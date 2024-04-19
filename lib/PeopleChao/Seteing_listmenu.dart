@@ -141,7 +141,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
     var qutser = widget.Get_Value_NameShop_index;
 
     String url =
-        '${MyConstant().domain}/GC_tran_bill_All.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser}';
+        '${MyConstant().domain}/GC_tran_bill_All.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -181,7 +181,14 @@ class _SettringListMenuState extends State<SettringListMenu> {
                   children: [
                     Container(
                       height: 50,
-                      color: Colors.brown[200],
+                      decoration: BoxDecoration(
+                        color: AppbackgroundColor.TiTile_Colors,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                            bottomLeft: Radius.circular(0),
+                            bottomRight: Radius.circular(0)),
+                      ),
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -194,9 +201,12 @@ class _SettringListMenuState extends State<SettringListMenu> {
                               'รายการตั้งหนี้',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  color: PeopleChaoScreen_Color.Colors_Text1_,
                                   fontWeight: FontWeight.bold,
-                                  fontFamily: Font_.Fonts_T),
+                                  fontFamily: FontWeight_.Fonts_T
+                                  //fontSize: 10.0
+                                  //fontSize: 10.0
+                                  ),
                             ),
                           ),
                           // Expanded(
@@ -278,6 +288,16 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                   });
                                 },
                                 title: Container(
+                                  decoration: BoxDecoration(
+                                    // color: Colors.green[100]!
+                                    //     .withOpacity(0.5),
+                                    border: Border(
+                                      bottom: BorderSide(
+                                        color: Colors.black12,
+                                        width: 1,
+                                      ),
+                                    ),
+                                  ),
                                   // _TransModelsdocno
                                   // color: ptype == contractxModels[index].expname
                                   //     ? tappedIndex_Color.tappedIndex_Colors
@@ -331,249 +351,278 @@ class _SettringListMenuState extends State<SettringListMenu> {
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: Container(
-                              height: 50,
-                              color: Colors.brown[200],
-                              padding: const EdgeInsets.all(8.0),
-                              child: const Center(
-                                child: AutoSizeText(
-                                  minFontSize: 10,
-                                  maxFontSize: 25,
-                                  maxLines: 1,
-                                  'เลขตั้งหนี้',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color:
-                                          PeopleChaoScreen_Color.Colors_Text2_,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: Font_.Fonts_T),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: Container(
-                              height: 50,
-                              color: Colors.brown[200],
-                              padding: const EdgeInsets.all(8.0),
-                              child: const Center(
-                                child: AutoSizeText(
-                                  minFontSize: 10,
-                                  maxFontSize: 25,
-                                  maxLines: 1,
-                                  'กำหนดชำระ',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color:
-                                          PeopleChaoScreen_Color.Colors_Text2_,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: Font_.Fonts_T),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: Container(
-                              height: 50,
-                              color: Colors.brown[200],
-                              padding: const EdgeInsets.all(8.0),
-                              child: DropdownButtonFormField2(
-                                decoration: InputDecoration(
-                                  isDense: true,
-                                  contentPadding: EdgeInsets.zero,
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                ),
-                                isExpanded: true,
-                                hint: Text(
-                                  ptype == 'ทั้งหมด' ? 'ประเภท' : ptype,
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      color:
-                                          PeopleChaoScreen_Color.Colors_Text2_,
-                                      // fontWeight: FontWeight.bold,
-                                      fontFamily: Font_.Fonts_T),
-                                ),
-                                icon: const Icon(
-                                  Icons.arrow_drop_down,
-                                  color: TextHome_Color.TextHome_Colors,
-                                ),
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
-                                iconSize: 20,
-                                buttonHeight: 50,
-                                // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-                                dropdownDecoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                items: contractxModels
-                                    .map((item) => DropdownMenuItem<String>(
-                                          value: '${item.ser},${item.expname}',
-                                          child: Text(
-                                            item.expname!,
-                                            style: const TextStyle(
-                                                fontSize: 14,
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text2_,
-                                                // fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T),
-                                          ),
-                                        ))
-                                    .toList(),
-
-                                onChanged: (value) async {
-                                  var zones = value!.indexOf(',');
-                                  var zoneSer = value.substring(0, zones);
-                                  var zonesName = value.substring(zones + 1);
-                                  print(
-                                      'mmmmm ${zoneSer.toString()} $zonesName');
-                                  setState(() {
-                                    con_pser = zoneSer;
-
-                                    ptype = zonesName.toString();
-                                    edit_data = 1;
-                                    edit_data_ser = null;
-                                    edit_data_date = null;
-                                    edit_data_vtype = null;
-                                    edit_data_nvat = null;
-                                    edit_data_nwht = null;
-                                    edit_data_docno = null;
-                                    edit_data_total = null;
-                                    edit_textall.clear();
-                                    edit_textvat.clear();
-                                    edit_textwht.clear();
-                                    red_Trans_billAll(zonesName);
-                                  });
-                                },
-                              ),
-                              //      Center(
-                              //   child: AutoSizeText(
-                              //     minFontSize: 10,
-                              //     maxFontSize: 25,
-                              //     maxLines: 2,
-                              //     'ประเภท',
-                              //     textAlign: TextAlign.center,
-                              //     style: TextStyle(
-                              //         color:
-                              //             PeopleChaoScreen_Color.Colors_Text2_,
-                              //         fontWeight: FontWeight.bold,
-                              //         fontFamily: Font_.Fonts_T),
-                              //   ),
-                              // ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              height: 50,
-                              color: Colors.brown[200],
-                              padding: const EdgeInsets.all(8.0),
-                              child: const Center(
-                                child: AutoSizeText(
-                                  minFontSize: 10,
-                                  maxFontSize: 25,
-                                  maxLines: 1,
-                                  'VAT',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color:
-                                          PeopleChaoScreen_Color.Colors_Text2_,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: Font_.Fonts_T),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              height: 50,
-                              color: Colors.brown[200],
-                              padding: const EdgeInsets.all(8.0),
-                              child: const Center(
-                                child: AutoSizeText(
-                                  minFontSize: 10,
-                                  maxFontSize: 25,
-                                  maxLines: 1,
-                                  'VAT %',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color:
-                                          PeopleChaoScreen_Color.Colors_Text2_,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: Font_.Fonts_T),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              height: 50,
-                              color: Colors.brown[200],
-                              padding: const EdgeInsets.all(8.0),
-                              child: const Center(
-                                child: AutoSizeText(
-                                  minFontSize: 10,
-                                  maxFontSize: 25,
-                                  maxLines: 1,
-                                  'WHT %',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color:
-                                          PeopleChaoScreen_Color.Colors_Text2_,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: Font_.Fonts_T),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppbackgroundColor.TiTile_Colors,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                              bottomLeft: Radius.circular(0),
+                              bottomRight: Radius.circular(0)),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
                               flex: 2,
                               child: Container(
                                 height: 50,
-                                color: Colors.brown[200],
-                                padding: EdgeInsets.all(8.0),
-                                child: Center(
-                                  child: InkWell(
-                                    onTap: () async {
-                                      // setState(() {
-                                      //   edit_data = 1;
-                                      // });
-                                    },
-                                    child: Text(
-                                      'ยอดชำระ',
-                                      style: TextStyle(
-                                          color: PeopleChaoScreen_Color
-                                              .Colors_Text2_,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: Font_.Fonts_T),
+                                padding: const EdgeInsets.all(8.0),
+                                child: const Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: AutoSizeText(
+                                    minFontSize: 10,
+                                    maxFontSize: 25,
+                                    maxLines: 1,
+                                    'เลขตั้งหนี้',
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T
+                                        //fontSize: 10.0
+                                        //fontSize: 10.0
+                                        ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                height: 50,
+                                padding: const EdgeInsets.all(8.0),
+                                child: const Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: AutoSizeText(
+                                    minFontSize: 10,
+                                    maxFontSize: 25,
+                                    maxLines: 1,
+                                    'กำหนดชำระ',
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T
+                                        //fontSize: 10.0
+                                        //fontSize: 10.0
+                                        ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                height: 50,
+
+                                padding: const EdgeInsets.all(8.0),
+                                child: DropdownButtonFormField2(
+                                  decoration: InputDecoration(
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.zero,
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
                                     ),
                                   ),
-                                  // AutoSizeText(
-                                  //   minFontSize: 10,
-                                  //   maxFontSize: 25,
-                                  //   maxLines: 1,
-                                  //   'ยอดชำระ',
-                                  //   textAlign: TextAlign.end,
-                                  //   style: TextStyle(
-                                  //       color: PeopleChaoScreen_Color
-                                  //           .Colors_Text2_,
-                                  //       fontWeight: FontWeight.bold,
-                                  //       fontFamily: Font_.Fonts_T),
-                                  // ),
+                                  isExpanded: true,
+                                  hint: Text(
+                                    ptype == 'ทั้งหมด' ? 'ประเภท' : ptype,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text2_,
+                                        // fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                  icon: const Icon(
+                                    Icons.arrow_drop_down,
+                                    color: TextHome_Color.TextHome_Colors,
+                                  ),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                  iconSize: 20,
+                                  buttonHeight: 50,
+                                  // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                  dropdownDecoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  items: contractxModels
+                                      .map((item) => DropdownMenuItem<String>(
+                                            value:
+                                                '${item.ser},${item.expname}',
+                                            child: Text(
+                                              item.expname!,
+                                              style: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  // fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ))
+                                      .toList(),
+
+                                  onChanged: (value) async {
+                                    var zones = value!.indexOf(',');
+                                    var zoneSer = value.substring(0, zones);
+                                    var zonesName = value.substring(zones + 1);
+                                    print(
+                                        'mmmmm ${zoneSer.toString()} $zonesName');
+                                    setState(() {
+                                      con_pser = zoneSer;
+
+                                      ptype = zonesName.toString();
+                                      edit_data = 1;
+                                      edit_data_ser = null;
+                                      edit_data_date = null;
+                                      edit_data_vtype = null;
+                                      edit_data_nvat = null;
+                                      edit_data_nwht = null;
+                                      edit_data_docno = null;
+                                      edit_data_total = null;
+                                      edit_textall.clear();
+                                      edit_textvat.clear();
+                                      edit_textwht.clear();
+                                      red_Trans_billAll(zonesName);
+                                    });
+                                  },
                                 ),
-                              )),
-                        ],
+                                //      Center(
+                                //   child: AutoSizeText(
+                                //     minFontSize: 10,
+                                //     maxFontSize: 25,
+                                //     maxLines: 2,
+                                //     'ประเภท',
+                                //     textAlign: TextAlign.center,
+                                //     style: TextStyle(
+                                //         color:
+                                //             PeopleChaoScreen_Color.Colors_Text2_,
+                                //         fontWeight: FontWeight.bold,
+                                //         fontFamily: Font_.Fonts_T),
+                                //   ),
+                                // ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                height: 50,
+                                padding: const EdgeInsets.all(8.0),
+                                child: const Align(
+                                  alignment: Alignment.centerRight,
+                                  child: AutoSizeText(
+                                    minFontSize: 10,
+                                    maxFontSize: 25,
+                                    maxLines: 1,
+                                    'VAT',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T
+                                        //fontSize: 10.0
+                                        //fontSize: 10.0
+                                        ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                height: 50,
+                                padding: const EdgeInsets.all(8.0),
+                                child: const Align(
+                                  alignment: Alignment.centerRight,
+                                  child: AutoSizeText(
+                                    minFontSize: 10,
+                                    maxFontSize: 25,
+                                    maxLines: 1,
+                                    'VAT %',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T
+                                        //fontSize: 10.0
+                                        //fontSize: 10.0
+                                        ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                height: 50,
+                                padding: const EdgeInsets.all(8.0),
+                                child: const Align(
+                                  alignment: Alignment.centerRight,
+                                  child: AutoSizeText(
+                                    minFontSize: 10,
+                                    maxFontSize: 25,
+                                    maxLines: 1,
+                                    'WHT %',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T
+                                        //fontSize: 10.0
+                                        //fontSize: 10.0
+                                        ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                                flex: 2,
+                                child: Container(
+                                  height: 50,
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: InkWell(
+                                      onTap: () async {
+                                        // setState(() {
+                                        //   edit_data = 1;
+                                        // });
+                                      },
+                                      child: const Text(
+                                        'ยอดชำระ',
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    // AutoSizeText(
+                                    //   minFontSize: 10,
+                                    //   maxFontSize: 25,
+                                    //   maxLines: 1,
+                                    //   'ยอดชำระ',
+                                    //   textAlign: TextAlign.end,
+                                    //   style: TextStyle(
+                                    //       color: PeopleChaoScreen_Color
+                                    //           .Colors_Text2_,
+                                    //       fontWeight: FontWeight.bold,
+                                    //       fontFamily: Font_.Fonts_T),
+                                    // ),
+                                  ),
+                                )),
+                          ],
+                        ),
                       ),
                       _TransBillModels.length == 0
                           ? Container(
@@ -931,6 +980,16 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                           // in_Trans_select(index);
                                         },
                                         title: Container(
+                                          decoration: BoxDecoration(
+                                            // color: Colors.green[100]!
+                                            //     .withOpacity(0.5),
+                                            border: Border(
+                                              bottom: BorderSide(
+                                                color: Colors.black12,
+                                                width: 1,
+                                              ),
+                                            ),
+                                          ),
                                           //_TransModelsdocno
                                           // color: edit_data_ser ==
                                           //         _TransBillModels[index].ser
@@ -965,7 +1024,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                     maxFontSize: 25,
                                                     maxLines: 1,
                                                     '${_TransBillModels[index].docno}',
-                                                    textAlign: TextAlign.center,
+                                                    textAlign: TextAlign.left,
                                                     style: const TextStyle(
                                                         color:
                                                             PeopleChaoScreen_Color
@@ -1003,7 +1062,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                     maxFontSize: 25,
                                                     maxLines: 1,
                                                     '${DateFormat('dd-MM').format(DateTime.parse('${_TransBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransBillModels[index].date} 00:00:00').year + 543}',
-                                                    textAlign: TextAlign.center,
+                                                    textAlign: TextAlign.left,
                                                     style: const TextStyle(
                                                         color:
                                                             PeopleChaoScreen_Color
@@ -1061,7 +1120,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                               ? '${_TransBillModels[index].expname}'
                                                               : '${_TransBillModels[index].descr}',
                                                           textAlign:
-                                                              TextAlign.center,
+                                                              TextAlign.left,
                                                           style:
                                                               const TextStyle(
                                                                   color: PeopleChaoScreen_Color
@@ -1083,7 +1142,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                                   '${DateFormat('dd-MM').format(DateTime.parse('${_TransBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransBillModels[index].date} 00:00:00').year + 543}',
                                                                   textAlign:
                                                                       TextAlign
-                                                                          .center,
+                                                                          .left,
                                                                   style: TextStyle(
                                                                       color: Colors.grey.shade500,
                                                                       //fontWeight: FontWeight.bold,
@@ -1106,7 +1165,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                                       : '${_TransBillModels[index].descr}',
                                                                   textAlign:
                                                                       TextAlign
-                                                                          .center,
+                                                                          .left,
                                                                   style: const TextStyle(
                                                                       color: PeopleChaoScreen_Color.Colors_Text2_,
                                                                       //fontWeight: FontWeight.bold,
@@ -1298,7 +1357,14 @@ class _SettringListMenuState extends State<SettringListMenu> {
                               Expanded(
                                 child: Container(
                                   height: 50,
-                                  color: Colors.brown[200],
+                                  decoration: BoxDecoration(
+                                    color: AppbackgroundColor.TiTile_Colors,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(0),
+                                        bottomRight: Radius.circular(0)),
+                                  ),
                                   padding: const EdgeInsets.all(8.0),
                                   child: ptype == 'ทั้งหมด'
                                       ? edit_data == 1
@@ -1306,30 +1372,42 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                           : Center(
                                               child: Text(
                                               'แก้ไขข้อมูล',
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                   color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
+                                                      .Colors_Text1_,
                                                   fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T),
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T
+                                                  //fontSize: 10.0
+                                                  //fontSize: 10.0
+                                                  ),
                                             ))
                                       : edit_data == 1
                                           ? Center(
                                               child: Text(
                                               'แก้ไขข้อมูลทั้งหมด',
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                   color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
+                                                      .Colors_Text1_,
                                                   fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T),
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T
+                                                  //fontSize: 10.0
+                                                  //fontSize: 10.0
+                                                  ),
                                             ))
                                           : Center(
                                               child: Text(
                                               'แก้ไขข้อมูล',
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                   color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
+                                                      .Colors_Text1_,
                                                   fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T),
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T
+                                                  //fontSize: 10.0
+                                                  //fontSize: 10.0
+                                                  ),
                                             )),
                                 ),
                               ),
@@ -1874,7 +1952,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                  .only(
+                                                                      .only(
                                                                   top: 8,
                                                                   bottom: 8),
                                                           child: Container(
@@ -2087,7 +2165,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                               child: Container(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .all(
+                                                                            .all(
                                                                         15.0),
                                                                 child:
                                                                     AutoSizeText(
@@ -2205,7 +2283,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                .only(
+                                                                    .only(
                                                                 top: 8,
                                                                 bottom: 8),
                                                         child: Container(
@@ -2382,7 +2460,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                             child: Container(
                                                               padding:
                                                                   const EdgeInsets
-                                                                      .all(
+                                                                          .all(
                                                                       15.0),
                                                               child:
                                                                   AutoSizeText(
@@ -2716,7 +2794,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                .only(
+                                                                    .only(
                                                                 top: 8,
                                                                 bottom: 8),
                                                         child: TextFormField(
@@ -2964,7 +3042,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                .only(
+                                                                    .only(
                                                                 top: 8,
                                                                 bottom: 8),
                                                         child: TextFormField(
@@ -3211,7 +3289,7 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                .only(
+                                                                    .only(
                                                                 top: 8,
                                                                 bottom: 8),
                                                         child: TextFormField(
@@ -3561,9 +3639,8 @@ class _SettringListMenuState extends State<SettringListMenu> {
                                                                           ),
                                                                         ),
                                                                         Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
                                                                           child:
                                                                               Row(
                                                                             mainAxisAlignment:

@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 
-import 'package:htmltopdfwidgets/htmltopdfwidgets.dart';
+// import 'package:htmltopdfwidgets/htmltopdfwidgets.dart';
 
 import '../PeopleChao/Pays_.dart';
 

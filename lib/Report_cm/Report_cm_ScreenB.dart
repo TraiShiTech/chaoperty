@@ -109,7 +109,7 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       // Map<String, dynamic> map = Map();
       // map['ser'] = '0';
       // map['rser'] = '0';
@@ -171,7 +171,7 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
 
       for (var map in result) {
         ZoneModel zoneModel = ZoneModel.fromJson(map);
@@ -201,7 +201,7 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           ExpModel expModel = ExpModel.fromJson(map);
@@ -230,7 +230,7 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result.toString() != 'null') {
         for (var map in result) {
           TransReBillModelRECM transReBillModel =
@@ -241,7 +241,7 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
           });
         }
 
-        print('result ${_TransReBillModels_GropType_Mon.length}');
+        // print('result ${_TransReBillModels_GropType_Mon.length}');
       }
     } catch (e) {}
   }
@@ -261,7 +261,7 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result.toString() != 'null') {
         for (var map in result) {
           TransReBillModelRECM transReBillModel =
@@ -272,7 +272,7 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
           });
         }
 
-        print('result ${_TransReBillModels_GropType_Sub_zone.length}');
+        // print('result ${_TransReBillModels_GropType_Sub_zone.length}');
       }
     } catch (e) {}
   }
@@ -727,9 +727,12 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
               double.parse('${zoneModels_report[index1].b_3}');
     }
 
-    for (int index1 = 0; index1 < zoneModels_report.length; index1++) {}
+    for (int index2 = 0; index2 < zoneModels_report_Sub_zone.length; index2++) {
+      totalB3 += double.parse(
+          calculateTotal_B3_SubZone(zoneModels_report_Sub_zone[index2].ser));
+    }
 
-//////////------------------------------------------->
+    //////////------------------------------------------->
 
     return totalB3.toString();
   }
@@ -763,23 +766,6 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
                     (double.parse(calculateTotalArea_Zone_Sub(in_dex)!) *
                         double.parse(
                             '${zoneModeels_report_Ser_Sub_zone[in_dex].b_3}'));
-        // (zoneModeels_report_Ser_Sub_zone[index3].jon! == '1' &&
-        //         zoneModeels_report_Ser_Sub_zone[index3].jon_book! == '3')
-        //     ? totalB3 += double.parse(calculateTotalBills_Zone_Sub(index3)!) -
-        //         ((double.parse(calculateTotalArea_Zone_Sub(index3)!) *
-        //                 double.parse(
-        //                     '${zoneModeels_report_Ser_Sub_zone[index3].b_1}')) +
-        //             (double.parse(calculateTotalArea_Zone_Sub(index3)!) *
-        //                 double.parse(
-        //                     '${zoneModeels_report_Ser_Sub_zone[index3].b_2}')) +
-        //             (double.parse(calculateTotalArea_Zone_Sub(index3)!) *
-        //                 double.parse(
-        //                     '${zoneModeels_report_Ser_Sub_zone[index3].b_3}')) +
-        //             (double.parse(calculateTotalArea_Zone_Sub(index3)!) *
-        //                 double.parse(
-        //                     '${zoneModeels_report_Ser_Sub_zone[index3].b_4}')))
-        //     : totalB3 += double.parse(calculateTotalArea_Zone_Sub(index3)!) *
-        //         double.parse('${zoneModeels_report_Ser_Sub_zone[index3].b_2}');
       }
     }
 
@@ -857,7 +843,7 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result.toString() != 'null') {
         for (var map in result) {
           TransReBillModelRECM transReBillModel =
@@ -868,7 +854,7 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
           });
         }
 
-        print('result ${_TransReBillModels_GropType_Mon.length}');
+        // print('result ${_TransReBillModels_GropType_Mon.length}');
       }
     } catch (e) {}
   }
@@ -888,7 +874,7 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result.toString() != 'null') {
         for (var map in result) {
           TransReBillModelRECM transReBillModel =
@@ -899,7 +885,7 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
           });
         }
 
-        print('result ${_TransReBillModels_GropType_Sub_zone.length}');
+        // print('result ${_TransReBillModels_GropType_Sub_zone.length}');
       }
     } catch (e) {}
   }
@@ -989,7 +975,7 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
           DateFormat('dd-MM-yyyy').parse('$Value_selectDate_Daily_Type_');
       var LDate = DateFormat('dd-MM-yyyy').parse('$result');
       if (picked != null) {
-        print('LDate is before SDate');
+        // print('LDate is before SDate');
         // TransReBillModels = [];
 
         var formatter = DateFormat('y-MM-d');
@@ -1774,7 +1760,7 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
                               children: [
                                 Container(
                                   // width: 1050,
-                                  decoration: const BoxDecoration(
+                                  decoration: BoxDecoration(
                                     color: AppbackgroundColor.TiTile_Colors,
                                     borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(10),
@@ -3562,7 +3548,7 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
                               children: [
                                 Container(
                                   // width: 1050,
-                                  decoration: const BoxDecoration(
+                                  decoration: BoxDecoration(
                                     color: AppbackgroundColor.TiTile_Colors,
                                     borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(10),

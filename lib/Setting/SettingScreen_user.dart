@@ -56,8 +56,8 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
   //------------------------------------------------------>
   int Status_MenuZone = 1;
   String name_Zone = 'ทั้งหมด';
-  int Ser_Zone = 0, renTal_lavel = 1;
-  String Ser_nowpage = '8';
+  int Ser_Zone = 0,renTal_lavel = 1;
+    String Ser_nowpage = '8';
   ///////---------------------------------------------------->
   String tappedIndex_ = '';
   final _formKey = GlobalKey<FormState>();
@@ -738,9 +738,9 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
                           border: Border.all(color: Colors.white, width: 2),
                         ),
                         padding: const EdgeInsets.all(5.0),
-                        child: const Row(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
+                          children: const [
                             AutoSizeText(
                               'ตั้งค่า/จัดการข้อมูลส่วนตัว',
                               overflow: TextOverflow.ellipsis,
@@ -771,7 +771,7 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
                   ),
                 ),
               ),
-              Align(
+            Align(
                 alignment: Alignment.centerRight,
                 child: viewpage(context, '$Ser_nowpage'),
               ),
@@ -3876,7 +3876,7 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
             padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
             child: Container(
               width: MediaQuery.of(context).size.width,
-              decoration: const BoxDecoration(
+              decoration:  BoxDecoration(
                 color: AppbackgroundColor.TiTile_Colors,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(10),
@@ -4557,7 +4557,8 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
                                                                         fontFamily:
                                                                             FontWeight_.Fonts_T,
                                                                       )),
-                                                                  inputFormatters: <TextInputFormatter>[
+                                                                  inputFormatters: <
+                                                                      TextInputFormatter>[
                                                                     FilteringTextInputFormatter
                                                                         .deny(RegExp(
                                                                             "[' ']")),
@@ -4684,7 +4685,8 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
                                                                         fontFamily:
                                                                             FontWeight_.Fonts_T,
                                                                       )),
-                                                                  inputFormatters: <TextInputFormatter>[
+                                                                  inputFormatters: <
+                                                                      TextInputFormatter>[
                                                                     FilteringTextInputFormatter
                                                                         .deny(RegExp(
                                                                             "[' ']")),
@@ -4930,7 +4932,7 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
                             children: [
                               Container(
                                 height: 50,
-                                decoration: const BoxDecoration(
+                                decoration:  BoxDecoration(
                                   color: AppbackgroundColor.TiTile_Colors,
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(10),
@@ -5468,7 +5470,8 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
                                                                             // fontWeight: FontWeight.bold,
                                                                             fontFamily: Font_.Fonts_T),
                                                                       ),
-                                                                      inputFormatters: <TextInputFormatter>[
+                                                                      inputFormatters: <
+                                                                          TextInputFormatter>[
                                                                         // for below version 2 use this
                                                                         FilteringTextInputFormatter.allow(
                                                                             RegExp(r'[0-9 .]')),
@@ -5592,7 +5595,8 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
                                                                             // fontWeight: FontWeight.bold,
                                                                             fontFamily: Font_.Fonts_T),
                                                                       ),
-                                                                      inputFormatters: <TextInputFormatter>[
+                                                                      inputFormatters: <
+                                                                          TextInputFormatter>[
                                                                         // for below version 2 use this
                                                                         FilteringTextInputFormatter.allow(
                                                                             RegExp(r'[0-9 .]')),

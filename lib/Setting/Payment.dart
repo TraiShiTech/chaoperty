@@ -504,7 +504,7 @@ class _PaymentState extends State<Payment> {
                               child: Container(
                                 height: 55,
                                 child: Container(
-                                  decoration: const BoxDecoration(
+                                  decoration: BoxDecoration(
                                     color: AppbackgroundColor.TiTile_Colors,
                                     borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(10),
@@ -648,7 +648,7 @@ class _PaymentState extends State<Payment> {
                               flex: 1,
                               child: Container(
                                 height: 55,
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   color: AppbackgroundColor.TiTile_Colors,
                                   borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(0),
@@ -723,7 +723,7 @@ class _PaymentState extends State<Payment> {
                                                                       20.0))),
                                                   title: const Center(
                                                       child: Text(
-                                                    'แก้ไขการชำระ',
+                                                    '+ เพิ่มการชำระ',
                                                     style: TextStyle(
                                                       color: SettingScreen_Color
                                                           .Colors_Text1_,
@@ -970,6 +970,9 @@ class _PaymentState extends State<Payment> {
                                                                 ),
                                                                 items:
                                                                     getBankModels
+                                                                        .where((item) =>
+                                                                            item.st.toString() ==
+                                                                            '1')
                                                                         .map((item) =>
                                                                             DropdownMenuItem<String>(
                                                                               value: '${item.ser}:${item.bname}',
@@ -2836,6 +2839,7 @@ class _PaymentState extends State<Payment> {
                                                                                           borderRadius: BorderRadius.circular(15),
                                                                                         ),
                                                                                         items: getBankModels
+                                                                                            .where((item) => item.st.toString() == '1')
                                                                                             .map((item) => DropdownMenuItem<String>(
                                                                                                   value: '${item.ser}:${item.bname}',
                                                                                                   child: Row(

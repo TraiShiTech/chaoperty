@@ -13,10 +13,12 @@ import 'package:http/http.dart' as http;
 import '../Constant/Myconstant.dart';
 import '../INSERT_Log/Insert_log.dart';
 import '../Model/GetC_Quot_Select_Model.dart';
+import '../Model/GetContract_Photo_Model.dart';
 import '../Model/GetExp_Model.dart';
 import '../Model/GetPakan_Contractx_Model.dart';
 import '../Model/GetPayMent_Model.dart';
 import '../Model/GetRenTal_Model.dart';
+import '../Model/GetTeNant_Model.dart';
 import '../Model/GetTrans_Kon_Model.dart';
 import '../Model/GetZone_Model.dart';
 import '../Model/Get_TenantAll_billpay_Model.dart';
@@ -26,6 +28,8 @@ import '../Style/colors.dart';
 import 'Excel_GetPakan_Report.dart';
 import 'Excel_PayPakan_Report.dart';
 import 'Excel_PeopleChoAllbill_Report.dart';
+import 'Excel_PeopleChoStart_Report.dart';
+import 'Excel_PeopleCho_Report.dart';
 
 class ReportScreen10 extends StatefulWidget {
   const ReportScreen10({super.key});
@@ -65,6 +69,12 @@ class _ReportScreen10State extends State<ReportScreen10> {
   String? Value_Chang_Zone_People, Value_Chang_Zone_People_Ser;
   String? Value_Chang_Zone_Pakan, Value_Chang_Zone_Pakan_Ser;
   ////////--------------------------------------------->
+  String? YE_People_Start,
+      Mon_People_Start,
+      Status_pe_Start,
+      Status_pe_ser_Start;
+  String? Value_Chang_Zone_People_Start, Value_Chang_Zone_People_Ser_Start;
+  ////////--------------------------------------------->
   List<String> YE_Th = [];
   List<String> Mont_Th = [];
   List<ZoneModel> zoneModels = [];
@@ -83,10 +93,22 @@ class _ReportScreen10State extends State<ReportScreen10> {
 
   List<TransKonModel> transKonModels = [];
   List<TransKonModel> _transKonModels = <TransKonModel>[];
+  List<TeNantModel> teNantModels_Start = [];
+  List<TeNantModel> _teNantModels_Start = <TeNantModel>[];
+  List<ContractPhotoModel> contractPhotoModels = [];
+  late List<List<QuotxSelectModel>> quotxSelectModels;
+
+  List<QuotxSelectModel> quotxSelectModels_Select = [];
 ///////----------------------------------->
+  // List Status = [
+  //   'ปัจจุบัน',
+  //   'หมดสัญญา',
+  //   'ผู้สนใจ',
+  // ];
   List Status = [
     'ปัจจุบัน',
     'หมดสัญญา',
+    'ใกล้หมดสัญญา',
     'ผู้สนใจ',
   ];
   List<String> monthsInThai = [
@@ -138,7 +160,7 @@ class _ReportScreen10State extends State<ReportScreen10> {
     var ren = preferences.getString('renTalSer');
     var zone = preferences.getString('zoneSer');
 
-    print('ren >>>>>> $ren');
+    // print('ren >>>>>> $ren');
 
     String url =
         '${MyConstant().domain}/GC_Bank_Paytype.php?isAdd=true&ren=$ren';
@@ -147,7 +169,7 @@ class _ReportScreen10State extends State<ReportScreen10> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           PayMentModel payMentModel = PayMentModel.fromJson(map);
@@ -230,7 +252,7 @@ class _ReportScreen10State extends State<ReportScreen10> {
         }
       } else {}
     } catch (e) {
-      print('Error-Dis(read_GC_rental) : ${e}');
+      // print('Error-Dis(read_GC_rental) : ${e}');
     }
     // print('name>>>>>  $renname');
   }
@@ -350,7 +372,7 @@ class _ReportScreen10State extends State<ReportScreen10> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           ExpModel expModel = ExpModel.fromJson(map);
@@ -379,7 +401,7 @@ class _ReportScreen10State extends State<ReportScreen10> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       Map<String, dynamic> map = Map();
       map['ser'] = '0';
       map['rser'] = '0';
@@ -443,7 +465,7 @@ class _ReportScreen10State extends State<ReportScreen10> {
         ? '0'
         : Value_Chang_Zone_People_Ser;
 
-    print('>>>>>>>>>>>>>>>>>>>>>>>>>>>> $Status_pe_ser');
+    // print('>>>>>>>>>>>>>>>>>>>>>>>>>>>> $Status_pe_ser');
 
     String url = (zone == '0')
         ? '${MyConstant().domain}/GC_tenantAllbill_Report.php?isAdd=true&ren=$ren&zone=$zone&quan_tity=$Status_pe_ser'
@@ -473,7 +495,7 @@ class _ReportScreen10State extends State<ReportScreen10> {
             var date2 = DateTime.now();
             var difference = daysBetween(birthday, date2);
 
-            print('difference == $difference');
+            // print('difference == $difference');
 
             var daterx_now = DateTime.now();
 
@@ -482,8 +504,8 @@ class _ReportScreen10State extends State<ReportScreen10> {
             final now = DateTime.now();
             final earlier = daterx_ldate.subtract(const Duration(days: 0));
             var daterx_A = now.isAfter(earlier);
-            print(now.isAfter(earlier)); // true
-            print(now.isBefore(earlier)); // true
+            // print(now.isAfter(earlier)); // true
+            // print(now.isBefore(earlier)); // true
 
             if (daterx_A != true) {
               setState(() {
@@ -492,8 +514,8 @@ class _ReportScreen10State extends State<ReportScreen10> {
             }
           }
         }
-        print('teNantModels.length');
-        print(teNantModels.length);
+        // print('teNantModels.length');
+        // print(teNantModels.length);
         setState(() {
           _teNantModels = teNantModels;
         });
@@ -569,7 +591,7 @@ class _ReportScreen10State extends State<ReportScreen10> {
         });
       } else {}
     } catch (e) {}
-    print('tenant_Pakan : ${contractxPakanModels.length}');
+    // print('tenant_Pakan : ${contractxPakanModels.length}');
     setState(() {
       Await_Status_Report2 = 1;
     });
@@ -611,11 +633,306 @@ class _ReportScreen10State extends State<ReportScreen10> {
     if (transKonModels.length != 0) {
       // read_his_list();
     }
-    print('red_Trans_Kon : ${transKonModels.length}');
+    // print('red_Trans_Kon : ${transKonModels.length}');
     setState(() {
       Await_Status_Report3 = 1;
     });
   }
+
+////////////------------------------------------------>(วันที่ผู้เช่าเริ่มสัญญา)
+  Future<Null> read_GC_tenantSelect_Start() async {
+    int open_set_date = 30;
+    if (teNantModels_Start.isNotEmpty) {
+      setState(() {
+        teNantModels_Start.clear();
+        _teNantModels_Start.clear();
+      });
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    var ren = preferences.getString('renTalSer');
+    var zone = Value_Chang_Zone_People_Ser_Start;
+
+    var Mon_People_Start_ = Mon_People_Start;
+    var YE_People_Start_ = YE_People_Start;
+    // print('>>>>>>>>>>>>>>>>>>>>>>>>>>>> $Status_pe_ser');
+
+    if (Status_pe_ser_Start == '1') {
+      String url = zone == null
+          ? '${MyConstant().domain}/GC_tenantAllStart.php?isAdd=true&ren=$ren&zone=$zone&mont_h=$Mon_People_Start_&yea_r=$YE_People_Start_'
+          : zone == '0'
+              ? '${MyConstant().domain}/GC_tenantAllStart.php?isAdd=true&ren=$ren&zone=$zone&mont_h=$Mon_People_Start_&yea_r=$YE_People_Start_'
+              : '${MyConstant().domain}/GC_tenant_Start.php?isAdd=true&ren=$ren&zone=$zone&mont_h=$Mon_People_Start_&yea_r=$YE_People_Start_';
+
+      try {
+        var response = await http.get(Uri.parse(url));
+
+        var result = json.decode(response.body);
+        // print(result);
+        if (result != null) {
+          for (var map in result) {
+            TeNantModel teNantModel = TeNantModel.fromJson(map);
+            if (teNantModel.quantity == '1') {
+              var daterx = teNantModel.ldate == null
+                  ? teNantModel.ldate_q
+                  : teNantModel.ldate;
+
+              if (daterx != null) {
+                int daysBetween(DateTime from, DateTime to) {
+                  from = DateTime(from.year, from.month, from.day);
+                  to = DateTime(to.year, to.month, to.day);
+                  return (to.difference(from).inHours / 24).round();
+                }
+
+                var birthday = DateTime.parse('$daterx 00:00:00.000')
+                    .add(const Duration(days: -30));
+                var date2 = DateTime.now();
+                var difference = daysBetween(birthday, date2);
+
+                // print('difference == $difference');
+
+                var daterx_now = DateTime.now();
+
+                var daterx_ldate = DateTime.parse('$daterx 00:00:00.000');
+
+                final now = DateTime.now();
+                final earlier = daterx_ldate.subtract(const Duration(days: 0));
+                var daterx_A = now.isAfter(earlier);
+                // print(now.isAfter(earlier)); // true
+                // print(now.isBefore(earlier)); // true
+
+                if (daterx_A != true) {
+                  setState(() {
+                    teNantModels_Start.add(teNantModel);
+                  });
+                  // read_GC_photo(
+                  //     teNantModel.docno == null
+                  //         ? teNantModel.cid == null
+                  //             ? ''
+                  //             : '${teNantModel.cid}'
+                  //         : '${teNantModel.docno}',
+                  //     teNantModel.quantity);
+                }
+              }
+            }
+          }
+        } else {}
+
+        setState(() {
+          _teNantModels_Start = teNantModels_Start;
+        });
+      } catch (e) {}
+    } else if (Status_pe_ser_Start == '2') {
+      String url = zone == null
+          ? '${MyConstant().domain}/GC_tenantAllStart.php?isAdd=true&ren=$ren&zone=$zone&mont_h=$Mon_People_Start_&yea_r=$YE_People_Start_'
+          : zone == '0'
+              ? '${MyConstant().domain}/GC_tenantAllStart.php?isAdd=true&ren=$ren&zone=$zone&mont_h=$Mon_People_Start_&yea_r=$YE_People_Start_'
+              : '${MyConstant().domain}/GC_tenant_Start.php?isAdd=true&ren=$ren&zone=$zone&mont_h=$Mon_People_Start_&yea_r=$YE_People_Start_';
+
+      try {
+        var response = await http.get(Uri.parse(url));
+
+        var result = json.decode(response.body);
+        // print(result);
+        if (result != null) {
+          for (var map in result) {
+            TeNantModel teNantModel = TeNantModel.fromJson(map);
+            var daterx = teNantModel.ldate == null
+                ? teNantModel.ldate_q
+                : teNantModel.ldate;
+
+            if (daterx != null) {
+              int daysBetween(DateTime from, DateTime to) {
+                from = DateTime(from.year, from.month, from.day);
+                to = DateTime(to.year, to.month, to.day);
+                return (to.difference(from).inHours / 24).round();
+              }
+
+              var birthday = DateTime.parse('$daterx 00:00:00.000')
+                  .add(const Duration(days: -30));
+              var date2 = DateTime.now();
+              var difference = daysBetween(birthday, date2);
+
+              // print('difference == $difference');
+
+              var daterx_now = DateTime.now();
+
+              var daterx_ldate = DateTime.parse('$daterx 00:00:00.000');
+
+              final now = DateTime.now();
+              final earlier = daterx_ldate.subtract(const Duration(days: 0));
+              var daterx_A = now.isAfter(earlier);
+              // print(now.isAfter(earlier)); // true
+              // print(now.isBefore(earlier)); // true
+
+              if (daterx_A == true) {
+                setState(() {
+                  if (teNantModel.quantity == '1') {
+                    teNantModels_Start.add(teNantModel);
+                  }
+                });
+                // read_GC_photo(
+                //     teNantModel.docno == null
+                //         ? teNantModel.cid == null
+                //             ? ''
+                //             : '${teNantModel.cid}'
+                //         : '${teNantModel.docno}',
+                //     teNantModel.quantity);
+              }
+            }
+          }
+        } else {}
+        setState(() {
+          _teNantModels_Start = teNantModels_Start;
+        });
+      } catch (e) {}
+    } else if (Status_pe_ser_Start == '3') {
+      String url = zone == null
+          ? '${MyConstant().domain}/GC_tenantAllStart.php?isAdd=true&ren=$ren&zone=$zone&mont_h=$Mon_People_Start_&yea_r=$YE_People_Start_'
+          : zone == '0'
+              ? '${MyConstant().domain}/GC_tenantAllStart.php?isAdd=true&ren=$ren&zone=$zone&mont_h=$Mon_People_Start_&yea_r=$YE_People_Start_'
+              : '${MyConstant().domain}/GC_tenant_Start.php?isAdd=true&ren=$ren&zone=$zone&mont_h=$Mon_People_Start_&yea_r=$YE_People_Start_';
+      try {
+        var response = await http.get(Uri.parse(url));
+
+        var result = json.decode(response.body);
+        // print(result);
+        if (result != null) {
+          for (var map in result) {
+            TeNantModel teNantModel = TeNantModel.fromJson(map);
+            if (teNantModel.quantity == '1') {
+              if (datex.isAfter(
+                      DateTime.parse('${teNantModel.ldate} 00:00:00.000')
+                          .subtract(Duration(days: open_set_date))) ==
+                  true) {
+                var daterx = teNantModel.ldate == null
+                    ? teNantModel.ldate_q
+                    : teNantModel.ldate;
+
+                if (daterx != null) {
+                  int daysBetween(DateTime from, DateTime to) {
+                    from = DateTime(from.year, from.month, from.day);
+                    to = DateTime(to.year, to.month, to.day);
+                    return (to.difference(from).inHours / 24).round();
+                  }
+
+                  var birthday = DateTime.parse('$daterx 00:00:00.000')
+                      .add(const Duration(days: -30));
+                  var date2 = DateTime.now();
+                  var difference = daysBetween(birthday, date2);
+
+                  // print('difference == $difference');
+
+                  var daterx_now = DateTime.now();
+
+                  var daterx_ldate = DateTime.parse('$daterx 00:00:00.000');
+
+                  final now = DateTime.now();
+                  final earlier =
+                      daterx_ldate.subtract(const Duration(days: 0));
+                  var daterx_A = now.isAfter(earlier);
+                  // print(now.isAfter(earlier)); // true
+                  // print(now.isBefore(earlier)); // true
+
+                  if (daterx_A != true) {
+                    setState(() {
+                      teNantModels_Start.add(teNantModel);
+                    });
+                    // read_GC_photo(
+                    //     teNantModel.docno == null
+                    //         ? teNantModel.cid == null
+                    //             ? ''
+                    //             : '${teNantModel.cid}'
+                    //         : '${teNantModel.docno}',
+                    //     teNantModel.quantity);
+                  }
+                }
+              }
+            }
+          }
+        } else {}
+        setState(() {
+          _teNantModels_Start = teNantModels_Start;
+        });
+      } catch (e) {}
+    } else if (Status_pe_ser_Start == '4') {
+      String url = zone == null
+          ? '${MyConstant().domain}/GC_tenantAllStart.php?isAdd=true&ren=$ren&zone=$zone&mont_h=$Mon_People_Start_&yea_r=$YE_People_Start_'
+          : zone == '0'
+              ? '${MyConstant().domain}/GC_tenantAllStart.php?isAdd=true&ren=$ren&zone=$zone&mont_h=$Mon_People_Start_&yea_r=$YE_People_Start_'
+              : '${MyConstant().domain}/GC_tenant_Start.php?isAdd=true&ren=$ren&zone=$zone&mont_h=$Mon_People_Start_&yea_r=$YE_People_Start_';
+
+      try {
+        var response = await http.get(Uri.parse(url));
+
+        var result = json.decode(response.body);
+        // print(result);
+        if (result != null) {
+          for (var map in result) {
+            TeNantModel teNantModel = TeNantModel.fromJson(map);
+            if (teNantModel.quantity == '2' || teNantModel.quantity == '3') {
+              setState(() {
+                teNantModels_Start.add(teNantModel);
+              });
+              // read_GC_photo(
+              //     teNantModel.docno == null
+              //         ? teNantModel.cid == null
+              //             ? ''
+              //             : '${teNantModel.cid}'
+              //         : '${teNantModel.docno}',
+              //     teNantModel.quantity);
+            }
+          }
+        } else {}
+        setState(() {
+          _teNantModels_Start = teNantModels_Start;
+        });
+      } catch (e) {}
+    }
+    setState(() {
+      Await_Status_Report4 = 1;
+    });
+    // quotxSelectModels = List.generate(teNantModels.length, (_) => []);
+    // red_report();
+  }
+
+  //////////----------------------------------------->(รายละเอียดค่าบริการ)
+  // Future<Null> red_report() async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   var ren = preferences.getString('renTalSer');
+  //   for (int index = 0; index < teNantModels_Start.length; index++) {
+  //     setState(() {
+  //       quotxSelectModels[index].clear();
+  //     });
+  //     var ciddoc = teNantModels_Start[index].docno == null
+  //         ? teNantModels_Start[index].cid == null
+  //             ? ''
+  //             : '${teNantModels_Start[index].cid}'
+  //         : '${teNantModels_Start[index].docno}';
+  //     var qutser = teNantModels_Start[index].quantity;
+
+  //     String url =
+  //         '${MyConstant().domain}/GC_quot_conx.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser';
+  //     try {
+  //       var response = await http.get(Uri.parse(url));
+
+  //       var result = json.decode(response.body);
+  //       // print(result);
+  //       if (result != null) {
+  //         for (var map in result) {
+  //           QuotxSelectModel quotxSelectModel = QuotxSelectModel.fromJson(map);
+  //           setState(() {
+  //             quotxSelectModels[index].add(quotxSelectModel);
+  //           });
+  //         }
+  //       } else {}
+  //       // quotxSelectModels[index].sort((a, b) => a.expser!.compareTo(b.expser!));
+  //     } catch (e) {}
+  //   }
+  //   setState(() {
+  //     Await_Status_Report4 = 1;
+  //   });
+  // }
 
   ////////////------------------------------------------>
   _searchBar_tenantSelect() {
@@ -938,7 +1255,7 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                 Status_pe = Status[selectedIndex]!;
                                 Status_pe_ser = '${selectedIndex + 1}';
                               });
-                              print(Status_pe_ser);
+                              // print(Status_pe_ser);
                             },
                           ),
                         ),
@@ -1040,8 +1357,8 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                 Value_Chang_Zone_People_Ser =
                                     zoneModels_report[selectedIndex].ser!;
                               });
-                              print(
-                                  'Selected Index: $Value_Chang_Zone_People  //${Value_Chang_Zone_People_Ser}');
+                              // print(
+                              //     'Selected Index: $Value_Chang_Zone_People  //${Value_Chang_Zone_People_Ser}');
                             },
                           ),
                         ),
@@ -1412,8 +1729,8 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                 Value_Chang_Zone_Pakan_Ser =
                                     zoneModels_report[selectedIndex].ser!;
                               });
-                              print(
-                                  'Selected Index: $Value_Chang_Zone_Pakan  //${Value_Chang_Zone_Pakan_Ser}');
+                              // print(
+                              //     'Selected Index: $Value_Chang_Zone_Pakan  //${Value_Chang_Zone_Pakan_Ser}');
                             },
                           ),
                         ),
@@ -1651,6 +1968,650 @@ class _ReportScreen10State extends State<ReportScreen10> {
                   ],
                 ),
               ),
+              const SizedBox(
+                height: 5.0,
+              ),
+              Row(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width / 2,
+                    height: 4.0,
+                    child: Divider(
+                      color: Colors.grey[300],
+                      height: 4.0,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 5.0,
+              ),
+              ScrollConfiguration(
+                behavior:
+                    ScrollConfiguration.of(context).copyWith(dragDevices: {
+                  PointerDeviceKind.touch,
+                  PointerDeviceKind.mouse,
+                }),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'ผู้เช่า :',
+                          style: TextStyle(
+                            color: ReportScreen_Color.Colors_Text2_,
+                            // fontWeight: FontWeight.bold,
+                            fontFamily: Font_.Fonts_T,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: AppbackgroundColor.Sub_Abg_Colors,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            // border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                          width: 150,
+                          padding: const EdgeInsets.all(8.0),
+                          child: DropdownButtonFormField2(
+                            value: Status_pe_Start,
+
+                            alignment: Alignment.center,
+                            focusColor: Colors.white,
+                            autofocus: false,
+                            decoration: InputDecoration(
+                              enabled: true,
+                              hoverColor: Colors.brown,
+                              prefixIconColor: Colors.blue,
+                              fillColor: Colors.white.withOpacity(0.05),
+                              filled: false,
+                              isDense: true,
+                              contentPadding: EdgeInsets.zero,
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(color: Colors.red),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  topLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                ),
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(255, 231, 227, 227),
+                                ),
+                              ),
+                            ),
+                            isExpanded: false,
+                            // hint: StreamBuilder(
+                            //     stream: Stream.periodic(const Duration(seconds: 1)),
+                            //     builder: (context, snapshot) {
+                            //       return Text(
+                            //         Status_pe == null ? 'เลือก' : '$Status_pe',
+                            //         maxLines: 2,
+                            //         textAlign: TextAlign.center,
+                            //         style: const TextStyle(
+                            //           overflow: TextOverflow.ellipsis,
+                            //           fontSize: 14,
+                            //           color: Colors.grey,
+                            //         ),
+                            //       );
+                            //     }),
+                            icon: const Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black,
+                            ),
+                            style: const TextStyle(
+                              color: Colors.grey,
+                            ),
+                            iconSize: 20,
+                            buttonHeight: 40,
+                            buttonWidth: 250,
+                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                            dropdownDecoration: BoxDecoration(
+                              // color: Colors
+                              //     .amber,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            items:
+                                Status.map((item) => DropdownMenuItem<String>(
+                                      value: '${item}',
+                                      child: Text(
+                                        '${item}',
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          overflow: TextOverflow.ellipsis,
+                                          fontSize: 14,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    )).toList(),
+
+                            onChanged: (value) async {
+                              int selectedIndex =
+                                  Status.indexWhere((item) => item == value);
+                              setState(() {
+                                Status_pe_Start = Status[selectedIndex]!;
+                                Status_pe_ser_Start = '${selectedIndex + 1}';
+                              });
+                              // print(selectedIndex);
+                            },
+                          ),
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'โซน :',
+                          style: TextStyle(
+                            color: ReportScreen_Color.Colors_Text2_,
+                            // fontWeight: FontWeight.bold,
+                            fontFamily: Font_.Fonts_T,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: AppbackgroundColor.Sub_Abg_Colors,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            // border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                          width: 260,
+                          padding: const EdgeInsets.all(8.0),
+                          child: DropdownButtonFormField2(
+                            alignment: Alignment.center,
+                            focusColor: Colors.white,
+                            autofocus: false,
+                            decoration: InputDecoration(
+                              enabled: true,
+                              hoverColor: Colors.brown,
+                              prefixIconColor: Colors.blue,
+                              fillColor: Colors.white.withOpacity(0.05),
+                              filled: false,
+                              isDense: true,
+                              contentPadding: EdgeInsets.zero,
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(color: Colors.red),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  topLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                ),
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(255, 231, 227, 227),
+                                ),
+                              ),
+                            ),
+                            isExpanded: false,
+                            value: Value_Chang_Zone_People_Start,
+                            icon: const Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black,
+                            ),
+                            style: const TextStyle(
+                              color: Colors.grey,
+                            ),
+                            iconSize: 20,
+                            buttonHeight: 40,
+                            buttonWidth: 250,
+                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                            dropdownDecoration: BoxDecoration(
+                              // color: Colors
+                              //     .amber,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            items: zoneModels_report
+                                .map((item) => DropdownMenuItem<String>(
+                                      value: '${item.zn}',
+                                      child: Text(
+                                        '${item.zn}',
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          overflow: TextOverflow.ellipsis,
+                                          fontSize: 14,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ))
+                                .toList(),
+
+                            onChanged: (value) async {
+                              int selectedIndex = zoneModels_report
+                                  .indexWhere((item) => item.zn == value);
+
+                              setState(() {
+                                Value_Chang_Zone_People_Start = value!;
+                                Value_Chang_Zone_People_Ser_Start =
+                                    zoneModels_report[selectedIndex].ser!;
+                              });
+                              // print(
+                              //     'Selected Index: $Value_Chang_Zone_People_Start  //${Value_Chang_Zone_People_Ser_Start}');
+                            },
+                          ),
+                        ),
+                      ),
+
+/////----------------------------->
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'เดือนที่เริ่มสัญญา :',
+                          style: TextStyle(
+                            color: ReportScreen_Color.Colors_Text2_,
+                            // fontWeight: FontWeight.bold,
+                            fontFamily: Font_.Fonts_T,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: AppbackgroundColor.Sub_Abg_Colors,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            // border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                          width: 120,
+                          padding: const EdgeInsets.all(8.0),
+                          child: DropdownButtonFormField2(
+                            alignment: Alignment.center,
+                            focusColor: Colors.white,
+                            autofocus: false,
+                            decoration: InputDecoration(
+                              floatingLabelAlignment:
+                                  FloatingLabelAlignment.center,
+                              enabled: true,
+                              hoverColor: Colors.brown,
+                              prefixIconColor: Colors.blue,
+                              fillColor: Colors.white.withOpacity(0.05),
+                              filled: false,
+                              isDense: true,
+                              contentPadding: EdgeInsets.zero,
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(color: Colors.red),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  topLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                ),
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(255, 231, 227, 227),
+                                ),
+                              ),
+                            ),
+                            isExpanded: false,
+                            value: (Mon_People_Start == null)
+                                ? null
+                                : Mon_People_Start,
+
+                            icon: const Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black,
+                            ),
+                            style: const TextStyle(
+                              color: Colors.grey,
+                            ),
+                            iconSize: 20,
+                            buttonHeight: 40,
+                            buttonWidth: 200,
+                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                            dropdownDecoration: BoxDecoration(
+                              // color: Colors
+                              //     .amber,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            items: [
+                              for (int item = 1; item < 13; item++)
+                                DropdownMenuItem<String>(
+                                  value: '${item}',
+                                  child: Text(
+                                    '${monthsInThai[item - 1]}',
+                                    // '${item}',
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      overflow: TextOverflow.ellipsis,
+                                      fontSize: 14,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                )
+                            ],
+
+                            onChanged: (value) async {
+                              Mon_People_Start = value.toString();
+                            },
+                          ),
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'ปีที่เริ่มสัญญา :',
+                          style: TextStyle(
+                            color: ReportScreen_Color.Colors_Text2_,
+                            // fontWeight: FontWeight.bold,
+                            fontFamily: Font_.Fonts_T,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: AppbackgroundColor.Sub_Abg_Colors,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            // border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                          width: 120,
+                          padding: const EdgeInsets.all(8.0),
+                          child: DropdownButtonFormField2(
+                            alignment: Alignment.center,
+                            focusColor: Colors.white,
+                            autofocus: false,
+                            decoration: InputDecoration(
+                              floatingLabelAlignment:
+                                  FloatingLabelAlignment.center,
+                              enabled: true,
+                              hoverColor: Colors.brown,
+                              prefixIconColor: Colors.blue,
+                              fillColor: Colors.white.withOpacity(0.05),
+                              filled: false,
+                              isDense: true,
+                              contentPadding: EdgeInsets.zero,
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(color: Colors.red),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  topLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                ),
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(255, 231, 227, 227),
+                                ),
+                              ),
+                            ),
+                            isExpanded: false,
+                            value: (YE_People_Start == null)
+                                ? null
+                                : YE_People_Start,
+
+                            icon: const Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black,
+                            ),
+                            style: const TextStyle(
+                              color: Colors.grey,
+                            ),
+                            iconSize: 20,
+                            buttonHeight: 40,
+                            buttonWidth: 200,
+                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                            dropdownDecoration: BoxDecoration(
+                              // color: Colors
+                              //     .amber,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            items: YE_Th.map((item) => DropdownMenuItem<String>(
+                                  value: '${item}',
+                                  child: Text(
+                                    '${item}',
+                                    // '${int.parse(item) + 543}',
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      overflow: TextOverflow.ellipsis,
+                                      fontSize: 14,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                )).toList(),
+
+                            onChanged: (value) async {
+                              YE_People_Start = value.toString();
+                            },
+                          ),
+                        ),
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          onTap: () async {
+                            if (Status_pe_Start != null) {
+                              setState(() {
+                                Await_Status_Report4 = 0;
+                              });
+                              Dia_log();
+                            }
+
+                            if (Status_pe_Start != null) {
+                              read_GC_tenantSelect_Start();
+                            }
+                          },
+                          child: Container(
+                              width: 100,
+                              padding: const EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                color: Colors.green[700],
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'ค้นหา',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T,
+                                  ),
+                                ),
+                              )),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    InkWell(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.yellow[600],
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: const Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'เรียกดู',
+                                  style: TextStyle(
+                                    color: ReportScreen_Color.Colors_Text1_,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.navigate_next,
+                                  color: Colors.grey,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        onTap: (Status_pe_Start == null ||
+                                teNantModels_Start.isEmpty)
+                            ? null
+                            : () async {
+                                Insert_log.Insert_logs(
+                                    'รายงาน', 'กดดูรายงานผู้เช่าเริ่มสัญญา');
+                                RE_People_WidgetStart();
+                              }),
+                    (teNantModels_Start.isEmpty || Await_Status_Report4 == null)
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              (Status_pe_Start != null &&
+                                      teNantModels_Start.isEmpty &&
+                                      Await_Status_Report4 != null)
+                                  ? 'รายงานรายงานผู้เช่าเริ่มสัญญา (ไม่พบข้อมูล ✖️)'
+                                  : 'รายงานรายงานผู้เช่าเริ่มสัญญา',
+                              style: const TextStyle(
+                                color: ReportScreen_Color.Colors_Text2_,
+                                // fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T,
+                              ),
+                            ))
+                        : (Await_Status_Report4 == 0)
+                            ? SizedBox(
+                                // height: 20,
+                                child: Row(
+                                children: [
+                                  Container(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: const CircularProgressIndicator()),
+                                  const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'กำลังโหลดรายงานผู้เช่าเริ่มสัญญา...',
+                                      style: TextStyle(
+                                        color: ReportScreen_Color.Colors_Text2_,
+                                        // fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ))
+                            : Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'รายงานผู้เช่าเริ่มสัญญา ✔️',
+                                  style: TextStyle(
+                                    color: ReportScreen_Color.Colors_Text2_,
+                                    // fontWeight: FontWeight.bold,
+                                    fontFamily: Font_.Fonts_T,
+                                  ),
+                                ),
+                              )
+                    //     onTap:
+                    //         (Value_Chang_Zone_Pakan == null ||
+                    //                 transKonModels.isEmpty)
+                    //             ? null
+                    //             :
+                    //         () async {
+                    //       Insert_log.Insert_logs(
+                    //           'รายงาน', 'กดดูรายงานผู้เช่าเริ่มสัญญา');
+                    //       RE_People_WidgetStart();
+                    //     }),
+                    // (transKonModels.isEmpty || Await_Status_Report4 == null)
+                    //     ? Padding(
+                    //         padding: const EdgeInsets.all(8.0),
+                    //         child: Text(
+                    //           (transKonModels.isEmpty &&
+                    //                   Value_Chang_Zone_Pakan != null &&
+                    //                   Await_Status_Report4 != null)
+                    //               ? 'รายงานผู้เช่าเริ่มสัญญา (ไม่พบข้อมูล ✖️)'
+                    //               : 'รายงานผู้เช่าเริ่มสัญญา',
+                    //           style: const TextStyle(
+                    //             color: ReportScreen_Color.Colors_Text2_,
+                    //             // fontWeight: FontWeight.bold,
+                    //             fontFamily: Font_.Fonts_T,
+                    //           ),
+                    //         ),
+                    //       )
+                    //     : (Await_Status_Report4 == 0)
+                    //         ? SizedBox(
+                    //             // height: 20,
+                    //             child: Row(
+                    //             children: [
+                    //               Container(
+                    //                   padding: const EdgeInsets.all(4.0),
+                    //                   child: const CircularProgressIndicator()),
+                    //               const Padding(
+                    //                 padding: EdgeInsets.all(8.0),
+                    //                 child: Text(
+                    //                   'กำลังโหลดรายงานผู้เช่าเริ่มสัญญา...',
+                    //                   style: TextStyle(
+                    //                     color: ReportScreen_Color.Colors_Text2_,
+                    //                     // fontWeight: FontWeight.bold,
+                    //                     fontFamily: Font_.Fonts_T,
+                    //                   ),
+                    //                 ),
+                    //               ),
+                    //             ],
+                    //           ))
+                    //         : const Padding(
+                    //             padding: EdgeInsets.all(8.0),
+                    //             child: Text(
+                    //               'รายงานผู้เช่าเริ่มสัญญา ✔️',
+                    //               style: TextStyle(
+                    //                 color: ReportScreen_Color.Colors_Text2_,
+                    //                 // fontWeight: FontWeight.bold,
+                    //                 fontFamily: Font_.Fonts_T,
+                    //               ),
+                    //             ),
+                    //           )
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 5.0,
+              ),
             ])));
   }
 
@@ -1820,7 +2781,7 @@ class _ReportScreen10State extends State<ReportScreen10> {
                             children: <Widget>[
                               Container(
                                 // width: 1050,
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   color: AppbackgroundColor.TiTile_Colors,
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(10),
@@ -3075,7 +4036,7 @@ class _ReportScreen10State extends State<ReportScreen10> {
                             children: <Widget>[
                               Container(
                                 // width: 1050,
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   color: AppbackgroundColor.TiTile_Colors,
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(10),
@@ -3087,10 +4048,10 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    const Expanded(
+                                    Expanded(
                                       flex: 1,
-                                      child: Text(
-                                        'โซน',
+                                      child: const Text(
+                                        'เลขที่ใบเสร็จ',
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
                                             color: PeopleChaoScreen_Color
@@ -3107,6 +4068,22 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                       flex: 1,
                                       child: const Text(
                                         'เลขที่สัญญา',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'โซน',
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
                                             color: PeopleChaoScreen_Color
@@ -3154,7 +4131,7 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                     Expanded(
                                       flex: 1,
                                       child: const Text(
-                                        'รายการ',
+                                        'เลขตั้งหนี้',
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
                                             color: PeopleChaoScreen_Color
@@ -3170,7 +4147,7 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                     Expanded(
                                       flex: 1,
                                       child: const Text(
-                                        'ประเภท',
+                                        'รายการ',
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
                                             color: PeopleChaoScreen_Color
@@ -3225,36 +4202,43 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                         children: [
                                           Expanded(
                                             flex: 1,
-                                            child: Tooltip(
-                                              richMessage: TextSpan(
-                                                text:
-                                                    '${contractxPakanModels[index].zn}',
-                                                style: const TextStyle(
-                                                  color: HomeScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T,
-                                                  //fontSize: 10.0
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Tooltip(
+                                                richMessage: TextSpan(
+                                                  text:
+                                                      '${contractxPakanModels[index].docno}',
+                                                  style: const TextStyle(
+                                                    color: HomeScreen_Color
+                                                        .Colors_Text1_,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T,
+                                                    //fontSize: 10.0
+                                                  ),
                                                 ),
-                                              ),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                                color: Colors.grey[200],
-                                              ),
-                                              child: AutoSizeText(
-                                                minFontSize: 10,
-                                                maxFontSize: 25,
-                                                maxLines: 2,
-                                                '${contractxPakanModels[index].zn}',
-                                                textAlign: TextAlign.start,
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    //fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                  color: Colors.grey[200],
+                                                ),
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 25,
+                                                  maxLines: 1,
+                                                  '${contractxPakanModels[index].docno}',
+                                                  textAlign: TextAlign.start,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -3302,6 +4286,49 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                           ),
                                           Expanded(
                                             flex: 1,
+                                            child: Tooltip(
+                                              richMessage: TextSpan(
+                                                text: (contractxPakanModels[
+                                                                index]
+                                                            .zn !=
+                                                        null)
+                                                    ? '${contractxPakanModels[index].zn}'
+                                                    : '${contractxPakanModels[index].zn1}',
+                                                style: const TextStyle(
+                                                  color: HomeScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  //fontSize: 10.0
+                                                ),
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                color: Colors.grey[200],
+                                              ),
+                                              child: AutoSizeText(
+                                                minFontSize: 10,
+                                                maxFontSize: 25,
+                                                maxLines: 2,
+                                                (contractxPakanModels[index]
+                                                            .zn !=
+                                                        null)
+                                                    ? '${contractxPakanModels[index].zn}'
+                                                    : '${contractxPakanModels[index].zn1}',
+                                                textAlign: TextAlign.start,
+                                                style: const TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text2_,
+                                                    //fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
                                             child: Padding(
                                               padding:
                                                   const EdgeInsets.all(8.0),
@@ -3309,7 +4336,11 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                                 minFontSize: 10,
                                                 maxFontSize: 25,
                                                 maxLines: 1,
-                                                '${contractxPakanModels[index].cname}',
+                                                (contractxPakanModels[index]
+                                                            .cname ==
+                                                        null)
+                                                    ? '${contractxPakanModels[index].remark}'
+                                                    : '${contractxPakanModels[index].cname}',
                                                 textAlign: TextAlign.start,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: const TextStyle(
@@ -3328,8 +4359,12 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                                   const EdgeInsets.all(8.0),
                                               child: Tooltip(
                                                 richMessage: TextSpan(
-                                                  text:
-                                                      '${contractxPakanModels[index].sname}',
+                                                  text: (contractxPakanModels[
+                                                                  index]
+                                                              .sname ==
+                                                          null)
+                                                      ? '${contractxPakanModels[index].remark}'
+                                                      : '${contractxPakanModels[index].sname}',
                                                   style: const TextStyle(
                                                     color: HomeScreen_Color
                                                         .Colors_Text1_,
@@ -3348,7 +4383,11 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                                   minFontSize: 10,
                                                   maxFontSize: 25,
                                                   maxLines: 1,
-                                                  '${contractxPakanModels[index].sname}',
+                                                  (contractxPakanModels[index]
+                                                              .sname ==
+                                                          null)
+                                                      ? '${contractxPakanModels[index].remark}'
+                                                      : '${contractxPakanModels[index].sname}',
                                                   textAlign: TextAlign.start,
                                                   overflow:
                                                       TextOverflow.ellipsis,
@@ -3361,6 +4400,22 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                                           Font_.Fonts_T),
                                                 ),
                                               ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              '${contractxPakanModels[index].refno}',
+                                              textAlign: TextAlign.start,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
                                             ),
                                           ),
                                           Expanded(
@@ -3382,22 +4437,6 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                                     //fontWeight: FontWeight.bold,
                                                     fontFamily: Font_.Fonts_T),
                                               ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 1,
-                                              '${contractxPakanModels[index].unit}',
-                                              textAlign: TextAlign.start,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
-                                                  //fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T),
                                             ),
                                           ),
                                           Expanded(
@@ -3649,7 +4688,7 @@ class _ReportScreen10State extends State<ReportScreen10> {
                             children: <Widget>[
                               Container(
                                 // width: 1050,
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   color: AppbackgroundColor.TiTile_Colors,
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(10),
@@ -3661,54 +4700,6 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    const Expanded(
-                                      flex: 1,
-                                      child: Text(
-                                        'โซน',
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                            color: PeopleChaoScreen_Color
-                                                .Colors_Text1_,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T,
-                                            fontSize: 14.0
-                                            //fontSize: 10.0
-                                            //fontSize: 10.0
-                                            ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: const Text(
-                                        'เลขที่สัญญา',
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                            color: PeopleChaoScreen_Color
-                                                .Colors_Text1_,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T,
-                                            fontSize: 14.0
-                                            //fontSize: 10.0
-                                            //fontSize: 10.0
-                                            ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: const Text(
-                                        'ชื่อร้านค้า',
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                            color: PeopleChaoScreen_Color
-                                                .Colors_Text1_,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T,
-                                            fontSize: 14.0
-                                            //fontSize: 10.0
-                                            //fontSize: 10.0
-                                            ),
-                                      ),
-                                    ),
                                     Expanded(
                                       flex: 1,
                                       child: const Text(
@@ -3741,6 +4732,86 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                             ),
                                       ),
                                     ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'โซน',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'รหัสพื้นที่',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: const Text(
+                                        'เลขที่สัญญา',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: const Text(
+                                        'ชื่อผู้ติดต่อ',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: const Text(
+                                        'ชื่อร้านค้า',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
                                     Expanded(
                                       flex: 1,
                                       child: const Text(
@@ -3761,7 +4832,7 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                       flex: 1,
                                       child: const Text(
                                         'ยอดคืนสุทธิ',
-                                        textAlign: TextAlign.start,
+                                        textAlign: TextAlign.right,
                                         style: TextStyle(
                                             color: PeopleChaoScreen_Color
                                                 .Colors_Text1_,
@@ -3773,38 +4844,6 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                             ),
                                       ),
                                     ),
-                                    // Expanded(
-                                    //   flex: 1,
-                                    //   child: const Text(
-                                    //     'Slip',
-                                    //     textAlign: TextAlign.right,
-                                    //     style: TextStyle(
-                                    //         color: PeopleChaoScreen_Color
-                                    //             .Colors_Text1_,
-                                    //         fontWeight: FontWeight.bold,
-                                    //         fontFamily: FontWeight_.Fonts_T,
-                                    //         fontSize: 14.0
-                                    //         //fontSize: 10.0
-                                    //         //fontSize: 10.0
-                                    //         ),
-                                    //   ),
-                                    // ),
-                                    // Expanded(
-                                    //   flex: 1,
-                                    //   child: const Text(
-                                    //     '...',
-                                    //     textAlign: TextAlign.right,
-                                    //     style: TextStyle(
-                                    //         color: PeopleChaoScreen_Color
-                                    //             .Colors_Text1_,
-                                    //         fontWeight: FontWeight.bold,
-                                    //         fontFamily: FontWeight_.Fonts_T,
-                                    //         fontSize: 14.0
-                                    //         //fontSize: 10.0
-                                    //         //fontSize: 10.0
-                                    //         ),
-                                    //   ),
-                                    // ),
                                   ],
                                 ),
                               ),
@@ -3834,7 +4873,63 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                             child: Tooltip(
                                               richMessage: TextSpan(
                                                 text:
-                                                    '${transKonModels[index].zn}',
+                                                    '${transKonModels[index].docno}',
+                                                style: const TextStyle(
+                                                  color: HomeScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  //fontSize: 10.0
+                                                ),
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                color: Colors.grey[200],
+                                              ),
+                                              child: AutoSizeText(
+                                                minFontSize: 10,
+                                                maxFontSize: 25,
+                                                maxLines: 1,
+                                                '${transKonModels[index].docno}',
+                                                textAlign: TextAlign.start,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text2_,
+                                                    //fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              '${DateFormat('dd-MM').format(DateTime.parse('${transKonModels[index].pdate} 00:00:00'))}-${int.parse('${DateFormat('yyyy').format(DateTime.parse('${transKonModels[index].pdate} 00:00:00'))}') + 543}',
+                                              // '${transKonModels[index].pdate}',
+                                              textAlign: TextAlign.start,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Tooltip(
+                                              richMessage: TextSpan(
+                                                text: (transKonModels[index]
+                                                            .zn ==
+                                                        null)
+                                                    ? '${transKonModels[index].zn1}'
+                                                    : '${transKonModels[index].zn}',
                                                 style: const TextStyle(
                                                   color: HomeScreen_Color
                                                       .Colors_Text1_,
@@ -3853,7 +4948,45 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                                 minFontSize: 10,
                                                 maxFontSize: 25,
                                                 maxLines: 2,
-                                                '${transKonModels[index].zn}',
+                                                (transKonModels[index].zn !=
+                                                        null)
+                                                    ? '${transKonModels[index].zn}'
+                                                    : '${transKonModels[index].zn1}',
+                                                textAlign: TextAlign.start,
+                                                style: const TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text2_,
+                                                    //fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Tooltip(
+                                              richMessage: TextSpan(
+                                                text:
+                                                    '${transKonModels[index].ln}',
+                                                style: const TextStyle(
+                                                  color: HomeScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  //fontSize: 10.0
+                                                ),
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                color: Colors.grey[200],
+                                              ),
+                                              child: AutoSizeText(
+                                                minFontSize: 10,
+                                                maxFontSize: 25,
+                                                maxLines: 2,
+                                                '${transKonModels[index].ln}',
                                                 textAlign: TextAlign.start,
                                                 style: const TextStyle(
                                                     color:
@@ -3940,7 +5073,7 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                             child: Tooltip(
                                               richMessage: TextSpan(
                                                 text:
-                                                    '${transKonModels[index].docno}',
+                                                    '${transKonModels[index].sname}',
                                                 style: const TextStyle(
                                                   color: HomeScreen_Color
                                                       .Colors_Text1_,
@@ -3959,7 +5092,7 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                                 minFontSize: 10,
                                                 maxFontSize: 25,
                                                 maxLines: 1,
-                                                '${transKonModels[index].docno}',
+                                                '${transKonModels[index].sname}',
                                                 textAlign: TextAlign.start,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: const TextStyle(
@@ -3969,23 +5102,6 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                                     //fontWeight: FontWeight.bold,
                                                     fontFamily: Font_.Fonts_T),
                                               ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 1,
-                                              '${DateFormat('dd-MM').format(DateTime.parse('${transKonModels[index].pdate} 00:00:00'))}-${int.parse('${DateFormat('yyyy').format(DateTime.parse('${transKonModels[index].pdate} 00:00:00'))}') + 543}',
-                                              // '${transKonModels[index].pdate}',
-                                              textAlign: TextAlign.start,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
-                                                  //fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T),
                                             ),
                                           ),
                                           Expanded(
@@ -4034,7 +5150,7 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                                   .format(double.parse(
                                                       '${transKonModels[index].total}'))
                                                   .toString(),
-                                              textAlign: TextAlign.start,
+                                              textAlign: TextAlign.right,
                                               overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(
                                                   color: PeopleChaoScreen_Color
@@ -4043,39 +5159,6 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                                   fontFamily: Font_.Fonts_T),
                                             ),
                                           ),
-                                          // Expanded(
-                                          //   flex: 1,
-                                          //   child: AutoSizeText(
-                                          //     minFontSize: 10,
-                                          //     maxFontSize: 25,
-                                          //     maxLines: 1,
-                                          //     '',
-                                          //     // '${transKonModels[index].slip}',
-                                          //     textAlign: TextAlign.start,
-                                          //     overflow: TextOverflow.ellipsis,
-                                          //     style: const TextStyle(
-                                          //         color: PeopleChaoScreen_Color
-                                          //             .Colors_Text2_,
-                                          //         //fontWeight: FontWeight.bold,
-                                          //         fontFamily: Font_.Fonts_T),
-                                          //   ),
-                                          // ),
-                                          // Expanded(
-                                          //   flex: 1,
-                                          //   child: AutoSizeText(
-                                          //     minFontSize: 10,
-                                          //     maxFontSize: 25,
-                                          //     maxLines: 1,
-                                          //     '...',
-                                          //     textAlign: TextAlign.right,
-                                          //     overflow: TextOverflow.ellipsis,
-                                          //     style: const TextStyle(
-                                          //         color: PeopleChaoScreen_Color
-                                          //             .Colors_Text2_,
-                                          //         //fontWeight: FontWeight.bold,
-                                          //         fontFamily: Font_.Fonts_T),
-                                          //   ),
-                                          // ),
                                         ],
                                       ),
                                     ),
@@ -4170,6 +5253,1889 @@ class _ReportScreen10State extends State<ReportScreen10> {
 
                             transKonModels.clear();
                             _transKonModels.clear();
+                          });
+                          // check_clear();
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+///////////////////////////----------------------------------------------->(รายงานผู้เช่าเริ่มสัญญา)
+  RE_People_WidgetStart() {
+    int? ser_index;
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          title: StreamBuilder(
+              stream: Stream.periodic(const Duration(seconds: 0)),
+              builder: (context, snapshot) {
+                return Column(
+                  children: [
+                    Center(
+                        child: Text(
+                      // 'รายงานข้อมูลผู้เช่าเริ่มสัญญา (โซน : ทั้งหมด)',
+                      (Value_Chang_Zone_People_Start == null)
+                          ? 'รายงานผู้เช่า (กรุณาเลือกโซน)'
+                          : 'รายงานผู้เช่า (โซน : $Value_Chang_Zone_People_Start)',
+                      style: const TextStyle(
+                        color: ReportScreen_Color.Colors_Text1_,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: FontWeight_.Fonts_T,
+                      ),
+                    )),
+                    Row(
+                      children: [
+                        Expanded(
+                            flex: 1,
+                            child: Text(
+                              'ผู้เช่า: ${Status_pe_Start}',
+                              textAlign: TextAlign.start,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: ReportScreen_Color.Colors_Text1_,
+                                // fontWeight: FontWeight.bold,
+                                fontFamily: FontWeight_.Fonts_T,
+                              ),
+                            )),
+                        Expanded(
+                            flex: 1,
+                            child: Text(
+                              'ทั้งหมด: ${teNantModels_Start.length}',
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: ReportScreen_Color.Colors_Text1_,
+                                // fontWeight: FontWeight.bold,
+                                fontFamily: FontWeight_.Fonts_T,
+                              ),
+                            )),
+                      ],
+                    ),
+                    const SizedBox(height: 1),
+                    const Divider(),
+                    const SizedBox(height: 1),
+                    // Container(
+                    //   width: MediaQuery.of(context).size.width,
+                    //   // padding: EdgeInsets.all(10),
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.start,
+                    //     children: [
+                    //       Expanded(
+                    //         child: _searchBar_tenantSelect(),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
+                  ],
+                );
+              }),
+          content: StreamBuilder(
+              stream: Stream.periodic(const Duration(seconds: 0)),
+              builder: (context, snapshot) {
+                return ScrollConfiguration(
+                  behavior:
+                      ScrollConfiguration.of(context).copyWith(dragDevices: {
+                    PointerDeviceKind.touch,
+                    PointerDeviceKind.mouse,
+                  }),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        Container(
+                          // color: Colors.grey[50],
+                          width: (Responsive.isDesktop(context))
+                              ? MediaQuery.of(context).size.width * 0.93
+                              : (teNantModels_Start.length == 0)
+                                  ? MediaQuery.of(context).size.width
+                                  : 1200,
+                          // height:
+                          //     MediaQuery.of(context)
+                          //             .size
+                          //             .height *
+                          //         0.3,
+                          child: (teNantModels_Start.length == 0)
+                              ? const Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Center(
+                                      child: Text(
+                                        'ไม่พบข้อมูล ณ วันที่เลือก',
+                                        style: TextStyle(
+                                          color:
+                                              ReportScreen_Color.Colors_Text1_,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: FontWeight_.Fonts_T,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : Column(
+                                  children: <Widget>[
+                                    Container(
+                                      // width: 1050,
+                                      decoration: BoxDecoration(
+                                        color: AppbackgroundColor.TiTile_Colors,
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(10),
+                                            topRight: Radius.circular(10),
+                                            bottomLeft: Radius.circular(0),
+                                            bottomRight: Radius.circular(0)),
+                                      ),
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            flex: 1,
+                                            child: const Text(
+                                              'เลขที่สัญญา/เสนอราคา',
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  fontSize: 14.0
+                                                  //fontSize: 10.0
+                                                  //fontSize: 10.0
+                                                  ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: const Text(
+                                              'ชื่อผู้ติดต่อ',
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  fontSize: 14.0
+                                                  //fontSize: 10.0
+                                                  //fontSize: 10.0
+                                                  ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: const Text(
+                                              'ชื่อร้านค้า',
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  fontSize: 14.0
+                                                  //fontSize: 10.0
+                                                  //fontSize: 10.0
+                                                  ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: const Text(
+                                              'โซนพื้นที่',
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  fontSize: 14.0
+                                                  //fontSize: 10.0
+                                                  //fontSize: 10.0
+                                                  ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: const Text(
+                                              'รหัสพื้นที่',
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  fontSize: 14.0
+                                                  //fontSize: 10.0
+                                                  //fontSize: 10.0
+                                                  ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: const Text(
+                                              'ขนาดพื้นที่(ต.ร.ม.)',
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  fontSize: 14.0
+                                                  //fontSize: 10.0
+                                                  //fontSize: 10.0
+                                                  ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: const Text(
+                                              'ระยะเวลาการเช่า',
+                                              textAlign: TextAlign.end,
+                                              style: TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  fontSize: 14.0
+                                                  //fontSize: 10.0
+                                                  //fontSize: 10.0
+                                                  ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: const Text(
+                                              'วันเริ่มสัญญา',
+                                              textAlign: TextAlign.end,
+                                              style: TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  fontSize: 14.0
+                                                  //fontSize: 10.0
+                                                  ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: const Text(
+                                              'วันสิ้นสุดสัญญา',
+                                              textAlign: TextAlign.end,
+                                              style: TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  fontSize: 14.0
+                                                  //fontSize: 10.0
+                                                  //fontSize: 10.0
+                                                  ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: const Text(
+                                              'สถานะ',
+                                              textAlign: TextAlign.end,
+                                              style: TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  fontSize: 14.0
+                                                  //fontSize: 10.0
+                                                  //fontSize: 10.0
+                                                  ),
+                                            ),
+                                          ),
+                                          // Expanded(
+                                          //   flex: 1,
+                                          //   child: Text(
+                                          //     '...',
+                                          //     textAlign: TextAlign.end,
+                                          //     style: TextStyle(
+                                          //         color: PeopleChaoScreen_Color
+                                          //             .Colors_Text1_,
+                                          //         fontWeight: FontWeight.bold,
+                                          //         fontFamily:
+                                          //             FontWeight_.Fonts_T,
+                                          //         fontSize: 14.0
+                                          //         //fontSize: 10.0
+                                          //         //fontSize: 10.0
+                                          //         ),
+                                          //   ),
+                                          // ),
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                        // height: (Responsive.isDesktop(context))
+                                        //     ? MediaQuery.of(context).size.width * 0.255
+                                        //     : MediaQuery.of(context).size.height * 0.45,
+                                        child: ListView.builder(
+                                      itemCount: teNantModels_Start.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return (ser_index != index)
+                                            ? ListTile(
+                                                title: Container(
+                                                  decoration: BoxDecoration(
+                                                    // color: Colors.green[100]!
+                                                    //     .withOpacity(0.5),
+                                                    border: const Border(
+                                                      bottom: BorderSide(
+                                                        color: Colors.black12,
+                                                        width: 1,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  child: Row(children: [
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Tooltip(
+                                                          richMessage: TextSpan(
+                                                            text: teNantModels_Start[
+                                                                            index]
+                                                                        .docno ==
+                                                                    null
+                                                                ? teNantModels_Start[index]
+                                                                            .cid ==
+                                                                        null
+                                                                    ? ''
+                                                                    : '${teNantModels_Start[index].cid}'
+                                                                : '${teNantModels_Start[index].docno}',
+                                                            style:
+                                                                const TextStyle(
+                                                              color: HomeScreen_Color
+                                                                  .Colors_Text1_,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                              //fontSize: 10.0
+                                                            ),
+                                                          ),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5),
+                                                            color: Colors
+                                                                .grey[200],
+                                                          ),
+                                                          child: AutoSizeText(
+                                                            minFontSize: 10,
+                                                            maxFontSize: 25,
+                                                            maxLines: 1,
+                                                            teNantModels_Start[
+                                                                            index]
+                                                                        .docno ==
+                                                                    null
+                                                                ? teNantModels_Start[index]
+                                                                            .cid ==
+                                                                        null
+                                                                    ? ''
+                                                                    : '${teNantModels_Start[index].cid}'
+                                                                : '${teNantModels_Start[index].docno}',
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style:
+                                                                const TextStyle(
+                                                                    color: PeopleChaoScreen_Color
+                                                                        .Colors_Text2_,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: AutoSizeText(
+                                                          minFontSize: 10,
+                                                          maxFontSize: 25,
+                                                          maxLines: 1,
+                                                          teNantModels_Start[
+                                                                          index]
+                                                                      .cname ==
+                                                                  null
+                                                              ? teNantModels_Start[
+                                                                              index]
+                                                                          .cname_q ==
+                                                                      null
+                                                                  ? ''
+                                                                  : '${teNantModels_Start[index].cname_q}'
+                                                              : '${teNantModels_Start[index].cname}',
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  //fontWeight: FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Tooltip(
+                                                          richMessage: TextSpan(
+                                                            text: teNantModels_Start[
+                                                                            index]
+                                                                        .sname ==
+                                                                    null
+                                                                ? teNantModels_Start[index]
+                                                                            .sname_q ==
+                                                                        null
+                                                                    ? ''
+                                                                    : '${teNantModels_Start[index].sname_q}'
+                                                                : '${teNantModels_Start[index].sname}',
+                                                            style:
+                                                                const TextStyle(
+                                                              color: HomeScreen_Color
+                                                                  .Colors_Text1_,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                              //fontSize: 10.0
+                                                            ),
+                                                          ),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5),
+                                                            color: Colors
+                                                                .grey[200],
+                                                          ),
+                                                          child: AutoSizeText(
+                                                            minFontSize: 10,
+                                                            maxFontSize: 25,
+                                                            maxLines: 1,
+                                                            teNantModels_Start[
+                                                                            index]
+                                                                        .sname ==
+                                                                    null
+                                                                ? teNantModels_Start[index]
+                                                                            .sname_q ==
+                                                                        null
+                                                                    ? ''
+                                                                    : '${teNantModels_Start[index].sname_q}'
+                                                                : '${teNantModels_Start[index].sname}',
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style:
+                                                                const TextStyle(
+                                                                    color: PeopleChaoScreen_Color
+                                                                        .Colors_Text2_,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: AutoSizeText(
+                                                        minFontSize: 10,
+                                                        maxFontSize: 25,
+                                                        maxLines: 1,
+                                                        '${teNantModels_Start[index].zn}',
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: const TextStyle(
+                                                            color: PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                            //fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Tooltip(
+                                                        richMessage: TextSpan(
+                                                          text: teNantModels_Start[
+                                                                          index]
+                                                                      .ln_c ==
+                                                                  null
+                                                              ? teNantModels_Start[
+                                                                              index]
+                                                                          .ln_q ==
+                                                                      null
+                                                                  ? ''
+                                                                  : '${teNantModels_Start[index].ln_q}'
+                                                              : '${teNantModels_Start[index].ln_c}',
+                                                          style:
+                                                              const TextStyle(
+                                                            color: HomeScreen_Color
+                                                                .Colors_Text1_,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontFamily:
+                                                                FontWeight_
+                                                                    .Fonts_T,
+                                                            //fontSize: 10.0
+                                                          ),
+                                                        ),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(5),
+                                                          color:
+                                                              Colors.grey[200],
+                                                        ),
+                                                        child: AutoSizeText(
+                                                          minFontSize: 10,
+                                                          maxFontSize: 25,
+                                                          maxLines: 1,
+                                                          teNantModels_Start[
+                                                                          index]
+                                                                      .ln_c ==
+                                                                  null
+                                                              ? teNantModels_Start[
+                                                                              index]
+                                                                          .ln_q ==
+                                                                      null
+                                                                  ? ''
+                                                                  : '${teNantModels_Start[index].ln_q}'
+                                                              : '${teNantModels_Start[index].ln_c}',
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  //fontWeight: FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: AutoSizeText(
+                                                        minFontSize: 10,
+                                                        maxFontSize: 25,
+                                                        maxLines: 1,
+                                                        teNantModels_Start[
+                                                                        index]
+                                                                    .area_c ==
+                                                                null
+                                                            ? teNantModels_Start[
+                                                                            index]
+                                                                        .area_q ==
+                                                                    null
+                                                                ? ''
+                                                                : '${teNantModels_Start[index].area_q}'
+                                                            : '${teNantModels_Start[index].area_c}',
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: const TextStyle(
+                                                            color: PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                            //fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: AutoSizeText(
+                                                        minFontSize: 10,
+                                                        maxFontSize: 25,
+                                                        maxLines: 1,
+                                                        teNantModels_Start[
+                                                                        index]
+                                                                    .period ==
+                                                                null
+                                                            ? teNantModels_Start[
+                                                                            index]
+                                                                        .period_q ==
+                                                                    null
+                                                                ? ''
+                                                                : '${teNantModels_Start[index].period_q}  ${teNantModels_Start[index].rtname_q!.substring(3)}'
+                                                            : '${teNantModels_Start[index].period}  ${teNantModels_Start[index].rtname!.substring(3)}',
+                                                        textAlign:
+                                                            TextAlign.end,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: const TextStyle(
+                                                            color: PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                            //fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: AutoSizeText(
+                                                          minFontSize: 10,
+                                                          maxFontSize: 25,
+                                                          maxLines: 1,
+                                                          teNantModels_Start[
+                                                                          index]
+                                                                      .sdate_q ==
+                                                                  null
+                                                              ? teNantModels_Start[
+                                                                              index]
+                                                                          .sdate ==
+                                                                      null
+                                                                  ? ''
+                                                                  : DateFormat(
+                                                                          'dd-MM-yyyy')
+                                                                      .format(DateTime
+                                                                          .parse(
+                                                                              '${teNantModels_Start[index].sdate} 00:00:00'))
+                                                                      .toString()
+                                                              : DateFormat(
+                                                                      'dd-MM-yyyy')
+                                                                  .format(DateTime
+                                                                      .parse(
+                                                                          '${teNantModels_Start[index].sdate_q} 00:00:00'))
+                                                                  .toString(),
+                                                          textAlign:
+                                                              TextAlign.end,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  //fontWeight: FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: AutoSizeText(
+                                                          minFontSize: 10,
+                                                          maxFontSize: 25,
+                                                          maxLines: 1,
+                                                          teNantModels_Start[
+                                                                          index]
+                                                                      .ldate_q ==
+                                                                  null
+                                                              ? teNantModels_Start[
+                                                                              index]
+                                                                          .ldate ==
+                                                                      null
+                                                                  ? ''
+                                                                  : DateFormat(
+                                                                          'dd-MM-yyyy')
+                                                                      .format(DateTime
+                                                                          .parse(
+                                                                              '${teNantModels_Start[index].ldate} 00:00:00'))
+                                                                      .toString()
+                                                              : DateFormat(
+                                                                      'dd-MM-yyyy')
+                                                                  .format(DateTime
+                                                                      .parse(
+                                                                          '${teNantModels_Start[index].ldate_q} 00:00:00'))
+                                                                  .toString(),
+                                                          textAlign:
+                                                              TextAlign.end,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  //fontWeight: FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: AutoSizeText(
+                                                        minFontSize: 10,
+                                                        maxFontSize: 25,
+                                                        maxLines: 1,
+                                                        teNantModels_Start[
+                                                                        index]
+                                                                    .quantity ==
+                                                                '1'
+                                                            ? datex.isAfter(DateTime.parse(
+                                                                            '${teNantModels_Start[index].ldate} 00:00:00.000')
+                                                                        .subtract(const Duration(
+                                                                            days:
+                                                                                0))) ==
+                                                                    true
+                                                                ? 'หมดสัญญา'
+                                                                : datex.isAfter(DateTime.parse('${teNantModels_Start[index].ldate} 00:00:00.000').subtract(const Duration(days: 30))) ==
+                                                                        true
+                                                                    ? 'ใกล้หมดสัญญา'
+                                                                    : 'เช่าอยู่'
+                                                            : teNantModels_Start[
+                                                                            index]
+                                                                        .quantity ==
+                                                                    '2'
+                                                                ? 'เสนอราคา'
+                                                                : teNantModels_Start[index]
+                                                                            .quantity ==
+                                                                        '3'
+                                                                    ? 'เสนอราคา(มัดจำ)'
+                                                                    : 'ว่าง',
+                                                        textAlign:
+                                                            TextAlign.end,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                            color: teNantModels_Start[
+                                                                            index]
+                                                                        .quantity ==
+                                                                    '1'
+                                                                ? datex.isAfter(DateTime.parse('${teNantModels_Start[index].ldate} 00:00:00.000').subtract(const Duration(days: 0))) ==
+                                                                        true
+                                                                    ? Colors.red
+                                                                    : datex.isAfter(DateTime.parse('${teNantModels_Start[index].ldate} 00:00:00.000').subtract(const Duration(days: 30))) ==
+                                                                            true
+                                                                        ? Colors
+                                                                            .orange
+                                                                            .shade900
+                                                                        : Colors
+                                                                            .black
+                                                                : teNantModels_Start[index]
+                                                                            .quantity ==
+                                                                        '2'
+                                                                    ? Colors
+                                                                        .blue
+                                                                    : teNantModels_Start[index]
+                                                                                .quantity ==
+                                                                            '3'
+                                                                        ? Colors
+                                                                            .blue
+                                                                        : Colors
+                                                                            .green,
+                                                            fontFamily:
+                                                                Font_.Fonts_T
+                                                            //fontSize: 10.0
+                                                            ),
+                                                      ),
+                                                    ),
+                                                    // Expanded(
+                                                    //   flex: 1,
+                                                    //   child: Padding(
+                                                    //     padding:
+                                                    //         const EdgeInsets
+                                                    //             .all(8.0),
+                                                    //     child: InkWell(
+                                                    //       child: Container(
+                                                    //         decoration:
+                                                    //             BoxDecoration(
+                                                    //           color:
+                                                    //               Colors.green,
+                                                    //           borderRadius: const BorderRadius
+                                                    //                   .only(
+                                                    //               topLeft:
+                                                    //                   Radius.circular(
+                                                    //                       10),
+                                                    //               topRight: Radius
+                                                    //                   .circular(
+                                                    //                       10),
+                                                    //               bottomLeft: Radius
+                                                    //                   .circular(
+                                                    //                       10),
+                                                    //               bottomRight: Radius
+                                                    //                   .circular(
+                                                    //                       10)),
+                                                    //         ),
+                                                    //         padding:
+                                                    //             const EdgeInsets
+                                                    //                 .all(2.0),
+                                                    //         child: Center(
+                                                    //           child:
+                                                    //               AutoSizeText(
+                                                    //             minFontSize: 10,
+                                                    //             maxFontSize: 25,
+                                                    //             maxLines: 1,
+                                                    //             'เพิ่มเติม',
+                                                    //             textAlign:
+                                                    //                 TextAlign
+                                                    //                     .end,
+                                                    //             style:
+                                                    //                 TextStyle(
+                                                    //               color: PeopleChaoScreen_Color
+                                                    //                   .Colors_Text1_,
+                                                    //               fontWeight:
+                                                    //                   FontWeight
+                                                    //                       .bold,
+                                                    //               fontFamily: Font_
+                                                    //                   .Fonts_T,
+                                                    //             ),
+                                                    //           ),
+                                                    //         ),
+                                                    //       ),
+                                                    //       onTap: () async {
+                                                    //         setState(() {
+                                                    //           ser_index = index;
+                                                    //         });
+                                                    //         // red_report_Select(
+                                                    //         //     index);
+                                                    //       },
+                                                    //     ),
+                                                    //   ),
+                                                    // ),
+                                                  ]),
+                                                ),
+                                              )
+                                            : Container(
+                                                child: Column(
+                                                  children: [
+                                                    ListTile(
+                                                      title: Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color:
+                                                              Colors.green[100],
+                                                          border: const Border(
+                                                            bottom: BorderSide(
+                                                              color: Colors
+                                                                  .black12,
+                                                              width: 1,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        child: Row(children: [
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: Tooltip(
+                                                                richMessage:
+                                                                    TextSpan(
+                                                                  text: teNantModels_Start[index]
+                                                                              .docno ==
+                                                                          null
+                                                                      ? teNantModels_Start[index].cid ==
+                                                                              null
+                                                                          ? ''
+                                                                          : '${teNantModels_Start[index].cid}'
+                                                                      : '${teNantModels_Start[index].docno}',
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    color: HomeScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontFamily:
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                    //fontSize: 10.0
+                                                                  ),
+                                                                ),
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              5),
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      200],
+                                                                ),
+                                                                child:
+                                                                    AutoSizeText(
+                                                                  minFontSize:
+                                                                      10,
+                                                                  maxFontSize:
+                                                                      25,
+                                                                  maxLines: 1,
+                                                                  teNantModels_Start[index]
+                                                                              .docno ==
+                                                                          null
+                                                                      ? teNantModels_Start[index].cid ==
+                                                                              null
+                                                                          ? ''
+                                                                          : '${teNantModels_Start[index].cid}'
+                                                                      : '${teNantModels_Start[index].docno}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .start,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  style: const TextStyle(
+                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily: Font_.Fonts_T),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child:
+                                                                  AutoSizeText(
+                                                                minFontSize: 10,
+                                                                maxFontSize: 25,
+                                                                maxLines: 1,
+                                                                teNantModels_Start[index]
+                                                                            .cname ==
+                                                                        null
+                                                                    ? teNantModels_Start[index].cname_q ==
+                                                                            null
+                                                                        ? ''
+                                                                        : '${teNantModels_Start[index].cname_q}'
+                                                                    : '${teNantModels_Start[index].cname}',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .start,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                style: const TextStyle(
+                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: Tooltip(
+                                                                richMessage:
+                                                                    TextSpan(
+                                                                  text: teNantModels_Start[index]
+                                                                              .sname ==
+                                                                          null
+                                                                      ? teNantModels_Start[index].sname_q ==
+                                                                              null
+                                                                          ? ''
+                                                                          : '${teNantModels_Start[index].sname_q}'
+                                                                      : '${teNantModels_Start[index].sname}',
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    color: HomeScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontFamily:
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                    //fontSize: 10.0
+                                                                  ),
+                                                                ),
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              5),
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      200],
+                                                                ),
+                                                                child:
+                                                                    AutoSizeText(
+                                                                  minFontSize:
+                                                                      10,
+                                                                  maxFontSize:
+                                                                      25,
+                                                                  maxLines: 1,
+                                                                  teNantModels_Start[index]
+                                                                              .sname ==
+                                                                          null
+                                                                      ? teNantModels_Start[index].sname_q ==
+                                                                              null
+                                                                          ? ''
+                                                                          : '${teNantModels_Start[index].sname_q}'
+                                                                      : '${teNantModels_Start[index].sname}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .start,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  style: const TextStyle(
+                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily: Font_.Fonts_T),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: AutoSizeText(
+                                                              minFontSize: 10,
+                                                              maxFontSize: 25,
+                                                              maxLines: 1,
+                                                              '${teNantModels_Start[index].zn}',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              style:
+                                                                  const TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Tooltip(
+                                                              richMessage:
+                                                                  TextSpan(
+                                                                text: teNantModels_Start[index]
+                                                                            .ln_c ==
+                                                                        null
+                                                                    ? teNantModels_Start[index].ln_q ==
+                                                                            null
+                                                                        ? ''
+                                                                        : '${teNantModels_Start[index].ln_q}'
+                                                                    : '${teNantModels_Start[index].ln_c}',
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: HomeScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                  //fontSize: 10.0
+                                                                ),
+                                                              ),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            5),
+                                                                color: Colors
+                                                                    .grey[200],
+                                                              ),
+                                                              child:
+                                                                  AutoSizeText(
+                                                                minFontSize: 10,
+                                                                maxFontSize: 25,
+                                                                maxLines: 1,
+                                                                teNantModels_Start[index]
+                                                                            .ln_c ==
+                                                                        null
+                                                                    ? teNantModels_Start[index].ln_q ==
+                                                                            null
+                                                                        ? ''
+                                                                        : '${teNantModels_Start[index].ln_q}'
+                                                                    : '${teNantModels_Start[index].ln_c}',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .start,
+                                                                style: const TextStyle(
+                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: AutoSizeText(
+                                                              minFontSize: 10,
+                                                              maxFontSize: 25,
+                                                              maxLines: 1,
+                                                              teNantModels_Start[
+                                                                              index]
+                                                                          .area_c ==
+                                                                      null
+                                                                  ? teNantModels_Start[index]
+                                                                              .area_q ==
+                                                                          null
+                                                                      ? ''
+                                                                      : '${teNantModels_Start[index].area_q}'
+                                                                  : '${teNantModels_Start[index].area_c}',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              style:
+                                                                  const TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: AutoSizeText(
+                                                              minFontSize: 10,
+                                                              maxFontSize: 25,
+                                                              maxLines: 1,
+                                                              teNantModels_Start[
+                                                                              index]
+                                                                          .period ==
+                                                                      null
+                                                                  ? teNantModels_Start[index]
+                                                                              .period_q ==
+                                                                          null
+                                                                      ? ''
+                                                                      : '${teNantModels_Start[index].period_q}  ${teNantModels_Start[index].rtname_q!.substring(3)}'
+                                                                  : '${teNantModels_Start[index].period}  ${teNantModels_Start[index].rtname!.substring(3)}',
+                                                              textAlign:
+                                                                  TextAlign.end,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              style:
+                                                                  const TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child:
+                                                                  AutoSizeText(
+                                                                minFontSize: 10,
+                                                                maxFontSize: 25,
+                                                                maxLines: 1,
+                                                                teNantModels_Start[index]
+                                                                            .sdate_q ==
+                                                                        null
+                                                                    ? teNantModels_Start[index].sdate ==
+                                                                            null
+                                                                        ? ''
+                                                                        : DateFormat('dd-MM-yyyy')
+                                                                            .format(DateTime.parse(
+                                                                                '${teNantModels_Start[index].sdate} 00:00:00'))
+                                                                            .toString()
+                                                                    : DateFormat(
+                                                                            'dd-MM-yyyy')
+                                                                        .format(
+                                                                            DateTime.parse('${teNantModels_Start[index].sdate_q} 00:00:00'))
+                                                                        .toString(),
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .end,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                style: const TextStyle(
+                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child:
+                                                                  AutoSizeText(
+                                                                minFontSize: 10,
+                                                                maxFontSize: 25,
+                                                                maxLines: 1,
+                                                                teNantModels_Start[index]
+                                                                            .ldate_q ==
+                                                                        null
+                                                                    ? teNantModels_Start[index].ldate ==
+                                                                            null
+                                                                        ? ''
+                                                                        : DateFormat('dd-MM-yyyy')
+                                                                            .format(DateTime.parse(
+                                                                                '${teNantModels_Start[index].ldate} 00:00:00'))
+                                                                            .toString()
+                                                                    : DateFormat(
+                                                                            'dd-MM-yyyy')
+                                                                        .format(
+                                                                            DateTime.parse('${teNantModels_Start[index].ldate_q} 00:00:00'))
+                                                                        .toString(),
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .end,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                style: const TextStyle(
+                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: AutoSizeText(
+                                                              minFontSize: 10,
+                                                              maxFontSize: 25,
+                                                              maxLines: 1,
+                                                              teNantModels_Start[
+                                                                              index]
+                                                                          .quantity ==
+                                                                      '1'
+                                                                  ? datex.isAfter(DateTime.parse('${teNantModels_Start[index].ldate} 00:00:00.000').subtract(const Duration(
+                                                                              days:
+                                                                                  0))) ==
+                                                                          true
+                                                                      ? 'หมดสัญญา'
+                                                                      : datex.isAfter(DateTime.parse('${teNantModels_Start[index].ldate} 00:00:00.000').subtract(const Duration(days: 30))) ==
+                                                                              true
+                                                                          ? 'ใกล้หมดสัญญา'
+                                                                          : 'เช่าอยู่'
+                                                                  : teNantModels_Start[index]
+                                                                              .quantity ==
+                                                                          '2'
+                                                                      ? 'เสนอราคา'
+                                                                      : teNantModels_Start[index].quantity ==
+                                                                              '3'
+                                                                          ? 'เสนอราคา(มัดจำ)'
+                                                                          : 'ว่าง',
+                                                              textAlign:
+                                                                  TextAlign.end,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              style: TextStyle(
+                                                                  color: teNantModels_Start[index]
+                                                                              .quantity ==
+                                                                          '1'
+                                                                      ? datex.isAfter(DateTime.parse('${teNantModels_Start[index].ldate} 00:00:00.000').subtract(const Duration(days: 0))) ==
+                                                                              true
+                                                                          ? Colors
+                                                                              .red
+                                                                          : datex.isAfter(DateTime.parse('${teNantModels_Start[index].ldate} 00:00:00.000').subtract(const Duration(days: 30))) ==
+                                                                                  true
+                                                                              ? Colors
+                                                                                  .orange.shade900
+                                                                              : Colors
+                                                                                  .black
+                                                                      : teNantModels_Start[index].quantity ==
+                                                                              '2'
+                                                                          ? Colors
+                                                                              .blue
+                                                                          : teNantModels_Start[index].quantity ==
+                                                                                  '3'
+                                                                              ? Colors
+                                                                                  .blue
+                                                                              : Colors
+                                                                                  .green,
+                                                                  fontFamily:
+                                                                      Font_
+                                                                          .Fonts_T
+                                                                  //fontSize: 10.0
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: InkWell(
+                                                                child:
+                                                                    Container(
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    color: Colors
+                                                                        .red,
+                                                                    borderRadius: const BorderRadius
+                                                                            .only(
+                                                                        topLeft:
+                                                                            Radius.circular(
+                                                                                10),
+                                                                        topRight:
+                                                                            Radius.circular(
+                                                                                10),
+                                                                        bottomLeft:
+                                                                            Radius.circular(
+                                                                                10),
+                                                                        bottomRight:
+                                                                            Radius.circular(10)),
+                                                                  ),
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          2.0),
+                                                                  child: Center(
+                                                                    child:
+                                                                        AutoSizeText(
+                                                                      minFontSize:
+                                                                          10,
+                                                                      maxFontSize:
+                                                                          25,
+                                                                      maxLines:
+                                                                          1,
+                                                                      'X',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .end,
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: PeopleChaoScreen_Color
+                                                                            .Colors_Text1_,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        fontFamily:
+                                                                            Font_.Fonts_T,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                onTap: () {
+                                                                  setState(() {
+                                                                    ser_index =
+                                                                        null;
+                                                                  });
+                                                                },
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ]),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            Colors.green[100],
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        8),
+                                                                topRight:
+                                                                    Radius
+                                                                        .circular(
+                                                                            8),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        0),
+                                                                bottomRight:
+                                                                    Radius
+                                                                        .circular(
+                                                                            0)),
+                                                      ),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              2.0),
+                                                      child: const Row(
+                                                        children: [
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Padding(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(2.0),
+                                                              child: Text(
+                                                                'งวด',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .start,
+                                                                style: TextStyle(
+                                                                    color: PeopleChaoScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontFamily:
+                                                                        FontWeight_
+                                                                            .Fonts_T
+                                                                    //fontSize: 10.0
+                                                                    //fontSize: 10.0
+                                                                    ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Padding(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(2.0),
+                                                              child: Text(
+                                                                'วันที่',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .start,
+                                                                style: TextStyle(
+                                                                    color: PeopleChaoScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontFamily:
+                                                                        FontWeight_
+                                                                            .Fonts_T
+                                                                    //fontSize: 10.0
+                                                                    //fontSize: 10.0
+                                                                    ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Padding(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(2.0),
+                                                              child: Text(
+                                                                'รายการ',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .start,
+                                                                style: TextStyle(
+                                                                    color: PeopleChaoScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontFamily:
+                                                                        FontWeight_
+                                                                            .Fonts_T
+                                                                    //fontSize: 10.0
+                                                                    //fontSize: 10.0
+                                                                    ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Padding(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(2.0),
+                                                              child: Text(
+                                                                'ยอด/งวด',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .end,
+                                                                style: TextStyle(
+                                                                    color: PeopleChaoScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontFamily:
+                                                                        FontWeight_
+                                                                            .Fonts_T
+                                                                    //fontSize: 10.0
+                                                                    //fontSize: 10.0
+                                                                    ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Padding(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(2.0),
+                                                              child: Text(
+                                                                'ยอด',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .end,
+                                                                style: TextStyle(
+                                                                    color: PeopleChaoScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontFamily:
+                                                                        FontWeight_
+                                                                            .Fonts_T
+                                                                    //fontSize: 10.0
+                                                                    //fontSize: 10.0
+                                                                    ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    // if (quotxSelectModels_Select
+                                                    //         .length ==
+                                                    //     0)
+                                                    //   Container(
+                                                    //       decoration:
+                                                    //           BoxDecoration(
+                                                    //         color: Colors
+                                                    //             .green[50],
+                                                    //         border:
+                                                    //             const Border(
+                                                    //           bottom:
+                                                    //               BorderSide(
+                                                    //             color: Colors
+                                                    //                 .black12,
+                                                    //             width: 1,
+                                                    //           ),
+                                                    //         ),
+                                                    //       ),
+                                                    //       child: ListTile(
+                                                    //           title: Row(
+                                                    //               mainAxisAlignment:
+                                                    //                   MainAxisAlignment
+                                                    //                       .center,
+                                                    //               children: [
+                                                    //             Expanded(
+                                                    //               flex: 1,
+                                                    //               child:
+                                                    //                   AutoSizeText(
+                                                    //                 minFontSize:
+                                                    //                     10,
+                                                    //                 maxFontSize:
+                                                    //                     25,
+                                                    //                 maxLines: 1,
+                                                    //                 'ไม่พบข้อมูล',
+                                                    //                 textAlign:
+                                                    //                     TextAlign
+                                                    //                         .center,
+                                                    //                 style: const TextStyle(
+                                                    //                     color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                    //                     //fontWeight: FontWeight.bold,
+                                                    //                     fontFamily: Font_.Fonts_T),
+                                                    //               ),
+                                                    //             ),
+                                                    //           ]))),
+                                                    // for (int index2 = 0;
+                                                    //     index2 <
+                                                    //         quotxSelectModels_Select
+                                                    //             .length;
+                                                    //     index2++)
+                                                    //   Container(
+                                                    //     decoration:
+                                                    //         BoxDecoration(
+                                                    //       color:
+                                                    //           Colors.green[50],
+                                                    //       border: const Border(
+                                                    //         bottom: BorderSide(
+                                                    //           color: Colors
+                                                    //               .black12,
+                                                    //           width: 1,
+                                                    //         ),
+                                                    //       ),
+                                                    //     ),
+                                                    //     child: ListTile(
+                                                    //         title: Row(
+                                                    //       mainAxisAlignment:
+                                                    //           MainAxisAlignment
+                                                    //               .center,
+                                                    //       children: [
+                                                    //         Expanded(
+                                                    //           flex: 1,
+                                                    //           child:
+                                                    //               AutoSizeText(
+                                                    //             maxLines: 2,
+                                                    //             minFontSize: 8,
+                                                    //             // maxFontSize: 15,
+                                                    //             '${quotxSelectModels_Select[index2].unit} / ${quotxSelectModels_Select[index2].term} (งวด)',
+                                                    //             textAlign:
+                                                    //                 TextAlign
+                                                    //                     .start,
+                                                    //             style: const TextStyle(
+                                                    //                 color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                    //                 //fontWeight: FontWeight.bold,
+                                                    //                 fontFamily: Font_.Fonts_T),
+                                                    //           ),
+                                                    //         ),
+                                                    //         Expanded(
+                                                    //           flex: 1,
+                                                    //           child:
+                                                    //               AutoSizeText(
+                                                    //             maxLines: 2,
+                                                    //             minFontSize: 8,
+                                                    //             // maxFontSize: 15,
+                                                    //             '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels_Select[index2].sdate!} 00:00:00'))} - ${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels_Select[index2].ldate!} 00:00:00'))}',
+                                                    //             textAlign:
+                                                    //                 TextAlign
+                                                    //                     .start,
+                                                    //             style: const TextStyle(
+                                                    //                 color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                    //                 //fontWeight: FontWeight.bold,
+                                                    //                 fontFamily: Font_.Fonts_T),
+                                                    //           ),
+                                                    //         ),
+                                                    //         Expanded(
+                                                    //           flex: 1,
+                                                    //           child: Tooltip(
+                                                    //             richMessage:
+                                                    //                 TextSpan(
+                                                    //               text:
+                                                    //                   '${quotxSelectModels_Select[index2].expname}',
+                                                    //               style:
+                                                    //                   const TextStyle(
+                                                    //                 color: HomeScreen_Color
+                                                    //                     .Colors_Text1_,
+                                                    //                 fontWeight:
+                                                    //                     FontWeight
+                                                    //                         .bold,
+                                                    //                 fontFamily:
+                                                    //                     FontWeight_
+                                                    //                         .Fonts_T,
+                                                    //                 //fontSize: 10.0
+                                                    //               ),
+                                                    //             ),
+                                                    //             decoration:
+                                                    //                 BoxDecoration(
+                                                    //               borderRadius:
+                                                    //                   BorderRadius
+                                                    //                       .circular(
+                                                    //                           5),
+                                                    //               color: Colors
+                                                    //                       .grey[
+                                                    //                   200],
+                                                    //             ),
+                                                    //             child:
+                                                    //                 AutoSizeText(
+                                                    //               maxLines: 2,
+                                                    //               minFontSize:
+                                                    //                   8,
+                                                    //               // maxFontSize: 15,
+                                                    //               '${quotxSelectModels_Select[index2].expname}',
+                                                    //               textAlign:
+                                                    //                   TextAlign
+                                                    //                       .start,
+                                                    //               style: const TextStyle(
+                                                    //                   color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                    //                   //fontWeight: FontWeight.bold,
+                                                    //                   fontFamily: Font_.Fonts_T),
+                                                    //             ),
+                                                    //           ),
+                                                    //         ),
+                                                    //         Expanded(
+                                                    //           flex: 1,
+                                                    //           child:
+                                                    //               AutoSizeText(
+                                                    //             maxLines: 2,
+                                                    //             minFontSize: 8,
+                                                    //             // maxFontSize: 15,
+                                                    //             '${nFormat.format(double.parse(quotxSelectModels_Select[index2].total!))}',
+                                                    //             textAlign:
+                                                    //                 TextAlign
+                                                    //                     .end,
+                                                    //             style: const TextStyle(
+                                                    //                 color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                    //                 //fontWeight: FontWeight.bold,
+                                                    //                 fontFamily: Font_.Fonts_T),
+                                                    //           ),
+                                                    //         ),
+                                                    //         Expanded(
+                                                    //           flex: 1,
+                                                    //           child:
+                                                    //               AutoSizeText(
+                                                    //             maxLines: 2,
+                                                    //             minFontSize: 8,
+                                                    //             // maxFontSize: 15,
+                                                    //             '${nFormat.format(int.parse(quotxSelectModels_Select[index2].term!) * double.parse(quotxSelectModels_Select[index2].total!))}',
+                                                    //             textAlign:
+                                                    //                 TextAlign
+                                                    //                     .end,
+                                                    //             style: const TextStyle(
+                                                    //                 color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                    //                 //fontWeight: FontWeight.bold,
+                                                    //                 fontFamily: Font_.Fonts_T),
+                                                    //           ),
+                                                    //         ),
+                                                    //       ],
+                                                    //     )),
+                                                    //   )
+                                                  ],
+                                                ),
+                                              );
+                                      },
+                                    )),
+                                  ],
+                                ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
+          actions: <Widget>[
+            const SizedBox(height: 1),
+            const Divider(),
+            const SizedBox(height: 1),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    if (teNantModels_Start.length != 0)
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          child: Container(
+                            width: 100,
+                            decoration: const BoxDecoration(
+                              color: Colors.blue,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Center(
+                              child: Text(
+                                'Export file',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                              ),
+                            ),
+                          ),
+                          onTap: () async {
+                            setState(() {
+                              Value_Report = 'รายงานข้อมูลผู้เช่าเริ่มสัญญา';
+                              Pre_and_Dow = 'Download';
+                            });
+                            _showMyDialog_SAVE();
+                          },
+                        ),
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        child: Container(
+                          width: 100,
+                          decoration: const BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                          ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: const Center(
+                            child: Text(
+                              'ปิด',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T,
+                              ),
+                            ),
+                          ),
+                        ),
+                        onTap: () async {
+                          setState(() {
+                            formKey.currentState?.reset();
+                            Value_Chang_Zone_People_Ser_Start = null;
+
+                            Value_Chang_Zone_People_Start = null;
+                            Status_pe_Start = null;
+                            Await_Status_Report4 = null;
+                            teNantModels_Start.clear();
+                            Mon_People_Start = null;
+                            YE_People_Start = null;
+
+                            // contractPhotoModels.clear();
+                            // Ser_Cid_ldate = 0;
+                            // Mon_Cid_ldate = null;
+                            // YE_Cid_ldate = null;
                           });
                           // check_clear();
                           Navigator.of(context).pop();
@@ -4441,13 +7407,21 @@ class _ReportScreen10State extends State<ReportScreen10> {
               renTal_name,
               Value_Chang_Zone_Pakan,
               transKonModels);
+        } else if (Value_Report == 'รายงานข้อมูลผู้เช่าเริ่มสัญญา') {
+          Excgen_PeopleStart_ChoReport.exportExcel_PeopleStart_ChoReport(
+            expModels,
+            context,
+            NameFile_,
+            _verticalGroupValue_NameFile,
+            Value_Chang_Zone_People_Start,
+            (Status_pe_Start == null) ? 'ปัจจุบัน' : Status_pe_Start,
+            teNantModels_Start,
+          );
         }
       }
       Navigator.of(context).pop();
     }
   }
 }
-
-
 
 ///​กรรมกรข่าว X ​ทีมพากย์พันธมิตร

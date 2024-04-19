@@ -239,7 +239,7 @@ class _WebViewX2PageState extends State<WebViewX2Page> {
       final content = await webviewController.getContent();
       // showAlertDialog(content.source, context);
     } catch (e) {
-      // showAlertDialog('Failed to execute this task.', context);
+      // showAlertDialog('Failed to execute this task.', context);webviewPay_beamcheckout.dart
     }
   }
 

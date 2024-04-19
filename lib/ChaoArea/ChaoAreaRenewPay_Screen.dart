@@ -61,7 +61,7 @@ class _ChaoAreaRenewPayScreenState extends State<ChaoAreaRenewPayScreen> {
                       children: [
                         Container(
                           width: MediaQuery.of(context).size.width,
-                          decoration: const BoxDecoration(
+                          decoration:  BoxDecoration(
                             color: AppbackgroundColor.TiTile_Colors,
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(10),

@@ -52,7 +52,7 @@ class _PeopleChaoScreen4State extends State<PeopleChaoScreen4> {
           child: Container(
             height: 50,
             width: MediaQuery.of(context).size.width,
-            decoration: const BoxDecoration(
+            decoration:  BoxDecoration(
               color: AppbackgroundColor.TiTile_Colors,
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(10),
@@ -268,7 +268,7 @@ class _PeopleChaoScreen4State extends State<PeopleChaoScreen4> {
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
                       height: 450,
-                      decoration: const BoxDecoration(
+                      decoration:  BoxDecoration(
                         color: AppbackgroundColor.TiTile_Colors,
                         // color: AppbackgroundColor.Sub_Abg_Colors,
                         borderRadius: BorderRadius.only(
@@ -543,7 +543,7 @@ class _PeopleChaoScreen4State extends State<PeopleChaoScreen4> {
                   padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
                   child: Container(
                       height: 450,
-                      decoration: const BoxDecoration(
+                      decoration:  BoxDecoration(
                         color: AppbackgroundColor.TiTile_Colors,
                         // color: AppbackgroundColor.Sub_Abg_Colors,
                         borderRadius: BorderRadius.only(

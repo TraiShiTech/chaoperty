@@ -19,6 +19,11 @@ class Pdfgen_BillingNoteInvlice_TP7 {
   //////////---------------------------------------------------->(ใบวางบิล แจ้งหนี้)  ใช้  ++
   static void exportPDF_BillingNoteInvlice_TP7(
       foder,
+      Cust_no,
+      cid_,
+      Zone_s,
+      Ln_s,
+      fname,
 
       ///(ser_BillingNote 1 = วางบิล  /// 2 = ประวัติวางบิล )
       // ser_BillingNote,
@@ -124,55 +129,74 @@ class Pdfgen_BillingNoteInvlice_TP7 {
     pw.Widget Header(int serpang) {
       return pw.Column(children: [
         pw.Row(
+          // mainAxisSize: pw.MainAxisSize.min,
+          // crossAxisAlignment: pw.CrossAxisAlignment.start,
+          children: [
+            (netImage.isEmpty)
+                ? pw.Container(
+                    height: 30,
+                    width: 40,
+                    decoration: const pw.BoxDecoration(
+                      color: PdfColors.grey200,
+                      border: pw.Border(
+                        right: pw.BorderSide(color: PdfColors.grey300),
+                        left: pw.BorderSide(color: PdfColors.grey300),
+                        top: pw.BorderSide(color: PdfColors.grey300),
+                        bottom: pw.BorderSide(color: PdfColors.grey300),
+                      ),
+                    ),
+                    child: pw.Center(
+                      child: pw.Text(
+                        '$bill_name ',
+                        maxLines: 1,
+                        style: pw.TextStyle(
+                          fontSize: 10,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
+                      ),
+                    ))
+                : pw.Container(
+                    height: 30,
+                    width: 40,
+                    decoration: const pw.BoxDecoration(
+                      color: PdfColors.grey200,
+                      border: pw.Border(
+                        right: pw.BorderSide(color: PdfColors.grey300),
+                        left: pw.BorderSide(color: PdfColors.grey300),
+                        top: pw.BorderSide(color: PdfColors.grey300),
+                        bottom: pw.BorderSide(color: PdfColors.grey300),
+                      ),
+                    ),
+                    child: pw.Image(
+                      (netImage[0]),
+                      height: 30,
+                      width: 40,
+                    ),
+                  ),
+            pw.Spacer(),
+            pw.Text(
+              'ใบวางบิล/ใบแจ้งหนี้ (Invoice)',
+              textAlign: pw.TextAlign.right,
+              maxLines: 1,
+              style: pw.TextStyle(
+                fontSize: font_Size + 1,
+                fontWeight: pw.FontWeight.bold,
+                font: ttf,
+                color: Colors_pd,
+              ),
+            ),
+          ],
+        ),
+        pw.Row(
           children: [
             pw.Container(
               width: 200,
               child: pw.Column(
+                mainAxisAlignment: pw.MainAxisAlignment.start,
                 mainAxisSize: pw.MainAxisSize.min,
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
                 children: [
-                  (netImage.isEmpty)
-                      ? pw.Container(
-                          height: 30,
-                          width: 40,
-                          decoration: const pw.BoxDecoration(
-                            color: PdfColors.grey200,
-                            border: pw.Border(
-                              right: pw.BorderSide(color: PdfColors.grey300),
-                              left: pw.BorderSide(color: PdfColors.grey300),
-                              top: pw.BorderSide(color: PdfColors.grey300),
-                              bottom: pw.BorderSide(color: PdfColors.grey300),
-                            ),
-                          ),
-                          child: pw.Center(
-                            child: pw.Text(
-                              '$bill_name ',
-                              maxLines: 1,
-                              style: pw.TextStyle(
-                                fontSize: 10,
-                                font: ttf,
-                                color: Colors_pd,
-                              ),
-                            ),
-                          ))
-                      : pw.Container(
-                          height: 30,
-                          width: 40,
-                          decoration: const pw.BoxDecoration(
-                            color: PdfColors.grey200,
-                            border: pw.Border(
-                              right: pw.BorderSide(color: PdfColors.grey300),
-                              left: pw.BorderSide(color: PdfColors.grey300),
-                              top: pw.BorderSide(color: PdfColors.grey300),
-                              bottom: pw.BorderSide(color: PdfColors.grey300),
-                            ),
-                          ),
-                          child: pw.Image(
-                            (netImage[0]),
-                            height: 30,
-                            width: 40,
-                          ),
-                        ),
                   pw.SizedBox(height: 1 * PdfPageFormat.mm),
                   pw.Text(
                     '${bill_name.toString().trim()}',
@@ -210,7 +234,7 @@ class Pdfgen_BillingNoteInvlice_TP7 {
                     ),
                   ),
                   pw.Text(
-                    'โทร : $bill_tel',
+                    'โทร : $bill_tel / อีเมล : $bill_email',
                     textAlign: pw.TextAlign.right,
                     maxLines: 1,
                     style: pw.TextStyle(
@@ -219,23 +243,19 @@ class Pdfgen_BillingNoteInvlice_TP7 {
                       color: Colors_pd,
                     ),
                   ),
+                  // pw.Text(
+                  //   'ลูกค้า(Customer)',
+                  //   textAlign: pw.TextAlign.right,
+                  //   maxLines: 1,
+                  //   style: pw.TextStyle(
+                  //     fontSize: font_Size,
+                  //     fontWeight: pw.FontWeight.bold,
+                  //     font: ttf,
+                  //     color: Colors_pd,
+                  //   ),
+                  // ),
                   pw.Text(
-                    'ลูกค้า(Customer)',
-                    textAlign: pw.TextAlign.right,
-                    maxLines: 1,
-                    style: pw.TextStyle(
-                      fontSize: font_Size,
-                      fontWeight: pw.FontWeight.bold,
-                      font: ttf,
-                      color: Colors_pd,
-                    ),
-                  ),
-                  pw.Text(
-                    (sname_.toString() == '' ||
-                            sname_ == null ||
-                            sname_.toString() == 'null')
-                        ? '-'
-                        : '${sname_}',
+                    'ลูกค้า(Customer) : ${(sname_.toString() == '' || sname_ == null || sname_.toString() == 'null') ? '-' : sname_} (${(cname_.toString() == '' || cname_ == null || cname_.toString() == 'null') ? '-' : cname_})',
                     textAlign: pw.TextAlign.right, maxLines: 1,
                     // textAlign: pw.TextAlign.justify,
                     style: pw.TextStyle(
@@ -259,11 +279,7 @@ class Pdfgen_BillingNoteInvlice_TP7 {
                     ),
                   ),
                   pw.Text(
-                    (tax_.toString() == '' ||
-                            tax_ == null ||
-                            tax_.toString() == 'null')
-                        ? 'เลขประจำตัวผู้เสียภาษี : 0'
-                        : 'เลขประจำตัวผู้เสียภาษี : ${tax_}',
+                    'โทร : ${(tel_.toString() == '' || tel_ == null || tel_.toString() == 'null') ? 0 : tel_} / เลขประจำตัวผู้เสียภาษี : ${(tax_.toString() == '' || tax_ == null || tax_.toString() == 'null') ? 0 : tax_}',
                     textAlign: pw.TextAlign.justify,
                     maxLines: 1,
                     style: pw.TextStyle(
@@ -279,20 +295,21 @@ class Pdfgen_BillingNoteInvlice_TP7 {
             pw.Container(
               width: 180,
               child: pw.Column(
+                mainAxisAlignment: pw.MainAxisAlignment.start,
                 mainAxisSize: pw.MainAxisSize.min,
                 crossAxisAlignment: pw.CrossAxisAlignment.end,
                 children: [
-                  pw.Text(
-                    'ใบวางบิล/ใบแจ้งหนี้ (Invoice)',
-                    textAlign: pw.TextAlign.right,
-                    maxLines: 1,
-                    style: pw.TextStyle(
-                      fontSize: font_Size,
-                      fontWeight: pw.FontWeight.bold,
-                      font: ttf,
-                      color: Colors_pd,
-                    ),
-                  ),
+                  // pw.Text(
+                  //   'ใบวางบิล/ใบแจ้งหนี้ (Invoice)',
+                  //   textAlign: pw.TextAlign.right,
+                  //   maxLines: 1,
+                  //   style: pw.TextStyle(
+                  //     fontSize: font_Size,
+                  //     fontWeight: pw.FontWeight.bold,
+                  //     font: ttf,
+                  //     color: Colors_pd,
+                  //   ),
+                  // ),
                   pw.Text(
                     (serpang == 1) ? 'ต้นฉบับ (Original)' : 'สำเนา (Copy)',
                     textAlign: pw.TextAlign.right,
@@ -331,9 +348,7 @@ class Pdfgen_BillingNoteInvlice_TP7 {
                     ),
                   ),
                   pw.Text(
-                    (End_Bill_Paydate == null)
-                        ? 'วันที่ครบกำหนด : '
-                        : 'วันที่ครบกำหนด : ${formatter.format(DateTime.parse(End_Bill_Paydate))} ${DateTime.parse(End_Bill_Paydate).year + 543}',
+                    'โซน(Zone) : $Zone_s / ห้อง( Room) : $Ln_s',
                     textAlign: pw.TextAlign.right,
                     maxLines: 1,
                     style: pw.TextStyle(
@@ -343,6 +358,31 @@ class Pdfgen_BillingNoteInvlice_TP7 {
                       color: Colors_pd,
                     ),
                   ),
+                  pw.Text(
+                    (End_Bill_Paydate == null)
+                        ? 'วันที่ครบกำหนดชำระ : '
+                        : 'วันที่ครบกำหนดชำระ : ${formatter.format(DateTime.parse(End_Bill_Paydate))} ${DateTime.parse(End_Bill_Paydate).year + 543}',
+                    textAlign: pw.TextAlign.right,
+                    maxLines: 1,
+                    style: pw.TextStyle(
+                      fontSize: font_Size,
+                      fontWeight: pw.FontWeight.bold,
+                      font: ttf,
+                      color: Colors_pd,
+                    ),
+                  ),
+                  pw.Text(
+                    'พนักงาน(Staff) : $fname',
+                    textAlign: pw.TextAlign.right,
+                    maxLines: 1,
+                    style: pw.TextStyle(
+                      fontSize: font_Size,
+                      fontWeight: pw.FontWeight.bold,
+                      font: ttf,
+                      color: Colors_pd,
+                    ),
+                  ),
+                  pw.SizedBox(height: 10 * PdfPageFormat.mm),
                 ],
               ),
             ),
@@ -363,7 +403,7 @@ class Pdfgen_BillingNoteInvlice_TP7 {
                 pw.Padding(
                   padding: pw.EdgeInsets.all(0),
                   child: pw.Text(
-                    '1. ขอความกรุณาชำระค่าบริการ/ค่าเช่าให้ตรงตามยอด เพื่อความถูกต้อง',
+                    '1. โปรดชำระเงินภายในวันที่ 25 ถึง วันที่ 5 ของเดือนถัดไป หากเกิดการชำระเงินล่าช้า ทางโครงการจะขอเก็บค่าปรับเป็นดอกเบี้ย ร้อยละ 15 ต่อปี ของยอดนั้นๆ',
                     textAlign: pw.TextAlign.left,
                     maxLines: 1,
                     style: pw.TextStyle(
@@ -372,10 +412,22 @@ class Pdfgen_BillingNoteInvlice_TP7 {
                         color: PdfColors.grey800),
                   ),
                 ),
+                // pw.Padding(
+                //   padding: pw.EdgeInsets.all(0),
+                //   child: pw.Text(
+                //     '2. หากเกิดข้อผิดพลาดโปรดเก็บหลักฐานการชำระไว้ เพื่อติดต่อเจ้าหน้าที่',
+                //     textAlign: pw.TextAlign.left,
+                //     maxLines: 1,
+                //     style: pw.TextStyle(
+                //         font: ttf,
+                //         fontSize: font_Size,
+                //         color: PdfColors.red400),
+                //   ),
+                // ),
                 pw.Padding(
                   padding: pw.EdgeInsets.all(0),
                   child: pw.Text(
-                    '2. หากเกิดข้อผิดพลาดโปรดเก็บหลักฐานการชำระไว้ เพื่อติดต่อเจ้าหน้าที่',
+                    '2. ขอความกรุณาโอนชำระค่าเช่าให้ตรงกับยอดในใบแจ้งหนี้ เพื่อความถูกต้องในทางบัญชี',
                     textAlign: pw.TextAlign.left,
                     maxLines: 1,
                     style: pw.TextStyle(
@@ -393,7 +445,7 @@ class Pdfgen_BillingNoteInvlice_TP7 {
                 pw.Padding(
                   padding: pw.EdgeInsets.all(0),
                   child: pw.Text(
-                    '1. ขอความกรุณาชำระค่าบริการ/ค่าเช่าให้ตรงตามยอด เพื่อความถูกต้อง',
+                    '1. โปรดชำระเงินภายในวันที่ 25 ถึง วันที่ 5 ของเดือนถัดไป หากเกิดการชำระเงินล่าช้า ทางโครงการจะขอเก็บค่าปรับเป็นดอกเบี้ย ร้อยละ 15 ต่อปี ของยอดนั้นๆ',
                     textAlign: pw.TextAlign.left,
                     maxLines: 1,
                     style: pw.TextStyle(
@@ -406,11 +458,12 @@ class Pdfgen_BillingNoteInvlice_TP7 {
                 //     ?
                 if (ptser1.toString() == '2' ||
                     ptser1.toString() == '5' ||
-                    ptser1.toString() == '6')
+                    ptser1.toString() == '6' ||
+                    ptser1.toString() == '7')
                   pw.Padding(
                     padding: pw.EdgeInsets.all(0),
                     child: pw.Text(
-                      '2. การชำระเงิน ท่านสามารถโอนเข้าบัญชี ${bank1} เลขที่บัญชี ${selectedValue_bank_bno} [ ${(ptname1 == 'Online Payment') ? 'PromptPay QR' : (ptname1 == 'เงินโอน') ? 'เลขบัญชี' : 'Online Standard QR'} ]',
+                      '2. การชำระเงิน ท่านสามารถโอนเข้าบัญชี ${bank1} เลขที่บัญชี ${selectedValue_bank_bno} [ ${(ptname1 == 'Online Payment') ? 'PromptPay QR' : (ptname1 == 'เงินโอน') ? 'เลขบัญชี' : (ptname1 == 'Beam Checkout') ? 'Beam Checkout' : 'Online Standard QR'} ]',
                       //  '2. การชำระเงิน ท่านสามารถโอนเข้าเลขที่บัญชี ${finnancetransModels.where((model) => model.ptser == '6' && model.dtype != 'MM').map((model) => model.bno).join(', ')}',
                       textAlign: pw.TextAlign.left,
                       maxLines: 1,
@@ -437,7 +490,7 @@ class Pdfgen_BillingNoteInvlice_TP7 {
                 pw.Padding(
                   padding: pw.EdgeInsets.all(0),
                   child: pw.Text(
-                    '3. หากเกิดข้อผิดพลาดโปรดเก็บหลักฐานการชำระไว้ เพื่อติดต่อเจ้าหน้าที่',
+                    '3. ขอความกรุณาโอนชำระค่าเช่าให้ตรงกับยอดในใบแจ้งหนี้ เพื่อความถูกต้องในทางบัญชี',
                     textAlign: pw.TextAlign.left,
                     maxLines: 1,
                     style: pw.TextStyle(
@@ -470,15 +523,28 @@ class Pdfgen_BillingNoteInvlice_TP7 {
                 children: [
                   pw.Expanded(
                     flex: 1,
-                    child: pw.Text(
-                      'หมายเหตุ(Note)',
-                      textAlign: pw.TextAlign.left,
-                      style: pw.TextStyle(
-                          // fontWeight: pw.FontWeight.bold,
-                          font: ttf,
-                          fontSize: font_Size,
-                          color: PdfColors.grey800),
-                    ),
+                    child: pw.Column(
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        children: [
+                          pw.Text(
+                            'หมายเหตุ(Note)',
+                            textAlign: pw.TextAlign.left,
+                            style: pw.TextStyle(
+                                // fontWeight: pw.FontWeight.bold,
+                                font: ttf,
+                                fontSize: font_Size,
+                                color: PdfColors.grey800),
+                          ),
+                          // pw.Text(
+                          //   '...................................',
+                          //   textAlign: pw.TextAlign.left,
+                          //   style: pw.TextStyle(
+                          //       // fontWeight: pw.FontWeight.bold,
+                          //       font: ttf,
+                          //       fontSize: font_Size,
+                          //       color: PdfColors.grey800),
+                          // ),
+                        ]),
                   ),
                   pw.Expanded(
                     flex: 1,
@@ -486,7 +552,7 @@ class Pdfgen_BillingNoteInvlice_TP7 {
                       crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
                         pw.Text(
-                          'ลงชื่อ.......................................................................',
+                          'ลงชื่อ..................................................................(ผู้วางบิล)',
                           textAlign: pw.TextAlign.left,
                           maxLines: 1,
                           style: pw.TextStyle(
@@ -523,18 +589,32 @@ class Pdfgen_BillingNoteInvlice_TP7 {
                         height: 35,
                         width: 40,
                       ),
-                      pw.Padding(
-                        padding: pw.EdgeInsets.all(0),
-                        child: pw.Text(
-                          'สแกน (Scan me)',
-                          textAlign: pw.TextAlign.left,
-                          maxLines: 1,
-                          style: pw.TextStyle(
-                              font: ttf,
-                              fontSize: font_Size,
-                              color: PdfColors.grey800),
+                      pw.SizedBox(height: 2),
+                      pw.Text(
+                        (End_Bill_Paydate == null ||
+                                End_Bill_Paydate.toString() == '')
+                            ? 'ชำระไม่เกินวันที่ ${End_Bill_Paydate} '
+                            : 'ชำระไม่เกินวันที่ ${DateFormat('dd/MM').format(DateTime.parse(End_Bill_Paydate!))}/${DateTime.parse('${End_Bill_Paydate}').year + 543}',
+                        textAlign: pw.TextAlign.center,
+                        style: pw.TextStyle(
+                          fontSize: font_Size - 1.5,
+                          font: ttf,
+                          // fontWeight: pw.FontWeight.bold,
+                          color: Colors_pd,
                         ),
                       ),
+                      // pw.Padding(
+                      //   padding: pw.EdgeInsets.all(0),
+                      //   child: pw.Text(
+                      //     'สแกน (Scan me)',
+                      //     textAlign: pw.TextAlign.left,
+                      //     maxLines: 1,
+                      //     style: pw.TextStyle(
+                      //         font: ttf,
+                      //         fontSize: font_Size,
+                      //         color: PdfColors.grey800),
+                      //   ),
+                      // ),
                     ],
                   )),
                 if (ptser1.toString() == '5')
@@ -551,18 +631,32 @@ class Pdfgen_BillingNoteInvlice_TP7 {
                         height: 35,
                         width: 40,
                       ),
-                      pw.Padding(
-                        padding: pw.EdgeInsets.all(0),
-                        child: pw.Text(
-                          'สแกน (Scan me)',
-                          textAlign: pw.TextAlign.left,
-                          maxLines: 1,
-                          style: pw.TextStyle(
-                              font: ttf,
-                              fontSize: font_Size,
-                              color: PdfColors.grey800),
+                      pw.SizedBox(height: 2),
+                      pw.Text(
+                        (End_Bill_Paydate == null ||
+                                End_Bill_Paydate.toString() == '')
+                            ? 'ชำระไม่เกินวันที่ ${End_Bill_Paydate} '
+                            : 'ชำระไม่เกินวันที่ ${DateFormat('dd/MM').format(DateTime.parse(End_Bill_Paydate!))}/${DateTime.parse('${End_Bill_Paydate}').year + 543}',
+                        textAlign: pw.TextAlign.center,
+                        style: pw.TextStyle(
+                          fontSize: font_Size - 1.5,
+                          font: ttf,
+                          // fontWeight: pw.FontWeight.bold,
+                          color: Colors_pd,
                         ),
                       ),
+                      // pw.Padding(
+                      //   padding: pw.EdgeInsets.all(0),
+                      //   child: pw.Text(
+                      //     'สแกน (Scan me)',
+                      //     textAlign: pw.TextAlign.left,
+                      //     maxLines: 1,
+                      //     style: pw.TextStyle(
+                      //         font: ttf,
+                      //         fontSize: font_Size,
+                      //         color: PdfColors.grey800),
+                      //   ),
+                      // ),
                     ],
                   )),
                 if (img1.toString() != '')
@@ -575,18 +669,32 @@ class Pdfgen_BillingNoteInvlice_TP7 {
                           height: 35,
                           width: 40,
                         ),
-                        pw.Padding(
-                          padding: pw.EdgeInsets.all(0),
-                          child: pw.Text(
-                            'สแกน (Scan me)',
-                            textAlign: pw.TextAlign.left,
-                            maxLines: 1,
-                            style: pw.TextStyle(
-                                font: ttf,
-                                fontSize: font_Size,
-                                color: PdfColors.grey800),
+                        pw.SizedBox(height: 2),
+                        pw.Text(
+                          (End_Bill_Paydate == null ||
+                                  End_Bill_Paydate.toString() == '')
+                              ? 'ชำระไม่เกินวันที่ ${End_Bill_Paydate} '
+                              : 'ชำระไม่เกินวันที่ ${DateFormat('dd/MM').format(DateTime.parse(End_Bill_Paydate!))}/${DateTime.parse('${End_Bill_Paydate}').year + 543}',
+                          textAlign: pw.TextAlign.center,
+                          style: pw.TextStyle(
+                            fontSize: font_Size - 1.5,
+                            font: ttf,
+                            // fontWeight: pw.FontWeight.bold,
+                            color: Colors_pd,
                           ),
                         ),
+                        // pw.Padding(
+                        //   padding: pw.EdgeInsets.all(0),
+                        //   child: pw.Text(
+                        //     'สแกน (Scan me)',
+                        //     textAlign: pw.TextAlign.left,
+                        //     maxLines: 1,
+                        //     style: pw.TextStyle(
+                        //         font: ttf,
+                        //         fontSize: font_Size,
+                        //         color: PdfColors.grey800),
+                        //   ),
+                        // ),
                       ],
                     )),
               ]),
@@ -707,7 +815,7 @@ class Pdfgen_BillingNoteInvlice_TP7 {
                     child: pw.Row(
                       children: [
                         pw.Container(
-                          width: 50,
+                          width: 30,
                           decoration: const pw.BoxDecoration(
                             // color: PdfColors.green100,
                             border: pw.Border(
@@ -728,30 +836,30 @@ class Pdfgen_BillingNoteInvlice_TP7 {
                                 color: PdfColors.black),
                           ),
                         ),
-                        pw.Expanded(
-                          flex: 2,
-                          child: pw.Container(
-                            decoration: const pw.BoxDecoration(
-                              // color: PdfColors.green100,
-                              border: pw.Border(
-                                  // left: pw.BorderSide(color: PdfColors.grey800),
-                                  // top: pw.BorderSide(color: PdfColors.grey800),
-                                  // bottom: pw.BorderSide(color: PdfColors.grey800),
-                                  ),
-                            ),
-                            // height: 25,
-                            child: pw.Text(
-                              'กำหนดชำระ(Due date)',
-                              maxLines: 1,
-                              textAlign: pw.TextAlign.left,
-                              style: pw.TextStyle(
-                                  fontSize: font_Size,
-                                  fontWeight: pw.FontWeight.bold,
-                                  font: ttf,
-                                  color: PdfColors.black),
-                            ),
-                          ),
-                        ),
+                        // pw.Expanded(
+                        //   flex: 2,
+                        //   child: pw.Container(
+                        //     decoration: const pw.BoxDecoration(
+                        //       // color: PdfColors.green100,
+                        //       border: pw.Border(
+                        //           // left: pw.BorderSide(color: PdfColors.grey800),
+                        //           // top: pw.BorderSide(color: PdfColors.grey800),
+                        //           // bottom: pw.BorderSide(color: PdfColors.grey800),
+                        //           ),
+                        //     ),
+                        //     // height: 25,
+                        //     child: pw.Text(
+                        //       'กำหนดชำระ(Due date)',
+                        //       maxLines: 1,
+                        //       textAlign: pw.TextAlign.left,
+                        //       style: pw.TextStyle(
+                        //           fontSize: font_Size,
+                        //           fontWeight: pw.FontWeight.bold,
+                        //           font: ttf,
+                        //           color: PdfColors.black),
+                        //     ),
+                        //   ),
+                        // ),
                         pw.Expanded(
                           flex: 4,
                           child: pw.Container(
@@ -789,6 +897,54 @@ class Pdfgen_BillingNoteInvlice_TP7 {
                             ),
                             // height: 25,
                             child: pw.Text(
+                              'จำนวน (Quantity)',
+                              textAlign: pw.TextAlign.right,
+                              maxLines: 1,
+                              style: pw.TextStyle(
+                                  fontSize: font_Size,
+                                  fontWeight: pw.FontWeight.bold,
+                                  font: ttf,
+                                  color: PdfColors.black),
+                            ),
+                          ),
+                        ),
+                        pw.Expanded(
+                          flex: 1,
+                          child: pw.Container(
+                            decoration: const pw.BoxDecoration(
+                              // color: PdfColors.green100,
+                              border: pw.Border(
+                                  // left: pw.BorderSide(color: PdfColors.grey800),
+                                  // top: pw.BorderSide(color: PdfColors.grey800),
+                                  // bottom: pw.BorderSide(color: PdfColors.grey800),
+                                  ),
+                            ),
+                            // height: 25,
+                            child: pw.Text(
+                              'หน่วยละ (Unit)',
+                              textAlign: pw.TextAlign.right,
+                              maxLines: 1,
+                              style: pw.TextStyle(
+                                  fontSize: font_Size,
+                                  fontWeight: pw.FontWeight.bold,
+                                  font: ttf,
+                                  color: PdfColors.black),
+                            ),
+                          ),
+                        ),
+                        pw.Expanded(
+                          flex: 1,
+                          child: pw.Container(
+                            decoration: const pw.BoxDecoration(
+                              // color: PdfColors.green100,
+                              border: pw.Border(
+                                  // left: pw.BorderSide(color: PdfColors.grey800),
+                                  // top: pw.BorderSide(color: PdfColors.grey800),
+                                  // bottom: pw.BorderSide(color: PdfColors.grey800),
+                                  ),
+                            ),
+                            // height: 25,
+                            child: pw.Text(
                               'ส่วนลด (Dis)',
                               textAlign: pw.TextAlign.right,
                               maxLines: 1,
@@ -801,7 +957,7 @@ class Pdfgen_BillingNoteInvlice_TP7 {
                           ),
                         ),
                         pw.Expanded(
-                          flex: 2,
+                          flex: 1,
                           child: pw.Container(
                             decoration: const pw.BoxDecoration(
                               // color: PdfColors.green100,
@@ -839,7 +995,7 @@ class Pdfgen_BillingNoteInvlice_TP7 {
                       child: pw.Row(
                         children: [
                           pw.Container(
-                            width: 50,
+                            width: 30,
                             decoration: const pw.BoxDecoration(
                               color: PdfColors.white,
                               border: const pw.Border(
@@ -861,35 +1017,35 @@ class Pdfgen_BillingNoteInvlice_TP7 {
                               ),
                             ),
                           ),
-                          pw.Expanded(
-                            flex: 2,
-                            child: pw.Container(
-                              // height: 25,
-                              decoration: const pw.BoxDecoration(
-                                color: PdfColors.white,
-                                border: const pw.Border(
-                                    // left: pw.BorderSide(color: PdfColors.grey600),
-                                    // bottom: pw.BorderSide(color: PdfColors.grey600),
-                                    ),
-                              ),
-                              // padding: const pw.EdgeInsets.all(1.0),
-                              child: pw.Align(
-                                alignment: pw.Alignment.centerLeft,
-                                child: pw.Text(
-                                  (tableData003[index][1] == null)
-                                      ? '${tableData003[index][1]}'
-                                      : '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${tableData003[index][1]}'))}',
-                                  // '${tableData003[index][1]}',
-                                  maxLines: 1,
-                                  textAlign: pw.TextAlign.left,
-                                  style: pw.TextStyle(
-                                      fontSize: font_Size,
-                                      font: ttf,
-                                      color: PdfColors.grey800),
-                                ),
-                              ),
-                            ),
-                          ),
+                          // pw.Expanded(
+                          //   flex: 2,
+                          //   child: pw.Container(
+                          //     // height: 25,
+                          //     decoration: const pw.BoxDecoration(
+                          //       color: PdfColors.white,
+                          //       border: const pw.Border(
+                          //           // left: pw.BorderSide(color: PdfColors.grey600),
+                          //           // bottom: pw.BorderSide(color: PdfColors.grey600),
+                          //           ),
+                          //     ),
+                          //     // padding: const pw.EdgeInsets.all(1.0),
+                          //     child: pw.Align(
+                          //       alignment: pw.Alignment.centerLeft,
+                          //       child: pw.Text(
+                          //         (tableData003[index][1] == null)
+                          //             ? '${tableData003[index][1]}'
+                          //             : '${DateFormat('dd-MM').format(DateTime.parse('${tableData003[index][1]}'))}-${DateTime.parse('${tableData003[index][1]}').year + 543}',
+                          //         // '${tableData003[index][1]}',
+                          //         maxLines: 1,
+                          //         textAlign: pw.TextAlign.left,
+                          //         style: pw.TextStyle(
+                          //             fontSize: font_Size,
+                          //             font: ttf,
+                          //             color: PdfColors.grey800),
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                           pw.Expanded(
                             flex: 4,
                             child: pw.Container(
@@ -905,7 +1061,13 @@ class Pdfgen_BillingNoteInvlice_TP7 {
                               child: pw.Align(
                                 alignment: pw.Alignment.centerLeft,
                                 child: pw.Text(
-                                  '${tableData003[index][2]}',
+                                  (tableData003[index][0].toString() == '6')
+                                      ? '${tableData003[index][2]}'
+                                      : '${tableData003[index][2]} ${DateFormat('dd/MM').format(DateTime.parse(tableData003[index][1]))}/${DateTime.parse('${tableData003[index][1]}').year + 543}',
+                                  // (tableData003[index][0].toString() == '6')
+                                  //     ? '${tableData003[index][2]}[ หน่วยที่ใช้ไป ${tableData003[index][8]}-${tableData003[index][9]} ]'
+                                  //     : '${tableData003[index][2]} ',
+                                  // '${tableData003[index][2]}',
                                   maxLines: 1,
                                   textAlign: pw.TextAlign.left,
                                   style: pw.TextStyle(
@@ -932,6 +1094,60 @@ class Pdfgen_BillingNoteInvlice_TP7 {
                               child: pw.Align(
                                 alignment: pw.Alignment.centerRight,
                                 child: pw.Text(
+                                  '${tableData003[index][12]}',
+                                  maxLines: 1,
+                                  textAlign: pw.TextAlign.right,
+                                  style: pw.TextStyle(
+                                      fontSize: font_Size,
+                                      font: ttf,
+                                      color: PdfColors.grey800),
+                                ),
+                              ),
+                            ),
+                          ),
+                          pw.Expanded(
+                            flex: 1,
+                            child: pw.Container(
+                              // padding: const pw.EdgeInsets.all(1.0),
+                              // height: 25,
+                              decoration: const pw.BoxDecoration(
+                                color: PdfColors.white,
+                                border: pw.Border(
+                                    // left: pw.BorderSide(color: PdfColors.grey600),
+                                    // right: pw.BorderSide(color: PdfColors.grey600),
+                                    // bottom: pw.BorderSide(color: PdfColors.grey600),
+                                    ),
+                              ),
+                              child: pw.Align(
+                                alignment: pw.Alignment.centerRight,
+                                child: pw.Text(
+                                  '${tableData003[index][13]}',
+                                  maxLines: 1,
+                                  textAlign: pw.TextAlign.right,
+                                  style: pw.TextStyle(
+                                      fontSize: font_Size,
+                                      font: ttf,
+                                      color: PdfColors.grey800),
+                                ),
+                              ),
+                            ),
+                          ),
+                          pw.Expanded(
+                            flex: 1,
+                            child: pw.Container(
+                              // padding: const pw.EdgeInsets.all(1.0),
+                              // height: 25,
+                              decoration: const pw.BoxDecoration(
+                                color: PdfColors.white,
+                                border: pw.Border(
+                                    // left: pw.BorderSide(color: PdfColors.grey600),
+                                    // right: pw.BorderSide(color: PdfColors.grey600),
+                                    // bottom: pw.BorderSide(color: PdfColors.grey600),
+                                    ),
+                              ),
+                              child: pw.Align(
+                                alignment: pw.Alignment.centerRight,
+                                child: pw.Text(
                                   '0.00',
                                   maxLines: 1,
                                   textAlign: pw.TextAlign.right,
@@ -944,7 +1160,7 @@ class Pdfgen_BillingNoteInvlice_TP7 {
                             ),
                           ),
                           pw.Expanded(
-                            flex: 2,
+                            flex: 1,
                             child: pw.Container(
                               // padding: const pw.EdgeInsets.all(1.0),
                               // height: 25,

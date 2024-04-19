@@ -319,12 +319,9 @@ class Mini_Ex_InvoiceReport {
             '${InvoiceModels[index].ln}',
           );
       sheet.getRangeByName('I${indextotol + 5 - 1}').setNumber(
-            double.parse((InvoiceModels[index].total_bill == null)
-                    ? '0'
-                    : InvoiceModels[index].total_bill.toString()) -
-                double.parse((InvoiceModels[index].total_dis == null)
-                    ? '0'
-                    : InvoiceModels[index].total_dis.toString()),
+            double.parse((InvoiceModels[index].amt_dis == null)
+                ? '0'
+                : InvoiceModels[index].amt_dis.toString()),
           );
       sheet.getRangeByName('J${indextotol + 5 - 1}').setNumber(
             (InvoiceModels[index].total_bill == null)

@@ -37,7 +37,7 @@ class AreaQuotModel {
   String? id;
   String? path;
   String? color;
-  String? name;
+  String? name;String?ser_ren;
 
   AreaQuotModel(
       {this.ser,
@@ -78,7 +78,8 @@ class AreaQuotModel {
       this.id,
       this.path,
       this.color,
-      this.name});
+      this.name,
+      this.ser_ren});
 
   AreaQuotModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -121,6 +122,7 @@ class AreaQuotModel {
     path = json['path'];
     color = json['color'];
     name = json['name'];
+    ser_ren = json['ser_ren'];
   }
 
   Map<String, dynamic> toJson() {
@@ -164,6 +166,7 @@ class AreaQuotModel {
     data['path'] = this.path;
     data['color'] = this.color;
     data['name'] = this.name;
+    data['ser_ren'] = this.ser_ren;
     return data;
   }
 }

@@ -175,6 +175,10 @@ class Excgen_BankmovemenReport {
     sheet.getRangeByName('P1').cellStyle = globalStyle22;
     sheet.getRangeByName('Q1').cellStyle = globalStyle22;
     sheet.getRangeByName('R1').cellStyle = globalStyle22;
+    sheet.getRangeByName('S1').cellStyle = globalStyle22;
+    sheet.getRangeByName('T1').cellStyle = globalStyle22;
+    sheet.getRangeByName('U1').cellStyle = globalStyle22;
+    sheet.getRangeByName('V1').cellStyle = globalStyle22;
     final x.Range range = sheet.getRangeByName('E1');
     range.setText(
       (ser_type_repro == '1')
@@ -213,8 +217,11 @@ class Excgen_BankmovemenReport {
     sheet.getRangeByName('Q2').cellStyle = globalStyle22;
     sheet.getRangeByName('R2').cellStyle = globalStyle22;
     sheet.getRangeByName('S2').cellStyle = globalStyle22;
+    sheet.getRangeByName('T2').cellStyle = globalStyle22;
+    sheet.getRangeByName('U2').cellStyle = globalStyle22;
+    sheet.getRangeByName('V2').cellStyle = globalStyle22;
     sheet.getRangeByName('A2').setText('${renTal_name}');
-    sheet.getRangeByName('K2').setText('เดือน : ${Mon_Income} (${YE_Income}) ');
+    sheet.getRangeByName('I2').setText('เดือน : ${Mon_Income} (${YE_Income}) ');
 
     globalStyle2.hAlign = x.HAlignType.center;
     sheet.getRangeByName('A2').cellStyle = globalStyle22;
@@ -238,6 +245,10 @@ class Excgen_BankmovemenReport {
     sheet.getRangeByName('Q3').cellStyle = globalStyle22;
     sheet.getRangeByName('R3').cellStyle = globalStyle22;
     sheet.getRangeByName('S3').cellStyle = globalStyle22;
+    sheet.getRangeByName('T3').cellStyle = globalStyle22;
+    sheet.getRangeByName('U3').cellStyle = globalStyle22;
+    sheet.getRangeByName('V3').cellStyle = globalStyle22;
+
     sheet.getRangeByName('A3').setText('ใบเสร็จ : ${TransReBillBank.length}');
     sheet.getRangeByName('B3').setText('รายการ : ${TransHisBillBank.length}');
     sheet.getRangeByName('A3').columnWidth = 18;
@@ -259,6 +270,9 @@ class Excgen_BankmovemenReport {
     sheet.getRangeByName('Q3').columnWidth = 18;
     sheet.getRangeByName('R3').columnWidth = 18;
     sheet.getRangeByName('S3').columnWidth = 18;
+    sheet.getRangeByName('T3').columnWidth = 18;
+    sheet.getRangeByName('U3').columnWidth = 18;
+    sheet.getRangeByName('V3').columnWidth = 18;
 
     sheet.getRangeByName('A4').cellStyle = globalStyle1;
     sheet.getRangeByName('B4').cellStyle = globalStyle1;
@@ -279,6 +293,9 @@ class Excgen_BankmovemenReport {
     sheet.getRangeByName('Q4').cellStyle = globalStyle1;
     sheet.getRangeByName('R4').cellStyle = globalStyle1;
     sheet.getRangeByName('S4').cellStyle = globalStyle1;
+    sheet.getRangeByName('T4').cellStyle = globalStyle1;
+    sheet.getRangeByName('U4').cellStyle = globalStyle1;
+    sheet.getRangeByName('V4').cellStyle = globalStyle1;
 
     sheet.getRangeByName('A4').columnWidth = 18;
     sheet.getRangeByName('B4').columnWidth = 18;
@@ -308,10 +325,13 @@ class Excgen_BankmovemenReport {
     sheet.getRangeByName('Q4').columnWidth = 18;
     sheet.getRangeByName('R4').columnWidth = 18;
     sheet.getRangeByName('S4').columnWidth = 18;
+    sheet.getRangeByName('T4').columnWidth = 18;
+    sheet.getRangeByName('U4').columnWidth = 18;
+    sheet.getRangeByName('V4').columnWidth = 18;
 
     sheet.getRangeByName('A4').setText('เลขที่');
     sheet.getRangeByName('B4').setText('ลำดับ');
-    sheet.getRangeByName('C4').setText('วันที่');
+    sheet.getRangeByName('C4').setText('วันที่ชำระ');
     sheet.getRangeByName('D4').setText('รหัสโซน');
     sheet.getRangeByName('E4').setText('โซน');
     sheet.getRangeByName('F4').setText('รหัสพื้นที่');
@@ -331,6 +351,9 @@ class Excgen_BankmovemenReport {
     sheet.getRangeByName('Q4').setText('ยอดสุทธิ');
     sheet.getRangeByName('R4').setText('ประเภท');
     sheet.getRangeByName('S4').setText('สถานะ');
+    sheet.getRangeByName('T4').setText('วันที่ทำรายการ');
+    sheet.getRangeByName('U4').setText('อ้างถึง');
+    sheet.getRangeByName('V4').setText('เลขที่สัญญา');
 
     ///---------------------------------------------------------->
 
@@ -392,6 +415,12 @@ class Excgen_BankmovemenReport {
               globalStyle2220;
           sheet.getRangeByName('S${indextotol + 5 - 1}').cellStyle =
               globalStyle2220;
+          sheet.getRangeByName('T${indextotol + 5 - 1}').cellStyle =
+              globalStyle2220;
+          sheet.getRangeByName('U${indextotol + 5 - 1}').cellStyle =
+              globalStyle2220;
+          sheet.getRangeByName('V${indextotol + 5 - 1}').cellStyle =
+              globalStyle2220;
 
           sheet
               .getRangeByName('A${indextotol + 5 - 1}')
@@ -399,10 +428,10 @@ class Excgen_BankmovemenReport {
           sheet.getRangeByName('B${indextotol + 5 - 1}').setText('0');
           sheet.getRangeByName('C${indextotol + 5 - 1}').setText((TransHisBillBank[
                           index2]
-                      .daterec ==
+                      .dateacc ==
                   null)
               ? ''
-              : '${DateFormat('dd-MM').format(DateTime.parse('${TransHisBillBank[index2].daterec}'))}-${int.parse('${DateFormat('yyyy').format(DateTime.parse('${TransHisBillBank[index2].daterec}'))}') + 543}');
+              : '${DateFormat('dd-MM').format(DateTime.parse('${TransHisBillBank[index2].dateacc}'))}-${int.parse('${DateFormat('yyyy').format(DateTime.parse('${TransHisBillBank[index2].dateacc}'))}') + 543}');
 
           sheet.getRangeByName('D${indextotol + 5 - 1}').setText(
                 (item.zser1 == null) ? '${item.zser}' : '${item.zser1}',
@@ -452,6 +481,23 @@ class Excgen_BankmovemenReport {
           sheet.getRangeByName('S${indextotol + 5 - 1}').setText(
                 (item.doctax == '' || item.doctax == null) ? '' : 'ใบกำกับภาษี',
               );
+
+          sheet.getRangeByName('T${indextotol + 5 - 1}').setText((TransHisBillBank[
+                          index2]
+                      .daterec ==
+                  null)
+              ? ''
+              : '${DateFormat('dd-MM').format(DateTime.parse('${TransHisBillBank[index2].daterec}'))}-${int.parse('${DateFormat('yyyy').format(DateTime.parse('${TransHisBillBank[index2].daterec}'))}') + 543}');
+
+          sheet.getRangeByName('U${indextotol + 5 - 1}').setText(
+              (TransHisBillBank[index2].inv == null)
+                  ? ''
+                  : '${TransHisBillBank[index2].inv}');
+
+          sheet.getRangeByName('V${indextotol + 5 - 1}').setText(
+              (TransHisBillBank[index2].cid == null)
+                  ? ''
+                  : '${TransHisBillBank[index2].cid}');
         });
       }
 
@@ -480,6 +526,9 @@ class Excgen_BankmovemenReport {
 
       sheet.getRangeByName('R${indextotol + 5 - 1}').cellStyle = globalStyle22;
       sheet.getRangeByName('S${indextotol + 5 - 1}').cellStyle = globalStyle22;
+      sheet.getRangeByName('T${indextotol + 5 - 1}').cellStyle = globalStyle22;
+      sheet.getRangeByName('U${indextotol + 5 - 1}').cellStyle = globalStyle22;
+      sheet.getRangeByName('V${indextotol + 5 - 1}').cellStyle = globalStyle22;
 
       sheet
           .getRangeByName('A${indextotol + 5 - 1}')
@@ -487,10 +536,10 @@ class Excgen_BankmovemenReport {
       sheet.getRangeByName('B${indextotol + 5 - 1}').setText('${ser_dis}');
       sheet.getRangeByName('C${indextotol + 5 - 1}').setText((TransHisBillBank[
                       index2]
-                  .daterec ==
+                  .dateacc ==
               null)
           ? ''
-          : '${DateFormat('dd-MM').format(DateTime.parse('${TransHisBillBank[index2].daterec}'))}-${int.parse('${DateFormat('yyyy').format(DateTime.parse('${TransHisBillBank[index2].daterec}'))}') + 543}');
+          : '${DateFormat('dd-MM').format(DateTime.parse('${TransHisBillBank[index2].dateacc}'))}-${int.parse('${DateFormat('yyyy').format(DateTime.parse('${TransHisBillBank[index2].dateacc}'))}') + 543}');
 
       sheet.getRangeByName('D${indextotol + 5 - 1}').setText(
           (TransHisBillBank[index2].zser1 == null)
@@ -561,6 +610,24 @@ class Excgen_BankmovemenReport {
           );
       sheet.getRangeByName('R${indextotol + 5 - 1}').setText('');
       sheet.getRangeByName('S${indextotol + 5 - 1}').setText('');
+      sheet.getRangeByName('T${indextotol + 5 - 1}').setText((TransHisBillBank[
+                      index2]
+                  .daterec ==
+              null)
+          ? ''
+          : '${DateFormat('dd-MM').format(DateTime.parse('${TransHisBillBank[index2].daterec}'))}-${int.parse('${DateFormat('yyyy').format(DateTime.parse('${TransHisBillBank[index2].daterec}'))}') + 543}');
+
+      sheet.getRangeByName('U${indextotol + 5 - 1}').setText(
+          (TransHisBillBank[index2].inv == null ||
+                  TransHisBillBank[index2].inv.toString() == '')
+              ? ''
+              : '${TransHisBillBank[index2].inv}');
+
+      sheet.getRangeByName('V${indextotol + 5 - 1}').setText(
+          (TransHisBillBank[index2].cid == null ||
+                  TransHisBillBank[index2].cid.toString() == '')
+              ? ''
+              : '${TransHisBillBank[index2].cid}');
     }
 
     /////////////////////////////////------------------------------------------------>

@@ -122,7 +122,7 @@ class _WebUserState extends State<WebUser> {
           setState(() {
             if (imageProModel.type == 'IM') {
               var foderx =
-                  'https://www.dzentric.com/chao_perty/chao_api/${imageProModel.imgName.toString()}';
+                  '${MyConstant().domain}/${imageProModel.imgName.toString()}';
               var urlx = imageProModel.url;
               Map<String, dynamic> map = Map();
               map['image'] = foderx;

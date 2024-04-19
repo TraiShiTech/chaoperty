@@ -129,7 +129,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           UserModel userModel = UserModel.fromJson(map);
@@ -213,7 +213,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         }
       } else {}
     } catch (e) {}
-    print('name>>>>>  $renname');
+    // print('name>>>>>  $renname');
   }
 
 ///////////////------------------------------->
@@ -336,8 +336,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             double.parse(_TransReBillModels_Incomes.total_dis!))
                 : totalbank + 0.00;
           });
-          print(
-              '${_TransReBillModels_Incomes.type.toString().trim()} /// ${totalbank}');
+          // print(
+          //     '${_TransReBillModels_Incomes.type.toString().trim()} /// ${totalbank}');
         }
       }
     } catch (e) {}
@@ -657,7 +657,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 ],
               )),
-              ////
+          ////
           Padding(
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
               child: Container(
@@ -696,378 +696,397 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                               bottomLeft: Radius.circular(10),
                                               bottomRight: Radius.circular(10)),
                                         ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            SizedBox(
-                                                height: 35,
-                                                child: Row(
-                                                  children: [
-                                                    const Padding(
-                                                      padding:
-                                                          EdgeInsets.all(4.0),
-                                                      child: Text(
-                                                        'รายรับ :',
-                                                        style: TextStyle(
-                                                          color:
-                                                              ReportScreen_Color
+                                        child: ScrollConfiguration(
+                                          behavior:
+                                              ScrollConfiguration.of(context)
+                                                  .copyWith(dragDevices: {
+                                            PointerDeviceKind.touch,
+                                            PointerDeviceKind.mouse,
+                                          }),
+                                          child: SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                SizedBox(
+                                                    height: 35,
+                                                    child: Row(
+                                                      children: [
+                                                        const Padding(
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  4.0),
+                                                          child: Text(
+                                                            'รายรับ :',
+                                                            style: TextStyle(
+                                                              color: ReportScreen_Color
                                                                   .Colors_Text2_,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                            ),
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ),
-                                                    const Padding(
-                                                      padding:
-                                                          EdgeInsets.all(4.0),
-                                                      child: Text(
-                                                        'โซน ',
-                                                        style: TextStyle(
-                                                          color:
-                                                              ReportScreen_Color
+                                                        const Padding(
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  4.0),
+                                                          child: Text(
+                                                            'โซน ',
+                                                            style: TextStyle(
+                                                              color: ReportScreen_Color
                                                                   .Colors_Text2_,
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
+                                                              // fontWeight: FontWeight.bold,
+                                                              fontFamily:
+                                                                  Font_.Fonts_T,
+                                                            ),
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              4.0),
-                                                      child: Container(
-                                                        decoration:
-                                                            const BoxDecoration(
-                                                          color:
-                                                              AppbackgroundColor
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(4.0),
+                                                          child: Container(
+                                                            decoration:
+                                                                const BoxDecoration(
+                                                              color: AppbackgroundColor
                                                                   .Sub_Abg_Colors,
-                                                          borderRadius: BorderRadius.only(
-                                                              topLeft: Radius
-                                                                  .circular(10),
-                                                              topRight: Radius
-                                                                  .circular(10),
-                                                              bottomLeft: Radius
-                                                                  .circular(10),
-                                                              bottomRight:
-                                                                  Radius
-                                                                      .circular(
-                                                                          10)),
-                                                          // border: Border.all(color: Colors.grey, width: 1),
-                                                        ),
-                                                        width: 260,
-                                                        // height: 40,
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(4.0),
-                                                        child:
-                                                            DropdownButtonFormField2(
-                                                          alignment:
-                                                              Alignment.center,
-                                                          focusColor:
-                                                              Colors.white,
-                                                          autofocus: false,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            enabled: true,
-                                                            hoverColor:
-                                                                Colors.brown,
-                                                            prefixIconColor:
-                                                                Colors.blue,
-                                                            fillColor: Colors
-                                                                .white
-                                                                .withOpacity(
-                                                                    0.05),
-                                                            filled: false,
-                                                            isDense: true,
-                                                            contentPadding:
-                                                                EdgeInsets.zero,
-                                                            border:
-                                                                OutlineInputBorder(
-                                                              borderSide:
-                                                                  const BorderSide(
-                                                                      color: Colors
-                                                                          .red),
-                                                              borderRadius:
-                                                                  BorderRadius
+                                                              borderRadius: BorderRadius.only(
+                                                                  topLeft: Radius
                                                                       .circular(
                                                                           10),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10)),
+                                                              // border: Border.all(color: Colors.grey, width: 1),
                                                             ),
-                                                            focusedBorder:
-                                                                const OutlineInputBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .only(
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomRight:
-                                                                    Radius
+                                                            width: 260,
+                                                            // height: 40,
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(4.0),
+                                                            child:
+                                                                DropdownButtonFormField2(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              focusColor:
+                                                                  Colors.white,
+                                                              autofocus: false,
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                enabled: true,
+                                                                hoverColor:
+                                                                    Colors
+                                                                        .brown,
+                                                                prefixIconColor:
+                                                                    Colors.blue,
+                                                                fillColor: Colors
+                                                                    .white
+                                                                    .withOpacity(
+                                                                        0.05),
+                                                                filled: false,
+                                                                isDense: true,
+                                                                contentPadding:
+                                                                    EdgeInsets
+                                                                        .zero,
+                                                                border:
+                                                                    OutlineInputBorder(
+                                                                  borderSide:
+                                                                      const BorderSide(
+                                                                          color:
+                                                                              Colors.red),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10),
+                                                                ),
+                                                                focusedBorder:
+                                                                    const OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .only(
+                                                                    topRight: Radius
                                                                         .circular(
                                                                             10),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        10),
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                            10),
+                                                                    bottomRight:
+                                                                        Radius.circular(
+                                                                            10),
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            10),
+                                                                  ),
+                                                                  borderSide:
+                                                                      BorderSide(
+                                                                    width: 1,
+                                                                    color: Color
+                                                                        .fromARGB(
+                                                                            255,
+                                                                            231,
+                                                                            227,
+                                                                            227),
+                                                                  ),
+                                                                ),
                                                               ),
-                                                              borderSide:
-                                                                  BorderSide(
-                                                                width: 1,
-                                                                color: Color
-                                                                    .fromARGB(
-                                                                        255,
-                                                                        231,
-                                                                        227,
-                                                                        227),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          isExpanded: false,
-                                                          value: overview_Zone_,
-                                                          // hint: Text(
-                                                          //   Value_Chang_Zone_Income ==
-                                                          //           null
-                                                          //       ? 'เลือก'
-                                                          //       : '$Value_Chang_Zone_Income',
-                                                          //   maxLines: 2,
-                                                          //   textAlign: TextAlign.center,
-                                                          //   style: const TextStyle(
-                                                          //     overflow:
-                                                          //         TextOverflow.ellipsis,
-                                                          //     fontSize: 14,
-                                                          //     color: Colors.grey,
-                                                          //   ),
-                                                          // ),
-                                                          icon: const Icon(
-                                                            Icons
-                                                                .arrow_drop_down,
-                                                            color: Colors.black,
-                                                          ),
-                                                          style:
-                                                              const TextStyle(
-                                                            color: Colors.grey,
-                                                          ),
-                                                          iconSize: 20,
-
-                                                          buttonHeight: 40,
-                                                          buttonWidth: 250,
-                                                          dropdownDecoration:
-                                                              BoxDecoration(
-                                                            // color: Colors
-                                                            //     .amber,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10),
-                                                            border: Border.all(
+                                                              isExpanded: false,
+                                                              value:
+                                                                  overview_Zone_,
+                                                              // hint: Text(
+                                                              //   Value_Chang_Zone_Income ==
+                                                              //           null
+                                                              //       ? 'เลือก'
+                                                              //       : '$Value_Chang_Zone_Income',
+                                                              //   maxLines: 2,
+                                                              //   textAlign: TextAlign.center,
+                                                              //   style: const TextStyle(
+                                                              //     overflow:
+                                                              //         TextOverflow.ellipsis,
+                                                              //     fontSize: 14,
+                                                              //     color: Colors.grey,
+                                                              //   ),
+                                                              // ),
+                                                              icon: const Icon(
+                                                                Icons
+                                                                    .arrow_drop_down,
                                                                 color: Colors
-                                                                    .white,
-                                                                width: 1),
-                                                          ),
-                                                          items:
-                                                              zoneModels_report
-                                                                  .map((item) =>
-                                                                      DropdownMenuItem<
-                                                                          String>(
-                                                                        value:
-                                                                            '${item.zn}',
-                                                                        child:
-                                                                            Text(
-                                                                          '${item.zn}',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            overflow:
-                                                                                TextOverflow.ellipsis,
-                                                                            fontSize:
-                                                                                14,
-                                                                            color:
-                                                                                Colors.grey,
-                                                                          ),
-                                                                        ),
-                                                                      ))
-                                                                  .toList(),
+                                                                    .black,
+                                                              ),
+                                                              style:
+                                                                  const TextStyle(
+                                                                color:
+                                                                    Colors.grey,
+                                                              ),
+                                                              iconSize: 20,
 
-                                                          onChanged:
-                                                              (value) async {
-                                                            int selectedIndex =
-                                                                zoneModels_report
-                                                                    .indexWhere(
+                                                              buttonHeight: 40,
+                                                              buttonWidth: 250,
+                                                              dropdownDecoration:
+                                                                  BoxDecoration(
+                                                                // color: Colors
+                                                                //     .amber,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                                border: Border.all(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    width: 1),
+                                                              ),
+                                                              items:
+                                                                  zoneModels_report
+                                                                      .map((item) =>
+                                                                          DropdownMenuItem<
+                                                                              String>(
+                                                                            value:
+                                                                                '${item.zn}',
+                                                                            child:
+                                                                                Text(
+                                                                              '${item.zn}',
+                                                                              textAlign: TextAlign.center,
+                                                                              style: const TextStyle(
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                fontSize: 14,
+                                                                                color: Colors.grey,
+                                                                              ),
+                                                                            ),
+                                                                          ))
+                                                                      .toList(),
+
+                                                              onChanged:
+                                                                  (value) async {
+                                                                int selectedIndex =
+                                                                    zoneModels_report.indexWhere(
                                                                         (item) =>
                                                                             item.zn ==
                                                                             value);
-                                                            setState(() {
-                                                              overview_Zone_ =
-                                                                  value!;
-                                                              overview_Ser_Zone_ =
-                                                                  '${zoneModels_report[selectedIndex].ser}';
-                                                            });
+                                                                setState(() {
+                                                                  overview_Zone_ =
+                                                                      value!;
+                                                                  overview_Ser_Zone_ =
+                                                                      '${zoneModels_report[selectedIndex].ser}';
+                                                                });
 
-                                                            red_Sum_billIncome();
-                                                          },
+                                                                red_Sum_billIncome();
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    )),
+                                                SizedBox(
+                                                  child: Row(
+                                                    children: [
+                                                      const Padding(
+                                                        padding:
+                                                            EdgeInsets.all(8.0),
+                                                        child: Text(
+                                                          'วันที่ ',
+                                                          style: TextStyle(
+                                                            color: ReportScreen_Color
+                                                                .Colors_Text2_,
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                )),
-                                            SizedBox(
-                                              child: Row(
-                                                children: [
-                                                  const Padding(
-                                                    padding:
-                                                        EdgeInsets.all(8.0),
-                                                    child: Text(
-                                                      'วันที่ ',
-                                                      style: TextStyle(
-                                                        color:
-                                                            ReportScreen_Color
-                                                                .Colors_Text2_,
-                                                        // fontWeight: FontWeight.bold,
-                                                        fontFamily:
-                                                            Font_.Fonts_T,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .fromLTRB(8, 0, 8, 0),
-                                                    child: InkWell(
-                                                      onTap: () {
-                                                        _select_financial_StartDate(
-                                                            context);
-                                                      },
-                                                      child: Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: AppbackgroundColor
-                                                                .Sub_Abg_Colors,
-                                                            borderRadius: const BorderRadius
-                                                                    .only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                            border: Border.all(
-                                                                color:
-                                                                    Colors.grey,
-                                                                width: 1),
-                                                          ),
-                                                          height: 25,
-                                                          width: 120,
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(2.0),
-                                                          child: Center(
-                                                            child: Text(
-                                                              (SDatex_total1_ ==
-                                                                      null)
-                                                                  ? 'เลือก'
-                                                                  : '$SDatex_total1_',
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontSize: 12,
-                                                                color: ReportScreen_Color
-                                                                    .Colors_Text2_,
-                                                                // fontWeight: FontWeight.bold,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T,
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .fromLTRB(
+                                                                8, 0, 8, 0),
+                                                        child: InkWell(
+                                                          onTap: () {
+                                                            _select_financial_StartDate(
+                                                                context);
+                                                          },
+                                                          child: Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: AppbackgroundColor
+                                                                    .Sub_Abg_Colors,
+                                                                borderRadius: const BorderRadius
+                                                                        .only(
+                                                                    topLeft:
+                                                                        Radius.circular(
+                                                                            10),
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                            10),
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            10),
+                                                                    bottomRight:
+                                                                        Radius.circular(
+                                                                            10)),
+                                                                border: Border.all(
+                                                                    color: Colors
+                                                                        .grey,
+                                                                    width: 1),
                                                               ),
-                                                            ),
-                                                          )),
-                                                    ),
-                                                  ),
-                                                  const Padding(
-                                                    padding:
-                                                        EdgeInsets.fromLTRB(
-                                                            8, 0, 8, 0),
-                                                    child: Text(
-                                                      'ถึง',
-                                                      style: TextStyle(
-                                                        color:
-                                                            ReportScreen_Color
+                                                              height: 25,
+                                                              width: 120,
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(2.0),
+                                                              child: Center(
+                                                                child: Text(
+                                                                  (SDatex_total1_ ==
+                                                                          null)
+                                                                      ? 'เลือก'
+                                                                      : '$SDatex_total1_',
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    color: ReportScreen_Color
+                                                                        .Colors_Text2_,
+                                                                    // fontWeight: FontWeight.bold,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T,
+                                                                  ),
+                                                                ),
+                                                              )),
+                                                        ),
+                                                      ),
+                                                      const Padding(
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                8, 0, 8, 0),
+                                                        child: Text(
+                                                          'ถึง',
+                                                          style: TextStyle(
+                                                            color: ReportScreen_Color
                                                                 .Colors_Text1_,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontFamily:
-                                                            FontWeight_.Fonts_T,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .fromLTRB(8, 0, 8, 0),
-                                                    child: InkWell(
-                                                      onTap: () {
-                                                        _select_financial_LtartDate(
-                                                            context);
-                                                      },
-                                                      child: Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: AppbackgroundColor
-                                                                .Sub_Abg_Colors,
-                                                            borderRadius: const BorderRadius
-                                                                    .only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                            border: Border.all(
-                                                                color:
-                                                                    Colors.grey,
-                                                                width: 1),
-                                                          ),
-                                                          height: 25,
-                                                          width: 120,
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(2.0),
-                                                          child: Center(
-                                                            child: Text(
-                                                              (LDatex_total1_ ==
-                                                                      null)
-                                                                  ? 'เลือก'
-                                                                  : '$LDatex_total1_',
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontSize: 12,
-                                                                color: ReportScreen_Color
-                                                                    .Colors_Text2_,
-                                                                // fontWeight: FontWeight.bold,
-                                                                fontFamily: Font_
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontFamily:
+                                                                FontWeight_
                                                                     .Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .fromLTRB(
+                                                                8, 0, 8, 0),
+                                                        child: InkWell(
+                                                          onTap: () {
+                                                            _select_financial_LtartDate(
+                                                                context);
+                                                          },
+                                                          child: Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: AppbackgroundColor
+                                                                    .Sub_Abg_Colors,
+                                                                borderRadius: const BorderRadius
+                                                                        .only(
+                                                                    topLeft:
+                                                                        Radius.circular(
+                                                                            10),
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                            10),
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            10),
+                                                                    bottomRight:
+                                                                        Radius.circular(
+                                                                            10)),
+                                                                border: Border.all(
+                                                                    color: Colors
+                                                                        .grey,
+                                                                    width: 1),
                                                               ),
-                                                            ),
-                                                          )),
-                                                    ),
+                                                              height: 25,
+                                                              width: 120,
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(2.0),
+                                                              child: Center(
+                                                                child: Text(
+                                                                  (LDatex_total1_ ==
+                                                                          null)
+                                                                      ? 'เลือก'
+                                                                      : '$LDatex_total1_',
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    color: ReportScreen_Color
+                                                                        .Colors_Text2_,
+                                                                    // fontWeight: FontWeight.bold,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T,
+                                                                  ),
+                                                                ),
+                                                              )),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ],
-                                              ),
-                                            )
-                                          ],
+                                                )
+                                              ],
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     )
@@ -1465,10 +1484,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             stream: Stream.periodic(const Duration(seconds: 0)),
                             builder: (context, snapshot) {
                               return GridView.count(
-                                  padding:
-                                      ((MediaQuery.of(context).size.width) < 650)
-                                          ? const EdgeInsets.all(2)
-                                          : const EdgeInsets.all(5),
+                                  padding: ((MediaQuery.of(context).size.width) < 650)
+                                      ? const EdgeInsets.all(2)
+                                      : const EdgeInsets.all(5),
                                   crossAxisSpacing:
                                       ((MediaQuery.of(context).size.width) < 650)
                                           ? 10.00
@@ -1480,7 +1498,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   crossAxisCount:
                                       (MediaQuery.of(context).size.width) < 650
                                           ? 2
-                                          : 4,
+                                          : (MediaQuery.of(context).size.width) <
+                                                  1330
+                                              ? 2
+                                              : 4,
                                   childAspectRatio: (Responsive.isDesktop(
                                           context))
                                       ? ((MediaQuery.of(context).size.width) >=
@@ -1640,8 +1661,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                         650)
                                                     ? 40
                                                     : 100,
-                                                child: const Text(
-                                                  'ว่าง',
+                                                child: Text(
+                                                  (widget.areaModels2.length ==
+                                                          0)
+                                                      ? 'ว่าง [0%]'
+                                                      : 'ว่าง [${(((widget.areaModels2.length ?? 0.0) * 100) / widget.areaModels.length ?? 0.0).toStringAsFixed(2)}%]',
                                                   maxLines: 2,
                                                   overflow:
                                                       TextOverflow.ellipsis,
@@ -1697,9 +1721,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                             .width) <
                                                         650)
                                                     ? 40
-                                                    : 100,
-                                                child: const Text(
-                                                  'ใกล้หมดสัญญา',
+                                                    : 120,
+                                                child: Text(
+                                                  (widget.areaModels1.length ==
+                                                          0)
+                                                      ? 'ใกล้หมด.. [0%]'
+                                                      : 'ใกล้หมด.. [${(((widget.areaModels1.length ?? 0.0) * 100) / widget.areaModels.length ?? 0.0).toStringAsFixed(2)}%]',
                                                   maxLines: 3,
                                                   overflow:
                                                       TextOverflow.ellipsis,
@@ -1919,8 +1946,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                         650)
                                                     ? 40
                                                     : 100,
-                                                child: const Text(
-                                                  'ใช้งานวันนี้',
+                                                child: Text(
+                                                  (user_today == 0.00)
+                                                      ? 'วันนี้ [0%]'
+                                                      : 'วันนี้ [${(((user_today ?? 0.0) * 100) / userModels.length ?? 0.0).toStringAsFixed(2)}%]',
                                                   maxLines: 2,
                                                   overflow:
                                                       TextOverflow.ellipsis,
@@ -2092,8 +2121,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                         650)
                                                     ? 40
                                                     : 100,
-                                                child: const Text(
-                                                  'Cash',
+                                                child: Text(
+                                                  (totalcash_ == 0.00)
+                                                      ? 'Cash [0%]'
+                                                      : 'Cash [${(((totalcash_ ?? 0.0) * 100) / total1_ ?? 0.0).toStringAsFixed(2)}%]',
                                                   maxLines: 2,
                                                   overflow:
                                                       TextOverflow.ellipsis,
@@ -2145,8 +2176,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                         650)
                                                     ? 40
                                                     : 100,
-                                                child: const Text(
-                                                  'Bank',
+                                                child: Text(
+                                                  (totalbank == 0.00)
+                                                      ? 'Bank [0%]'
+                                                      : 'Bank [${(((totalbank ?? 0.0) * 100) / total1_ ?? 0.0).toStringAsFixed(2)}%]',
                                                   maxLines: 2,
                                                   overflow:
                                                       TextOverflow.ellipsis,
@@ -2307,7 +2340,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                     ? 40
                                                     : 100,
                                                 child: const Text(
-                                                  'ไม่หักส่วนลด',
+                                                  'ก่อน-หักส่วนลด',
                                                   maxLines: 2,
                                                   overflow:
                                                       TextOverflow.ellipsis,
@@ -2360,7 +2393,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                     ? 40
                                                     : 100,
                                                 child: const Text(
-                                                  'หักส่วนลด',
+                                                  'หลัง-หักส่วนลด',
                                                   maxLines: 2,
                                                   overflow:
                                                       TextOverflow.ellipsis,
@@ -2442,7 +2475,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
-                        for (int index = 0; index < 9; index++)
+                        for (int index = 0; index < 8; index++)
                           Padding(
                             padding: const EdgeInsets.all(4.0),
                             child: InkWell(
@@ -2582,7 +2615,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   : (ser_pang == 6)
                                       ? const Dashboard_Screen7()
                                       : (ser_pang == 7)
-                                          ? const Dashboard_Screen8()
+                                          ? const Dashboard_Screen9()
                                           : const Dashboard_Screen9()
         ]),
       ),

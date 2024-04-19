@@ -143,6 +143,10 @@ class TransReBillModelRECM {
   String? total_expname;
   String? sub_zone;
   String? zn_sub;
+  String? b_1;
+  String? b_2;
+  String? b_3;
+  String? b_4;
 
   TransReBillModelRECM({
     this.ser,
@@ -282,6 +286,10 @@ class TransReBillModelRECM {
     this.total_expname,
     this.sub_zone,
     this.zn_sub,
+    this.b_1,
+    this.b_2,
+    this.b_3,
+    this.b_4,
   });
 
   TransReBillModelRECM.fromJson(Map<String, dynamic> json) {
@@ -426,6 +434,10 @@ class TransReBillModelRECM {
     total_expname = json['total_expname'];
     sub_zone = json['sub_zone'];
     zn_sub = json['zn_sub'];
+    b_1 = json['b_1'];
+    b_2 = json['b_2'];
+    b_3 = json['b_3'];
+    b_4 = json['b_4'];
   }
 
   Map<String, dynamic> toJson() {
@@ -571,6 +583,10 @@ class TransReBillModelRECM {
     data['total_expname'] = this.total_expname;
     data['sub_zone'] = this.sub_zone;
     data['zn_sub'] = this.zn_sub;
+    data['b_1'] = this.b_1;
+    data['b_2'] = this.b_2;
+    data['b_3'] = this.b_3;
+    data['b_4'] = this.b_4;
 
     return data;
   }

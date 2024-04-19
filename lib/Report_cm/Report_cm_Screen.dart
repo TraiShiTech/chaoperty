@@ -45,6 +45,7 @@ import '../Model/trans_re_bill_model.dart';
 import '../PeopleChao/PeopleChao_Screen.dart';
 import '../Report/Report_Screen1.dart';
 import '../Report/Report_Screen10.dart';
+import '../Report/Report_Screen11.dart';
 import '../Report/Report_Screen2.dart';
 import '../Report/Report_Screen3.dart';
 import '../Report/Report_Screen4.dart';
@@ -223,7 +224,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           UserModel userModel = UserModel.fromJson(map);
@@ -251,7 +252,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
     var ren = preferences.getString('renTalSer');
     var zone = preferences.getString('zoneSer');
 
-    print('ren >>>>>> $ren');
+    // print('ren >>>>>> $ren');
 
     String url =
         '${MyConstant().domain}/GC_Bank_Paytype.php?isAdd=true&ren=$ren';
@@ -260,7 +261,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           PayMentModel payMentModel = PayMentModel.fromJson(map);
@@ -287,7 +288,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       Map<String, dynamic> map = Map();
       map['ser'] = '0';
       map['rser'] = '0';
@@ -455,7 +456,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
         }
       } else {}
     } catch (e) {}
-    print('name>>>>>  $renname');
+    // print('name>>>>>  $renname');
   }
 
 /////////////////----https://flutterawesome.com/tag/dashboard-tag/------------------------------->(รวมรายรับ ชำระแล้ว)https://flutterawesome.com/responsive-flutter-bank-dashboard-ui/
@@ -516,8 +517,8 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                             double.parse(_TransReBillModels_Incomes.total_dis!))
                 : totalbank + 0.00;
           });
-          print(
-              '${_TransReBillModels_Incomes.type.toString().trim()} /// ${totalbank}');
+          // print(
+          //     '${_TransReBillModels_Incomes.type.toString().trim()} /// ${totalbank}');
         }
       }
     } catch (e) {}
@@ -566,12 +567,12 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
           var docnoin = (_TransReBillModels_Incomes.docno == null)
               ? _TransReBillModels_Incomes.refno!
               : _TransReBillModels_Incomes.docno!;
-          print('imd ${imd + 1}');
+          // print('imd ${imd + 1}');
           // red_Trans_selectIncome(ciddoc, docnoin, index);
           index++;
         }
 
-        print('result ${_TransReBillModels_Income.length}');
+        // print('result ${_TransReBillModels_Income.length}');
 
         // TransReBillModels_Income =
         //     List.generate(_TransReBillModels_Income.length, (_) => []);
@@ -594,7 +595,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print('red_Trans_selectIncome__${index}');
+      // print('red_Trans_selectIncome__${index}');
       if (result.toString() != 'null') {
         for (var map in result) {
           TransReBillHistoryModel _TransReBillHistoryModels_Incomes =
@@ -660,7 +661,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
           });
         }
 
-        print('result ${_TransReBillModels_Bankmovemen.length}');
+        // print('result ${_TransReBillModels_Bankmovemen.length}');
       }
     } catch (e) {}
   }
@@ -680,7 +681,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result.toString() != 'null') {
         for (var map in result) {
           TransReBillHistoryModel _TransReBillHistoryModels_Bankmovemens =
@@ -852,7 +853,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result.toString() != 'null') {
         for (var map in result) {
           TransReBillHistoryModel _TransReBillHistoryModel =
@@ -877,7 +878,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
     var ren = preferences.getString('renTalSer');
     var zone = preferences.getString('zoneSer');
 
-    print('zone >>>>>> $zone');
+    // print('zone >>>>>> $zone');
 
     String url =
         '${MyConstant().domain}/GC_areaAll.php?isAdd=true&ren=$ren&zone=$zone';
@@ -900,16 +901,16 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
             var now = DateTime.now();
             var difference = lastDateObject.difference(now).inDays;
             if (difference == 0) {
-              print('หมดสัญญาวันนี้');
+              // print('หมดสัญญาวันนี้');
             } else if (difference <= 90 && difference > 0) {
               setState(() {
                 areaModels1.add(areaModel);
               });
-              print('ใกล้หมดสัญญา');
+              // print('ใกล้หมดสัญญา');
             } else if (difference < 0) {
-              print('หมดสัญญา');
+              // print('หมดสัญญา');
             } else {
-              print('ไม่ใกล้หมดสัญญา');
+              // print('ไม่ใกล้หมดสัญญา');
             }
           } else {}
         }
@@ -931,9 +932,9 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
     } catch (e) {}
     var end = DateTime.now();
     var difference = end.difference(start);
-    print('Time read_GC_area(): ${difference.inSeconds} seconds');
-    print('Time read_GC_area(): ${difference.inSeconds} seconds');
-    print('Time read_GC_area(): ${difference.inSeconds} seconds');
+    // print('Time read_GC_area(): ${difference.inSeconds} seconds');
+    // print('Time read_GC_area(): ${difference.inSeconds} seconds');
+    // print('Time read_GC_area(): ${difference.inSeconds} seconds');
   }
 
 ///////////--------------------------------------------->(รวม ว่าง ให้เช่า)
@@ -952,7 +953,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
     var ren = preferences.getString('renTalSer');
     var zone = preferences.getString('zoneSer');
 
-    print('zone >>>>>> $zone');
+    // print('zone >>>>>> $zone');
 
     String url = zone == null
         ? '${MyConstant().domain}/GC_areaAll.php?isAdd=true&ren=$ren&zone=$zone'
@@ -964,7 +965,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           AreaModel areaModel = AreaModel.fromJson(map);
@@ -996,9 +997,9 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
     } catch (e) {}
     var end = DateTime.now();
     var difference = end.difference(start);
-    print('Time read_GC_area(): ${difference.inSeconds} seconds');
-    print('Time read_GC_area(): ${difference.inSeconds} seconds');
-    print('Time read_GC_area(): ${difference.inSeconds} seconds');
+    // print('Time read_GC_area(): ${difference.inSeconds} seconds');
+    // print('Time read_GC_area(): ${difference.inSeconds} seconds');
+    // print('Time read_GC_area(): ${difference.inSeconds} seconds');
   }
 
   ///////---------------------------------------------------->
@@ -1416,7 +1417,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       decoration: const BoxDecoration(
-                              color: AppbackgroundColor.TiTile_Box,
+                        color: AppbackgroundColor.TiTile_Box,
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(10),
                             topRight: Radius.circular(10),
@@ -2527,7 +2528,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                   ),
                                                   Row(
                                                     children: [
-                                                      const Expanded(
+                                                      Expanded(
                                                         // width: ((MediaQuery.of(
                                                         //                 context)
                                                         //             .size
@@ -2536,7 +2537,10 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                         //     ? 40
                                                         //     : 100,
                                                         child: Text(
-                                                          'ว่าง',
+                                                          (areaModels2.length ==
+                                                                  0)
+                                                              ? 'ว่าง [0%]'
+                                                              : 'ว่าง [${(((areaModels2.length ?? 0.0) * 100) / areaModels.length ?? 0.0).toStringAsFixed(2)}%]',
                                                           maxLines: 2,
                                                           overflow: TextOverflow
                                                               .ellipsis,
@@ -2586,7 +2590,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                   ),
                                                   Row(
                                                     children: [
-                                                      const Expanded(
+                                                      Expanded(
                                                         // width: ((MediaQuery.of(
                                                         //                 context)
                                                         //             .size
@@ -2595,7 +2599,10 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                         //     ? 40
                                                         //     : 100,
                                                         child: Text(
-                                                          'ใกล้หมดสัญญา',
+                                                          (areaModels1.length ==
+                                                                  0)
+                                                              ? 'ใกล้หมดสัญญา [0%]'
+                                                              : 'ใกล้หมดสัญญา [${(((areaModels1.length ?? 0.0) * 100) / areaModels.length ?? 0.0).toStringAsFixed(2)}%]',
                                                           maxLines: 3,
                                                           overflow: TextOverflow
                                                               .ellipsis,
@@ -2809,7 +2816,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                   ),
                                                   Row(
                                                     children: [
-                                                      const Expanded(
+                                                      Expanded(
                                                         // width: ((MediaQuery.of(
                                                         //                 context)
                                                         //             .size
@@ -2818,7 +2825,9 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                         //     ? 40
                                                         //     : 100,
                                                         child: Text(
-                                                          'ใช้งานวันนี้',
+                                                          (user_today == 0.00)
+                                                              ? 'วันนี้ [0%]'
+                                                              : 'วันนี้ [${(((user_today ?? 0.0) * 100) / userModels.length ?? 0.0).toStringAsFixed(2)}%]',
                                                           maxLines: 2,
                                                           overflow: TextOverflow
                                                               .ellipsis,
@@ -2983,7 +2992,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                   ),
                                                   Row(
                                                     children: [
-                                                      const Expanded(
+                                                      Expanded(
                                                         // width: ((MediaQuery.of(
                                                         //                 context)
                                                         //             .size
@@ -2992,7 +3001,9 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                         //     ? 40
                                                         //     : 100,
                                                         child: Text(
-                                                          'Cash',
+                                                          (totalcash_ == 0.00)
+                                                              ? 'Cash [0%]'
+                                                              : 'Cash [${(((totalcash_ ?? 0.0) * 100) / total1_ ?? 0.0).toStringAsFixed(2)}%]',
                                                           maxLines: 2,
                                                           overflow: TextOverflow
                                                               .ellipsis,
@@ -3032,7 +3043,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                   ),
                                                   Row(
                                                     children: [
-                                                      const Expanded(
+                                                      Expanded(
                                                         // width: ((MediaQuery.of(
                                                         //                 context)
                                                         //             .size
@@ -3041,7 +3052,9 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                         //     ? 40
                                                         //     : 100,
                                                         child: Text(
-                                                          'Bank',
+                                                          (totalbank == 0.00)
+                                                              ? 'Bank [0%]'
+                                                              : 'Bank [${(((totalbank ?? 0.0) * 100) / total1_ ?? 0.0).toStringAsFixed(2)}%]',
                                                           maxLines: 2,
                                                           overflow: TextOverflow
                                                               .ellipsis,
@@ -3216,7 +3229,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                         //     ? 40
                                                         //     : 100,
                                                         child: Text(
-                                                          'ไม่หักส่วนลด',
+                                                          'ก่อน-หักส่วนลด',
                                                           maxLines: 2,
                                                           overflow: TextOverflow
                                                               .ellipsis,
@@ -3265,7 +3278,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                         //     ? 40
                                                         //     : 100,
                                                         child: Text(
-                                                          'หักส่วนลด',
+                                                          'หลัง-หักส่วนลด',
                                                           maxLines: 2,
                                                           overflow: TextOverflow
                                                               .ellipsis,
@@ -3394,7 +3407,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                       ),
                                     ),
                                   ),
-                                for (int index = 1; index < 11; index++)
+                                for (int index = 1; index < 12; index++)
                                   Padding(
                                     padding: const EdgeInsets.all(4.0),
                                     child: InkWell(
@@ -3469,16 +3482,21 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                           : (ser_pang == 8)
                                                               ? const ReportScreen8()
                                                               : (ser_pang == 9)
-                                                                  ? (rtser.toString() == '72' ||
-                                                                          rtser.toString() ==
-                                                                              '92' ||
-                                                                          rtser.toString() ==
-                                                                              '93' ||
-                                                                          rtser.toString() ==
-                                                                              '94')
-                                                                      ? const ReportScreen9_1() ////องค์การตลาด กระทรวงมหาดไทย
-                                                                      : const ReportScreen9()
-                                                                  : const ReportScreen10()
+                                                                  ?
+                                                                  // (rtser.toString() == '72' ||
+                                                                  //         rtser.toString() ==
+                                                                  //             '92' ||
+                                                                  //         rtser.toString() ==
+                                                                  //             '93' ||
+                                                                  //         rtser.toString() ==
+                                                                  //             '94')
+                                                                  //     ? const ReportScreen9_1() ////องค์การตลาด กระทรวงมหาดไทย
+                                                                  //     :
+                                                                  const ReportScreen9()
+                                                                  : (ser_pang ==
+                                                                          10)
+                                                                      ? const ReportScreen10()
+                                                                      : const ReportScreen11()
                 ],
               ),
             ),
@@ -3487,77 +3505,77 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
 }
 
 ///////////----------------------------------------->
-class PreviewReportScreen extends StatelessWidget {
-  final pw.Document doc;
-  final Status_;
-  PreviewReportScreen({super.key, required this.doc, this.Status_});
+// class PreviewReportScreen extends StatelessWidget {
+//   final pw.Document doc;
+//   final Status_;
+//   PreviewReportScreen({super.key, required this.doc, this.Status_});
 
-  static const customSwatch = MaterialColor(
-    0xFF8DB95A,
-    <int, Color>{
-      50: Color(0xFFC2FD7F),
-      100: Color(0xFFB6EE77),
-      200: Color(0xFFB2E875),
-      300: Color(0xFFACDF71),
-      400: Color(0xFFA7DA6E),
-      500: Color(0xFFA1D16A),
-      600: Color(0xFF94BF62),
-      700: Color(0xFF90B961),
-      800: Color(0xFF85AB5A),
-      900: Color(0xFF7A9B54),
-    },
-  );
-  String day_ =
-      '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}';
+//   static const customSwatch = MaterialColor(
+//     0xFF8DB95A,
+//     <int, Color>{
+//       50: Color(0xFFC2FD7F),
+//       100: Color(0xFFB6EE77),
+//       200: Color(0xFFB2E875),
+//       300: Color(0xFFACDF71),
+//       400: Color(0xFFA7DA6E),
+//       500: Color(0xFFA1D16A),
+//       600: Color(0xFF94BF62),
+//       700: Color(0xFF90B961),
+//       800: Color(0xFF85AB5A),
+//       900: Color(0xFF7A9B54),
+//     },
+//   );
+//   String day_ =
+//       '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}';
 
-  String Tim_ =
-      '${DateTime.now().hour}.${DateTime.now().minute}.${DateTime.now().second}';
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      // title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: customSwatch,
-      ),
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          // backgroundColor: Color.fromARGB(255, 141, 185, 90),
-          leading: IconButton(
-            onPressed: () async {
-              SharedPreferences preferences =
-                  await SharedPreferences.getInstance();
+//   String Tim_ =
+//       '${DateTime.now().hour}.${DateTime.now().minute}.${DateTime.now().second}';
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       // title: 'Flutter Demo',
+//       theme: ThemeData(
+//         primarySwatch: customSwatch,
+//       ),
+//       debugShowCheckedModeBanner: false,
+//       home: Scaffold(
+//         appBar: AppBar(
+//           // backgroundColor: Color.fromARGB(255, 141, 185, 90),
+//           leading: IconButton(
+//             onPressed: () async {
+//               SharedPreferences preferences =
+//                   await SharedPreferences.getInstance();
 
-              String? _route = preferences.getString('route');
-              MaterialPageRoute materialPageRoute = MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      AdminScafScreen(route: _route));
-              Navigator.pushAndRemoveUntil(
-                  context, materialPageRoute, (route) => false);
-            },
-            icon: const Icon(
-              Icons.arrow_back_outlined,
-              color: Colors.white,
-            ),
-          ),
-          centerTitle: true,
-          title: Text(
-            "${Status_}",
-            style: const TextStyle(
-                color: Colors.white, fontFamily: FontWeight_.Fonts_T),
-          ),
-        ),
-        body: PdfPreview(
-          build: (format) => doc.save(),
-          allowSharing: false,
-          allowPrinting: true, canChangePageFormat: false,
-          canChangeOrientation: false, canDebug: false,
-          maxPageWidth: MediaQuery.of(context).size.width * 0.6,
-          // scrollViewDecoration:,
-          initialPageFormat: PdfPageFormat.a4,
-          pdfFileName: "${Status_}[$day_].pdf",
-        ),
-      ),
-    );
-  }
-}
+//               String? _route = preferences.getString('route');
+//               MaterialPageRoute materialPageRoute = MaterialPageRoute(
+//                   builder: (BuildContext context) =>
+//                       AdminScafScreen(route: _route));
+//               Navigator.pushAndRemoveUntil(
+//                   context, materialPageRoute, (route) => false);
+//             },
+//             icon: const Icon(
+//               Icons.arrow_back_outlined,
+//               color: Colors.white,
+//             ),
+//           ),
+//           centerTitle: true,
+//           title: Text(
+//             "${Status_}",
+//             style: const TextStyle(
+//                 color: Colors.white, fontFamily: FontWeight_.Fonts_T),
+//           ),
+//         ),
+//         body: PdfPreview(
+//           build: (format) => doc.save(),
+//           allowSharing: false,
+//           allowPrinting: true, canChangePageFormat: false,
+//           canChangeOrientation: false, canDebug: false,
+//           maxPageWidth: MediaQuery.of(context).size.width * 0.6,
+//           // scrollViewDecoration:,
+//           initialPageFormat: PdfPageFormat.a4,
+//           pdfFileName: "${Status_}[$day_].pdf",
+//         ),
+//       ),
+//     );
+//   }
+// }

@@ -13,6 +13,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_admin_scaffold/admin_scaffold.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Account/Account_Screen.dart';
@@ -32,6 +33,7 @@ import '../PeopleChao/PeopleChao_Screen.dart';
 import '../Report/Report_Screen.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
+import '../Style/downloadImage.dart';
 import '../Style/view_pagenow.dart';
 import 'Access_Rights.dart';
 import 'Advance_Setting.dart';
@@ -66,6 +68,8 @@ class _SettingScreenState extends State<SettingScreen> {
   List<DragAndDropList> _contents = <DragAndDropList>[];
   DateTime datex = DateTime.now();
   int Status_ = 1;
+  int renTal_lavel = 0;
+  final qrImageKey = GlobalKey();
   //------------------------------------------------------>
   int Status_MenuZone = 1;
   String name_Zone = 'ทั้งหมด';
@@ -137,7 +141,7 @@ class _SettingScreenState extends State<SettingScreen> {
 
   String? renTal_user, renTal_name, zone_ser, zone_name;
   String? rtname, type, typex, renname, pkname, ser_Zonex;
-  int? pkqty, pkuser, countarae;
+  int? pkqty, pkuser, countarae, mass_on;
   String? base64_Imgmap, foder;
   String? ser_user,
       position_user,
@@ -149,7 +153,8 @@ class _SettingScreenState extends State<SettingScreen> {
       tel_user,
       img_,
       img_logo,
-      acc_2;
+      acc_2,
+      lineqr;
   @override
   void initState() {
     super.initState();
@@ -338,6 +343,8 @@ class _SettingScreenState extends State<SettingScreen> {
           var imglogo = renTalModel.imglogo;
           var open_setx = int.parse(renTalModel.open_set!);
           var open_set_datex = int.parse(renTalModel.open_set_date!);
+          var mass_onx = int.parse(renTalModel.mass_on!);
+          var imglineqrx = renTalModel.imglineqr;
           setState(() {
             acc_2 = renTalModel.acc2!;
             foder = foderx;
@@ -352,6 +359,8 @@ class _SettingScreenState extends State<SettingScreen> {
             img_logo = imglogo;
             open_set = open_setx;
             open_set_date = open_set_datex == 0 ? 30 : open_set_datex;
+            mass_on = mass_onx;
+            lineqr = imglineqrx;
             renTalModels.add(renTalModel);
           });
         }
@@ -365,6 +374,7 @@ class _SettingScreenState extends State<SettingScreen> {
     setState(() {
       renTal_user = preferences.getString('renTalSer');
       renTal_name = preferences.getString('renTalName');
+      renTal_lavel = int.parse(preferences.getString('lavel').toString());
     });
   }
 
@@ -1007,460 +1017,499 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          // Padding(
-          //   padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-          //   child: Container(
-          //     height: 20,
-          //     width: MediaQuery.of(context).size.width,
-          //     decoration: const BoxDecoration(
-          //       color: AppbackgroundColor.TiTile_Colors,
-          //       borderRadius: BorderRadius.only(
-          //           topLeft: Radius.circular(10),
-          //           topRight: Radius.circular(10),
-          //           bottomLeft: Radius.circular(0),
-          //           bottomRight: Radius.circular(0)),
-          //       // border: Border.all(color: Colors.white, width: 1),
-          //     ),
-          //     // padding: const EdgeInsets.all(8.0),
-          //   ),
-          // ),
-          Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 8, 2, 0),
-                      child: Container(
-                        width: 100,
-                        decoration: BoxDecoration(
-                          color: AppbackgroundColor.TiTile_Box,
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(10),
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10),
-                          ),
-                          border: Border.all(color: Colors.white, width: 2),
-                        ),
-                        padding: const EdgeInsets.all(5.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const AutoSizeText(
-                              'ตั้งค่า',
-                              overflow: TextOverflow.ellipsis,
-                              minFontSize: 8,
-                              maxFontSize: 20,
-                              style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                color: ReportScreen_Color.Colors_Text1_,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: FontWeight_.Fonts_T,
-                              ),
-                            ),
-                            const AutoSizeText(
-                              ' > >',
-                              overflow: TextOverflow.ellipsis,
-                              minFontSize: 8,
-                              maxFontSize: 20,
-                              style: TextStyle(
-                                color: Colors.green,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: FontWeight_.Fonts_T,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+      child: renTal_lavel <= 4
+          ? Container(
+              height: 500,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: Text(
+                    'Level ของคุณไม่สามารถเข้าถึงได้',
+                    style: TextStyle(
+                      color: ReportScreen_Color.Colors_Text1_,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: FontWeight_.Fonts_T,
                     ),
                   ),
                 ),
               ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: viewpage(context, '$Ser_nowpage'),
-              ),
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: InkWell(
-              //     onTap: () {
-              //       setState(() {
-              //         Status_ = 8;
-              //       });
-              //     },
-              //     child: Container(
-              //       decoration: BoxDecoration(
-              //         color: Colors.tealAccent[700],
-              //         borderRadius: const BorderRadius.only(
-              //           topLeft: Radius.circular(10),
-              //           topRight: Radius.circular(10),
-              //           bottomLeft: Radius.circular(10),
-              //           bottomRight: Radius.circular(10),
-              //         ),
-              //         border: Border.all(color: Colors.white, width: 2),
-              //       ),
-              //       padding: const EdgeInsets.all(8.0),
-              //       width: 120,
-              //       // height: 30,
-              //       child: Row(
-              //         mainAxisAlignment: MainAxisAlignment.center,
-              //         children: [
-              //           const Text(
-              //             '🔰 ',
-              //             style: TextStyle(
-              //                 // color:
-              //                 //     (Status_ == 7) ? Colors.black : Colors.black,
-              //                 fontFamily: FontWeight_.Fonts_T),
-              //           ),
-              //           Text(
-              //             'ติดต่อผู้ดูแล',
-              //             style: TextStyle(
-              //                 // decoration: TextDecoration.underline,
-              //                 color:
-              //                     (Status_ == 8) ? Colors.black : Colors.black,
-              //                 fontFamily: FontWeight_.Fonts_T),
-              //           ),
-              //         ],
-              //       ),
-              //     ),
-              //   ),
-              // )
-            ],
-          ),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.end,
-          //   children: [
-          //     Align(
-          //       alignment: Alignment.topLeft,
-          //       child: viewpage(context, '$Ser_nowpage'),
-          //     ),
-          //   ],
-          // ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              decoration: const BoxDecoration(
-                color: AppbackgroundColor.TiTile_Box,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
-                    bottomLeft: Radius.circular(10),
-                    bottomRight: Radius.circular(10)),
-                // border: Border.all(color: Colors.grey, width: 1),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: ScrollConfiguration(
-                        behavior: ScrollConfiguration.of(context)
-                            .copyWith(dragDevices: {
-                          PointerDeviceKind.touch,
-                          PointerDeviceKind.mouse,
-                        }),
-                        child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: (acc_2! == '1')
-                                ? Row(children: [
-                                    for (int i = 0; i < Status_2.length; i++)
-                                      Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              8, 4, 4, 2),
-                                          child: InkWell(
-                                            onTap: () {
-                                              print(i);
-                                              setState(() {
-                                                Status_ = i + 1;
-                                              });
-                                              // if (i == 6) {
-                                              //   setState(() {
-                                              //     Status_ = 9;
-                                              //   });
-                                              // } else {
-                                              //   setState(() {
-                                              //     Status_ = i + 1;
-                                              //   });
-                                              // }
-                                            },
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                color: (i + 1 == 1)
-                                                    ? (Status_ == i + 1)
-                                                        ? Colors.grey[700]
-                                                        : Colors.grey[300]
-                                                    : (i + 1 == 2)
-                                                        ? (Status_ == i + 1)
-                                                            ? Colors.red[700]
-                                                            : Colors.red[200]
-                                                        : (i + 1 == 3)
-                                                            ? (Status_ == i + 1)
-                                                                ? Colors
-                                                                    .green[700]
-                                                                : Colors
-                                                                    .green[200]
-                                                            : (i + 1 == 4)
-                                                                ? (Status_ ==
-                                                                        i + 1)
-                                                                    ? Colors.blue[
-                                                                        700]
-                                                                    : Colors.blue[
-                                                                        200]
-                                                                : (i + 1 == 5)
-                                                                    ? (Status_ ==
-                                                                            i +
-                                                                                1)
-                                                                        ? Colors.orange[
-                                                                            700]
-                                                                        : Colors.orange[
-                                                                            200]
-                                                                    : (i + 1 ==
-                                                                            6)
-                                                                        ? (Status_ ==
-                                                                                i + 1)
-                                                                            ? Colors.blueGrey
-                                                                            : Colors.blueGrey[200]
-                                                                        : (i + 1 == 7)
-                                                                            ? (Status_ == i + 1)
-                                                                                ? Colors.deepPurple
-                                                                                : Colors.deepPurple[200]
-                                                                            : (i + 1 == 8)
-                                                                                ? (Status_ == i + 1)
-                                                                                    ? Colors.brown
-                                                                                    : Colors.brown[200]
-                                                                                : (i + 1 == 9)
-                                                                                    ? (Status_ == i + 1)
-                                                                                        ? Colors.pink
-                                                                                        : Colors.pink[200]
-                                                                                    : (Status_ == i + 1)
-                                                                                        ? Colors.yellow[600]
-                                                                                        : Colors.yellow[200],
-                                                //     ? Colors.green
-                                                //     : (i + 1 == 2)
-                                                //         ? Colors.blue
-                                                //         : (i + 1 == 3)
-                                                //             ? Colors
-                                                //                 .deepPurple[300]
-                                                //             : (i + 1 == 4)
-                                                //                 ? Colors.red
-                                                //                 : (i + 1 == 5)
-                                                //                     ? Colors
-                                                //                         .orange
-                                                //                     : (i + 1 ==
-                                                //                             7)
-                                                //                         ? Colors
-                                                //                             .pink
-                                                //                         : (i + 1 ==
-                                                //                                 8)
-                                                //                             ? Colors.green
-                                                //                             : Colors.teal,
-                                                borderRadius:
-                                                    const BorderRadius.only(
-                                                        topLeft:
-                                                            Radius.circular(10),
-                                                        topRight:
-                                                            Radius.circular(10),
-                                                        bottomLeft:
-                                                            Radius.circular(10),
-                                                        bottomRight:
-                                                            Radius.circular(
-                                                                10)),
-                                                border: (Status_ == i + 1)
-                                                    ? Border.all(
-                                                        color: Colors.white,
-                                                        width: 1)
-                                                    : null,
-                                              ),
-                                              padding:
-                                                  const EdgeInsets.all(6.0),
-                                              child: Center(
-                                                child: Text(
-                                                  '${Status_2[i]}',
-                                                  style: TextStyle(
-                                                      color: (Status_ == i + 1)
-                                                          ? Colors.white
-                                                          : Colors.black,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T),
-                                                ),
-                                              ),
-                                            ),
-                                          )),
-                                  ])
-                                : Row(children: [
-                                    for (int i = 0; i < Status.length; i++)
-                                      Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              8, 4, 8, 4),
-                                          child: InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                Status_ = i + 1;
-                                              });
-                                              // setState(() {
-                                              //   if (i + 1 > 5) {
-                                              //     Status_ = i + 2;
-                                              //   } else {
-                                              //     Status_ = i + 1;
-                                              //   }
-                                              // });
-                                            },
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                color: (i + 1 == 1)
-                                                    ? (Status_ == i + 1)
-                                                        ? Colors.grey[700]
-                                                        : Colors.grey[300]
-                                                    : (i + 1 == 2)
-                                                        ? (Status_ == i + 1)
-                                                            ? Colors.red[700]
-                                                            : Colors.red[200]
-                                                        : (i + 1 == 3)
-                                                            ? (Status_ == i + 1)
-                                                                ? Colors
-                                                                    .green[700]
-                                                                : Colors
-                                                                    .green[200]
-                                                            : (i + 1 == 4)
-                                                                ? (Status_ ==
-                                                                        i + 1)
-                                                                    ? Colors.blue[
-                                                                        700]
-                                                                    : Colors.blue[
-                                                                        200]
-                                                                : (i + 1 == 5)
-                                                                    ? (Status_ ==
-                                                                            i +
-                                                                                1)
-                                                                        ? Colors.orange[
-                                                                            700]
-                                                                        : Colors.orange[
-                                                                            200]
-                                                                    : (i + 1 ==
-                                                                            6)
-                                                                        ? (Status_ ==
-                                                                                i + 1)
-                                                                            ? Colors.blueGrey
-                                                                            : Colors.blueGrey[200]
-                                                                        : (i + 1 == 7)
-                                                                            ? (Status_ == i + 1)
-                                                                                ? Colors.deepPurple
-                                                                                : Colors.deepPurple[200]
-                                                                            : (i + 1 == 8)
-                                                                                ? (Status_ == i + 1)
-                                                                                    ? Colors.brown
-                                                                                    : Colors.brown[200]
-                                                                                : (i + 1 == 9)
-                                                                                    ? (Status_ == i + 1)
-                                                                                        ? Colors.pink
-                                                                                        : Colors.pink[200]
-                                                                                    : (Status_ == i + 1)
-                                                                                        ? Colors.yellow[600]
-                                                                                        : Colors.yellow[200],
-                                                // ? Colors.green
-                                                // : (i + 1 == 2)
-                                                //     ? Colors.blue
-                                                //     : (i + 1 == 3)
-                                                //         ? Colors
-                                                //             .deepPurple[300]
-                                                //         : (i + 1 == 4)
-                                                //             ? Colors.red
-                                                //             : (i + 1 == 5)
-                                                //                 ? Colors
-                                                //                     .orange
-                                                //                 : (i + 1 ==
-                                                //                         7)
-                                                //                     ? Colors
-                                                //                         .green
-                                                //                     : (i + 1 ==
-                                                //                             8)
-                                                //                         ? Colors.lime.shade800
-                                                //                         : Colors.teal,
-                                                borderRadius:
-                                                    const BorderRadius.only(
-                                                        topLeft:
-                                                            Radius.circular(10),
-                                                        topRight:
-                                                            Radius.circular(10),
-                                                        bottomLeft:
-                                                            Radius.circular(10),
-                                                        bottomRight:
-                                                            Radius.circular(
-                                                                10)),
-                                                border: (Status_ == i + 1)
-                                                    ? Border.all(
-                                                        color: Colors.white,
-                                                        width: 1)
-                                                    : null,
-                                              ),
-                                              padding:
-                                                  const EdgeInsets.all(6.0),
-                                              child: Center(
-                                                child: Text(
-                                                  '${Status[i]}',
-                                                  style: TextStyle(
-                                                      color: (Status_ == i + 1)
-                                                          ? Colors.white
-                                                          : Colors.black,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T),
-                                                ),
-                                              ),
-                                            ),
-                                          )),
-                                  ])),
+            )
+          : Column(
+              children: [
+                // Padding(
+                //   padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                //   child: Container(
+                //     height: 20,
+                //     width: MediaQuery.of(context).size.width,
+                //     decoration: const BoxDecoration(
+                //       color: AppbackgroundColor.TiTile_Colors,
+                //       borderRadius: BorderRadius.only(
+                //           topLeft: Radius.circular(10),
+                //           topRight: Radius.circular(10),
+                //           bottomLeft: Radius.circular(0),
+                //           bottomRight: Radius.circular(0)),
+                //       // border: Border.all(color: Colors.white, width: 1),
+                //     ),
+                //     // padding: const EdgeInsets.all(8.0),
+                //   ),
+                // ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 8, 2, 0),
+                            child: Container(
+                              width: 100,
+                              decoration: BoxDecoration(
+                                color: AppbackgroundColor.TiTile_Box,
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                ),
+                                border:
+                                    Border.all(color: Colors.white, width: 2),
+                              ),
+                              padding: const EdgeInsets.all(5.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const AutoSizeText(
+                                    'ตั้งค่า',
+                                    overflow: TextOverflow.ellipsis,
+                                    minFontSize: 8,
+                                    maxFontSize: 20,
+                                    style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                      color: ReportScreen_Color.Colors_Text1_,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T,
+                                    ),
+                                  ),
+                                  const AutoSizeText(
+                                    ' > >',
+                                    overflow: TextOverflow.ellipsis,
+                                    minFontSize: 8,
+                                    maxFontSize: 20,
+                                    style: TextStyle(
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: viewpage(context, '$Ser_nowpage'),
+                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(8.0),
+                    //   child: InkWell(
+                    //     onTap: () {
+                    //       setState(() {
+                    //         Status_ = 8;
+                    //       });
+                    //     },
+                    //     child: Container(
+                    //       decoration: BoxDecoration(
+                    //         color: Colors.tealAccent[700],
+                    //         borderRadius: const BorderRadius.only(
+                    //           topLeft: Radius.circular(10),
+                    //           topRight: Radius.circular(10),
+                    //           bottomLeft: Radius.circular(10),
+                    //           bottomRight: Radius.circular(10),
+                    //         ),
+                    //         border: Border.all(color: Colors.white, width: 2),
+                    //       ),
+                    //       padding: const EdgeInsets.all(8.0),
+                    //       width: 120,
+                    //       // height: 30,
+                    //       child: Row(
+                    //         mainAxisAlignment: MainAxisAlignment.center,
+                    //         children: [
+                    //           const Text(
+                    //             '🔰 ',
+                    //             style: TextStyle(
+                    //                 // color:
+                    //                 //     (Status_ == 7) ? Colors.black : Colors.black,
+                    //                 fontFamily: FontWeight_.Fonts_T),
+                    //           ),
+                    //           Text(
+                    //             'ติดต่อผู้ดูแล',
+                    //             style: TextStyle(
+                    //                 // decoration: TextDecoration.underline,
+                    //                 color:
+                    //                     (Status_ == 8) ? Colors.black : Colors.black,
+                    //                 fontFamily: FontWeight_.Fonts_T),
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ),
+                    // )
+                  ],
+                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.end,
+                //   children: [
+                //     Align(
+                //       alignment: Alignment.topLeft,
+                //       child: viewpage(context, '$Ser_nowpage'),
+                //     ),
+                //   ],
+                // ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: const BoxDecoration(
+                      color: AppbackgroundColor.TiTile_Box,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10)),
+                      // border: Border.all(color: Colors.grey, width: 1),
+                    ),
+                    padding: const EdgeInsets.all(4.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: ScrollConfiguration(
+                              behavior: ScrollConfiguration.of(context)
+                                  .copyWith(dragDevices: {
+                                PointerDeviceKind.touch,
+                                PointerDeviceKind.mouse,
+                              }),
+                              child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: (acc_2! == '1')
+                                      ? Row(children: [
+                                          for (int i = 0;
+                                              i < Status_2.length;
+                                              i++)
+                                            Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        8, 4, 4, 2),
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    print(i);
+                                                    setState(() {
+                                                      Status_ = i + 1;
+                                                    });
+                                                    // if (i == 6) {
+                                                    //   setState(() {
+                                                    //     Status_ = 9;
+                                                    //   });
+                                                    // } else {
+                                                    //   setState(() {
+                                                    //     Status_ = i + 1;
+                                                    //   });
+                                                    // }
+                                                  },
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: (i + 1 == 1)
+                                                          ? (Status_ == i + 1)
+                                                              ? Colors.grey[700]
+                                                              : Colors.grey[300]
+                                                          : (i + 1 == 2)
+                                                              ? (Status_ ==
+                                                                      i + 1)
+                                                                  ? Colors
+                                                                      .red[700]
+                                                                  : Colors
+                                                                      .red[200]
+                                                              : (i + 1 == 3)
+                                                                  ? (Status_ ==
+                                                                          i + 1)
+                                                                      ? Colors.green[
+                                                                          700]
+                                                                      : Colors.green[
+                                                                          200]
+                                                                  : (i + 1 == 4)
+                                                                      ? (Status_ ==
+                                                                              i +
+                                                                                  1)
+                                                                          ? Colors.blue[
+                                                                              700]
+                                                                          : Colors.blue[
+                                                                              200]
+                                                                      : (i + 1 ==
+                                                                              5)
+                                                                          ? (Status_ == i + 1)
+                                                                              ? Colors.orange[700]
+                                                                              : Colors.orange[200]
+                                                                          : (i + 1 == 6)
+                                                                              ? (Status_ == i + 1)
+                                                                                  ? Colors.blueGrey
+                                                                                  : Colors.blueGrey[200]
+                                                                              : (i + 1 == 7)
+                                                                                  ? (Status_ == i + 1)
+                                                                                      ? Colors.deepPurple
+                                                                                      : Colors.deepPurple[200]
+                                                                                  : (i + 1 == 8)
+                                                                                      ? (Status_ == i + 1)
+                                                                                          ? Colors.brown
+                                                                                          : Colors.brown[200]
+                                                                                      : (i + 1 == 9)
+                                                                                          ? (Status_ == i + 1)
+                                                                                              ? Colors.pink
+                                                                                              : Colors.pink[200]
+                                                                                          : (Status_ == i + 1)
+                                                                                              ? Colors.yellow[600]
+                                                                                              : Colors.yellow[200],
+                                                      //     ? Colors.green
+                                                      //     : (i + 1 == 2)
+                                                      //         ? Colors.blue
+                                                      //         : (i + 1 == 3)
+                                                      //             ? Colors
+                                                      //                 .deepPurple[300]
+                                                      //             : (i + 1 == 4)
+                                                      //                 ? Colors.red
+                                                      //                 : (i + 1 == 5)
+                                                      //                     ? Colors
+                                                      //                         .orange
+                                                      //                     : (i + 1 ==
+                                                      //                             7)
+                                                      //                         ? Colors
+                                                      //                             .pink
+                                                      //                         : (i + 1 ==
+                                                      //                                 8)
+                                                      //                             ? Colors.green
+                                                      //                             : Colors.teal,
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                                  .only(
+                                                              topLeft: Radius
+                                                                  .circular(10),
+                                                              topRight: Radius
+                                                                  .circular(10),
+                                                              bottomLeft: Radius
+                                                                  .circular(10),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          10)),
+                                                      border: (Status_ == i + 1)
+                                                          ? Border.all(
+                                                              color:
+                                                                  Colors.white,
+                                                              width: 1)
+                                                          : null,
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            6.0),
+                                                    child: Center(
+                                                      child: Text(
+                                                        '${Status_2[i]}',
+                                                        style: TextStyle(
+                                                            color: (Status_ ==
+                                                                    i + 1)
+                                                                ? Colors.white
+                                                                : Colors.black,
+                                                            fontFamily:
+                                                                FontWeight_
+                                                                    .Fonts_T),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )),
+                                        ])
+                                      : Row(children: [
+                                          for (int i = 0;
+                                              i < Status.length;
+                                              i++)
+                                            Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        8, 4, 4, 2),
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      Status_ = i + 1;
+                                                    });
+                                                    // setState(() {
+                                                    //   if (i + 1 > 5) {
+                                                    //     Status_ = i + 2;
+                                                    //   } else {
+                                                    //     Status_ = i + 1;
+                                                    //   }
+                                                    // });
+                                                  },
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: (i + 1 == 1)
+                                                          ? (Status_ == i + 1)
+                                                              ? Colors.grey[700]
+                                                              : Colors.grey[300]
+                                                          : (i + 1 == 2)
+                                                              ? (Status_ ==
+                                                                      i + 1)
+                                                                  ? Colors
+                                                                      .red[700]
+                                                                  : Colors
+                                                                      .red[200]
+                                                              : (i + 1 == 3)
+                                                                  ? (Status_ ==
+                                                                          i + 1)
+                                                                      ? Colors.green[
+                                                                          700]
+                                                                      : Colors.green[
+                                                                          200]
+                                                                  : (i + 1 == 4)
+                                                                      ? (Status_ ==
+                                                                              i +
+                                                                                  1)
+                                                                          ? Colors.blue[
+                                                                              700]
+                                                                          : Colors.blue[
+                                                                              200]
+                                                                      : (i + 1 ==
+                                                                              5)
+                                                                          ? (Status_ == i + 1)
+                                                                              ? Colors.orange[700]
+                                                                              : Colors.orange[200]
+                                                                          : (i + 1 == 6)
+                                                                              ? (Status_ == i + 1)
+                                                                                  ? Colors.blueGrey
+                                                                                  : Colors.blueGrey[200]
+                                                                              : (i + 1 == 7)
+                                                                                  ? (Status_ == i + 1)
+                                                                                      ? Colors.deepPurple
+                                                                                      : Colors.deepPurple[200]
+                                                                                  : (i + 1 == 8)
+                                                                                      ? (Status_ == i + 1)
+                                                                                          ? Colors.brown
+                                                                                          : Colors.brown[200]
+                                                                                      : (i + 1 == 9)
+                                                                                          ? (Status_ == i + 1)
+                                                                                              ? Colors.pink
+                                                                                              : Colors.pink[200]
+                                                                                          : (Status_ == i + 1)
+                                                                                              ? Colors.yellow[600]
+                                                                                              : Colors.yellow[200],
+                                                      // ? Colors.green
+                                                      // : (i + 1 == 2)
+                                                      //     ? Colors.blue
+                                                      //     : (i + 1 == 3)
+                                                      //         ? Colors
+                                                      //             .deepPurple[300]
+                                                      //         : (i + 1 == 4)
+                                                      //             ? Colors.red
+                                                      //             : (i + 1 == 5)
+                                                      //                 ? Colors
+                                                      //                     .orange
+                                                      //                 : (i + 1 ==
+                                                      //                         7)
+                                                      //                     ? Colors
+                                                      //                         .green
+                                                      //                     : (i + 1 ==
+                                                      //                             8)
+                                                      //                         ? Colors.lime.shade800
+                                                      //                         : Colors.teal,
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                                  .only(
+                                                              topLeft: Radius
+                                                                  .circular(10),
+                                                              topRight: Radius
+                                                                  .circular(10),
+                                                              bottomLeft: Radius
+                                                                  .circular(10),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          10)),
+                                                      border: (Status_ == i + 1)
+                                                          ? Border.all(
+                                                              color:
+                                                                  Colors.white,
+                                                              width: 1)
+                                                          : null,
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            6.0),
+                                                    child: Center(
+                                                      child: Text(
+                                                        '${Status[i]}',
+                                                        style: TextStyle(
+                                                            color: (Status_ ==
+                                                                    i + 1)
+                                                                ? Colors.white
+                                                                : Colors.black,
+                                                            fontFamily:
+                                                                FontWeight_
+                                                                    .Fonts_T),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )),
+                                        ])),
+                            ),
+                          ),
+                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.all(8.0),
+                        //   child: InkWell(
+                        //     onTap: () {
+                        //       setState(() {
+                        //         Status_ = 7;
+                        //       });
+                        //     },
+                        //     child: Container(
+                        //       decoration: BoxDecoration(
+                        //         color: Colors.purpleAccent,
+                        //         borderRadius: const BorderRadius.only(
+                        //             topLeft: Radius.circular(10),
+                        //             topRight: Radius.circular(10),
+                        //             bottomLeft: Radius.circular(10),
+                        //             bottomRight: Radius.circular(10)),
+                        //         border: (Status_ == 6)
+                        //             ? Border.all(color: Colors.white, width: 1)
+                        //             : null,
+                        //       ),
+                        //       padding: const EdgeInsets.all(8.0),
+                        //       width: 120,
+                        //       // height: 30,
+                        //       child: Center(
+                        //         child: Text(
+                        //           'ข้อมูลผู้ใช้งาน',
+                        //           style: TextStyle(
+                        //               color: (Status_ == 7)
+                        //                   ? Colors.white
+                        //                   : Colors.black,
+                        //               fontFamily: FontWeight_.Fonts_T),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // )
+                      ],
+                    ),
                   ),
-                  // Padding(
-                  //   padding: const EdgeInsets.all(8.0),
-                  //   child: InkWell(
-                  //     onTap: () {
-                  //       setState(() {
-                  //         Status_ = 7;
-                  //       });
-                  //     },
-                  //     child: Container(
-                  //       decoration: BoxDecoration(
-                  //         color: Colors.purpleAccent,
-                  //         borderRadius: const BorderRadius.only(
-                  //             topLeft: Radius.circular(10),
-                  //             topRight: Radius.circular(10),
-                  //             bottomLeft: Radius.circular(10),
-                  //             bottomRight: Radius.circular(10)),
-                  //         border: (Status_ == 6)
-                  //             ? Border.all(color: Colors.white, width: 1)
-                  //             : null,
-                  //       ),
-                  //       padding: const EdgeInsets.all(8.0),
-                  //       width: 120,
-                  //       // height: 30,
-                  //       child: Center(
-                  //         child: Text(
-                  //           'ข้อมูลผู้ใช้งาน',
-                  //           style: TextStyle(
-                  //               color: (Status_ == 7)
-                  //                   ? Colors.white
-                  //                   : Colors.black,
-                  //               fontFamily: FontWeight_.Fonts_T),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // )
-                ],
-              ),
+                ),
+                (!Responsive.isDesktop(context))
+                    ? BodyHome_mobile()
+                    : BodyHome_Web()
+              ],
             ),
-          ),
-          (!Responsive.isDesktop(context)) ? BodyHome_mobile() : BodyHome_Web()
-        ],
-      ),
     );
   }
 
@@ -1507,8 +1556,14 @@ class _SettingScreenState extends State<SettingScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white60,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      colorFilter: new ColorFilter.mode(
+                          Colors.black.withOpacity(0.05), BlendMode.dstATop),
+                      image: AssetImage("images/BG_im.png"),
+                      fit: BoxFit.cover,
+                    ),
+                    color: Colors.white30,
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(10),
                         topRight: Radius.circular(10),
@@ -1553,7 +1608,7 @@ class _SettingScreenState extends State<SettingScreen> {
                               children: [
                                 Container(
                                   width: 300,
-                                  height: 100,
+                                  height: 150,
                                   decoration: BoxDecoration(
                                     color: Colors.brown[100],
                                     borderRadius: const BorderRadius.only(
@@ -1571,7 +1626,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                         ))
                                       : Image.network(
                                           '${MyConstant().domain}/files/$foder/contract/$img_',
-                                          fit: BoxFit.fill,
+                                          fit: BoxFit.cover,
                                         ),
                                 ),
                                 Positioned(
@@ -1680,8 +1735,8 @@ class _SettingScreenState extends State<SettingScreen> {
                                                   children: [
                                                     Container(
                                                       decoration: BoxDecoration(
-                                                        color:
-                                                            Colors.brown[100],
+                                                        // color:
+                                                        //     Colors.brown[100],
                                                         borderRadius: const BorderRadius
                                                                 .only(
                                                             topLeft: Radius
@@ -1695,6 +1750,10 @@ class _SettingScreenState extends State<SettingScreen> {
                                                             bottomRight:
                                                                 Radius.circular(
                                                                     10)),
+                                                        border: Border.all(
+                                                            color: Colors
+                                                                .grey.shade800,
+                                                            width: 1.2),
                                                       ),
                                                       padding:
                                                           const EdgeInsets.all(
@@ -1777,7 +1836,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                               child: Container(
                                                 // width: 150,
                                                 decoration: BoxDecoration(
-                                                  color: Colors.brown[100],
+                                                  // color: Colors.brown[100],
                                                   borderRadius:
                                                       const BorderRadius.only(
                                                           topLeft:
@@ -1792,6 +1851,10 @@ class _SettingScreenState extends State<SettingScreen> {
                                                           bottomRight:
                                                               Radius.circular(
                                                                   10)),
+                                                  border: Border.all(
+                                                      color:
+                                                          Colors.grey.shade800,
+                                                      width: 1.2),
                                                 ),
                                                 padding:
                                                     const EdgeInsets.all(8.0),
@@ -1865,7 +1928,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                               child: Container(
                                                 // width: 200,
                                                 decoration: BoxDecoration(
-                                                  color: Colors.brown[100],
+                                                  // color: Colors.brown[100],
                                                   borderRadius:
                                                       const BorderRadius.only(
                                                           topLeft:
@@ -1880,6 +1943,10 @@ class _SettingScreenState extends State<SettingScreen> {
                                                           bottomRight:
                                                               Radius.circular(
                                                                   10)),
+                                                  border: Border.all(
+                                                      color:
+                                                          Colors.grey.shade800,
+                                                      width: 1.2),
                                                 ),
                                                 padding:
                                                     const EdgeInsets.all(8.0),
@@ -1922,12 +1989,15 @@ class _SettingScreenState extends State<SettingScreen> {
                                       //     MediaQuery.of(context).size.width * 0.3,
                                       height: 200,
                                       decoration: BoxDecoration(
-                                        color: Colors.brown[100],
+                                        color: Colors.grey[100],
                                         borderRadius: const BorderRadius.only(
                                             topLeft: Radius.circular(10),
                                             topRight: Radius.circular(10),
                                             bottomLeft: Radius.circular(10),
                                             bottomRight: Radius.circular(10)),
+                                        border: Border.all(
+                                            color: Colors.grey.shade800,
+                                            width: 0.5),
                                       ),
                                       padding: const EdgeInsets.all(8.0),
                                       child: (img_ == null ||
@@ -3480,6 +3550,77 @@ class _SettingScreenState extends State<SettingScreen> {
                                                 child: Column(
                                                   // mainAxisAlignment: MainAxisAlignment.center,
                                                   children: [
+                                                    StreamBuilder(
+                                                        stream: Stream.periodic(
+                                                            const Duration(
+                                                                seconds: 0)),
+                                                        builder: (context,
+                                                            snapshot) {
+                                                          return (zone_text
+                                                                      .text ==
+                                                                  '')
+                                                              ? SizedBox()
+                                                              : Column(
+                                                                  children: [
+                                                                    Row(
+                                                                      children: [
+                                                                        Text(
+                                                                          '# ชื่อโซนที่ใกล้เครียง : ',
+                                                                          textAlign:
+                                                                              TextAlign.left,
+                                                                          style:
+                                                                              TextStyle(
+                                                                            color:
+                                                                                SettingScreen_Color.Colors_Text1_,
+                                                                            fontFamily:
+                                                                                FontWeight_.Fonts_T,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                          ),
+                                                                        ),
+                                                                        Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                ScrollConfiguration(
+                                                                              behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+                                                                                PointerDeviceKind.touch,
+                                                                                PointerDeviceKind.mouse,
+                                                                              }),
+                                                                              child: SingleChildScrollView(
+                                                                                scrollDirection: Axis.horizontal,
+                                                                                child: Row(
+                                                                                  children: [
+                                                                                    Text(
+                                                                                      '${zoneModels.where((zoneModelss) {
+                                                                                            var notTitle = zoneModelss.zn.toString().trim().toLowerCase();
+                                                                                            var notTitle2 = zoneModelss.zn.toString().trim();
+
+                                                                                            return notTitle.contains(zone_text.text.toString().trim()) || notTitle2.contains(zone_text.text.toString().trim());
+                                                                                          }).map((model) => model.zn).join(' , ')}',
+                                                                                      textAlign: TextAlign.left,
+                                                                                      style: TextStyle(
+                                                                                        color: Colors.red,
+                                                                                        fontFamily: Font_.Fonts_T,
+                                                                                        // fontWeight: FontWeight.bold,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ),
+                                                                            )),
+                                                                      ],
+                                                                    ),
+                                                                    Divider(
+                                                                      color: Colors
+                                                                              .grey[
+                                                                          300],
+                                                                      height:
+                                                                          4.0,
+                                                                    ),
+                                                                  ],
+                                                                );
+                                                        }),
                                                     const Row(
                                                       children: [
                                                         Padding(
@@ -3640,106 +3781,97 @@ class _SettingScreenState extends State<SettingScreen> {
                                                           padding:
                                                               const EdgeInsets
                                                                   .all(8.0),
-                                                          child: Container(
-                                                            width: 100,
-                                                            decoration:
-                                                                const BoxDecoration(
-                                                              color:
-                                                                  Colors.green,
-                                                              borderRadius: BorderRadius.only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          10),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          10),
-                                                                  bottomLeft: Radius
-                                                                      .circular(
-                                                                          10),
-                                                                  bottomRight: Radius
-                                                                      .circular(
-                                                                          10)),
-                                                            ),
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: TextButton(
-                                                              onPressed:
-                                                                  () async {
-                                                                if (_formKey
-                                                                    .currentState!
-                                                                    .validate()) {
-                                                                  SharedPreferences
-                                                                      preferences =
-                                                                      await SharedPreferences
-                                                                          .getInstance();
-                                                                  String? ren =
-                                                                      preferences
-                                                                          .getString(
-                                                                              'renTalSer');
-                                                                  String?
-                                                                      ser_user =
-                                                                      preferences
-                                                                          .getString(
-                                                                              'ser');
+                                                          child: StreamBuilder(
+                                                              stream: Stream.periodic(
+                                                                  const Duration(
+                                                                      seconds:
+                                                                          0)),
+                                                              builder: (context,
+                                                                  snapshot) {
+                                                                return Container(
+                                                                  width: 100,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    color: (zoneModels.any(
+                                                                                (zoneModelss) {
+                                                                              return zoneModelss.zn.toString().trim() == '${zone_text.text}';
+                                                                            }) ==
+                                                                            true)
+                                                                        ? Colors
+                                                                            .grey
+                                                                        : Colors
+                                                                            .green,
+                                                                    borderRadius: BorderRadius.only(
+                                                                        topLeft:
+                                                                            Radius.circular(
+                                                                                10),
+                                                                        topRight:
+                                                                            Radius.circular(
+                                                                                10),
+                                                                        bottomLeft:
+                                                                            Radius.circular(
+                                                                                10),
+                                                                        bottomRight:
+                                                                            Radius.circular(10)),
+                                                                  ),
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          8.0),
+                                                                  child:
+                                                                      TextButton(
+                                                                    onPressed: (zoneModels.any((zoneModelss) {
+                                                                              return zoneModelss.zn.toString().trim() == '${zone_text.text}';
+                                                                            }) ==
+                                                                            true)
+                                                                        ? null
+                                                                        : () async {
+                                                                            if (_formKey.currentState!.validate()) {
+                                                                              SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                              String? ren = preferences.getString('renTalSer');
+                                                                              String? ser_user = preferences.getString('ser');
 
-                                                                  var zonename =
-                                                                      zone_text
-                                                                          .text;
+                                                                              var zonename = zone_text.text;
 
-                                                                  String url =
-                                                                      '${MyConstant().domain}/InC_zone_setring.php?isAdd=true&ren=$ren&ser_user=$ser_user&zonename=$zonename';
+                                                                              String url = '${MyConstant().domain}/InC_zone_setring.php?isAdd=true&ren=$ren&ser_user=$ser_user&zonename=$zonename';
 
-                                                                  try {
-                                                                    var response =
-                                                                        await http
-                                                                            .get(Uri.parse(url));
+                                                                              try {
+                                                                                var response = await http.get(Uri.parse(url));
 
-                                                                    var result =
-                                                                        json.decode(
-                                                                            response.body);
-                                                                    print(
-                                                                        result);
-                                                                    Insert_log.Insert_logs(
-                                                                        'ตั้งค่า',
-                                                                        'พื้นที่>>เพิ่มโซนพื้นที่(${zone_text.text.toString()})');
-                                                                    if (result
-                                                                            .toString() ==
-                                                                        'true') {
-                                                                      setState(
-                                                                          () {
-                                                                        zone_text
-                                                                            .clear();
-                                                                        read_GC_zone();
-                                                                        read_GC_area();
-                                                                        read_GC_area_count();
-                                                                      });
+                                                                                var result = json.decode(response.body);
+                                                                                print(result);
+                                                                                Insert_log.Insert_logs('ตั้งค่า', 'พื้นที่>>เพิ่มโซนพื้นที่(${zone_text.text.toString()})');
+                                                                                if (result.toString() == 'true') {
+                                                                                  setState(() {
+                                                                                    zone_text.clear();
+                                                                                    read_GC_zone();
+                                                                                    read_GC_area();
+                                                                                    read_GC_area_count();
+                                                                                  });
 
-                                                                      Navigator.pop(
-                                                                          context,
-                                                                          'OK');
-                                                                    }
-                                                                  } catch (e) {
-                                                                    print(e);
-                                                                  }
-                                                                }
-                                                              },
-                                                              child: const Text(
-                                                                'บันทึก',
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
+                                                                                  Navigator.pop(context, 'OK');
+                                                                                }
+                                                                              } catch (e) {
+                                                                                print(e);
+                                                                              }
+                                                                            }
+                                                                          },
+                                                                    child:
+                                                                        const Text(
+                                                                      'บันทึก',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontFamily:
+                                                                            FontWeight_.Fonts_T,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              }),
                                                         ),
                                                         Padding(
                                                           padding:
@@ -3950,11 +4082,345 @@ class _SettingScreenState extends State<SettingScreen> {
                                     ),
                                   ),
                                 ],
-                              )
+                              ),
                             ],
                           ),
                         ),
                       ),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: Row(
+                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      width: (Responsive.isDesktop(context))
+                                          ? 300
+                                          : 200,
+                                      decoration: const BoxDecoration(
+                                        // color: Colors.yellow[200],
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(10),
+                                            topRight: Radius.circular(10),
+                                            bottomLeft: Radius.circular(10),
+                                            bottomRight: Radius.circular(10)),
+                                      ),
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: const Text(
+                                          '6.เปิดแจ้งผ่านไลน์ (อาจมีค่าใช้จ่ายเพิ่มเติม)',
+                                          textAlign: TextAlign.start,
+                                          maxLines: 3,
+                                          overflow: TextOverflow.ellipsis,
+                                          softWrap: false,
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              color: SettingScreen_Color
+                                                  .Colors_Text2_,
+                                              fontFamily: Font_.Fonts_T
+                                              // fontWeight: FontWeight.bold,
+                                              )),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      width: 50,
+                                      decoration: const BoxDecoration(
+                                        // color: Colors.yellow[200],
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(10),
+                                            topRight: Radius.circular(10),
+                                            bottomLeft: Radius.circular(10),
+                                            bottomRight: Radius.circular(10)),
+                                      ),
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: GestureDetector(
+                                        onTap: () async {
+                                          SharedPreferences preferences =
+                                              await SharedPreferences
+                                                  .getInstance();
+                                          String? ren = preferences
+                                              .getString('renTalSer');
+                                          String? ser_user =
+                                              preferences.getString('ser');
+                                          var value = mass_on == 1 ? '0' : '1';
+                                          String url =
+                                              '${MyConstant().domain}/UpC_rentel_mass_on.php?isAdd=true&ren=$ren&value=$value&ser_user=$ser_user';
+
+                                          try {
+                                            var response =
+                                                await http.get(Uri.parse(url));
+
+                                            var result =
+                                                json.decode(response.body);
+                                            print(result);
+                                            if (result.toString() == 'true') {
+                                              setState(() {
+                                                read_GC_rental();
+                                              });
+                                            } else {}
+                                          } catch (e) {}
+                                        },
+                                        child: Icon(
+                                          mass_on == 1
+                                              ? Icons.toggle_on
+                                              : Icons.toggle_off,
+                                          size: 50,
+                                          color: mass_on == 1
+                                              ? Colors.green
+                                              : Colors.red,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      mass_on == 1 ? 'เปิดอยู่' : 'ปิดอยู่',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            if (Responsive.isDesktop(context))
+                              lineqr == ''
+                                  ? const SizedBox()
+                                  : Expanded(
+                                      child: Align(
+                                        alignment: Alignment.center,
+                                        child: Column(
+                                          children: [
+                                            RepaintBoundary(
+                                              key: qrImageKey,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          topLeft: Radius
+                                                              .circular(10),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  10),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  10),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  10)),
+                                                  border: Border.all(
+                                                      color: Colors.grey,
+                                                      width: 1),
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.all(4.0),
+                                                child: Container(
+                                                  width: 150,
+                                                  height: 150,
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10)),
+                                                    // image: DecorationImage(
+                                                    //   image:
+                                                    //       NetworkImage(lineqr!),
+                                                    //   fit: BoxFit.fitHeight,
+                                                    // ),
+                                                  ),
+                                                  child: PrettyQr( 
+                                                    // typeNumber: 3,
+                                                    // image: AssetImage(
+                                                    //   "images/Icon-chao.png",
+                                                    // ),
+                                                    size: 120,
+                                                    data:
+                                                        'https://lin.ee/CZv8lAr',
+                                                    // 'https://qr-official.line.me/gs/M_218wysoe_BW.png?oat_content=qr',
+                                                    errorCorrectLevel:
+                                                        QrErrorCorrectLevel.M,
+                                                    roundEdges: true,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 150,
+                                              child: Align(
+                                                alignment: Alignment.center,
+                                                child: Padding(
+                                                  padding: EdgeInsets.all(8.0),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        'LINE QR ADD',
+                                                        style: TextStyle(
+                                                            fontFamily:
+                                                                FontWeight_
+                                                                    .Fonts_T,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                      InkWell(
+                                                          onTap: () {
+                                                            Future.delayed(
+                                                                const Duration(
+                                                                    milliseconds:
+                                                                        300),
+                                                                () async {
+                                                              captureAndConvertToBase64(
+                                                                  qrImageKey,
+                                                                  'QR_LINE_');
+                                                            });
+                                                          },
+                                                          child: Icon(
+                                                            Icons.download,
+                                                            color: Colors.green,
+                                                          ))
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                            // Row(
+                            //   children: [
+                            //     lineqr == ''
+                            //         ? const SizedBox()
+                            //         :
+                            // Column(
+                            //             children: [
+                            //               Container(
+                            //                 width: MediaQuery.of(context)
+                            //                     .size
+                            //                     .width,
+                            //                 height: 150,
+                            //                 decoration: BoxDecoration(
+                            //                   image: DecorationImage(
+                            //                     image:
+                            //                         NetworkImage(lineqr!),
+                            //                     fit: BoxFit.fitHeight,
+                            //                   ),
+                            //                 ),
+                            //                 child: const SizedBox(
+                            //                   width: 200,
+                            //                   height: 200,
+                            //                 ),
+                            //               ),
+                            //               const Padding(
+                            //                 padding: EdgeInsets.all(8.0),
+                            //                 child: Text(
+                            //                   'LINE QR ADD',
+                            //                   style: TextStyle(
+                            //                       fontFamily:
+                            //                           FontWeight_.Fonts_T,
+                            //                       fontWeight:
+                            //                           FontWeight.bold),
+                            //                 ),
+                            //               )
+                            //             ],
+                            //           ),
+                            //   ],
+                            // ),
+                          ],
+                        ),
+                      ),
+                      if (!Responsive.isDesktop(context))
+                        Align(
+                          alignment: Alignment.center,
+                          child: Column(
+                            children: [
+                              RepaintBoundary(
+                                key: qrImageKey,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10)),
+                                    border: Border.all(
+                                        color: Colors.grey, width: 1),
+                                  ),
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Container(
+                                    width: 150,
+                                    height: 150,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
+                                      image: DecorationImage(
+                                        image: NetworkImage(lineqr!),
+                                        fit: BoxFit.fitHeight,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 150,
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const Text(
+                                          'LINE QR ADD',
+                                          style: TextStyle(
+                                              fontFamily: FontWeight_.Fonts_T,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        InkWell(
+                                            onTap: () {
+                                              Future.delayed(
+                                                  const Duration(
+                                                      milliseconds: 300),
+                                                  () async {
+                                                captureAndConvertToBase64(
+                                                    qrImageKey, 'QR_LINE_');
+                                              });
+                                            },
+                                            child: Icon(
+                                              Icons.download,
+                                              color: Colors.green,
+                                            ))
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -4017,7 +4483,10 @@ class _SettingScreenState extends State<SettingScreen> {
                                           },
                                           child: Container(
                                             decoration: BoxDecoration(
-                                              color: Colors.brown[400],
+                                              color:
+                                                  (Status_MenuZone == index + 1)
+                                                      ? Colors.brown[400]
+                                                      : Colors.brown[200],
                                               borderRadius:
                                                   const BorderRadius.only(
                                                       topLeft:
@@ -4575,7 +5044,7 @@ class _SettingScreenState extends State<SettingScreen> {
                               ),
                         row_num == 1
                             ? SizedBox()
-                            : const Padding(
+                            : Padding(
                                 padding: EdgeInsets.all(8.0),
                                 child: Text('จำนวนพื้นที่คงเหลือ',
                                     maxLines: 3,
@@ -4630,7 +5099,9 @@ class _SettingScreenState extends State<SettingScreen> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: InkWell(
                                           onTap: () async {
-                                            print('1111');
+                                            // List<AreaModel> areaModels_Check =
+                                            //     [];
+                                            // print('1111');
                                             showDialog<String>(
                                               barrierDismissible: false,
                                               context: context,
@@ -4644,9 +5115,9 @@ class _SettingScreenState extends State<SettingScreen> {
                                                               BorderRadius.all(
                                                                   Radius.circular(
                                                                       20.0))),
-                                                  title: const Center(
+                                                  title: Center(
                                                       child: Text(
-                                                    'เพิ่มพื้นที่',
+                                                    'เพิ่มพื้นที่ใน (โซน : $name_Zone)',
                                                     style: TextStyle(
                                                       color: SettingScreen_Color
                                                           .Colors_Text1_,
@@ -4690,8 +5161,136 @@ class _SettingScreenState extends State<SettingScreen> {
                                                     child:
                                                         SingleChildScrollView(
                                                       child: Column(
-                                                        // mainAxisAlignment: MainAxisAlignment.center,
+                                                        // mainAxisAlignment: MainAxisAlignment.center,areaModels
                                                         children: [
+                                                          StreamBuilder(
+                                                              stream: Stream.periodic(
+                                                                  const Duration(
+                                                                      seconds:
+                                                                          0)),
+                                                              builder: (context,
+                                                                  snapshot) {
+                                                                return (area_ser_text
+                                                                            .text ==
+                                                                        '')
+                                                                    ? SizedBox()
+                                                                    : Column(
+                                                                        children: [
+                                                                          Row(
+                                                                            children: [
+                                                                              Text(
+                                                                                '# รหัสพื้นที่ใกล้เครียง : ',
+                                                                                textAlign: TextAlign.left,
+                                                                                style: TextStyle(
+                                                                                  color: SettingScreen_Color.Colors_Text1_,
+                                                                                  fontFamily: FontWeight_.Fonts_T,
+                                                                                  fontWeight: FontWeight.bold,
+                                                                                ),
+                                                                              ),
+                                                                              Expanded(
+                                                                                  flex: 1,
+                                                                                  child: ScrollConfiguration(
+                                                                                    behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+                                                                                      PointerDeviceKind.touch,
+                                                                                      PointerDeviceKind.mouse,
+                                                                                    }),
+                                                                                    child: SingleChildScrollView(
+                                                                                      scrollDirection: Axis.horizontal,
+                                                                                      child: Row(
+                                                                                        children: [
+                                                                                          Text(
+                                                                                            '${_areaModels.where((areaModelss) {
+                                                                                                  var notTitle = areaModelss.ln.toString().trim().toLowerCase();
+                                                                                                  var notTitle2 = areaModelss.ln.toString().trim();
+
+                                                                                                  return notTitle.contains(area_ser_text.text.toString().trim()) || notTitle2.contains(area_ser_text.text.toString().trim());
+                                                                                                }).map((model) => model.ln).join(', ')}',
+                                                                                            textAlign: TextAlign.left,
+                                                                                            style: TextStyle(
+                                                                                              color: Colors.red,
+                                                                                              fontFamily: Font_.Fonts_T,
+                                                                                              // fontWeight: FontWeight.bold,
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ),
+                                                                                  )),
+                                                                            ],
+                                                                          ),
+                                                                          Divider(
+                                                                            color:
+                                                                                Colors.grey[300],
+                                                                            height:
+                                                                                4.0,
+                                                                          ),
+                                                                        ],
+                                                                      );
+                                                              }),
+                                                          StreamBuilder(
+                                                              stream: Stream.periodic(
+                                                                  const Duration(
+                                                                      seconds:
+                                                                          0)),
+                                                              builder: (context,
+                                                                  snapshot) {
+                                                                return (area_name_text
+                                                                            .text ==
+                                                                        '')
+                                                                    ? SizedBox()
+                                                                    : Column(
+                                                                        children: [
+                                                                          Row(
+                                                                            children: [
+                                                                              Text(
+                                                                                '# ชื่อพื้นที่ใกล้เครียง : ',
+                                                                                textAlign: TextAlign.left,
+                                                                                style: TextStyle(
+                                                                                  color: SettingScreen_Color.Colors_Text1_,
+                                                                                  fontFamily: FontWeight_.Fonts_T,
+                                                                                  fontWeight: FontWeight.bold,
+                                                                                ),
+                                                                              ),
+                                                                              Expanded(
+                                                                                  flex: 1,
+                                                                                  child: ScrollConfiguration(
+                                                                                    behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+                                                                                      PointerDeviceKind.touch,
+                                                                                      PointerDeviceKind.mouse,
+                                                                                    }),
+                                                                                    child: SingleChildScrollView(
+                                                                                      scrollDirection: Axis.horizontal,
+                                                                                      child: Row(
+                                                                                        children: [
+                                                                                          Text(
+                                                                                            '${_areaModels.where((areaModelss) {
+                                                                                                  var notTitle = areaModelss.lncode.toString().trim().toLowerCase();
+                                                                                                  var notTitle2 = areaModelss.lncode.toString().trim();
+
+                                                                                                  return notTitle.contains(area_name_text.text.toString().trim()) || notTitle2.contains(area_name_text.text.toString().trim());
+                                                                                                }).map((model) => model.lncode).join(', ')}',
+                                                                                            textAlign: TextAlign.left,
+                                                                                            style: TextStyle(
+                                                                                              color: Colors.red,
+                                                                                              fontFamily: Font_.Fonts_T,
+                                                                                              // fontWeight: FontWeight.bold,
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ),
+                                                                                  )),
+                                                                            ],
+                                                                          ),
+                                                                          Divider(
+                                                                            color:
+                                                                                Colors.grey[300],
+                                                                            height:
+                                                                                4.0,
+                                                                          ),
+                                                                        ],
+                                                                      );
+                                                              }),
                                                           Row(
                                                             children: [
                                                               Expanded(
@@ -4721,7 +5320,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                             const EdgeInsets.all(8.0),
                                                                         child:
                                                                             SizedBox(
-                                                                          // width: 200,
+                                                                          // width: 200, areaModels
                                                                           child:
                                                                               TextFormField(
                                                                             controller:
@@ -4775,18 +5374,16 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                                   color: Colors.black54,
                                                                                   fontFamily: FontWeight_.Fonts_T,
                                                                                 )),
-                                                                            // inputFormatters: <
-                                                                            //     TextInputFormatter>[
-                                                                            //   FilteringTextInputFormatter
-                                                                            //       .deny(RegExp("[' ']")),
-                                                                            //   // for below version 2 use this
-                                                                            //   FilteringTextInputFormatter
-                                                                            //       .allow(RegExp(
-                                                                            //           r'[a-z A-Z 1-9]')),
-                                                                            //   // for version 2 and greater youcan also use this
-                                                                            //   // FilteringTextInputFormatter
-                                                                            //   //     .digitsOnly
-                                                                            // ],
+                                                                            inputFormatters: <TextInputFormatter>[
+                                                                              FilteringTextInputFormatter.deny(RegExp("[' ']")),
+                                                                              // for below version 2 use this
+                                                                              // FilteringTextInputFormatter
+                                                                              //     .allow(RegExp(
+                                                                              //         r'[a-z A-Z 1-9]')),
+                                                                              // for version 2 and greater youcan also use this
+                                                                              // FilteringTextInputFormatter
+                                                                              //     .digitsOnly
+                                                                            ],
                                                                           ),
                                                                         ),
                                                                       ),
@@ -5110,104 +5707,90 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                             .all(
                                                                         8.0),
                                                                 child:
-                                                                    Container(
-                                                                  width: 100,
-                                                                  decoration:
-                                                                      const BoxDecoration(
-                                                                    color: Colors
-                                                                        .green,
-                                                                    borderRadius: BorderRadius.only(
-                                                                        topLeft:
-                                                                            Radius.circular(
-                                                                                10),
-                                                                        topRight:
-                                                                            Radius.circular(
-                                                                                10),
-                                                                        bottomLeft:
-                                                                            Radius.circular(
-                                                                                10),
-                                                                        bottomRight:
-                                                                            Radius.circular(10)),
-                                                                  ),
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          8.0),
-                                                                  child:
-                                                                      TextButton(
-                                                                    onPressed:
-                                                                        () async {
-                                                                      if (_formKey
-                                                                          .currentState!
-                                                                          .validate()) {
-                                                                        SharedPreferences
-                                                                            preferences =
-                                                                            await SharedPreferences.getInstance();
-                                                                        String?
-                                                                            ren =
-                                                                            preferences.getString('renTalSer');
-                                                                        String?
-                                                                            ser_user =
-                                                                            preferences.getString('ser');
+                                                                    StreamBuilder(
+                                                                        stream: Stream.periodic(const Duration(
+                                                                            seconds:
+                                                                                0)),
+                                                                        builder:
+                                                                            (context,
+                                                                                snapshot) {
+                                                                          return Container(
+                                                                            width:
+                                                                                100,
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              color: (areaModels.any((areaModelss) {
+                                                                                            return areaModelss.ln.toString().trim() == '${area_ser_text.text}';
+                                                                                          }) ==
+                                                                                          true ||
+                                                                                      areaModels.any((areaModelss) {
+                                                                                            return areaModelss.lncode.toString().trim() == '${area_name_text.text}';
+                                                                                          }) ==
+                                                                                          true)
+                                                                                  ? Colors.grey
+                                                                                  : Colors.green,
+                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                            ),
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                TextButton(
+                                                                              onPressed: (areaModels.any((areaModelss) {
+                                                                                            return areaModelss.ln.toString().trim() == '${area_ser_text.text}';
+                                                                                          }) ==
+                                                                                          true ||
+                                                                                      areaModels.any((areaModelss) {
+                                                                                            return areaModelss.lncode.toString().trim() == '${area_name_text.text}';
+                                                                                          }) ==
+                                                                                          true)
+                                                                                  ? null
+                                                                                  : () async {
+                                                                                      if (_formKey.currentState!.validate()) {
+                                                                                        SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                        String? ren = preferences.getString('renTalSer');
+                                                                                        String? ser_user = preferences.getString('ser');
 
-                                                                        var zonename =
-                                                                            ser_Zonex;
-                                                                        var area_ser =
-                                                                            area_ser_text.text;
-                                                                        var area_name =
-                                                                            area_name_text.text;
-                                                                        var area_qty =
-                                                                            area_qty_text.text;
-                                                                        var area_pri =
-                                                                            area_pri_text.text;
+                                                                                        var zonename = ser_Zonex;
+                                                                                        var area_ser = area_ser_text.text;
+                                                                                        var area_name = area_name_text.text;
+                                                                                        var area_qty = area_qty_text.text;
+                                                                                        var area_pri = area_pri_text.text;
 
-                                                                        String
-                                                                            url =
-                                                                            '${MyConstant().domain}/InC_area_setring.php?isAdd=true&ren=$ren&ser_user=$ser_user&zonename=$zonename&area_ser=$area_ser&area_name=$area_name&area_qty=$area_qty&area_pri=$area_pri';
+                                                                                        String url = '${MyConstant().domain}/InC_area_setring.php?isAdd=true&ren=$ren&ser_user=$ser_user&zonename=$zonename&area_ser=$area_ser&area_name=$area_name&area_qty=$area_qty&area_pri=$area_pri';
 
-                                                                        try {
-                                                                          var response =
-                                                                              await http.get(Uri.parse(url));
+                                                                                        try {
+                                                                                          var response = await http.get(Uri.parse(url));
 
-                                                                          var result =
-                                                                              json.decode(response.body);
-                                                                          print(
-                                                                              result);
-                                                                          if (result.toString() ==
-                                                                              'true') {
-                                                                            setState(() {
-                                                                              read_GC_zone();
-                                                                              read_GC_area();
-                                                                              read_GC_area_count();
-                                                                              area_ser_text.clear();
-                                                                              area_name_text.clear();
-                                                                              area_qty_text.clear();
-                                                                              area_pri_text.clear();
-                                                                            });
-                                                                            Navigator.pop(context,
-                                                                                'OK');
-                                                                          }
-                                                                        } catch (e) {
-                                                                          print(
-                                                                              e);
-                                                                        }
-                                                                      }
-                                                                    },
-                                                                    child:
-                                                                        const Text(
-                                                                      'บันทึก',
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ),
+                                                                                          var result = json.decode(response.body);
+                                                                                          print(result);
+                                                                                          if (result.toString() == 'true') {
+                                                                                            setState(() {
+                                                                                              read_GC_zone();
+                                                                                              read_GC_area();
+                                                                                              read_GC_area_count();
+                                                                                              area_ser_text.clear();
+                                                                                              area_name_text.clear();
+                                                                                              area_qty_text.clear();
+                                                                                              area_pri_text.clear();
+                                                                                            });
+                                                                                            Navigator.pop(context, 'OK');
+                                                                                          }
+                                                                                        } catch (e) {
+                                                                                          print(e);
+                                                                                        }
+                                                                                      }
+                                                                                    },
+                                                                              child: const Text(
+                                                                                'บันทึก',
+                                                                                style: TextStyle(
+                                                                                  color: Colors.white,
+                                                                                  fontFamily: FontWeight_.Fonts_T,
+                                                                                  fontWeight: FontWeight.bold,
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          );
+                                                                        }),
                                                               ),
                                                               Padding(
                                                                 padding:
@@ -5317,7 +5900,7 @@ class _SettingScreenState extends State<SettingScreen> {
                         row_num == 1
                             ? SizedBox()
                             : pkqty! - countarae! > 0
-                                ? Ser_Zone == 0
+                                ? Ser_Zone == 0 || areaModels.length != 0
                                     ? const SizedBox()
                                     : InkWell(
                                         child: Container(
@@ -5338,7 +5921,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                                   color: Colors.white,
                                                   width: 1)),
                                           padding: const EdgeInsets.all(8.0),
-                                          child: const Center(
+                                          child: Center(
                                             child: Text(
                                               'เพิ่มแบบAuto',
                                               style: TextStyle(
@@ -5367,9 +5950,9 @@ class _SettingScreenState extends State<SettingScreen> {
                                                             BorderRadius.all(
                                                                 Radius.circular(
                                                                     20.0))),
-                                                title: const Center(
+                                                title: Center(
                                                     child: Text(
-                                                  'เพิ่มจำนวนพื้นที่แบบAuto',
+                                                  'เพิ่มจำนวนพื้นที่แบบAutoใน (โซน : $name_Zone)',
                                                   style: TextStyle(
                                                     color: SettingScreen_Color
                                                         .Colors_Text1_,
@@ -6515,7 +7098,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                           // ),
                                           Container(
                                             height: 50,
-                                            decoration: const BoxDecoration(
+                                            decoration: BoxDecoration(
                                               color: AppbackgroundColor
                                                   .TiTile_Colors,
                                               borderRadius: BorderRadius.only(
@@ -6796,9 +7379,13 @@ class _SettingScreenState extends State<SettingScreen> {
                                             ),
                                           ),
                                           Container(
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
+                                            width:
+                                                (!Responsive.isDesktop(context))
+                                                    ? 790
+                                                    : MediaQuery.of(context)
+                                                            .size
+                                                            .width *
+                                                        0.84,
                                             height: 350,
                                             decoration: const BoxDecoration(
                                               color: AppbackgroundColor
@@ -7719,7 +8306,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                             children: [
                                               Container(
                                                 height: 50,
-                                                decoration: const BoxDecoration(
+                                                decoration: BoxDecoration(
                                                   color: AppbackgroundColor
                                                       .TiTile_Colors,
                                                   borderRadius:

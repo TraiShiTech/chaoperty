@@ -142,7 +142,7 @@ class _AdvanceSettingState extends State<AdvanceSetting> {
                         children: [
                           Container(
                             height: 50,
-                            decoration: const BoxDecoration(
+                            decoration:  BoxDecoration(
                               color: AppbackgroundColor.TiTile_Colors,
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(10),

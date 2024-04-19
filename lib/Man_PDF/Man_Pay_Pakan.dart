@@ -10,18 +10,23 @@ import '../Model/GetUser_Model.dart';
 import '../Model/Read_DataONBill_PDF_Model.dart';
 import '../Model/trans_re_bill_history_model.dart';
 import '../PDF/PDF_Receipt/pdf_AC_his_statusbill.dart';
-import '../PDF/pdf_Receipt_PayPakan.dart';
+
 import '../PDF_TP2/PDF_Receipt_TP2/pdf_AC_his_statusbill_TP2.dart';
+import '../PDF_TP3/PDF_Pakan_TP3/pdf_Receipt_PayPakan_TP3.dart';
 import '../PDF_TP3/PDF_Receipt_TP3/pdf_AC_his_statusbill_TP3.dart';
+import '../PDF_TP4/PDF_Pakan_TP4/pdf_Receipt_PayPakan_TP4.dart';
 import '../PDF_TP4/PDF_Receipt_TP4/pdf_AC_his_statusbill_TP4.dart';
 import '../PDF_TP5/PDF_Receipt_TP5/pdf_AC_his_statusbill_TP5.dart';
 import '../PDF_TP6/PDF_Receipt_TP6/pdf_AC_his_statusbill_TP6.dart';
+import '../PDF_TP7/PDF_Pakan_TP7/pdf_Receipt_PayPakan_TP7.dart';
 import '../PDF_TP7/PDF_Receipt_TP7/pdf_AC_his_statusbill_TP7.dart';
+import '../PDF_TP8/PDF_Pakan_TP8/pdf_Receipt_PayPakan_TP8.dart';
 import '../PDF_TP8/PDF_Receipt_TP8/pdf_AC_his_statusbill_TP8.dart';
+import '../PDF_TP8_Ortorkor/PDF_Pakan_TP8_Ortorkor/pdf_Receipt_PayPakan_TP8.dart';
 import '../PDF_TP8_Ortorkor/PDF_Receipt_TP8_Ortorkor/pdf_AC_his_statusbill_TP8.dart';
 
 class ManPay_Receipt_PakanPDF {
-  // --------------------------------> PDF หลังรับชำระ และ ประวัติบิล
+  // --------------------------------> PDF Pakan
   static void ManPayReceipt_PakanPDF(
       docno, ////----->เลขที่รับชำระ
       context, ////----->context
@@ -99,9 +104,13 @@ class ManPay_Receipt_PakanPDF {
               Read_DataONBill_PDFModel.fromJson(map);
 
           scname_ = (readDataONBillPDFModels.scname == null)
-              ? readDataONBillPDFModels.remark
+              ? (readDataONBillPDFModels.remark == null)
+                  ? readDataONBillPDFModels.scname1
+                  : readDataONBillPDFModels.remark
               : readDataONBillPDFModels.scname;
-          cname_ = readDataONBillPDFModels.cname;
+          cname_ = (readDataONBillPDFModels.cname == null)
+              ? readDataONBillPDFModels.cname1
+              : readDataONBillPDFModels.cname;
           addr_ = readDataONBillPDFModels.addr1;
           tax_ = readDataONBillPDFModels.tax;
           tel_ = readDataONBillPDFModels.tel;
@@ -149,7 +158,7 @@ class ManPay_Receipt_PakanPDF {
     print('$scname_ $cname_ $addr_');
 //////////////////////-------------------------------------------->
     String url =
-        '${MyConstant().domain}/GC_bill_pay_amt.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&docnoin=$docnoin';
+        '${MyConstant().domain}/GC_bill_pay_amtPakan.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&docnoin=$docnoin';
     try {
       var response = await http.get(Uri.parse(url));
       var result = json.decode(response.body);
@@ -205,9 +214,10 @@ class ManPay_Receipt_PakanPDF {
       sum_wht = 0;
       sum_amt = 0;
     }
-
     String url2 =
-        '${MyConstant().domain}/GC_bill_pay_history.php?isAdd=true&ren=$ren&user=$user&ciddoc=$ciddoc&docnoin=$docnoin';
+        '${MyConstant().domain}/GC_bill_pay_PakanHistory.php?isAdd=true&ren=$ren&user=$user&ciddoc=$ciddoc&docnoin=$docnoin';
+    // String url2 =
+    //     '${MyConstant().domain}/GC_bill_pay_history.php?isAdd=true&ren=$ren&user=$user&ciddoc=$ciddoc&docnoin=$docnoin';
     try {
       var response = await http.get(Uri.parse(url2));
 
@@ -217,76 +227,299 @@ class ManPay_Receipt_PakanPDF {
         for (var map in result) {
           TransReBillHistoryModel _TransReBillHistoryModel =
               TransReBillHistoryModel.fromJson(map);
-
+          var sum_pvatx = _TransReBillHistoryModel.pvat != null
+              ? double.parse(_TransReBillHistoryModel.pvat!)
+              : 0.0;
+          var sum_vatx = _TransReBillHistoryModel.vat != null
+              ? double.parse(_TransReBillHistoryModel.vat!)
+              : 0.0;
+          var sum_whtx = _TransReBillHistoryModel.wht != null
+              ? double.parse(_TransReBillHistoryModel.wht!)
+              : 0.0;
+          var sum_amtx = _TransReBillHistoryModel.total != null
+              ? double.parse(_TransReBillHistoryModel.total!)
+              : 0.0;
           numinvoice = _TransReBillHistoryModel.docno!;
           numdoctax = _TransReBillHistoryModel.doctax!;
+
+          sum_pvat = sum_pvat + sum_pvatx;
+          sum_vat = sum_vat + sum_vatx;
+          sum_wht = sum_wht + sum_whtx;
+          sum_amt = sum_amt + sum_amtx;
           _TransReBillHistoryModels.add(_TransReBillHistoryModel);
         }
       }
     } catch (e) {}
+
     final tableData00 = [
       for (int index = 0; index < _TransReBillHistoryModels.length; index++)
         [
-          (_TransReBillHistoryModels[index].dtype == 'KZ')
-              ? 'คืนเงินประกัน'
-              : (_TransReBillHistoryModels[index].dtype == 'KP')
-                  ? 'รายการชำระเพิ่ม'
-                  : '-',
+          '${_TransReBillHistoryModels[index].refno!}',
 
           ///---0
-          _TransReBillHistoryModels[index].bank == ''
-              ? 'เงินสด'
-              : '${_TransReBillHistoryModels[index].bank} (${_TransReBillHistoryModels[index].bno})',
+          '${_TransReBillHistoryModels[index].expname!}',
 
           ///---1
-          '${_TransReBillHistoryModels[index].total!}',
+          '${_TransReBillHistoryModels[index].vat}',
 
           ///---2
+          '${_TransReBillHistoryModels[index].wht}',
+
+          ///---3
+          '${_TransReBillHistoryModels[index].total!}',
+
+          ///---4
         ],
     ];
     final tableData01 = [];
+
     Future.delayed(Duration(milliseconds: 500), () async {
-      print('numinvoice');
-      print('numinvoice');
-      print(numinvoice);
-      print(numdoctax);
-      print('**numinvoice');
-      PdfgenReceipt_PayPakan.exportPDF_Receipt_PayPakan(
-          foder,
-          tableData00,
-          tableData01,
-          context,
-          _TransReBillHistoryModels,
-          'Num_cid',
-          'Namenew',
-          '${sum_pvat}',
-          sum_vat,
-          sum_wht,
-          sum_amt,
-          sum_disp,
-          sum_disamt,
-          '${(sum_amt - sum_disamt)}',
-          renTal_name,
-          scname_,
-          cname_,
-          addr_,
-          tax_,
-          bill_addr,
-          bill_email,
-          bill_tel,
-          bill_tax,
-          bill_name,
-          newValuePDFimg,
-          numinvoice,
-          numdoctax,
-          finnancetransModels,
-          date_Transaction,
-          date_pay,
-          Howto_LockJonPay,
-          dis_sum_Matjum,
-          TitleType_Default_Receipt_Name,
-          dis_sum_Pakan,
-          sum_fee);
+      if (tem_page_ser.toString() == '0' || tem_page_ser == null) {
+        PdfgenReceipt_PayPakan_TP3.exportPDF_Receipt_PayPakan_TP3(
+            foder,
+            tableData00,
+            tableData01,
+            context,
+            _TransReBillHistoryModels,
+            'Num_cid',
+            'Namenew',
+            '${sum_pvat}',
+            sum_vat,
+            sum_wht,
+            sum_amt,
+            sum_disp,
+            sum_disamt,
+            '${(sum_amt - sum_disamt)}',
+            renTal_name,
+            scname_,
+            cname_,
+            addr_,
+            tax_,
+            bill_addr,
+            bill_email,
+            bill_tel,
+            bill_tax,
+            bill_name,
+            newValuePDFimg,
+            numinvoice,
+            numdoctax,
+            finnancetransModels,
+            date_Transaction,
+            date_pay,
+            Howto_LockJonPay,
+            dis_sum_Matjum,
+            TitleType_Default_Receipt_Name,
+            dis_sum_Pakan,
+            sum_fee);
+      } else if (tem_page_ser.toString() == '1') {
+        PdfgenReceipt_PayPakan_TP4.exportPDF_Receipt_PayPakan_TP4(
+            foder,
+            tableData00,
+            tableData01,
+            context,
+            _TransReBillHistoryModels,
+            'Num_cid',
+            'Namenew',
+            '${sum_pvat}',
+            sum_vat,
+            sum_wht,
+            sum_amt,
+            sum_disp,
+            sum_disamt,
+            '${(sum_amt - sum_disamt)}',
+            renTal_name,
+            scname_,
+            cname_,
+            addr_,
+            tax_,
+            bill_addr,
+            bill_email,
+            bill_tel,
+            bill_tax,
+            bill_name,
+            newValuePDFimg,
+            numinvoice,
+            numdoctax,
+            finnancetransModels,
+            date_Transaction,
+            date_pay,
+            Howto_LockJonPay,
+            dis_sum_Matjum,
+            TitleType_Default_Receipt_Name,
+            dis_sum_Pakan,
+            sum_fee);
+      } else if (tem_page_ser.toString() == '2') {
+        PdfgenReceipt_PayPakan_TP7.exportPDF_Receipt_PayPakan_TP7(
+            foder,
+            tableData00,
+            tableData01,
+            context,
+            _TransReBillHistoryModels,
+            'Num_cid',
+            'Namenew',
+            '${sum_pvat}',
+            sum_vat,
+            sum_wht,
+            sum_amt,
+            sum_disp,
+            sum_disamt,
+            '${(sum_amt - sum_disamt)}',
+            renTal_name,
+            scname_,
+            cname_,
+            addr_,
+            tax_,
+            bill_addr,
+            bill_email,
+            bill_tel,
+            bill_tax,
+            bill_name,
+            newValuePDFimg,
+            numinvoice,
+            numdoctax,
+            finnancetransModels,
+            date_Transaction,
+            date_pay,
+            Howto_LockJonPay,
+            dis_sum_Matjum,
+            TitleType_Default_Receipt_Name,
+            dis_sum_Pakan,
+            sum_fee);
+      } else if (tem_page_ser.toString() == '3') {
+        if (rtser.toString() == '72' ||
+            rtser.toString() == '92' ||
+            rtser.toString() == '93' ||
+            rtser.toString() == '94') {
+          PdfgenReceipt_PayPakan_TP8_Ortorkor
+              .exportPDF_Receipt_PayPakan_TP8_Ortorkor(
+                  foder,
+                  tableData00,
+                  tableData01,
+                  context,
+                  _TransReBillHistoryModels,
+                  'Num_cid',
+                  'Namenew',
+                  '${sum_pvat}',
+                  sum_vat,
+                  sum_wht,
+                  sum_amt,
+                  sum_disp,
+                  sum_disamt,
+                  '${(sum_amt - sum_disamt)}',
+                  renTal_name,
+                  scname_,
+                  cname_,
+                  addr_,
+                  tax_,
+                  bill_addr,
+                  bill_email,
+                  bill_tel,
+                  bill_tax,
+                  bill_name,
+                  newValuePDFimg,
+                  numinvoice,
+                  numdoctax,
+                  finnancetransModels,
+                  date_Transaction,
+                  date_pay,
+                  Howto_LockJonPay,
+                  dis_sum_Matjum,
+                  TitleType_Default_Receipt_Name,
+                  dis_sum_Pakan,
+                  sum_fee,
+                  Cust_no,
+                  Zone_s,
+                  Ln_s,
+                  cid_,
+                  fname);
+        } else {
+          PdfgenReceipt_PayPakan_TP8.exportPDF_Receipt_PayPakan_TP8(
+              foder,
+              tableData00,
+              tableData01,
+              context,
+              _TransReBillHistoryModels,
+              'Num_cid',
+              'Namenew',
+              '${sum_pvat}',
+              sum_vat,
+              sum_wht,
+              sum_amt,
+              sum_disp,
+              sum_disamt,
+              '${(sum_amt - sum_disamt)}',
+              renTal_name,
+              scname_,
+              cname_,
+              addr_,
+              tax_,
+              bill_addr,
+              bill_email,
+              bill_tel,
+              bill_tax,
+              bill_name,
+              newValuePDFimg,
+              numinvoice,
+              numdoctax,
+              finnancetransModels,
+              date_Transaction,
+              date_pay,
+              Howto_LockJonPay,
+              dis_sum_Matjum,
+              TitleType_Default_Receipt_Name,
+              dis_sum_Pakan,
+              sum_fee,
+              Cust_no,
+              Zone_s,
+              Ln_s,
+              cid_,
+              fname);
+        }
+      }
     });
+
+    // Future.delayed(Duration(milliseconds: 500), () async {
+    //   print('numinvoice');
+    //   print('numinvoice');
+    //   print(numinvoice);
+    //   print(numdoctax);
+    //   print('**numinvoice');
+    //   PdfgenReceipt_PayPakan.exportPDF_Receipt_PayPakan(
+    //       foder,
+    //       tableData00,
+    //       tableData01,
+    //       context,
+    //       _TransReBillHistoryModels,
+    //       'Num_cid',
+    //       'Namenew',
+    //       '${sum_pvat}',
+    //       sum_vat,
+    //       sum_wht,
+    //       sum_amt,
+    //       sum_disp,
+    //       sum_disamt,
+    //       '${(sum_amt - sum_disamt)}',
+    //       renTal_name,
+    //       scname_,
+    //       cname_,
+    //       addr_,
+    //       tax_,
+    //       bill_addr,
+    //       bill_email,
+    //       bill_tel,
+    //       bill_tax,
+    //       bill_name,
+    //       newValuePDFimg,
+    //       numinvoice,
+    //       numdoctax,
+    //       finnancetransModels,
+    //       date_Transaction,
+    //       date_pay,
+    //       Howto_LockJonPay,
+    //       dis_sum_Matjum,
+    //       TitleType_Default_Receipt_Name,
+    //       dis_sum_Pakan,
+    //       sum_fee);
+    // });
   }
 }

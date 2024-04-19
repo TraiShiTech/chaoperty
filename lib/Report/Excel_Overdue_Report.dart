@@ -229,17 +229,17 @@ class Excgen_OverdueReport {
     sheet.getRangeByName('J4').columnWidth = 18;
     sheet.getRangeByName('K4').columnWidth = 18;
 
-    sheet.getRangeByName('A4').setText('เลขที่สัญญา');
-    sheet.getRangeByName('B4').setText('เลขที่ตั้งหนี้');
-    sheet.getRangeByName('C4').setText('เลขที่วางบิล');
-    sheet.getRangeByName('D4').setText('โซน');
-    sheet.getRangeByName('E4').setText('รหัสพื้นที่');
+    sheet.getRangeByName('A4').setText('ลำดับ');
+    sheet.getRangeByName('B4').setText('เลขสัญญา');
+    sheet.getRangeByName('C4').setText('เลขที่ตั้งหนี้');
+    sheet.getRangeByName('D4').setText('เลขที่วางบิล');
+    sheet.getRangeByName('E4').setText('โซน');
 
     sheet.getRangeByName('F4').setText(
-          'ชื่อร้าน',
+          'รหัสพื้นที่',
         );
     sheet.getRangeByName('G4').setText(
-          'ผู้เช่า',
+          'ชื่อร้าน',
         );
 
     sheet.getRangeByName('H4').setText('ผู้เช่า');

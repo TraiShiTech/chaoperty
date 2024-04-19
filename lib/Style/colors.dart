@@ -1,9 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+//  void changeColor() {
+//     Color tiTileColorss1 = Color.fromARGB(255, 203, 200, 219);
+//     Color tiTileColorss2 = Color(0xFFD9D9B7);
 
+//     setState(() {
+//       if (AppbackgroundColor.TiTile_Colors == tiTileColorss1) {
+//         AppbackgroundColor.TiTile_Colors = tiTileColorss2;
+//       } else {
+//         AppbackgroundColor.TiTile_Colors = tiTileColorss1;
+//       }
+//     });
+//   }
 ///////////////----------------------------------------------------------->
 class AppBarColors {
-  static const ABar_Colors = Color.fromARGB(255, 141, 185, 90);
-  static const hexColor = Color(0xFF102456);
+  static const Color ABar_Colors = Color.fromARGB(255, 141, 185, 90);
+
+  static Color hexColor = Color(0xFF102456);
 }
 
 class AppbackgroundColor {
@@ -11,7 +24,8 @@ class AppbackgroundColor {
   //  Color.fromARGB(
   //     57, 202, 191, 191); //Color(0xF3F3F3); // Color(0xffF2F2D6);
   static const Sub_Abg_Colors = Color(0xFFFFFFFF);
-  static const TiTile_Colors = Color(0xFFD9D9B7); //Colors.blue[200],
+  // static const TiTile_Colors = Color(0xFFD9D9B7); //Colors.blue[200],
+  static Color TiTile_Colors = Color(0xFFD9D9B7); //Colors.blue[200],
   static const TiTile_Box =
       Color.fromARGB(255, 204, 204, 196); //Colors.blue[200],
 }
@@ -121,5 +135,5 @@ class SettingScreen_Color {
   static const Colors_Text2_ = Colors.black;
   static const Colors_Text3_ = Colors.white;
 }
-///////////////----------------------------------------------------------->
 
+///////////////----------------------------------------------------------->

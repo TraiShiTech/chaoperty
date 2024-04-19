@@ -17,6 +17,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../Constant/Myconstant.dart';
 import '../INSERT_Log/Insert_log.dart';
 import '../Man_PDF/Man_BillingNoteInvlice_PDF.dart';
+import '../Model/GetCFinnancetrans_Model.dart';
 import '../Model/GetExp_Model.dart';
 import '../Model/GetInvoiceRe_Model.dart';
 import '../Model/GetInvoice_history_Model.dart';
@@ -89,6 +90,7 @@ class _BillingScreenState extends State<BillingScreen> {
   ///////////--------------------------------------------->
   String? renTal_user, renTal_name, zone_ser, zone_name;
   String? rtname,
+      rtser,
       type,
       typex,
       renname,
@@ -249,6 +251,7 @@ class _BillingScreenState extends State<BillingScreen> {
           var foderx = renTalModel.dbn;
           setState(() {
             foder = foderx;
+            rtser = renTalModel.ser!.trim();
             rtname = rtnamex;
             type = typexs;
             typex = typexx;
@@ -287,6 +290,8 @@ class _BillingScreenState extends State<BillingScreen> {
 
     setState(() {
       limitedList_InvoiceModels_.clear();
+      InvoiceModels.clear();
+      _InvoiceModels.clear();
       offset_save = 0;
       endIndex_save = 0;
       invoice_select.clear();
@@ -294,8 +299,8 @@ class _BillingScreenState extends State<BillingScreen> {
     String Serdata =
         (zone.toString() == '0' || zone == null) ? 'All' : 'Allzone';
     String url = (Serdata.toString() == 'All')
-        ? '${MyConstant().domain}/GC_bill_invoiceMon_historyReport.php?isAdd=true&ren=$ren&Serdata=$Serdata&serzone=$zone&_monts=$MONTH_Now&yex=$YEAR_Now'
-        : '${MyConstant().domain}/GC_bill_invoiceMon_historyReport.php?isAdd=true&ren=$ren&Serdata=$Serdata&serzone=$zone&_monts=$MONTH_Now&yex=$YEAR_Now';
+        ? '${MyConstant().domain}/GC_bill_invoiceMon_history.php?isAdd=true&ren=$ren&Serdata=$Serdata&serzone=$zone&_monts=$MONTH_Now&yex=$YEAR_Now'
+        : '${MyConstant().domain}/GC_bill_invoiceMon_history.php?isAdd=true&ren=$ren&Serdata=$Serdata&serzone=$zone&_monts=$MONTH_Now&yex=$YEAR_Now';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -321,6 +326,7 @@ class _BillingScreenState extends State<BillingScreen> {
   }
 
   ///----------------------->
+
   Future<Null> read_Invoice_limit() async {
     setState(() {
       endIndex = offset + limit;
@@ -436,15 +442,24 @@ class _BillingScreenState extends State<BillingScreen> {
         // var Text_searchBar2_ = Text_searchBar_main1.text.toLowerCase();
         setState(() {
           InvoiceModels = _InvoiceModels.where((Invoice) {
-            var notTitle = Invoice.cid.toString().toLowerCase();
-            var notTitle2 = Invoice.docno.toString().toLowerCase();
-            var notTitle3 = Invoice.ln.toString().toLowerCase();
-            var notTitle4 = Invoice.btype.toString().toLowerCase();
-            var notTitle5 = Invoice.bank.toString().toLowerCase();
-            var notTitle6 = Invoice.cname.toString().toLowerCase();
-            var notTitle7 = Invoice.expname.toString().toLowerCase();
-            var notTitle8 = Invoice.date.toString().toLowerCase();
-            var notTitle9 = Invoice.remark.toString().toLowerCase();
+            var notTitle = Invoice.cid.toString();
+            var notTitle2 = Invoice.docno.toString();
+            var notTitle3 = Invoice.ln.toString();
+            var notTitle4 = Invoice.btype.toString();
+            var notTitle5 = Invoice.bank.toString();
+            var notTitle6 = Invoice.cname.toString();
+            var notTitle7 = Invoice.expname.toString();
+            var notTitle8 = Invoice.date.toString();
+            var notTitle9 = Invoice.remark.toString();
+            // var notTitle = Invoice.cid.toString().toLowerCase();
+            // var notTitle2 = Invoice.docno.toString().toLowerCase();
+            // var notTitle3 = Invoice.ln.toString().toLowerCase();
+            // var notTitle4 = Invoice.btype.toString().toLowerCase();
+            // var notTitle5 = Invoice.bank.toString().toLowerCase();
+            // var notTitle6 = Invoice.cname.toString().toLowerCase();
+            // var notTitle7 = Invoice.expname.toString().toLowerCase();
+            // var notTitle8 = Invoice.date.toString().toLowerCase();
+            // var notTitle9 = Invoice.remark.toString().toLowerCase();
             return notTitle.contains(text) ||
                 notTitle2.contains(text) ||
                 notTitle3.contains(text) ||
@@ -468,7 +483,7 @@ class _BillingScreenState extends State<BillingScreen> {
   Widget Next_page() {
     return Row(
       children: [
-        Expanded(child: Text('')),
+        const Expanded(child: Text('')),
         StreamBuilder(
             stream: Stream.periodic(const Duration(milliseconds: 300)),
             builder: (context, snapshot) {
@@ -484,7 +499,7 @@ class _BillingScreenState extends State<BillingScreen> {
                 padding: const EdgeInsets.all(4.0),
                 child: Row(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.menu_book,
                       color: Colors.grey,
                       size: 20,
@@ -668,7 +683,7 @@ class _BillingScreenState extends State<BillingScreen> {
 
               _showMyDialog_SAVE2(newValuePDFimg);
             },
-            child: Icon(
+            child: const Icon(
               Icons.download,
               color: Colors.white,
               size: 22,
@@ -681,7 +696,7 @@ class _BillingScreenState extends State<BillingScreen> {
 
   ////////--------------------------------------------------------------->
 
-  Future<Null> red_Trans_select(index, ciddoc, qutser, tser, tdocno) async {
+  Future<Null> red_Trans_select(index, ciddoc, qutser, tser, docno) async {
     if (_InvoiceHistoryModels.length != 0) {
       setState(() {
         _InvoiceHistoryModels.clear();
@@ -698,7 +713,7 @@ class _BillingScreenState extends State<BillingScreen> {
     var user = preferences.getString('ser');
     // var ciddoc = widget.Get_Value_cid;
     // var qutser = widget.Get_Value_NameShop_index;
-    var docnoin = _InvoiceModels[index].docno;
+    var docnoin = docno;
 
     String url =
         '${MyConstant().domain}/GC_bill_invoice_history.php?isAdd=true&ren=$ren&user=$user&ciddoc=$ciddoc&docnoin=$docnoin';
@@ -730,7 +745,7 @@ class _BillingScreenState extends State<BillingScreen> {
           });
         }
       }
-      checkshowDialog(index);
+      checkshowDialog(index, docno);
     } catch (e) {}
   }
   ////////--------------------------------------------------------------->
@@ -842,7 +857,7 @@ class _BillingScreenState extends State<BillingScreen> {
                           ),
                           padding: const EdgeInsets.all(2.0),
                           // width: 200,บช.ที่จะใช้  Online Standard QR ต้องไปสมัคร
-                          child: Row(
+                          child: const Row(
                             children: [
                               Text(
                                 'รูปแบบ : ธนาคารกรุงไทย (KTB)  ',
@@ -945,14 +960,20 @@ class _BillingScreenState extends State<BillingScreen> {
           ),
         ),
         (Ser_Tap == 1)
-            ? Verifi_Exc_Billing()
+            ? const Verifi_Exc_Billing()
             : Padding(
                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                 child: Column(
                   children: [
                     Container(
                       width: (Responsive.isDesktop(context))
-                          ? MediaQuery.of(context).size.width * 0.85
+                          ? (rtser.toString() == '50' ||
+                                  rtser.toString() == '72' ||
+                                  rtser.toString() == '92' ||
+                                  rtser.toString() == '93' ||
+                                  rtser.toString() == '94')
+                              ? MediaQuery.of(context).size.width * 0.88
+                              : MediaQuery.of(context).size.width * 0.85
                           : 1200,
                       decoration: const BoxDecoration(
                         color: AppbackgroundColor.Sub_Abg_Colors,
@@ -967,7 +988,13 @@ class _BillingScreenState extends State<BillingScreen> {
                         children: [
                           Container(
                               width: (Responsive.isDesktop(context))
-                                  ? MediaQuery.of(context).size.width * 0.85
+                                  ? (rtser.toString() == '50' ||
+                                          rtser.toString() == '72' ||
+                                          rtser.toString() == '92' ||
+                                          rtser.toString() == '93' ||
+                                          rtser.toString() == '94')
+                                      ? MediaQuery.of(context).size.width * 0.88
+                                      : MediaQuery.of(context).size.width * 0.85
                                   : 1200,
                               child: Column(
                                 children: [
@@ -989,13 +1016,28 @@ class _BillingScreenState extends State<BillingScreen> {
                                                 Container(
                                                   width: (Responsive.isDesktop(
                                                           context))
-                                                      ? MediaQuery.of(context)
-                                                              .size
-                                                              .width *
-                                                          0.85
+                                                      ? (rtser.toString() ==
+                                                                  '50' ||
+                                                              rtser.toString() ==
+                                                                  '72' ||
+                                                              rtser.toString() ==
+                                                                  '92' ||
+                                                              rtser.toString() ==
+                                                                  '93' ||
+                                                              rtser.toString() ==
+                                                                  '94')
+                                                          ? MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.9
+                                                          : MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.85
                                                       : 1200,
-                                                  decoration:
-                                                      const BoxDecoration(
+                                                  decoration: BoxDecoration(
                                                     color: AppbackgroundColor
                                                         .TiTile_Colors,
                                                     borderRadius:
@@ -1094,9 +1136,10 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                       .Sub_Abg_Colors
                                                                   .withOpacity(
                                                                       0.5),
-                                                              borderRadius: BorderRadius.only(
-                                                                  topLeft: Radius
-                                                                      .circular(
+                                                              borderRadius: const BorderRadius
+                                                                      .only(
+                                                                  topLeft:
+                                                                      Radius.circular(
                                                                           10),
                                                                   topRight: Radius
                                                                       .circular(
@@ -1117,7 +1160,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                           .all(
                                                                               2.0),
                                                                   child: Text(
-                                                                    'เดือน :',
+                                                                    'เดือนที่ครบกำหนด :',
                                                                     style:
                                                                         TextStyle(
                                                                       color: ReportScreen_Color
@@ -1315,7 +1358,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                           .all(
                                                                               2.0),
                                                                   child: Text(
-                                                                    'ปี :',
+                                                                    'ปีที่ครบกำหนด :',
                                                                     style:
                                                                         TextStyle(
                                                                       color: ReportScreen_Color
@@ -1605,7 +1648,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                                 [
                                                                           PopupMenuItem(
                                                                               onTap: () async {
-                                                                                Future.delayed(Duration(microseconds: 800), () async {
+                                                                                Future.delayed(const Duration(microseconds: 800), () async {
                                                                                   List newValuePDFimg = [];
 
                                                                                   for (int index = 0; index < 1; index++) {
@@ -1636,15 +1679,15 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                                 child: Row(
                                                                                   children: [
                                                                                     Text(
-                                                                                      'อนุมัติทั้งหมด( ${invoice_select.length} ) : ',
-                                                                                      style: TextStyle(
+                                                                                      'Saveทั้งหมด( ${invoice_select.length} ) : ',
+                                                                                      style: const TextStyle(
                                                                                         fontSize: 14,
                                                                                         color: ReportScreen_Color.Colors_Text2_,
                                                                                         // fontWeight: FontWeight.bold,
                                                                                         fontFamily: Font_.Fonts_T,
                                                                                       ),
                                                                                     ),
-                                                                                    Icon(Icons.check_box, color: AppBarColors.ABar_Colors)
+                                                                                    const Icon(Icons.check_box, color: AppBarColors.ABar_Colors)
                                                                                   ],
                                                                                 ),
                                                                               )),
@@ -1671,14 +1714,14 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                                   children: [
                                                                                     Text(
                                                                                       'ยกเลิกทั้งหมด( ${invoice_select.length} ) : ',
-                                                                                      style: TextStyle(
+                                                                                      style: const TextStyle(
                                                                                         fontSize: 14,
                                                                                         color: ReportScreen_Color.Colors_Text2_,
                                                                                         // fontWeight: FontWeight.bold,
                                                                                         fontFamily: Font_.Fonts_T,
                                                                                       ),
                                                                                     ),
-                                                                                    Icon(
+                                                                                    const Icon(
                                                                                       Icons.check_box_outline_blank,
                                                                                       color: Colors.red,
                                                                                       size: 22,
@@ -1741,7 +1784,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                               : (Text_searchBar_main1
                                                                       .text
                                                                       .isNotEmpty)
-                                                                  ? Expanded(
+                                                                  ? const Expanded(
                                                                       flex: 1,
                                                                       child:
                                                                           Text(
@@ -1763,7 +1806,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                           BoxDecoration(
                                                                         color: Colors
                                                                             .white,
-                                                                        borderRadius: BorderRadius.only(
+                                                                        borderRadius: const BorderRadius.only(
                                                                             topLeft:
                                                                                 Radius.circular(8),
                                                                             topRight: Radius.circular(8),
@@ -1792,9 +1835,13 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                           for (int index = 0;
                                                                               index < InvoiceModels.length;
                                                                               index++) {
-                                                                            setState(() {
-                                                                              invoice_select.add('${InvoiceModels[index].docno}');
-                                                                            });
+                                                                            if (InvoiceModels[index].btype == null ||
+                                                                                InvoiceModels[index].btype.toString() == '') {
+                                                                            } else {
+                                                                              setState(() {
+                                                                                invoice_select.add('${InvoiceModels[index].docno}');
+                                                                              });
+                                                                            }
                                                                           }
                                                                         },
                                                                         child:
@@ -1803,7 +1850,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                           textAlign:
                                                                               TextAlign.center,
                                                                           style:
-                                                                              TextStyle(
+                                                                              const TextStyle(
                                                                             color:
                                                                                 Colors.green,
                                                                             // fontWeight:
@@ -1835,7 +1882,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                           //       ),
                                                           //     ),
                                                           //   ),
-                                                          Expanded(
+                                                          const Expanded(
                                                             flex: 1,
                                                             child: Text(
                                                               'เลขสัญญา',
@@ -1854,8 +1901,8 @@ class _BillingScreenState extends State<BillingScreen> {
                                                               ),
                                                             ),
                                                           ),
-                                                          Expanded(
-                                                            flex: 1,
+                                                          const Expanded(
+                                                            flex: 2,
                                                             child: Text(
                                                               'เลขที่ใบแจ้งหนี้',
                                                               textAlign:
@@ -1886,7 +1933,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                           //     ),
                                                           //   ),
                                                           // ),
-                                                          Expanded(
+                                                          const Expanded(
                                                             flex: 1,
                                                             child: Text(
                                                               'วันที่ออกใบแจ้งหนี้',
@@ -1906,13 +1953,13 @@ class _BillingScreenState extends State<BillingScreen> {
                                                               ),
                                                             ),
                                                           ),
-                                                          Expanded(
+                                                          const Expanded(
                                                             flex: 1,
                                                             child: Text(
                                                               'วันที่ครบกำหนดชำระ',
                                                               textAlign:
                                                                   TextAlign
-                                                                      .start,
+                                                                      .center,
                                                               maxLines: 1,
                                                               style: TextStyle(
                                                                 color: ManageScreen_Color
@@ -1926,7 +1973,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                               ),
                                                             ),
                                                           ),
-                                                          Expanded(
+                                                          const Expanded(
                                                             flex: 2,
                                                             child: Text(
                                                               'ชื่อร้านค้า',
@@ -1958,7 +2005,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                           //     ),
                                                           //   ),
                                                           // ),
-                                                          Expanded(
+                                                          const Expanded(
                                                             flex: 1,
                                                             child: Text(
                                                               'โซน',
@@ -1977,7 +2024,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                               ),
                                                             ),
                                                           ),
-                                                          Expanded(
+                                                          const Expanded(
                                                             flex: 1,
                                                             child: Text(
                                                               'รหัสพื้นที่',
@@ -1996,7 +2043,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                               ),
                                                             ),
                                                           ),
-                                                          Expanded(
+                                                          const Expanded(
                                                             flex: 1,
                                                             child: Text(
                                                               'ช่องทางชำระ',
@@ -2058,7 +2105,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                           //     ),
                                                           //   ),
                                                           // ),
-                                                          Expanded(
+                                                          const Expanded(
                                                             flex: 1,
                                                             child: Text(
                                                               'ส่วนลด',
@@ -2076,7 +2123,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                               ),
                                                             ),
                                                           ),
-                                                          Expanded(
+                                                          const Expanded(
                                                             flex: 1,
                                                             child: Text(
                                                               'ยอดรวม',
@@ -2095,7 +2142,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                               ),
                                                             ),
                                                           ),
-                                                          Expanded(
+                                                          const Expanded(
                                                             flex: 1,
                                                             child: Text(
                                                               'ยอดสุทธิ',
@@ -2127,24 +2174,35 @@ class _BillingScreenState extends State<BillingScreen> {
                                                           //     ),
                                                           //   ),
                                                           // ),
-                                                          // Expanded(
-                                                          //   flex: 1,
-                                                          //   child: Text(
-                                                          //     '....',
-                                                          //     textAlign:
-                                                          //         TextAlign.end,
-                                                          //     style: TextStyle(
-                                                          //       color: ManageScreen_Color
-                                                          //           .Colors_Text1_,
-                                                          //       fontWeight:
-                                                          //           FontWeight
-                                                          //               .bold,
-                                                          //       fontFamily:
-                                                          //           FontWeight_
-                                                          //               .Fonts_T,
-                                                          //     ),
-                                                          //   ),
-                                                          // ),
+                                                          if (rtser.toString() == '50' ||
+                                                              rtser.toString() ==
+                                                                  '72' ||
+                                                              rtser.toString() ==
+                                                                  '92' ||
+                                                              rtser.toString() ==
+                                                                  '93' ||
+                                                              rtser.toString() ==
+                                                                  '94')
+                                                            Container(
+                                                              width: 80,
+                                                              child: Text(
+                                                                '',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .end,
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: ManageScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                ),
+                                                              ),
+                                                            ),
                                                           Expanded(
                                                             flex: 2,
                                                             child: (invoice_select_delete
@@ -2213,7 +2271,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                               (BuildContext context) => [
                                                                             PopupMenuItem(
                                                                                 onTap: () async {
-                                                                                  Future.delayed(Duration(microseconds: 800), () async {
+                                                                                  Future.delayed(const Duration(microseconds: 800), () async {
                                                                                     _showMyDialog_delete();
                                                                                   });
                                                                                 },
@@ -2234,14 +2292,14 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                                     children: [
                                                                                       Text(
                                                                                         'ยืนยันทั้งหมด( ${invoice_select_delete.length} ) : ',
-                                                                                        style: TextStyle(
+                                                                                        style: const TextStyle(
                                                                                           fontSize: 14,
                                                                                           color: ReportScreen_Color.Colors_Text2_,
                                                                                           // fontWeight: FontWeight.bold,
                                                                                           fontFamily: Font_.Fonts_T,
                                                                                         ),
                                                                                       ),
-                                                                                      Icon(Icons.check_box, color: AppBarColors.ABar_Colors)
+                                                                                      const Icon(Icons.check_box, color: AppBarColors.ABar_Colors)
                                                                                     ],
                                                                                   ),
                                                                                 )),
@@ -2268,14 +2326,14 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                                     children: [
                                                                                       Text(
                                                                                         'ยกเลิกทั้งหมด( ${invoice_select_delete.length} ) : ',
-                                                                                        style: TextStyle(
+                                                                                        style: const TextStyle(
                                                                                           fontSize: 14,
                                                                                           color: ReportScreen_Color.Colors_Text2_,
                                                                                           // fontWeight: FontWeight.bold,
                                                                                           fontFamily: Font_.Fonts_T,
                                                                                         ),
                                                                                       ),
-                                                                                      Icon(
+                                                                                      const Icon(
                                                                                         Icons.check_box_outline_blank,
                                                                                         color: Colors.red,
                                                                                         size: 22,
@@ -2343,17 +2401,30 @@ class _BillingScreenState extends State<BillingScreen> {
                                                   ),
                                                 ),
                                                 Container(
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height *
-                                                            0.63,
+                                                    height: MediaQuery.of(context)
+                                                            .size
+                                                            .height *
+                                                        0.63,
                                                     width: Responsive.isDesktop(
                                                             context)
-                                                        ? MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.85
+                                                        ? (rtser.toString() ==
+                                                                    '50' ||
+                                                                rtser.toString() ==
+                                                                    '72' ||
+                                                                rtser.toString() ==
+                                                                    '92' ||
+                                                                rtser.toString() ==
+                                                                    '93' ||
+                                                                rtser.toString() ==
+                                                                    '94')
+                                                            ? MediaQuery.of(context)
+                                                                    .size
+                                                                    .width *
+                                                                0.9
+                                                            : MediaQuery.of(context)
+                                                                    .size
+                                                                    .width *
+                                                                0.85
                                                         : 1200,
                                                     decoration:
                                                         const BoxDecoration(
@@ -2429,23 +2500,26 @@ class _BillingScreenState extends State<BillingScreen> {
                                                             physics:
                                                                 const AlwaysScrollableScrollPhysics(),
                                                             shrinkWrap: true,
-                                                            itemCount:
-                                                                InvoiceModels
-                                                                    .length,
+                                                            itemCount: InvoiceModels
+                                                                .length,
                                                             itemBuilder:
-                                                                (BuildContext
-                                                                        context,
+                                                                (BuildContext context,
                                                                     int index) {
                                                               return Column(
                                                                 children: [
                                                                   Material(
-                                                                    color: tappedIndex_ ==
-                                                                            index
-                                                                                .toString()
-                                                                        ? tappedIndex_Color
-                                                                            .tappedIndex_Colors
-                                                                        : AppbackgroundColor
-                                                                            .Sub_Abg_Colors,
+                                                                    // color:
+                                                                    //(InvoiceModels[index].btype ==
+                                                                    //             null ||
+                                                                    //         InvoiceModels[index].btype.toString() ==
+                                                                    //             '')
+                                                                    //     ? Colors
+                                                                    //         .red[
+                                                                    //             50]!
+                                                                    //         .withOpacity(
+                                                                    //             0.4)
+                                                                    //     : AppbackgroundColor
+                                                                    //         .Sub_Abg_Colors,
                                                                     child:
                                                                         Container(
                                                                       child: ListTile(
@@ -2458,7 +2532,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                           // },
                                                                           title: Container(
                                                                         decoration:
-                                                                            BoxDecoration(
+                                                                            const BoxDecoration(
                                                                           // color: Colors.green[100]!
                                                                           //     .withOpacity(0.5),
                                                                           border:
@@ -2475,51 +2549,58 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                           mainAxisAlignment:
                                                                               MainAxisAlignment.center,
                                                                           children: [
-                                                                            Padding(
-                                                                              padding: const EdgeInsets.all(8.0),
-                                                                              child: InkWell(
-                                                                                onTap: () async {
-                                                                                  setState(() {
-                                                                                    invoice_select_delete.clear();
-                                                                                  });
-                                                                                  if (invoice_select.length >= 50) {
-                                                                                    setState(() {
-                                                                                      invoice_select.remove('${InvoiceModels[index].docno}');
-                                                                                    });
-                                                                                    Dialog_notimax(50);
-                                                                                  } else {
-                                                                                    setState(() {
-                                                                                      if (invoice_select.contains('${InvoiceModels[index].docno}') == true) {
-                                                                                        invoice_select.remove('${InvoiceModels[index].docno}');
-                                                                                      } else {
-                                                                                        invoice_select.add('${InvoiceModels[index].docno}');
-                                                                                      }
-                                                                                    });
-                                                                                  }
-                                                                                },
-                                                                                child: Container(
-                                                                                  decoration: BoxDecoration(
-                                                                                    color: Colors.blueGrey[50]!.withOpacity(0.5),
-                                                                                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                    border: Border.all(color: Colors.grey, width: 1),
-                                                                                  ),
-                                                                                  width: 70,
-                                                                                  padding: const EdgeInsets.all(5),
-                                                                                  child: Row(
-                                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                    children: [
-                                                                                      (invoice_select.contains('${InvoiceModels[index].docno}') == true) ? Icon(Icons.check_box, color: AppBarColors.ABar_Colors) : Icon(Icons.check_box_outline_blank, color: Colors.grey),
+                                                                            (InvoiceModels[index].btype == null || InvoiceModels[index].btype.toString() == '')
+                                                                                ? Padding(
+                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                    child: Container(
+                                                                                      width: 70,
+                                                                                    ),
+                                                                                  )
+                                                                                : Padding(
+                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                    child: InkWell(
+                                                                                      onTap: () async {
+                                                                                        setState(() {
+                                                                                          invoice_select_delete.clear();
+                                                                                        });
+                                                                                        if (invoice_select.length >= 50) {
+                                                                                          setState(() {
+                                                                                            invoice_select.remove('${InvoiceModels[index].docno}');
+                                                                                          });
+                                                                                          Dialog_notimax(50);
+                                                                                        } else {
+                                                                                          setState(() {
+                                                                                            if (invoice_select.contains('${InvoiceModels[index].docno}') == true) {
+                                                                                              invoice_select.remove('${InvoiceModels[index].docno}');
+                                                                                            } else {
+                                                                                              invoice_select.add('${InvoiceModels[index].docno}');
+                                                                                            }
+                                                                                          });
+                                                                                        }
+                                                                                      },
+                                                                                      child: Container(
+                                                                                        decoration: BoxDecoration(
+                                                                                          color: Colors.blueGrey[50]!.withOpacity(0.5),
+                                                                                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                          border: Border.all(color: Colors.grey, width: 1),
+                                                                                        ),
+                                                                                        width: 70,
+                                                                                        padding: const EdgeInsets.all(5),
+                                                                                        child: Row(
+                                                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                          children: [
+                                                                                            (invoice_select.contains('${InvoiceModels[index].docno}') == true) ? const Icon(Icons.check_box, color: AppBarColors.ABar_Colors) : const Icon(Icons.check_box_outline_blank, color: Colors.grey),
 
-                                                                                      ///invoice_loade_Success
-                                                                                      Icon(
-                                                                                        Icons.download,
-                                                                                        color: (invoice_loade_Success.contains('${InvoiceModels[index].docno}') == true) ? Colors.orange[600] : null,
-                                                                                      )
-                                                                                    ],
+                                                                                            ///invoice_loade_Success
+                                                                                            Icon(
+                                                                                              Icons.download,
+                                                                                              color: (invoice_loade_Success.contains('${InvoiceModels[index].docno}') == true) ? Colors.orange[600] : null,
+                                                                                            )
+                                                                                          ],
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
                                                                                   ),
-                                                                                ),
-                                                                              ),
-                                                                            ),
                                                                             Expanded(
                                                                               flex: 1,
                                                                               child: AutoSizeText(
@@ -2529,8 +2610,8 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                                 '${InvoiceModels[index].cid}',
                                                                                 textAlign: TextAlign.start,
                                                                                 overflow: TextOverflow.ellipsis,
-                                                                                style: const TextStyle(
-                                                                                  color: ManageScreen_Color.Colors_Text2_,
+                                                                                style: TextStyle(
+                                                                                  color: (InvoiceModels[index].btype == null || InvoiceModels[index].btype.toString() == '') ? Colors.red : ManageScreen_Color.Colors_Text2_,
                                                                                   // fontWeight: FontWeight.bold,
                                                                                   fontFamily: Font_.Fonts_T,
                                                                                   //fontSize: 10.0
@@ -2538,7 +2619,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                               ),
                                                                             ),
                                                                             Expanded(
-                                                                              flex: 1,
+                                                                              flex: 2,
                                                                               child: AutoSizeText(
                                                                                 minFontSize: 10,
                                                                                 maxFontSize: 25,
@@ -2546,8 +2627,8 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                                 '${InvoiceModels[index].docno}',
                                                                                 textAlign: TextAlign.start,
                                                                                 overflow: TextOverflow.ellipsis,
-                                                                                style: const TextStyle(
-                                                                                  color: ManageScreen_Color.Colors_Text2_,
+                                                                                style: TextStyle(
+                                                                                  color: (InvoiceModels[index].btype == null || InvoiceModels[index].btype.toString() == '') ? Colors.red : ManageScreen_Color.Colors_Text2_,
                                                                                   // fontWeight: FontWeight.bold,
                                                                                   fontFamily: Font_.Fonts_T,
                                                                                   //fontSize: 10.0
@@ -2565,8 +2646,8 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                                 textAlign: TextAlign.center,
 
                                                                                 overflow: TextOverflow.ellipsis,
-                                                                                style: const TextStyle(
-                                                                                  color: ManageScreen_Color.Colors_Text2_,
+                                                                                style: TextStyle(
+                                                                                  color: (InvoiceModels[index].btype == null || InvoiceModels[index].btype.toString() == '') ? Colors.red : ManageScreen_Color.Colors_Text2_,
                                                                                   // fontWeight: FontWeight.bold,
                                                                                   fontFamily: Font_.Fonts_T,
                                                                                   // fontSize: 12.0
@@ -2584,8 +2665,8 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                                 textAlign: TextAlign.center,
 
                                                                                 overflow: TextOverflow.ellipsis,
-                                                                                style: const TextStyle(
-                                                                                  color: ManageScreen_Color.Colors_Text2_,
+                                                                                style: TextStyle(
+                                                                                  color: (InvoiceModels[index].btype == null || InvoiceModels[index].btype.toString() == '') ? Colors.red : ManageScreen_Color.Colors_Text2_,
                                                                                   // fontWeight: FontWeight.bold,
                                                                                   fontFamily: Font_.Fonts_T,
                                                                                   // fontSize: 12.0
@@ -2600,9 +2681,9 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                                 maxLines: 1,
                                                                                 '${InvoiceModels[index].scname}',
                                                                                 // '${transMeterModels[index].ovalue}',
-                                                                                textAlign: TextAlign.start,
-                                                                                style: const TextStyle(
-                                                                                  color: ManageScreen_Color.Colors_Text2_,
+                                                                                textAlign: TextAlign.center,
+                                                                                style: TextStyle(
+                                                                                  color: (InvoiceModels[index].btype == null || InvoiceModels[index].btype.toString() == '') ? Colors.red : ManageScreen_Color.Colors_Text2_,
                                                                                   // fontWeight: FontWeight.bold,
                                                                                   fontFamily: Font_.Fonts_T,
                                                                                   //fontSize: 12.0
@@ -2618,8 +2699,8 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                                 '${InvoiceModels[index].zn}',
                                                                                 //'${transMeterModels[index].qty}',
                                                                                 textAlign: TextAlign.start,
-                                                                                style: const TextStyle(
-                                                                                  color: ManageScreen_Color.Colors_Text2_,
+                                                                                style: TextStyle(
+                                                                                  color: (InvoiceModels[index].btype == null || InvoiceModels[index].btype.toString() == '') ? Colors.red : ManageScreen_Color.Colors_Text2_,
                                                                                   // fontWeight:
                                                                                   //     FontWeight.bold,
                                                                                   fontFamily: Font_.Fonts_T,
@@ -2635,8 +2716,8 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                                 '${InvoiceModels[index].ln}',
                                                                                 //'${transMeterModels[index].qty}',
                                                                                 textAlign: TextAlign.start,
-                                                                                style: const TextStyle(
-                                                                                  color: ManageScreen_Color.Colors_Text2_,
+                                                                                style: TextStyle(
+                                                                                  color: (InvoiceModels[index].btype == null || InvoiceModels[index].btype.toString() == '') ? Colors.red : ManageScreen_Color.Colors_Text2_,
                                                                                   // fontWeight:
                                                                                   //     FontWeight.bold,
                                                                                   fontFamily: Font_.Fonts_T,
@@ -2645,20 +2726,26 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                             ),
                                                                             Expanded(
                                                                               flex: 1,
-                                                                              child: AutoSizeText(
-                                                                                minFontSize: 10,
-                                                                                maxFontSize: 25,
-                                                                                maxLines: 1,
-                                                                                InvoiceModels[index].btype == null ? '' : '${InvoiceModels[index].btype}',
-                                                                                //'${transMeterModels[index].qty}',
-                                                                                textAlign: TextAlign.center,
-                                                                                style: const TextStyle(
-                                                                                  color: ManageScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight:
-                                                                                  //     FontWeight.bold,
-                                                                                  fontFamily: Font_.Fonts_T,
-                                                                                ),
-                                                                              ),
+                                                                              child: (InvoiceModels[index].btype == null || InvoiceModels[index].btype.toString() == '')
+                                                                                  ? Container(
+                                                                                      width: 40,
+                                                                                      height: 30,
+                                                                                      color: Colors.red[100],
+                                                                                    )
+                                                                                  : AutoSizeText(
+                                                                                      minFontSize: 10,
+                                                                                      maxFontSize: 25,
+                                                                                      maxLines: 1,
+                                                                                      InvoiceModels[index].btype == null ? '' : '${InvoiceModels[index].btype}',
+                                                                                      //'${transMeterModels[index].qty}',
+                                                                                      textAlign: TextAlign.center,
+                                                                                      style: const TextStyle(
+                                                                                        color: ManageScreen_Color.Colors_Text2_,
+                                                                                        // fontWeight:
+                                                                                        //     FontWeight.bold,
+                                                                                        fontFamily: Font_.Fonts_T,
+                                                                                      ),
+                                                                                    ),
                                                                             ),
                                                                             Expanded(
                                                                               flex: 1,
@@ -2666,11 +2753,11 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                                 minFontSize: 10,
                                                                                 maxFontSize: 25,
                                                                                 maxLines: 1,
-                                                                                //'${InvoiceModels[index].total_bill}',
-                                                                                '${nFormat.format(double.parse(InvoiceModels[index].total_bill.toString()) - double.parse(InvoiceModels[index].total_dis.toString()))}',
+                                                                                '${nFormat.format(double.parse(InvoiceModels[index].amt_dis.toString()))}',
+                                                                                // '${nFormat.format(double.parse(InvoiceModels[index].total_bill.toString()) - double.parse(InvoiceModels[index].total_dis.toString()))}',
                                                                                 textAlign: TextAlign.end,
-                                                                                style: const TextStyle(
-                                                                                  color: ManageScreen_Color.Colors_Text2_,
+                                                                                style: TextStyle(
+                                                                                  color: (InvoiceModels[index].btype == null || InvoiceModels[index].btype.toString() == '') ? Colors.red : ManageScreen_Color.Colors_Text2_,
                                                                                   // fontWeight:
                                                                                   //     FontWeight.bold,
                                                                                   fontFamily: Font_.Fonts_T,
@@ -2686,8 +2773,8 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                                 //'${InvoiceModels[index].total_bill}',
                                                                                 '${nFormat.format(double.parse(InvoiceModels[index].total_bill.toString()))}',
                                                                                 textAlign: TextAlign.end,
-                                                                                style: const TextStyle(
-                                                                                  color: ManageScreen_Color.Colors_Text2_,
+                                                                                style: TextStyle(
+                                                                                  color: (InvoiceModels[index].btype == null || InvoiceModels[index].btype.toString() == '') ? Colors.red : ManageScreen_Color.Colors_Text2_,
                                                                                   // fontWeight:
                                                                                   //     FontWeight.bold,
                                                                                   fontFamily: Font_.Fonts_T,
@@ -2702,8 +2789,8 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                                 maxLines: 1,
                                                                                 '${nFormat.format(double.parse(InvoiceModels[index].total_dis.toString()))}',
                                                                                 textAlign: TextAlign.end,
-                                                                                style: const TextStyle(
-                                                                                  color: ManageScreen_Color.Colors_Text2_,
+                                                                                style: TextStyle(
+                                                                                  color: (InvoiceModels[index].btype == null || InvoiceModels[index].btype.toString() == '') ? Colors.red : ManageScreen_Color.Colors_Text2_,
                                                                                   // fontWeight:
                                                                                   //     FontWeight.bold,
                                                                                   fontFamily: Font_.Fonts_T,
@@ -2717,11 +2804,11 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                                   setState(() {
                                                                                     invoice_select.clear();
                                                                                   });
-                                                                                  if (invoice_select_delete.length >= 5) {
+                                                                                  if (invoice_select_delete.length >= 50) {
                                                                                     setState(() {
                                                                                       invoice_select_delete.remove('${InvoiceModels[index].docno}');
                                                                                     });
-                                                                                    Dialog_notimax(5);
+                                                                                    Dialog_notimax(50);
                                                                                   } else {
                                                                                     setState(() {
                                                                                       if (invoice_select_delete.contains('${InvoiceModels[index].docno}') == true) {
@@ -2743,7 +2830,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                                   child: Row(
                                                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                                     children: [
-                                                                                      (invoice_select_delete.contains('${InvoiceModels[index].docno}') == true) ? Icon(Icons.check_box, color: Colors.red[300]) : Icon(Icons.check_box_outline_blank, color: Colors.grey),
+                                                                                      (invoice_select_delete.contains('${InvoiceModels[index].docno}') == true) ? Icon(Icons.check_box, color: Colors.red[300]) : const Icon(Icons.check_box_outline_blank, color: Colors.grey),
 
                                                                                       ///invoice_loade_Success
                                                                                       Icon(
@@ -2755,6 +2842,54 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                                 ),
                                                                               ),
                                                                             ),
+                                                                            if (rtser.toString() == '50' ||
+                                                                                rtser.toString() == '72' ||
+                                                                                rtser.toString() == '92' ||
+                                                                                rtser.toString() == '93' ||
+                                                                                rtser.toString() == '94')
+                                                                              Expanded(
+                                                                                flex: 1,
+                                                                                child: Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                                                  children: [
+                                                                                    Padding(
+                                                                                      padding: const EdgeInsets.all(4.0),
+                                                                                      child: InkWell(
+                                                                                        onTap: () async {
+                                                                                          setState(() {
+                                                                                            bneme_check = InvoiceModels[index].ptname;
+                                                                                            bno_check = InvoiceModels[index].bno;
+                                                                                            bser_check = InvoiceModels[index].ptser;
+                                                                                          });
+                                                                                          red_Trans_selectPay(index).then((value) {
+                                                                                            _showMyDialog_pay(index);
+                                                                                          });
+                                                                                        },
+                                                                                        child: Container(
+                                                                                          width: 80,
+                                                                                          decoration: const BoxDecoration(
+                                                                                            color: Colors.green,
+                                                                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                          ),
+                                                                                          padding: const EdgeInsets.all(2.0),
+                                                                                          child: const AutoSizeText(
+                                                                                            minFontSize: 10,
+                                                                                            maxFontSize: 25,
+                                                                                            maxLines: 1,
+                                                                                            'อนุมัติ',
+                                                                                            textAlign: TextAlign.center,
+                                                                                            overflow: TextOverflow.ellipsis,
+                                                                                            style: TextStyle(
+                                                                                                color: Colors.white,
+                                                                                                //fontWeight: FontWeight.bold,
+                                                                                                fontFamily: Font_.Fonts_T),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ),
                                                                             Expanded(
                                                                               flex: 1,
                                                                               child: Row(
@@ -2776,35 +2911,35 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                                         var ciddoc = InvoiceModels[index].cid;
                                                                                         var qutser = '1';
                                                                                         var tser = InvoiceModels[index].total_dis;
-                                                                                        var tdocno = InvoiceModels[index].docno;
+                                                                                        var docno = InvoiceModels[index].docno;
 
                                                                                         setState(() {
-                                                                                          payment_Ptser1 = _InvoiceModels[index].ptser;
-                                                                                          payment_Ptname1 = _InvoiceModels[index].ptname;
-                                                                                          payment_Bno1 = _InvoiceModels[index].bno;
+                                                                                          payment_Ptser1 = InvoiceModels[index].ptser;
+                                                                                          payment_Ptname1 = InvoiceModels[index].ptname;
+                                                                                          payment_Bno1 = InvoiceModels[index].bno;
 
-                                                                                          Datex_invoice = _InvoiceModels[index].daterec;
+                                                                                          Datex_invoice = InvoiceModels[index].daterec;
 
-                                                                                          payment_type1 = _InvoiceModels[index].btype;
-                                                                                          payment_bank1 = _InvoiceModels[index].bank;
+                                                                                          payment_type1 = InvoiceModels[index].btype;
+                                                                                          payment_bank1 = InvoiceModels[index].bank;
                                                                                         });
-                                                                                        red_Trans_select(index, ciddoc, qutser, tser, tdocno);
+                                                                                        red_Trans_select(index, ciddoc, qutser, tser, docno);
                                                                                       },
                                                                                       child: Container(
                                                                                         width: 80,
-                                                                                        decoration: BoxDecoration(
+                                                                                        decoration: const BoxDecoration(
                                                                                           color: Colors.blue,
-                                                                                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
                                                                                         ),
                                                                                         padding: const EdgeInsets.all(2.0),
-                                                                                        child: AutoSizeText(
+                                                                                        child: const AutoSizeText(
                                                                                           minFontSize: 10,
                                                                                           maxFontSize: 25,
                                                                                           maxLines: 1,
                                                                                           'เรียกดู',
                                                                                           textAlign: TextAlign.center,
                                                                                           overflow: TextOverflow.ellipsis,
-                                                                                          style: const TextStyle(
+                                                                                          style: TextStyle(
                                                                                               color: PeopleChaoScreen_Color.Colors_Text2_,
                                                                                               //fontWeight: FontWeight.bold,
                                                                                               fontFamily: Font_.Fonts_T),
@@ -2833,7 +2968,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                       child:
                                                                           Row(
                                                                         children: [
-                                                                          AutoSizeText(
+                                                                          const AutoSizeText(
                                                                             minFontSize:
                                                                                 10,
                                                                             maxFontSize:
@@ -2857,7 +2992,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                               height: 1,
                                                                             ),
                                                                           ),
-                                                                          AutoSizeText(
+                                                                          const AutoSizeText(
                                                                             minFontSize:
                                                                                 10,
                                                                             maxFontSize:
@@ -3129,9 +3264,11 @@ class _BillingScreenState extends State<BillingScreen> {
   }
 
   ///---------------------------------------------------------------------->
-  Future<Null> checkshowDialog(index) async {
+  Future<Null> checkshowDialog(index, docno) async {
+    int selectedIndex = InvoiceModels.indexWhere(
+        (item) => item.docno.toString() == docno.toString());
     setState(() {
-      read_GC_Line(index);
+      read_GC_Line(selectedIndex);
     });
     showDialog(
         context: context,
@@ -3152,7 +3289,7 @@ class _BillingScreenState extends State<BillingScreen> {
                         Navigator.pop(context);
                       },
                       child: Padding(
-                        padding: EdgeInsets.all(4.0),
+                        padding: const EdgeInsets.all(4.0),
                         child: Icon(Icons.highlight_off,
                             size: 30, color: Colors.red[700]),
                       ),
@@ -3199,7 +3336,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                           child: AutoSizeText(
                                             minFontSize: 8,
                                             maxFontSize: 14,
-                                            'รายละเอียดบิล', //numinvoice
+                                            'รายละเอียดบิล ', //numinvoice
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                                 color: PeopleChaoScreen_Color
@@ -3245,7 +3382,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                             child: AutoSizeText(
                                               minFontSize: 8,
                                               maxFontSize: 12,
-                                              'บิลเลขที่ ${_InvoiceModels[index].docno}',
+                                              'บิลเลขที่ ${docno} ',
                                               textAlign: TextAlign.center,
                                               style: const TextStyle(
                                                   color: PeopleChaoScreen_Color
@@ -3286,7 +3423,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                               ),
                                         ),
                                       ),
-                                      Expanded(
+                                      const Expanded(
                                         flex: 1,
                                         child: AutoSizeText(
                                           minFontSize: 8,
@@ -3304,8 +3441,26 @@ class _BillingScreenState extends State<BillingScreen> {
                                               ),
                                         ),
                                       ),
-                                      Expanded(
-                                        flex: 1,
+                                      const Expanded(
+                                        flex: 2,
+                                        child: AutoSizeText(
+                                          minFontSize: 8,
+                                          maxFontSize: 14,
+                                          maxLines: 1,
+                                          'เลขตั้งหนี้',
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text1_,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T
+                                              //fontSize: 10.0
+                                              //fontSize: 10.0
+                                              ),
+                                        ),
+                                      ),
+                                      const Expanded(
+                                        flex: 2,
                                         child: AutoSizeText(
                                           minFontSize: 8,
                                           maxFontSize: 14,
@@ -3322,8 +3477,8 @@ class _BillingScreenState extends State<BillingScreen> {
                                               ),
                                         ),
                                       ),
-                                      Expanded(
-                                        flex: 2,
+                                      const Expanded(
+                                        flex: 1,
                                         child: AutoSizeText(
                                           minFontSize: 8,
                                           maxFontSize: 14,
@@ -3340,8 +3495,8 @@ class _BillingScreenState extends State<BillingScreen> {
                                               ),
                                         ),
                                       ),
-                                      Expanded(
-                                        flex: 2,
+                                      const Expanded(
+                                        flex: 1,
                                         child: AutoSizeText(
                                           minFontSize: 8,
                                           maxFontSize: 14,
@@ -3358,7 +3513,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                               ),
                                         ),
                                       ),
-                                      Expanded(
+                                      const Expanded(
                                         flex: 1,
                                         child: AutoSizeText(
                                           minFontSize: 8,
@@ -3376,7 +3531,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                               ),
                                         ),
                                       ),
-                                      Expanded(
+                                      const Expanded(
                                         flex: 1,
                                         child: AutoSizeText(
                                           minFontSize: 8,
@@ -3394,13 +3549,31 @@ class _BillingScreenState extends State<BillingScreen> {
                                               ),
                                         ),
                                       ),
-                                      Expanded(
+                                      // const Expanded(
+                                      //   flex: 1,
+                                      //   child: AutoSizeText(
+                                      //     minFontSize: 8,
+                                      //     maxFontSize: 14,
+                                      //     maxLines: 1,
+                                      //     'ราคารวม Vat',
+                                      //     textAlign: TextAlign.end,
+                                      //     style: TextStyle(
+                                      //         color: PeopleChaoScreen_Color
+                                      //             .Colors_Text1_,
+                                      //         fontWeight: FontWeight.bold,
+                                      //         fontFamily: FontWeight_.Fonts_T
+                                      //         //fontSize: 10.0
+                                      //         //fontSize: 10.0
+                                      //         ),
+                                      //   ),
+                                      // ),
+                                      const Expanded(
                                         flex: 1,
                                         child: AutoSizeText(
                                           minFontSize: 8,
                                           maxFontSize: 14,
                                           maxLines: 1,
-                                          'ราคารวม Vat',
+                                          'ยอดสุทธิ',
                                           textAlign: TextAlign.end,
                                           style: TextStyle(
                                               color: PeopleChaoScreen_Color
@@ -3485,7 +3658,24 @@ class _BillingScreenState extends State<BillingScreen> {
                                                       ),
                                                     ),
                                                     Expanded(
-                                                      flex: 1,
+                                                      flex: 2,
+                                                      child: AutoSizeText(
+                                                        minFontSize: 8,
+                                                        maxFontSize: 14,
+                                                        maxLines: 1,
+                                                        '${_InvoiceHistoryModels[index].refno}',
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        style: const TextStyle(
+                                                            color: PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                            //fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 2,
                                                       child: AutoSizeText(
                                                         minFontSize: 8,
                                                         maxFontSize: 14,
@@ -3502,12 +3692,17 @@ class _BillingScreenState extends State<BillingScreen> {
                                                       ),
                                                     ),
                                                     Expanded(
-                                                      flex: 2,
+                                                      flex: 1,
                                                       child: AutoSizeText(
                                                         minFontSize: 8,
                                                         maxFontSize: 14,
                                                         maxLines: 1,
-                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
+                                                        double.parse(_InvoiceHistoryModels[
+                                                                        index]
+                                                                    .tf!) ==
+                                                                0.00
+                                                            ? '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}'
+                                                            : 'ก่อน-หลัง (${int.parse(_InvoiceHistoryModels[index].ovalue!)} - ${int.parse(_InvoiceHistoryModels[index].nvalue!)}) ${double.parse(_InvoiceHistoryModels[index].qty!)}',
                                                         textAlign:
                                                             TextAlign.start,
                                                         style: const TextStyle(
@@ -3519,16 +3714,16 @@ class _BillingScreenState extends State<BillingScreen> {
                                                       ),
                                                     ),
                                                     Expanded(
-                                                      flex: 2,
+                                                      flex: 1,
                                                       child: AutoSizeText(
                                                         minFontSize: 8,
                                                         maxFontSize: 14,
                                                         maxLines: 1,
-                                                        _InvoiceHistoryModels[
+                                                        double.parse(_InvoiceHistoryModels[
                                                                         index]
-                                                                    .nvalue !=
-                                                                '0'
-                                                            ? '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pri!))}'
+                                                                    .tf!) !=
+                                                                0.00
+                                                            ? '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pri!))} (tf ${nFormat.format((double.parse(_InvoiceHistoryModels[index].amt!) - (double.parse(_InvoiceHistoryModels[index].vat!) + double.parse(_InvoiceHistoryModels[index].pvat!))))})'
                                                             : '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
                                                         textAlign:
                                                             TextAlign.start,
@@ -3546,7 +3741,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                         minFontSize: 8,
                                                         maxFontSize: 14,
                                                         maxLines: 1,
-                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
+                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat_t!))}',
                                                         textAlign:
                                                             TextAlign.end,
                                                         style: const TextStyle(
@@ -3563,7 +3758,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                         minFontSize: 8,
                                                         maxFontSize: 14,
                                                         maxLines: 1,
-                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
+                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat_t!))}',
                                                         textAlign:
                                                             TextAlign.end,
                                                         style: const TextStyle(
@@ -3574,13 +3769,30 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                 Font_.Fonts_T),
                                                       ),
                                                     ),
+                                                    // Expanded(
+                                                    //   flex: 1,
+                                                    //   child: AutoSizeText(
+                                                    //     minFontSize: 8,
+                                                    //     maxFontSize: 14,
+                                                    //     maxLines: 1,
+                                                    //     '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
+                                                    //     textAlign:
+                                                    //         TextAlign.end,
+                                                    //     style: const TextStyle(
+                                                    //         color: PeopleChaoScreen_Color
+                                                    //             .Colors_Text2_,
+                                                    //         //fontWeight: FontWeight.bold,
+                                                    //         fontFamily:
+                                                    //             Font_.Fonts_T),
+                                                    //   ),
+                                                    // ),
                                                     Expanded(
                                                       flex: 1,
                                                       child: AutoSizeText(
                                                         minFontSize: 8,
                                                         maxFontSize: 14,
                                                         maxLines: 1,
-                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
+                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].total_t!))}',
                                                         textAlign:
                                                             TextAlign.end,
                                                         style: const TextStyle(
@@ -3771,11 +3983,12 @@ class _BillingScreenState extends State<BillingScreen> {
                                                     // height: 100,
                                                     width: 300,
                                                     padding:
-                                                        EdgeInsets.all(8.0),
+                                                        const EdgeInsets.all(
+                                                            8.0),
                                                     child: Column(children: [
                                                       Row(
                                                         children: [
-                                                          Expanded(
+                                                          const Expanded(
                                                             flex: 1,
                                                             child: AutoSizeText(
                                                               minFontSize: 8,
@@ -3797,19 +4010,21 @@ class _BillingScreenState extends State<BillingScreen> {
                                                               textAlign:
                                                                   TextAlign.end,
                                                               '${nFormat.format(sum_pvat)}',
-                                                              style: TextStyle(
-                                                                  color: PeopleChaoScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  //fontWeight: FontWeight.bold,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
+                                                              style:
+                                                                  const TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T),
                                                             ),
                                                           ),
                                                         ],
                                                       ),
                                                       Row(
                                                         children: [
-                                                          Expanded(
+                                                          const Expanded(
                                                             flex: 1,
                                                             child: AutoSizeText(
                                                               minFontSize: 8,
@@ -3831,19 +4046,21 @@ class _BillingScreenState extends State<BillingScreen> {
                                                               textAlign:
                                                                   TextAlign.end,
                                                               '${nFormat.format(sum_vat)}',
-                                                              style: TextStyle(
-                                                                  color: PeopleChaoScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  //fontWeight: FontWeight.bold,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
+                                                              style:
+                                                                  const TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T),
                                                             ),
                                                           ),
                                                         ],
                                                       ),
                                                       Row(
                                                         children: [
-                                                          Expanded(
+                                                          const Expanded(
                                                             flex: 1,
                                                             child: AutoSizeText(
                                                               minFontSize: 8,
@@ -3865,19 +4082,21 @@ class _BillingScreenState extends State<BillingScreen> {
                                                               textAlign:
                                                                   TextAlign.end,
                                                               '${nFormat.format(sum_wht)}',
-                                                              style: TextStyle(
-                                                                  color: PeopleChaoScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  //fontWeight: FontWeight.bold,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
+                                                              style:
+                                                                  const TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T),
                                                             ),
                                                           ),
                                                         ],
                                                       ),
                                                       Row(
                                                         children: [
-                                                          Expanded(
+                                                          const Expanded(
                                                             flex: 1,
                                                             child: AutoSizeText(
                                                               minFontSize: 8,
@@ -3899,12 +4118,14 @@ class _BillingScreenState extends State<BillingScreen> {
                                                               textAlign:
                                                                   TextAlign.end,
                                                               '${nFormat.format(sum_amt)}',
-                                                              style: TextStyle(
-                                                                  color: PeopleChaoScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  //fontWeight: FontWeight.bold,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
+                                                              style:
+                                                                  const TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T),
                                                             ),
                                                           ),
                                                         ],
@@ -3915,7 +4136,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                             flex: 2,
                                                             child: Row(
                                                               children: [
-                                                                AutoSizeText(
+                                                                const AutoSizeText(
                                                                   minFontSize:
                                                                       8,
                                                                   maxFontSize:
@@ -3926,7 +4147,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                       //fontWeight: FontWeight.bold,
                                                                       fontFamily: Font_.Fonts_T),
                                                                 ),
-                                                                SizedBox(
+                                                                const SizedBox(
                                                                   width: 10,
                                                                 ),
                                                                 SizedBox(
@@ -3939,7 +4160,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                     maxFontSize:
                                                                         11,
                                                                     '$sum_disp  %',
-                                                                    style: TextStyle(
+                                                                    style: const TextStyle(
                                                                         color: PeopleChaoScreen_Color.Colors_Text2_,
                                                                         //fontWeight: FontWeight.bold,
                                                                         fontFamily: Font_.Fonts_T),
@@ -3956,12 +4177,14 @@ class _BillingScreenState extends State<BillingScreen> {
                                                               '${nFormat.format(sum_disamt)}',
                                                               textAlign:
                                                                   TextAlign.end,
-                                                              style: TextStyle(
-                                                                  color: PeopleChaoScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  //fontWeight: FontWeight.bold,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
+                                                              style:
+                                                                  const TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T),
                                                             ),
                                                             // AutoSizeText(
                                                             //   minFontSize: 10,
@@ -3979,7 +4202,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                       ),
                                                       Row(
                                                         children: [
-                                                          Expanded(
+                                                          const Expanded(
                                                             flex: 1,
                                                             child: AutoSizeText(
                                                               minFontSize: 8,
@@ -4001,12 +4224,14 @@ class _BillingScreenState extends State<BillingScreen> {
                                                               textAlign:
                                                                   TextAlign.end,
                                                               '${nFormat.format(sum_amt - sum_disamt)}',
-                                                              style: TextStyle(
-                                                                  color: PeopleChaoScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  //fontWeight: FontWeight.bold,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
+                                                              style:
+                                                                  const TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T),
                                                             ),
                                                           ),
                                                         ],
@@ -4054,7 +4279,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                       width: (Responsive.isDesktop(context))
                                           ? MediaQuery.of(context).size.width *
                                               0.85
-                                          : 1200,
+                                          : MediaQuery.of(context).size.width,
                                       child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.end,
@@ -4095,7 +4320,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                           child: Container(
                                                             child: Column(
                                                               children: [
-                                                                Row(
+                                                                const Row(
                                                                   mainAxisAlignment:
                                                                       MainAxisAlignment
                                                                           .center,
@@ -4106,7 +4331,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                         'เลขที่ใบเสร็จ',
                                                                         textAlign:
                                                                             TextAlign.center,
-                                                                        style: const TextStyle(
+                                                                        style: TextStyle(
                                                                             color: PeopleChaoScreen_Color.Colors_Text2_,
                                                                             //fontWeight: FontWeight.bold,
                                                                             fontFamily: Font_.Fonts_T),
@@ -4133,7 +4358,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                     ),
                                                                   ],
                                                                 ),
-                                                                SizedBox(
+                                                                const SizedBox(
                                                                   height: 10,
                                                                 ),
                                                                 Row(
@@ -4254,7 +4479,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                               ),
                                             ),
                                             regis_models.length == 0
-                                                ? SizedBox()
+                                                ? const SizedBox()
                                                 : Container(
                                                     padding:
                                                         const EdgeInsets.all(
@@ -4294,7 +4519,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                 MainAxisAlignment
                                                                     .center,
                                                             children: [
-                                                              Padding(
+                                                              const Padding(
                                                                 padding:
                                                                     EdgeInsets
                                                                         .all(
@@ -4315,13 +4540,13 @@ class _BillingScreenState extends State<BillingScreen> {
                                                               ),
                                                               Padding(
                                                                   padding:
-                                                                      EdgeInsets
-                                                                          .all(
-                                                                              4.0),
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          4.0),
                                                                   child:
                                                                       Container(
                                                                     decoration:
-                                                                        BoxDecoration(
+                                                                        const BoxDecoration(
                                                                       image:
                                                                           DecorationImage(
                                                                         image: AssetImage(
@@ -4331,7 +4556,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                       ),
                                                                     ),
                                                                     child:
-                                                                        SizedBox(
+                                                                        const SizedBox(
                                                                       width: 20,
                                                                       height:
                                                                           20,
@@ -4341,41 +4566,18 @@ class _BillingScreenState extends State<BillingScreen> {
                                                           )),
                                                     ),
                                                   ),
-                                            Container(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              width: 200,
-                                              child: InkWell(
-                                                onTap: () {
-                                                  List newValuePDFimg = [];
-                                                  for (int index = 0;
-                                                      index < 1;
-                                                      index++) {
-                                                    if (renTalModels[0]
-                                                            .imglogo!
-                                                            .trim() ==
-                                                        '') {
-                                                      // newValuePDFimg.add(
-                                                      //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
-                                                    } else {
-                                                      newValuePDFimg.add(
-                                                          '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
-                                                    }
-                                                  }
-                                                  var docno =
-                                                      _InvoiceModels[index]
-                                                          .cname;
-                                                  var namenew =
-                                                      _InvoiceModels[index]
-                                                          .cname;
-                                                  _showMyDialog_SAVE(
-                                                      newValuePDFimg,
-                                                      docno,
-                                                      namenew);
-                                                },
-                                                child: Container(
+                                            (InvoiceModels[index].btype ==
+                                                        null ||
+                                                    InvoiceModels[index]
+                                                            .btype
+                                                            .toString() ==
+                                                        '')
+                                                ? Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
                                                     decoration: BoxDecoration(
-                                                      color: Colors.green,
+                                                      // color: Colors.green,
                                                       borderRadius:
                                                           const BorderRadius
                                                                   .only(
@@ -4393,40 +4595,131 @@ class _BillingScreenState extends State<BillingScreen> {
                                                           color: Colors.grey,
                                                           width: 1),
                                                     ),
-                                                    child: const Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
+                                                    child: const Column(
                                                       children: [
-                                                        Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  4.0),
-                                                          child: Icon(
-                                                              Icons.print,
-                                                              color:
-                                                                  Colors.white),
+                                                        Text(
+                                                          '** พิมพ์ ไม่ได้ไม่พบช่องทางรับชำระ !!!',
+                                                          style: TextStyle(
+                                                            color:
+                                                                Colors.orange,
+                                                            // fontWeight:
+                                                            //     FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
                                                         ),
-                                                        Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  4.0),
-                                                          child: Text(
-                                                            'พิมพ์',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              // fontWeight:
-                                                              //     FontWeight.bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                            ),
+                                                        Text(
+                                                          '( โปรดตรวจสอบหรือยกเลิก )',
+                                                          style: TextStyle(
+                                                            color:
+                                                                Colors.orange,
+                                                            // fontWeight:
+                                                            //     FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
                                                           ),
                                                         ),
                                                       ],
-                                                    )),
-                                              ),
-                                            ),
+                                                    ),
+                                                  )
+                                                : Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    width: 200,
+                                                    child: InkWell(
+                                                      onTap: () {
+                                                        List newValuePDFimg =
+                                                            [];
+                                                        for (int index = 0;
+                                                            index < 1;
+                                                            index++) {
+                                                          if (renTalModels[0]
+                                                                  .imglogo!
+                                                                  .trim() ==
+                                                              '') {
+                                                            // newValuePDFimg.add(
+                                                            //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
+                                                          } else {
+                                                            newValuePDFimg.add(
+                                                                '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
+                                                          }
+                                                        }
+                                                        var docno =
+                                                            _InvoiceModels[
+                                                                    index]
+                                                                .cname;
+                                                        var namenew =
+                                                            _InvoiceModels[
+                                                                    index]
+                                                                .cname;
+                                                        _showMyDialog_SAVE(
+                                                            newValuePDFimg,
+                                                            docno,
+                                                            namenew);
+                                                      },
+                                                      child: Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Colors.green,
+                                                            borderRadius: const BorderRadius
+                                                                    .only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        6),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        6),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        6),
+                                                                bottomRight:
+                                                                    Radius
+                                                                        .circular(
+                                                                            6)),
+                                                            border: Border.all(
+                                                                color:
+                                                                    Colors.grey,
+                                                                width: 1),
+                                                          ),
+                                                          child: const Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Padding(
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .all(
+                                                                            4.0),
+                                                                child: Icon(
+                                                                    Icons.print,
+                                                                    color: Colors
+                                                                        .white),
+                                                              ),
+                                                              Padding(
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .all(
+                                                                            4.0),
+                                                                child: Text(
+                                                                  'พิมพ์',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    // fontWeight:
+                                                                    //     FontWeight.bold,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          )),
+                                                    ),
+                                                  ),
                                           ]))));
                         })
                   ])
@@ -4481,24 +4774,24 @@ class _BillingScreenState extends State<BillingScreen> {
                         child: Row(
                           children: [
                             Container(
-                                padding: EdgeInsets.all(8),
+                                padding: const EdgeInsets.all(8),
                                 child: Text(
                                   'Line UserName : ${regis_models[inregis].username}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.black,
                                     fontFamily: Font_.Fonts_T,
                                   ),
                                 )),
                             Padding(
-                                padding: EdgeInsets.all(4.0),
+                                padding: const EdgeInsets.all(4.0),
                                 child: Container(
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     image: DecorationImage(
                                       image: AssetImage("images/lineicon.png"),
                                       fit: BoxFit.cover,
                                     ),
                                   ),
-                                  child: SizedBox(
+                                  child: const SizedBox(
                                     width: 20,
                                     height: 20,
                                   ),
@@ -4507,7 +4800,7 @@ class _BillingScreenState extends State<BillingScreen> {
                         ),
                       ),
                     ),
-                  Divider(),
+                  const Divider(),
                 ],
               ),
             ),
@@ -4628,7 +4921,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                   bottomRight: Radius.circular(10)),
                             ),
                             padding: const EdgeInsets.all(8.0),
-                            child: Center(
+                            child: const Center(
                               child: Text(
                                 'พิมพ์',
                                 style: TextStyle(
@@ -4658,7 +4951,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                   bottomRight: Radius.circular(10)),
                             ),
                             padding: const EdgeInsets.all(8.0),
-                            child: Center(
+                            child: const Center(
                               child: Text(
                                 'ปิด',
                                 style: TextStyle(
@@ -4709,11 +5002,11 @@ class _BillingScreenState extends State<BillingScreen> {
                 content: SingleChildScrollView(
                   child: (invoice_select_Ser == 1)
                       ? ListBody(children: <Widget>[
-                          Center(
+                          const Center(
                               child: SizedBox(
                                   height: 50,
                                   width: 50,
-                                  child: const CircularProgressIndicator())),
+                                  child: CircularProgressIndicator())),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Center(
@@ -4867,7 +5160,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                         bottomRight: Radius.circular(10)),
                                   ),
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Center(
+                                  child: const Center(
                                     child: Text(
                                       'Save',
                                       style: TextStyle(
@@ -4897,7 +5190,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                         bottomRight: Radius.circular(10)),
                                   ),
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Center(
+                                  child: const Center(
                                     child: Text(
                                       'ปิด',
                                       style: TextStyle(
@@ -4944,11 +5237,11 @@ class _BillingScreenState extends State<BillingScreen> {
                 content: SingleChildScrollView(
                   child: (invoice_select_Ser == 1)
                       ? ListBody(children: <Widget>[
-                          Center(
+                          const Center(
                               child: SizedBox(
                                   height: 50,
                                   width: 50,
-                                  child: const CircularProgressIndicator())),
+                                  child: CircularProgressIndicator())),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Center(
@@ -4997,7 +5290,7 @@ class _BillingScreenState extends State<BillingScreen> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.fromLTRB(0, 4, 0, 0),
+                              padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
                               child: Text(
                                 '- ${email_login}($seremail_login)',
                                 style: const TextStyle(
@@ -5158,14 +5451,14 @@ class _BillingScreenState extends State<BillingScreen> {
                                         (Pincontroller.text != "$randomString")
                                             ? Colors.grey
                                             : Colors.green,
-                                    borderRadius: BorderRadius.only(
+                                    borderRadius: const BorderRadius.only(
                                         topLeft: Radius.circular(10),
                                         topRight: Radius.circular(10),
                                         bottomLeft: Radius.circular(10),
                                         bottomRight: Radius.circular(10)),
                                   ),
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Center(
+                                  child: const Center(
                                     child: Text(
                                       'ลบ',
                                       style: TextStyle(
@@ -5195,7 +5488,7 @@ class _BillingScreenState extends State<BillingScreen> {
                                         bottomRight: Radius.circular(10)),
                                   ),
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Center(
+                                  child: const Center(
                                     child: Text(
                                       'ปิด',
                                       style: TextStyle(
@@ -5296,7 +5589,7 @@ class _BillingScreenState extends State<BillingScreen> {
       SnackBar(
           backgroundColor: Colors.red,
           content: Text('เลือกได้สูงสุด $max รายการ...!!',
-              style: TextStyle(
+              style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontFamily: FontWeight_.Fonts_T))),
@@ -5330,5 +5623,884 @@ class _BillingScreenState extends State<BillingScreen> {
         newValuePDFimg,
         numinvoice,
         Preview_ser);
+  }
+
+///////////////-------------------------------------------->
+  double sum_Pakan = 0,
+      sum_Pakan_KF = 0,
+      dis_Pakan = 0,
+      dis_matjum = 0,
+      dis_sum_Pakan = 0.00,
+      dis_sum_Matjum = 0.00,
+      sum_Matjum_KF = 0,
+      sum_tran_dis = 0,
+      sum_matjum = 0.00,
+      sum_tran_fine = 0,
+      fine_total = 0,
+      fine_total2 = 0,
+      sum_fine = 0;
+  String? cFinn,
+      doctax,
+      paymentSer1,
+      paymentSer2,
+      paymentName1,
+      selectedValue,
+      bname1;
+  String? bneme_check, bno_check, bser_check;
+  List Default_ = [
+    'บิลธรรมดา',
+  ];
+  List Default2_ = [
+    'บิลธรรมดา',
+    'ใบกำกับภาษี',
+  ];
+
+  /////////----------------------------------------------------------->
+/////////----------------------------------------------------------->
+  Future<Null> red_Trans_selectPay(index) async {
+    print(
+        'Ser : ${InvoiceModels[index].ser} // docno :  ${InvoiceModels[index].docno} ///total : ${InvoiceModels[index].total_dis}');
+    if (_InvoiceHistoryModels.length != 0) {
+      setState(() {
+        _InvoiceHistoryModels.clear();
+        sum_pvat = 0;
+        sum_vat = 0;
+        sum_wht = 0;
+        sum_amt = 0;
+        sum_disamt = 0;
+        sum_disp = 0;
+      });
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    var user = preferences.getString('ser');
+    var ciddoc = InvoiceModels[index].cid;
+    var qutser = '1';
+    var docnoin = InvoiceModels[index].docno;
+
+    String url =
+        '${MyConstant().domain}/GC_bill_invoice_history.php?isAdd=true&ren=$ren&user=$user&ciddoc=$ciddoc&docnoin=$docnoin';
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      if (result.toString() != 'null') {
+        for (var map in result) {
+          InvoiceHistoryModel _InvoiceHistoryModel =
+              InvoiceHistoryModel.fromJson(map);
+
+          var sum_pvatx = double.parse(_InvoiceHistoryModel.pvat_t!);
+          var sum_vatx = double.parse(_InvoiceHistoryModel.vat_t!);
+          var sum_whtx = double.parse(_InvoiceHistoryModel.wht!);
+          var sum_amtx = double.parse(_InvoiceHistoryModel.total_t!);
+          var sum_disamtx = double.parse(_InvoiceHistoryModel.disendbill!);
+          var sum_dispx = double.parse(_InvoiceHistoryModel.disendbillper!);
+          setState(() {
+            sum_pvat = sum_pvat + sum_pvatx;
+            sum_vat = sum_vat + sum_vatx;
+            sum_wht = sum_wht + sum_whtx;
+            sum_amt = sum_amt + sum_amtx;
+            sum_disamt = sum_disamtx;
+            sum_disp = sum_dispx;
+
+            _InvoiceHistoryModels.add(_InvoiceHistoryModel);
+          });
+        }
+      } else if (result.toString() == 'false') {
+        for (var map in result) {
+          InvoiceHistoryModel _InvoiceHistoryModel =
+              InvoiceHistoryModel.fromJson(map);
+
+          var sum_pvatx = double.parse(_InvoiceHistoryModel.pvat_t!);
+          var sum_vatx = double.parse(_InvoiceHistoryModel.vat_t!);
+          var sum_whtx = double.parse(_InvoiceHistoryModel.wht!);
+          var sum_amtx = double.parse(_InvoiceHistoryModel.total_t!);
+          var sum_disamtx = double.parse(_InvoiceHistoryModel.disendbill!);
+          var sum_dispx = double.parse(_InvoiceHistoryModel.disendbillper!);
+          setState(() {
+            sum_pvat = sum_pvat + sum_pvatx;
+            sum_vat = sum_vat + sum_vatx;
+            sum_wht = sum_wht + sum_whtx;
+            sum_amt = sum_amt + sum_amtx;
+            sum_disamt = sum_disamtx;
+            sum_disp = sum_dispx;
+
+            _InvoiceHistoryModels.add(_InvoiceHistoryModel);
+          });
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('มีผู้ใช้อื่นกำลังทำรายการอยู่....',
+                  style: TextStyle(
+                      color: Colors.white, fontFamily: Font_.Fonts_T))),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('มีผู้ใช้อื่นกำลังทำรายการอยู่....',
+                style:
+                    TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+      );
+    }
+  }
+
+  /////////----------------------------------------------------------->
+  Future<void> _showMyDialog_pay(index) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        final _formKey = GlobalKey<FormState>();
+
+        DateTime datexDialog = DateTime.now();
+        String Value_newDatepay = '${InvoiceModels[index].date}';
+        String Value_newDateY1 =
+            '${DateFormat('yyyy-MM-dd').format(datexDialog)}';
+        //  '${DateFormat('yyyy-MM-dd').format(datexDialog)}';
+
+        return StreamBuilder(
+          stream: Stream.periodic(const Duration(seconds: 0)),
+          builder: (context, snapshot) {
+            return Form(
+              key: _formKey,
+              child: AlertDialog(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                content: Container(
+                  width: 220,
+                  child: SingleChildScrollView(
+                    child: ListBody(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Center(
+                            child: Text(
+                              '${InvoiceModels[index].docno}',
+                              style: const TextStyle(
+                                color: ReportScreen_Color.Colors_Text2_,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: FontWeight_.Fonts_T,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const Divider(),
+                        Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Center(
+                            child: Text(
+                              'เลขที่สัญญา : ${InvoiceModels[index].cid} ',
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontFamily: Font_.Fonts_T,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Center(
+                            child: Text(
+                              'ชื่อร้าน : ${InvoiceModels[index].scname} ',
+                              maxLines: 2,
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontFamily: Font_.Fonts_T,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Center(
+                            child: Text(
+                              'รหัสพื้นที่ : ${InvoiceModels[index].ln} ',
+                              maxLines: 1,
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontFamily: Font_.Fonts_T,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 0.5),
+                        const Divider(),
+                        const SizedBox(height: 0.5),
+                        Container(
+                          // width: 200,
+                          color: AppbackgroundColor.Sub_Abg_Colors,
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'วันที่รับชำระ',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: PeopleChaoScreen_Color.Colors_Text1_,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T
+                                    //fontSize: 10.0
+                                    ),
+                              ),
+                              Container(
+                                  width: 200,
+                                  height: 35,
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          height: 35,
+                                          decoration: BoxDecoration(
+                                            // color: Colors.green[50],
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                              topLeft: Radius.circular(8),
+                                              topRight: Radius.circular(0),
+                                              bottomLeft: Radius.circular(8),
+                                              bottomRight: Radius.circular(0),
+                                            ),
+                                            border: Border.all(
+                                                color: Colors.grey, width: 1),
+                                          ),
+                                          padding: const EdgeInsets.all(2.0),
+                                          child: AutoSizeText(
+                                            Value_newDatepay == ''
+                                                ? 'เลือกวันที่'
+                                                : '$Value_newDatepay',
+                                            minFontSize: 10,
+                                            maxFontSize: 16,
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                color: PeopleChaoScreen_Color
+                                                    .Colors_Text2_,
+                                                // fontWeight: FontWeight.bold,
+                                                fontFamily: Font_.Fonts_T),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ),
+                                      InkWell(
+                                          onTap: () async {
+                                            DateTime? newDate =
+                                                await showDatePicker(
+                                              locale: const Locale('th', 'TH'),
+                                              context: context,
+                                              initialDate: DateTime.now(),
+                                              firstDate: DateTime.now().add(
+                                                  const Duration(days: -50)),
+                                              lastDate: DateTime.now().add(
+                                                  const Duration(days: 365)),
+                                              builder: (context, child) {
+                                                return Theme(
+                                                  data: Theme.of(context)
+                                                      .copyWith(
+                                                    colorScheme:
+                                                        const ColorScheme.light(
+                                                      primary: AppBarColors
+                                                          .ABar_Colors, // header background color
+                                                      onPrimary: Colors
+                                                          .white, // header text color
+                                                      onSurface: Colors
+                                                          .black, // body text color
+                                                    ),
+                                                    textButtonTheme:
+                                                        TextButtonThemeData(
+                                                      style:
+                                                          TextButton.styleFrom(
+                                                        primary: Colors
+                                                            .black, // button text color
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  child: child!,
+                                                );
+                                              },
+                                            );
+
+                                            if (newDate == null) {
+                                              return;
+                                            } else {
+                                              String start =
+                                                  DateFormat('yyyy-MM-dd')
+                                                      .format(newDate);
+
+                                              setState(() {
+                                                Value_newDatepay = start;
+                                              });
+                                            }
+                                          },
+                                          child: Container(
+                                              decoration: BoxDecoration(
+                                                // color: Colors.green[50],
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  topLeft: Radius.circular(0),
+                                                  topRight: Radius.circular(8),
+                                                  bottomLeft:
+                                                      Radius.circular(0),
+                                                  bottomRight:
+                                                      Radius.circular(8),
+                                                ),
+                                                border: Border.all(
+                                                    color: Colors.grey,
+                                                    width: 1),
+                                              ),
+                                              padding:
+                                                  const EdgeInsets.all(2.0),
+                                              child: const Icon(Icons.edit)))
+                                    ],
+                                  )),
+                              // Container(
+                              //     height: 35,
+                              //     width: 200,
+                              //     color: AppbackgroundColor.Sub_Abg_Colors,
+                              //     padding: const EdgeInsets.all(4.0),
+                              //     child: Row(
+                              //       children: [
+                              //         Expanded(
+                              //           child: Container(
+                              //             height: 35,
+                              //             decoration: BoxDecoration(
+                              //               color: Colors.grey[100],
+                              //               borderRadius:
+                              //                   const BorderRadius.only(
+                              //                 topLeft: Radius.circular(8),
+                              //                 topRight: Radius.circular(8),
+                              //                 bottomLeft: Radius.circular(8),
+                              //                 bottomRight: Radius.circular(8),
+                              //               ),
+                              //               border: Border.all(
+                              //                   color: Colors.grey, width: 1),
+                              //             ),
+                              //             padding: const EdgeInsets.all(2.0),
+                              //             child: AutoSizeText(
+                              //               '$Value_newDatepay',
+                              //               // '${bankExcBilling.where((model) => model.ref1.toString() == InvoiceModels[index].docno.toString() && model.amount.toString() == result.toString()).map((model) => model.payment_date).join(', ')}',
+                              //               minFontSize: 10,
+                              //               maxFontSize: 16,
+                              //               textAlign: TextAlign.center,
+                              //               style: const TextStyle(
+                              //                   color: PeopleChaoScreen_Color
+                              //                       .Colors_Text2_,
+                              //                   // fontWeight: FontWeight.bold,
+                              //                   fontFamily: Font_.Fonts_T),
+                              //               maxLines: 1,
+                              //               overflow: TextOverflow.ellipsis,
+                              //             ),
+                              //           ),
+                              //         ),
+                              //       ],
+                              //     )),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          // width: 200,
+                          color: AppbackgroundColor.Sub_Abg_Colors,
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'ยอดรวมสุทธิ',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: PeopleChaoScreen_Color.Colors_Text1_,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T
+                                    //fontSize: 10.0
+                                    ),
+                              ),
+                              Container(
+                                  height: 35,
+                                  width: 200,
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          height: 35,
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey[100],
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                              topLeft: Radius.circular(8),
+                                              topRight: Radius.circular(8),
+                                              bottomLeft: Radius.circular(8),
+                                              bottomRight: Radius.circular(8),
+                                            ),
+                                            border: Border.all(
+                                                color: Colors.grey, width: 1),
+                                          ),
+                                          padding: const EdgeInsets.all(2.0),
+                                          child: AutoSizeText(
+                                            '${InvoiceModels[index].total_dis}',
+                                            minFontSize: 10,
+                                            maxFontSize: 16,
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                color: PeopleChaoScreen_Color
+                                                    .Colors_Text2_,
+                                                // fontWeight: FontWeight.bold,
+                                                fontFamily: Font_.Fonts_T),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 0.5),
+                        const Divider(),
+                        const SizedBox(height: 0.5),
+                        Container(
+                          // width: 200,
+                          // color: AppbackgroundColor.Sub_Abg_Colors,
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'รูปแบบบิล',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: PeopleChaoScreen_Color.Colors_Text1_,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T
+                                    //fontSize: 10.0
+                                    ),
+                              ),
+                              Container(
+                                width: 200,
+                                height: 35,
+                                color: AppbackgroundColor.Sub_Abg_Colors,
+                                padding: const EdgeInsets.all(8.0),
+                                child: DropdownButtonFormField2(
+                                  decoration: InputDecoration(
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.zero,
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  isExpanded: true,
+
+                                  hint: Text(
+                                    bills_name_.toString(),
+                                    maxLines: 1,
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text2_,
+                                        //fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                  icon: const Icon(
+                                    Icons.arrow_drop_down,
+                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  ),
+                                  style: const TextStyle(
+                                      color: Colors.green,
+                                      fontFamily: Font_.Fonts_T),
+                                  iconSize: 30,
+                                  buttonHeight: 40,
+                                  // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                  dropdownDecoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  items: bill_tser == '1'
+                                      ? Default_.map((item) =>
+                                          DropdownMenuItem<String>(
+                                            value: item,
+                                            child: Text(
+                                              item,
+                                              style: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          )).toList()
+                                      : Default2_.map((item) =>
+                                          DropdownMenuItem<String>(
+                                            value: item,
+                                            child: Text(
+                                              item,
+                                              style: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          )).toList(),
+
+                                  onChanged: (value) async {
+                                    var bill_set =
+                                        value == 'บิลธรรมดา' ? 'P' : 'F';
+                                    setState(() {
+                                      bills_name_ = bill_set;
+                                    });
+                                    print(bills_name_);
+                                  },
+                                  // onSaved: (value) {
+                                  //   // selectedValue = value.toString();
+                                  // },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          // width: 200,
+                          // color: AppbackgroundColor.Sub_Abg_Colors,
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'วันที่ทำรายการ',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: PeopleChaoScreen_Color.Colors_Text1_,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T
+                                    //fontSize: 10.0
+                                    ),
+                              ),
+                              Container(
+                                  width: 200,
+                                  height: 35,
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          height: 35,
+                                          decoration: BoxDecoration(
+                                            // color: Colors.green[50],
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                              topLeft: Radius.circular(8),
+                                              topRight: Radius.circular(8),
+                                              bottomLeft: Radius.circular(8),
+                                              bottomRight: Radius.circular(8),
+                                            ),
+                                            border: Border.all(
+                                                color: Colors.grey, width: 1),
+                                          ),
+                                          padding: const EdgeInsets.all(2.0),
+                                          child: AutoSizeText(
+                                            Value_newDateY1 == ''
+                                                ? 'เลือกวันที่'
+                                                : '$Value_newDateY1',
+                                            minFontSize: 10,
+                                            maxFontSize: 16,
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                color: PeopleChaoScreen_Color
+                                                    .Colors_Text2_,
+                                                // fontWeight: FontWeight.bold,
+                                                fontFamily: Font_.Fonts_T),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ),
+                                      // InkWell(
+                                      //     onTap: () async {
+                                      //       DateTime? newDate =
+                                      //           await showDatePicker(
+                                      //         locale: const Locale('th', 'TH'),
+                                      //         context: context,
+                                      //         initialDate: DateTime.now(),
+                                      //         firstDate: DateTime.now().add(
+                                      //             const Duration(days: -50)),
+                                      //         lastDate: DateTime.now().add(
+                                      //             const Duration(days: 365)),
+                                      //         builder: (context, child) {
+                                      //           return Theme(
+                                      //             data: Theme.of(context)
+                                      //                 .copyWith(
+                                      //               colorScheme:
+                                      //                   const ColorScheme.light(
+                                      //                 primary: AppBarColors
+                                      //                     .ABar_Colors, // header background color
+                                      //                 onPrimary: Colors
+                                      //                     .white, // header text color
+                                      //                 onSurface: Colors
+                                      //                     .black, // body text color
+                                      //               ),
+                                      //               textButtonTheme:
+                                      //                   TextButtonThemeData(
+                                      //                 style:
+                                      //                     TextButton.styleFrom(
+                                      //                   primary: Colors
+                                      //                       .black, // button text color
+                                      //                 ),
+                                      //               ),
+                                      //             ),
+                                      //             child: child!,
+                                      //           );
+                                      //         },
+                                      //       );
+
+                                      //       if (newDate == null) {
+                                      //         return;
+                                      //       } else {
+                                      //         String start =
+                                      //             DateFormat('yyyy-MM-dd')
+                                      //                 .format(newDate);
+
+                                      //         setState(() {
+                                      //           Value_newDateY1 = start;
+                                      //         });
+                                      //       }
+                                      //     },
+                                      //     child: Container(
+                                      //         decoration: BoxDecoration(
+                                      //           // color: Colors.green[50],
+                                      //           borderRadius:
+                                      //               const BorderRadius.only(
+                                      //             topLeft: Radius.circular(0),
+                                      //             topRight: Radius.circular(8),
+                                      //             bottomLeft:
+                                      //                 Radius.circular(0),
+                                      //             bottomRight:
+                                      //                 Radius.circular(8),
+                                      //           ),
+                                      //           border: Border.all(
+                                      //               color: Colors.grey,
+                                      //               width: 1),
+                                      //         ),
+                                      //         padding:
+                                      //             const EdgeInsets.all(2.0),
+                                      //         child: const Icon(Icons.edit)))
+                                    ],
+                                  )),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                actions: <Widget>[
+                  Column(
+                    children: [
+                      const SizedBox(height: 0.5),
+                      const Divider(),
+                      const SizedBox(height: 0.5),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: InkWell(
+                              onTap: () async {
+                                print(
+                                    'Docno InvoiceModels1 >>>>> ${InvoiceModels[index].docno}');
+                                in_Trans_invoice_refnoPay(index,
+                                        Value_newDateY1, Value_newDatepay, '0')
+                                    .then((value) {
+                                  setState(() {
+                                    Future.delayed(
+                                        const Duration(milliseconds: 800));
+                                    red_InvoiceMon_bill();
+                                  });
+                                });
+
+                                // Pay_Invoice(
+                                //     index, Value_newDateY1, Value_newDatepay);
+                              },
+                              child: Container(
+                                width: 100,
+                                decoration: const BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10)),
+                                ),
+                                padding: const EdgeInsets.all(8.0),
+                                child: const Center(
+                                  child: Text(
+                                    'ยืนยัน',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      //fontWeight: FontWeight.bold, color:
+
+                                      // fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: InkWell(
+                              onTap: () => Navigator.pop(context, 'OK'),
+                              child: Container(
+                                width: 100,
+                                decoration: const BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10)),
+                                ),
+                                padding: const EdgeInsets.all(8.0),
+                                child: const Center(
+                                  child: Text(
+                                    'ปิด',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      //fontWeight: FontWeight.bold, color:
+
+                                      // fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+/////////----------------------------------------------------------->
+  /////////----------------------------------------------------------->
+  Future<Null> in_Trans_invoice_refnoPay(
+      index, Value_newDateY1, Value_newDatepay, serpay_all) async {
+    var Times = DateFormat('HH:mm:ss').format(datex).toString();
+    String? fileName_Slip_ = '';
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    var user = preferences.getString('ser');
+    var ciddoc = InvoiceModels[index].cid;
+    var qutser = '1';
+    var sumdis = sum_disamt.toString();
+    var sumdisp = sum_disp.toString();
+    var dateY = Value_newDatepay;
+    var dateY1 = Value_newDateY1;
+    var time = Times;
+    //pamentpage == 0
+    var dis_akan = dis_sum_Pakan.toString();
+    var dis_Matjum = dis_sum_Matjum.toString();
+    var payment1 = InvoiceModels[index].total_dis.toString();
+    var payment2 = '';
+    var pSer1 = InvoiceModels[index].payment_ser.toString();
+    var pSer2 = paymentSer2;
+    var ref = InvoiceModels[index].docno;
+    var sum_whta = sum_wht.toString();
+    var bill = bills_name_ == 'บิลธรรมดา' ? 'P' : 'F';
+    var comment = '';
+    var sum_fine = sum_tran_fine;
+    var fine_total_amt = (fine_total + fine_total2);
+    // var ren = preferences.getString('renTalSer');
+    // var user = preferences.getString('ser');
+    // var ciddoc = InvoiceModels[index].cid;
+    // var qutser = '1';
+    // var sumdis = '0';
+    // var sumdisp = '0';
+    // var dateY = Value_newDatepay;
+    // var dateY1 = Value_newDateY1;
+    // var time = Times;
+    // //pamentpage == 0
+    // var dis_akan = '0';
+    // var dis_Matjum = '0';
+    // var payment1 = InvoiceModels[index].total_dis.toString();
+    // var payment2 = '0';
+    // var pSer1 = InvoiceModels[index].payment_ser.toString();
+    // var pSer2 = '0';
+    // var ref = InvoiceModels[index].docno;
+    // var sum_whta = '0';
+    // var bill = bills_name_ == 'บิลธรรมดา' ? 'P' : 'F';
+    // var comment = '0';
+    // var sum_fine = '0';
+    // var fine_total_amt = (fine_total + fine_total2);
+    // print('in_Trans_invoice_refno()///$fileName_Slip_');
+    // print('in_Trans_invoice_refno >>> $payment1  $payment2  $bill ');
+    print('Docno InvoiceModels 2 >>>>> ${InvoiceModels[index].docno}');
+    String url =
+        '${MyConstant().domain}/In_tran_finanref1.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&ref=$ref&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&dis_Pakan=$dis_akan&dis_Matjum=$dis_Matjum&sum_fine=$sum_fine&fine_total_amt=$fine_total_amt';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print(result);
+      if (result.toString() != 'No') {
+        print('result.toString() != No');
+        for (var map in result) {
+          CFinnancetransModel cFinnancetransModel =
+              CFinnancetransModel.fromJson(map);
+          setState(() {
+            cFinn = cFinnancetransModel.docno;
+
+            doctax = cFinnancetransModel.doctax;
+          });
+          print('zzzzasaaa123454>>>>  $cFinn');
+        }
+        // setState(() {
+        //   Invoic_selectAllSuccess.add(InvoiceModels[index].docno.toString());
+        // });
+
+        Insert_log.Insert_logs(
+            'บัญชี', 'ประวัติวางบิล -->Excel อนุมัติ:$cFinn ');
+        if (serpay_all == '0') {
+          Navigator.pop(context, 'OK');
+        } else {}
+
+        setState(() async {
+          dis_sum_Pakan = 0.00;
+          dis_Pakan = 0;
+          dis_matjum = 0;
+          sum_matjum = 0.00;
+          dis_sum_Matjum = 0.00;
+          sum_tran_fine = 0;
+          fine_total = 0;
+          fine_total2 = 0;
+          sum_pvat = 0.00;
+          sum_vat = 0.00;
+          sum_wht = 0.00;
+          sum_amt = 0.00;
+          sum_dis = 0.00;
+          sum_disamt = 0.00;
+          sum_disp = 0;
+
+          _InvoiceModels.clear();
+          _InvoiceHistoryModels.clear();
+        });
+        print('rrrrrrrrrrrrrr');
+      }
+    } catch (e) {}
   }
 }

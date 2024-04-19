@@ -659,7 +659,7 @@ class _EditZoneAmtState extends State<EditZoneAmt> {
                                 : Column(
                                     children: [
                                       Container(
-                                        decoration: const BoxDecoration(
+                                        decoration:  BoxDecoration(
                                           color:
                                               AppbackgroundColor.TiTile_Colors,
                                           borderRadius: BorderRadius.only(
@@ -1123,7 +1123,7 @@ class _EditZoneAmtState extends State<EditZoneAmt> {
                                         ),
                                       ),
                                       Container(
-                                        decoration: const BoxDecoration(
+                                        decoration:  BoxDecoration(
                                           color:
                                               AppbackgroundColor.TiTile_Colors,
                                           borderRadius: BorderRadius.only(

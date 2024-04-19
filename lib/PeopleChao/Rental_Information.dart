@@ -47,6 +47,8 @@ import '../Model/GetTrans_Model.dart';
 import '../Model/electricity_model.dart';
 import '../PDF/PDF_Agreement/pdf_Agreement.dart';
 import '../PDF/PDF_Agreement/pdf_Agreement2.dart';
+import '../PDF/PDF_Agreement/pdf_Agreement_JSpace.dart';
+import '../PDF/PDF_Agreement/pdf_Agreement_JSpace2.dart';
 import '../PDF/PDF_Agreement/pdf_RentalInforma.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
@@ -101,6 +103,7 @@ class _RentalInformationState extends State<RentalInformation> {
   final Form_tel = TextEditingController();
   final Form_email = TextEditingController();
   final Form_tax = TextEditingController();
+  final Form_wnote = TextEditingController();
   final rental_count_text = TextEditingController();
   final Form_area = TextEditingController();
   final Form_ln = TextEditingController();
@@ -140,6 +143,7 @@ class _RentalInformationState extends State<RentalInformation> {
   int renTal_lavel = 0, ser_tabbarview_2 = 0;
   List<ContractfModel> Other_file = [];
   String? pic_tenant, pic_shop, pic_plan, fiew;
+  String _ReportValue_type = "ไม่ระบุ";
   @override
   void initState() {
     super.initState();
@@ -389,7 +393,7 @@ class _RentalInformationState extends State<RentalInformation> {
                 teNantModel.tax == null ? "-" : teNantModel.tax.toString();
             Form_area.text = teNantModel.area.toString();
             Form_ln.text = teNantModel.area_c.toString();
-
+            Form_wnote.text = teNantModel.wnote.toString();
             Form_sdate.text = DateFormat('dd-MM-yyyy')
                 .format(DateTime.parse('${teNantModel.sdate} 00:00:00'))
                 .toString();
@@ -2280,523 +2284,475 @@ class _RentalInformationState extends State<RentalInformation> {
       } else {}
     } catch (e) {}
   }
+/////////////------------------------------------>
+  // Future<Null> _select_Date_Daily(BuildContext context) async {
+  //   final Future<DateTime?> picked = showDatePicker(
+  //     // locale: const Locale('th', 'TH'),
+  //     helpText: 'เลือกวันที่', confirmText: 'ตกลง',
+  //     cancelText: 'ยกเลิก',
+  //     context: context,
+  //     initialDate: DateTime(
+  //         DateTime.now().year, DateTime.now().month, DateTime.now().day - 1),
+  //     initialDatePickerMode: DatePickerMode.day,
+  //     firstDate: DateTime(2023, 1, 1),
+  //     lastDate: DateTime(
+  //         DateTime.now().year, DateTime.now().month, DateTime.now().day),
+  //     // selectableDayPredicate: _decideWhichDayToEnable,
+  //     builder: (context, child) {
+  //       return Theme(
+  //         data: Theme.of(context).copyWith(
+  //           colorScheme: const ColorScheme.light(
+  //             primary: AppBarColors.ABar_Colors, // header background color
+  //             onPrimary: Colors.white, // header text color
+  //             onSurface: Colors.black, // body text color
+  //           ),
+  //           textButtonTheme: TextButtonThemeData(
+  //             style: TextButton.styleFrom(
+  //               primary: Colors.black, // button text color
+  //             ),
+  //           ),
+  //         ),
+  //         child: child!,
+  //       );
+  //     },
+  //   );
+  //   picked.then((result) {
+  //     if (picked != null) {
+  //       // TransReBillModels = [];
 
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        // color: Colors.red,
-        width: MediaQuery.of(context).size.width,
-        decoration: const BoxDecoration(
-          color: Color(0xfff3f3ee),
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10),
-              topRight: Radius.circular(10),
-              bottomLeft: Radius.circular(10),
-              bottomRight: Radius.circular(10)),
-        ),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(children: [
-                Expanded(
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 350,
-                        // height: 135,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10),
-                              bottomLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 3,
-                              blurRadius: 5,
-                              offset: const Offset(
-                                  0, 3), // changes position of shadow
-                            ),
-                          ],
-                          image: const DecorationImage(
-                            image: AssetImage("images/pngegg2.png"),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        child: (pic_tenant == null ||
-                                pic_tenant.toString() == '')
-                            ? const SizedBox(
-                                height: 200,
-                              )
-                            : SizedBox(
-                                height: 200,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    showDialog<String>(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          AlertDialog(
-                                        shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20.0))),
-                                        title: Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.25,
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.35,
-                                            child: Image.network(
-                                              '${MyConstant().domain}/files/$foder/contract/$pic_tenant',
-                                              fit: BoxFit.contain,
-                                            )),
-                                        actions: <Widget>[
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Container(
-                                                  width: 100,
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                    color: Colors.redAccent,
-                                                    borderRadius:
-                                                        BorderRadius.only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    10)),
-                                                  ),
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: TextButton(
-                                                    onPressed: () =>
-                                                        Navigator.pop(
-                                                            context, 'OK'),
-                                                    child: const Text(
-                                                      'ปิด',
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                  child: Image.network(
-                                    '${MyConstant().domain}/files/$foder/contract/$pic_tenant',
-                                    fit: BoxFit.fill,
-                                  ),
-                                )),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const AutoSizeText(
-                            minFontSize: 10,
-                            maxFontSize: 15,
-                            'รูปผู้เช่า',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: PeopleChaoScreen_Color.Colors_Text1_,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: FontWeight_.Fonts_T),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              setState(() {
-                                fiew = 'pic_tenant';
-                              });
-                              uploadImage(ImageSource.gallery);
-                              // _getFromGallery2();
-                            },
-                            icon: const Icon(
-                              Icons.edit,
-                              color: Colors.red,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 350,
-                        // height: 135,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10),
-                              bottomLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 3,
-                              blurRadius: 5,
-                              offset: const Offset(
-                                  0, 3), // changes position of shadow
-                            ),
-                          ],
-                          image: const DecorationImage(
-                            image: AssetImage("images/pngegg2.png"),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        child: (pic_shop == null || pic_shop.toString() == '')
-                            ? const SizedBox(
-                                height: 200,
-                              )
-                            : SizedBox(
-                                height: 200,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    showDialog<String>(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          AlertDialog(
-                                        shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20.0))),
-                                        title: Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.25,
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.35,
-                                            child: Image.network(
-                                              '${MyConstant().domain}/files/$foder/contract/$pic_shop',
-                                              fit: BoxFit.contain,
-                                            )),
-                                        actions: <Widget>[
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Container(
-                                                  width: 100,
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                    color: Colors.redAccent,
-                                                    borderRadius:
-                                                        BorderRadius.only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    10)),
-                                                  ),
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: TextButton(
-                                                    onPressed: () =>
-                                                        Navigator.pop(
-                                                            context, 'OK'),
-                                                    child: const Text(
-                                                      'ปิด',
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                  child: Image.network(
-                                    '${MyConstant().domain}/files/$foder/contract/$pic_shop',
-                                    fit: BoxFit.fill,
-                                  ),
-                                )),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const AutoSizeText(
-                            minFontSize: 10,
-                            maxFontSize: 15,
-                            'รูปร้านค้า',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: PeopleChaoScreen_Color.Colors_Text1_,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: FontWeight_.Fonts_T),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              setState(() {
-                                fiew = 'pic_shop';
-                              });
-                              uploadImage(ImageSource.gallery);
-                              // _getFromGallery2();
-                            },
-                            icon: const Icon(
-                              Icons.edit,
-                              color: Colors.red,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 350,
-                        // height: 135,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10),
-                              bottomLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 3,
-                              blurRadius: 5,
-                              offset: const Offset(
-                                  0, 3), // changes position of shadow
-                            ),
-                          ],
-                          image: const DecorationImage(
-                            image: AssetImage("images/pngegg2.png"),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        child: (pic_plan == null || pic_plan.toString() == '')
-                            ? const SizedBox(
-                                height: 200,
-                              )
-                            : SizedBox(
-                                height: 200,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    showDialog<String>(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          AlertDialog(
-                                        shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20.0))),
-                                        title: Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.25,
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.35,
-                                            child: Image.network(
-                                              '${MyConstant().domain}/files/$foder/contract/$pic_plan',
-                                              fit: BoxFit.contain,
-                                            )),
-                                        actions: <Widget>[
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Container(
-                                                  width: 100,
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                    color: Colors.redAccent,
-                                                    borderRadius:
-                                                        BorderRadius.only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    10)),
-                                                  ),
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: TextButton(
-                                                    onPressed: () =>
-                                                        Navigator.pop(
-                                                            context, 'OK'),
-                                                    child: const Text(
-                                                      'ปิด',
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                  child: Image.network(
-                                    '${MyConstant().domain}/files/$foder/contract/$pic_plan',
-                                    fit: BoxFit.fill,
-                                  ),
-                                )),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const AutoSizeText(
-                            minFontSize: 10,
-                            maxFontSize: 15,
-                            'รูปแผนฝัง',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: PeopleChaoScreen_Color.Colors_Text1_,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: FontWeight_.Fonts_T),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              setState(() {
-                                fiew = 'pic_plan';
-                              });
-                              uploadImage(ImageSource.gallery);
-                              // _getFromGallery2();
-                            },
-                            icon: const Icon(
-                              Icons.edit,
-                              color: Colors.red,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ]),
-            ),
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: InkWell(
-                    onTap: () {
-                      // _generatePdf();
-                    },
-                    child: const AutoSizeText(
-                      minFontSize: 10,
-                      maxFontSize: 15,
-                      '1.ข้อมูลผู้เช่า',
-                      style: TextStyle(
-                          color: PeopleChaoScreen_Color.Colors_Text1_,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: FontWeight_.Fonts_T),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+  //       var formatter = DateFormat('yyyy-MM-dd');
+  //       print("${formatter.format(result!)}");
+  //       setState(() {
+  //         Value_TransDate_Daily = "${formatter.format(result)}";
+  //       });
+  //     }
+  //   });
+  // }
 
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  const Expanded(
-                    flex: 1,
-                    child: Text(
-                      'ประเภท',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          color: PeopleChaoScreen_Color.Colors_Text2_,
+  ////////////------------------------------------------------------>(Export file)
+  Future<void> _showMyDialog_SAVE(
+      context, tableData00, newValuePDFimg, ren, type) async {
+    String _ReportValue_type_doc = "ปกติ";
+    String _verticalGroupValue_NameFile = "จากระบบ";
+    String Value_Report = ' ';
+    String NameFile_ = '';
+    String Pre_and_Dow = '';
+    String? TitleType_Default_Receipt_Name;
+    final _formKey = GlobalKey<FormState>();
+    final FormNameFile_text = TextEditingController();
+    final Datex_text = TextEditingController();
+    final Pri1_text = TextEditingController();
+    final Pri2_text = TextEditingController();
+    final Pri3_text = TextEditingController();
+    var date_x = DateTime.now();
+    var formatter = DateFormat('dd-MM-yyyy');
+    setState(() {
+      Datex_text.text = "${formatter.format(date_x)}";
+      Pri1_text.text = '0.00';
+      Pri2_text.text = '0.00';
+      Pri3_text.text = '0.00';
+    });
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return StreamBuilder(
+          stream: Stream.periodic(const Duration(seconds: 0)),
+          builder: (context, snapshot) {
+            return Form(
+              key: _formKey,
+              child: AlertDialog(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      if (type == 1)
+                        if (ren.toString() == '90' || ren.toString() == '50')
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(15),
+                                topRight: Radius.circular(15),
+                                bottomLeft: Radius.circular(15),
+                                bottomRight: Radius.circular(15),
+                              ),
+                              border: Border.all(color: Colors.grey, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  'รูปแบบ :',
+                                  style: TextStyle(
+                                    color: ReportScreen_Color.Colors_Text2_,
+                                    // fontWeight: FontWeight.bold,
+                                    fontFamily: Font_.Fonts_T,
+                                  ),
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.3),
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(15),
+                                      topRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                    ),
+                                    border: Border.all(
+                                        color: Colors.grey, width: 1),
+                                  ),
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: RadioGroup<String>.builder(
+                                    direction: Axis.horizontal,
+                                    groupValue: _ReportValue_type_doc,
+                                    horizontalAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    onChanged: (value) {
+                                      // setState(() {
+                                      //   FormNameFile_text.clear();
+                                      // });
+                                      setState(() {
+                                        _ReportValue_type_doc = value ?? '';
+                                      });
+
+                                      // if (value == 'ไม่ระบุ') {
+                                      //   setState(() {
+                                      //     TitleType_Default_Receipt_Name = null;
+                                      //   });
+                                      // } else {
+                                      //   setState(() {
+                                      //     TitleType_Default_Receipt_Name = value;
+                                      //   });
+                                      // }
+                                    },
+                                    items: const <String>[
+                                      'ปกติ',
+                                      'J Space',
+                                    ],
+                                    textStyle: const TextStyle(
+                                      fontSize: 15,
+                                      color: ReportScreen_Color.Colors_Text2_,
+                                      // fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T,
+                                    ),
+                                    itemBuilder: (item) => RadioButtonBuilder(
+                                      item,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 2),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: const Text(
+                                    'วันที่ทำสัญญา :',
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      color: ReportScreen_Color.Colors_Text2_,
+                                      // fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Future<DateTime?> picked = showDatePicker(
+                                        // locale: const Locale('th', 'TH'),
+                                        helpText: 'เลือกวันที่',
+                                        confirmText: 'ตกลง',
+                                        cancelText: 'ยกเลิก',
+                                        context: context,
+                                        initialDate: DateTime(
+                                            DateTime.now().year,
+                                            DateTime.now().month,
+                                            DateTime.now().day - 1),
+                                        initialDatePickerMode:
+                                            DatePickerMode.day,
+                                        firstDate: DateTime(2023, 1, 1),
+                                        lastDate: DateTime(
+                                            DateTime.now().year,
+                                            DateTime.now().month,
+                                            DateTime.now().day),
+                                        // selectableDayPredicate: _decideWhichDayToEnable,
+                                        builder: (context, child) {
+                                          return Theme(
+                                            data: Theme.of(context).copyWith(
+                                              colorScheme:
+                                                  const ColorScheme.light(
+                                                primary: AppBarColors
+                                                    .ABar_Colors, // header background color
+                                                onPrimary: Colors
+                                                    .white, // header text color
+                                                onSurface: Colors
+                                                    .black, // body text color
+                                              ),
+                                              textButtonTheme:
+                                                  TextButtonThemeData(
+                                                style: TextButton.styleFrom(
+                                                  primary: Colors
+                                                      .black, // button text color
+                                                ),
+                                              ),
+                                            ),
+                                            child: child!,
+                                          );
+                                        },
+                                      );
+                                      picked.then((result) {
+                                        if (picked != null) {
+                                          // TransReBillModels = [];
+
+                                          var formatter =
+                                              DateFormat('dd-MM-yyyy');
+                                          print("${formatter.format(result!)}");
+                                          setState(() {
+                                            Datex_text.text =
+                                                "${formatter.format(result)}";
+                                          });
+                                        }
+                                      });
+                                    },
+                                    child: Container(
+                                        decoration: BoxDecoration(
+                                          color:
+                                              AppbackgroundColor.Sub_Abg_Colors,
+                                          borderRadius: const BorderRadius.only(
+                                              topLeft: Radius.circular(10),
+                                              topRight: Radius.circular(10),
+                                              bottomLeft: Radius.circular(10),
+                                              bottomRight: Radius.circular(10)),
+                                          border: Border.all(
+                                              color: Colors.grey, width: 1),
+                                        ),
+                                        width: 200,
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Center(
+                                          child: Text(
+                                            (Datex_text.text == null)
+                                                ? 'เลือก'
+                                                : '${Datex_text.text}',
+                                            style: const TextStyle(
+                                              color: ReportScreen_Color
+                                                  .Colors_Text2_,
+                                              // fontWeight: FontWeight.bold,
+                                              fontFamily: Font_.Fonts_T,
+                                            ),
+                                          ),
+                                        )),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: const Text(
+                                    'อัตราค่าเช่าเดือนละ :',
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      color: ReportScreen_Color.Colors_Text2_,
+                                      // fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    controller: Pri1_text,
+
+                                    // maxLength: 13,
+                                    cursorColor: Colors.green,
+                                    decoration: InputDecoration(
+                                      fillColor: Colors.white.withOpacity(0.3),
+                                      filled: true,
+                                      focusedBorder: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(15),
+                                          topLeft: Radius.circular(15),
+                                          bottomRight: Radius.circular(15),
+                                          bottomLeft: Radius.circular(15),
+                                        ),
+                                        borderSide: BorderSide(
+                                          width: 1,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      errorStyle:
+                                          TextStyle(fontFamily: Font_.Fonts_T),
+                                      enabledBorder: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(15),
+                                          topLeft: Radius.circular(15),
+                                          bottomRight: Radius.circular(15),
+                                          bottomLeft: Radius.circular(15),
+                                        ),
+                                        borderSide: BorderSide(
+                                          width: 1,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      // labelText: 'อัตราค่าเช่าเดือนละ : ',
+                                      labelStyle: const TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.black54,
+                                          fontFamily: Font_.Fonts_T),
+                                    ),
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.deny(
+                                          RegExp(r'\s')),
+                                      // FilteringTextInputFormatter.deny(
+                                      //     RegExp(r'^0')),
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'[0-9 .]')),
+                                    ],
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: const Text(
+                                    'วางเงินประกันตลอดอายุสัญญาเช่า :',
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      color: ReportScreen_Color.Colors_Text2_,
+                                      // fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    controller: Pri2_text,
+
+                                    // maxLength: 13,
+                                    cursorColor: Colors.green,
+                                    decoration: InputDecoration(
+                                        fillColor:
+                                            Colors.white.withOpacity(0.3),
+                                        filled: true,
+                                        focusedBorder: const OutlineInputBorder(
+                                          borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(15),
+                                            topLeft: Radius.circular(15),
+                                            bottomRight: Radius.circular(15),
+                                            bottomLeft: Radius.circular(15),
+                                          ),
+                                          borderSide: BorderSide(
+                                            width: 1,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        errorStyle: TextStyle(
+                                            fontFamily: Font_.Fonts_T),
+                                        enabledBorder: const OutlineInputBorder(
+                                          borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(15),
+                                            topLeft: Radius.circular(15),
+                                            bottomRight: Radius.circular(15),
+                                            bottomLeft: Radius.circular(15),
+                                          ),
+                                          borderSide: BorderSide(
+                                            width: 1,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        // labelText:
+                                        //     'วางเงินประกันตลอดอายุสัญญาเช่า : ',
+                                        labelStyle: const TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.black54,
+                                            fontFamily: Font_.Fonts_T)),
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.deny(
+                                          RegExp(r'\s')),
+                                      // FilteringTextInputFormatter.deny(
+                                      //     RegExp(r'^0')),
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'[0-9 .]')),
+                                    ],
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: const Text(
+                                    'ผู้เช่าต้องชำระค่าส่วนกลางต่อเดือน :',
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      color: ReportScreen_Color.Colors_Text2_,
+                                      // fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    controller: Pri3_text,
+
+                                    // maxLength: 13,
+                                    cursorColor: Colors.green,
+                                    decoration: InputDecoration(
+                                        fillColor:
+                                            Colors.white.withOpacity(0.3),
+                                        filled: true,
+                                        focusedBorder: const OutlineInputBorder(
+                                          borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(15),
+                                            topLeft: Radius.circular(15),
+                                            bottomRight: Radius.circular(15),
+                                            bottomLeft: Radius.circular(15),
+                                          ),
+                                          borderSide: BorderSide(
+                                            width: 1,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        errorStyle: TextStyle(
+                                            fontFamily: Font_.Fonts_T),
+                                        enabledBorder: const OutlineInputBorder(
+                                          borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(15),
+                                            topLeft: Radius.circular(15),
+                                            bottomRight: Radius.circular(15),
+                                            bottomLeft: Radius.circular(15),
+                                          ),
+                                          borderSide: BorderSide(
+                                            width: 1,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        // labelText:
+                                        //     'ผู้เช่าต้องชำระค่าส่วนกลางต่อเดือน : ',
+                                        labelStyle: const TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.black54,
+                                            fontFamily: Font_.Fonts_T)),
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.deny(
+                                          RegExp(r'\s')),
+                                      // FilteringTextInputFormatter.deny(
+                                      //     RegExp(r'^0')),
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'[0-9 .]')),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                      const Text(
+                        'หัวบิล :',
+                        style: TextStyle(
+                          color: ReportScreen_Color.Colors_Text2_,
                           // fontWeight: FontWeight.bold,
-                          fontFamily: Font_.Fonts_T
-                          //fontSize: 10.0
-                          ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
+                          fontFamily: Font_.Fonts_T,
+                        ),
+                      ),
+                      Container(
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.3),
                           borderRadius: const BorderRadius.only(
@@ -2807,198 +2763,467 @@ class _RentalInformationState extends State<RentalInformation> {
                           ),
                           border: Border.all(color: Colors.grey, width: 1),
                         ),
-                        padding: const EdgeInsets.all(15),
-                        child: Text(
-                          '$_verticalGroupValue',
-                          textAlign: TextAlign.start,
-                          style: const TextStyle(
-                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                              // fontWeight: FontWeight.bold,
-                              fontFamily: Font_.Fonts_T
-                              //fontSize: 10.0
-                              ),
+                        padding: const EdgeInsets.all(8.0),
+                        child: RadioGroup<String>.builder(
+                          direction: Axis.horizontal,
+                          groupValue: _ReportValue_type,
+                          horizontalAlignment: MainAxisAlignment.spaceAround,
+                          onChanged: (value) {
+                            // setState(() {
+                            //   FormNameFile_text.clear();
+                            // });
+                            setState(() {
+                              _ReportValue_type = value ?? '';
+                            });
+
+                            if (value == 'ไม่ระบุ') {
+                              setState(() {
+                                TitleType_Default_Receipt_Name = null;
+                              });
+                            } else {
+                              setState(() {
+                                TitleType_Default_Receipt_Name = value;
+                              });
+                            }
+                          },
+                          items: const <String>[
+                            'ไม่ระบุ',
+                            'ต้นฉบับ',
+                            'สำเนา',
+                          ],
+                          textStyle: const TextStyle(
+                            fontSize: 15,
+                            color: ReportScreen_Color.Colors_Text2_,
+                            // fontWeight: FontWeight.bold,
+                            fontFamily: Font_.Fonts_T,
+                          ),
+                          itemBuilder: (item) => RadioButtonBuilder(
+                            item,
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: Row(
-                      children: [
-                        Text(
-                          'บัตรผู้เช่า',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                              // fontWeight: FontWeight.bold,
-                              fontFamily: Font_.Fonts_T
-                              //fontSize: 10.0
-                              ),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10)),
-                            border: Border.all(color: Colors.grey, width: 1),
-                          ),
-                          width: 70,
-                          child: DropdownButtonFormField2(
-                            decoration: InputDecoration(
-                              isDense: true,
-                              contentPadding: EdgeInsets.zero,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            isExpanded: true,
-                            hint: Icon(Icons.circle_rounded,
-                                color: cardColor, size: 16),
-                            icon: const Icon(
-                              Icons.arrow_drop_down,
-                              color: TextHome_Color.TextHome_Colors,
-                            ),
-                            style: const TextStyle(
-                                color: Colors.green, fontFamily: Font_.Fonts_T),
-                            iconSize: 20,
-                            buttonHeight: 30,
-                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-                            dropdownDecoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            items: colorList
-                                .map((item) => DropdownMenuItem<dynamic>(
-                                      value: item,
-                                      child: Icon(Icons.circle_rounded,
-                                          color: item, size: 16),
-                                    ))
-                                .toList(),
+                ),
+                actions: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: InkWell(
+                          onTap: (type == 2)
+                              ? () {
+                                  Pdfgen_Agreement_JSpace2
+                                      .exportPDF_Agreement_JSpace2(
+                                          context,
+                                          '${widget.Get_Value_NameShop_index}',
+                                          '${widget.Get_Value_cid}',
+                                          _verticalGroupValue,
+                                          Form_nameshop.text,
+                                          Form_typeshop.text,
+                                          Form_bussshop.text,
+                                          Form_bussscontact.text,
+                                          Form_address.text,
+                                          Form_tel.text,
+                                          Form_email.text,
+                                          Form_tax.text,
+                                          Form_ln.text,
+                                          Form_zn.text,
+                                          Form_area.text,
+                                          Form_qty.text,
+                                          Form_sdate.text,
+                                          Form_ldate.text,
+                                          Form_period.text,
+                                          Form_rtname.text,
+                                          quotxSelectModels,
+                                          _TransModels,
+                                          '$renTal_name',
+                                          '${renTalModels[0].bill_addr}',
+                                          '${renTalModels[0].bill_email}',
+                                          '${renTalModels[0].bill_tel}',
+                                          '${renTalModels[0].bill_tax}',
+                                          '${renTalModels[0].bill_name}',
+                                          newValuePDFimg,
+                                          tableData00,
+                                          TitleType_Default_Receipt_Name,
+                                          Datex_text,
+                                          Pri1_text,
+                                          Pri2_text,
+                                          Pri3_text
 
-                            onChanged: (value) async {
-                              final selectedColor = value;
-                              final index = colorList.indexWhere((color) =>
-                                  color.value == selectedColor.value);
-                              setState(() {
-                                indexcardColor = index;
-                              });
+                                          // (ser_user == null) ? '' : ser_user
+                                          );
+                                }
+                              : () {
+                                  if (_ReportValue_type_doc == 'ปกติ') {
+                                    Pdfgen_Agreement.exportPDF_Agreement(
+                                        context,
+                                        '${widget.Get_Value_NameShop_index}',
+                                        '${widget.Get_Value_cid}',
+                                        _verticalGroupValue,
+                                        Form_nameshop.text,
+                                        Form_typeshop.text,
+                                        Form_bussshop.text,
+                                        Form_bussscontact.text,
+                                        Form_address.text,
+                                        Form_tel.text,
+                                        Form_email.text,
+                                        Form_tax.text,
+                                        Form_ln.text,
+                                        Form_zn.text,
+                                        Form_area.text,
+                                        Form_qty.text,
+                                        Form_sdate.text,
+                                        Form_ldate.text,
+                                        Form_period.text,
+                                        Form_rtname.text,
+                                        quotxSelectModels,
+                                        _TransModels,
+                                        '$renTal_name',
+                                        '${renTalModels[0].bill_addr}',
+                                        '${renTalModels[0].bill_email}',
+                                        '${renTalModels[0].bill_tel}',
+                                        '${renTalModels[0].bill_tax}',
+                                        '${renTalModels[0].bill_name}',
+                                        newValuePDFimg,
+                                        tableData00,
+                                        TitleType_Default_Receipt_Name
 
-                              changeCardColor(colorList[index]);
-                            },
+                                        // (ser_user == null) ? '' : ser_user
+                                        );
+                                  } else if (_ReportValue_type_doc ==
+                                      'J Space') {
+                                    Pdfgen_Agreement_JSpace
+                                        .exportPDF_Agreement_JSpace(
+                                            context,
+                                            '${widget.Get_Value_NameShop_index}',
+                                            '${widget.Get_Value_cid}',
+                                            _verticalGroupValue,
+                                            Form_nameshop.text,
+                                            Form_typeshop.text,
+                                            Form_bussshop.text,
+                                            Form_bussscontact.text,
+                                            Form_address.text,
+                                            Form_tel.text,
+                                            Form_email.text,
+                                            Form_tax.text,
+                                            Form_ln.text,
+                                            Form_zn.text,
+                                            Form_area.text,
+                                            Form_qty.text,
+                                            Form_sdate.text,
+                                            Form_ldate.text,
+                                            Form_period.text,
+                                            Form_rtname.text,
+                                            quotxSelectModels,
+                                            _TransModels,
+                                            '$renTal_name',
+                                            '${renTalModels[0].bill_addr}',
+                                            '${renTalModels[0].bill_email}',
+                                            '${renTalModels[0].bill_tel}',
+                                            '${renTalModels[0].bill_tax}',
+                                            '${renTalModels[0].bill_name}',
+                                            newValuePDFimg,
+                                            tableData00,
+                                            TitleType_Default_Receipt_Name,
+                                            Datex_text,
+                                            Pri1_text,
+                                            Pri2_text,
+                                            Pri3_text
+
+                                            // (ser_user == null) ? '' : ser_user
+                                            );
+                                  } else {}
+                                  // (ren.toString() == '82')
+                                  //     ?
+                                  // Pdfgen_Agreement_Ekkamai
+                                  //         .exportPDF_Agreement_Ekkamai(
+                                  //             context,
+                                  //             '${widget.Get_Value_NameShop_index}',
+                                  //             '${widget.Get_Value_cid}',
+                                  //             _verticalGroupValue,
+                                  //             Form_nameshop.text,
+                                  //             Form_typeshop.text,
+                                  //             Form_bussshop.text,
+                                  //             Form_bussscontact.text,
+                                  //             Form_address.text,
+                                  //             Form_tel.text,
+                                  //             Form_email.text,
+                                  //             Form_tax.text,
+                                  //             Form_ln.text,
+                                  //             Form_zn.text,
+                                  //             Form_area.text,
+                                  //             Form_qty.text,
+                                  //             Form_sdate.text,
+                                  //             Form_ldate.text,
+                                  //             Form_period.text,
+                                  //             Form_rtname.text,
+                                  //             quotxSelectModels,
+                                  //             _TransModels,
+                                  //             '$renTal_name',
+                                  //             '${renTalModels[0].bill_addr}',
+                                  //             '${renTalModels[0].bill_email}',
+                                  //             '${renTalModels[0].bill_tel}',
+                                  //             '${renTalModels[0].bill_tax}',
+                                  //             '${renTalModels[0].bill_name}',
+                                  //             newValuePDFimg,
+                                  //             tableData00)
+                                  //     :
+                                  //(ren.toString() == '90' ||
+                                  //             ren.toString() == '50')
+                                  //         ?
+                                  // Pdfgen_Agreement_JSpace
+                                  //             .exportPDF_Agreement_JSpace(
+                                  //             context,
+                                  //             '${widget.Get_Value_NameShop_index}',
+                                  //             '${widget.Get_Value_cid}',
+                                  //             _verticalGroupValue,
+                                  //             Form_nameshop.text,
+                                  //             Form_typeshop.text,
+                                  //             Form_bussshop.text,
+                                  //             Form_bussscontact.text,
+                                  //             Form_address.text,
+                                  //             Form_tel.text,
+                                  //             Form_email.text,
+                                  //             Form_tax.text,
+                                  //             Form_ln.text,
+                                  //             Form_zn.text,
+                                  //             Form_area.text,
+                                  //             Form_qty.text,
+                                  //             Form_sdate.text,
+                                  //             Form_ldate.text,
+                                  //             Form_period.text,
+                                  //             Form_rtname.text,
+                                  //             quotxSelectModels,
+                                  //             _TransModels,
+                                  //             '$renTal_name',
+                                  //             '${renTalModels[0].bill_addr}',
+                                  //             '${renTalModels[0].bill_email}',
+                                  //             '${renTalModels[0].bill_tel}',
+                                  //             '${renTalModels[0].bill_tax}',
+                                  //             '${renTalModels[0].bill_name}',
+                                  //             newValuePDFimg,
+                                  //             tableData00,
+
+                                  //             // (ser_user == null) ? '' : ser_user
+                                  //           )
+                                  //         :
+                                  // Pdfgen_Agreement.exportPDF_Agreement(
+                                  //             context,
+                                  //             '${widget.Get_Value_NameShop_index}',
+                                  //             '${widget.Get_Value_cid}',
+                                  //             _verticalGroupValue,
+                                  //             Form_nameshop.text,
+                                  //             Form_typeshop.text,
+                                  //             Form_bussshop.text,
+                                  //             Form_bussscontact.text,
+                                  //             Form_address.text,
+                                  //             Form_tel.text,
+                                  //             Form_email.text,
+                                  //             Form_tax.text,
+                                  //             Form_ln.text,
+                                  //             Form_zn.text,
+                                  //             Form_area.text,
+                                  //             Form_qty.text,
+                                  //             Form_sdate.text,
+                                  //             Form_ldate.text,
+                                  //             Form_period.text,
+                                  //             Form_rtname.text,
+                                  //             quotxSelectModels,
+                                  //             _TransModels,
+                                  //             '$renTal_name',
+                                  //             '${renTalModels[0].bill_addr}',
+                                  //             '${renTalModels[0].bill_email}',
+                                  //             '${renTalModels[0].bill_tel}',
+                                  //             '${renTalModels[0].bill_tax}',
+                                  //             '${renTalModels[0].bill_name}',
+                                  //             newValuePDFimg,
+                                  //             tableData00
+
+                                  //             // (ser_user == null) ? '' : ser_user
+                                  //             );
+                                },
+                          child: Container(
+                            width: 100,
+                            decoration: const BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: Text(
+                                'พิมพ์',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  //fontWeight: FontWeight.bold, color:
+
+                                  // fontWeight: FontWeight.bold,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: ScrollConfiguration(
-                      behavior: ScrollConfiguration.of(context)
-                          .copyWith(dragDevices: {
-                        PointerDeviceKind.touch,
-                        PointerDeviceKind.mouse,
-                      }),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: InkWell(
+                          onTap: () => Navigator.pop(context, 'OK'),
+                          child: Container(
+                            width: 100,
+                            decoration: const BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: Text(
+                                'ปิด',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  //fontWeight: FontWeight.bold, color:
+
+                                  // fontWeight: FontWeight.bold,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        // color: Colors.red,
+        width: MediaQuery.of(context).size.width,
+        decoration: const BoxDecoration(
+          // color: AppbackgroundColor.Sub_Abg_Colors,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10),
+              topRight: Radius.circular(10),
+              bottomLeft: Radius.circular(10),
+              bottomRight: Radius.circular(10)),
+        ),
+        padding: const EdgeInsets.all(2.0),
+        child: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  colorFilter: new ColorFilter.mode(
+                      Colors.white.withOpacity(0.05), BlendMode.dstATop),
+                  image: AssetImage("images/BG_im.png"),
+                  fit: BoxFit.cover,
+                ),
+                color: AppbackgroundColor.Sub_Abg_Colors,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10)),
+                // border: Border.all(color: Colors.white, width: 1),
+              ),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(children: [
+                      Expanded(
+                        child: Column(
                           children: [
                             Container(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: 300,
-                                    // height: 135,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          topRight: Radius.circular(0),
-                                          bottomLeft: Radius.circular(10),
-                                          bottomRight: Radius.circular(0)),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.5),
-                                          spreadRadius: 3,
-                                          blurRadius: 5,
-                                          offset: const Offset(0,
-                                              3), // changes position of shadow
-                                        ),
-                                      ],
-                                      image: const DecorationImage(
-                                        image: AssetImage("images/pngegg2.png"),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          color: Colors.white,
-                                          child: Text(
-                                            '$renTal_name ',
-                                            maxLines: 1,
-                                            style: const TextStyle(
-                                              fontSize: 9.0,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: Font_.Fonts_T,
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                          color: Colors.white,
-                                          child: Text(
-                                            '${Form_sdate.text} ถึง ${Form_ldate.text}',
-                                            maxLines: 1,
-                                            style: const TextStyle(
-                                              fontSize: 8.0,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: Font_.Fonts_T,
-                                            ),
-                                          ),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      4, 0, 0, 0),
-                                              child: Container(
-                                                color: Colors.white,
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Center(
-                                                        child: Container(
-                                                      height: 84,
-                                                      width: 84,
-                                                      child: SfBarcodeGenerator(
-                                                        value:
-                                                            '${widget.Get_Value_cid}',
-                                                        symbology: QRCode(),
-                                                        showValue: false,
-                                                      ),
-                                                    )),
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsets.fromLTRB(
-                                                              0, 4, 0, 0),
-                                                      child: Container(
+                              width: 350,
+                              // height: 135,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 3,
+                                    blurRadius: 5,
+                                    offset: const Offset(
+                                        0, 3), // changes position of shadow
+                                  ),
+                                ],
+                                image: const DecorationImage(
+                                  image: AssetImage("images/pngegg2.png"),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              child: (pic_tenant == null ||
+                                      pic_tenant.toString() == '')
+                                  ? const SizedBox(
+                                      height: 200,
+                                    )
+                                  : SizedBox(
+                                      height: 200,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          showDialog<String>(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                AlertDialog(
+                                              shape:
+                                                  const RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  20.0))),
+                                              title: Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.25,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.35,
+                                                  child: Image.network(
+                                                    '${MyConstant().domain}/files/$foder/contract/$pic_tenant',
+                                                    fit: BoxFit.contain,
+                                                  )),
+                                              actions: <Widget>[
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Container(
+                                                        width: 100,
                                                         decoration:
-                                                            BoxDecoration(
+                                                            const BoxDecoration(
                                                           color:
-                                                              Colors.grey[100],
-                                                          borderRadius: const BorderRadius
-                                                                  .only(
+                                                              Colors.redAccent,
+                                                          borderRadius: BorderRadius.only(
                                                               topLeft: Radius
                                                                   .circular(10),
                                                               topRight: Radius
@@ -3009,1681 +3234,2462 @@ class _RentalInformationState extends State<RentalInformation> {
                                                                   Radius
                                                                       .circular(
                                                                           10)),
-                                                          // border: Border.all(color: Colors.grey, width: 1),
                                                         ),
                                                         padding:
-                                                            EdgeInsets.fromLTRB(
-                                                                2, 2, 2, 0),
-                                                        child: Text(
-                                                          'ลงชื่อ.....................................',
-                                                          maxLines: 1,
-                                                          style: TextStyle(
-                                                            fontSize: 7.0,
-                                                            color: PeopleChaoScreen_Color
-                                                                .Colors_Text1_,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: TextButton(
+                                                          onPressed: () =>
+                                                              Navigator.pop(
+                                                                  context,
+                                                                  'OK'),
+                                                          child: const Text(
+                                                            'ปิด',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T),
                                                           ),
                                                         ),
                                                       ),
-                                                    ),
-
-                                                    // Center(
-                                                    //   child: PrettyQr(
-                                                    //     // typeNumber: 3,
-                                                    //     image: const AssetImage(
-                                                    //       "images/Icon-chao.png",
-                                                    //     ),
-                                                    //     size: 110,
-                                                    //     data: '${teNantModels[index].cid}',
-                                                    //     errorCorrectLevel: QrErrorCorrectLevel.M,
-                                                    //     roundEdges: true,
-                                                    //   ),
-                                                    // ),
-                                                    // Container(
-                                                    //   color: Colors.white,
-                                                    //   child: Text(
-                                                    //     ' ${teNantModels_Save[index_type][index].sdate} ถึง ${teNantModels_Save[index_type][index].ldate}',
-                                                    //     maxLines: 2,
-                                                    //     style: const TextStyle(
-                                                    //       fontSize: 8.0,
-                                                    //       color: PeopleChaoScreen_Color.Colors_Text1_,
-                                                    //       // fontWeight: FontWeight.bold,
-                                                    //       fontFamily: Font_.Fonts_T,
-                                                    //     ),
-                                                    //   ),
-                                                    // ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            Stack(
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          4, 8, 0, 8),
-                                                  child: Container(
-                                                    // decoration:
-                                                    //     BoxDecoration(
-                                                    //   image:
-                                                    //       DecorationImage(
-                                                    //     image: NetworkImage("https://www.kindpng.com/picc/m/266-2660257_dotted-background-png-image-free-download-searchpng-white.png"),
-                                                    //     fit: BoxFit.cover,
-                                                    //   ),
-                                                    // ),
-                                                    width: 170,
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        // const SizedBox(
-                                                        //   height: 5.0,
-                                                        // ),
-                                                        // const Text(
-                                                        //   'เลขสัญญา',
-                                                        //   style: TextStyle(
-                                                        //     fontSize: 10.0,
-                                                        //     color: PeopleChaoScreen_Color.Colors_Text1_,
-                                                        //     // fontWeight: FontWeight.bold,
-                                                        //     fontFamily: Font_.Fonts_T,
-                                                        //   ),
-                                                        // ),
-                                                        Text(
-                                                          '${widget.Get_Value_cid}',
-                                                          maxLines: 1,
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 11.0,
-                                                            color: PeopleChaoScreen_Color
-                                                                .Colors_Text1_,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
-                                                        ),
-                                                        const Text(
-                                                          'ชื่อผู้ติดต่อ',
-                                                          maxLines: 1,
-                                                          style: TextStyle(
-                                                            fontSize: 9.0,
-                                                            color: PeopleChaoScreen_Color
-                                                                .Colors_Text1_,
-                                                            //fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
-                                                        ),
-                                                        Text(
-                                                          '${Form_bussscontact.text}',
-                                                          maxLines: 1,
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 11.0,
-                                                            color: PeopleChaoScreen_Color
-                                                                .Colors_Text1_,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
-                                                        ),
-                                                        const Text(
-                                                          'ชื่อร้านค้า',
-                                                          maxLines: 1,
-                                                          style: TextStyle(
-                                                            fontSize: 9.0,
-                                                            color: PeopleChaoScreen_Color
-                                                                .Colors_Text1_,
-                                                            // fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
-                                                        ),
-                                                        Text(
-                                                          '${Form_nameshop.text}',
-                                                          maxLines: 1,
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 11.0,
-                                                            color: PeopleChaoScreen_Color
-                                                                .Colors_Text1_,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
-                                                        ),
-                                                        Text(
-                                                          'พื้นที่ : ${Form_ln.text} ',
-                                                          maxLines: 1,
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 9.0,
-                                                            color: PeopleChaoScreen_Color
-                                                                .Colors_Text1_,
-                                                            // fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
-                                                        ),
-                                                        Text(
-                                                          'โซน : ${Form_zn.text}',
-                                                          maxLines: 1,
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 9.0,
-                                                            color: PeopleChaoScreen_Color
-                                                                .Colors_Text1_,
-                                                            // fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
-                                                        ),
-
-                                                        // Text(
-                                                        //   ' ${teNantModels[index].sdate} ถึง ${teNantModels[index].ldate}',
-                                                        //   maxLines: 2,
-                                                        //   style: const TextStyle(
-                                                        //     fontSize: 8.0,
-                                                        //     color: PeopleChaoScreen_Color.Colors_Text1_,
-                                                        //     // fontWeight: FontWeight.bold,
-                                                        //     fontFamily: Font_.Fonts_T,
-                                                        //   ),
-                                                        // ),
-                                                      ],
-                                                    ),
+                                                    ],
                                                   ),
                                                 ),
-                                                Positioned(
-                                                  bottom: 5,
-                                                  right: 5,
-                                                  child: InkWell(
-                                                    child: Container(
-                                                      width: 30.0,
-                                                      height: 30.0,
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.black
-                                                            .withOpacity(0.5),
-                                                        shape: BoxShape.circle,
-                                                      ),
-                                                      child: const Center(
-                                                          child: Icon(
-                                                        Icons.print,
-                                                        color: Colors.white,
-                                                      )),
-                                                    ),
-                                                    onTap: () async {
-                                                      showDialog(
-                                                          barrierDismissible:
-                                                              false,
-                                                          context: context,
-                                                          builder: (_) {
-                                                            // Future.delayed(
-                                                            //     const Duration(
-                                                            //         seconds:
-                                                            //             1),
-                                                            //     () {
-                                                            //   Navigator.of(
-                                                            //           context)
-                                                            //       .pop();
-                                                            // });
-
-                                                            return Dialog(
-                                                              child:
-                                                                  StreamBuilder(
-                                                                      stream: Stream.periodic(const Duration(
-                                                                          seconds:
-                                                                              1)),
-                                                                      builder:
-                                                                          (context,
-                                                                              snapshot) {
-                                                                        return const SizedBox(
-                                                                            // height: 20,
-                                                                            width:
-                                                                                350,
-                                                                            child:
-                                                                                Padding(
-                                                                              padding: EdgeInsets.all(20.0),
-                                                                              child: Row(
-                                                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                                                children: [
-                                                                                  Padding(
-                                                                                    padding: EdgeInsets.fromLTRB(0, 0, 8, 0),
-                                                                                    child: SizedBox(height: 30, child: CircularProgressIndicator()),
-                                                                                  ),
-                                                                                  Text(
-                                                                                    'กำลัง Download และแปลงไฟล์ PDF...  ',
-                                                                                    style: TextStyle(
-                                                                                      color: PeopleChaoScreen_Color.Colors_Text1_,
-                                                                                      fontWeight: FontWeight.bold,
-                                                                                      fontFamily: FontWeight_.Fonts_T,
-                                                                                    ),
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                            ));
-                                                                      }),
-                                                            );
-                                                          });
-                                                      Pdfgen_QR_2.displayPdf_QR2(
-                                                          context,
-                                                          renTal_name,
-                                                          widget.Get_Value_cid,
-                                                          '${Form_bussscontact.text}',
-                                                          '${Form_sdate.text} ถึง ${Form_ldate.text}',
-                                                          '${Form_nameshop.text}',
-                                                          '${Form_ln.text}',
-                                                          '${Form_zn.text}',
-                                                          indexcardColor);
-                                                    },
-                                                  ),
-                                                )
                                               ],
                                             ),
-                                          ],
+                                          );
+                                        },
+                                        child: Image.network(
+                                          '${MyConstant().domain}/files/$foder/contract/$pic_tenant',
+                                          fit: BoxFit.cover,
                                         ),
-                                      ],
-                                    ),
+                                      )),
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const AutoSizeText(
+                                  minFontSize: 10,
+                                  maxFontSize: 15,
+                                  'รูปผู้เช่า',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color:
+                                          PeopleChaoScreen_Color.Colors_Text1_,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      fiew = 'pic_tenant';
+                                    });
+                                    uploadImage(ImageSource.gallery);
+                                    // _getFromGallery2();
+                                  },
+                                  icon: const Icon(
+                                    Icons.edit,
+                                    color: Colors.red,
                                   ),
-                                  Container(
-                                    height: 150,
-                                    width: 15,
-                                    decoration: BoxDecoration(
-                                      color: cardColor,
-                                      borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(0),
-                                          topRight: Radius.circular(10),
-                                          bottomLeft: Radius.circular(0),
-                                          bottomRight: Radius.circular(10)),
-                                    ),
-                                    // child: Column(
-                                    //   mainAxisAlignment:
-                                    //       MainAxisAlignment.center,
-                                    //   children: [
-                                    //     RotatedBox(
-                                    //       quarterTurns: 1,
-                                    //       child: Text(
-                                    //         '$renTal_name',
-                                    //         maxLines: 1,
-                                    //         style: const TextStyle(
-                                    //           fontSize: 9.0,
-                                    //           color: Colors.white,
-                                    //           // fontWeight: FontWeight.bold,
-                                    //           fontFamily: Font_.Fonts_T,
-                                    //         ),
-                                    //       ),
-                                    //     ),
-                                    //   ],
-                                    // ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
                       ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  const Expanded(
-                    flex: 1,
-                    child: Text(
-                      'ชื่อร้านค้า',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                          // fontWeight: FontWeight.bold,
-                          fontFamily: Font_.Fonts_T
-                          //fontSize: 10.0
-                          ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        // color: Colors.green,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(6),
-                          topRight: Radius.circular(6),
-                          bottomLeft: Radius.circular(6),
-                          bottomRight: Radius.circular(6),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 350,
+                              // height: 135,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 3,
+                                    blurRadius: 5,
+                                    offset: const Offset(
+                                        0, 3), // changes position of shadow
+                                  ),
+                                ],
+                                image: const DecorationImage(
+                                  image: AssetImage("images/pngegg2.png"),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              child: (pic_shop == null ||
+                                      pic_shop.toString() == '')
+                                  ? const SizedBox(
+                                      height: 200,
+                                    )
+                                  : SizedBox(
+                                      height: 200,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          showDialog<String>(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                AlertDialog(
+                                              shape:
+                                                  const RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  20.0))),
+                                              title: Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.25,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.35,
+                                                  child: Image.network(
+                                                    '${MyConstant().domain}/files/$foder/contract/$pic_shop',
+                                                    fit: BoxFit.contain,
+                                                  )),
+                                              actions: <Widget>[
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Container(
+                                                        width: 100,
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                          color:
+                                                              Colors.redAccent,
+                                                          borderRadius: BorderRadius.only(
+                                                              topLeft: Radius
+                                                                  .circular(10),
+                                                              topRight: Radius
+                                                                  .circular(10),
+                                                              bottomLeft: Radius
+                                                                  .circular(10),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          10)),
+                                                        ),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: TextButton(
+                                                          onPressed: () =>
+                                                              Navigator.pop(
+                                                                  context,
+                                                                  'OK'),
+                                                          child: const Text(
+                                                            'ปิด',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                        child: Image.network(
+                                          '${MyConstant().domain}/files/$foder/contract/$pic_shop',
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )),
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const AutoSizeText(
+                                  minFontSize: 10,
+                                  maxFontSize: 15,
+                                  'รูปร้านค้า',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color:
+                                          PeopleChaoScreen_Color.Colors_Text1_,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      fiew = 'pic_shop';
+                                    });
+                                    uploadImage(ImageSource.gallery);
+                                    // _getFromGallery2();
+                                  },
+                                  icon: const Icon(
+                                    Icons.edit,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                        // border: Border.all(color: Colors.grey, width: 1),
                       ),
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        showCursor: false, //add this line
-                        readOnly: true,
-                        controller: Form_nameshop,
-
-                        cursorColor: Colors.green,
-                        decoration: InputDecoration(
-                            fillColor: Colors.white.withOpacity(0.3),
-                            filled: true,
-                            // prefixIcon:
-                            //     const Icon(Icons.person, color: Colors.black),
-                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                            focusedBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 350,
+                              // height: 135,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 3,
+                                    blurRadius: 5,
+                                    offset: const Offset(
+                                        0, 3), // changes position of shadow
+                                  ),
+                                ],
+                                image: const DecorationImage(
+                                  image: AssetImage("images/pngegg2.png"),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.black,
-                              ),
+                              child: (pic_plan == null ||
+                                      pic_plan.toString() == '')
+                                  ? const SizedBox(
+                                      height: 200,
+                                    )
+                                  : SizedBox(
+                                      height: 200,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          showDialog<String>(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                AlertDialog(
+                                              shape:
+                                                  const RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  20.0))),
+                                              title: Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.25,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.35,
+                                                  child: Image.network(
+                                                    '${MyConstant().domain}/files/$foder/contract/$pic_plan',
+                                                    fit: BoxFit.contain,
+                                                  )),
+                                              actions: <Widget>[
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Container(
+                                                        width: 100,
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                          color:
+                                                              Colors.redAccent,
+                                                          borderRadius: BorderRadius.only(
+                                                              topLeft: Radius
+                                                                  .circular(10),
+                                                              topRight: Radius
+                                                                  .circular(10),
+                                                              bottomLeft: Radius
+                                                                  .circular(10),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          10)),
+                                                        ),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: TextButton(
+                                                          onPressed: () =>
+                                                              Navigator.pop(
+                                                                  context,
+                                                                  'OK'),
+                                                          child: const Text(
+                                                            'ปิด',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                        child: Image.network(
+                                          '${MyConstant().domain}/files/$foder/contract/$pic_plan',
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )),
                             ),
-                            enabledBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.grey,
-                              ),
+                            const SizedBox(
+                              height: 15,
                             ),
-                            // labelText: 'ระบุชื่อร้านค้า',
-                            labelStyle: const TextStyle(
-                                color: Colors.black54,
-
-                                // fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T
-                                //fontSize: 10.0
-                                )),
-                      ),
-                    ),
-                  ),
-                  const Expanded(
-                    flex: 1,
-                    child: Text(
-                      'ประเภทร้านค้า',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                          // fontWeight: FontWeight.bold,
-                          fontFamily: Font_.Fonts_T
-                          //fontSize: 10.0
-                          ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        // color: Colors.green,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(6),
-                          topRight: Radius.circular(6),
-                          bottomLeft: Radius.circular(6),
-                          bottomRight: Radius.circular(6),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const AutoSizeText(
+                                  minFontSize: 10,
+                                  maxFontSize: 15,
+                                  'รูปแผนฝัง',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color:
+                                          PeopleChaoScreen_Color.Colors_Text1_,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      fiew = 'pic_plan';
+                                    });
+                                    uploadImage(ImageSource.gallery);
+                                    // _getFromGallery2();
+                                  },
+                                  icon: const Icon(
+                                    Icons.edit,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                        // border: Border.all(color: Colors.grey, width: 1),
                       ),
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        showCursor: false, //add this line
-                        readOnly: true,
-                        controller: Form_typeshop,
-                        // maxLength: 13,
-                        cursorColor: Colors.green,
-                        decoration: InputDecoration(
-                            fillColor: Colors.white.withOpacity(0.3),
-                            filled: true,
-                            // prefixIcon:
-                            //     const Icon(Icons.person, color: Colors.black),
-                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                            focusedBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.black,
-                              ),
-                            ),
-                            enabledBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            labelStyle: const TextStyle(
-                                color: Colors.black54,
-
-                                // fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T
-                                //fontSize: 10.0
-
-                                )),
-                      ),
-                    ),
+                    ]),
                   ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  const Expanded(
-                    flex: 1,
-                    child: Text(
-                      'ชื่อผู้เช่า/บริษัท',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                          // fontWeight: FontWeight.bold,
-                          fontFamily: Font_.Fonts_T
-                          //fontSize: 10.0
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          onTap: () {
+                            // _generatePdf();
+                          },
+                          child: const AutoSizeText(
+                            minFontSize: 10,
+                            maxFontSize: 15,
+                            '1.ข้อมูลผู้เช่า',
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text1_,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: FontWeight_.Fonts_T),
                           ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        // color: Colors.green,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(6),
-                          topRight: Radius.circular(6),
-                          bottomLeft: Radius.circular(6),
-                          bottomRight: Radius.circular(6),
                         ),
-                        // border: Border.all(color: Colors.grey, width: 1),
                       ),
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        showCursor: false, //add this line
-                        readOnly: true,
-                        controller: Form_bussshop,
-                        cursorColor: Colors.green,
-                        decoration: InputDecoration(
-                            fillColor: Colors.white.withOpacity(0.3),
-                            filled: true,
-                            // prefixIcon:
-                            //     const Icon(Icons.person, color: Colors.black),
-                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                            focusedBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.black,
-                              ),
-                            ),
-                            enabledBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            labelStyle: const TextStyle(
-                                color: Colors.black54,
-
-                                // fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T
-                                //fontSize: 10.0
-
-                                )),
-                      ),
-                    ),
+                    ],
                   ),
-                  const Expanded(
-                    flex: 1,
-                    child: Text(
-                      'ชื่อบุคคลติดต่อ',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                          // fontWeight: FontWeight.bold,
-                          fontFamily: Font_.Fonts_T
-                          //fontSize: 10.0
-                          ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        // color: Colors.green,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(6),
-                          topRight: Radius.circular(6),
-                          bottomLeft: Radius.circular(6),
-                          bottomRight: Radius.circular(6),
-                        ),
-                        // border: Border.all(color: Colors.grey, width: 1),
-                      ),
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        showCursor: false, //add this line
-                        readOnly: true,
-                        controller: Form_bussscontact,
-                        cursorColor: Colors.green,
-                        decoration: InputDecoration(
-                            fillColor: Colors.white.withOpacity(0.3),
-                            filled: true,
-                            // prefixIcon:
-                            //     const Icon(Icons.person, color: Colors.black),
-                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                            focusedBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.black,
-                              ),
-                            ),
-                            enabledBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            labelStyle: const TextStyle(
-                                color: Colors.black54,
-
-                                // fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T
-                                //fontSize: 10.0
-
-                                )),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  const Expanded(
-                    flex: 1,
-                    child: Text(
-                      'ที่อยู่',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                          // fontWeight: FontWeight.bold,
-                          fontFamily: Font_.Fonts_T
-                          //fontSize: 10.0
-                          ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 5,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        // color: Colors.green,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(6),
-                          topRight: Radius.circular(6),
-                          bottomLeft: Radius.circular(6),
-                          bottomRight: Radius.circular(6),
-                        ),
-                        // border: Border.all(color: Colors.grey, width: 1),
-                      ),
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        showCursor: false, //add this line
-                        readOnly: true,
-                        controller: Form_address,
-                        cursorColor: Colors.green,
-                        decoration: InputDecoration(
-                            fillColor: Colors.white.withOpacity(0.3),
-                            filled: true,
-                            // prefixIcon:
-                            //     const Icon(Icons.person, color: Colors.black),
-                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                            focusedBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.black,
-                              ),
-                            ),
-                            enabledBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            labelStyle: const TextStyle(
-                                color: Colors.black54,
-
-                                // fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T
-                                //fontSize: 10.0
-
-                                )),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  const Expanded(
-                    flex: 1,
-                    child: Text(
-                      'เบอร์โทร',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                          // fontWeight: FontWeight.bold,
-                          fontFamily: Font_.Fonts_T
-                          //fontSize: 10.0
-                          ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        // color: Colors.green,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(6),
-                          topRight: Radius.circular(6),
-                          bottomLeft: Radius.circular(6),
-                          bottomRight: Radius.circular(6),
-                        ),
-                        // border: Border.all(color: Colors.grey, width: 1),
-                      ),
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        showCursor: false, //add this line
-                        readOnly: true,
-                        controller: Form_tel,
-                        cursorColor: Colors.green,
-                        decoration: InputDecoration(
-                            fillColor: Colors.white.withOpacity(0.3),
-                            filled: true,
-                            // prefixIcon:
-                            //     const Icon(Icons.person, color: Colors.black),
-                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                            focusedBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.black,
-                              ),
-                            ),
-                            enabledBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            labelStyle: const TextStyle(
-                                color: Colors.black54,
-
-                                // fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T
-                                //fontSize: 10.0
-                                )),
-                      ),
-                    ),
-                  ),
-                  const Expanded(
-                    flex: 1,
-                    child: Text(
-                      'อีเมล',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                          // fontWeight: FontWeight.bold,
-                          fontFamily: Font_.Fonts_T
-                          //fontSize: 10.0
-                          ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        // color: Colors.green,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(6),
-                          topRight: Radius.circular(6),
-                          bottomLeft: Radius.circular(6),
-                          bottomRight: Radius.circular(6),
-                        ),
-                        // border: Border.all(color: Colors.grey, width: 1),
-                      ),
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        showCursor: false, //add this line
-                        readOnly: true,
-                        controller: Form_email,
-                        cursorColor: Colors.green,
-                        decoration: InputDecoration(
-                            fillColor: Colors.white.withOpacity(0.3),
-                            filled: true,
-                            // prefixIcon:
-                            //     const Icon(Icons.person, color: Colors.black),
-                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                            focusedBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.black,
-                              ),
-                            ),
-                            enabledBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            labelStyle: const TextStyle(
-                                color: Colors.black54,
-
-                                // fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T
-                                //fontSize: 10.0
-
-                                )),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  const Expanded(
-                    flex: 1,
-                    child: Text(
-                      'ID/TAX ID',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                          // fontWeight: FontWeight.bold,
-                          fontFamily: Font_.Fonts_T
-                          //fontSize: 10.0
-                          ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        // color: Colors.green,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(6),
-                          topRight: Radius.circular(6),
-                          bottomLeft: Radius.circular(6),
-                          bottomRight: Radius.circular(6),
-                        ),
-                        // border: Border.all(color: Colors.grey, width: 1),
-                      ),
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        showCursor: false, //add this line
-                        readOnly: true,
-                        controller: Form_tax,
-                        cursorColor: Colors.green,
-                        decoration: InputDecoration(
-                            fillColor: Colors.white.withOpacity(0.3),
-                            filled: true,
-                            // prefixIcon:
-                            //     const Icon(Icons.person, color: Colors.black),
-                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                            focusedBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.black,
-                              ),
-                            ),
-                            enabledBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            labelStyle: const TextStyle(
-                                color: Colors.black54,
-
-                                // fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T
-                                //fontSize: 10.0
-
-                                )),
-                      ),
-                    ),
-                  ),
-                  const Expanded(
-                    flex: 1,
-                    child: Text(
-                      '',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                          // fontWeight: FontWeight.bold,
-                          fontFamily: Font_.Fonts_T
-                          //fontSize: 10.0
-                          ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        // color: Colors.green,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(6),
-                          topRight: Radius.circular(6),
-                          bottomLeft: Radius.circular(6),
-                          bottomRight: Radius.circular(6),
-                        ),
-                        // border: Border.all(color: Colors.grey, width: 1),
-                      ),
-                      padding: const EdgeInsets.all(8.0),
-                      // child: Icon(Icons.check_box_outline_blank),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: InkWell(
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(8),
-                                topRight: Radius.circular(8),
-                                bottomLeft: Radius.circular(8),
-                                bottomRight: Radius.circular(8)),
-                          ),
-                          padding: const EdgeInsets.all(4.0),
-                          child: const Text(
-                            'แก้ไขข้อมูลผู้เช่า',
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        const Expanded(
+                          flex: 1,
+                          child: Text(
+                            'ประเภท',
                             textAlign: TextAlign.start,
                             style: TextStyle(
-                                color: Colors.white,
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
                                 // fontWeight: FontWeight.bold,
                                 fontFamily: Font_.Fonts_T
                                 //fontSize: 10.0
                                 ),
                           ),
                         ),
-                        onTap: () {
-                          select_coutumerAll(context);
-                        })),
-              ],
-            ),
+                        Expanded(
+                          flex: 2,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.3),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(15),
+                                  topRight: Radius.circular(15),
+                                  bottomLeft: Radius.circular(15),
+                                  bottomRight: Radius.circular(15),
+                                ),
+                                border:
+                                    Border.all(color: Colors.grey, width: 1),
+                              ),
+                              padding: const EdgeInsets.all(15),
+                              child: Text(
+                                '$_verticalGroupValue',
+                                textAlign: TextAlign.start,
+                                style: const TextStyle(
+                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                    // fontWeight: FontWeight.bold,
+                                    fontFamily: Font_.Fonts_T
+                                    //fontSize: 10.0
+                                    ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Row(
+                            children: [
+                              Text(
+                                'บัตรผู้เช่า',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                    // fontWeight: FontWeight.bold,
+                                    fontFamily: Font_.Fonts_T
+                                    //fontSize: 10.0
+                                    ),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10)),
+                                  border:
+                                      Border.all(color: Colors.grey, width: 1),
+                                ),
+                                width: 70,
+                                child: DropdownButtonFormField2(
+                                  decoration: InputDecoration(
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.zero,
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  isExpanded: true,
+                                  hint: Icon(Icons.circle_rounded,
+                                      color: cardColor, size: 16),
+                                  icon: const Icon(
+                                    Icons.arrow_drop_down,
+                                    color: TextHome_Color.TextHome_Colors,
+                                  ),
+                                  style: const TextStyle(
+                                      color: Colors.green,
+                                      fontFamily: Font_.Fonts_T),
+                                  iconSize: 20,
+                                  buttonHeight: 30,
+                                  // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                  dropdownDecoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  items: colorList
+                                      .map((item) => DropdownMenuItem<dynamic>(
+                                            value: item,
+                                            child: Icon(Icons.circle_rounded,
+                                                color: item, size: 16),
+                                          ))
+                                      .toList(),
 
-            const Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: AutoSizeText(
-                    minFontSize: 10,
-                    maxFontSize: 15,
-                    '2.พื้นที่เช่า',
-                    style: TextStyle(
-                        color: PeopleChaoScreen_Color.Colors_Text1_,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: FontWeight_.Fonts_T),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  const Expanded(
-                    flex: 1,
-                    child: Text(
-                      'รหัสพื้นที่เช่า',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                          //fontWeight: FontWeight.bold,
-                          fontFamily: Font_.Fonts_T),
+                                  onChanged: (value) async {
+                                    final selectedColor = value;
+                                    final index = colorList.indexWhere(
+                                        (color) =>
+                                            color.value == selectedColor.value);
+                                    setState(() {
+                                      indexcardColor = index;
+                                    });
+
+                                    changeCardColor(colorList[index]);
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: ScrollConfiguration(
+                            behavior: ScrollConfiguration.of(context)
+                                .copyWith(dragDevices: {
+                              PointerDeviceKind.touch,
+                              PointerDeviceKind.mouse,
+                            }),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          width: 300,
+                                          // height: 135,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: const BorderRadius
+                                                    .only(
+                                                topLeft: Radius.circular(10),
+                                                topRight: Radius.circular(0),
+                                                bottomLeft: Radius.circular(10),
+                                                bottomRight:
+                                                    Radius.circular(0)),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey
+                                                    .withOpacity(0.5),
+                                                spreadRadius: 3,
+                                                blurRadius: 5,
+                                                offset: const Offset(0,
+                                                    3), // changes position of shadow
+                                              ),
+                                            ],
+                                            image: const DecorationImage(
+                                              image: AssetImage(
+                                                  "images/pngegg2.png"),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                color: Colors.white,
+                                                child: Text(
+                                                  '$renTal_name ',
+                                                  maxLines: 1,
+                                                  style: const TextStyle(
+                                                    fontSize: 9.0,
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T,
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                color: Colors.white,
+                                                child: Text(
+                                                  '${Form_sdate.text} ถึง ${Form_ldate.text}',
+                                                  maxLines: 1,
+                                                  style: const TextStyle(
+                                                    fontSize: 8.0,
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T,
+                                                  ),
+                                                ),
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                        .fromLTRB(4, 0, 0, 0),
+                                                    child: Container(
+                                                      color: Colors.white,
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Center(
+                                                              child: Container(
+                                                            height: 84,
+                                                            width: 84,
+                                                            child:
+                                                                SfBarcodeGenerator(
+                                                              value:
+                                                                  '${widget.Get_Value_cid}',
+                                                              symbology:
+                                                                  QRCode(),
+                                                              showValue: false,
+                                                            ),
+                                                          )),
+                                                          Padding(
+                                                            padding: EdgeInsets
+                                                                .fromLTRB(
+                                                                    0, 4, 0, 0),
+                                                            child: Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: Colors
+                                                                    .grey[100],
+                                                                borderRadius: const BorderRadius
+                                                                        .only(
+                                                                    topLeft:
+                                                                        Radius.circular(
+                                                                            10),
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                            10),
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            10),
+                                                                    bottomRight:
+                                                                        Radius.circular(
+                                                                            10)),
+                                                                // border: Border.all(color: Colors.grey, width: 1),
+                                                              ),
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .fromLTRB(
+                                                                          2,
+                                                                          2,
+                                                                          2,
+                                                                          0),
+                                                              child: Text(
+                                                                'ลงชื่อ.....................................',
+                                                                maxLines: 1,
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 7.0,
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+
+                                                          // Center(
+                                                          //   child: PrettyQr(
+                                                          //     // typeNumber: 3,
+                                                          //     image: const AssetImage(
+                                                          //       "images/Icon-chao.png",
+                                                          //     ),
+                                                          //     size: 110,
+                                                          //     data: '${teNantModels[index].cid}',
+                                                          //     errorCorrectLevel: QrErrorCorrectLevel.M,
+                                                          //     roundEdges: true,
+                                                          //   ),
+                                                          // ),
+                                                          // Container(
+                                                          //   color: Colors.white,
+                                                          //   child: Text(
+                                                          //     ' ${teNantModels_Save[index_type][index].sdate} ถึง ${teNantModels_Save[index_type][index].ldate}',
+                                                          //     maxLines: 2,
+                                                          //     style: const TextStyle(
+                                                          //       fontSize: 8.0,
+                                                          //       color: PeopleChaoScreen_Color.Colors_Text1_,
+                                                          //       // fontWeight: FontWeight.bold,
+                                                          //       fontFamily: Font_.Fonts_T,
+                                                          //     ),
+                                                          //   ),
+                                                          // ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Stack(
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .fromLTRB(
+                                                                4, 8, 0, 8),
+                                                        child: Container(
+                                                          // decoration:
+                                                          //     BoxDecoration(
+                                                          //   image:
+                                                          //       DecorationImage(
+                                                          //     image: NetworkImage("https://www.kindpng.com/picc/m/266-2660257_dotted-background-png-image-free-download-searchpng-white.png"),
+                                                          //     fit: BoxFit.cover,
+                                                          //   ),
+                                                          // ),
+                                                          width: 170,
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              // const SizedBox(
+                                                              //   height: 5.0,
+                                                              // ),
+                                                              // const Text(
+                                                              //   'เลขสัญญา',
+                                                              //   style: TextStyle(
+                                                              //     fontSize: 10.0,
+                                                              //     color: PeopleChaoScreen_Color.Colors_Text1_,
+                                                              //     // fontWeight: FontWeight.bold,
+                                                              //     fontFamily: Font_.Fonts_T,
+                                                              //   ),
+                                                              // ),
+                                                              Text(
+                                                                '${widget.Get_Value_cid}',
+                                                                maxLines: 1,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontSize:
+                                                                      11.0,
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T,
+                                                                ),
+                                                              ),
+                                                              const Text(
+                                                                'ชื่อผู้ติดต่อ',
+                                                                maxLines: 1,
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 9.0,
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  //fontWeight: FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T,
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                '${Form_bussscontact.text}',
+                                                                maxLines: 1,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontSize:
+                                                                      11.0,
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T,
+                                                                ),
+                                                              ),
+                                                              const Text(
+                                                                'ชื่อร้านค้า',
+                                                                maxLines: 1,
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 9.0,
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  // fontWeight: FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T,
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                '${Form_nameshop.text}',
+                                                                maxLines: 1,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontSize:
+                                                                      11.0,
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T,
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                'พื้นที่ : ${Form_ln.text} ',
+                                                                maxLines: 1,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontSize: 9.0,
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  // fontWeight: FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T,
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                'โซน : ${Form_zn.text}',
+                                                                maxLines: 1,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontSize: 9.0,
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  // fontWeight: FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T,
+                                                                ),
+                                                              ),
+
+                                                              // Text(
+                                                              //   ' ${teNantModels[index].sdate} ถึง ${teNantModels[index].ldate}',
+                                                              //   maxLines: 2,
+                                                              //   style: const TextStyle(
+                                                              //     fontSize: 8.0,
+                                                              //     color: PeopleChaoScreen_Color.Colors_Text1_,
+                                                              //     // fontWeight: FontWeight.bold,
+                                                              //     fontFamily: Font_.Fonts_T,
+                                                              //   ),
+                                                              // ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Positioned(
+                                                        bottom: 5,
+                                                        right: 5,
+                                                        child: InkWell(
+                                                          child: Container(
+                                                            width: 30.0,
+                                                            height: 30.0,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: Colors
+                                                                  .black
+                                                                  .withOpacity(
+                                                                      0.5),
+                                                              shape: BoxShape
+                                                                  .circle,
+                                                            ),
+                                                            child: const Center(
+                                                                child: Icon(
+                                                              Icons.print,
+                                                              color:
+                                                                  Colors.white,
+                                                            )),
+                                                          ),
+                                                          onTap: () async {
+                                                            showDialog(
+                                                                barrierDismissible:
+                                                                    false,
+                                                                context:
+                                                                    context,
+                                                                builder: (_) {
+                                                                  // Future.delayed(
+                                                                  //     const Duration(
+                                                                  //         seconds:
+                                                                  //             1),
+                                                                  //     () {
+                                                                  //   Navigator.of(
+                                                                  //           context)
+                                                                  //       .pop();
+                                                                  // });
+
+                                                                  return Dialog(
+                                                                    child: StreamBuilder(
+                                                                        stream: Stream.periodic(const Duration(seconds: 1)),
+                                                                        builder: (context, snapshot) {
+                                                                          return const SizedBox(
+                                                                              // height: 20,
+                                                                              width: 350,
+                                                                              child: Padding(
+                                                                                padding: EdgeInsets.all(20.0),
+                                                                                child: Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                                  children: [
+                                                                                    Padding(
+                                                                                      padding: EdgeInsets.fromLTRB(0, 0, 8, 0),
+                                                                                      child: SizedBox(height: 30, child: CircularProgressIndicator()),
+                                                                                    ),
+                                                                                    Text(
+                                                                                      'กำลัง Download และแปลงไฟล์ PDF...  ',
+                                                                                      style: TextStyle(
+                                                                                        color: PeopleChaoScreen_Color.Colors_Text1_,
+                                                                                        fontWeight: FontWeight.bold,
+                                                                                        fontFamily: FontWeight_.Fonts_T,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ));
+                                                                        }),
+                                                                  );
+                                                                });
+                                                            Pdfgen_QR_2.displayPdf_QR2(
+                                                                context,
+                                                                renTal_name,
+                                                                widget
+                                                                    .Get_Value_cid,
+                                                                '${Form_bussscontact.text}',
+                                                                '${Form_sdate.text} ถึง ${Form_ldate.text}',
+                                                                '${Form_nameshop.text}',
+                                                                '${Form_ln.text}',
+                                                                '${Form_zn.text}',
+                                                                indexcardColor);
+                                                          },
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          height: 150,
+                                          width: 15,
+                                          decoration: BoxDecoration(
+                                            color: cardColor,
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                                    topLeft: Radius.circular(0),
+                                                    topRight:
+                                                        Radius.circular(10),
+                                                    bottomLeft:
+                                                        Radius.circular(0),
+                                                    bottomRight:
+                                                        Radius.circular(10)),
+                                          ),
+                                          // child: Column(
+                                          //   mainAxisAlignment:
+                                          //       MainAxisAlignment.center,
+                                          //   children: [
+                                          //     RotatedBox(
+                                          //       quarterTurns: 1,
+                                          //       child: Text(
+                                          //         '$renTal_name',
+                                          //         maxLines: 1,
+                                          //         style: const TextStyle(
+                                          //           fontSize: 9.0,
+                                          //           color: Colors.white,
+                                          //           // fontWeight: FontWeight.bold,
+                                          //           fontFamily: Font_.Fonts_T,
+                                          //         ),
+                                          //       ),
+                                          //     ),
+                                          //   ],
+                                          // ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        // color: Colors.green,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(6),
-                          topRight: Radius.circular(6),
-                          bottomLeft: Radius.circular(6),
-                          bottomRight: Radius.circular(6),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        const Expanded(
+                          flex: 1,
+                          child: Text(
+                            'ชื่อร้านค้า',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                // fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T
+                                //fontSize: 10.0
+                                ),
+                          ),
                         ),
-                        // border: Border.all(color: Colors.grey, width: 1),
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              // color: Colors.green,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(6),
+                                topRight: Radius.circular(6),
+                                bottomLeft: Radius.circular(6),
+                                bottomRight: Radius.circular(6),
+                              ),
+                              // border: Border.all(color: Colors.grey, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              showCursor: false, //add this line
+                              readOnly: true,
+                              controller: Form_nameshop,
+
+                              cursorColor: Colors.green,
+                              decoration: InputDecoration(
+                                  fillColor: Colors.white.withOpacity(0.3),
+                                  filled: true,
+                                  // prefixIcon:
+                                  //     const Icon(Icons.person, color: Colors.black),
+                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  // labelText: 'ระบุชื่อร้านค้า',
+                                  labelStyle: const TextStyle(
+                                      color: Colors.black54,
+
+                                      // fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T
+                                      //fontSize: 10.0
+                                      )),
+                            ),
+                          ),
+                        ),
+                        const Expanded(
+                          flex: 1,
+                          child: Text(
+                            'ประเภทร้านค้า',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                // fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T
+                                //fontSize: 10.0
+                                ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              // color: Colors.green,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(6),
+                                topRight: Radius.circular(6),
+                                bottomLeft: Radius.circular(6),
+                                bottomRight: Radius.circular(6),
+                              ),
+                              // border: Border.all(color: Colors.grey, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              showCursor: false, //add this line
+                              readOnly: true,
+                              controller: Form_typeshop,
+                              // maxLength: 13,
+                              cursorColor: Colors.green,
+                              decoration: InputDecoration(
+                                  fillColor: Colors.white.withOpacity(0.3),
+                                  filled: true,
+                                  // prefixIcon:
+                                  //     const Icon(Icons.person, color: Colors.black),
+                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  labelStyle: const TextStyle(
+                                      color: Colors.black54,
+
+                                      // fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T
+                                      //fontSize: 10.0
+
+                                      )),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        const Expanded(
+                          flex: 1,
+                          child: Text(
+                            'ชื่อผู้เช่า/บริษัท',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                // fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T
+                                //fontSize: 10.0
+                                ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              // color: Colors.green,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(6),
+                                topRight: Radius.circular(6),
+                                bottomLeft: Radius.circular(6),
+                                bottomRight: Radius.circular(6),
+                              ),
+                              // border: Border.all(color: Colors.grey, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              showCursor: false, //add this line
+                              readOnly: true,
+                              controller: Form_bussshop,
+                              cursorColor: Colors.green,
+                              decoration: InputDecoration(
+                                  fillColor: Colors.white.withOpacity(0.3),
+                                  filled: true,
+                                  // prefixIcon:
+                                  //     const Icon(Icons.person, color: Colors.black),
+                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  labelStyle: const TextStyle(
+                                      color: Colors.black54,
+
+                                      // fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T
+                                      //fontSize: 10.0
+
+                                      )),
+                            ),
+                          ),
+                        ),
+                        const Expanded(
+                          flex: 1,
+                          child: Text(
+                            'ชื่อบุคคลติดต่อ',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                // fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T
+                                //fontSize: 10.0
+                                ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              // color: Colors.green,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(6),
+                                topRight: Radius.circular(6),
+                                bottomLeft: Radius.circular(6),
+                                bottomRight: Radius.circular(6),
+                              ),
+                              // border: Border.all(color: Colors.grey, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              showCursor: false, //add this line
+                              readOnly: true,
+                              controller: Form_bussscontact,
+                              cursorColor: Colors.green,
+                              decoration: InputDecoration(
+                                  fillColor: Colors.white.withOpacity(0.3),
+                                  filled: true,
+                                  // prefixIcon:
+                                  //     const Icon(Icons.person, color: Colors.black),
+                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  labelStyle: const TextStyle(
+                                      color: Colors.black54,
+
+                                      // fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T
+                                      //fontSize: 10.0
+
+                                      )),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        const Expanded(
+                          flex: 1,
+                          child: Text(
+                            'ที่อยู่',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                // fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T
+                                //fontSize: 10.0
+                                ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 5,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              // color: Colors.green,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(6),
+                                topRight: Radius.circular(6),
+                                bottomLeft: Radius.circular(6),
+                                bottomRight: Radius.circular(6),
+                              ),
+                              // border: Border.all(color: Colors.grey, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              showCursor: false, //add this line
+                              readOnly: true,
+                              controller: Form_address,
+                              cursorColor: Colors.green,
+                              decoration: InputDecoration(
+                                  fillColor: Colors.white.withOpacity(0.3),
+                                  filled: true,
+                                  // prefixIcon:
+                                  //     const Icon(Icons.person, color: Colors.black),
+                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  labelStyle: const TextStyle(
+                                      color: Colors.black54,
+
+                                      // fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T
+                                      //fontSize: 10.0
+
+                                      )),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        const Expanded(
+                          flex: 1,
+                          child: Text(
+                            'เบอร์โทร',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                // fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T
+                                //fontSize: 10.0
+                                ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              // color: Colors.green,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(6),
+                                topRight: Radius.circular(6),
+                                bottomLeft: Radius.circular(6),
+                                bottomRight: Radius.circular(6),
+                              ),
+                              // border: Border.all(color: Colors.grey, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              showCursor: false, //add this line
+                              readOnly: true,
+                              controller: Form_tel,
+                              cursorColor: Colors.green,
+                              decoration: InputDecoration(
+                                  fillColor: Colors.white.withOpacity(0.3),
+                                  filled: true,
+                                  // prefixIcon:
+                                  //     const Icon(Icons.person, color: Colors.black),
+                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  labelStyle: const TextStyle(
+                                      color: Colors.black54,
+
+                                      // fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T
+                                      //fontSize: 10.0
+                                      )),
+                            ),
+                          ),
+                        ),
+                        const Expanded(
+                          flex: 1,
+                          child: Text(
+                            'อีเมล',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                // fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T
+                                //fontSize: 10.0
+                                ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              // color: Colors.green,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(6),
+                                topRight: Radius.circular(6),
+                                bottomLeft: Radius.circular(6),
+                                bottomRight: Radius.circular(6),
+                              ),
+                              // border: Border.all(color: Colors.grey, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              showCursor: false, //add this line
+                              readOnly: true,
+                              controller: Form_email,
+                              cursorColor: Colors.green,
+                              decoration: InputDecoration(
+                                  fillColor: Colors.white.withOpacity(0.3),
+                                  filled: true,
+                                  // prefixIcon:
+                                  //     const Icon(Icons.person, color: Colors.black),
+                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  labelStyle: const TextStyle(
+                                      color: Colors.black54,
+
+                                      // fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T
+                                      //fontSize: 10.0
+
+                                      )),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        const Expanded(
+                          flex: 1,
+                          child: Text(
+                            'ID/TAX ID',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                // fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T
+                                //fontSize: 10.0
+                                ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              // color: Colors.green,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(6),
+                                topRight: Radius.circular(6),
+                                bottomLeft: Radius.circular(6),
+                                bottomRight: Radius.circular(6),
+                              ),
+                              // border: Border.all(color: Colors.grey, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              showCursor: false, //add this line
+                              readOnly: true,
+                              controller: Form_tax,
+                              cursorColor: Colors.green,
+                              decoration: InputDecoration(
+                                  fillColor: Colors.white.withOpacity(0.3),
+                                  filled: true,
+                                  // prefixIcon:
+                                  //     const Icon(Icons.person, color: Colors.black),
+                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  labelStyle: const TextStyle(
+                                      color: Colors.black54,
+
+                                      // fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T
+                                      //fontSize: 10.0
+
+                                      )),
+                            ),
+                          ),
+                        ),
+                        const Expanded(
+                          flex: 1,
+                          child: Text(
+                            'เลขที่อ้างอิง',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                // fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T
+                                //fontSize: 10.0
+                                ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              // color: Colors.green,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(6),
+                                topRight: Radius.circular(6),
+                                bottomLeft: Radius.circular(6),
+                                bottomRight: Radius.circular(6),
+                              ),
+                              // border: Border.all(color: Colors.grey, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              // keyboardType: TextInputType.number,
+                              // showCursor: false, //add this line
+                              // readOnly: true,
+                              controller: Form_wnote,
+                              cursorColor: Colors.green,
+                              onFieldSubmitted: (value) async {
+                                print(value);
+
+                                SharedPreferences preferences =
+                                    await SharedPreferences.getInstance();
+                                var ren = preferences.getString('renTalSer');
+                                var ciddoc = widget.Get_Value_cid;
+                                String url =
+                                    '${MyConstant().domain}/UP_wnote.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&value=$value';
+
+                                try {
+                                  var response = await http.get(Uri.parse(url));
+
+                                  var result = json.decode(response.body);
+                                  print(result);
+                                  if (result.toString() == 'true') {
+                                    setState(() {
+                                      read_data();
+                                    });
+                                    Insert_log.Insert_logs('ผู้เช่า',
+                                        'เรียกดู:${widget.Get_Value_cid} >> แก้ไขเลขอ้างอิงผู้เช่า : ${Form_wnote.text} >> $value');
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content:
+                                              Text('แก้ไขข้อมูลผู้เช่าสำเร็จ')),
+                                    );
+                                  }
+                                } catch (e) {
+                                  print(e);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(' ผิดพลาด กรุณาลองใหม่!',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: Font_.Fonts_T))),
+                                  );
+                                }
+                                read_data();
+                              },
+                              decoration: InputDecoration(
+                                  fillColor: Colors.white.withOpacity(0.3),
+                                  filled: true,
+                                  // prefixIcon:
+                                  //     const Icon(Icons.person, color: Colors.black),
+                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  labelStyle: const TextStyle(
+                                      color: Colors.black54,
+
+                                      // fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T
+                                      //fontSize: 10.0
+
+                                      )),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  renTal_lavel <= 3
+                      ? SizedBox()
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: InkWell(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.red[300],
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(8),
+                                            topRight: Radius.circular(8),
+                                            bottomLeft: Radius.circular(8),
+                                            bottomRight: Radius.circular(8)),
+                                      ),
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: const Text(
+                                        'แก้ไขข้อมูลผู้เช่า',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: Font_.Fonts_T
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      select_coutumerAll(context);
+                                    })),
+                          ],
+                        ),
+                ],
+              ),
+            ),
+
+            Container(
+              color: AppbackgroundColor.Sub_Abg_Colors,
+              child: Column(
+                children: [
+                  const Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: AutoSizeText(
+                          minFontSize: 10,
+                          maxFontSize: 15,
+                          '2.พื้นที่เช่า',
+                          style: TextStyle(
+                              color: PeopleChaoScreen_Color.Colors_Text1_,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: FontWeight_.Fonts_T),
+                        ),
                       ),
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        showCursor: false, //add this line
-                        readOnly: true,
-                        controller: Form_ln,
-                        cursorColor: Colors.green,
-                        decoration: InputDecoration(
-                            fillColor: Colors.white.withOpacity(0.3),
-                            filled: true,
-                            // prefixIcon:
-                            //     const Icon(Icons.person, color: Colors.black),
-                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                            focusedBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.black,
-                              ),
-                            ),
-                            enabledBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            labelStyle: const TextStyle(
-                                color: Colors.black54,
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        const Expanded(
+                          flex: 1,
+                          child: Text(
+                            'รหัสพื้นที่เช่า',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
                                 //fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T)),
-                      ),
-                    ),
-                  ),
-                  const Expanded(
-                    flex: 1,
-                    child: Text(
-                      'โซนพื้นที่เช่า',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                          //fontWeight: FontWeight.bold,
-                          fontFamily: Font_.Fonts_T),
-                    ),
-                  ),
-                  Expanded(
-                      flex: 2,
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          // color: Colors.green,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(6),
-                            topRight: Radius.circular(6),
-                            bottomLeft: Radius.circular(6),
-                            bottomRight: Radius.circular(6),
+                                fontFamily: Font_.Fonts_T),
                           ),
-                          // border: Border.all(color: Colors.grey, width: 1),
                         ),
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          showCursor: false, //add this line
-                          readOnly: true,
-                          controller: Form_zn,
-                          cursorColor: Colors.green,
-                          decoration: InputDecoration(
-                              fillColor: Colors.white.withOpacity(0.3),
-                              filled: true,
-                              // prefixIcon:
-                              //     const Icon(Icons.person, color: Colors.black),
-                              // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                              focusedBorder: const OutlineInputBorder(
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(15),
-                                  topLeft: Radius.circular(15),
-                                  bottomRight: Radius.circular(15),
-                                  bottomLeft: Radius.circular(15),
-                                ),
-                                borderSide: BorderSide(
-                                  width: 1,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              enabledBorder: const OutlineInputBorder(
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(15),
-                                  topLeft: Radius.circular(15),
-                                  bottomRight: Radius.circular(15),
-                                  bottomLeft: Radius.circular(15),
-                                ),
-                                borderSide: BorderSide(
-                                  width: 1,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              labelStyle: const TextStyle(
-                                  color: Colors.black54,
-                                  fontFamily: Font_.Fonts_T)),
-                        ),
-                      )),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  const Expanded(
-                    flex: 1,
-                    child: Text(
-                      'รวมพื้นที่เช่า(ตร.ม.)',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                          //fontWeight: FontWeight.bold,
-                          fontFamily: Font_.Fonts_T),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        // color: Colors.green,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(6),
-                          topRight: Radius.circular(6),
-                          bottomLeft: Radius.circular(6),
-                          bottomRight: Radius.circular(6),
-                        ),
-                        // border: Border.all(color: Colors.grey, width: 1),
-                      ),
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        showCursor: false, //add this line
-                        readOnly: true,
-                        controller: Form_area,
-                        cursorColor: Colors.green,
-                        decoration: InputDecoration(
-                            fillColor: Colors.white.withOpacity(0.3),
-                            filled: true,
-                            // prefixIcon:
-                            //     const Icon(Icons.person, color: Colors.black),
-                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                            focusedBorder: const OutlineInputBorder(
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              // color: Colors.green,
                               borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
+                                topLeft: Radius.circular(6),
+                                topRight: Radius.circular(6),
+                                bottomLeft: Radius.circular(6),
+                                bottomRight: Radius.circular(6),
                               ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.black,
-                              ),
+                              // border: Border.all(color: Colors.grey, width: 1),
                             ),
-                            enabledBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.grey,
-                              ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              showCursor: false, //add this line
+                              readOnly: true,
+                              controller: Form_ln,
+                              cursorColor: Colors.green,
+                              decoration: InputDecoration(
+                                  fillColor: Colors.white.withOpacity(0.3),
+                                  filled: true,
+                                  // prefixIcon:
+                                  //     const Icon(Icons.person, color: Colors.black),
+                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  labelStyle: const TextStyle(
+                                      color: Colors.black54,
+                                      //fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T)),
                             ),
-                            labelStyle: const TextStyle(
-                                color: Colors.black54,
-                                fontFamily: Font_.Fonts_T)),
-                      ),
-                    ),
-                  ),
-                  const Expanded(
-                    flex: 1,
-                    child: Text(
-                      'จำนวนพื้นที่',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                          //fontWeight: FontWeight.bold,
-                          fontFamily: Font_.Fonts_T),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        // color: Colors.green,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(6),
-                          topRight: Radius.circular(6),
-                          bottomLeft: Radius.circular(6),
-                          bottomRight: Radius.circular(6),
-                        ),
-                        // border: Border.all(color: Colors.grey, width: 1),
-                      ),
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        showCursor: false, //add this line
-                        readOnly: true,
-                        controller: Form_qty,
-                        cursorColor: Colors.green,
-                        decoration: InputDecoration(
-                            fillColor: Colors.white.withOpacity(0.3),
-                            filled: true,
-                            // prefixIcon:
-                            //     const Icon(Icons.person, color: Colors.black),
-                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                            focusedBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.black,
-                              ),
-                            ),
-                            enabledBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            labelStyle: const TextStyle(
-                                color: Colors.black54,
-                                fontFamily: Font_.Fonts_T)),
-                      ),
-                    ),
-                  ),
-                  const Expanded(
-                    flex: 1,
-                    child: Text(
-                      'ล็อค/ห้อง',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                          //fontWeight: FontWeight.bold,
-                          fontFamily: Font_.Fonts_T),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: AutoSizeText(
-                    minFontSize: 10,
-                    maxFontSize: 15,
-                    '3.ข้อมูลสัญญา/เสนอราคา',
-                    style: TextStyle(
-                        color: PeopleChaoScreen_Color.Colors_Text1_,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: FontWeight_.Fonts_T
-                        //fontSize: 10.0
-                        ),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  const Expanded(
-                    flex: 1,
-                    child: Text(
-                      'วันเริ่มสัญญา/เสนอราคา',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                          //fontWeight: FontWeight.bold,
-                          fontFamily: Font_.Fonts_T),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        // color: Colors.green,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(6),
-                          topRight: Radius.circular(6),
-                          bottomLeft: Radius.circular(6),
-                          bottomRight: Radius.circular(6),
-                        ),
-                        // border: Border.all(color: Colors.grey, width: 1),
-                      ),
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        showCursor: false, //add this line
-                        readOnly: true,
-                        controller: Form_sdate,
-                        cursorColor: Colors.green,
-                        decoration: InputDecoration(
-                            fillColor: Colors.white.withOpacity(0.3),
-                            filled: true,
-                            // prefixIcon:
-                            //     const Icon(Icons.person, color: Colors.black),
-                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                            focusedBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.black,
-                              ),
-                            ),
-                            enabledBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            labelStyle: const TextStyle(
-                                color: Colors.black54,
-                                fontFamily: Font_.Fonts_T)),
-                      ),
-                    ),
-                  ),
-                  const Expanded(
-                    flex: 1,
-                    child: Text(
-                      'วันสิ้นสุดสัญญา/เสนอราคา',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                          //fontWeight: FontWeight.bold,
-                          fontFamily: Font_.Fonts_T),
-                    ),
-                  ),
-                  Expanded(
-                      flex: 2,
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          // color: Colors.green,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(6),
-                            topRight: Radius.circular(6),
-                            bottomLeft: Radius.circular(6),
-                            bottomRight: Radius.circular(6),
                           ),
-                          // border: Border.all(color: Colors.grey, width: 1),
                         ),
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          showCursor: false, //add this line
-                          readOnly: true,
-                          controller: Form_ldate,
-                          cursorColor: Colors.green,
-                          decoration: InputDecoration(
-                              fillColor: Colors.white.withOpacity(0.3),
-                              filled: true,
-                              // prefixIcon:
-                              //     const Icon(Icons.person, color: Colors.black),
-                              // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                              focusedBorder: const OutlineInputBorder(
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(15),
-                                  topLeft: Radius.circular(15),
-                                  bottomRight: Radius.circular(15),
-                                  bottomLeft: Radius.circular(15),
-                                ),
-                                borderSide: BorderSide(
-                                  width: 1,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              enabledBorder: const OutlineInputBorder(
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(15),
-                                  topLeft: Radius.circular(15),
-                                  bottomRight: Radius.circular(15),
-                                  bottomLeft: Radius.circular(15),
-                                ),
-                                borderSide: BorderSide(
-                                  width: 1,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              labelStyle: const TextStyle(
-                                  color: Colors.black54,
-                                  fontFamily: Font_.Fonts_T)),
-                        ),
-                      )),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  const Expanded(
-                    flex: 1,
-                    child: Text(
-                      'ระยะเวลาการเช่า',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                          //fontWeight: FontWeight.bold,
-                          fontFamily: Font_.Fonts_T),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        // color: Colors.green,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(6),
-                          topRight: Radius.circular(6),
-                          bottomLeft: Radius.circular(6),
-                          bottomRight: Radius.circular(6),
-                        ),
-                        // border: Border.all(color: Colors.grey, width: 1),
-                      ),
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        showCursor: false, //add this line
-                        readOnly: true,
-                        controller: Form_period,
-                        cursorColor: Colors.green,
-                        decoration: InputDecoration(
-                            fillColor: Colors.white.withOpacity(0.3),
-                            filled: true,
-                            // prefixIcon:
-                            //     const Icon(Icons.person, color: Colors.black),
-                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                            focusedBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.black,
-                              ),
-                            ),
-                            enabledBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            labelStyle: const TextStyle(
-                                color: Colors.black54,
-                                fontFamily: Font_.Fonts_T)),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                      '${Form_rtname.text}',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                          //fontWeight: FontWeight.bold,
-                          fontFamily: Font_.Fonts_T),
-                    ),
-                  ),
-                  Expanded(
-                      flex: 2,
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          // color: Colors.green,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(6),
-                            topRight: Radius.circular(6),
-                            bottomLeft: Radius.circular(6),
-                            bottomRight: Radius.circular(6),
+                        const Expanded(
+                          flex: 1,
+                          child: Text(
+                            'โซนพื้นที่เช่า',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                //fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T),
                           ),
-                          // border: Border.all(color: Colors.grey, width: 1),
                         ),
-                        padding: const EdgeInsets.all(8.0),
-                      )),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  InkWell(
-                    child: Container(
-                      width: 200,
-                      // height: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.orange[400],
-                        borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(10),
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10)),
+                        Expanded(
+                            flex: 2,
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                // color: Colors.green,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(6),
+                                  topRight: Radius.circular(6),
+                                  bottomLeft: Radius.circular(6),
+                                  bottomRight: Radius.circular(6),
+                                ),
+                                // border: Border.all(color: Colors.grey, width: 1),
+                              ),
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                keyboardType: TextInputType.number,
+                                showCursor: false, //add this line
+                                readOnly: true,
+                                controller: Form_zn,
+                                cursorColor: Colors.green,
+                                decoration: InputDecoration(
+                                    fillColor: Colors.white.withOpacity(0.3),
+                                    filled: true,
+                                    // prefixIcon:
+                                    //     const Icon(Icons.person, color: Colors.black),
+                                    // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                    focusedBorder: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(15),
+                                        topLeft: Radius.circular(15),
+                                        bottomRight: Radius.circular(15),
+                                        bottomLeft: Radius.circular(15),
+                                      ),
+                                      borderSide: BorderSide(
+                                        width: 1,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    enabledBorder: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(15),
+                                        topLeft: Radius.circular(15),
+                                        bottomRight: Radius.circular(15),
+                                        bottomLeft: Radius.circular(15),
+                                      ),
+                                      borderSide: BorderSide(
+                                        width: 1,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    labelStyle: const TextStyle(
+                                        color: Colors.black54,
+                                        fontFamily: Font_.Fonts_T)),
+                              ),
+                            )),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        const Expanded(
+                          flex: 1,
+                          child: Text(
+                            'รวมพื้นที่เช่า(ตร.ม.)',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                //fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              // color: Colors.green,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(6),
+                                topRight: Radius.circular(6),
+                                bottomLeft: Radius.circular(6),
+                                bottomRight: Radius.circular(6),
+                              ),
+                              // border: Border.all(color: Colors.grey, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              showCursor: false, //add this line
+                              readOnly: true,
+                              controller: Form_area,
+                              cursorColor: Colors.green,
+                              decoration: InputDecoration(
+                                  fillColor: Colors.white.withOpacity(0.3),
+                                  filled: true,
+                                  // prefixIcon:
+                                  //     const Icon(Icons.person, color: Colors.black),
+                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  labelStyle: const TextStyle(
+                                      color: Colors.black54,
+                                      fontFamily: Font_.Fonts_T)),
+                            ),
+                          ),
+                        ),
+                        const Expanded(
+                          flex: 1,
+                          child: Text(
+                            'จำนวนพื้นที่',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                //fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              // color: Colors.green,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(6),
+                                topRight: Radius.circular(6),
+                                bottomLeft: Radius.circular(6),
+                                bottomRight: Radius.circular(6),
+                              ),
+                              // border: Border.all(color: Colors.grey, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              showCursor: false, //add this line
+                              readOnly: true,
+                              controller: Form_qty,
+                              cursorColor: Colors.green,
+                              decoration: InputDecoration(
+                                  fillColor: Colors.white.withOpacity(0.3),
+                                  filled: true,
+                                  // prefixIcon:
+                                  //     const Icon(Icons.person, color: Colors.black),
+                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  labelStyle: const TextStyle(
+                                      color: Colors.black54,
+                                      fontFamily: Font_.Fonts_T)),
+                            ),
+                          ),
+                        ),
+                        const Expanded(
+                          flex: 1,
+                          child: Text(
+                            'ล็อค/ห้อง',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                //fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: AutoSizeText(
+                          minFontSize: 10,
+                          maxFontSize: 15,
+                          '3.ข้อมูลสัญญา/เสนอราคา',
+                          style: TextStyle(
+                              color: PeopleChaoScreen_Color.Colors_Text1_,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: FontWeight_.Fonts_T
+                              //fontSize: 10.0
+                              ),
+                        ),
                       ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        const Expanded(
+                          flex: 1,
+                          child: Text(
+                            'วันเริ่มสัญญา/เสนอราคา',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                //fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              // color: Colors.green,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(6),
+                                topRight: Radius.circular(6),
+                                bottomLeft: Radius.circular(6),
+                                bottomRight: Radius.circular(6),
+                              ),
+                              // border: Border.all(color: Colors.grey, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              showCursor: false, //add this line
+                              readOnly: true,
+                              controller: Form_sdate,
+                              cursorColor: Colors.green,
+                              decoration: InputDecoration(
+                                  fillColor: Colors.white.withOpacity(0.3),
+                                  filled: true,
+                                  // prefixIcon:
+                                  //     const Icon(Icons.person, color: Colors.black),
+                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  labelStyle: const TextStyle(
+                                      color: Colors.black54,
+                                      fontFamily: Font_.Fonts_T)),
+                            ),
+                          ),
+                        ),
+                        const Expanded(
+                          flex: 1,
+                          child: Text(
+                            'วันสิ้นสุดสัญญา/เสนอราคา',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                //fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T),
+                          ),
+                        ),
+                        Expanded(
+                            flex: 2,
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                // color: Colors.green,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(6),
+                                  topRight: Radius.circular(6),
+                                  bottomLeft: Radius.circular(6),
+                                  bottomRight: Radius.circular(6),
+                                ),
+                                // border: Border.all(color: Colors.grey, width: 1),
+                              ),
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                keyboardType: TextInputType.number,
+                                showCursor: false, //add this line
+                                readOnly: true,
+                                controller: Form_ldate,
+                                cursorColor: Colors.green,
+                                decoration: InputDecoration(
+                                    fillColor: Colors.white.withOpacity(0.3),
+                                    filled: true,
+                                    // prefixIcon:
+                                    //     const Icon(Icons.person, color: Colors.black),
+                                    // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                    focusedBorder: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(15),
+                                        topLeft: Radius.circular(15),
+                                        bottomRight: Radius.circular(15),
+                                        bottomLeft: Radius.circular(15),
+                                      ),
+                                      borderSide: BorderSide(
+                                        width: 1,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    enabledBorder: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(15),
+                                        topLeft: Radius.circular(15),
+                                        bottomRight: Radius.circular(15),
+                                        bottomLeft: Radius.circular(15),
+                                      ),
+                                      borderSide: BorderSide(
+                                        width: 1,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    labelStyle: const TextStyle(
+                                        color: Colors.black54,
+                                        fontFamily: Font_.Fonts_T)),
+                              ),
+                            )),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        const Expanded(
+                          flex: 1,
+                          child: Text(
+                            'ระยะเวลาการเช่า',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                //fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              // color: Colors.green,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(6),
+                                topRight: Radius.circular(6),
+                                bottomLeft: Radius.circular(6),
+                                bottomRight: Radius.circular(6),
+                              ),
+                              // border: Border.all(color: Colors.grey, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              showCursor: false, //add this line
+                              readOnly: true,
+                              controller: Form_period,
+                              cursorColor: Colors.green,
+                              decoration: InputDecoration(
+                                  fillColor: Colors.white.withOpacity(0.3),
+                                  filled: true,
+                                  // prefixIcon:
+                                  //     const Icon(Icons.person, color: Colors.black),
+                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  labelStyle: const TextStyle(
+                                      color: Colors.black54,
+                                      fontFamily: Font_.Fonts_T)),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            '${Form_rtname.text}',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                //fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T),
+                          ),
+                        ),
+                        Expanded(
+                            flex: 2,
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                // color: Colors.green,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(6),
+                                  topRight: Radius.circular(6),
+                                  bottomLeft: Radius.circular(6),
+                                  bottomRight: Radius.circular(6),
+                                ),
+                                // border: Border.all(color: Colors.grey, width: 1),
+                              ),
+                              padding: const EdgeInsets.all(8.0),
+                            )),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          child: Container(
+                            width: 200,
+                            // height: 40,
+                            decoration: BoxDecoration(
+                              color: Colors.orange[300],
+                              borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                            ),
 
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(4.0),
-                            child: Icon(
-                              Icons.print,
-                              color: Colors.white,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(4.0),
+                                  child: Icon(
+                                    Icons.print,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'ใบเสนอราคา',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text2_,
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: Font_.Fonts_T),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'ใบเสนอราคา',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text2_,
-                                  //fontWeight: FontWeight.bold,
-                                  fontFamily: Font_.Fonts_T),
-                            ),
-                          ),
-                        ],
-                      ),
+                          onTap: () async {
+                            List newValuePDFimg = [];
+                            for (int index = 0; index < 1; index++) {
+                              if (renTalModels[0].imglogo!.trim() == '') {
+                                // newValuePDFimg.add(
+                                //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
+                              } else {
+                                newValuePDFimg.add(
+                                    '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
+                              }
+                            }
+                            SharedPreferences preferences =
+                                await SharedPreferences.getInstance();
+                            var renTal_name =
+                                preferences.getString('renTalName');
+                            Pdfgen_RentalInforma.exportPDF_RentalInforma(
+                              context,
+                              '${widget.Get_Value_NameShop_index}',
+                              '${widget.Get_Value_cid}',
+                              _verticalGroupValue,
+                              Form_nameshop.text,
+                              Form_typeshop.text,
+                              Form_bussshop.text,
+                              Form_bussscontact.text,
+                              Form_address.text,
+                              Form_tel.text,
+                              Form_email.text,
+                              Form_tax.text,
+                              Form_ln.text,
+                              Form_zn.text,
+                              Form_area.text,
+                              Form_qty.text,
+                              Form_sdate.text,
+                              Form_ldate.text,
+                              Form_period.text,
+                              Form_rtname.text,
+                              Form_cdate.text,
+                              quotxSelectModels,
+                              _TransModels,
+                              '$renTal_name',
+                              ' ${renTalModels[0].bill_addr}',
+                              ' ${renTalModels[0].bill_email}',
+                              ' ${renTalModels[0].bill_tel}',
+                              ' ${renTalModels[0].bill_tax}',
+                              ' ${renTalModels[0].bill_name}',
+                              newValuePDFimg,
+                            );
+                          },
+                        ),
+                      ],
                     ),
-                    onTap: () async {
-                      List newValuePDFimg = [];
-                      for (int index = 0; index < 1; index++) {
-                        if (renTalModels[0].imglogo!.trim() == '') {
-                          // newValuePDFimg.add(
-                          //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
-                        } else {
-                          newValuePDFimg.add(
-                              '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
-                        }
-                      }
-                      SharedPreferences preferences =
-                          await SharedPreferences.getInstance();
-                      var renTal_name = preferences.getString('renTalName');
-                      Pdfgen_RentalInforma.exportPDF_RentalInforma(
-                        context,
-                        '${widget.Get_Value_NameShop_index}',
-                        '${widget.Get_Value_cid}',
-                        _verticalGroupValue,
-                        Form_nameshop.text,
-                        Form_typeshop.text,
-                        Form_bussshop.text,
-                        Form_bussscontact.text,
-                        Form_address.text,
-                        Form_tel.text,
-                        Form_email.text,
-                        Form_tax.text,
-                        Form_ln.text,
-                        Form_zn.text,
-                        Form_area.text,
-                        Form_qty.text,
-                        Form_sdate.text,
-                        Form_ldate.text,
-                        Form_period.text,
-                        Form_rtname.text,
-                        Form_cdate.text,
-                        quotxSelectModels,
-                        _TransModels,
-                        '$renTal_name',
-                        ' ${renTalModels[0].bill_addr}',
-                        ' ${renTalModels[0].bill_email}',
-                        ' ${renTalModels[0].bill_tel}',
-                        ' ${renTalModels[0].bill_tax}',
-                        ' ${renTalModels[0].bill_name}',
-                        newValuePDFimg,
-                      );
-                    },
                   ),
                 ],
               ),
             ),
+
             // const Row(
             //   children: [
             //     Padding(
@@ -5335,528 +6341,84 @@ class _RentalInformationState extends State<RentalInformation> {
             //     ),
             //   ),
             // ),
-            const Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: AutoSizeText(
-                    minFontSize: 10,
-                    maxFontSize: 15,
-                    '4.เอกสาร',
-                    style: TextStyle(
-                        color: PeopleChaoScreen_Color.Colors_Text1_,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: FontWeight_.Fonts_T
-                        //fontSize: 10.0
-                        ),
-                  ),
-                ),
-              ],
-            ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Text(
-                    'สำเนาบัตรประชาชนผู้เช่า',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        color: PeopleChaoScreen_Color.Colors_Text2_,
-                        // fontWeight: FontWeight.bold,
-                        fontFamily: Font_.Fonts_T
-                        //fontSize: 10.0
-                        ),
-                  ),
-                ],
-              ),
-            ),
             Container(
-              height: 150,
               decoration: BoxDecoration(
-                // color: AppbackgroundColor.Sub_Abg_Colors,
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
+                image: DecorationImage(
+                  colorFilter: new ColorFilter.mode(
+                      Colors.white.withOpacity(0.05), BlendMode.dstATop),
+                  image: AssetImage("images/BG_im2.png"),
+                  fit: BoxFit.cover,
+                ),
+                color: AppbackgroundColor.Sub_Abg_Colors,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(0),
+                    topRight: Radius.circular(0),
                     bottomLeft: Radius.circular(10),
                     bottomRight: Radius.circular(10)),
-                border: Border.all(color: Colors.grey, width: 1),
+                // border: Border.all(color: Colors.white, width: 1),
               ),
-              child: Row(
+              child: Column(
                 children: [
-                  Expanded(
-                    flex: 2,
-                    child: Stack(
+                  const Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: AutoSizeText(
+                          minFontSize: 10,
+                          maxFontSize: 15,
+                          '4.เอกสาร',
+                          style: TextStyle(
+                              color: PeopleChaoScreen_Color.Colors_Text1_,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: FontWeight_.Fonts_T
+                              //fontSize: 10.0
+                              ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Row(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: (cxname_card != null)
-                              ? Stack(
-                                  children: [
-                                    Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey[300],
-                                          borderRadius: const BorderRadius.only(
-                                              topLeft: Radius.circular(10),
-                                              topRight: Radius.circular(10),
-                                              bottomLeft: Radius.circular(10),
-                                              bottomRight: Radius.circular(10)),
-                                        ),
-                                        child: Image.network(
-                                          '${MyConstant().domain}/files/$foder/contract/card/$cxname_card',
-                                          // width: 200,
-                                          // height: 160,
-                                          fit: BoxFit.cover,
-                                        )
-                                        //  Center(
-                                        //   child: Column(
-                                        //     mainAxisAlignment: MainAxisAlignment.center,
-                                        //     children: [
-                                        //       Text(
-                                        //         'พบเอกสาร',
-                                        //         textAlign: TextAlign.center,
-                                        //         style: TextStyle(
-                                        //             color: PeopleChaoScreen_Color
-                                        //                 .Colors_Text2_,
-                                        //             // fontWeight: FontWeight.bold,
-                                        //             fontFamily: Font_.Fonts_T
-
-                                        //             //fontSize: 10.0
-                                        //             ),
-                                        //       ),
-                                        //       Text(
-                                        //         '$cxname_card',
-                                        //         textAlign: TextAlign.center,
-                                        //         style: TextStyle(
-                                        //             color: Colors.blue[800],
-                                        //             // fontWeight: FontWeight.bold,
-                                        //             fontFamily: Font_.Fonts_T,
-                                        //             fontSize: 8.0),
-                                        //       ),
-                                        //     ],
-                                        //   ),
-                                        // ),
-                                        ),
-                                    Positioned(
-                                      top: 20,
-                                      right: 10,
-                                      child: InkWell(
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: Colors.red[900]!
-                                                .withOpacity(0.8),
-                                            borderRadius: const BorderRadius
-                                                    .only(
-                                                topLeft: Radius.circular(10),
-                                                topRight: Radius.circular(10),
-                                                bottomLeft: Radius.circular(10),
-                                                bottomRight:
-                                                    Radius.circular(10)),
-                                          ),
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: const Center(
-                                            child: Text(
-                                              'ดูเอกสาร',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  // fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T
-
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
-                                          ),
-                                        ),
-                                        onTap: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (_) => Dialog(
-                                              child: Stack(
-                                                children: [
-                                                  SizedBox(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.8,
-                                                    child: FittedBox(
-                                                      fit: BoxFit.contain,
-                                                      child: (cxname_card ==
-                                                                  null ||
-                                                              cxname_card
-                                                                      .toString() ==
-                                                                  '')
-                                                          ? const Icon(Icons
-                                                              .image_not_supported)
-                                                          : Image.network(
-                                                              '${MyConstant().domain}/files/$foder/contract/card/$cxname_card'),
-                                                    ),
-                                                  ),
-                                                  Positioned(
-                                                      top: 10,
-                                                      right: 10,
-                                                      child: InkWell(
-                                                        onTap: () {
-                                                          Navigator.of(context)
-                                                              .pop();
-                                                        },
-                                                        child: const Icon(
-                                                          Icons.cancel_outlined,
-                                                          size: 40,
-                                                          color: Colors.red,
-                                                        ),
-                                                      ))
-                                                ],
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    )
-                                  ],
-                                )
-                              : Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[300],
-                                    borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(10),
-                                        topRight: Radius.circular(10),
-                                        bottomLeft: Radius.circular(10),
-                                        bottomRight: Radius.circular(10)),
-                                  ),
-                                  child: const Center(
-                                    child: Text(
-                                      'ไม่พบเอกสาร',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: PeopleChaoScreen_Color
-                                              .Colors_Text2_,
-                                          // fontWeight: FontWeight.bold,
-                                          fontFamily: Font_.Fonts_T
-
-                                          //fontSize: 10.0
-                                          ),
-                                    ),
-                                  ),
-                                ),
+                        Text(
+                          'สำเนาบัตรประชาชนผู้เช่า',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                              // fontWeight: FontWeight.bold,
+                              fontFamily: Font_.Fonts_T
+                              //fontSize: 10.0
+                              ),
                         ),
                       ],
                     ),
                   ),
-                  if (Responsive.isDesktop(context))
-                    Expanded(
-                      flex: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            // color: Colors.grey,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10)),
-                          ),
-                        ),
-                      ),
+                  Container(
+                    height: 150,
+                    decoration: BoxDecoration(
+                      // color: AppbackgroundColor.Sub_Abg_Colors,
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10)),
+                      border: Border.all(color: Colors.grey, width: 1),
                     ),
-                  Expanded(
-                    flex: 2,
                     child: Row(
                       children: [
-                        // Expanded(
-                        //   flex: 1,
-                        //   child: Padding(
-                        //     padding: const EdgeInsets.all(8.0),
-                        //     child: Container(
-                        //       decoration: const BoxDecoration(
-                        //         color: Colors.red,
-                        //         borderRadius: BorderRadius.only(
-                        //             topLeft: Radius.circular(10),
-                        //             topRight: Radius.circular(10),
-                        //             bottomLeft: Radius.circular(10),
-                        //             bottomRight: Radius.circular(10)),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-
                         Expanded(
-                          flex: 1,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                // color: Colors.white,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                              ),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: InkWell(
-                                      child: Container(
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                          color: Colors.blue[400],
-                                          borderRadius: const BorderRadius.only(
-                                              topLeft: Radius.circular(10),
-                                              topRight: Radius.circular(10),
-                                              bottomLeft: Radius.circular(10),
-                                              bottomRight: Radius.circular(10)),
-                                        ),
-                                        child: const Center(
-                                          child: Text(
-                                            'อัพโหลดไฟล์(jpeg,png,jpg)',
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text2_,
-                                                // fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T
-                                                //fontSize: 10.0
-                                                ),
-                                          ),
-                                        ),
-                                      ),
-                                      onTap: () async {
-                                        (cxname_card == null)
-                                            ? uploadFile_IDcard(
-                                                '${cxname_card}',
-                                                ' $cxname_card_ser',
-                                              )
-                                            : showDialog<void>(
-                                                context: context,
-                                                barrierDismissible:
-                                                    false, // user must tap button!
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return AlertDialog(
-                                                    shape: const RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    10.0))),
-                                                    title: const Center(
-                                                        child: Text(
-                                                      'มีเอกสารสำเนาบัตรประชาชนอยู่แล้ว',
-                                                      style: TextStyle(
-                                                          color:
-                                                              PeopleChaoScreen_Color
-                                                                  .Colors_Text1_,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T),
-                                                    )),
-                                                    content:
-                                                        const SingleChildScrollView(
-                                                      child: ListBody(
-                                                        children: <Widget>[
-                                                          Text(
-                                                            'มีเอกสารสำเนาบัตรประชาชนอยู่แล้ว หากต้องการอัพโหลดกรุณาลบเอกสารที่มีอยู่แล้วก่อน',
-                                                            style: TextStyle(
-                                                                color: PeopleChaoScreen_Color
-                                                                    .Colors_Text2_,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    actions: <Widget>[
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: InkWell(
-                                                              child: Container(
-                                                                  width: 100,
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    color: Colors
-                                                                            .red[
-                                                                        600],
-                                                                    borderRadius: const BorderRadius
-                                                                            .only(
-                                                                        topLeft:
-                                                                            Radius.circular(
-                                                                                10),
-                                                                        topRight:
-                                                                            Radius.circular(
-                                                                                10),
-                                                                        bottomLeft:
-                                                                            Radius.circular(
-                                                                                10),
-                                                                        bottomRight:
-                                                                            Radius.circular(10)),
-                                                                    // border: Border.all(color: Colors.white, width: 1),
-                                                                  ),
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          8.0),
-                                                                  child:
-                                                                      const Center(
-                                                                          child:
-                                                                              Text(
-                                                                    'ลบเอกสาร',
-                                                                    style: TextStyle(
-                                                                        color: PeopleChaoScreen_Color
-                                                                            .Colors_Text3_,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T),
-                                                                  ))),
-                                                              onTap: () async {
-                                                                //String fileName, String ser, String Pathfoder,    String PathfoderSub
-
-                                                                deletedFile_(
-                                                                    '${cxname_card}',
-                                                                    ' $cxname_card_ser',
-                                                                    'card');
-                                                                deletedFile_SQL(
-                                                                    '$cxname_card_ser');
-
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
-                                                              },
-                                                            ),
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: InkWell(
-                                                              child: Container(
-                                                                  width: 100,
-                                                                  decoration:
-                                                                      const BoxDecoration(
-                                                                    color: Colors
-                                                                        .black,
-                                                                    borderRadius: BorderRadius.only(
-                                                                        topLeft:
-                                                                            Radius.circular(
-                                                                                10),
-                                                                        topRight:
-                                                                            Radius.circular(
-                                                                                10),
-                                                                        bottomLeft:
-                                                                            Radius.circular(
-                                                                                10),
-                                                                        bottomRight:
-                                                                            Radius.circular(10)),
-                                                                    // border: Border.all(color: Colors.white, width: 1),
-                                                                  ),
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          8.0),
-                                                                  child:
-                                                                      const Center(
-                                                                          child:
-                                                                              Text(
-                                                                    'ปิด',
-                                                                    style: TextStyle(
-                                                                        color: PeopleChaoScreen_Color
-                                                                            .Colors_Text3_,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T),
-                                                                  ))),
-                                                              onTap: () {
-                                                                GC_contractf();
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
-                                                              },
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  );
-                                                },
-                                              );
-                                      },
-                                    ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      // Expanded(
-                                      //   flex: 1,
-                                      //   child: Padding(
-                                      //     padding: const EdgeInsets.all(8.0),
-                                      //     child: InkWell(
-                                      //       child: Container(
-                                      //         height: 40,
-                                      //         decoration: BoxDecoration(
-                                      //           color: Colors.red[400],
-                                      //           borderRadius:
-                                      //               const BorderRadius.only(
-                                      //                   topLeft:
-                                      //                       Radius.circular(10),
-                                      //                   topRight:
-                                      //                       Radius.circular(10),
-                                      //                   bottomLeft:
-                                      //                       Radius.circular(10),
-                                      //                   bottomRight:
-                                      //                       Radius.circular(
-                                      //                           10)),
-                                      //         ),
-                                      //         child: const Center(
-                                      //           child: Text(
-                                      //             'ลบ(PDF)',
-                                      //             textAlign: TextAlign.start,
-                                      //             style: TextStyle(
-                                      //                 color:
-                                      //                     PeopleChaoScreen_Color
-                                      //                         .Colors_Text2_,
-                                      //                 // fontWeight: FontWeight.bold,
-                                      //                 fontFamily: Font_.Fonts_T
-                                      //                 //fontSize: 10.0
-                                      //                 ),
-                                      //           ),
-                                      //         ),
-                                      //       ),
-                                      //       onTap: () async {
-                                      //         // deletedFile_('${cxname_card}',
-                                      //         //     ' $cxname_card_ser');
-
-                                      //         // deletedFile_('${cxname_card}',
-                                      //         //     ' $cxname_card_ser', 'card');
-                                      //         // deletedFile_SQL(
-                                      //         //     '$cxname_card_ser');
-                                      //       },
-                                      //     ),
-                                      //   ),
-                                      // ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: InkWell(
-                                            child: Container(
-                                              height: 40,
+                          flex: 2,
+                          child: Stack(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: (cxname_card != null)
+                                    ? Stack(
+                                        children: [
+                                          Container(
                                               decoration: BoxDecoration(
-                                                color: Colors.orange[400],
+                                                color: Colors.grey[300],
                                                 borderRadius:
                                                     const BorderRadius.only(
                                                         topLeft:
@@ -5869,1047 +6431,354 @@ class _RentalInformationState extends State<RentalInformation> {
                                                             Radius.circular(
                                                                 10)),
                                               ),
-                                              child: const Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsets.all(4.0),
-                                                    child: Icon(
-                                                      Icons.print,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    'พิมพ์',
-                                                    textAlign: TextAlign.start,
+                                              child: Image.network(
+                                                '${MyConstant().domain}/files/$foder/contract/card/$cxname_card',
+                                                // width: 200,
+                                                // height: 160,
+                                                fit: BoxFit.cover,
+                                              )
+                                              //  Center(
+                                              //   child: Column(
+                                              //     mainAxisAlignment: MainAxisAlignment.center,
+                                              //     children: [
+                                              //       Text(
+                                              //         'พบเอกสาร',
+                                              //         textAlign: TextAlign.center,
+                                              //         style: TextStyle(
+                                              //             color: PeopleChaoScreen_Color
+                                              //                 .Colors_Text2_,
+                                              //             // fontWeight: FontWeight.bold,
+                                              //             fontFamily: Font_.Fonts_T
+
+                                              //             //fontSize: 10.0
+                                              //             ),
+                                              //       ),
+                                              //       Text(
+                                              //         '$cxname_card',
+                                              //         textAlign: TextAlign.center,
+                                              //         style: TextStyle(
+                                              //             color: Colors.blue[800],
+                                              //             // fontWeight: FontWeight.bold,
+                                              //             fontFamily: Font_.Fonts_T,
+                                              //             fontSize: 8.0),
+                                              //       ),
+                                              //     ],
+                                              //   ),
+                                              // ),
+                                              ),
+                                          Positioned(
+                                            top: 20,
+                                            right: 10,
+                                            child: InkWell(
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.red[900]!
+                                                      .withOpacity(0.8),
+                                                  borderRadius:
+                                                      const BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  10),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  10),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  10),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  10)),
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: const Center(
+                                                  child: Text(
+                                                    'ดูเอกสาร',
+                                                    textAlign: TextAlign.center,
                                                     style: TextStyle(
-                                                        color:
-                                                            PeopleChaoScreen_Color
-                                                                .Colors_Text2_,
+                                                        color: Colors.white,
                                                         // fontWeight: FontWeight.bold,
                                                         fontFamily:
                                                             Font_.Fonts_T
+
                                                         //fontSize: 10.0
                                                         ),
                                                   ),
-                                                ],
-                                              ),
-                                            ),
-                                            onTap: () async {
-                                              String Url =
-                                                  await '${MyConstant().domain}/files/$foder/contract/card/$cxname_card';
-                                              print(Url);
-                                              Idcard_(context, Url);
-                                              // String Url =
-                                              //     'https://www.etda.or.th/getattachment/78750426-4a58-4c36-85d3-d1c11c3db1f3/IUB-65-Final.pdf.aspx';
-                                              // if (Url == '') {
-                                              //   showDialog<void>(
-                                              //     context: context,
-                                              //     barrierDismissible:
-                                              //         false, // user must tap button!
-                                              //     builder:
-                                              //         (BuildContext context) {
-                                              //       return AlertDialog(
-                                              //         shape: const RoundedRectangleBorder(
-                                              //             borderRadius:
-                                              //                 BorderRadius.all(
-                                              //                     Radius.circular(
-                                              //                         10.0))),
-                                              //         title: const Center(
-                                              //             child: Text(
-                                              //           'ไม่พบสำเนาบัตรประชาชน',
-                                              //           style: TextStyle(
-                                              //               color: PeopleChaoScreen_Color
-                                              //                   .Colors_Text1_,
-                                              //               fontWeight:
-                                              //                   FontWeight.bold,
-                                              //               fontFamily:
-                                              //                   FontWeight_
-                                              //                       .Fonts_T),
-                                              //         )),
-                                              //         content:
-                                              //             SingleChildScrollView(
-                                              //           child: ListBody(
-                                              //             children: const <
-                                              //                 Widget>[
-                                              //               Text(
-                                              //                 'ไม่พบเอกสาร หรือ กรุณาอัพโหลดก่อน จึงจะสามารถพิมพ์ได้',
-                                              //                 style: TextStyle(
-                                              //                     color: PeopleChaoScreen_Color
-                                              //                         .Colors_Text2_,
-                                              //                     fontFamily: Font_
-                                              //                         .Fonts_T),
-                                              //               ),
-                                              //             ],
-                                              //           ),
-                                              //         ),
-                                              //         actions: <Widget>[
-                                              //           InkWell(
-                                              //             child: Container(
-                                              //                 width: 100,
-                                              //                 decoration:
-                                              //                     const BoxDecoration(
-                                              //                   color: Colors
-                                              //                       .black,
-                                              //                   borderRadius: BorderRadius.only(
-                                              //                       topLeft: Radius
-                                              //                           .circular(
-                                              //                               10),
-                                              //                       topRight: Radius
-                                              //                           .circular(
-                                              //                               10),
-                                              //                       bottomLeft:
-                                              //                           Radius.circular(
-                                              //                               10),
-                                              //                       bottomRight:
-                                              //                           Radius.circular(
-                                              //                               10)),
-                                              //                   // border: Border.all(color: Colors.white, width: 1),
-                                              //                 ),
-                                              //                 padding:
-                                              //                     const EdgeInsets
-                                              //                         .all(8.0),
-                                              //                 child:
-                                              //                     const Center(
-                                              //                         child:
-                                              //                             Text(
-                                              //                   'ปิด',
-                                              //                   style: TextStyle(
-                                              //                       color: PeopleChaoScreen_Color
-                                              //                           .Colors_Text3_,
-                                              //                       fontWeight:
-                                              //                           FontWeight
-                                              //                               .bold,
-                                              //                       fontFamily:
-                                              //                           Font_
-                                              //                               .Fonts_T),
-                                              //                 ))),
-                                              //             onTap: () {
-                                              //               Navigator.of(
-                                              //                       context)
-                                              //                   .pop();
-                                              //             },
-                                              //           ),
-                                              //           // TextButton(
-                                              //           //   child: const Text('ตกลง'),
-                                              //           //   onPressed: () {
-                                              //           //     Navigator.of(context).pop();
-                                              //           //   },
-                                              //           // ),
-                                              //         ],
-                                              //       );
-                                              //     },
-                                              //   );
-                                              // } else {
-                                              //   Navigator.push(
-                                              //       context,
-                                              //       MaterialPageRoute(
-                                              //         builder: (context) =>
-                                              //             PreviewScreenRental_(
-                                              //                 title:
-                                              //                     'สำเนาบัตรประชาชน',
-                                              //                 Url: Url),
-                                              //       ));
-                                              // }
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Text(
-                    'เอกสารสัญญาเช่า',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        color: PeopleChaoScreen_Color.Colors_Text2_,
-                        // fontWeight: FontWeight.bold,
-                        fontFamily: Font_.Fonts_T
-                        //fontSize: 10.0
-                        ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              // height: 150,
-              decoration: BoxDecoration(
-                // color: AppbackgroundColor.Sub_Abg_Colors,
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
-                    bottomLeft: Radius.circular(10),
-                    bottomRight: Radius.circular(10)),
-                border: Border.all(color: Colors.grey, width: 1),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      child: Column(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'เอกสารสัญญาเช่า(ต้นฉบับ)',
-                              maxLines: 2,
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text2_,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    height: 60,
-                                    decoration: const BoxDecoration(
-                                      // color: Colors.orange[600],
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          topRight: Radius.circular(10),
-                                          bottomLeft: Radius.circular(10),
-                                          bottomRight: Radius.circular(10)),
-                                    ),
-                                    child: Center(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            '',
-                                            maxLines: 2,
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: (cxname_lease != null)
-                                                    ? Colors.black
-                                                    : Colors.red,
-                                                // fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T
-                                                //fontSize: 10.0
                                                 ),
-                                          ),
-                                          Text(
-                                            '',
-                                            maxLines: 2,
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: Colors.blue[800],
-                                                // fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T,
-                                                fontSize: 8.0),
-                                          ),
+                                              ),
+                                              onTap: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (_) => Dialog(
+                                                    child: Stack(
+                                                      children: [
+                                                        SizedBox(
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.8,
+                                                          child: FittedBox(
+                                                            fit: BoxFit.contain,
+                                                            child: (cxname_card ==
+                                                                        null ||
+                                                                    cxname_card
+                                                                            .toString() ==
+                                                                        '')
+                                                                ? const Icon(Icons
+                                                                    .image_not_supported)
+                                                                : Image.network(
+                                                                    '${MyConstant().domain}/files/$foder/contract/card/$cxname_card'),
+                                                          ),
+                                                        ),
+                                                        Positioned(
+                                                            top: 10,
+                                                            right: 10,
+                                                            child: InkWell(
+                                                              onTap: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                              },
+                                                              child: const Icon(
+                                                                Icons
+                                                                    .cancel_outlined,
+                                                                size: 40,
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                            ))
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          )
                                         ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    height: 40,
-                                    decoration: const BoxDecoration(
-                                      // color: Colors.orange[600],
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          topRight: Radius.circular(10),
-                                          bottomLeft: Radius.circular(10),
-                                          bottomRight: Radius.circular(10)),
-                                    ),
-                                    child: const Center(
-                                      child: Text(
-                                        '',
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                            color: Colors.green,
-                                            // fontWeight: FontWeight.bold,
-                                            fontFamily: Font_.Fonts_T
-                                            //fontSize: 10.0
-                                            ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: InkWell(
-                                    child: Container(
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        color: Colors.orange[400],
-                                        borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            topRight: Radius.circular(10),
-                                            bottomLeft: Radius.circular(10),
-                                            bottomRight: Radius.circular(10)),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          const Padding(
-                                            padding: EdgeInsets.all(4.0),
-                                            child: Icon(
-                                              Icons.print,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          Text(
-                                            'พิมพ์',
-                                            textAlign: TextAlign.start,
-                                            style: const TextStyle(
+                                      )
+                                    : Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                          borderRadius: const BorderRadius.only(
+                                              topLeft: Radius.circular(10),
+                                              topRight: Radius.circular(10),
+                                              bottomLeft: Radius.circular(10),
+                                              bottomRight: Radius.circular(10)),
+                                        ),
+                                        child: const Center(
+                                          child: Text(
+                                            'ไม่พบเอกสาร',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
                                                 color: PeopleChaoScreen_Color
                                                     .Colors_Text2_,
                                                 // fontWeight: FontWeight.bold,
                                                 fontFamily: Font_.Fonts_T
+
                                                 //fontSize: 10.0
                                                 ),
                                           ),
-                                        ],
+                                        ),
                                       ),
-                                    ),
-                                    onTap: () async {
-                                      print('base64Image');
-                                      // print(base64Image);
-                                      List newValuePDFimg = [];
-                                      for (int index = 0; index < 1; index++) {
-                                        if (renTalModels[0].imglogo!.trim() ==
-                                            '') {
-                                          // newValuePDFimg.add(
-                                          //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
-                                        } else {
-                                          newValuePDFimg.add(
-                                              '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
-                                        }
-                                      }
-                                      SharedPreferences preferences =
-                                          await SharedPreferences.getInstance();
-                                      var ren =
-                                          preferences.getString('renTalSer');
-                                      var renTal_name =
-                                          preferences.getString('renTalName');
-
-                                      final tableData00 = [
-                                        for (int index = 0;
-                                            index < quotxSelectModels.length;
-                                            index++)
-                                          [
-                                            '${quotxSelectModels[index].unit} / ${quotxSelectModels[index].term} (งวด)',
-                                            '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].sdate!} 00:00:00'))} - ${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].ldate!} 00:00:00'))}',
-                                            '${quotxSelectModels[index].expname}',
-                                            '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
-                                            '${nFormat.format(int.parse(quotxSelectModels[index].term!) * double.parse(quotxSelectModels[index].total!))}',
-                                          ],
-                                      ];
-                                      (ren.toString() == '82')
-                                          ? Pdfgen_Agreement_Ekkamai
-                                              .exportPDF_Agreement_Ekkamai(
-                                                  context,
-                                                  '${widget.Get_Value_NameShop_index}',
-                                                  '${widget.Get_Value_cid}',
-                                                  _verticalGroupValue,
-                                                  Form_nameshop.text,
-                                                  Form_typeshop.text,
-                                                  Form_bussshop.text,
-                                                  Form_bussscontact.text,
-                                                  Form_address.text,
-                                                  Form_tel.text,
-                                                  Form_email.text,
-                                                  Form_tax.text,
-                                                  Form_ln.text,
-                                                  Form_zn.text,
-                                                  Form_area.text,
-                                                  Form_qty.text,
-                                                  Form_sdate.text,
-                                                  Form_ldate.text,
-                                                  Form_period.text,
-                                                  Form_rtname.text,
-                                                  quotxSelectModels,
-                                                  _TransModels,
-                                                  '$renTal_name',
-                                                  '${renTalModels[0].bill_addr}',
-                                                  '${renTalModels[0].bill_email}',
-                                                  '${renTalModels[0].bill_tel}',
-                                                  '${renTalModels[0].bill_tax}',
-                                                  '${renTalModels[0].bill_name}',
-                                                  newValuePDFimg,
-                                                  tableData00)
-                                          : Pdfgen_Agreement.exportPDF_Agreement(
-                                              context,
-                                              '${widget.Get_Value_NameShop_index}',
-                                              '${widget.Get_Value_cid}',
-                                              _verticalGroupValue,
-                                              Form_nameshop.text,
-                                              Form_typeshop.text,
-                                              Form_bussshop.text,
-                                              Form_bussscontact.text,
-                                              Form_address.text,
-                                              Form_tel.text,
-                                              Form_email.text,
-                                              Form_tax.text,
-                                              Form_ln.text,
-                                              Form_zn.text,
-                                              Form_area.text,
-                                              Form_qty.text,
-                                              Form_sdate.text,
-                                              Form_ldate.text,
-                                              Form_period.text,
-                                              Form_rtname.text,
-                                              quotxSelectModels,
-                                              _TransModels,
-                                              '$renTal_name',
-                                              '${renTalModels[0].bill_addr}',
-                                              '${renTalModels[0].bill_email}',
-                                              '${renTalModels[0].bill_tel}',
-                                              '${renTalModels[0].bill_tax}',
-                                              '${renTalModels[0].bill_name}',
-                                              newValuePDFimg,
-                                              tableData00
-
-                                              // (ser_user == null) ? '' : ser_user
-                                              );
-                                    },
-                                  ),
-                                ),
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  // Expanded(
-                  //   flex: 1,
-                  //   child: Text(''),
-                  // ),
-                  // Expanded(
-                  //   flex: 2,
-                  //   child: Container(
-                  //     child: Column(
-                  //       children: [
-                  //         Padding(
-                  //           padding: EdgeInsets.all(8.0),
-                  //           child: Text(
-                  //             'เอกสารสัญญาเช่า(เซ็นแล้ว)',
-                  //             textAlign: TextAlign.start,
-                  //             style: TextStyle(
-                  //                 color: PeopleChaoScreen_Color.Colors_Text2_,
-                  //                 fontWeight: FontWeight.bold,
-                  //                 fontFamily: FontWeight_.Fonts_T
-                  //                 //fontSize: 10.0
-                  //                 ),
-                  //           ),
-                  //         ),
-                  //         Row(
-                  //           children: [
-                  //             Expanded(
-                  //               flex: 1,
-                  //               child: Padding(
-                  //                 padding: const EdgeInsets.all(8.0),
-                  //                 child: Container(
-                  //                   height: 60,
-                  //                   decoration: const BoxDecoration(
-                  //                     // color: Colors.orange[600],
-                  //                     borderRadius: BorderRadius.only(
-                  //                         topLeft: Radius.circular(10),
-                  //                         topRight: Radius.circular(10),
-                  //                         bottomLeft: Radius.circular(10),
-                  //                         bottomRight: Radius.circular(10)),
-                  //                   ),
-                  //                   child: Center(
-                  //                     child: Column(
-                  //                       mainAxisAlignment:
-                  //                           MainAxisAlignment.center,
-                  //                       children: [
-                  //                         Text(
-                  //                           (cxname_lease != null)
-                  //                               ? 'พบเอกสาร'
-                  //                               : 'ไม่พบเอกสาร',
-                  //                           textAlign: TextAlign.start,
-                  //                           style: TextStyle(
-                  //                               color: (cxname_lease != null)
-                  //                                   ? Colors.black
-                  //                                   : Colors.red,
-                  //                               // fontWeight: FontWeight.bold,
-                  //                               fontFamily: Font_.Fonts_T
-                  //                               //fontSize: 10.0
-                  //                               ),
-                  //                         ),
-                  //                         Text(
-                  //                           (cxname_lease != null)
-                  //                               ? '$cxname_lease'
-                  //                               : '',
-                  //                           textAlign: TextAlign.start,
-                  //                           style: TextStyle(
-                  //                               color: Colors.blue[800],
-                  //                               // fontWeight: FontWeight.bold,
-                  //                               fontFamily: Font_.Fonts_T,
-                  //                               fontSize: 8.0),
-                  //                         ),
-                  //                       ],
-                  //                     ),
-                  //                   ),
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //         Row(
-                  //           children: [
-                  //             Expanded(
-                  //               flex: 1,
-                  //               child: Padding(
-                  //                 padding: const EdgeInsets.all(8.0),
-                  //                 child: InkWell(
-                  //                   child: Container(
-                  //                     height: 40,
-                  //                     decoration: BoxDecoration(
-                  //                       color: Colors.blue[400],
-                  //                       borderRadius: const BorderRadius.only(
-                  //                           topLeft: Radius.circular(10),
-                  //                           topRight: Radius.circular(10),
-                  //                           bottomLeft: Radius.circular(10),
-                  //                           bottomRight: Radius.circular(10)),
-                  //                     ),
-                  //                     child: const Center(
-                  //                       child: Text(
-                  //                         'อัพโหลดไฟล์(PDF)',
-                  //                         textAlign: TextAlign.start,
-                  //                         style: TextStyle(
-                  //                             color: PeopleChaoScreen_Color
-                  //                                 .Colors_Text2_,
-                  //                             // fontWeight: FontWeight.bold,
-                  //                             fontFamily: Font_.Fonts_T
-                  //                             //fontSize: 10.0
-                  //                             ),
-                  //                       ),
-                  //                     ),
-                  //                   ),
-                  //                   onTap: () async {
-                  //                     // uploadFile_Agreement();
-
-                  //                     (cxname_lease == null)
-                  //                         ? uploadFile_Agreement(
-                  //                             '${cxname_lease}',
-                  //                             ' $cxname_lease_ser',
-                  //                           )
-                  //                         : showDialog<void>(
-                  //                             context: context,
-                  //                             barrierDismissible:
-                  //                                 false, // user must tap button!
-                  //                             builder: (BuildContext context) {
-                  //                               return AlertDialog(
-                  //                                 shape:
-                  //                                     const RoundedRectangleBorder(
-                  //                                         borderRadius:
-                  //                                             BorderRadius.all(
-                  //                                                 Radius.circular(
-                  //                                                     10.0))),
-                  //                                 title: const Center(
-                  //                                     child: Text(
-                  //                                   'มีเอกสารสัญญาเช่า(เซ็นแล้ว)อยู่แล้ว',
-                  //                                   style: TextStyle(
-                  //                                       color:
-                  //                                           PeopleChaoScreen_Color
-                  //                                               .Colors_Text1_,
-                  //                                       fontWeight:
-                  //                                           FontWeight.bold,
-                  //                                       fontFamily: FontWeight_
-                  //                                           .Fonts_T),
-                  //                                 )),
-                  //                                 content:
-                  //                                     SingleChildScrollView(
-                  //                                   child: ListBody(
-                  //                                     children: const <Widget>[
-                  //                                       Text(
-                  //                                         'มีเอกสารเอกสารสัญญาเช่า(เซ็นแล้ว)อยู่แล้ว หากต้องการอัพโหลดกรุณาลบเอกสารที่มีอยู่แล้วก่อน',
-                  //                                         style: TextStyle(
-                  //                                             color: PeopleChaoScreen_Color
-                  //                                                 .Colors_Text2_,
-                  //                                             fontFamily: Font_
-                  //                                                 .Fonts_T),
-                  //                                       ),
-                  //                                     ],
-                  //                                   ),
-                  //                                 ),
-                  //                                 actions: <Widget>[
-                  //                                   Row(
-                  //                                     mainAxisAlignment:
-                  //                                         MainAxisAlignment
-                  //                                             .center,
-                  //                                     children: [
-                  //                                       Padding(
-                  //                                         padding:
-                  //                                             const EdgeInsets
-                  //                                                 .all(8.0),
-                  //                                         child: InkWell(
-                  //                                           child: Container(
-                  //                                               width: 100,
-                  //                                               decoration:
-                  //                                                   BoxDecoration(
-                  //                                                 color: Colors
-                  //                                                     .red[600],
-                  //                                                 borderRadius: const BorderRadius
-                  //                                                         .only(
-                  //                                                     topLeft:
-                  //                                                         Radius.circular(
-                  //                                                             10),
-                  //                                                     topRight:
-                  //                                                         Radius.circular(
-                  //                                                             10),
-                  //                                                     bottomLeft:
-                  //                                                         Radius.circular(
-                  //                                                             10),
-                  //                                                     bottomRight:
-                  //                                                         Radius.circular(
-                  //                                                             10)),
-                  //                                                 // border: Border.all(color: Colors.white, width: 1),
-                  //                                               ),
-                  //                                               padding:
-                  //                                                   const EdgeInsets
-                  //                                                           .all(
-                  //                                                       8.0),
-                  //                                               child:
-                  //                                                   const Center(
-                  //                                                       child:
-                  //                                                           Text(
-                  //                                                 'ลบเอกสาร',
-                  //                                                 style: TextStyle(
-                  //                                                     color: PeopleChaoScreen_Color
-                  //                                                         .Colors_Text3_,
-                  //                                                     fontWeight:
-                  //                                                         FontWeight
-                  //                                                             .bold,
-                  //                                                     fontFamily:
-                  //                                                         Font_
-                  //                                                             .Fonts_T),
-                  //                                               ))),
-                  //                                           onTap: () async {
-                  //                                             deletedFile_SQL(
-                  //                                                 '$cxname_lease_ser');
-                  //                                             deletedFile_(
-                  //                                                 '${cxname_lease}',
-                  //                                                 ' $cxname_lease_ser',
-                  //                                                 'lease');
-
-                  //                                             GC_contractf();
-                  //                                             Navigator.of(
-                  //                                                     context)
-                  //                                                 .pop();
-                  //                                           },
-                  //                                         ),
-                  //                                       ),
-                  //                                       Padding(
-                  //                                         padding:
-                  //                                             const EdgeInsets
-                  //                                                 .all(8.0),
-                  //                                         child: InkWell(
-                  //                                           child: Container(
-                  //                                               width: 100,
-                  //                                               decoration:
-                  //                                                   const BoxDecoration(
-                  //                                                 color: Colors
-                  //                                                     .black,
-                  //                                                 borderRadius: BorderRadius.only(
-                  //                                                     topLeft:
-                  //                                                         Radius.circular(
-                  //                                                             10),
-                  //                                                     topRight:
-                  //                                                         Radius.circular(
-                  //                                                             10),
-                  //                                                     bottomLeft:
-                  //                                                         Radius.circular(
-                  //                                                             10),
-                  //                                                     bottomRight:
-                  //                                                         Radius.circular(
-                  //                                                             10)),
-                  //                                                 // border: Border.all(color: Colors.white, width: 1),
-                  //                                               ),
-                  //                                               padding:
-                  //                                                   const EdgeInsets
-                  //                                                           .all(
-                  //                                                       8.0),
-                  //                                               child:
-                  //                                                   const Center(
-                  //                                                       child:
-                  //                                                           Text(
-                  //                                                 'ปิด',
-                  //                                                 style: TextStyle(
-                  //                                                     color: PeopleChaoScreen_Color
-                  //                                                         .Colors_Text3_,
-                  //                                                     fontWeight:
-                  //                                                         FontWeight
-                  //                                                             .bold,
-                  //                                                     fontFamily:
-                  //                                                         Font_
-                  //                                                             .Fonts_T),
-                  //                                               ))),
-                  //                                           onTap: () {
-                  //                                             GC_contractf();
-                  //                                             Navigator.of(
-                  //                                                     context)
-                  //                                                 .pop();
-                  //                                           },
-                  //                                         ),
-                  //                                       ),
-                  //                                     ],
-                  //                                   ),
-                  //                                 ],
-                  //                               );
-                  //                             },
-                  //                           );
-                  //                   },
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //         Row(
-                  //           children: [
-                  //             // Expanded(
-                  //             //   flex: 1,
-                  //             //   child: Padding(
-                  //             //     padding: const EdgeInsets.all(8.0),
-                  //             //     child: InkWell(
-                  //             //       child: Container(
-                  //             //         height: 40,
-                  //             //         decoration: BoxDecoration(
-                  //             //           color: Colors.red[400],
-                  //             //           borderRadius: const BorderRadius.only(
-                  //             //               topLeft: Radius.circular(10),
-                  //             //               topRight: Radius.circular(10),
-                  //             //               bottomLeft: Radius.circular(10),
-                  //             //               bottomRight: Radius.circular(10)),
-                  //             //         ),
-                  //             //         child: const Center(
-                  //             //           child: Text(
-                  //             //             'ลบ(PDF)',
-                  //             //             textAlign: TextAlign.start,
-                  //             //             style: TextStyle(
-                  //             //                 color: PeopleChaoScreen_Color
-                  //             //                     .Colors_Text2_,
-                  //             //                 // fontWeight: FontWeight.bold,
-                  //             //                 fontFamily: Font_.Fonts_T
-                  //             //                 //fontSize: 10.0
-                  //             //                 ),
-                  //             //           ),
-                  //             //         ),
-                  //             //       ),
-                  //             //       onTap: () async {
-                  //             //         deletedFile_('${cxname_lease}',
-                  //             //             ' $cxname_lease_ser');
-                  //             //         // final file = await pickFile_agreement();
-                  //             //         // if (file != null) {
-                  //             //         //   // Upload the file to the server
-                  //             //         //   uploadFile_Agreement(file);
-                  //             //         // }
-                  //             //       },
-                  //             //     ),
-                  //             //   ),
-                  //             // ),
-                  //             Expanded(
-                  //               flex: 1,
-                  //               child: Padding(
-                  //                 padding: const EdgeInsets.all(8.0),
-                  //                 child: InkWell(
-                  //                   child: Container(
-                  //                     height: 40,
-                  //                     decoration: BoxDecoration(
-                  //                       color: Colors.orange[400],
-                  //                       borderRadius: const BorderRadius.only(
-                  //                           topLeft: Radius.circular(10),
-                  //                           topRight: Radius.circular(10),
-                  //                           bottomLeft: Radius.circular(10),
-                  //                           bottomRight: Radius.circular(10)),
-                  //                     ),
-                  //                     child: Row(
-                  //                       mainAxisAlignment:
-                  //                           MainAxisAlignment.center,
-                  //                       children: const [
-                  //                         Padding(
-                  //                           padding: EdgeInsets.all(4.0),
-                  //                           child: Icon(
-                  //                             Icons.print,
-                  //                             color: Colors.white,
-                  //                           ),
-                  //                         ),
-                  //                         Text(
-                  //                           'พิมพ์',
-                  //                           textAlign: TextAlign.start,
-                  //                           style: TextStyle(
-                  //                               color: PeopleChaoScreen_Color
-                  //                                   .Colors_Text2_,
-                  //                               // fontWeight: FontWeight.bold,
-                  //                               fontFamily: Font_.Fonts_T
-                  //                               //fontSize: 10.0
-                  //                               ),
-                  //                         ),
-                  //                       ],
-                  //                     ),
-                  //                   ),
-                  //                   onTap: () async {
-                  //                     // String Url =
-                  //                     //     'https://www.etda.or.th/getattachment/78750426-4a58-4c36-85d3-d1c11c3db1f3/IUB-65-Final.pdf.aspx';
-                  //                     String Url =
-                  //                         await '${MyConstant().domain}/files/kad_taii/contract/lease/$cxname_lease';
-                  //                     print(Url);
-                  //                     if (Url == '') {
-                  //                       showDialog<void>(
-                  //                         context: context,
-                  //                         barrierDismissible:
-                  //                             false, // user must tap button!
-                  //                         builder: (BuildContext context) {
-                  //                           return AlertDialog(
-                  //                             shape:
-                  //                                 const RoundedRectangleBorder(
-                  //                                     borderRadius:
-                  //                                         BorderRadius.all(
-                  //                                             Radius.circular(
-                  //                                                 10.0))),
-                  //                             title: const Center(
-                  //                                 child: Text(
-                  //                               'ไม่พบเอกสารสัญญาเช่า(เซ็นแล้ว)',
-                  //                               style: TextStyle(
-                  //                                   color:
-                  //                                       PeopleChaoScreen_Color
-                  //                                           .Colors_Text1_,
-                  //                                   fontWeight: FontWeight.bold,
-                  //                                   fontFamily:
-                  //                                       FontWeight_.Fonts_T),
-                  //                             )),
-                  //                             content: SingleChildScrollView(
-                  //                               child: ListBody(
-                  //                                 children: const <Widget>[
-                  //                                   Text(
-                  //                                     'ไม่พบเอกสาร หรือ กรุณาอัพโหลดก่อน จึงจะสามารถพิมพ์ได้',
-                  //                                     style: TextStyle(
-                  //                                         color:
-                  //                                             PeopleChaoScreen_Color
-                  //                                                 .Colors_Text2_,
-                  //                                         fontFamily:
-                  //                                             Font_.Fonts_T),
-                  //                                   ),
-                  //                                 ],
-                  //                               ),
-                  //                             ),
-                  //                             actions: <Widget>[
-                  //                               InkWell(
-                  //                                 child: Container(
-                  //                                     width: 100,
-                  //                                     decoration:
-                  //                                         const BoxDecoration(
-                  //                                       color: Colors.black,
-                  //                                       borderRadius:
-                  //                                           BorderRadius.only(
-                  //                                               topLeft: Radius
-                  //                                                   .circular(
-                  //                                                       10),
-                  //                                               topRight: Radius
-                  //                                                   .circular(
-                  //                                                       10),
-                  //                                               bottomLeft: Radius
-                  //                                                   .circular(
-                  //                                                       10),
-                  //                                               bottomRight: Radius
-                  //                                                   .circular(
-                  //                                                       10)),
-                  //                                       // border: Border.all(color: Colors.white, width: 1),
-                  //                                     ),
-                  //                                     padding:
-                  //                                         const EdgeInsets.all(
-                  //                                             8.0),
-                  //                                     child: const Center(
-                  //                                         child: Text(
-                  //                                       'ปิด',
-                  //                                       style: TextStyle(
-                  //                                           color: PeopleChaoScreen_Color
-                  //                                               .Colors_Text3_,
-                  //                                           fontWeight:
-                  //                                               FontWeight.bold,
-                  //                                           fontFamily:
-                  //                                               Font_.Fonts_T),
-                  //                                     ))),
-                  //                                 onTap: () {
-                  //                                   Navigator.of(context).pop();
-                  //                                 },
-                  //                               ),
-                  //                               // TextButton(
-                  //                               //   child: const Text('ตกลง'),
-                  //                               //   onPressed: () {
-                  //                               //     Navigator.of(context).pop();
-                  //                               //   },
-                  //                               // ),
-                  //                             ],
-                  //                           );
-                  //                         },
-                  //                       );
-                  //                     } else {
-                  //                       Navigator.push(
-                  //                           context,
-                  //                           MaterialPageRoute(
-                  //                             builder: (context) =>
-                  //                                 PreviewScreenRental_(
-                  //                                     title:
-                  //                                         'เอกสารสัญญาเช่า(เซ็นแล้ว)',
-                  //                                     Url: Url),
-                  //                           ));
-                  //                     }
-                  //                   },
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'เอกสารอื่นๆ ${Other_file.length} รายการ',
-                              textAlign: TextAlign.start,
-                              style: const TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text2_,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
+                        ),
+                        if (Responsive.isDesktop(context))
+                          Expanded(
+                            flex: 2,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  // color: Colors.grey,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10)),
+                                ),
+                              ),
                             ),
                           ),
-                          Row(
+                        Expanded(
+                          flex: 2,
+                          child: Row(
                             children: [
+                              // Expanded(
+                              //   flex: 1,
+                              //   child: Padding(
+                              //     padding: const EdgeInsets.all(8.0),
+                              //     child: Container(
+                              //       decoration: const BoxDecoration(
+                              //         color: Colors.red,
+                              //         borderRadius: BorderRadius.only(
+                              //             topLeft: Radius.circular(10),
+                              //             topRight: Radius.circular(10),
+                              //             bottomLeft: Radius.circular(10),
+                              //             bottomRight: Radius.circular(10)),
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
+
                               Expanded(
                                 flex: 1,
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
-                                    height: 110,
-                                    padding: const EdgeInsets.all(4.0),
-                                    decoration: BoxDecoration(
-                                      // color: Colors.green,
-                                      borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(8),
-                                          topRight: Radius.circular(8),
-                                          bottomLeft: Radius.circular(8),
-                                          bottomRight: Radius.circular(8)),
-                                      border: Border.all(
-                                          color: Colors.grey, width: 2),
+                                    decoration: const BoxDecoration(
+                                      // color: Colors.white,
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
                                     ),
-                                    child: ScrollConfiguration(
-                                      behavior: ScrollConfiguration.of(context)
-                                          .copyWith(dragDevices: {
-                                        PointerDeviceKind.touch,
-                                        PointerDeviceKind.mouse,
-                                      }),
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        child: Row(
-                                          children: [
-                                            for (int index = 0;
-                                                index < Other_file.length;
-                                                index++)
-                                              Stack(
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: InkWell(
-                                                      onTap: () async {
-                                                        // String Url =
-                                                        //     'https://www.etda.or.th/getattachment/78750426-4a58-4c36-85d3-d1c11c3db1f3/IUB-65-Final.pdf.aspx';
-                                                        String Url =
-                                                            await '${MyConstant().domain}/files/$foder/contract/other/${Other_file[index].filename}';
-                                                        print(Url);
-                                                        if (Url == '') {
-                                                          showDialog<void>(
-                                                            context: context,
-                                                            barrierDismissible:
-                                                                false, // user must tap button!
-                                                            builder:
-                                                                (BuildContext
-                                                                    context) {
-                                                              return AlertDialog(
-                                                                shape: const RoundedRectangleBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius.all(
-                                                                            Radius.circular(10.0))),
-                                                                title:
-                                                                    const Center(
-                                                                        child:
-                                                                            Text(
-                                                                  'ไม่พบเอกสารอื่นๆ',
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: InkWell(
+                                            child: Container(
+                                              height: 40,
+                                              decoration: BoxDecoration(
+                                                color: Colors.blue[300],
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(10),
+                                                        topRight:
+                                                            Radius.circular(10),
+                                                        bottomLeft:
+                                                            Radius.circular(10),
+                                                        bottomRight:
+                                                            Radius.circular(
+                                                                10)),
+                                              ),
+                                              child: const Center(
+                                                child: Text(
+                                                  'อัพโหลดไฟล์ ( jpeg,png,jpg )',
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
+                                              ),
+                                            ),
+                                            onTap: () async {
+                                              (cxname_card == null)
+                                                  ? uploadFile_IDcard(
+                                                      '${cxname_card}',
+                                                      ' $cxname_card_ser',
+                                                    )
+                                                  : showDialog<void>(
+                                                      context: context,
+                                                      barrierDismissible:
+                                                          false, // user must tap button!
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return AlertDialog(
+                                                          shape: const RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
+                                                                          10.0))),
+                                                          title: const Center(
+                                                              child: Text(
+                                                            'มีเอกสารสำเนาบัตรประชาชนอยู่แล้ว',
+                                                            style: TextStyle(
+                                                                color: PeopleChaoScreen_Color
+                                                                    .Colors_Text1_,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T),
+                                                          )),
+                                                          content:
+                                                              const SingleChildScrollView(
+                                                            child: ListBody(
+                                                              children: <Widget>[
+                                                                Text(
+                                                                  'มีเอกสารสำเนาบัตรประชาชนอยู่แล้ว หากต้องการอัพโหลดกรุณาลบเอกสารที่มีอยู่แล้วก่อน',
                                                                   style: TextStyle(
                                                                       color: PeopleChaoScreen_Color
-                                                                          .Colors_Text1_,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
+                                                                          .Colors_Text2_,
                                                                       fontFamily:
-                                                                          FontWeight_
+                                                                          Font_
                                                                               .Fonts_T),
-                                                                )),
-                                                                content:
-                                                                    const SingleChildScrollView(
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          actions: <Widget>[
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          8.0),
                                                                   child:
-                                                                      ListBody(
-                                                                    children: <Widget>[
-                                                                      Text(
-                                                                        'ไม่พบเอกสาร หรือ กรุณาอัพโหลดก่อน จึงจะสามารถพิมพ์ได้',
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                PeopleChaoScreen_Color.Colors_Text2_,
-                                                                            fontFamily: Font_.Fonts_T),
-                                                                      ),
-                                                                    ],
+                                                                      InkWell(
+                                                                    child: Container(
+                                                                        width: 100,
+                                                                        decoration: BoxDecoration(
+                                                                          color:
+                                                                              Colors.red[600],
+                                                                          borderRadius: const BorderRadius.only(
+                                                                              topLeft: Radius.circular(10),
+                                                                              topRight: Radius.circular(10),
+                                                                              bottomLeft: Radius.circular(10),
+                                                                              bottomRight: Radius.circular(10)),
+                                                                          // border: Border.all(color: Colors.white, width: 1),
+                                                                        ),
+                                                                        padding: const EdgeInsets.all(8.0),
+                                                                        child: const Center(
+                                                                            child: Text(
+                                                                          'ลบเอกสาร',
+                                                                          style: TextStyle(
+                                                                              color: PeopleChaoScreen_Color.Colors_Text3_,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T),
+                                                                        ))),
+                                                                    onTap:
+                                                                        () async {
+                                                                      //String fileName, String ser, String Pathfoder,    String PathfoderSub
+
+                                                                      deletedFile_(
+                                                                          '${cxname_card}',
+                                                                          ' $cxname_card_ser',
+                                                                          'card');
+                                                                      deletedFile_SQL(
+                                                                          '$cxname_card_ser');
+
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
                                                                   ),
                                                                 ),
-                                                                actions: <Widget>[
-                                                                  InkWell(
+                                                                Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          8.0),
+                                                                  child:
+                                                                      InkWell(
                                                                     child: Container(
                                                                         width: 100,
                                                                         decoration: const BoxDecoration(
@@ -6932,152 +6801,1194 @@ class _RentalInformationState extends State<RentalInformation> {
                                                                               fontFamily: Font_.Fonts_T),
                                                                         ))),
                                                                     onTap: () {
+                                                                      GC_contractf();
                                                                       Navigator.of(
                                                                               context)
                                                                           .pop();
                                                                     },
                                                                   ),
-                                                                  // TextButton(
-                                                                  //   child: const Text('ตกลง'),
-                                                                  //   onPressed: () {
-                                                                  //     Navigator.of(context).pop();
-                                                                  //   },
-                                                                  // ),
-                                                                ],
-                                                              );
-                                                            },
-                                                          );
-                                                        } else {
-                                                          Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    PreviewScreenRental_(
-                                                                        title:
-                                                                            'เอกสารอื่นๆ',
-                                                                        Url:
-                                                                            Url),
-                                                              ));
-                                                        }
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        );
                                                       },
-                                                      child: Container(
-                                                          width: 150,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: Colors.white,
-                                                            borderRadius: const BorderRadius
-                                                                    .only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        8),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        8),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        8),
-                                                                bottomRight:
-                                                                    Radius
-                                                                        .circular(
-                                                                            8)),
-                                                            border: Border.all(
-                                                                color:
-                                                                    Colors.grey,
-                                                                width: 2),
+                                                    );
+                                            },
+                                          ),
+                                        ),
+                                        Row(
+                                          children: [
+                                            // Expanded(
+                                            //   flex: 1,
+                                            //   child: Padding(
+                                            //     padding: const EdgeInsets.all(8.0),
+                                            //     child: InkWell(
+                                            //       child: Container(
+                                            //         height: 40,
+                                            //         decoration: BoxDecoration(
+                                            //           color: Colors.red[400],
+                                            //           borderRadius:
+                                            //               const BorderRadius.only(
+                                            //                   topLeft:
+                                            //                       Radius.circular(10),
+                                            //                   topRight:
+                                            //                       Radius.circular(10),
+                                            //                   bottomLeft:
+                                            //                       Radius.circular(10),
+                                            //                   bottomRight:
+                                            //                       Radius.circular(
+                                            //                           10)),
+                                            //         ),
+                                            //         child: const Center(
+                                            //           child: Text(
+                                            //             'ลบ(PDF)',
+                                            //             textAlign: TextAlign.start,
+                                            //             style: TextStyle(
+                                            //                 color:
+                                            //                     PeopleChaoScreen_Color
+                                            //                         .Colors_Text2_,
+                                            //                 // fontWeight: FontWeight.bold,
+                                            //                 fontFamily: Font_.Fonts_T
+                                            //                 //fontSize: 10.0
+                                            //                 ),
+                                            //           ),
+                                            //         ),
+                                            //       ),
+                                            //       onTap: () async {
+                                            //         // deletedFile_('${cxname_card}',
+                                            //         //     ' $cxname_card_ser');
+
+                                            //         // deletedFile_('${cxname_card}',
+                                            //         //     ' $cxname_card_ser', 'card');
+                                            //         // deletedFile_SQL(
+                                            //         //     '$cxname_card_ser');
+                                            //       },
+                                            //     ),
+                                            //   ),
+                                            // ),
+                                            Expanded(
+                                              flex: 1,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: InkWell(
+                                                  child: Container(
+                                                    height: 40,
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.orange[300],
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                                  .only(
+                                                              topLeft: Radius
+                                                                  .circular(10),
+                                                              topRight: Radius
+                                                                  .circular(10),
+                                                              bottomLeft: Radius
+                                                                  .circular(10),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          10)),
+                                                    ),
+                                                    child: const Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  4.0),
+                                                          child: Icon(
+                                                            Icons.print,
+                                                            color: Colors.black,
                                                           ),
+                                                        ),
+                                                        Text(
+                                                          'พิมพ์',
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          style: TextStyle(
+                                                              color: PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              fontFamily: Font_
+                                                                  .Fonts_T),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  onTap: () async {
+                                                    String Url =
+                                                        await '${MyConstant().domain}/files/$foder/contract/card/$cxname_card';
+                                                    print(Url);
+                                                    Idcard_(context, Url);
+                                                    // String Url =
+                                                    //     'https://www.etda.or.th/getattachment/78750426-4a58-4c36-85d3-d1c11c3db1f3/IUB-65-Final.pdf.aspx';
+                                                    // if (Url == '') {
+                                                    //   showDialog<void>(
+                                                    //     context: context,
+                                                    //     barrierDismissible:
+                                                    //         false, // user must tap button!
+                                                    //     builder:
+                                                    //         (BuildContext context) {
+                                                    //       return AlertDialog(
+                                                    //         shape: const RoundedRectangleBorder(
+                                                    //             borderRadius:
+                                                    //                 BorderRadius.all(
+                                                    //                     Radius.circular(
+                                                    //                         10.0))),
+                                                    //         title: const Center(
+                                                    //             child: Text(
+                                                    //           'ไม่พบสำเนาบัตรประชาชน',
+                                                    //           style: TextStyle(
+                                                    //               color: PeopleChaoScreen_Color
+                                                    //                   .Colors_Text1_,
+                                                    //               fontWeight:
+                                                    //                   FontWeight.bold,
+                                                    //               fontFamily:
+                                                    //                   FontWeight_
+                                                    //                       .Fonts_T),
+                                                    //         )),
+                                                    //         content:
+                                                    //             SingleChildScrollView(
+                                                    //           child: ListBody(
+                                                    //             children: const <
+                                                    //                 Widget>[
+                                                    //               Text(
+                                                    //                 'ไม่พบเอกสาร หรือ กรุณาอัพโหลดก่อน จึงจะสามารถพิมพ์ได้',
+                                                    //                 style: TextStyle(
+                                                    //                     color: PeopleChaoScreen_Color
+                                                    //                         .Colors_Text2_,
+                                                    //                     fontFamily: Font_
+                                                    //                         .Fonts_T),
+                                                    //               ),
+                                                    //             ],
+                                                    //           ),
+                                                    //         ),
+                                                    //         actions: <Widget>[
+                                                    //           InkWell(
+                                                    //             child: Container(
+                                                    //                 width: 100,
+                                                    //                 decoration:
+                                                    //                     const BoxDecoration(
+                                                    //                   color: Colors
+                                                    //                       .black,
+                                                    //                   borderRadius: BorderRadius.only(
+                                                    //                       topLeft: Radius
+                                                    //                           .circular(
+                                                    //                               10),
+                                                    //                       topRight: Radius
+                                                    //                           .circular(
+                                                    //                               10),
+                                                    //                       bottomLeft:
+                                                    //                           Radius.circular(
+                                                    //                               10),
+                                                    //                       bottomRight:
+                                                    //                           Radius.circular(
+                                                    //                               10)),
+                                                    //                   // border: Border.all(color: Colors.white, width: 1),
+                                                    //                 ),
+                                                    //                 padding:
+                                                    //                     const EdgeInsets
+                                                    //                         .all(8.0),
+                                                    //                 child:
+                                                    //                     const Center(
+                                                    //                         child:
+                                                    //                             Text(
+                                                    //                   'ปิด',
+                                                    //                   style: TextStyle(
+                                                    //                       color: PeopleChaoScreen_Color
+                                                    //                           .Colors_Text3_,
+                                                    //                       fontWeight:
+                                                    //                           FontWeight
+                                                    //                               .bold,
+                                                    //                       fontFamily:
+                                                    //                           Font_
+                                                    //                               .Fonts_T),
+                                                    //                 ))),
+                                                    //             onTap: () {
+                                                    //               Navigator.of(
+                                                    //                       context)
+                                                    //                   .pop();
+                                                    //             },
+                                                    //           ),
+                                                    //           // TextButton(
+                                                    //           //   child: const Text('ตกลง'),
+                                                    //           //   onPressed: () {
+                                                    //           //     Navigator.of(context).pop();
+                                                    //           //   },
+                                                    //           // ),
+                                                    //         ],
+                                                    //       );
+                                                    //     },
+                                                    //   );
+                                                    // } else {
+                                                    //   Navigator.push(
+                                                    //       context,
+                                                    //       MaterialPageRoute(
+                                                    //         builder: (context) =>
+                                                    //             PreviewScreenRental_(
+                                                    //                 title:
+                                                    //                     'สำเนาบัตรประชาชน',
+                                                    //                 Url: Url),
+                                                    //       ));
+                                                    // }
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Text(
+                          'เอกสารสัญญาเช่า',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                              // fontWeight: FontWeight.bold,
+                              fontFamily: Font_.Fonts_T
+                              //fontSize: 10.0
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    // height: 150,
+                    decoration: BoxDecoration(
+                      // color: AppbackgroundColor.Sub_Abg_Colors,
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10)),
+                      border: Border.all(color: Colors.grey, width: 1),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            child: Column(
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'เอกสารสัญญาเช่า(ต้นฉบับ)',
+                                    maxLines: 2,
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text2_,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T
+                                        //fontSize: 10.0
+                                        ),
+                                  ),
+                                ),
+                                (renTal_user.toString() == '90' ||
+                                        renTal_user.toString() == '50')
+                                    ? SizedBox()
+                                    : SizedBox(
+                                        height: 125,
+                                      ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: InkWell(
+                                          child: Container(
+                                            height: 40,
+                                            decoration: BoxDecoration(
+                                              color: Colors.orange[300],
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(10),
+                                                      topRight:
+                                                          Radius.circular(10),
+                                                      bottomLeft:
+                                                          Radius.circular(10),
+                                                      bottomRight:
+                                                          Radius.circular(10)),
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                const Padding(
+                                                  padding: EdgeInsets.all(4.0),
+                                                  child: Icon(
+                                                    Icons.print,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  'พิมพ์',
+                                                  textAlign: TextAlign.start,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          onTap: () async {
+                                            print('base64Image');
+                                            // print(base64Image);
+                                            List newValuePDFimg = [];
+                                            for (int index = 0;
+                                                index < 1;
+                                                index++) {
+                                              if (renTalModels[0]
+                                                      .imglogo!
+                                                      .trim() ==
+                                                  '') {
+                                                // newValuePDFimg.add(
+                                                //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
+                                              } else {
+                                                newValuePDFimg.add(
+                                                    '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
+                                                newValuePDFimg.add(
+                                                    '${MyConstant().domain}/files/$foder/contract/${renTalModels[0].img}');
+                                              }
+                                            }
+                                            SharedPreferences preferences =
+                                                await SharedPreferences
+                                                    .getInstance();
+                                            var ren = preferences
+                                                .getString('renTalSer');
+                                            var renTal_name = preferences
+                                                .getString('renTalName');
+
+                                            final tableData00 = [
+                                              for (int index = 0;
+                                                  index <
+                                                      quotxSelectModels.length;
+                                                  index++)
+                                                [
+                                                  '${quotxSelectModels[index].unit} / ${quotxSelectModels[index].term} (งวด)',
+                                                  '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].sdate!} 00:00:00'))} - ${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].ldate!} 00:00:00'))}',
+                                                  '${quotxSelectModels[index].expname}',
+                                                  '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
+                                                  '${nFormat.format(int.parse(quotxSelectModels[index].term!) * double.parse(quotxSelectModels[index].total!))}',
+                                                ],
+                                            ];
+                                            _showMyDialog_SAVE(
+                                                context,
+                                                tableData00,
+                                                newValuePDFimg,
+                                                ren,
+                                                1);
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                if (renTal_user.toString() == '90' ||
+                                    renTal_user.toString() == '50')
+                                  Container(
+                                    child: Column(
+                                      children: [
+                                        const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text(
+                                            'เอกสารแนบท้ายสัญญา (J Space)',
+                                            maxLines: 2,
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                color: PeopleChaoScreen_Color
+                                                    .Colors_Text2_,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: FontWeight_.Fonts_T
+                                                //fontSize: 10.0
+                                                ),
+                                          ),
+                                        ),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Container(
+                                                  height: 25,
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    // color: Colors.orange[600],
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10)),
+                                                  ),
+                                                  child: const Center(
+                                                    child: Text(
+                                                      '',
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      style: TextStyle(
+                                                          color: Colors.green,
+                                                          // fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T
+                                                          //fontSize: 10.0
+                                                          ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: InkWell(
+                                                  child: Container(
+                                                    height: 40,
+                                                    decoration: BoxDecoration(
+                                                      color:
+                                                          Colors.blueGrey[300],
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                                  .only(
+                                                              topLeft: Radius
+                                                                  .circular(10),
+                                                              topRight: Radius
+                                                                  .circular(10),
+                                                              bottomLeft: Radius
+                                                                  .circular(10),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          10)),
+                                                    ),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        const Padding(
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  4.0),
+                                                          child: Icon(
+                                                            Icons.print,
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          'พิมพ์',
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          style: const TextStyle(
+                                                              color: PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              fontFamily: Font_
+                                                                  .Fonts_T),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  onTap: () async {
+                                                    print('base64Image');
+                                                    // print(base64Image);
+                                                    List newValuePDFimg = [];
+                                                    for (int index = 0;
+                                                        index < 1;
+                                                        index++) {
+                                                      if (renTalModels[0]
+                                                              .imglogo!
+                                                              .trim() ==
+                                                          '') {
+                                                        // newValuePDFimg.add(
+                                                        //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
+                                                      } else {
+                                                        newValuePDFimg.add(
+                                                            '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
+                                                        newValuePDFimg.add(
+                                                            '${MyConstant().domain}/files/$foder/contract/${renTalModels[0].img}');
+                                                      }
+                                                    }
+                                                    SharedPreferences
+                                                        preferences =
+                                                        await SharedPreferences
+                                                            .getInstance();
+                                                    var ren = preferences
+                                                        .getString('renTalSer');
+                                                    var renTal_name =
+                                                        preferences.getString(
+                                                            'renTalName');
+
+                                                    final tableData00 = [
+                                                      for (int index = 0;
+                                                          index <
+                                                              quotxSelectModels
+                                                                  .length;
+                                                          index++)
+                                                        [
+                                                          '${quotxSelectModels[index].unit} / ${quotxSelectModels[index].term} (งวด)',
+                                                          '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].sdate!} 00:00:00'))} - ${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].ldate!} 00:00:00'))}',
+                                                          '${quotxSelectModels[index].expname}',
+                                                          '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
+                                                          '${nFormat.format(int.parse(quotxSelectModels[index].term!) * double.parse(quotxSelectModels[index].total!))}',
+                                                        ],
+                                                    ];
+                                                    _showMyDialog_SAVE(
+                                                        context,
+                                                        tableData00,
+                                                        newValuePDFimg,
+                                                        ren,
+                                                        2);
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        // Expanded(
+                        //   flex: 1,
+                        //   child: Text(''),
+                        // ),
+                        // Expanded(
+                        //   flex: 2,
+                        //   child: Container(
+                        //     child: Column(
+                        //       children: [
+                        //         Padding(
+                        //           padding: EdgeInsets.all(8.0),
+                        //           child: Text(
+                        //             'เอกสารสัญญาเช่า(เซ็นแล้ว)',
+                        //             textAlign: TextAlign.start,
+                        //             style: TextStyle(
+                        //                 color: PeopleChaoScreen_Color.Colors_Text2_,
+                        //                 fontWeight: FontWeight.bold,
+                        //                 fontFamily: FontWeight_.Fonts_T
+                        //                 //fontSize: 10.0
+                        //                 ),
+                        //           ),
+                        //         ),
+                        //         Row(
+                        //           children: [
+                        //             Expanded(
+                        //               flex: 1,
+                        //               child: Padding(
+                        //                 padding: const EdgeInsets.all(8.0),
+                        //                 child: Container(
+                        //                   height: 60,
+                        //                   decoration: const BoxDecoration(
+                        //                     // color: Colors.orange[600],
+                        //                     borderRadius: BorderRadius.only(
+                        //                         topLeft: Radius.circular(10),
+                        //                         topRight: Radius.circular(10),
+                        //                         bottomLeft: Radius.circular(10),
+                        //                         bottomRight: Radius.circular(10)),
+                        //                   ),
+                        //                   child: Center(
+                        //                     child: Column(
+                        //                       mainAxisAlignment:
+                        //                           MainAxisAlignment.center,
+                        //                       children: [
+                        //                         Text(
+                        //                           (cxname_lease != null)
+                        //                               ? 'พบเอกสาร'
+                        //                               : 'ไม่พบเอกสาร',
+                        //                           textAlign: TextAlign.start,
+                        //                           style: TextStyle(
+                        //                               color: (cxname_lease != null)
+                        //                                   ? Colors.black
+                        //                                   : Colors.red,
+                        //                               // fontWeight: FontWeight.bold,
+                        //                               fontFamily: Font_.Fonts_T
+                        //                               //fontSize: 10.0
+                        //                               ),
+                        //                         ),
+                        //                         Text(
+                        //                           (cxname_lease != null)
+                        //                               ? '$cxname_lease'
+                        //                               : '',
+                        //                           textAlign: TextAlign.start,
+                        //                           style: TextStyle(
+                        //                               color: Colors.blue[800],
+                        //                               // fontWeight: FontWeight.bold,
+                        //                               fontFamily: Font_.Fonts_T,
+                        //                               fontSize: 8.0),
+                        //                         ),
+                        //                       ],
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //         Row(
+                        //           children: [
+                        //             Expanded(
+                        //               flex: 1,
+                        //               child: Padding(
+                        //                 padding: const EdgeInsets.all(8.0),
+                        //                 child: InkWell(
+                        //                   child: Container(
+                        //                     height: 40,
+                        //                     decoration: BoxDecoration(
+                        //                       color: Colors.blue[400],
+                        //                       borderRadius: const BorderRadius.only(
+                        //                           topLeft: Radius.circular(10),
+                        //                           topRight: Radius.circular(10),
+                        //                           bottomLeft: Radius.circular(10),
+                        //                           bottomRight: Radius.circular(10)),
+                        //                     ),
+                        //                     child: const Center(
+                        //                       child: Text(
+                        //                         'อัพโหลดไฟล์(PDF)',
+                        //                         textAlign: TextAlign.start,
+                        //                         style: TextStyle(
+                        //                             color: PeopleChaoScreen_Color
+                        //                                 .Colors_Text2_,
+                        //                             // fontWeight: FontWeight.bold,
+                        //                             fontFamily: Font_.Fonts_T
+                        //                             //fontSize: 10.0
+                        //                             ),
+                        //                       ),
+                        //                     ),
+                        //                   ),
+                        //                   onTap: () async {
+                        //                     // uploadFile_Agreement();
+
+                        //                     (cxname_lease == null)
+                        //                         ? uploadFile_Agreement(
+                        //                             '${cxname_lease}',
+                        //                             ' $cxname_lease_ser',
+                        //                           )
+                        //                         : showDialog<void>(
+                        //                             context: context,
+                        //                             barrierDismissible:
+                        //                                 false, // user must tap button!
+                        //                             builder: (BuildContext context) {
+                        //                               return AlertDialog(
+                        //                                 shape:
+                        //                                     const RoundedRectangleBorder(
+                        //                                         borderRadius:
+                        //                                             BorderRadius.all(
+                        //                                                 Radius.circular(
+                        //                                                     10.0))),
+                        //                                 title: const Center(
+                        //                                     child: Text(
+                        //                                   'มีเอกสารสัญญาเช่า(เซ็นแล้ว)อยู่แล้ว',
+                        //                                   style: TextStyle(
+                        //                                       color:
+                        //                                           PeopleChaoScreen_Color
+                        //                                               .Colors_Text1_,
+                        //                                       fontWeight:
+                        //                                           FontWeight.bold,
+                        //                                       fontFamily: FontWeight_
+                        //                                           .Fonts_T),
+                        //                                 )),
+                        //                                 content:
+                        //                                     SingleChildScrollView(
+                        //                                   child: ListBody(
+                        //                                     children: const <Widget>[
+                        //                                       Text(
+                        //                                         'มีเอกสารเอกสารสัญญาเช่า(เซ็นแล้ว)อยู่แล้ว หากต้องการอัพโหลดกรุณาลบเอกสารที่มีอยู่แล้วก่อน',
+                        //                                         style: TextStyle(
+                        //                                             color: PeopleChaoScreen_Color
+                        //                                                 .Colors_Text2_,
+                        //                                             fontFamily: Font_
+                        //                                                 .Fonts_T),
+                        //                                       ),
+                        //                                     ],
+                        //                                   ),
+                        //                                 ),
+                        //                                 actions: <Widget>[
+                        //                                   Row(
+                        //                                     mainAxisAlignment:
+                        //                                         MainAxisAlignment
+                        //                                             .center,
+                        //                                     children: [
+                        //                                       Padding(
+                        //                                         padding:
+                        //                                             const EdgeInsets
+                        //                                                 .all(8.0),
+                        //                                         child: InkWell(
+                        //                                           child: Container(
+                        //                                               width: 100,
+                        //                                               decoration:
+                        //                                                   BoxDecoration(
+                        //                                                 color: Colors
+                        //                                                     .red[600],
+                        //                                                 borderRadius: const BorderRadius
+                        //                                                         .only(
+                        //                                                     topLeft:
+                        //                                                         Radius.circular(
+                        //                                                             10),
+                        //                                                     topRight:
+                        //                                                         Radius.circular(
+                        //                                                             10),
+                        //                                                     bottomLeft:
+                        //                                                         Radius.circular(
+                        //                                                             10),
+                        //                                                     bottomRight:
+                        //                                                         Radius.circular(
+                        //                                                             10)),
+                        //                                                 // border: Border.all(color: Colors.white, width: 1),
+                        //                                               ),
+                        //                                               padding:
+                        //                                                   const EdgeInsets
+                        //                                                           .all(
+                        //                                                       8.0),
+                        //                                               child:
+                        //                                                   const Center(
+                        //                                                       child:
+                        //                                                           Text(
+                        //                                                 'ลบเอกสาร',
+                        //                                                 style: TextStyle(
+                        //                                                     color: PeopleChaoScreen_Color
+                        //                                                         .Colors_Text3_,
+                        //                                                     fontWeight:
+                        //                                                         FontWeight
+                        //                                                             .bold,
+                        //                                                     fontFamily:
+                        //                                                         Font_
+                        //                                                             .Fonts_T),
+                        //                                               ))),
+                        //                                           onTap: () async {
+                        //                                             deletedFile_SQL(
+                        //                                                 '$cxname_lease_ser');
+                        //                                             deletedFile_(
+                        //                                                 '${cxname_lease}',
+                        //                                                 ' $cxname_lease_ser',
+                        //                                                 'lease');
+
+                        //                                             GC_contractf();
+                        //                                             Navigator.of(
+                        //                                                     context)
+                        //                                                 .pop();
+                        //                                           },
+                        //                                         ),
+                        //                                       ),
+                        //                                       Padding(
+                        //                                         padding:
+                        //                                             const EdgeInsets
+                        //                                                 .all(8.0),
+                        //                                         child: InkWell(
+                        //                                           child: Container(
+                        //                                               width: 100,
+                        //                                               decoration:
+                        //                                                   const BoxDecoration(
+                        //                                                 color: Colors
+                        //                                                     .black,
+                        //                                                 borderRadius: BorderRadius.only(
+                        //                                                     topLeft:
+                        //                                                         Radius.circular(
+                        //                                                             10),
+                        //                                                     topRight:
+                        //                                                         Radius.circular(
+                        //                                                             10),
+                        //                                                     bottomLeft:
+                        //                                                         Radius.circular(
+                        //                                                             10),
+                        //                                                     bottomRight:
+                        //                                                         Radius.circular(
+                        //                                                             10)),
+                        //                                                 // border: Border.all(color: Colors.white, width: 1),
+                        //                                               ),
+                        //                                               padding:
+                        //                                                   const EdgeInsets
+                        //                                                           .all(
+                        //                                                       8.0),
+                        //                                               child:
+                        //                                                   const Center(
+                        //                                                       child:
+                        //                                                           Text(
+                        //                                                 'ปิด',
+                        //                                                 style: TextStyle(
+                        //                                                     color: PeopleChaoScreen_Color
+                        //                                                         .Colors_Text3_,
+                        //                                                     fontWeight:
+                        //                                                         FontWeight
+                        //                                                             .bold,
+                        //                                                     fontFamily:
+                        //                                                         Font_
+                        //                                                             .Fonts_T),
+                        //                                               ))),
+                        //                                           onTap: () {
+                        //                                             GC_contractf();
+                        //                                             Navigator.of(
+                        //                                                     context)
+                        //                                                 .pop();
+                        //                                           },
+                        //                                         ),
+                        //                                       ),
+                        //                                     ],
+                        //                                   ),
+                        //                                 ],
+                        //                               );
+                        //                             },
+                        //                           );
+                        //                   },
+                        //                 ),
+                        //               ),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //         Row(
+                        //           children: [
+                        //             // Expanded(
+                        //             //   flex: 1,
+                        //             //   child: Padding(
+                        //             //     padding: const EdgeInsets.all(8.0),
+                        //             //     child: InkWell(
+                        //             //       child: Container(
+                        //             //         height: 40,
+                        //             //         decoration: BoxDecoration(
+                        //             //           color: Colors.red[400],
+                        //             //           borderRadius: const BorderRadius.only(
+                        //             //               topLeft: Radius.circular(10),
+                        //             //               topRight: Radius.circular(10),
+                        //             //               bottomLeft: Radius.circular(10),
+                        //             //               bottomRight: Radius.circular(10)),
+                        //             //         ),
+                        //             //         child: const Center(
+                        //             //           child: Text(
+                        //             //             'ลบ(PDF)',
+                        //             //             textAlign: TextAlign.start,
+                        //             //             style: TextStyle(
+                        //             //                 color: PeopleChaoScreen_Color
+                        //             //                     .Colors_Text2_,
+                        //             //                 // fontWeight: FontWeight.bold,
+                        //             //                 fontFamily: Font_.Fonts_T
+                        //             //                 //fontSize: 10.0
+                        //             //                 ),
+                        //             //           ),
+                        //             //         ),
+                        //             //       ),
+                        //             //       onTap: () async {
+                        //             //         deletedFile_('${cxname_lease}',
+                        //             //             ' $cxname_lease_ser');
+                        //             //         // final file = await pickFile_agreement();
+                        //             //         // if (file != null) {
+                        //             //         //   // Upload the file to the server
+                        //             //         //   uploadFile_Agreement(file);
+                        //             //         // }
+                        //             //       },
+                        //             //     ),
+                        //             //   ),
+                        //             // ),
+                        //             Expanded(
+                        //               flex: 1,
+                        //               child: Padding(
+                        //                 padding: const EdgeInsets.all(8.0),
+                        //                 child: InkWell(
+                        //                   child: Container(
+                        //                     height: 40,
+                        //                     decoration: BoxDecoration(
+                        //                       color: Colors.orange[400],
+                        //                       borderRadius: const BorderRadius.only(
+                        //                           topLeft: Radius.circular(10),
+                        //                           topRight: Radius.circular(10),
+                        //                           bottomLeft: Radius.circular(10),
+                        //                           bottomRight: Radius.circular(10)),
+                        //                     ),
+                        //                     child: Row(
+                        //                       mainAxisAlignment:
+                        //                           MainAxisAlignment.center,
+                        //                       children: const [
+                        //                         Padding(
+                        //                           padding: EdgeInsets.all(4.0),
+                        //                           child: Icon(
+                        //                             Icons.print,
+                        //                             color: Colors.white,
+                        //                           ),
+                        //                         ),
+                        //                         Text(
+                        //                           'พิมพ์',
+                        //                           textAlign: TextAlign.start,
+                        //                           style: TextStyle(
+                        //                               color: PeopleChaoScreen_Color
+                        //                                   .Colors_Text2_,
+                        //                               // fontWeight: FontWeight.bold,
+                        //                               fontFamily: Font_.Fonts_T
+                        //                               //fontSize: 10.0
+                        //                               ),
+                        //                         ),
+                        //                       ],
+                        //                     ),
+                        //                   ),
+                        //                   onTap: () async {
+                        //                     // String Url =
+                        //                     //     'https://www.etda.or.th/getattachment/78750426-4a58-4c36-85d3-d1c11c3db1f3/IUB-65-Final.pdf.aspx';
+                        //                     String Url =
+                        //                         await '${MyConstant().domain}/files/kad_taii/contract/lease/$cxname_lease';
+                        //                     print(Url);
+                        //                     if (Url == '') {
+                        //                       showDialog<void>(
+                        //                         context: context,
+                        //                         barrierDismissible:
+                        //                             false, // user must tap button!
+                        //                         builder: (BuildContext context) {
+                        //                           return AlertDialog(
+                        //                             shape:
+                        //                                 const RoundedRectangleBorder(
+                        //                                     borderRadius:
+                        //                                         BorderRadius.all(
+                        //                                             Radius.circular(
+                        //                                                 10.0))),
+                        //                             title: const Center(
+                        //                                 child: Text(
+                        //                               'ไม่พบเอกสารสัญญาเช่า(เซ็นแล้ว)',
+                        //                               style: TextStyle(
+                        //                                   color:
+                        //                                       PeopleChaoScreen_Color
+                        //                                           .Colors_Text1_,
+                        //                                   fontWeight: FontWeight.bold,
+                        //                                   fontFamily:
+                        //                                       FontWeight_.Fonts_T),
+                        //                             )),
+                        //                             content: SingleChildScrollView(
+                        //                               child: ListBody(
+                        //                                 children: const <Widget>[
+                        //                                   Text(
+                        //                                     'ไม่พบเอกสาร หรือ กรุณาอัพโหลดก่อน จึงจะสามารถพิมพ์ได้',
+                        //                                     style: TextStyle(
+                        //                                         color:
+                        //                                             PeopleChaoScreen_Color
+                        //                                                 .Colors_Text2_,
+                        //                                         fontFamily:
+                        //                                             Font_.Fonts_T),
+                        //                                   ),
+                        //                                 ],
+                        //                               ),
+                        //                             ),
+                        //                             actions: <Widget>[
+                        //                               InkWell(
+                        //                                 child: Container(
+                        //                                     width: 100,
+                        //                                     decoration:
+                        //                                         const BoxDecoration(
+                        //                                       color: Colors.black,
+                        //                                       borderRadius:
+                        //                                           BorderRadius.only(
+                        //                                               topLeft: Radius
+                        //                                                   .circular(
+                        //                                                       10),
+                        //                                               topRight: Radius
+                        //                                                   .circular(
+                        //                                                       10),
+                        //                                               bottomLeft: Radius
+                        //                                                   .circular(
+                        //                                                       10),
+                        //                                               bottomRight: Radius
+                        //                                                   .circular(
+                        //                                                       10)),
+                        //                                       // border: Border.all(color: Colors.white, width: 1),
+                        //                                     ),
+                        //                                     padding:
+                        //                                         const EdgeInsets.all(
+                        //                                             8.0),
+                        //                                     child: const Center(
+                        //                                         child: Text(
+                        //                                       'ปิด',
+                        //                                       style: TextStyle(
+                        //                                           color: PeopleChaoScreen_Color
+                        //                                               .Colors_Text3_,
+                        //                                           fontWeight:
+                        //                                               FontWeight.bold,
+                        //                                           fontFamily:
+                        //                                               Font_.Fonts_T),
+                        //                                     ))),
+                        //                                 onTap: () {
+                        //                                   Navigator.of(context).pop();
+                        //                                 },
+                        //                               ),
+                        //                               // TextButton(
+                        //                               //   child: const Text('ตกลง'),
+                        //                               //   onPressed: () {
+                        //                               //     Navigator.of(context).pop();
+                        //                               //   },
+                        //                               // ),
+                        //                             ],
+                        //                           );
+                        //                         },
+                        //                       );
+                        //                     } else {
+                        //                       Navigator.push(
+                        //                           context,
+                        //                           MaterialPageRoute(
+                        //                             builder: (context) =>
+                        //                                 PreviewScreenRental_(
+                        //                                     title:
+                        //                                         'เอกสารสัญญาเช่า(เซ็นแล้ว)',
+                        //                                     Url: Url),
+                        //                           ));
+                        //                     }
+                        //                   },
+                        //                 ),
+                        //               ),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'เอกสารอื่นๆ ${Other_file.length} รายการ',
+                                    textAlign: TextAlign.start,
+                                    style: const TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text2_,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T
+                                        //fontSize: 10.0
+                                        ),
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          height: 110,
+                                          padding: const EdgeInsets.all(4.0),
+                                          decoration: BoxDecoration(
+                                            // color: Colors.green,
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                                    topLeft: Radius.circular(8),
+                                                    topRight:
+                                                        Radius.circular(8),
+                                                    bottomLeft:
+                                                        Radius.circular(8),
+                                                    bottomRight:
+                                                        Radius.circular(8)),
+                                            border: Border.all(
+                                                color: Colors.grey, width: 2),
+                                          ),
+                                          child: ScrollConfiguration(
+                                            behavior:
+                                                ScrollConfiguration.of(context)
+                                                    .copyWith(dragDevices: {
+                                              PointerDeviceKind.touch,
+                                              PointerDeviceKind.mouse,
+                                            }),
+                                            child: SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal,
+                                              child: Row(
+                                                children: [
+                                                  for (int index = 0;
+                                                      index < Other_file.length;
+                                                      index++)
+                                                    Stack(
+                                                      children: [
+                                                        Padding(
                                                           padding:
                                                               const EdgeInsets
                                                                   .all(8.0),
-                                                          child: Text(
-                                                            '${Other_file[index].filename}',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .blue[800],
-                                                                // fontWeight: FontWeight.bold,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T,
-                                                                fontSize: 12.0),
-                                                          )),
-                                                    ),
-                                                  ),
-                                                  Positioned(
-                                                      top: 0,
-                                                      right: 2,
-                                                      child: InkWell(
-                                                        child: const Icon(
-                                                          Icons.close_sharp,
-                                                          color: Colors.red,
-                                                        ),
-                                                        onTap: () {
-                                                          showDialog<void>(
-                                                            context: context,
-                                                            barrierDismissible:
-                                                                false, // user must tap button!
-                                                            builder:
-                                                                (BuildContext
-                                                                    context) {
-                                                              return AlertDialog(
-                                                                shape: const RoundedRectangleBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius.all(
-                                                                            Radius.circular(10.0))),
-                                                                title:
-                                                                    const Center(
+                                                          child: InkWell(
+                                                            onTap: () async {
+                                                              // String Url =
+                                                              //     'https://www.etda.or.th/getattachment/78750426-4a58-4c36-85d3-d1c11c3db1f3/IUB-65-Final.pdf.aspx';
+                                                              String Url =
+                                                                  await '${MyConstant().domain}/files/$foder/contract/other/${Other_file[index].filename}';
+                                                              print(Url);
+                                                              if (Url == '') {
+                                                                showDialog<
+                                                                    void>(
+                                                                  context:
+                                                                      context,
+                                                                  barrierDismissible:
+                                                                      false, // user must tap button!
+                                                                  builder:
+                                                                      (BuildContext
+                                                                          context) {
+                                                                    return AlertDialog(
+                                                                      shape: const RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.all(Radius.circular(10.0))),
+                                                                      title: const Center(
+                                                                          child: Text(
+                                                                        'ไม่พบเอกสารอื่นๆ',
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                PeopleChaoScreen_Color.Colors_Text1_,
+                                                                            fontWeight: FontWeight.bold,
+                                                                            fontFamily: FontWeight_.Fonts_T),
+                                                                      )),
+                                                                      content:
+                                                                          const SingleChildScrollView(
                                                                         child:
+                                                                            ListBody(
+                                                                          children: <Widget>[
                                                                             Text(
-                                                                  'ลบเอกสาร',
-                                                                  style: TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text1_,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontFamily:
-                                                                          FontWeight_
-                                                                              .Fonts_T),
-                                                                )),
-                                                                actions: <Widget>[
-                                                                  Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .center,
-                                                                    children: [
-                                                                      Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
-                                                                        child:
-                                                                            InkWell(
-                                                                          child: Container(
-                                                                              width: 100,
-                                                                              decoration: BoxDecoration(
-                                                                                color: Colors.red[600],
-                                                                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                // border: Border.all(color: Colors.white, width: 1),
-                                                                              ),
-                                                                              padding: const EdgeInsets.all(8.0),
-                                                                              child: const Center(
-                                                                                  child: Text(
-                                                                                'ลบเอกสาร',
-                                                                                style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
-                                                                              ))),
-                                                                          onTap:
-                                                                              () async {
-                                                                            deletedFile_(
-                                                                                '${Other_file[index].filename}',
-                                                                                ' ${Other_file[index].ser}',
-                                                                                'other');
-
-                                                                            deletedFile_SQL('${Other_file[index].ser}');
-                                                                            GC_contractf();
-                                                                            Navigator.of(context).pop();
-                                                                          },
+                                                                              'ไม่พบเอกสาร หรือ กรุณาอัพโหลดก่อน จึงจะสามารถพิมพ์ได้',
+                                                                              style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                            ),
+                                                                          ],
                                                                         ),
                                                                       ),
-                                                                      Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
-                                                                        child:
-                                                                            InkWell(
+                                                                      actions: <Widget>[
+                                                                        InkWell(
                                                                           child: Container(
                                                                               width: 100,
                                                                               decoration: const BoxDecoration(
@@ -7093,179 +8004,351 @@ class _RentalInformationState extends State<RentalInformation> {
                                                                               ))),
                                                                           onTap:
                                                                               () {
-                                                                            GC_contractf();
                                                                             Navigator.of(context).pop();
                                                                           },
                                                                         ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ],
-                                                              );
+                                                                        // TextButton(
+                                                                        //   child: const Text('ตกลง'),
+                                                                        //   onPressed: () {
+                                                                        //     Navigator.of(context).pop();
+                                                                        //   },
+                                                                        // ),
+                                                                      ],
+                                                                    );
+                                                                  },
+                                                                );
+                                                              } else {
+                                                                Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                      builder: (context) => PreviewScreenRental_(
+                                                                          title:
+                                                                              'เอกสารอื่นๆ',
+                                                                          Url:
+                                                                              Url),
+                                                                    ));
+                                                              }
                                                             },
-                                                          );
-                                                        },
-                                                      ))
+                                                            child: Container(
+                                                                width: 150,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  borderRadius: const BorderRadius
+                                                                          .only(
+                                                                      topLeft:
+                                                                          Radius.circular(
+                                                                              8),
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              8),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              8),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              8)),
+                                                                  border: Border.all(
+                                                                      color: Colors
+                                                                          .grey,
+                                                                      width: 2),
+                                                                ),
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        8.0),
+                                                                child: Text(
+                                                                  '${Other_file[index].filename}',
+                                                                  style: TextStyle(
+                                                                      color: Colors.blue[800],
+                                                                      // fontWeight: FontWeight.bold,
+                                                                      fontFamily: Font_.Fonts_T,
+                                                                      fontSize: 12.0),
+                                                                )),
+                                                          ),
+                                                        ),
+                                                        Positioned(
+                                                            top: 0,
+                                                            right: 2,
+                                                            child: InkWell(
+                                                              child: const Icon(
+                                                                Icons
+                                                                    .close_sharp,
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                              onTap: () {
+                                                                showDialog<
+                                                                    void>(
+                                                                  context:
+                                                                      context,
+                                                                  barrierDismissible:
+                                                                      false, // user must tap button!
+                                                                  builder:
+                                                                      (BuildContext
+                                                                          context) {
+                                                                    return AlertDialog(
+                                                                      shape: const RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.all(Radius.circular(10.0))),
+                                                                      title: const Center(
+                                                                          child: Text(
+                                                                        'ลบเอกสาร',
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                PeopleChaoScreen_Color.Colors_Text1_,
+                                                                            fontWeight: FontWeight.bold,
+                                                                            fontFamily: FontWeight_.Fonts_T),
+                                                                      )),
+                                                                      actions: <Widget>[
+                                                                        Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.center,
+                                                                          children: [
+                                                                            Padding(
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: InkWell(
+                                                                                child: Container(
+                                                                                    width: 100,
+                                                                                    decoration: BoxDecoration(
+                                                                                      color: Colors.red[600],
+                                                                                      borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                      // border: Border.all(color: Colors.white, width: 1),
+                                                                                    ),
+                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                    child: const Center(
+                                                                                        child: Text(
+                                                                                      'ลบเอกสาร',
+                                                                                      style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
+                                                                                    ))),
+                                                                                onTap: () async {
+                                                                                  deletedFile_('${Other_file[index].filename}', ' ${Other_file[index].ser}', 'other');
+
+                                                                                  deletedFile_SQL('${Other_file[index].ser}');
+                                                                                  GC_contractf();
+                                                                                  Navigator.of(context).pop();
+                                                                                },
+                                                                              ),
+                                                                            ),
+                                                                            Padding(
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: InkWell(
+                                                                                child: Container(
+                                                                                    width: 100,
+                                                                                    decoration: const BoxDecoration(
+                                                                                      color: Colors.black,
+                                                                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                      // border: Border.all(color: Colors.white, width: 1),
+                                                                                    ),
+                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                    child: const Center(
+                                                                                        child: Text(
+                                                                                      'ปิด',
+                                                                                      style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
+                                                                                    ))),
+                                                                                onTap: () {
+                                                                                  GC_contractf();
+                                                                                  Navigator.of(context).pop();
+                                                                                },
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ],
+                                                                    );
+                                                                  },
+                                                                );
+                                                              },
+                                                            ))
+                                                      ],
+                                                    ),
                                                 ],
                                               ),
-                                          ],
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: InkWell(
-                                    child: Container(
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        color: Colors.blue[400],
-                                        borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            topRight: Radius.circular(10),
-                                            bottomLeft: Radius.circular(10),
-                                            bottomRight: Radius.circular(10)),
-                                      ),
-                                      child: const Center(
-                                        child: Text(
-                                          'อัพโหลดไฟล์(PDF)',
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                              color: PeopleChaoScreen_Color
-                                                  .Colors_Text2_,
-                                              // fontWeight: FontWeight.bold,
-                                              fontFamily: Font_.Fonts_T
-                                              //fontSize: 10.0
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: InkWell(
+                                          child: Container(
+                                            height: 40,
+                                            decoration: BoxDecoration(
+                                              color: Colors.blue[300],
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(10),
+                                                      topRight:
+                                                          Radius.circular(10),
+                                                      bottomLeft:
+                                                          Radius.circular(10),
+                                                      bottomRight:
+                                                          Radius.circular(10)),
+                                            ),
+                                            child: const Center(
+                                              child: Text(
+                                                'อัพโหลดไฟล์(PDF)',
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text2_,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: Font_.Fonts_T
+                                                    //fontSize: 10.0
+                                                    ),
                                               ),
+                                            ),
+                                          ),
+                                          onTap: () async {
+                                            uploadFile_Documentmore(
+                                              '${cxname_other}',
+                                              ' $cxname_other_ser',
+                                            );
+                                          },
                                         ),
                                       ),
                                     ),
-                                    onTap: () async {
-                                      uploadFile_Documentmore(
-                                        '${cxname_other}',
-                                        ' $cxname_other_ser',
-                                      );
-                                    },
-                                  ),
+                                  ],
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
+
             const SizedBox(
               height: 20,
             ),
-            renTal_lavel <= 1
+
+            renTal_lavel <= 3
                 ? SizedBox()
                 : widget.Get_Value_NameShop_index.toString() != '1'
                     ? SizedBox()
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          InkWell(
-                            onTap: () async {
-                              setState(() {
-                                if (ser_tabbarview_2 == 2) {
-                                  ser_tabbarview_2 = 0;
-                                } else {
-                                  ser_tabbarview_2 = 2;
-                                }
-                              });
+                    : Container(
+                        // width: MediaQuery.of(context).size.width,
+                        decoration: const BoxDecoration(
+                          color: AppbackgroundColor.TiTile_Box,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10)),
+                          // border: Border.all(color: Colors.grey, width: 1),
+                        ),
+                        padding: const EdgeInsets.all(4.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            InkWell(
+                              onTap: () async {
+                                setState(() {
+                                  if (ser_tabbarview_2 == 2) {
+                                    ser_tabbarview_2 = 0;
+                                  } else {
+                                    ser_tabbarview_2 = 2;
+                                  }
+                                });
 
-                              SharedPreferences preferences =
-                                  await SharedPreferences.getInstance();
-                              String? ren = preferences.getString('renTalSer');
-                              String? ser_user = preferences.getString('ser');
-                              String url2 =
-                                  '${MyConstant().domain}/D_quotx.php?isAdd=true&ren=$ren&ser_user=$ser_user';
+                                SharedPreferences preferences =
+                                    await SharedPreferences.getInstance();
+                                String? ren =
+                                    preferences.getString('renTalSer');
+                                String? ser_user = preferences.getString('ser');
+                                String url2 =
+                                    '${MyConstant().domain}/D_quotx.php?isAdd=true&ren=$ren&ser_user=$ser_user';
 
-                              try {
-                                var response2 = await http.get(Uri.parse(url2));
+                                try {
+                                  var response2 =
+                                      await http.get(Uri.parse(url2));
 
-                                var result2 = json.decode(response2.body);
-                                print(result2);
-                                if (result2.toString() == 'true') {}
-                              } catch (e) {}
-                            },
-                            child: Container(
-                              width: 200,
-                              decoration: BoxDecoration(
-                                color: Colors.blue[600],
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                                border:
-                                    Border.all(color: Colors.white, width: 1),
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                ser_tabbarview_2 == 2
-                                    ? 'ยกเลิกเพิ่มค่าบริการ'
-                                    : 'เพิ่มค่าบริการ',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  // fontSize: 15.0,
+                                  var result2 = json.decode(response2.body);
+                                  print(result2);
+                                  if (result2.toString() == 'true') {}
+                                } catch (e) {}
+                              },
+                              child: Container(
+                                width: 200,
+                                decoration: BoxDecoration(
+                                  color: Colors.blue[600],
+                                  borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10)),
+                                  border:
+                                      Border.all(color: Colors.grey, width: 1),
+                                ),
+                                padding: const EdgeInsets.all(4.0),
+                                child: Text(
+                                  ser_tabbarview_2 == 2
+                                      ? 'ยกเลิกเพิ่มค่าบริการ'
+                                      : 'เพิ่มค่าบริการ',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T
+                                      // fontSize: 15.0,
+                                      ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                if (ser_tabbarview_2 == 1) {
-                                  ser_tabbarview_2 = 0;
-                                } else {
-                                  ser_tabbarview_2 = 1;
-                                }
-                              });
-                            },
-                            child: Container(
-                              width: 200,
-                              decoration: BoxDecoration(
-                                color: Colors.orange[900],
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                                border:
-                                    Border.all(color: Colors.white, width: 1),
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                ser_tabbarview_2 == 1
-                                    ? 'ยกเลิกปรับตั้งหนี้'
-                                    : 'ปรับตั้งหนี้',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15.0),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  if (ser_tabbarview_2 == 1) {
+                                    ser_tabbarview_2 = 0;
+                                  } else {
+                                    ser_tabbarview_2 = 1;
+                                  }
+                                });
+                              },
+                              child: Container(
+                                width: 200,
+                                decoration: BoxDecoration(
+                                  color: Colors.orange[900],
+                                  borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10)),
+                                  border:
+                                      Border.all(color: Colors.grey, width: 1),
+                                ),
+                                padding: const EdgeInsets.all(4.0),
+                                child: Text(
+                                  ser_tabbarview_2 == 1
+                                      ? 'ยกเลิกปรับตั้งหนี้'
+                                      : 'ปรับตั้งหนี้',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T,
+                                      fontSize: 15.0),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
             ser_tabbarview_2 == 0
                 ? SizedBox(
@@ -7326,7 +8409,7 @@ class _RentalInformationState extends State<RentalInformation> {
                                                       .width *
                                                   0.84
                                               : 800,
-                                          decoration: const BoxDecoration(
+                                          decoration: BoxDecoration(
                                             color: AppbackgroundColor
                                                 .TiTile_Colors,
                                             borderRadius: BorderRadius.only(
@@ -7501,62 +8584,45 @@ class _RentalInformationState extends State<RentalInformation> {
                                                             index.toString();
                                                       });
                                                     },
-                                                    title: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Container(
-                                                                // decoration: BoxDecoration(
-                                                                //   color: Colors.grey.shade300,
-                                                                //   borderRadius:
-                                                                //       const BorderRadius.only(
-                                                                //           topLeft:
-                                                                //               Radius.circular(10),
-                                                                //           topRight:
-                                                                //               Radius.circular(10),
-                                                                //           bottomLeft:
-                                                                //               Radius.circular(10),
-                                                                //           bottomRight:
-                                                                //               Radius.circular(10)),
-                                                                //   // border: Border.all(color: Colors.grey, width: 1),
-                                                                // ),
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child:
-                                                                    AutoSizeText(
-                                                                  maxLines: 2,
-                                                                  minFontSize:
-                                                                      8,
-                                                                  // maxFontSize: 15,
-                                                                  '${quotxSelectModels[index].unit} / ${quotxSelectModels[index].term} (งวด)',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .start,
-                                                                  style: const TextStyle(
-                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                      //fontWeight: FontWeight.bold,
-                                                                      fontFamily: Font_.Fonts_T),
-                                                                ),
-                                                              ),
-                                                            ],
+                                                    title: Container(
+                                                      decoration: BoxDecoration(
+                                                        // color: Colors.green[100]!
+                                                        //     .withOpacity(0.5),
+                                                        border: Border(
+                                                          bottom: BorderSide(
+                                                            color:
+                                                                Colors.black12,
+                                                            width: 1,
                                                           ),
                                                         ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
+                                                      ),
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: AutoSizeText(
+                                                              maxLines: 2,
+                                                              minFontSize: 8,
+                                                              // maxFontSize: 15,
+                                                              '${quotxSelectModels[index].unit} / ${quotxSelectModels[index].term} (งวด)',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              style:
+                                                                  const TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
                                                             child: AutoSizeText(
                                                               maxLines: 2,
                                                               minFontSize: 8,
@@ -7575,13 +8641,8 @@ class _RentalInformationState extends State<RentalInformation> {
                                                                               .Fonts_T),
                                                             ),
                                                           ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
+                                                          Expanded(
+                                                            flex: 1,
                                                             child: Tooltip(
                                                               richMessage:
                                                                   TextSpan(
@@ -7625,389 +8686,41 @@ class _RentalInformationState extends State<RentalInformation> {
                                                               ),
                                                             ),
                                                           ),
-                                                        ),
-                                                        quotxSelectModels[index]
-                                                                    .ele_ty ==
-                                                                '0'
-                                                            ? Expanded(
-                                                                flex: 1,
-                                                                child:
-                                                                    AutoSizeText(
-                                                                  maxLines: 2,
-                                                                  minFontSize:
-                                                                      8,
-                                                                  // maxFontSize: 15,
-                                                                  quotxSelectModels[index]
-                                                                              .qty ==
-                                                                          '0.00'
-                                                                      ? '${nFormat.format(double.parse(quotxSelectModels[index].total!))} / งวด'
-                                                                      : '${nFormat.format(double.parse(quotxSelectModels[index].qty!))} / หน่วย',
-                                                                  // '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .end,
-                                                                  style: const TextStyle(
-                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                      //fontWeight: FontWeight.bold,
-                                                                      fontFamily: Font_.Fonts_T),
-                                                                ),
-                                                              )
-                                                            : Expanded(
-                                                                flex: 1,
-                                                                child:
-                                                                    AutoSizeText(
-                                                                  maxLines: 2,
-                                                                  minFontSize:
-                                                                      8,
-                                                                  // maxFontSize: 15,
-                                                                  'อัตราพิเศษ',
-                                                                  // '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .end,
-                                                                  style: const TextStyle(
-                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                      //fontWeight: FontWeight.bold,
-                                                                      fontFamily: Font_.Fonts_T),
-                                                                ),
-                                                              ),
-                                                        quotxSelectModels[index]
-                                                                    .ele_ty ==
-                                                                '0'
-                                                            ? Expanded(
-                                                                flex: 1,
-                                                                child:
-                                                                    AutoSizeText(
-                                                                  maxLines: 2,
-                                                                  minFontSize:
-                                                                      8,
-                                                                  // maxFontSize: 15,
-                                                                  '${nFormat.format(int.parse(quotxSelectModels[index].term!) * double.parse(quotxSelectModels[index].total!))}',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .end,
-                                                                  style: const TextStyle(
-                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                      //fontWeight: FontWeight.bold,
-                                                                      fontFamily: Font_.Fonts_T),
-                                                                ),
-                                                              )
-                                                            : Expanded(
-                                                                flex: 1,
-                                                                child:
-                                                                    GestureDetector(
-                                                                  onTap: () {
-                                                                    showcountmiter(
-                                                                            index)
-                                                                        .then((value) => showDialog(
-                                                                            context: context,
-                                                                            builder: (_) {
-                                                                              return Dialog(
-                                                                                child: Container(
-                                                                                  width: MediaQuery.of(context).size.width * 0.5,
-                                                                                  height: MediaQuery.of(context).size.width * 0.2,
-                                                                                  child: SingleChildScrollView(
-                                                                                    child: Column(
-                                                                                      children: [
-                                                                                        Row(
-                                                                                          children: [
-                                                                                            Expanded(
-                                                                                              child: Padding(
-                                                                                                padding: const EdgeInsets.all(15.0),
-                                                                                                child: Text(
-                                                                                                  // ignore: unnecessary_string_interpolations
-                                                                                                  'อัตราการคำนวณปัจจุบัน',
-                                                                                                  textAlign: TextAlign.center,
-                                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontWeight: FontWeight.bold, fontSize: 25, fontFamily: Font_.Fonts_T),
-                                                                                                ),
-                                                                                              ),
-                                                                                            ),
-                                                                                          ],
-                                                                                        ),
-                                                                                        Divider(),
-                                                                                        (double.parse(electricityModels[0].eleMitOne!) + double.parse(electricityModels[0].eleGobOne!)) == 0.00
-                                                                                            ? SizedBox()
-                                                                                            : Row(
-                                                                                                children: [
-                                                                                                  Expanded(flex: 1, child: Text('')),
-                                                                                                  Expanded(
-                                                                                                    flex: 2,
-                                                                                                    child: Text(
-                                                                                                      'หน่วยที่ 0 - ${electricityModels[0].eleOne}',
-                                                                                                      textAlign: TextAlign.start,
-                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  Expanded(
-                                                                                                    flex: 2,
-                                                                                                    child: Text(
-                                                                                                      double.parse(electricityModels[0].eleMitOne!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
-                                                                                                      textAlign: TextAlign.start,
-                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  Expanded(
-                                                                                                    flex: 2,
-                                                                                                    child: Text(
-                                                                                                      double.parse(electricityModels[0].eleMitOne!) == 0.00 ? '${electricityModels[0].eleGobOne}' : '${electricityModels[0].eleMitOne}',
-                                                                                                      textAlign: TextAlign.end,
-                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  Expanded(
-                                                                                                    flex: 1,
-                                                                                                    child: Text(
-                                                                                                      'บาท',
-                                                                                                      textAlign: TextAlign.center,
-                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                ],
-                                                                                              ),
-                                                                                        SizedBox(
-                                                                                          height: 10,
-                                                                                        ),
-                                                                                        (double.parse(electricityModels[0].eleMitTwo!) + double.parse(electricityModels[0].eleGobTwo!)) == 0.00
-                                                                                            ? SizedBox()
-                                                                                            : Row(
-                                                                                                children: [
-                                                                                                  Expanded(flex: 1, child: Text('')),
-                                                                                                  Expanded(
-                                                                                                    flex: 2,
-                                                                                                    child: Text(
-                                                                                                      'หน่วยที่ ${int.parse(electricityModels[0].eleOne!) + 1} - ${electricityModels[0].eleTwo}',
-                                                                                                      textAlign: TextAlign.start,
-                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  Expanded(
-                                                                                                    flex: 2,
-                                                                                                    child: Text(
-                                                                                                      double.parse(electricityModels[0].eleMitTwo!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
-                                                                                                      textAlign: TextAlign.start,
-                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  Expanded(
-                                                                                                    flex: 2,
-                                                                                                    child: Text(
-                                                                                                      double.parse(electricityModels[0].eleMitTwo!) == 0.00 ? '${electricityModels[0].eleGobTwo}' : '${electricityModels[0].eleMitTwo}',
-                                                                                                      textAlign: TextAlign.end,
-                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  Expanded(
-                                                                                                    flex: 1,
-                                                                                                    child: Text(
-                                                                                                      'บาท',
-                                                                                                      textAlign: TextAlign.center,
-                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                ],
-                                                                                              ),
-                                                                                        SizedBox(
-                                                                                          height: 10,
-                                                                                        ),
-                                                                                        (double.parse(electricityModels[0].eleMitThree!) + double.parse(electricityModels[0].eleGobThree!)) == 0.00
-                                                                                            ? SizedBox()
-                                                                                            : Row(
-                                                                                                children: [
-                                                                                                  Expanded(flex: 1, child: Text('')),
-                                                                                                  Expanded(
-                                                                                                    flex: 2,
-                                                                                                    child: Text(
-                                                                                                      'หน่วยที่ ${int.parse(electricityModels[0].eleTwo!) + 1} - ${electricityModels[0].eleThree}',
-                                                                                                      textAlign: TextAlign.start,
-                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  Expanded(
-                                                                                                    flex: 2,
-                                                                                                    child: Text(
-                                                                                                      double.parse(electricityModels[0].eleMitThree!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
-                                                                                                      textAlign: TextAlign.start,
-                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  Expanded(
-                                                                                                    flex: 2,
-                                                                                                    child: Text(
-                                                                                                      double.parse(electricityModels[0].eleMitThree!) == 0.00 ? '${electricityModels[0].eleGobThree}' : '${electricityModels[0].eleMitThree}',
-                                                                                                      textAlign: TextAlign.end,
-                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  Expanded(
-                                                                                                    flex: 1,
-                                                                                                    child: Text(
-                                                                                                      'บาท',
-                                                                                                      textAlign: TextAlign.center,
-                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                ],
-                                                                                              ),
-                                                                                        SizedBox(
-                                                                                          height: 10,
-                                                                                        ),
-                                                                                        (double.parse(electricityModels[0].eleMitTour!) + double.parse(electricityModels[0].eleGobTour!)) == 0.00
-                                                                                            ? SizedBox()
-                                                                                            : Row(
-                                                                                                children: [
-                                                                                                  Expanded(flex: 1, child: Text('')),
-                                                                                                  Expanded(
-                                                                                                    flex: 2,
-                                                                                                    child: Text(
-                                                                                                      'หน่วยที่ ${int.parse(electricityModels[0].eleThree!) + 1} - ${electricityModels[0].eleTour}',
-                                                                                                      textAlign: TextAlign.start,
-                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  Expanded(
-                                                                                                    flex: 2,
-                                                                                                    child: Text(
-                                                                                                      double.parse(electricityModels[0].eleMitTour!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
-                                                                                                      textAlign: TextAlign.start,
-                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  Expanded(
-                                                                                                    flex: 2,
-                                                                                                    child: Text(
-                                                                                                      double.parse(electricityModels[0].eleMitTour!) == 0.00 ? '${electricityModels[0].eleGobTour}' : '${electricityModels[0].eleMitTour}',
-                                                                                                      textAlign: TextAlign.end,
-                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  Expanded(
-                                                                                                    flex: 1,
-                                                                                                    child: Text(
-                                                                                                      'บาท',
-                                                                                                      textAlign: TextAlign.center,
-                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                ],
-                                                                                              ),
-                                                                                        SizedBox(
-                                                                                          height: 10,
-                                                                                        ),
-                                                                                        (double.parse(electricityModels[0].eleMitFive!) + double.parse(electricityModels[0].eleGobFive!)) == 0.00
-                                                                                            ? SizedBox()
-                                                                                            : Row(
-                                                                                                children: [
-                                                                                                  Expanded(flex: 1, child: Text('')),
-                                                                                                  Expanded(
-                                                                                                    flex: 2,
-                                                                                                    child: Text(
-                                                                                                      'หน่วยที่ ${int.parse(electricityModels[0].eleTour!) + 1} - ${electricityModels[0].eleFive}',
-                                                                                                      textAlign: TextAlign.start,
-                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  Expanded(
-                                                                                                    flex: 2,
-                                                                                                    child: Text(
-                                                                                                      double.parse(electricityModels[0].eleMitFive!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
-                                                                                                      textAlign: TextAlign.start,
-                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  Expanded(
-                                                                                                    flex: 2,
-                                                                                                    child: Text(
-                                                                                                      double.parse(electricityModels[0].eleMitFive!) == 0.00 ? '${electricityModels[0].eleGobFive}' : '${electricityModels[0].eleMitFive}',
-                                                                                                      textAlign: TextAlign.end,
-                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  Expanded(
-                                                                                                    flex: 1,
-                                                                                                    child: Text(
-                                                                                                      'บาท',
-                                                                                                      textAlign: TextAlign.center,
-                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                ],
-                                                                                              ),
-                                                                                        SizedBox(
-                                                                                          height: 10,
-                                                                                        ),
-                                                                                        (double.parse(electricityModels[0].eleMitSix!) + double.parse(electricityModels[0].eleGobSix!)) == 0.00
-                                                                                            ? SizedBox()
-                                                                                            : Row(
-                                                                                                children: [
-                                                                                                  Expanded(flex: 1, child: Text('')),
-                                                                                                  Expanded(
-                                                                                                    flex: 2,
-                                                                                                    child: Text(
-                                                                                                      'หน่วยที่ ${electricityModels[0].eleSix} ขึ้นไป',
-                                                                                                      textAlign: TextAlign.start,
-                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  Expanded(
-                                                                                                    flex: 2,
-                                                                                                    child: Text(
-                                                                                                      double.parse(electricityModels[0].eleMitSix!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
-                                                                                                      textAlign: TextAlign.start,
-                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  Expanded(
-                                                                                                    flex: 2,
-                                                                                                    child: Text(
-                                                                                                      double.parse(electricityModels[0].eleMitSix!) == 0.00 ? '${electricityModels[0].eleGobSix}' : '${electricityModels[0].eleMitSix}',
-                                                                                                      textAlign: TextAlign.end,
-                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  Expanded(
-                                                                                                    flex: 1,
-                                                                                                    child: Text(
-                                                                                                      'บาท',
-                                                                                                      textAlign: TextAlign.center,
-                                                                                                      style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                ],
-                                                                                              ),
-                                                                                        Divider(),
-                                                                                        Row(
-                                                                                          mainAxisAlignment: MainAxisAlignment.end,
-                                                                                          children: [
-                                                                                            Expanded(
-                                                                                              child: Padding(
-                                                                                                padding: const EdgeInsets.all(15.0),
-                                                                                                child: Text(
-                                                                                                  // ignore: unnecessary_string_interpolations
-                                                                                                  '* อัตราคำนวณปัจจุบันอาจไม่ตรงกับยอดชำระ ณ วันที่บันทึก',
-                                                                                                  textAlign: TextAlign.end,
-                                                                                                  style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 12, fontFamily: Font_.Fonts_T),
-                                                                                                ),
-                                                                                              ),
-                                                                                            ),
-                                                                                          ],
-                                                                                        ),
-                                                                                        SizedBox(
-                                                                                          height: 50,
-                                                                                        )
-                                                                                      ],
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                              );
-                                                                            }));
-                                                                  },
+                                                          quotxSelectModels[
+                                                                          index]
+                                                                      .ele_ty ==
+                                                                  '0'
+                                                              ? Expanded(
+                                                                  flex: 1,
                                                                   child:
                                                                       AutoSizeText(
                                                                     maxLines: 2,
                                                                     minFontSize:
                                                                         8,
                                                                     // maxFontSize: 15,
-                                                                    'ดูอัตราคำนวณ',
+                                                                    quotxSelectModels[index].qty ==
+                                                                            '0.00'
+                                                                        ? '${nFormat.format(double.parse(quotxSelectModels[index].total!))} / งวด'
+                                                                        : '${nFormat.format(double.parse(quotxSelectModels[index].qty!))} / หน่วย',
+                                                                    // '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: const TextStyle(
+                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        //fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T),
+                                                                  ),
+                                                                )
+                                                              : Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      AutoSizeText(
+                                                                    maxLines: 2,
+                                                                    minFontSize:
+                                                                        8,
+                                                                    // maxFontSize: 15,
+                                                                    'อัตราพิเศษ',
                                                                     // '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
                                                                     textAlign:
                                                                         TextAlign
@@ -8018,8 +8731,356 @@ class _RentalInformationState extends State<RentalInformation> {
                                                                         fontFamily: Font_.Fonts_T),
                                                                   ),
                                                                 ),
-                                                              ),
-                                                      ],
+                                                          quotxSelectModels[
+                                                                          index]
+                                                                      .ele_ty ==
+                                                                  '0'
+                                                              ? Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      AutoSizeText(
+                                                                    maxLines: 2,
+                                                                    minFontSize:
+                                                                        8,
+                                                                    // maxFontSize: 15,
+                                                                    '${nFormat.format(int.parse(quotxSelectModels[index].term!) * double.parse(quotxSelectModels[index].total!))}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .end,
+                                                                    style: const TextStyle(
+                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        //fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T),
+                                                                  ),
+                                                                )
+                                                              : Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      GestureDetector(
+                                                                    onTap: () {
+                                                                      showcountmiter(index).then((value) => showDialog(
+                                                                          context: context,
+                                                                          builder: (_) {
+                                                                            return Dialog(
+                                                                              child: Container(
+                                                                                width: MediaQuery.of(context).size.width * 0.5,
+                                                                                height: MediaQuery.of(context).size.width * 0.2,
+                                                                                child: SingleChildScrollView(
+                                                                                  child: Column(
+                                                                                    children: [
+                                                                                      Row(
+                                                                                        children: [
+                                                                                          Expanded(
+                                                                                            child: Padding(
+                                                                                              padding: const EdgeInsets.all(15.0),
+                                                                                              child: Text(
+                                                                                                // ignore: unnecessary_string_interpolations
+                                                                                                'อัตราการคำนวณปัจจุบัน',
+                                                                                                textAlign: TextAlign.center,
+                                                                                                style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontWeight: FontWeight.bold, fontSize: 25, fontFamily: Font_.Fonts_T),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                      Divider(),
+                                                                                      (double.parse(electricityModels[0].eleMitOne!) + double.parse(electricityModels[0].eleGobOne!)) == 0.00
+                                                                                          ? SizedBox()
+                                                                                          : Row(
+                                                                                              children: [
+                                                                                                Expanded(flex: 1, child: Text('')),
+                                                                                                Expanded(
+                                                                                                  flex: 2,
+                                                                                                  child: Text(
+                                                                                                    'หน่วยที่ 0 - ${electricityModels[0].eleOne}',
+                                                                                                    textAlign: TextAlign.start,
+                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                  ),
+                                                                                                ),
+                                                                                                Expanded(
+                                                                                                  flex: 2,
+                                                                                                  child: Text(
+                                                                                                    double.parse(electricityModels[0].eleMitOne!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
+                                                                                                    textAlign: TextAlign.start,
+                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                  ),
+                                                                                                ),
+                                                                                                Expanded(
+                                                                                                  flex: 2,
+                                                                                                  child: Text(
+                                                                                                    double.parse(electricityModels[0].eleMitOne!) == 0.00 ? '${electricityModels[0].eleGobOne}' : '${electricityModels[0].eleMitOne}',
+                                                                                                    textAlign: TextAlign.end,
+                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                  ),
+                                                                                                ),
+                                                                                                Expanded(
+                                                                                                  flex: 1,
+                                                                                                  child: Text(
+                                                                                                    'บาท',
+                                                                                                    textAlign: TextAlign.center,
+                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ],
+                                                                                            ),
+                                                                                      SizedBox(
+                                                                                        height: 10,
+                                                                                      ),
+                                                                                      (double.parse(electricityModels[0].eleMitTwo!) + double.parse(electricityModels[0].eleGobTwo!)) == 0.00
+                                                                                          ? SizedBox()
+                                                                                          : Row(
+                                                                                              children: [
+                                                                                                Expanded(flex: 1, child: Text('')),
+                                                                                                Expanded(
+                                                                                                  flex: 2,
+                                                                                                  child: Text(
+                                                                                                    'หน่วยที่ ${int.parse(electricityModels[0].eleOne!) + 1} - ${electricityModels[0].eleTwo}',
+                                                                                                    textAlign: TextAlign.start,
+                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                  ),
+                                                                                                ),
+                                                                                                Expanded(
+                                                                                                  flex: 2,
+                                                                                                  child: Text(
+                                                                                                    double.parse(electricityModels[0].eleMitTwo!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
+                                                                                                    textAlign: TextAlign.start,
+                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                  ),
+                                                                                                ),
+                                                                                                Expanded(
+                                                                                                  flex: 2,
+                                                                                                  child: Text(
+                                                                                                    double.parse(electricityModels[0].eleMitTwo!) == 0.00 ? '${electricityModels[0].eleGobTwo}' : '${electricityModels[0].eleMitTwo}',
+                                                                                                    textAlign: TextAlign.end,
+                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                  ),
+                                                                                                ),
+                                                                                                Expanded(
+                                                                                                  flex: 1,
+                                                                                                  child: Text(
+                                                                                                    'บาท',
+                                                                                                    textAlign: TextAlign.center,
+                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ],
+                                                                                            ),
+                                                                                      SizedBox(
+                                                                                        height: 10,
+                                                                                      ),
+                                                                                      (double.parse(electricityModels[0].eleMitThree!) + double.parse(electricityModels[0].eleGobThree!)) == 0.00
+                                                                                          ? SizedBox()
+                                                                                          : Row(
+                                                                                              children: [
+                                                                                                Expanded(flex: 1, child: Text('')),
+                                                                                                Expanded(
+                                                                                                  flex: 2,
+                                                                                                  child: Text(
+                                                                                                    'หน่วยที่ ${int.parse(electricityModels[0].eleTwo!) + 1} - ${electricityModels[0].eleThree}',
+                                                                                                    textAlign: TextAlign.start,
+                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                  ),
+                                                                                                ),
+                                                                                                Expanded(
+                                                                                                  flex: 2,
+                                                                                                  child: Text(
+                                                                                                    double.parse(electricityModels[0].eleMitThree!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
+                                                                                                    textAlign: TextAlign.start,
+                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                  ),
+                                                                                                ),
+                                                                                                Expanded(
+                                                                                                  flex: 2,
+                                                                                                  child: Text(
+                                                                                                    double.parse(electricityModels[0].eleMitThree!) == 0.00 ? '${electricityModels[0].eleGobThree}' : '${electricityModels[0].eleMitThree}',
+                                                                                                    textAlign: TextAlign.end,
+                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                  ),
+                                                                                                ),
+                                                                                                Expanded(
+                                                                                                  flex: 1,
+                                                                                                  child: Text(
+                                                                                                    'บาท',
+                                                                                                    textAlign: TextAlign.center,
+                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ],
+                                                                                            ),
+                                                                                      SizedBox(
+                                                                                        height: 10,
+                                                                                      ),
+                                                                                      (double.parse(electricityModels[0].eleMitTour!) + double.parse(electricityModels[0].eleGobTour!)) == 0.00
+                                                                                          ? SizedBox()
+                                                                                          : Row(
+                                                                                              children: [
+                                                                                                Expanded(flex: 1, child: Text('')),
+                                                                                                Expanded(
+                                                                                                  flex: 2,
+                                                                                                  child: Text(
+                                                                                                    'หน่วยที่ ${int.parse(electricityModels[0].eleThree!) + 1} - ${electricityModels[0].eleTour}',
+                                                                                                    textAlign: TextAlign.start,
+                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                  ),
+                                                                                                ),
+                                                                                                Expanded(
+                                                                                                  flex: 2,
+                                                                                                  child: Text(
+                                                                                                    double.parse(electricityModels[0].eleMitTour!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
+                                                                                                    textAlign: TextAlign.start,
+                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                  ),
+                                                                                                ),
+                                                                                                Expanded(
+                                                                                                  flex: 2,
+                                                                                                  child: Text(
+                                                                                                    double.parse(electricityModels[0].eleMitTour!) == 0.00 ? '${electricityModels[0].eleGobTour}' : '${electricityModels[0].eleMitTour}',
+                                                                                                    textAlign: TextAlign.end,
+                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                  ),
+                                                                                                ),
+                                                                                                Expanded(
+                                                                                                  flex: 1,
+                                                                                                  child: Text(
+                                                                                                    'บาท',
+                                                                                                    textAlign: TextAlign.center,
+                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ],
+                                                                                            ),
+                                                                                      SizedBox(
+                                                                                        height: 10,
+                                                                                      ),
+                                                                                      (double.parse(electricityModels[0].eleMitFive!) + double.parse(electricityModels[0].eleGobFive!)) == 0.00
+                                                                                          ? SizedBox()
+                                                                                          : Row(
+                                                                                              children: [
+                                                                                                Expanded(flex: 1, child: Text('')),
+                                                                                                Expanded(
+                                                                                                  flex: 2,
+                                                                                                  child: Text(
+                                                                                                    'หน่วยที่ ${int.parse(electricityModels[0].eleTour!) + 1} - ${electricityModels[0].eleFive}',
+                                                                                                    textAlign: TextAlign.start,
+                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                  ),
+                                                                                                ),
+                                                                                                Expanded(
+                                                                                                  flex: 2,
+                                                                                                  child: Text(
+                                                                                                    double.parse(electricityModels[0].eleMitFive!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
+                                                                                                    textAlign: TextAlign.start,
+                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                  ),
+                                                                                                ),
+                                                                                                Expanded(
+                                                                                                  flex: 2,
+                                                                                                  child: Text(
+                                                                                                    double.parse(electricityModels[0].eleMitFive!) == 0.00 ? '${electricityModels[0].eleGobFive}' : '${electricityModels[0].eleMitFive}',
+                                                                                                    textAlign: TextAlign.end,
+                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                  ),
+                                                                                                ),
+                                                                                                Expanded(
+                                                                                                  flex: 1,
+                                                                                                  child: Text(
+                                                                                                    'บาท',
+                                                                                                    textAlign: TextAlign.center,
+                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ],
+                                                                                            ),
+                                                                                      SizedBox(
+                                                                                        height: 10,
+                                                                                      ),
+                                                                                      (double.parse(electricityModels[0].eleMitSix!) + double.parse(electricityModels[0].eleGobSix!)) == 0.00
+                                                                                          ? SizedBox()
+                                                                                          : Row(
+                                                                                              children: [
+                                                                                                Expanded(flex: 1, child: Text('')),
+                                                                                                Expanded(
+                                                                                                  flex: 2,
+                                                                                                  child: Text(
+                                                                                                    'หน่วยที่ ${electricityModels[0].eleSix} ขึ้นไป',
+                                                                                                    textAlign: TextAlign.start,
+                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                  ),
+                                                                                                ),
+                                                                                                Expanded(
+                                                                                                  flex: 2,
+                                                                                                  child: Text(
+                                                                                                    double.parse(electricityModels[0].eleMitSix!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
+                                                                                                    textAlign: TextAlign.start,
+                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                  ),
+                                                                                                ),
+                                                                                                Expanded(
+                                                                                                  flex: 2,
+                                                                                                  child: Text(
+                                                                                                    double.parse(electricityModels[0].eleMitSix!) == 0.00 ? '${electricityModels[0].eleGobSix}' : '${electricityModels[0].eleMitSix}',
+                                                                                                    textAlign: TextAlign.end,
+                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                  ),
+                                                                                                ),
+                                                                                                Expanded(
+                                                                                                  flex: 1,
+                                                                                                  child: Text(
+                                                                                                    'บาท',
+                                                                                                    textAlign: TextAlign.center,
+                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ],
+                                                                                            ),
+                                                                                      Divider(),
+                                                                                      Row(
+                                                                                        mainAxisAlignment: MainAxisAlignment.end,
+                                                                                        children: [
+                                                                                          Expanded(
+                                                                                            child: Padding(
+                                                                                              padding: const EdgeInsets.all(15.0),
+                                                                                              child: Text(
+                                                                                                // ignore: unnecessary_string_interpolations
+                                                                                                '* อัตราคำนวณปัจจุบันอาจไม่ตรงกับยอดชำระ ณ วันที่บันทึก',
+                                                                                                textAlign: TextAlign.end,
+                                                                                                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 12, fontFamily: Font_.Fonts_T),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                      SizedBox(
+                                                                                        height: 50,
+                                                                                      )
+                                                                                    ],
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            );
+                                                                          }));
+                                                                    },
+                                                                    child:
+                                                                        AutoSizeText(
+                                                                      maxLines:
+                                                                          2,
+                                                                      minFontSize:
+                                                                          8,
+                                                                      // maxFontSize: 15,
+                                                                      'ดูอัตราคำนวณ',
+                                                                      // '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .end,
+                                                                      style: const TextStyle(
+                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                          //fontWeight: FontWeight.bold,
+                                                                          fontFamily: Font_.Fonts_T),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                        ],
+                                                      ),
                                                     )),
                                               ),
                                             );
@@ -8244,7 +9305,7 @@ class _RentalInformationState extends State<RentalInformation> {
                                                       .width *
                                                   0.84
                                               : 800,
-                                          decoration: const BoxDecoration(
+                                          decoration: BoxDecoration(
                                             color: AppbackgroundColor
                                                 .TiTile_Colors,
                                             borderRadius: BorderRadius.only(
@@ -8520,505 +9581,535 @@ class _RentalInformationState extends State<RentalInformation> {
                                               bottomRight: Radius.circular(0)),
                                           // border: Border.all(color: Colors.grey, width: 1),
                                         ),
-                                        child:
-                                            widget.Get_Value_NameShop_index ==
-                                                    '1'
-                                                ? ListView.builder(
-                                                    controller:
-                                                        _scrollController2,
-                                                    // itemExtent: 50,
-                                                    physics:
-                                                        const AlwaysScrollableScrollPhysics(), // const NeverScrollableScrollPhysics(),
-                                                    shrinkWrap: true,
-                                                    itemCount:
-                                                        _TransModels.length,
-                                                    itemBuilder:
-                                                        (BuildContext context,
-                                                            int index) {
-                                                      return Material(
-                                                        color: tappedIndex_2 ==
-                                                                index.toString()
-                                                            ? tappedIndex_Color
-                                                                .tappedIndex_Colors
-                                                            : AppbackgroundColor
-                                                                .Sub_Abg_Colors,
-                                                        child: Container(
-                                                          // color: tappedIndex_2 ==
-                                                          //         index.toString()
-                                                          //     ? tappedIndex_Color
-                                                          //         .tappedIndex_Colors
-                                                          //         .withOpacity(0.5)
-                                                          //     : null,
-                                                          child: ListTile(
-                                                              onTap: () {
-                                                                setState(() {
-                                                                  tappedIndex_2 =
-                                                                      index
-                                                                          .toString();
-                                                                });
-                                                              },
-                                                              title: Column(
-                                                                children: [
-                                                                  Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .center,
-                                                                    children: [
-                                                                      // Expanded(
-                                                                      //   flex: 1,
-                                                                      //   child: AutoSizeText(
-                                                                      //     maxLines: 1,
-                                                                      //     minFontSize: 8,
-                                                                      //     maxFontSize: 20,
-                                                                      //     '${(index + 1)}',
-                                                                      //     textAlign:
-                                                                      //         TextAlign.center,
-                                                                      //     style: const TextStyle(
-                                                                      //       color: TextHome_Color
-                                                                      //           .TextHome_Colors,
-                                                                      //     ),
-                                                                      //   ),
-                                                                      // ),
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            AutoSizeText(
-                                                                          maxLines:
-                                                                              1,
-                                                                          minFontSize:
-                                                                              8,
-                                                                          maxFontSize:
-                                                                              20,
-                                                                          '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_TransModels[index].duedate!} 00:00:00'))}',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style: const TextStyle(
-                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                              //fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T),
-                                                                        ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            Tooltip(
-                                                                          richMessage:
-                                                                              TextSpan(
-                                                                            text:
-                                                                                '${_TransModels[index].name!}',
-                                                                            style:
-                                                                                const TextStyle(
-                                                                              color: HomeScreen_Color.Colors_Text1_,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontFamily: FontWeight_.Fonts_T,
-                                                                              //fontSize: 10.0
-                                                                            ),
-                                                                          ),
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(5),
-                                                                            color:
-                                                                                Colors.grey[200],
-                                                                          ),
-                                                                          child:
-                                                                              AutoSizeText(
-                                                                            maxLines:
-                                                                                1,
-                                                                            minFontSize:
-                                                                                8,
-                                                                            maxFontSize:
-                                                                                20,
-                                                                            '${_TransModels[index].name!}',
-                                                                            textAlign:
-                                                                                TextAlign.center,
-                                                                            style: const TextStyle(
-                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                //fontWeight: FontWeight.bold,
-                                                                                fontFamily: Font_.Fonts_T),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            AutoSizeText(
-                                                                          maxLines:
-                                                                              1,
-                                                                          minFontSize:
-                                                                              8,
-                                                                          maxFontSize:
-                                                                              20,
-                                                                          '${_TransModels[index].vtype!}',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style: const TextStyle(
-                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                              //fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T),
-                                                                        ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            AutoSizeText(
-                                                                          maxLines:
-                                                                              1,
-                                                                          minFontSize:
-                                                                              8,
-                                                                          maxFontSize:
-                                                                              20,
-                                                                          '${_TransModels[index].nvat!} %',
-                                                                          textAlign:
-                                                                              TextAlign.right,
-                                                                          style: const TextStyle(
-                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                              //fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T),
-                                                                        ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            AutoSizeText(
-                                                                          maxLines:
-                                                                              1,
-                                                                          minFontSize:
-                                                                              8,
-                                                                          maxFontSize:
-                                                                              20,
-                                                                          '${_TransModels[index].vat!}',
-                                                                          textAlign:
-                                                                              TextAlign.right,
-                                                                          style: const TextStyle(
-                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                              //fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T),
-                                                                        ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            AutoSizeText(
-                                                                          maxLines:
-                                                                              1,
-                                                                          minFontSize:
-                                                                              8,
-                                                                          maxFontSize:
-                                                                              20,
-                                                                          '${_TransModels[index].pvat!}',
-                                                                          textAlign:
-                                                                              TextAlign.right,
-                                                                          style: const TextStyle(
-                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                              //fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T),
-                                                                        ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            AutoSizeText(
-                                                                          maxLines:
-                                                                              1,
-                                                                          minFontSize:
-                                                                              8,
-                                                                          maxFontSize:
-                                                                              20,
-                                                                          '${nFormat.format(double.parse(_TransModels[index].nwht!))}',
-                                                                          //'${_TransModels[index].nwht!}',
-                                                                          textAlign:
-                                                                              TextAlign.right,
-                                                                          style: const TextStyle(
-                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                              //fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T),
-                                                                        ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            AutoSizeText(
-                                                                          maxLines:
-                                                                              1,
-                                                                          minFontSize:
-                                                                              8,
-                                                                          maxFontSize:
-                                                                              20,
-                                                                          '${nFormat.format(double.parse(_TransModels[index].wht!))}',
-                                                                          //  '${_TransModels[index].wht!}',
-                                                                          textAlign:
-                                                                              TextAlign.right,
-                                                                          style: const TextStyle(
-                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                              //fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T),
-                                                                        ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            AutoSizeText(
-                                                                          maxLines:
-                                                                              1,
-                                                                          minFontSize:
-                                                                              8,
-                                                                          maxFontSize:
-                                                                              20,
-                                                                          '${nFormat.format(double.parse(_TransModels[index].total!))}',
-                                                                          textAlign:
-                                                                              TextAlign.right,
-                                                                          style: const TextStyle(
-                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                              //fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T),
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ],
-                                                              )),
-                                                        ),
-                                                      );
-                                                    },
-                                                  )
-                                                : ListView.builder(
-                                                    controller:
-                                                        _scrollController2,
-                                                    // itemExtent: 50,
-                                                    physics:
-                                                        const AlwaysScrollableScrollPhysics(), // const NeverScrollableScrollPhysics(),
-                                                    shrinkWrap: true,
-                                                    itemCount: quotxSelectModels
-                                                        .length,
-                                                    itemBuilder:
-                                                        (BuildContext context,
-                                                            int index) {
-                                                      return Container(
-                                                        color: tappedIndex_2 ==
-                                                                index.toString()
-                                                            ? tappedIndex_Color
-                                                                .tappedIndex_Colors
-                                                                .withOpacity(
-                                                                    0.5)
-                                                            : null,
-                                                        child: ListTile(
-                                                            onTap: () {
-                                                              setState(() {
-                                                                tappedIndex_2 =
-                                                                    index
-                                                                        .toString();
-                                                              });
-                                                            },
-                                                            title: Column(
+                                        child: widget
+                                                    .Get_Value_NameShop_index ==
+                                                '1'
+                                            ? ListView.builder(
+                                                controller: _scrollController2,
+                                                // itemExtent: 50,
+                                                physics:
+                                                    const AlwaysScrollableScrollPhysics(), // const NeverScrollableScrollPhysics(),
+                                                shrinkWrap: true,
+                                                itemCount: _TransModels.length,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  return Material(
+                                                    color: tappedIndex_2 ==
+                                                            index.toString()
+                                                        ? tappedIndex_Color
+                                                            .tappedIndex_Colors
+                                                        : AppbackgroundColor
+                                                            .Sub_Abg_Colors,
+                                                    child: Container(
+                                                      // color: tappedIndex_2 ==
+                                                      //         index.toString()
+                                                      //     ? tappedIndex_Color
+                                                      //         .tappedIndex_Colors
+                                                      //         .withOpacity(0.5)
+                                                      //     : null,
+                                                      child: ListTile(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              tappedIndex_2 =
+                                                                  index
+                                                                      .toString();
+                                                            });
+                                                          },
+                                                          title: Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              // color: Colors.green[100]!
+                                                              //     .withOpacity(0.5),
+                                                              border: Border(
+                                                                bottom:
+                                                                    BorderSide(
+                                                                  color: Colors
+                                                                      .black12,
+                                                                  width: 1,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
                                                               children: [
-                                                                for (var i = 0;
-                                                                    i <
-                                                                        int.parse(
-                                                                            quotxSelectModels[index].term!);
-                                                                    i++)
-                                                                  Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
+                                                                // Expanded(
+                                                                //   flex: 1,
+                                                                //   child: AutoSizeText(
+                                                                //     maxLines: 1,
+                                                                //     minFontSize: 8,
+                                                                //     maxFontSize: 20,
+                                                                //     '${(index + 1)}',
+                                                                //     textAlign:
+                                                                //         TextAlign.center,
+                                                                //     style: const TextStyle(
+                                                                //       color: TextHome_Color
+                                                                //           .TextHome_Colors,
+                                                                //     ),
+                                                                //   ),
+                                                                // ),
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      AutoSizeText(
+                                                                    maxLines: 1,
+                                                                    minFontSize:
+                                                                        8,
+                                                                    maxFontSize:
+                                                                        20,
+                                                                    '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_TransModels[index].duedate!} 00:00:00'))}',
+                                                                    textAlign:
+                                                                        TextAlign
                                                                             .center,
-                                                                    children: [
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            AutoSizeText(
-                                                                          maxLines:
-                                                                              1,
-                                                                          minFontSize:
-                                                                              8,
-                                                                          maxFontSize:
-                                                                              20,
-                                                                          '${(i + 1)}',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style: const TextStyle(
-                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                              //fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T),
-                                                                        ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            AutoSizeText(
-                                                                          maxLines:
-                                                                              1,
-                                                                          minFontSize:
-                                                                              8,
-                                                                          maxFontSize:
-                                                                              20,
-                                                                          '${DateFormat('dd').format(DateTime.parse('${quotxSelectModels[index].sdate!} 00:00:00'))}-${DateFormat('MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].sdate!} 00:00:00').add(Duration(days: int.parse('${quotxSelectModels[index].sday}') * i)))}',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style: const TextStyle(
-                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                              //fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T),
-                                                                        ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            AutoSizeText(
-                                                                          maxLines:
-                                                                              1,
-                                                                          minFontSize:
-                                                                              8,
-                                                                          maxFontSize:
-                                                                              20,
-                                                                          '${quotxSelectModels[index].expname!}',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style: const TextStyle(
-                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                              //fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T),
-                                                                        ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            AutoSizeText(
-                                                                          maxLines:
-                                                                              1,
-                                                                          minFontSize:
-                                                                              8,
-                                                                          maxFontSize:
-                                                                              20,
-                                                                          '${quotxSelectModels[index].vtype!}',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style: const TextStyle(
-                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                              //fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T),
-                                                                        ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            AutoSizeText(
-                                                                          maxLines:
-                                                                              1,
-                                                                          minFontSize:
-                                                                              8,
-                                                                          maxFontSize:
-                                                                              20,
-                                                                          '${quotxSelectModels[index].nvat!} %',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style: const TextStyle(
-                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                              //fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T),
-                                                                        ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            AutoSizeText(
-                                                                          maxLines:
-                                                                              1,
-                                                                          minFontSize:
-                                                                              8,
-                                                                          maxFontSize:
-                                                                              20,
-                                                                          '${quotxSelectModels[index].vat!}',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style: const TextStyle(
-                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                              //fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T),
-                                                                        ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            AutoSizeText(
-                                                                          maxLines:
-                                                                              1,
-                                                                          minFontSize:
-                                                                              8,
-                                                                          maxFontSize:
-                                                                              20,
-                                                                          '${quotxSelectModels[index].pvat!}',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style: const TextStyle(
-                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                              //fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T),
-                                                                        ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            AutoSizeText(
-                                                                          maxLines:
-                                                                              1,
-                                                                          minFontSize:
-                                                                              8,
-                                                                          maxFontSize:
-                                                                              20,
-                                                                          '${quotxSelectModels[index].nwht!}',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style: const TextStyle(
-                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                              //fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T),
-                                                                        ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            AutoSizeText(
-                                                                          maxLines:
-                                                                              1,
-                                                                          minFontSize:
-                                                                              8,
-                                                                          maxFontSize:
-                                                                              20,
-                                                                          '${quotxSelectModels[index].wht!}',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style: const TextStyle(
-                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                              //fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T),
-                                                                        ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child:
-                                                                            AutoSizeText(
-                                                                          maxLines:
-                                                                              1,
-                                                                          minFontSize:
-                                                                              8,
-                                                                          maxFontSize:
-                                                                              20,
-                                                                          '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style: const TextStyle(
-                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                              //fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T),
-                                                                        ),
-                                                                      ),
-                                                                    ],
+                                                                    style: const TextStyle(
+                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        //fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T),
                                                                   ),
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      Tooltip(
+                                                                    richMessage:
+                                                                        TextSpan(
+                                                                      text:
+                                                                          '${_TransModels[index].name!}',
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        color: HomeScreen_Color
+                                                                            .Colors_Text1_,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        fontFamily:
+                                                                            FontWeight_.Fonts_T,
+                                                                        //fontSize: 10.0
+                                                                      ),
+                                                                    ),
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              5),
+                                                                      color: Colors
+                                                                              .grey[
+                                                                          200],
+                                                                    ),
+                                                                    child:
+                                                                        AutoSizeText(
+                                                                      maxLines:
+                                                                          1,
+                                                                      minFontSize:
+                                                                          8,
+                                                                      maxFontSize:
+                                                                          20,
+                                                                      '${_TransModels[index].name!}',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style: const TextStyle(
+                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                          //fontWeight: FontWeight.bold,
+                                                                          fontFamily: Font_.Fonts_T),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      AutoSizeText(
+                                                                    maxLines: 1,
+                                                                    minFontSize:
+                                                                        8,
+                                                                    maxFontSize:
+                                                                        20,
+                                                                    '${_TransModels[index].vtype!}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style: const TextStyle(
+                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        //fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      AutoSizeText(
+                                                                    maxLines: 1,
+                                                                    minFontSize:
+                                                                        8,
+                                                                    maxFontSize:
+                                                                        20,
+                                                                    '${_TransModels[index].nvat!} %',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .right,
+                                                                    style: const TextStyle(
+                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        //fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      AutoSizeText(
+                                                                    maxLines: 1,
+                                                                    minFontSize:
+                                                                        8,
+                                                                    maxFontSize:
+                                                                        20,
+                                                                    '${_TransModels[index].vat!}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .right,
+                                                                    style: const TextStyle(
+                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        //fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      AutoSizeText(
+                                                                    maxLines: 1,
+                                                                    minFontSize:
+                                                                        8,
+                                                                    maxFontSize:
+                                                                        20,
+                                                                    '${_TransModels[index].pvat!}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .right,
+                                                                    style: const TextStyle(
+                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        //fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      AutoSizeText(
+                                                                    maxLines: 1,
+                                                                    minFontSize:
+                                                                        8,
+                                                                    maxFontSize:
+                                                                        20,
+                                                                    '${nFormat.format(double.parse(_TransModels[index].nwht!))}',
+                                                                    //'${_TransModels[index].nwht!}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .right,
+                                                                    style: const TextStyle(
+                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        //fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      AutoSizeText(
+                                                                    maxLines: 1,
+                                                                    minFontSize:
+                                                                        8,
+                                                                    maxFontSize:
+                                                                        20,
+                                                                    '${nFormat.format(double.parse(_TransModels[index].wht!))}',
+                                                                    //  '${_TransModels[index].wht!}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .right,
+                                                                    style: const TextStyle(
+                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        //fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      AutoSizeText(
+                                                                    maxLines: 1,
+                                                                    minFontSize:
+                                                                        8,
+                                                                    maxFontSize:
+                                                                        20,
+                                                                    '${nFormat.format(double.parse(_TransModels[index].total!))}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .right,
+                                                                    style: const TextStyle(
+                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        //fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T),
+                                                                  ),
+                                                                ),
                                                               ],
-                                                            )),
-                                                      );
-                                                    },
-                                                  ),
+                                                            ),
+                                                          )),
+                                                    ),
+                                                  );
+                                                },
+                                              )
+                                            : ListView.builder(
+                                                controller: _scrollController2,
+                                                // itemExtent: 50,
+                                                physics:
+                                                    const AlwaysScrollableScrollPhysics(), // const NeverScrollableScrollPhysics(),
+                                                shrinkWrap: true,
+                                                itemCount:
+                                                    quotxSelectModels.length,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  return Container(
+                                                    color: tappedIndex_2 ==
+                                                            index.toString()
+                                                        ? tappedIndex_Color
+                                                            .tappedIndex_Colors
+                                                            .withOpacity(0.5)
+                                                        : null,
+                                                    child: ListTile(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            tappedIndex_2 =
+                                                                index
+                                                                    .toString();
+                                                          });
+                                                        },
+                                                        title: Column(
+                                                          children: [
+                                                            for (var i = 0;
+                                                                i <
+                                                                    int.parse(quotxSelectModels[
+                                                                            index]
+                                                                        .term!);
+                                                                i++)
+                                                              Container(
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  // color: Colors.green[100]!
+                                                                  //     .withOpacity(0.5),
+                                                                  border:
+                                                                      Border(
+                                                                    bottom:
+                                                                        BorderSide(
+                                                                      color: Colors
+                                                                          .black12,
+                                                                      width: 1,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    Expanded(
+                                                                      flex: 1,
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        maxLines:
+                                                                            1,
+                                                                        minFontSize:
+                                                                            8,
+                                                                        maxFontSize:
+                                                                            20,
+                                                                        '${(i + 1)}',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style: const TextStyle(
+                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            //fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      flex: 1,
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        maxLines:
+                                                                            1,
+                                                                        minFontSize:
+                                                                            8,
+                                                                        maxFontSize:
+                                                                            20,
+                                                                        '${DateFormat('dd').format(DateTime.parse('${quotxSelectModels[index].sdate!} 00:00:00'))}-${DateFormat('MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].sdate!} 00:00:00').add(Duration(days: int.parse('${quotxSelectModels[index].sday}') * i)))}',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style: const TextStyle(
+                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            //fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      flex: 1,
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        maxLines:
+                                                                            1,
+                                                                        minFontSize:
+                                                                            8,
+                                                                        maxFontSize:
+                                                                            20,
+                                                                        '${quotxSelectModels[index].expname!}',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style: const TextStyle(
+                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            //fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      flex: 1,
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        maxLines:
+                                                                            1,
+                                                                        minFontSize:
+                                                                            8,
+                                                                        maxFontSize:
+                                                                            20,
+                                                                        '${quotxSelectModels[index].vtype!}',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style: const TextStyle(
+                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            //fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      flex: 1,
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        maxLines:
+                                                                            1,
+                                                                        minFontSize:
+                                                                            8,
+                                                                        maxFontSize:
+                                                                            20,
+                                                                        '${quotxSelectModels[index].nvat!} %',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style: const TextStyle(
+                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            //fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      flex: 1,
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        maxLines:
+                                                                            1,
+                                                                        minFontSize:
+                                                                            8,
+                                                                        maxFontSize:
+                                                                            20,
+                                                                        '${quotxSelectModels[index].vat!}',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style: const TextStyle(
+                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            //fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      flex: 1,
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        maxLines:
+                                                                            1,
+                                                                        minFontSize:
+                                                                            8,
+                                                                        maxFontSize:
+                                                                            20,
+                                                                        '${quotxSelectModels[index].pvat!}',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style: const TextStyle(
+                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            //fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      flex: 1,
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        maxLines:
+                                                                            1,
+                                                                        minFontSize:
+                                                                            8,
+                                                                        maxFontSize:
+                                                                            20,
+                                                                        '${quotxSelectModels[index].nwht!}',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style: const TextStyle(
+                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            //fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      flex: 1,
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        maxLines:
+                                                                            1,
+                                                                        minFontSize:
+                                                                            8,
+                                                                        maxFontSize:
+                                                                            20,
+                                                                        '${quotxSelectModels[index].wht!}',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style: const TextStyle(
+                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            //fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      flex: 1,
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        maxLines:
+                                                                            1,
+                                                                        minFontSize:
+                                                                            8,
+                                                                        maxFontSize:
+                                                                            20,
+                                                                        '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style: const TextStyle(
+                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            //fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                          ],
+                                                        )),
+                                                  );
+                                                },
+                                              ),
                                       ),
                                     ],
                                   ),
@@ -9556,6 +10647,7 @@ class RentalInforman_Agreement extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
+          backgroundColor: AppBarColors.hexColor,
           // backgroundColor: Color.fromARGB(255, 141, 185, 90),
           leading: IconButton(
             onPressed: () async {

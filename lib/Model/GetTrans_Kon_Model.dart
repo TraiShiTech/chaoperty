@@ -113,6 +113,10 @@ class TransKonModel {
   String? zser;
   String? bank;
   String? bno;
+  String? sname;
+  String? room_number;
+  String? ln;
+  String? zn1;
 
   TransKonModel({
     this.ser,
@@ -226,6 +230,10 @@ class TransKonModel {
     this.zser,
     this.bank,
     this.bno,
+    this.sname,
+    this.room_number,
+    this.ln,
+    this.zn1,
   });
 
   TransKonModel.fromJson(Map<String, dynamic> json) {
@@ -342,6 +350,10 @@ class TransKonModel {
     zser = json['zser'];
     bank = json['bank'];
     bno = json['bno'];
+    sname = json['sname'];
+    room_number = json['room_number'];
+    ln = json['ln'];
+    zn1 = json['zn1'];
   }
 
   Map<String, dynamic> toJson() {
@@ -459,6 +471,10 @@ class TransKonModel {
     data['zser'] = this.zser;
     data['bank'] = this.bank;
     data['bno'] = this.bno;
+    data['sname'] = this.sname;
+    data['room_number'] = this.room_number;
+    data['ln'] = this.ln;
+    data['zn1'] = this.zn1;
     return data;
   }
 }

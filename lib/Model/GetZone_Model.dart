@@ -17,27 +17,28 @@ class ZoneModel {
   String? jon_book;
   String? sub_zone;
   String? status;
+  String? ser_ren;
 
-  ZoneModel({
-    this.ser,
-    this.rser,
-    this.zn,
-    this.qty,
-    this.img,
-    this.data_update,
-    this.img_floorplan,
-    this.pri,
-    this.jon,
-    this.ren_pri,
-    this.b_1,
-    this.b_2,
-    this.b_3,
-    this.b_4,
-    this.number_zn,
-    this.jon_book,
-    this.sub_zone,
-    this.status,
-  });
+  ZoneModel(
+      {this.ser,
+      this.rser,
+      this.zn,
+      this.qty,
+      this.img,
+      this.data_update,
+      this.img_floorplan,
+      this.pri,
+      this.jon,
+      this.ren_pri,
+      this.b_1,
+      this.b_2,
+      this.b_3,
+      this.b_4,
+      this.number_zn,
+      this.jon_book,
+      this.sub_zone,
+      this.status,
+      this.ser_ren});
 
   ZoneModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -58,6 +59,7 @@ class ZoneModel {
     jon_book = json['jon_book'];
     sub_zone = json['sub_zone'];
     status = json['status'];
+    ser_ren = json['ser_ren'];
   }
 
   Map<String, dynamic> toJson() {
@@ -80,6 +82,8 @@ class ZoneModel {
     data['jon_book'] = this.jon_book;
     data['sub_zone'] = this.sub_zone;
     data['status'] = this.status;
+    data['ser_ren'] = this.ser_ren;
+
     return data;
   }
 }

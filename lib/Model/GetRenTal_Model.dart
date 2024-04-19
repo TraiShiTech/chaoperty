@@ -42,6 +42,9 @@ class RenTalModel {
   String? open_set;
   String? open_disinv;
   String? open_set_date;
+  String? mass_on;
+  String? imglineqr;
+  String? colors_ren;
 
   RenTalModel(
       {this.ser,
@@ -86,7 +89,10 @@ class RenTalModel {
       this.pn_TH,
       this.open_set,
       this.open_disinv,
-      this.open_set_date});
+      this.open_set_date,
+      this.mass_on,
+      this.imglineqr,
+      this.colors_ren});
 
   RenTalModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -132,6 +138,9 @@ class RenTalModel {
     open_set = json['open_set'];
     open_disinv = json['open_disinv'];
     open_set_date = json['open_set_date'];
+    mass_on = json['mass_on'];
+    imglineqr = json['imglineqr'];
+    colors_ren = json['colors_ren'];
   }
 
   Map<String, dynamic> toJson() {
@@ -179,6 +188,9 @@ class RenTalModel {
     data['open_set'] = this.open_set;
     data['open_disinv'] = this.open_disinv;
     data['open_set_date'] = this.open_set_date;
+    data['mass_on'] = this.mass_on;
+    data['imglineqr'] = this.imglineqr;
+    data['colors_ren'] = this.colors_ren;
 
     return data;
   }

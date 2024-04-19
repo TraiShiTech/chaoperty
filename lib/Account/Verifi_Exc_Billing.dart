@@ -292,8 +292,8 @@ class _Verifi_Exc_BillingState extends State<Verifi_Exc_Billing> {
     String Serdata =
         (zone.toString() == '0' || zone == null) ? 'All' : 'Allzone';
     String url = (Serdata.toString() == 'All')
-        ? '${MyConstant().domain}/GC_bill_invoiceMon_historyReport.php?isAdd=true&ren=$ren&Serdata=$Serdata&serzone=$zone&_monts=$MONTH_Now&yex=$YEAR_Now'
-        : '${MyConstant().domain}/GC_bill_invoiceMon_historyReport.php?isAdd=true&ren=$ren&Serdata=$Serdata&serzone=$zone&_monts=$MONTH_Now&yex=$YEAR_Now';
+        ? '${MyConstant().domain}/GC_bill_invoiceMonCheck.php?isAdd=true&ren=$ren&Serdata=$Serdata&serzone=$zone&_monts=$MONTH_Now&yex=$YEAR_Now'
+        : '${MyConstant().domain}/GC_bill_invoiceMonCheck.php?isAdd=true&ren=$ren&Serdata=$Serdata&serzone=$zone&_monts=$MONTH_Now&yex=$YEAR_Now';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -1094,7 +1094,7 @@ class _Verifi_Exc_BillingState extends State<Verifi_Exc_Billing> {
                                           : MediaQuery.of(context).size.width *
                                               0.85
                                       : 1200,
-                                  decoration: const BoxDecoration(
+                                  decoration: BoxDecoration(
                                     color: AppbackgroundColor.TiTile_Colors,
                                     borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(10),
@@ -5552,12 +5552,24 @@ class _Verifi_Exc_BillingState extends State<Verifi_Exc_Billing> {
                                             invoice_Now =
                                                 'Save (${index + 1} / ${invoice_select.length}) : ${InvoiceModels[selectedIndex].docno}';
                                           });
+                                          String amount =
+                                              '${double.parse(InvoiceModels[selectedIndex].total_dis.toString())}';
+                                          double parsedAmount =
+                                              double.parse(amount);
+                                          int result =
+                                              (parsedAmount * 100).round();
+
+                                          DateTime datexDialog = DateTime.now();
+                                          String Value_newDatepay_s =
+                                              convertDateString(
+                                                      '${bankExcBilling.where((model) => model.ref1.toString() == InvoiceModels[selectedIndex].docno!.replaceAll('-', '').toString() && model.amount.toString() == result.toString()).map((model) => model.payment_date).join(',')}')
+                                                  .toString();
 
                                           red_Trans_select(index).then((value) {
                                             in_Trans_invoice_refno(
                                                 selectedIndex,
                                                 Value_newDateY1,
-                                                Value_newDatepay,
+                                                Value_newDatepay_s,
                                                 '1');
                                           });
 
@@ -5750,7 +5762,7 @@ class _Verifi_Exc_BillingState extends State<Verifi_Exc_Billing> {
   Future<Null> in_Trans_invoice_refno(
       index, Value_newDateY1, Value_newDatepay, serpay_all) async {
     var Times = DateFormat('HH:mm:ss').format(datex).toString();
-    String? fileName_Slip_;
+    String? fileName_Slip_ = '';
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
     var user = preferences.getString('ser');
@@ -5773,12 +5785,13 @@ class _Verifi_Exc_BillingState extends State<Verifi_Exc_Billing> {
     var bill = bills_name_ == 'บิลธรรมดา' ? 'P' : 'F';
     var comment = '';
     var sum_fine = sum_tran_fine;
-    var fine_total_amt = nFormat.format(fine_total + fine_total2);
+    var fine_total_amt = (fine_total + fine_total2);
+    // var fine_total_amt = nFormat.format(fine_total + fine_total2);
     // print('in_Trans_invoice_refno()///$fileName_Slip_');
     // print('in_Trans_invoice_refno >>> $payment1  $payment2  $bill ');
 
     String url =
-        '${MyConstant().domain}/In_tran_finanref2.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&ref=$ref&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&dis_Pakan=$dis_akan&dis_Matjum=$dis_Matjum&sum_fine=$sum_fine&fine_total_amt=$fine_total_amt';
+        '${MyConstant().domain}/In_tran_finanref1.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&ref=$ref&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&dis_Pakan=$dis_akan&dis_Matjum=$dis_Matjum&sum_fine=$sum_fine&fine_total_amt=$fine_total_amt';
 
     try {
       var response = await http.get(Uri.parse(url));

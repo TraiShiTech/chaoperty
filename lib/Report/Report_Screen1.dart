@@ -123,7 +123,7 @@ class _ReportScreen1State extends State<ReportScreen1> {
     var ren = preferences.getString('renTalSer');
     var zone = preferences.getString('zoneSer');
 
-    print('ren >>>>>> $ren');
+    // print('ren >>>>>> $ren');
 
     String url =
         '${MyConstant().domain}/GC_Bank_Paytype.php?isAdd=true&ren=$ren';
@@ -132,7 +132,7 @@ class _ReportScreen1State extends State<ReportScreen1> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           PayMentModel payMentModel = PayMentModel.fromJson(map);
@@ -160,7 +160,7 @@ class _ReportScreen1State extends State<ReportScreen1> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       Map<String, dynamic> map = Map();
       map['ser'] = '0';
       map['rser'] = '0';
@@ -277,7 +277,7 @@ class _ReportScreen1State extends State<ReportScreen1> {
         }
       } else {}
     } catch (e) {}
-    print('name>>>>>  $renname');
+    // print('name>>>>>  $renname');
   }
 
 ///////////--------------------------------------------->(รายงานรายรับ)
@@ -299,7 +299,7 @@ class _ReportScreen1State extends State<ReportScreen1> {
 
     ///-------->
     String url_Mon = (zone_ser_Trans_Mon.toString() == '0')
-        ? '${MyConstant().domain}/GC_bill_pay_BC_IncomeReport_All.php?isAdd=true&ren=$ren&mont_h=$Mon_Trans_Mon&yea_r=$YE_Trans_Mon&serzone=$zone_ser_Trans_Mon'
+        ? '${MyConstant().domain}/GC_bill_pay_BC_IncomReeport_All.php?isAdd=true&ren=$ren&mont_h=$Mon_Trans_Mon&yea_r=$YE_Trans_Mon&serzone=$zone_ser_Trans_Mon'
         : '${MyConstant().domain}/GC_bill_pay_BC_IncomeReport.php?isAdd=true&ren=$ren&mont_h=$Mon_Trans_Mon&yea_r=$YE_Trans_Mon&serzone=$zone_ser_Trans_Mon';
 
     String url_Daily = (zone_ser_Trans_Daily.toString() == '0')
@@ -321,7 +321,7 @@ class _ReportScreen1State extends State<ReportScreen1> {
             TransReBillModels.add(_TransReBillModels_Incomes);
           });
         }
-        print('result ${TransReBillModels.length}');
+        // print('result ${TransReBillModels.length}');
       }
       Future.delayed(Duration(milliseconds: 700), () async {
         setState(() {
@@ -371,7 +371,7 @@ class _ReportScreen1State extends State<ReportScreen1> {
           });
         }
 
-        print('result ${TransReBillBank.length}');
+        // print('result ${TransReBillBank.length}');
       }
     } catch (e) {}
   }
@@ -417,10 +417,14 @@ class _ReportScreen1State extends State<ReportScreen1> {
         : (zone_ser_Trans_Daily == null)
             ? 0
             : zone_ser_Trans_Daily;
+
     String url = (Value_Report == 'รายงานการเคลื่อนไหวธนาคาร' ||
             Value_Report == 'รายงานการเคลื่อนไหวธนาคารประจำวัน')
         ? '${MyConstant().domain}/GC_bill_pay_historyselectBankAllReport.php?isAdd=true&ren=$ren&mont_h=$Mon_Trans_Mon&yea_r=$YE_Trans_Mon&serzone=$serzone_s&datex=$Value_TransDate_Daily&Typesearch=$Type_search'
         : '${MyConstant().domain}/GC_bill_pay_historyselectAllReport.php?isAdd=true&ren=$ren&mont_h=$Mon_Trans_Mon&yea_r=$YE_Trans_Mon&serzone=$serzone_s&datex=$Value_TransDate_Daily&Typesearch=$Type_search';
+    // print(
+    //     'Value_Report //TransHisBillBank/// ${Value_Report}** $serzone_s  /// $Type_search');
+
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -436,10 +440,10 @@ class _ReportScreen1State extends State<ReportScreen1> {
                 : TranHisBillModels.add(TranHisBillModels_Mons);
           });
         }
-        print(
-            'red_Trans_selectIncomeAll //TransHisBillBank/// ${TransHisBillBank.length}** $serzone_s  /// $Type_search');
-        print(
-            'red_Trans_selectIncomeAll//TranHisBillModels /// ${TranHisBillModels.length} ** $serzone_s /// $Type_search');
+        // print(
+        //     'red_Trans_selectIncomeAll //TransHisBillBank/// ${TransHisBillBank.length}** $serzone_s  /// $Type_search');
+        // print(
+        //     'red_Trans_selectIncomeAll//TranHisBillModels /// ${TranHisBillModels.length} ** $serzone_s /// $Type_search');
       }
     } catch (e) {}
   }
@@ -520,7 +524,7 @@ class _ReportScreen1State extends State<ReportScreen1> {
                       const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(
-                          'เดือน :',
+                          'เดือนที่รับชำระ :',
                           style: TextStyle(
                             color: ReportScreen_Color.Colors_Text2_,
                             // fontWeight: FontWeight.bold,
@@ -623,7 +627,7 @@ class _ReportScreen1State extends State<ReportScreen1> {
                       const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(
-                          'ปี :',
+                          'ปีที่รับชำระ :',
                           style: TextStyle(
                             color: ReportScreen_Color.Colors_Text2_,
                             // fontWeight: FontWeight.bold,
@@ -722,7 +726,7 @@ class _ReportScreen1State extends State<ReportScreen1> {
                       const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(
-                          'โซน :',
+                          'โซนที่รับชำระ :',
                           style: TextStyle(
                             color: ReportScreen_Color.Colors_Text2_,
                             // fontWeight: FontWeight.bold,
@@ -819,8 +823,8 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                 zone_ser_Trans_Mon =
                                     zoneModels_report[selectedIndex].ser!;
                               });
-                              print(
-                                  'Selected Index: $zone_ser_Trans_Mon  //${zone_name_Trans_Mon}');
+                              // print(
+                              //     'Selected Index: $zone_ser_Trans_Mon  //${zone_name_Trans_Mon}');
                             },
                           ),
                         ),
@@ -1121,7 +1125,7 @@ class _ReportScreen1State extends State<ReportScreen1> {
                       const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(
-                          'วันที่ :',
+                          'วันที่รับชำระ :',
                           style: TextStyle(
                             color: ReportScreen_Color.Colors_Text2_,
                             // fontWeight: FontWeight.bold,
@@ -1165,7 +1169,7 @@ class _ReportScreen1State extends State<ReportScreen1> {
                       const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(
-                          'โซน :',
+                          'โซนที่รับชำระ :',
                           style: TextStyle(
                             color: ReportScreen_Color.Colors_Text2_,
                             // fontWeight: FontWeight.bold,
@@ -1275,8 +1279,8 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                 zone_ser_Trans_Daily =
                                     zoneModels_report[selectedIndex].ser!;
                               });
-                              print(
-                                  'Selected Index: $value  //${zone_ser_Trans_Daily}');
+                              // print(
+                              //     'Selected Index: $value  //${zone_ser_Trans_Daily}');
                             },
                           ),
                         ),
@@ -1693,46 +1697,69 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                             .spaceBetween,
                                                     children: [
                                                       Container(
-                                                        decoration:
-                                                            const BoxDecoration(
-                                                          color:
-                                                              AppbackgroundColor
-                                                                  .TiTile_Colors,
-                                                          borderRadius: BorderRadius.only(
-                                                              topLeft: Radius
-                                                                  .circular(5),
-                                                              topRight: Radius
-                                                                  .circular(5),
-                                                              bottomLeft: Radius
-                                                                  .circular(0),
-                                                              bottomRight:
-                                                                  Radius
-                                                                      .circular(
-                                                                          0)),
-                                                        ),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(4.0),
-                                                        child: Text(
-                                                          //'${index1 + 1}. เลขที่: ${_TransReBillModels_Income[index1].docno}',
-                                                          TransReBillModels[
-                                                                          index1]
-                                                                      .doctax !=
-                                                                  ''
-                                                              ? '${index1 + 1}. เลขที่: ${TransReBillModels[index1].doctax}'
-                                                              : '${index1 + 1}. เลขที่: ${TransReBillModels[index1].docno}',
-                                                          style:
-                                                              const TextStyle(
-                                                            color: ReportScreen_Color
-                                                                .Colors_Text1_,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: AppbackgroundColor
+                                                                .TiTile_Colors,
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        5),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        5),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        0),
+                                                                bottomRight:
+                                                                    Radius
+                                                                        .circular(
+                                                                            0)),
                                                           ),
-                                                        ),
-                                                      ),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(4.0),
+                                                          child: RichText(
+                                                            text: TextSpan(
+                                                              text: TransReBillModels[
+                                                                              index1]
+                                                                          .doctax !=
+                                                                      ''
+                                                                  ? '${index1 + 1}. เลขที่: ${TransReBillModels[index1].doctax}'
+                                                                  : '${index1 + 1}. เลขที่: ${TransReBillModels[index1].docno}',
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: ReportScreen_Color
+                                                                    .Colors_Text1_,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                              ),
+                                                              children: <TextSpan>[
+                                                                TextSpan(
+                                                                  text: (TransReBillModels[index1].inv ==
+                                                                              null ||
+                                                                          TransReBillModels[index1].inv.toString() ==
+                                                                              '')
+                                                                      ? ''
+                                                                      : ' ( อ้างถึง : ${TransReBillModels[index1].inv} )',
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    color: Colors
+                                                                        .green,
+                                                                    // fontWeight:
+                                                                    //     FontWeight.bold,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          )),
                                                       (TransReBillModels[index1]
                                                                       .room_number
                                                                       .toString() ==
@@ -1876,7 +1903,27 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                               Expanded(
                                                                 flex: 1,
                                                                 child: Text(
-                                                                  'วันที่',
+                                                                  'วันที่ทำ',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: ReportScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontFamily:
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: Text(
+                                                                  'วันที่ชำระ',
                                                                   textAlign:
                                                                       TextAlign
                                                                           .center,
@@ -2189,6 +2236,29 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                               Expanded(
                                                                 flex: 1,
                                                                 child: Text(
+                                                                  // '${_TransReBillModels_Income[index1].daterec}',
+                                                                  (TransReBillModels[index1]
+                                                                              .dateacc ==
+                                                                          null)
+                                                                      ? ''
+                                                                      : '${DateFormat('dd-MM').format(DateTime.parse('${TransReBillModels[index1].dateacc}'))}-${int.parse('${DateFormat('yyyy').format(DateTime.parse('${TransReBillModels[index1].dateacc}'))}') + 543}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    color: ReportScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    // fontWeight: FontWeight.bold,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: Text(
                                                                   (TransReBillModels[index1]
                                                                                   .sname ==
                                                                               null ||
@@ -2419,8 +2489,8 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                                               .refno!
                                                                           : TransReBillModels[index1]
                                                                               .docno!;
-                                                                      print(
-                                                                          '$ciddoc // $docnoin');
+                                                                      // print(
+                                                                      //     '$ciddoc // $docnoin');
                                                                       red_Trans_selectIncome(
                                                                           ciddoc,
                                                                           docnoin,
@@ -3634,45 +3704,69 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                             .spaceBetween,
                                                     children: [
                                                       Container(
-                                                        decoration:
-                                                            const BoxDecoration(
-                                                          color:
-                                                              AppbackgroundColor
-                                                                  .TiTile_Colors,
-                                                          borderRadius: BorderRadius.only(
-                                                              topLeft: Radius
-                                                                  .circular(5),
-                                                              topRight: Radius
-                                                                  .circular(5),
-                                                              bottomLeft: Radius
-                                                                  .circular(0),
-                                                              bottomRight:
-                                                                  Radius
-                                                                      .circular(
-                                                                          0)),
-                                                        ),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(4.0),
-                                                        child: Text(
-                                                          //'${index1 + 1}. เลขที่: ${_TransReBillModels_Income[index1].docno}',
-                                                          TransReBillBank[index1]
-                                                                      .doctax !=
-                                                                  ''
-                                                              ? '${index1 + 1}. เลขที่: ${TransReBillBank[index1].doctax}'
-                                                              : '${index1 + 1}. เลขที่: ${TransReBillBank[index1].docno}',
-                                                          style:
-                                                              const TextStyle(
-                                                            color: ReportScreen_Color
-                                                                .Colors_Text1_,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: AppbackgroundColor
+                                                                .TiTile_Colors,
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        5),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        5),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        0),
+                                                                bottomRight:
+                                                                    Radius
+                                                                        .circular(
+                                                                            0)),
                                                           ),
-                                                        ),
-                                                      ),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(4.0),
+                                                          child: RichText(
+                                                            text: TextSpan(
+                                                              text: TransReBillBank[
+                                                                              index1]
+                                                                          .doctax !=
+                                                                      ''
+                                                                  ? '${index1 + 1}. เลขที่: ${TransReBillBank[index1].doctax}'
+                                                                  : '${index1 + 1}. เลขที่: ${TransReBillBank[index1].docno}',
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: ReportScreen_Color
+                                                                    .Colors_Text1_,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                              ),
+                                                              children: <TextSpan>[
+                                                                TextSpan(
+                                                                  text: (TransReBillBank[index1].inv ==
+                                                                              null ||
+                                                                          TransReBillBank[index1].inv.toString() ==
+                                                                              '')
+                                                                      ? ''
+                                                                      : ' ( อ้างถึง : ${TransReBillBank[index1].inv} )',
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    color: Colors
+                                                                        .green,
+                                                                    // fontWeight:
+                                                                    //     FontWeight.bold,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          )),
                                                       (TransReBillBank[index1]
                                                                       .room_number
                                                                       .toString() ==
@@ -3816,7 +3910,27 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                               Expanded(
                                                                 flex: 1,
                                                                 child: Text(
-                                                                  'วันที่',
+                                                                  'วันที่ทำ',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: ReportScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontFamily:
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: Text(
+                                                                  'วันที่ชำระ',
                                                                   textAlign:
                                                                       TextAlign
                                                                           .center,
@@ -4129,6 +4243,29 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                               Expanded(
                                                                 flex: 1,
                                                                 child: Text(
+                                                                  // '${_TransReBillModels_Income[index1].daterec}',
+                                                                  (TransReBillBank[index1]
+                                                                              .dateacc ==
+                                                                          null)
+                                                                      ? ''
+                                                                      : '${DateFormat('dd-MM').format(DateTime.parse('${TransReBillBank[index1].dateacc}'))}-${int.parse('${DateFormat('yyyy').format(DateTime.parse('${TransReBillBank[index1].dateacc}'))}') + 543}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    color: ReportScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    // fontWeight: FontWeight.bold,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: Text(
                                                                   (TransReBillBank[index1]
                                                                                   .sname ==
                                                                               null ||
@@ -4359,8 +4496,8 @@ class _ReportScreen1State extends State<ReportScreen1> {
                                                                               .refno!
                                                                           : TransReBillBank[index1]
                                                                               .docno!;
-                                                                      print(
-                                                                          '$ciddoc //// $docnoin');
+                                                                      // print(
+                                                                      //     '$ciddoc //// $docnoin');
                                                                       red_Trans_selectIncome(
                                                                           ciddoc,
                                                                           docnoin,

@@ -159,7 +159,7 @@ class _Report_cm_ScreenAState extends State<Report_cm_ScreenA> {
     var ren = preferences.getString('renTalSer');
     var zone = preferences.getString('zoneSer');
 
-    print('ren >>>>>> $ren');
+    // print('ren >>>>>> $ren');
 
     String url =
         '${MyConstant().domain}/GC_Bank_Paytype.php?isAdd=true&ren=$ren';
@@ -168,7 +168,7 @@ class _Report_cm_ScreenAState extends State<Report_cm_ScreenA> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           PayMentModel payMentModel = PayMentModel.fromJson(map);
@@ -195,7 +195,7 @@ class _Report_cm_ScreenAState extends State<Report_cm_ScreenA> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       // Map<String, dynamic> map = Map();
       // map['ser'] = '0';
       // map['rser'] = '0';
@@ -249,7 +249,7 @@ class _Report_cm_ScreenAState extends State<Report_cm_ScreenA> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           ExpModel expModel = ExpModel.fromJson(map);
@@ -340,7 +340,7 @@ class _Report_cm_ScreenAState extends State<Report_cm_ScreenA> {
         }
       } else {}
     } catch (e) {}
-    print('name>>>>>  $renname');
+    // print('name>>>>>  $renname');
   }
 
 ////////////-----------------------(วันที่รายงานประจำวัน)
@@ -419,7 +419,7 @@ class _Report_cm_ScreenAState extends State<Report_cm_ScreenA> {
           });
         }
 
-        print('result ${_TransReBillModels.length}');
+        // print('result ${_TransReBillModels.length}');
 
         TransReBillModels = List.generate(_TransReBillModels.length, (_) => []);
 
@@ -455,7 +455,7 @@ class _Report_cm_ScreenAState extends State<Report_cm_ScreenA> {
         var response = await http.get(Uri.parse(url));
 
         var result = json.decode(response.body);
-        print(result);
+        // print(result);
         if (result.toString() != 'null') {
           for (var map in result) {
             TransReBillHistoryModel _TransReBillHistoryModel =
@@ -519,7 +519,7 @@ class _Report_cm_ScreenAState extends State<Report_cm_ScreenA> {
 
     var ren = preferences.getString('renTalSer');
 
-    print('zone>>>>>>zone>>>>>$Value_Chang_Zone_Ser_');
+    // print('zone>>>>>>zone>>>>>$Value_Chang_Zone_Ser_');
 
     String url =
         '${MyConstant().domain}/GC_tenant_Cm.php?isAdd=true&ren=$ren&zone=$Value_Chang_Zone_Ser_';
@@ -760,8 +760,8 @@ class _Report_cm_ScreenAState extends State<Report_cm_ScreenA> {
                                     Value_Chang_Zone_Ser_Daily =
                                         zoneModels_report[selectedIndex].ser!;
                                   });
-                                  print(
-                                      'Selected Index: $Value_Chang_Zone_Daily  //${Value_Chang_Zone_Ser_Daily}');
+                                  // print(
+                                  //     'Selected Index: $Value_Chang_Zone_Daily  //${Value_Chang_Zone_Ser_Daily}');
                                 },
                               ),
                             ),
@@ -1062,7 +1062,7 @@ class _Report_cm_ScreenAState extends State<Report_cm_ScreenA> {
                                                                                   mainAxisAlignment: MainAxisAlignment.start,
                                                                                   children: [
                                                                                     Container(
-                                                                                      decoration: const BoxDecoration(
+                                                                                      decoration:  BoxDecoration(
                                                                                         color: AppbackgroundColor.TiTile_Colors,
                                                                                         borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
                                                                                       ),
@@ -2508,8 +2508,8 @@ class _Report_cm_ScreenAState extends State<Report_cm_ScreenA> {
                                 Value_Chang_Zone_Ser_ =
                                     zoneModels_report[selectedIndex].ser!;
                               });
-                              print(
-                                  'Selected Index: $Value_Chang_Zone_  //${Value_Chang_Zone_Ser_}');
+                              // print(
+                              //     'Selected Index: $Value_Chang_Zone_  //${Value_Chang_Zone_Ser_}');
 
                               // print('Selected Value: $value');
                             },

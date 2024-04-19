@@ -57,7 +57,7 @@ class _SetEleState extends State<SetEle> {
     return Column(
       children: [
         Container(
-          decoration: const BoxDecoration(
+          decoration:  BoxDecoration(
             color: AppbackgroundColor.TiTile_Colors,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10),
@@ -153,7 +153,7 @@ class _SetEleState extends State<SetEle> {
           ),
         ),
         Container(
-          decoration: const BoxDecoration(
+          decoration:  BoxDecoration(
             color: AppbackgroundColor.TiTile_Colors,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(0),

@@ -38,6 +38,8 @@ import '../Responsive/responsive.dart';
 import '../Setting/SettingScreen.dart';
 import '../Setting/ttt.dart';
 import '../Style/colors.dart';
+import 'home_dashboard.dart';
+import 'home_reservespace.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -58,8 +60,14 @@ class _HomeScreenState extends State<HomeScreen> {
   List<CustomerModel> customerModels = [];
   List<TransReBillModel> _TransReBillModels = [];
   List<MaintenanceModel> maintenanceModels = [];
-  String? renTal_user, renTal_name, sernote, pkldate, data_update, data_pn;
-  int app_port = 0;
+  String? renTal_user,
+      renTal_name,
+      sernote,
+      pkldate,
+      data_update,
+      data_pn,
+      renTal_utype;
+  int app_port = 0, show_Dashboard = 0;
 ///////////------------------------------------------->
   @override
   void initState() {
@@ -362,6 +370,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       renTal_user = preferences.getString('renTalSer');
       renTal_name = preferences.getString('renTalName');
+      renTal_utype = preferences.getString('utype');
     });
   }
 
@@ -642,8 +651,14 @@ class _HomeScreenState extends State<HomeScreen> {
       });
 
     return (!Responsive.isDesktop(context))
-        ? BodyHome_mobile()
-        : BodyHome_Web();
+        ? show_Dashboard == 1
+            ? const HomeDashboard()
+            :  show_Dashboard == 2
+            ? HomeReserveSpace():BodyHome_mobile()
+        : show_Dashboard == 1
+            ? const HomeDashboard()
+            :  show_Dashboard == 2
+            ? HomeReserveSpace(): BodyHome_Web();
   }
 
 /////////////---------------------------------------------------------->
@@ -662,110 +677,191 @@ class _HomeScreenState extends State<HomeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.all(4.0),
-                        child: Text(
-                          'เลือกสถานที่/Portfolio',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: HomeScreen_Color.Colors_Text1_,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: FontWeight_.Fonts_T,
+                      Expanded(
+                        flex: 2,
+                        child: Padding(
+                          padding: EdgeInsets.all(4.0),
+                          child: InkWell(
+                            onTap: () async {
+                              setState(() {
+                                show_Dashboard = 1;
+                              });
+                            },
+                            child: Container(
+                                width: 130,
+                                padding: const EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                  color: AppBarColors.hexColor,
+                                  borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(8),
+                                      topRight: Radius.circular(8),
+                                      bottomLeft: Radius.circular(8),
+                                      bottomRight: Radius.circular(8)),
+                                  border:
+                                      Border.all(color: Colors.white, width: 1),
+                                ),
+                                child: const Center(
+                                  child: Text(
+                                    'Dashboard',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T,
+                                    ),
+                                  ),
+                                )),
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10)),
-                            border: Border.all(color: Colors.grey, width: 1),
+                      Expanded(
+                        flex: 2,
+                        child: Padding(
+                          padding: EdgeInsets.all(4.0),
+                          child: InkWell(
+                            onTap: () async {
+                              setState(() {
+                                show_Dashboard = 2;
+                              });
+                            },
+                            child: Container(
+                                width: 130,
+                                padding: const EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                  color: AppBarColors.hexColor.withOpacity(0.8),
+                                  borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(8),
+                                      topRight: Radius.circular(8),
+                                      bottomLeft: Radius.circular(8),
+                                      bottomRight: Radius.circular(8)),
+                                  border:
+                                      Border.all(color: Colors.white, width: 1),
+                                ),
+                                child: const Center(
+                                  child: Text(
+                                    'Reserve Space',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T,
+                                    ),
+                                  ),
+                                )),
                           ),
-                          width: 200,
-                          child: DropdownButtonFormField2(
-                            decoration: InputDecoration(
-                              isDense: true,
-                              contentPadding: EdgeInsets.zero,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
+                        ),
+                      ),
+                      Expanded(flex: 4, child: SizedBox()),
+                      Expanded(
+                        flex: 2,
+                        child: const Padding(
+                          padding: EdgeInsets.all(4.0),
+                          child: Text(
+                            'เลือกสถานที่/Portfolio',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.end,
+                            style: TextStyle(
+                              color: HomeScreen_Color.Colors_Text1_,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: FontWeight_.Fonts_T,
                             ),
-                            isExpanded: true,
-                            hint: Text(
-                              renTal_name == null ? 'ค้นหา' : '$renTal_name',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppbackgroundColor.Sub_Abg_Colors,
+                              borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                              border: Border.all(color: Colors.grey, width: 1),
+                            ),
+                            width: 200,
+                            child: DropdownButtonFormField2(
+                              decoration: InputDecoration(
+                                isDense: true,
+                                contentPadding: EdgeInsets.zero,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              isExpanded: true,
+                              hint: Text(
+                                renTal_name == null ? 'ค้นหา' : '$renTal_name',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: HomeScreen_Color.Colors_Text2_,
+                                  // fontWeight: FontWeight.bold,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                              ),
+                              icon: const Icon(
+                                Icons.arrow_drop_down,
+                                color: Colors.black,
+                              ),
                               style: const TextStyle(
-                                fontSize: 14,
-                                color: HomeScreen_Color.Colors_Text2_,
-                                // fontWeight: FontWeight.bold,
+                                color: Colors.green,
                                 fontFamily: Font_.Fonts_T,
                               ),
-                            ),
-                            icon: const Icon(
-                              Icons.arrow_drop_down,
-                              color: Colors.black,
-                            ),
-                            style: const TextStyle(
-                              color: Colors.green,
-                              fontFamily: Font_.Fonts_T,
-                            ),
-                            iconSize: 30,
-                            buttonHeight: 40,
-                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-                            dropdownDecoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            items: renTalModels
-                                .map((item) => DropdownMenuItem<String>(
-                                      value: '${item.ser},${item.pn}',
-                                      child: Text(
-                                        item.pn!,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: HomeScreen_Color.Colors_Text2_,
-                                          fontFamily: Font_.Fonts_T,
+                              iconSize: 30,
+                              buttonHeight: 40,
+                              // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                              dropdownDecoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              items: renTalModels
+                                  .map((item) => DropdownMenuItem<String>(
+                                        value: '${item.ser},${item.pn}',
+                                        child: Text(
+                                          item.pn!,
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            color:
+                                                HomeScreen_Color.Colors_Text2_,
+                                            fontFamily: Font_.Fonts_T,
+                                          ),
                                         ),
-                                      ),
-                                    ))
-                                .toList(),
+                                      ))
+                                  .toList(),
 
-                            onChanged: (value) async {
-                              var renTals = value!.indexOf(',');
-                              var renTalSer = value.substring(0, renTals);
-                              var renTalName = value.substring(renTals + 1);
-                              print(
-                                  'mmmmm ${renTalSer.toString()} $renTalName');
+                              onChanged: (value) async {
+                                var renTals = value!.indexOf(',');
+                                var renTalSer = value.substring(0, renTals);
+                                var renTalName = value.substring(renTals + 1);
+                                print(
+                                    'mmmmm ${renTalSer.toString()} $renTalName');
 
-                              SharedPreferences preferences =
-                                  await SharedPreferences.getInstance();
-                              preferences.setString(
-                                  'renTalSer', renTalSer.toString());
-                              preferences.setString(
-                                  'renTalName', renTalName.toString());
-                              String? _route = preferences.getString('route');
+                                SharedPreferences preferences =
+                                    await SharedPreferences.getInstance();
+                                preferences.setString(
+                                    'renTalSer', renTalSer.toString());
+                                preferences.setString(
+                                    'renTalName', renTalName.toString());
+                                String? _route = preferences.getString('route');
 
-                              preferences.remove('zoneSer');
-                              preferences.remove('zonesName');
-                              preferences.remove('zonePSer');
-                              preferences.remove('zonesPName');
+                                preferences.remove('zoneSer');
+                                preferences.remove('zonesName');
+                                preferences.remove('zonePSer');
+                                preferences.remove('zonesPName');
 
-                              MaterialPageRoute route = MaterialPageRoute(
-                                builder: (context) =>
-                                    AdminScafScreen(route: _route),
-                              );
-                              Navigator.pushAndRemoveUntil(
-                                  context, route, (route) => false);
-                            },
-                            // onSaved: (value) {
-                            //   // selectedValue = value.toString();
-                            // },
+                                MaterialPageRoute route = MaterialPageRoute(
+                                  builder: (context) =>
+                                      AdminScafScreen(route: _route),
+                                );
+                                Navigator.pushAndRemoveUntil(
+                                    context, route, (route) => false);
+                              },
+                              // onSaved: (value) {
+                              //   // selectedValue = value.toString();
+                              // },
+                            ),
                           ),
                         ),
                       ),
@@ -1219,7 +1315,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       Container(
                                           // width: MediaQuery.of(context).size.width,
-                                          decoration: const BoxDecoration(
+                                          decoration: BoxDecoration(
                                             color: AppbackgroundColor
                                                 .TiTile_Colors,
                                             borderRadius: BorderRadius.only(
@@ -1751,8 +1847,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         )),
                                                   ),
                                                   Container(
-                                                      decoration:
-                                                          const BoxDecoration(
+                                                      decoration: BoxDecoration(
                                                         color:
                                                             AppbackgroundColor
                                                                 .TiTile_Colors,
@@ -2589,8 +2684,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         )),
                                                   ),
                                                   Container(
-                                                      decoration:
-                                                          const BoxDecoration(
+                                                      decoration: BoxDecoration(
                                                         color:
                                                             AppbackgroundColor
                                                                 .TiTile_Colors,
@@ -3358,8 +3452,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         )),
                                                   ),
                                                   Container(
-                                                      decoration:
-                                                          const BoxDecoration(
+                                                      decoration: BoxDecoration(
                                                         color:
                                                             AppbackgroundColor
                                                                 .TiTile_Colors,
@@ -4152,8 +4245,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         )),
                                                   ),
                                                   Container(
-                                                      decoration:
-                                                          const BoxDecoration(
+                                                      decoration: BoxDecoration(
                                                         color:
                                                             AppbackgroundColor
                                                                 .TiTile_Colors,
@@ -7417,7 +7509,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   children: [
                                     Container(
                                       width: 800,
-                                      decoration: const BoxDecoration(
+                                      decoration: BoxDecoration(
                                         color: AppbackgroundColor.TiTile_Colors,
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(10),
@@ -8025,7 +8117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     children: [
                                       Container(
                                         width: 800,
-                                        decoration: const BoxDecoration(
+                                        decoration: BoxDecoration(
                                           color:
                                               AppbackgroundColor.TiTile_Colors,
                                           borderRadius: BorderRadius.only(
@@ -8608,7 +8700,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   children: [
                                     Container(
                                       width: 750,
-                                      decoration: const BoxDecoration(
+                                      decoration: BoxDecoration(
                                         color: AppbackgroundColor.TiTile_Colors,
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(10),
@@ -9191,7 +9283,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   children: [
                                     Container(
                                       width: 800,
-                                      decoration: const BoxDecoration(
+                                      decoration: BoxDecoration(
                                         color: AppbackgroundColor.TiTile_Colors,
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(10),

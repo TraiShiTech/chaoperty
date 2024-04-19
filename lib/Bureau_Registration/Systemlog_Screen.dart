@@ -380,7 +380,7 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
             child: Container(
               width: MediaQuery.of(context).size.width,
               decoration: const BoxDecoration(
@@ -1240,7 +1240,7 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
                               child: Container(
-                                  decoration: const BoxDecoration(
+                                  decoration: BoxDecoration(
                                     color: AppbackgroundColor.TiTile_Colors,
                                     borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(10),
@@ -1421,7 +1421,7 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                                           //     tappedIndex_ == index.toString()
                                           //         ? Colors.grey.shade300
                                           //         : null,
-                                          padding: const EdgeInsets.all(0),
+                                          padding: const EdgeInsets.all(5),
                                           child: ListTile(
                                             onTap: () {
                                               setState(() {

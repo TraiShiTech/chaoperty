@@ -736,7 +736,7 @@ class _BillDocumentState extends State<BillDocument> {
                       child: Column(
                         children: [
                           Container(
-                            decoration: const BoxDecoration(
+                            decoration:  BoxDecoration(
                               color: AppbackgroundColor.TiTile_Colors,
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(10),
@@ -1879,7 +1879,7 @@ class _BillDocumentState extends State<BillDocument> {
                                               child: Container(
                                                 child: Container(
                                                   decoration:
-                                                      const BoxDecoration(
+                                                       BoxDecoration(
                                                     color: AppbackgroundColor
                                                         .TiTile_Colors,
                                                     borderRadius:
@@ -1959,7 +1959,7 @@ class _BillDocumentState extends State<BillDocument> {
                                             Expanded(
                                               flex: 1,
                                               child: Container(
-                                                decoration: const BoxDecoration(
+                                                decoration:  BoxDecoration(
                                                   color: AppbackgroundColor
                                                       .TiTile_Colors,
                                                   borderRadius:
@@ -2257,7 +2257,7 @@ class _BillDocumentState extends State<BillDocument> {
                                               child: Container(
                                                 child: Container(
                                                   decoration:
-                                                      const BoxDecoration(
+                                                       BoxDecoration(
                                                     color: AppbackgroundColor
                                                         .TiTile_Colors,
                                                     borderRadius:
@@ -2316,7 +2316,7 @@ class _BillDocumentState extends State<BillDocument> {
                                             Expanded(
                                               flex: 1,
                                               child: Container(
-                                                decoration: const BoxDecoration(
+                                                decoration:  BoxDecoration(
                                                   color: AppbackgroundColor
                                                       .TiTile_Colors,
                                                   borderRadius:
@@ -2643,7 +2643,7 @@ class _BillDocumentState extends State<BillDocument> {
                                         child: Column(
                                           children: [
                                             Container(
-                                              decoration: const BoxDecoration(
+                                              decoration:  BoxDecoration(
                                                 color: AppbackgroundColor
                                                     .TiTile_Colors,
                                                 borderRadius: BorderRadius.only(
@@ -2745,7 +2745,7 @@ class _BillDocumentState extends State<BillDocument> {
                                         child: Column(
                                           children: [
                                             Container(
-                                              decoration: const BoxDecoration(
+                                              decoration:  BoxDecoration(
                                                 color: AppbackgroundColor
                                                     .TiTile_Colors,
                                                 borderRadius: BorderRadius.only(
@@ -3460,7 +3460,7 @@ class _BillDocumentState extends State<BillDocument> {
                         flex: 2,
                         child: Container(
                           child: Container(
-                            decoration: const BoxDecoration(
+                            decoration:  BoxDecoration(
                               color: AppbackgroundColor.TiTile_Colors,
                               borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(10),
@@ -3522,7 +3522,7 @@ class _BillDocumentState extends State<BillDocument> {
                       Expanded(
                         flex: 1,
                         child: Container(
-                          decoration: const BoxDecoration(
+                          decoration:  BoxDecoration(
                             color: AppbackgroundColor.TiTile_Colors,
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(0),
@@ -3768,7 +3768,7 @@ class _BillDocumentState extends State<BillDocument> {
                         flex: 2,
                         child: Container(
                           child: Container(
-                            decoration: const BoxDecoration(
+                            decoration:  BoxDecoration(
                               color: AppbackgroundColor.TiTile_Colors,
                               borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(10),
@@ -3813,7 +3813,7 @@ class _BillDocumentState extends State<BillDocument> {
                       Expanded(
                         flex: 1,
                         child: Container(
-                          decoration: const BoxDecoration(
+                          decoration:  BoxDecoration(
                             color: AppbackgroundColor.TiTile_Colors,
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(0),

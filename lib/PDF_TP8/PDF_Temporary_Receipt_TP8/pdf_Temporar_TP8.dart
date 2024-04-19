@@ -927,7 +927,7 @@ class Pdfgen_Temporary_receipt_TP8 {
               child: pw.Row(
                 children: [
                   pw.Container(
-                    width: 45,
+                    width: 30,
                     decoration: const pw.BoxDecoration(
                       // color: PdfColors.green100,
                       border: pw.Border(
@@ -1210,7 +1210,7 @@ class Pdfgen_Temporary_receipt_TP8 {
                   for (int index = 0; index < tableData00.length; index++)
                     pw.TableRow(children: [
                       pw.Container(
-                        width: 45,
+                        width: 30,
                         padding: const pw.EdgeInsets.all(2.0),
                         child: pw.Align(
                           alignment: pw.Alignment.topCenter,
@@ -1338,7 +1338,7 @@ class Pdfgen_Temporary_receipt_TP8 {
                   for (int index = 0; index < tableData01.length; index++)
                     pw.TableRow(children: [
                       pw.Container(
-                        width: 45,
+                        width: 30,
                         padding: const pw.EdgeInsets.all(2.0),
                         child: pw.Align(
                           alignment: pw.Alignment.topCenter,

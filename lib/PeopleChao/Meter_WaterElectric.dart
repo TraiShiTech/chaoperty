@@ -534,7 +534,7 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
       print('******************** > $e');
     }
   }
-
+  @override
   ///----------------->
   Widget build(BuildContext context) {
     return Padding(
@@ -745,14 +745,13 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                                 child: Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child: Column(
                                                                     children: [
                                                                       Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            8.0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
                                                                         child:
                                                                             AutoSizeText(
                                                                           maxLines:
@@ -879,7 +878,7 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .all(
+                                                                            .all(
                                                                         8.0),
                                                                 child: InkWell(
                                                                   child: Container(
@@ -963,7 +962,8 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                       ],
                                     ),
                                     Container(
-                                      height: 70,
+                                      padding: const EdgeInsets.all(4.0),
+                                      // height: 70,
                                       color: Colors.blue[200],
                                       child: Row(
                                         children: [
@@ -997,8 +997,8 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                       MainAxisAlignment.center,
                                                   children: const [
                                                     AutoSizeText(
-                                                      minFontSize: 10,
-                                                      maxFontSize: 15,
+                                                      minFontSize: 8,
+                                                      maxFontSize: 14,
                                                       'ก่อน',
                                                       maxLines: 1,
                                                       textAlign:
@@ -1022,8 +1022,8 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                       MainAxisAlignment.center,
                                                   children: const [
                                                     AutoSizeText(
-                                                      minFontSize: 10,
-                                                      maxFontSize: 15,
+                                                      minFontSize: 8,
+                                                      maxFontSize: 14,
                                                       'เลขมิเตอร์(หน่วย)',
                                                       maxLines: 1,
                                                       textAlign:
@@ -1056,8 +1056,8 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                       MainAxisAlignment.center,
                                                   children: const [
                                                     AutoSizeText(
-                                                      minFontSize: 10,
-                                                      maxFontSize: 15,
+                                                      minFontSize: 8,
+                                                      maxFontSize: 14,
                                                       'หลัง',
                                                       maxLines: 1,
                                                       textAlign:
@@ -1081,8 +1081,8 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                       MainAxisAlignment.center,
                                                   children: const [
                                                     AutoSizeText(
-                                                      minFontSize: 10,
-                                                      maxFontSize: 15,
+                                                      minFontSize: 8,
+                                                      maxFontSize: 14,
                                                       'เลขมิเตอร์(หน่วย)',
                                                       maxLines: 1,
                                                       textAlign:
@@ -1115,8 +1115,8 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                       MainAxisAlignment.center,
                                                   children: const [
                                                     AutoSizeText(
-                                                      minFontSize: 10,
-                                                      maxFontSize: 15,
+                                                      minFontSize: 8,
+                                                      maxFontSize: 14,
                                                       'ใช้ไป(หน่วย)',
                                                       maxLines: 1,
                                                       textAlign:
@@ -1149,8 +1149,8 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                       MainAxisAlignment.center,
                                                   children: const [
                                                     AutoSizeText(
-                                                      minFontSize: 10,
-                                                      maxFontSize: 15,
+                                                      minFontSize: 8,
+                                                      maxFontSize: 14,
                                                       'ยอดเงิน',
                                                       maxLines: 1,
                                                       textAlign:
@@ -1174,8 +1174,8 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                       MainAxisAlignment.center,
                                                   children: [
                                                     AutoSizeText(
-                                                      minFontSize: 10,
-                                                      maxFontSize: 15,
+                                                      minFontSize: 8,
+                                                      maxFontSize: 14,
                                                       '(รวม VAT)',
                                                       maxLines: 1,
                                                       textAlign:
@@ -1200,7 +1200,9 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                           const Expanded(
                                             flex: 1,
                                             child: Center(
-                                              child: Text(
+                                              child: AutoSizeText(
+                                                minFontSize: 8,
+                                                maxFontSize: 14,
                                                 'หลักฐาน',
                                                 maxLines: 1,
                                                 textAlign: TextAlign.center,
@@ -1271,78 +1273,576 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                         indextran.toString();
                                                   });
                                                 },
-                                                title: Row(
-                                                  children: [
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        // ignore: unnecessary_string_interpolations
-                                                        '${DateFormat.MMMM('th_TH').format((DateTime.parse('${_TransModels[indextran].date} 00:00:00')))}\n${DateTime.parse('${_TransModels[indextran].date} 00:00:00').year + 543}',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: const TextStyle(
-                                                            color: PeopleChaoScreen_Color
-                                                                .Colors_Text2_,
-                                                            //fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T),
+                                                title: Container(
+                                                  decoration: BoxDecoration(
+                                                    // color: Colors.green[100]!
+                                                    //     .withOpacity(0.5),
+                                                    border: Border(
+                                                      bottom: BorderSide(
+                                                        color: Colors.black12,
+                                                        width: 1,
                                                       ),
                                                     ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: _cunitser != '6'
-                                                          ? Text(
-                                                              '$_cunit',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style:
-                                                                  const TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      //fontWeight: FontWeight.bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
-                                                            )
-                                                          : Container(
-                                                              decoration:
-                                                                  const BoxDecoration(
-                                                                // color: Colors.green,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  bottomLeft: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  bottomRight: Radius
-                                                                      .circular(
-                                                                          6),
+                                                  ),
+                                                  child: Row(
+                                                    children: [
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          // ignore: unnecessary_string_interpolations
+                                                          '${DateFormat.MMMM('th_TH').format((DateTime.parse('${_TransModels[indextran].date} 00:00:00')))}\n${DateTime.parse('${_TransModels[indextran].date} 00:00:00').year + 543}',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  //fontWeight: FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: _cunitser != '6'
+                                                            ? Text(
+                                                                '$_cunit',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: const TextStyle(
+                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T),
+                                                              )
+                                                            : Container(
+                                                                decoration:
+                                                                    const BoxDecoration(
+                                                                  // color: Colors.green,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .only(
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                            6),
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                            6),
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            6),
+                                                                    bottomRight:
+                                                                        Radius.circular(
+                                                                            6),
+                                                                  ),
+                                                                  // border: Border.all(color: Colors.grey, width: 1),
                                                                 ),
-                                                                // border: Border.all(color: Colors.grey, width: 1),
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        8.0),
+                                                                child: indextran ==
+                                                                        0
+                                                                    ? _TransModels[indextran].ovalue !=
+                                                                            null
+                                                                        ? GestureDetector(
+                                                                            onTap:
+                                                                                () {
+                                                                              if (_TransModels[indextran].docno_in == '') {
+                                                                                if (renTal_lavel > 1) {
+                                                                                  print('123254 Edit');
+                                                                                  showDialog<void>(
+                                                                                    context: context,
+                                                                                    barrierDismissible: false, // user must tap button!
+                                                                                    builder: (BuildContext context) {
+                                                                                      return AlertDialog(
+                                                                                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                                                                        // title: const Text('AlertDialog Title'),
+                                                                                        content: SingleChildScrollView(
+                                                                                          child: ListBody(
+                                                                                            children: <Widget>[
+                                                                                              Container(
+                                                                                                width: MediaQuery.of(context).size.width * 0.3,
+                                                                                                height: MediaQuery.of(context).size.width * 0.08,
+                                                                                                child: Center(
+                                                                                                  child: Padding(
+                                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                                    child: Column(
+                                                                                                      children: [
+                                                                                                        Container(
+                                                                                                          padding: const EdgeInsets.all(8.0),
+                                                                                                          child: AutoSizeText(
+                                                                                                            maxLines: 2,
+                                                                                                            minFontSize: 8,
+                                                                                                            // maxFontSize: 15,
+                                                                                                            'แก้ไขเลขมิเตอร์เริ่มต้น',
+                                                                                                            textAlign: TextAlign.start,
+                                                                                                            style: const TextStyle(
+                                                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: Font_.Fonts_T
+
+                                                                                                                //fontSize: 10.0
+                                                                                                                ),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                        TextFormField(
+                                                                                                          textAlign: TextAlign.center,
+                                                                                                          // initialValue:
+                                                                                                          //     _cmeter,
+                                                                                                          onFieldSubmitted: (value) async {
+                                                                                                            SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                                            String? ren = preferences.getString('renTalSer');
+                                                                                                            String? ser_user = preferences.getString('ser');
+                                                                                                            var qser_in = _TransModels[indextran].ser_in;
+                                                                                                            var ovalue = _TransModels[indextran].ovalue;
+                                                                                                            var qser = _cser;
+                                                                                                            String url = '${MyConstant().domain}/UPC_Invoice_ovalue.php?isAdd=true&ren=$ren&qser_in=$qser_in&qty=$value&ser_user=$ser_user';
+
+                                                                                                            try {
+                                                                                                              var response = await http.get(Uri.parse(url));
+
+                                                                                                              var result = json.decode(response.body);
+                                                                                                              print(result);
+                                                                                                              if (result.toString() == 'true') {
+                                                                                                                Insert_log.Insert_logs('แก้ไขเลขมิเตอร์เริ่มต้น', 'แก้ไข $ovalue >> $value');
+                                                                                                                setState(() {
+                                                                                                                  red_Trans(_cser);
+                                                                                                                });
+                                                                                                              }
+                                                                                                            } catch (e) {}
+                                                                                                            Navigator.of(context).pop();
+                                                                                                          },
+                                                                                                          // maxLength: 13,
+                                                                                                          cursorColor: Colors.green,
+                                                                                                          decoration: InputDecoration(
+                                                                                                              fillColor: Colors.white.withOpacity(0.05),
+                                                                                                              filled: true,
+
+                                                                                                              // prefixIcon:
+                                                                                                              //     const Icon(Icons.key, color: Colors.black),
+                                                                                                              // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                                              focusedBorder: const OutlineInputBorder(
+                                                                                                                borderRadius: BorderRadius.only(
+                                                                                                                  topRight: Radius.circular(15),
+                                                                                                                  topLeft: Radius.circular(15),
+                                                                                                                  bottomRight: Radius.circular(15),
+                                                                                                                  bottomLeft: Radius.circular(15),
+                                                                                                                ),
+                                                                                                                borderSide: BorderSide(
+                                                                                                                  width: 1,
+                                                                                                                  color: Colors.grey,
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                              enabledBorder: const OutlineInputBorder(
+                                                                                                                borderRadius: BorderRadius.only(
+                                                                                                                  topRight: Radius.circular(15),
+                                                                                                                  topLeft: Radius.circular(15),
+                                                                                                                  bottomRight: Radius.circular(15),
+                                                                                                                  bottomLeft: Radius.circular(15),
+                                                                                                                ),
+                                                                                                                borderSide: BorderSide(
+                                                                                                                  width: 1,
+                                                                                                                  color: Colors.grey,
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                              labelText: 'แก้ไขเลขมิเตอร์เริ่มต้น',
+                                                                                                              labelStyle: const TextStyle(
+                                                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                                  // fontWeight: FontWeight.bold,
+                                                                                                                  fontFamily: Font_.Fonts_T)),
+                                                                                                          // inputFormatters: <TextInputFormatter>[
+                                                                                                          //   // for below version 2 use this
+                                                                                                          //   FilteringTextInputFormatter.allow(
+                                                                                                          //       RegExp(r'[0-9]')),
+                                                                                                          //   // for version 2 and greater youcan also use this
+                                                                                                          //   FilteringTextInputFormatter
+                                                                                                          //       .digitsOnly
+                                                                                                          // ],
+                                                                                                        ),
+                                                                                                      ],
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ),
+                                                                                            ],
+                                                                                          ),
+                                                                                        ),
+                                                                                        actions: <Widget>[
+                                                                                          Row(
+                                                                                            mainAxisAlignment: MainAxisAlignment.end,
+                                                                                            children: [
+                                                                                              Container(
+                                                                                                child: Padding(
+                                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                                  child: InkWell(
+                                                                                                    child: Container(
+                                                                                                        width: 100,
+                                                                                                        decoration: const BoxDecoration(
+                                                                                                          color: Colors.black,
+                                                                                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                          // border: Border.all(color: Colors.white, width: 1),
+                                                                                                        ),
+                                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                                        child: const Center(
+                                                                                                            child: Text(
+                                                                                                          'ปิด',
+                                                                                                          textAlign: TextAlign.center,
+                                                                                                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                                              //fontSize: 10.0
+                                                                                                              ),
+                                                                                                        ))),
+                                                                                                    onTap: () {
+                                                                                                      Navigator.of(context).pop();
+                                                                                                    },
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ),
+                                                                                            ],
+                                                                                          ),
+                                                                                        ],
+                                                                                      );
+                                                                                    },
+                                                                                  );
+                                                                                }
+                                                                              }
+                                                                            },
+                                                                            child:
+                                                                                Container(
+                                                                              decoration: BoxDecoration(
+                                                                                color: Colors.grey.shade300,
+                                                                                borderRadius: const BorderRadius.only(
+                                                                                  topLeft: Radius.circular(15),
+                                                                                  topRight: Radius.circular(15),
+                                                                                  bottomLeft: Radius.circular(15),
+                                                                                  bottomRight: Radius.circular(15),
+                                                                                ),
+                                                                                border: Border.all(color: Colors.grey, width: 1),
+                                                                              ),
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: Text(
+                                                                                indextran == 0
+                                                                                    ? '${_TransModels[indextran].ovalue!.padLeft(4, '0')}' // '${nFormat.format(double.parse(_TransModels[indextran].ovalue!))}'
+                                                                                    //'${_TransModels[indextran].ovalue}'
+                                                                                    : '${_TransModels[indextran - 1].nvalue!.padLeft(4, '0')}', //'${nFormat.format(double.parse(_TransModels[indextran - 1].nvalue!))}',
+                                                                                // '${_TransModels[indextran - 1].nvalue}',
+                                                                                textAlign: TextAlign.right,
+                                                                                style: const TextStyle(
+                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                    //fontWeight: FontWeight.bold,
+                                                                                    fontFamily: Font_.Fonts_T),
+                                                                              ),
+                                                                            ),
+                                                                          )
+                                                                        : TextFormField(
+                                                                            textAlign:
+                                                                                TextAlign.right,
+                                                                            keyboardType:
+                                                                                TextInputType.number,
+                                                                            showCursor: indextran == 0
+                                                                                ? _TransModels[indextran].ovalue == null
+                                                                                    ? true
+                                                                                    : false
+                                                                                : false,
+                                                                            readOnly: indextran == 0
+                                                                                ? _TransModels[indextran].ovalue == null
+                                                                                    ? false
+                                                                                    : true
+                                                                                : true,
+                                                                            initialValue: indextran == 0
+                                                                                ? _TransModels[indextran].ovalue
+                                                                                : _TransModels[indextran - 1].nvalue,
+                                                                            onFieldSubmitted:
+                                                                                (value) async {
+                                                                              if (indextran == 0) {
+                                                                                if (_TransModels[indextran].ovalue == null) {
+                                                                                  SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                  String? ren = preferences.getString('renTalSer');
+                                                                                  String? ser_user = preferences.getString('ser');
+                                                                                  var qser = _TransModels[indextran].ser;
+
+                                                                                  var oval = '$_cnamex ${DateFormat.MMM('th_TH').format((DateTime.parse('${_TransModels[indextran].date} 00:00:00')))} ${DateTime.parse('${_TransModels[indextran].date} 00:00:00').year + 543}';
+                                                                                  String url = '${MyConstant().domain}/InC_Invoice.php?isAdd=true&ren=$ren&qser=$qser&qty=$value&ser_user=$ser_user&oval=$oval&con_ser=$_cser';
+
+                                                                                  try {
+                                                                                    var response = await http.get(Uri.parse(url));
+
+                                                                                    var result = json.decode(response.body);
+                                                                                    print(result);
+                                                                                    if (result.toString() != 'null') {
+                                                                                      setState(() {
+                                                                                        red_Trans(_cser);
+                                                                                      });
+                                                                                    }
+                                                                                  } catch (e) {}
+                                                                                }
+                                                                              }
+                                                                            },
+                                                                            // cursorColor:
+                                                                            //     Colors.black,
+                                                                            decoration: InputDecoration(
+                                                                                fillColor: Colors.white.withOpacity(0.3),
+                                                                                filled: true,
+                                                                                // prefixIcon:
+                                                                                //     const Icon(Icons.person, color: Colors.black),
+                                                                                // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                focusedBorder: const OutlineInputBorder(
+                                                                                  borderRadius: BorderRadius.only(
+                                                                                    topRight: Radius.circular(15),
+                                                                                    topLeft: Radius.circular(15),
+                                                                                    bottomRight: Radius.circular(15),
+                                                                                    bottomLeft: Radius.circular(15),
+                                                                                  ),
+                                                                                  borderSide: BorderSide(
+                                                                                    width: 1,
+                                                                                    color: Colors.black,
+                                                                                  ),
+                                                                                ),
+                                                                                enabledBorder: const OutlineInputBorder(
+                                                                                  borderRadius: BorderRadius.only(
+                                                                                    topRight: Radius.circular(15),
+                                                                                    topLeft: Radius.circular(15),
+                                                                                    bottomRight: Radius.circular(15),
+                                                                                    bottomLeft: Radius.circular(15),
+                                                                                  ),
+                                                                                  borderSide: BorderSide(
+                                                                                    width: 1,
+                                                                                    color: Colors.grey,
+                                                                                  ),
+                                                                                ),
+                                                                                // labelText: 'ระบุชื่อร้านค้า',
+                                                                                labelStyle: const TextStyle(color: Colors.black54, fontFamily: Font_.Fonts_T)),
+                                                                            inputFormatters: <TextInputFormatter>[
+                                                                              // for below version 2 use this
+                                                                              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                                                              // for version 2 and greater youcan also use this
+                                                                              FilteringTextInputFormatter.digitsOnly
+                                                                            ],
+                                                                          )
+                                                                    : Container(
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          color: Colors
+                                                                              .grey
+                                                                              .shade300,
+                                                                          borderRadius:
+                                                                              const BorderRadius.only(
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          border: Border.all(
+                                                                              color: Colors.grey,
+                                                                              width: 1),
+                                                                        ),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            Text(
+                                                                          indextran == 0
+                                                                              ? '${_TransModels[indextran].ovalue!.padLeft(4, '0')}' //'${nFormat.format(double.parse(_TransModels[indextran].ovalue!))}'
+                                                                              // '${_TransModels[indextran].ovalue}'
+                                                                              : _TransModels[indextran - 1].nvalue == null
+                                                                                  ? ''
+                                                                                  : '${_TransModels[indextran - 1].nvalue!.padLeft(4, '0')}', // '${nFormat.format(double.parse(_TransModels[indextran - 1].nvalue!))}',
+                                                                          //'${_TransModels[indextran - 1].nvalue}',
+                                                                          textAlign:
+                                                                              TextAlign.right,
+                                                                          style: const TextStyle(
+                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                              //fontWeight: FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T),
+                                                                        ),
+                                                                      ),
                                                               ),
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child: indextran ==
-                                                                      0
-                                                                  ? _TransModels[indextran]
-                                                                              .ovalue !=
-                                                                          null
-                                                                      ? GestureDetector(
-                                                                          onTap:
-                                                                              () {
-                                                                            if (_TransModels[indextran].docno_in ==
-                                                                                '') {
-                                                                              if (renTal_lavel > 1) {
-                                                                                print('123254 Edit');
-                                                                                showDialog<void>(
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: _cunitser != '6'
+                                                            ? Text(
+                                                                '$_cunit',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: const TextStyle(
+                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T),
+                                                              )
+                                                            : _TransModels[indextran]
+                                                                            .docno_in ==
+                                                                        null ||
+                                                                    _TransModels[indextran]
+                                                                            .docno_in ==
+                                                                        ''
+                                                                ? Container(
+                                                                    decoration:
+                                                                        const BoxDecoration(
+                                                                      // color: Colors.green,
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topLeft:
+                                                                            Radius.circular(6),
+                                                                        topRight:
+                                                                            Radius.circular(6),
+                                                                        bottomLeft:
+                                                                            Radius.circular(6),
+                                                                        bottomRight:
+                                                                            Radius.circular(6),
+                                                                      ),
+                                                                      // border: Border.all(color: Colors.grey, width: 1),
+                                                                    ),
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        TextFormField(
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .right,
+                                                                      keyboardType:
+                                                                          TextInputType
+                                                                              .number,
+                                                                      showCursor: _TransModels[indextran].docno_in == null ||
+                                                                              _TransModels[indextran].docno_in == ''
+                                                                          ? true
+                                                                          : false,
+                                                                      //add this line
+                                                                      readOnly: _TransModels[indextran].docno_in == null ||
+                                                                              _TransModels[indextran].docno_in == ''
+                                                                          ? false
+                                                                          : true,
+
+                                                                      initialValue:
+                                                                          _TransModels[indextran]
+                                                                              .nvalue,
+
+                                                                      // controller: Form_nameshop,
+                                                                      onFieldSubmitted:
+                                                                          (value) async {
+                                                                        if (indextran ==
+                                                                            0) {
+                                                                          SharedPreferences
+                                                                              preferences =
+                                                                              await SharedPreferences.getInstance();
+                                                                          String?
+                                                                              ren =
+                                                                              preferences.getString('renTalSer');
+                                                                          String?
+                                                                              ser_user =
+                                                                              preferences.getString('ser');
+
+                                                                          var qser_in =
+                                                                              _TransModels[indextran].ser_in;
+                                                                          var tran_expser =
+                                                                              _TransModels[indextran].expser;
+                                                                          var qser_inn =
+                                                                              _TransModels[indextran].ser_in;
+
+                                                                          var tran_ser =
+                                                                              _TransModels[indextran].ser;
+                                                                          var tran_sern =
+                                                                              _TransModels[indextran].ser;
+                                                                          var ovalue =
+                                                                              _TransModels[indextran].ovalue; // ก่อน
+                                                                          var nvalue =
+                                                                              _TransModels[indextran].nvalue; // หลัง
+                                                                          _celvat; //vat
+                                                                          _cqty_vat; // หน่วย
+
+                                                                          print(
+                                                                              'ovalue>>>. $ovalue  ---- nvalue>>>>>> $nvalue');
+
+                                                                          String
+                                                                              url =
+                                                                              '${MyConstant().domain}/UPC_Invoice.php?isAdd=true&ren=$ren&qser_in=$qser_in&qty=$value&ser_user=$ser_user&ovalue=$ovalue&nvalue=$nvalue&_celvat=$_celvat&_cqty_vat=$_cqty_vat&con_ser=$_cser&tran_ser=$tran_ser&tran_sern=$tran_sern&qser_inn=$qser_inn&tran_expser=$tran_expser';
+
+                                                                          try {
+                                                                            var response =
+                                                                                await http.get(Uri.parse(url));
+
+                                                                            var result =
+                                                                                json.decode(response.body);
+                                                                            print(result);
+                                                                            if (result.toString() !=
+                                                                                'null') {
+                                                                              setState(() {
+                                                                                red_Trans(_cser);
+                                                                              });
+                                                                            }
+                                                                          } catch (e) {}
+                                                                        } else {
+                                                                          if (_TransModels[indextran].ovalue ==
+                                                                              null) {
+                                                                            if (_TransModels[indextran].ovalue ==
+                                                                                null) {
+                                                                              SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                              String? ren = preferences.getString('renTalSer');
+                                                                              String? ser_user = preferences.getString('ser');
+
+                                                                              var qser_in = _TransModels[indextran].ser_in; // ser in
+
+                                                                              var tran_ser = _TransModels[indextran].ser; // ser tran
+                                                                              var ovalue = _TransModels[indextran - 1].nvalue; // ก่อน
+                                                                              var nvalue = _TransModels[indextran].nvalue; // หลัง
+                                                                              _celvat; //vat
+                                                                              _cqty_vat; // หน่วย
+                                                                              print('1ovalue>>>. $ovalue  ---- nvalue>>>>>> $nvalue');
+                                                                              var oval = '$_cnamex ${DateFormat.MMM('th_TH').format((DateTime.parse('${_TransModels[indextran].date} 00:00:00')))} ${DateTime.parse('${_TransModels[indextran].date} 00:00:00').year + 543}';
+                                                                              String url = '${MyConstant().domain}/InC_InvoiceNew.php?isAdd=true&ren=$ren&tran_ser=$tran_ser&qty=$value&ser_user=$ser_user&oval=$oval&ovalue=$ovalue&nvalue=$nvalue&_celvat=$_celvat&_cqty_vat=$_cqty_vat&con_ser=$_cser';
+
+                                                                              try {
+                                                                                var response = await http.get(Uri.parse(url));
+
+                                                                                var result = json.decode(response.body);
+                                                                                print(result);
+                                                                                if (result.toString() != 'null') {
+                                                                                  setState(() {
+                                                                                    red_Trans(_cser);
+                                                                                  });
+                                                                                }
+                                                                              } catch (e) {}
+                                                                            }
+                                                                          } else {
+                                                                            SharedPreferences
+                                                                                preferences =
+                                                                                await SharedPreferences.getInstance();
+                                                                            String?
+                                                                                ren =
+                                                                                preferences.getString('renTalSer');
+                                                                            String?
+                                                                                ser_user =
+                                                                                preferences.getString('ser');
+
+                                                                            var qser_in =
+                                                                                _TransModels[indextran].ser_in;
+                                                                            var qser_inn =
+                                                                                _TransModels[indextran].ser_in;
+                                                                            var tran_expser =
+                                                                                _TransModels[indextran].expser;
+                                                                            var tran_sern =
+                                                                                _TransModels[indextran].ser;
+                                                                            var tran_ser =
+                                                                                _TransModels[indextran].ser;
+                                                                            var ovalue =
+                                                                                _TransModels[indextran].ovalue; // ก่อน
+                                                                            var nvalue =
+                                                                                _TransModels[indextran].nvalue; // หลัง
+                                                                            _celvat; //vat
+                                                                            _cqty_vat; // หน่วย
+
+                                                                            print('2ovalue>>>. $ovalue  --$value-- nvalue>>>>>> $nvalue ');
+
+                                                                            if (double.parse(value) <
+                                                                                double.parse(ovalue!)) {
+                                                                              print('23ovalue>>>--$value-- น้อยกว่า  $ovalue');
+                                                                              showDialog<void>(
                                                                                   context: context,
                                                                                   barrierDismissible: false, // user must tap button!
                                                                                   builder: (BuildContext context) {
@@ -1352,108 +1852,29 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                                                       content: SingleChildScrollView(
                                                                                         child: ListBody(
                                                                                           children: <Widget>[
-                                                                                            Container(
-                                                                                              width: MediaQuery.of(context).size.width * 0.3,
-                                                                                              height: MediaQuery.of(context).size.width * 0.08,
-                                                                                              child: Center(
-                                                                                                child: Padding(
-                                                                                                  padding: const EdgeInsets.all(8.0),
-                                                                                                  child: Column(
-                                                                                                    children: [
-                                                                                                      Container(
-                                                                                                        padding: const EdgeInsets.all(8.0),
-                                                                                                        child: AutoSizeText(
-                                                                                                          maxLines: 2,
-                                                                                                          minFontSize: 8,
-                                                                                                          // maxFontSize: 15,
-                                                                                                          'แก้ไขเลขมิเตอร์เริ่มต้น',
-                                                                                                          textAlign: TextAlign.start,
-                                                                                                          style: const TextStyle(
-                                                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                                              // fontWeight: FontWeight.bold,
-                                                                                                              fontFamily: Font_.Fonts_T
-
-                                                                                                              //fontSize: 10.0
-                                                                                                              ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      TextFormField(
-                                                                                                        textAlign: TextAlign.center,
-                                                                                                        // initialValue:
-                                                                                                        //     _cmeter,
-                                                                                                        onFieldSubmitted: (value) async {
-                                                                                                          SharedPreferences preferences = await SharedPreferences.getInstance();
-                                                                                                          String? ren = preferences.getString('renTalSer');
-                                                                                                          String? ser_user = preferences.getString('ser');
-                                                                                                          var qser_in = _TransModels[indextran].ser_in;
-                                                                                                          var ovalue = _TransModels[indextran].ovalue;
-                                                                                                          var qser = _cser;
-                                                                                                          String url = '${MyConstant().domain}/UPC_Invoice_ovalue.php?isAdd=true&ren=$ren&qser_in=$qser_in&qty=$value&ser_user=$ser_user';
-
-                                                                                                          try {
-                                                                                                            var response = await http.get(Uri.parse(url));
-
-                                                                                                            var result = json.decode(response.body);
-                                                                                                            print(result);
-                                                                                                            if (result.toString() == 'true') {
-                                                                                                              Insert_log.Insert_logs('แก้ไขเลขมิเตอร์เริ่มต้น', 'แก้ไข $ovalue >> $value');
-                                                                                                              setState(() {
-                                                                                                                red_Trans(_cser);
-                                                                                                              });
-                                                                                                            }
-                                                                                                          } catch (e) {}
-                                                                                                          Navigator.of(context).pop();
-                                                                                                        },
-                                                                                                        // maxLength: 13,
-                                                                                                        cursorColor: Colors.green,
-                                                                                                        decoration: InputDecoration(
-                                                                                                            fillColor: Colors.white.withOpacity(0.05),
-                                                                                                            filled: true,
-
-                                                                                                            // prefixIcon:
-                                                                                                            //     const Icon(Icons.key, color: Colors.black),
-                                                                                                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                                                            focusedBorder: const OutlineInputBorder(
-                                                                                                              borderRadius: BorderRadius.only(
-                                                                                                                topRight: Radius.circular(15),
-                                                                                                                topLeft: Radius.circular(15),
-                                                                                                                bottomRight: Radius.circular(15),
-                                                                                                                bottomLeft: Radius.circular(15),
-                                                                                                              ),
-                                                                                                              borderSide: BorderSide(
-                                                                                                                width: 1,
-                                                                                                                color: Colors.grey,
-                                                                                                              ),
-                                                                                                            ),
-                                                                                                            enabledBorder: const OutlineInputBorder(
-                                                                                                              borderRadius: BorderRadius.only(
-                                                                                                                topRight: Radius.circular(15),
-                                                                                                                topLeft: Radius.circular(15),
-                                                                                                                bottomRight: Radius.circular(15),
-                                                                                                                bottomLeft: Radius.circular(15),
-                                                                                                              ),
-                                                                                                              borderSide: BorderSide(
-                                                                                                                width: 1,
-                                                                                                                color: Colors.grey,
-                                                                                                              ),
-                                                                                                            ),
-                                                                                                            labelText: 'แก้ไขเลขมิเตอร์เริ่มต้น',
-                                                                                                            labelStyle: const TextStyle(
-                                                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                                                // fontWeight: FontWeight.bold,
-                                                                                                                fontFamily: Font_.Fonts_T)),
-                                                                                                        // inputFormatters: <TextInputFormatter>[
-                                                                                                        //   // for below version 2 use this
-                                                                                                        //   FilteringTextInputFormatter.allow(
-                                                                                                        //       RegExp(r'[0-9]')),
-                                                                                                        //   // for version 2 and greater youcan also use this
-                                                                                                        //   FilteringTextInputFormatter
-                                                                                                        //       .digitsOnly
-                                                                                                        // ],
-                                                                                                      ),
-                                                                                                    ],
+                                                                                            Center(
+                                                                                              child: Column(
+                                                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                                                children: [
+                                                                                                  Padding(
+                                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                                    child: Icon(
+                                                                                                      Icons.report_problem,
+                                                                                                      size: 50,
+                                                                                                      color: Colors.yellow.shade800,
+                                                                                                    ),
                                                                                                   ),
-                                                                                                ),
+                                                                                                  Padding(
+                                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                                    child: Text(
+                                                                                                      'เลขมิเตอร์น้อยกว่าเลขมิเตอร์ก่อนหน้า ต้องการเริ่มเลขมิเตอร์ใหม่',
+                                                                                                      textAlign: TextAlign.center,
+                                                                                                      style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                                          //fontSize: 10.0
+                                                                                                          ),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ],
                                                                                               ),
                                                                                             ),
                                                                                           ],
@@ -1461,160 +1882,178 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                                                       ),
                                                                                       actions: <Widget>[
                                                                                         Row(
-                                                                                          mainAxisAlignment: MainAxisAlignment.end,
+                                                                                          mainAxisAlignment: MainAxisAlignment.center,
                                                                                           children: [
-                                                                                            Container(
-                                                                                              child: Padding(
-                                                                                                padding: const EdgeInsets.all(8.0),
-                                                                                                child: InkWell(
-                                                                                                  child: Container(
-                                                                                                      width: 100,
-                                                                                                      decoration: const BoxDecoration(
-                                                                                                        color: Colors.black,
-                                                                                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                                        // border: Border.all(color: Colors.white, width: 1),
-                                                                                                      ),
-                                                                                                      padding: const EdgeInsets.all(8.0),
-                                                                                                      child: const Center(
-                                                                                                          child: Text(
-                                                                                                        'ปิด',
-                                                                                                        textAlign: TextAlign.center,
-                                                                                                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
-                                                                                                            //fontSize: 10.0
-                                                                                                            ),
-                                                                                                      ))),
-                                                                                                  onTap: () {
-                                                                                                    Navigator.of(context).pop();
-                                                                                                  },
+                                                                                            Expanded(
+                                                                                              child: Container(
+                                                                                                child: Padding(
+                                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                                  child: InkWell(
+                                                                                                    child: Container(
+                                                                                                        width: 100,
+                                                                                                        decoration: BoxDecoration(
+                                                                                                          color: Colors.green.shade900,
+                                                                                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                          // border: Border.all(color: Colors.white, width: 1),
+                                                                                                        ),
+                                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                                        child: const Center(
+                                                                                                            child: Text(
+                                                                                                          'ตกลง',
+                                                                                                          textAlign: TextAlign.center,
+                                                                                                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                                              //fontSize: 10.0
+                                                                                                              ),
+                                                                                                        ))),
+                                                                                                    onTap: () async {
+                                                                                                      String url = '${MyConstant().domain}/UPC_Invoice.php?isAdd=true&ren=$ren&qser_in=$qser_in&qty=$value&ser_user=$ser_user&ovalue=$ovalue&nvalue=$nvalue&_celvat=$_celvat&_cqty_vat=$_cqty_vat&con_ser=$_cser&tran_ser=$tran_ser&tran_sern=$tran_sern&qser_inn=$qser_inn&tran_expser=$tran_expser';
+
+                                                                                                      try {
+                                                                                                        var response = await http.get(Uri.parse(url));
+
+                                                                                                        var result = json.decode(response.body);
+                                                                                                        print(result);
+                                                                                                        if (result.toString() != 'null') {
+                                                                                                          setState(() {
+                                                                                                            Navigator.of(context).pop();
+                                                                                                            red_Trans(_cser);
+                                                                                                          });
+                                                                                                        }
+                                                                                                      } catch (e) {}
+                                                                                                    },
+                                                                                                  ),
                                                                                                 ),
                                                                                               ),
                                                                                             ),
+                                                                                            Expanded(
+                                                                                              child: Container(
+                                                                                                child: Padding(
+                                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                                  child: InkWell(
+                                                                                                    child: Container(
+                                                                                                        width: 100,
+                                                                                                        decoration: const BoxDecoration(
+                                                                                                          color: Colors.black,
+                                                                                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                          // border: Border.all(color: Colors.white, width: 1),
+                                                                                                        ),
+                                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                                        child: const Center(
+                                                                                                            child: Text(
+                                                                                                          'ปิด',
+                                                                                                          textAlign: TextAlign.center,
+                                                                                                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                                              //fontSize: 10.0
+                                                                                                              ),
+                                                                                                        ))),
+                                                                                                    onTap: () {
+                                                                                                      Navigator.of(context).pop();
+                                                                                                    },
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ),
+                                                                                            )
                                                                                           ],
                                                                                         ),
                                                                                       ],
                                                                                     );
-                                                                                  },
-                                                                                );
-                                                                              }
+                                                                                  });
+                                                                            } else {
+                                                                              String url = '${MyConstant().domain}/UPC_Invoice.php?isAdd=true&ren=$ren&qser_in=$qser_in&qty=$value&ser_user=$ser_user&ovalue=$ovalue&nvalue=$nvalue&_celvat=$_celvat&_cqty_vat=$_cqty_vat&con_ser=$_cser&tran_ser=$tran_ser&tran_sern=$tran_sern&qser_inn=$qser_inn&tran_expser=$tran_expser';
+
+                                                                              try {
+                                                                                var response = await http.get(Uri.parse(url));
+
+                                                                                var result = json.decode(response.body);
+                                                                                print(result);
+                                                                                if (result.toString() != 'null') {
+                                                                                  setState(() {
+                                                                                    red_Trans(_cser);
+                                                                                  });
+                                                                                }
+                                                                              } catch (e) {}
                                                                             }
-                                                                          },
-                                                                          child:
-                                                                              Container(
-                                                                            decoration:
-                                                                                BoxDecoration(
-                                                                              color: Colors.grey.shade300,
-                                                                              borderRadius: const BorderRadius.only(
-                                                                                topLeft: Radius.circular(15),
-                                                                                topRight: Radius.circular(15),
-                                                                                bottomLeft: Radius.circular(15),
-                                                                                bottomRight: Radius.circular(15),
-                                                                              ),
-                                                                              border: Border.all(color: Colors.grey, width: 1),
+
+                                                                            // String
+                                                                            //     url =
+                                                                            //     '${MyConstant().domain}/UPC_Invoice.php?isAdd=true&ren=$ren&qser_in=$qser_in&qty=$value&ser_user=$ser_user&ovalue=$ovalue&nvalue=$nvalue&_celvat=$_celvat&_cqty_vat=$_cqty_vat&con_ser=$_cser&tran_ser=$tran_ser&tran_sern=$tran_sern&qser_inn=$qser_inn&tran_expser=$tran_expser';
+
+                                                                            // try {
+                                                                            //   var response =
+                                                                            //       await http.get(Uri.parse(url));
+
+                                                                            //   var result =
+                                                                            //       json.decode(response.body);
+                                                                            //   print(result);
+                                                                            //   if (result.toString() !=
+                                                                            //       'null') {
+                                                                            //     setState(() {
+                                                                            //       red_Trans(_cser);
+                                                                            //     });
+                                                                            //   }
+                                                                            // } catch (e) {}
+                                                                          }
+                                                                        }
+                                                                      },
+                                                                      // cursorColor:
+                                                                      //     Colors
+                                                                      //         .green,
+                                                                      decoration: InputDecoration(
+                                                                          fillColor: Colors.white.withOpacity(0.3),
+                                                                          filled: true,
+                                                                          // prefixIcon:
+                                                                          //     const Icon(Icons.person, color: Colors.black),
+                                                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                          focusedBorder: const OutlineInputBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.only(
+                                                                              topRight: Radius.circular(15),
+                                                                              topLeft: Radius.circular(15),
+                                                                              bottomRight: Radius.circular(15),
+                                                                              bottomLeft: Radius.circular(15),
                                                                             ),
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                Text(
-                                                                              indextran == 0
-                                                                                  ? '${_TransModels[indextran].ovalue!.padLeft(4, '0')}' // '${nFormat.format(double.parse(_TransModels[indextran].ovalue!))}'
-                                                                                  //'${_TransModels[indextran].ovalue}'
-                                                                                  : '${_TransModels[indextran - 1].nvalue!.padLeft(4, '0')}', //'${nFormat.format(double.parse(_TransModels[indextran - 1].nvalue!))}',
-                                                                              // '${_TransModels[indextran - 1].nvalue}',
-                                                                              textAlign: TextAlign.right,
-                                                                              style: const TextStyle(
-                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                  //fontWeight: FontWeight.bold,
-                                                                                  fontFamily: Font_.Fonts_T),
+                                                                            borderSide:
+                                                                                BorderSide(
+                                                                              width: 1,
+                                                                              color: Colors.black,
                                                                             ),
                                                                           ),
-                                                                        )
-                                                                      : TextFormField(
-                                                                          textAlign:
-                                                                              TextAlign.right,
-                                                                          keyboardType:
-                                                                              TextInputType.number,
-                                                                          showCursor: indextran == 0
-                                                                              ? _TransModels[indextran].ovalue == null
-                                                                                  ? true
-                                                                                  : false
-                                                                              : false,
-                                                                          readOnly: indextran == 0
-                                                                              ? _TransModels[indextran].ovalue == null
-                                                                                  ? false
-                                                                                  : true
-                                                                              : true,
-                                                                          initialValue: indextran == 0
-                                                                              ? _TransModels[indextran].ovalue
-                                                                              : _TransModels[indextran - 1].nvalue,
-                                                                          onFieldSubmitted:
-                                                                              (value) async {
-                                                                            if (indextran ==
-                                                                                0) {
-                                                                              if (_TransModels[indextran].ovalue == null) {
-                                                                                SharedPreferences preferences = await SharedPreferences.getInstance();
-                                                                                String? ren = preferences.getString('renTalSer');
-                                                                                String? ser_user = preferences.getString('ser');
-                                                                                var qser = _TransModels[indextran].ser;
+                                                                          enabledBorder: const OutlineInputBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.only(
+                                                                              topRight: Radius.circular(15),
+                                                                              topLeft: Radius.circular(15),
+                                                                              bottomRight: Radius.circular(15),
+                                                                              bottomLeft: Radius.circular(15),
+                                                                            ),
+                                                                            borderSide:
+                                                                                BorderSide(
+                                                                              width: 1,
+                                                                              color: Colors.grey,
+                                                                            ),
+                                                                          ),
+                                                                          // labelText: 'ระบุชื่อร้านค้า',
+                                                                          labelStyle: const TextStyle(
+                                                                              color: Colors.black54,
 
-                                                                                var oval = '$_cnamex ${DateFormat.MMM('th_TH').format((DateTime.parse('${_TransModels[indextran].date} 00:00:00')))} ${DateTime.parse('${_TransModels[indextran].date} 00:00:00').year + 543}';
-                                                                                String url = '${MyConstant().domain}/InC_Invoice.php?isAdd=true&ren=$ren&qser=$qser&qty=$value&ser_user=$ser_user&oval=$oval&con_ser=$_cser';
-
-                                                                                try {
-                                                                                  var response = await http.get(Uri.parse(url));
-
-                                                                                  var result = json.decode(response.body);
-                                                                                  print(result);
-                                                                                  if (result.toString() != 'null') {
-                                                                                    setState(() {
-                                                                                      red_Trans(_cser);
-                                                                                    });
-                                                                                  }
-                                                                                } catch (e) {}
-                                                                              }
-                                                                            }
-                                                                          },
-                                                                          // cursorColor:
-                                                                          //     Colors.black,
-                                                                          decoration: InputDecoration(
-                                                                              fillColor: Colors.white.withOpacity(0.3),
-                                                                              filled: true,
-                                                                              // prefixIcon:
-                                                                              //     const Icon(Icons.person, color: Colors.black),
-                                                                              // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                              focusedBorder: const OutlineInputBorder(
-                                                                                borderRadius: BorderRadius.only(
-                                                                                  topRight: Radius.circular(15),
-                                                                                  topLeft: Radius.circular(15),
-                                                                                  bottomRight: Radius.circular(15),
-                                                                                  bottomLeft: Radius.circular(15),
-                                                                                ),
-                                                                                borderSide: BorderSide(
-                                                                                  width: 1,
-                                                                                  color: Colors.black,
-                                                                                ),
-                                                                              ),
-                                                                              enabledBorder: const OutlineInputBorder(
-                                                                                borderRadius: BorderRadius.only(
-                                                                                  topRight: Radius.circular(15),
-                                                                                  topLeft: Radius.circular(15),
-                                                                                  bottomRight: Radius.circular(15),
-                                                                                  bottomLeft: Radius.circular(15),
-                                                                                ),
-                                                                                borderSide: BorderSide(
-                                                                                  width: 1,
-                                                                                  color: Colors.grey,
-                                                                                ),
-                                                                              ),
-                                                                              // labelText: 'ระบุชื่อร้านค้า',
-                                                                              labelStyle: const TextStyle(color: Colors.black54, fontFamily: Font_.Fonts_T)),
-                                                                          inputFormatters: <TextInputFormatter>[
-                                                                            // for below version 2 use this
-                                                                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                                                                            // for version 2 and greater youcan also use this
-                                                                            FilteringTextInputFormatter.digitsOnly
-                                                                          ],
-                                                                        )
-                                                                  : Container(
+                                                                              //fontWeight: FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T)),
+                                                                      inputFormatters: <TextInputFormatter>[
+                                                                        // for below version 2 use this
+                                                                        FilteringTextInputFormatter.allow(
+                                                                            RegExp(r'[0-9]')),
+                                                                        // for version 2 and greater youcan also use this
+                                                                        FilteringTextInputFormatter
+                                                                            .digitsOnly
+                                                                      ],
+                                                                    ),
+                                                                  )
+                                                                : Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        Container(
                                                                       decoration:
                                                                           BoxDecoration(
                                                                         color: Colors
@@ -1636,472 +2075,141 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                                                 Colors.grey,
                                                                             width: 1),
                                                                       ),
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           Text(
-                                                                        indextran ==
-                                                                                0
-                                                                            ? '${_TransModels[indextran].ovalue!.padLeft(4, '0')}' //'${nFormat.format(double.parse(_TransModels[indextran].ovalue!))}'
-                                                                            // '${_TransModels[indextran].ovalue}'
-                                                                            : _TransModels[indextran - 1].nvalue == null
-                                                                                ? ''
-                                                                                : '${_TransModels[indextran - 1].nvalue!.padLeft(4, '0')}', // '${nFormat.format(double.parse(_TransModels[indextran - 1].nvalue!))}',
-                                                                        //'${_TransModels[indextran - 1].nvalue}',
+                                                                        '${_TransModels[indextran].nvalue!.padLeft(4, '0')}', // '${nFormat.format(double.parse(_TransModels[indextran].nvalue!))}',
+                                                                        // '${_TransModels[indextran].nvalue}',
                                                                         textAlign:
                                                                             TextAlign.right,
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
                                                                         style: const TextStyle(
                                                                             color: PeopleChaoScreen_Color.Colors_Text2_,
                                                                             //fontWeight: FontWeight.bold,
                                                                             fontFamily: Font_.Fonts_T),
                                                                       ),
                                                                     ),
-                                                            ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: _cunitser != '6'
-                                                          ? Text(
-                                                              '$_cunit',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style:
-                                                                  const TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      //fontWeight: FontWeight.bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
-                                                            )
-                                                          : _TransModels[indextran]
-                                                                          .docno_in ==
-                                                                      null ||
-                                                                  _TransModels[
-                                                                              indextran]
-                                                                          .docno_in ==
-                                                                      ''
-                                                              ? Container(
-                                                                  decoration:
-                                                                      const BoxDecoration(
-                                                                    // color: Colors.green,
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              6),
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              6),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              6),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              6),
-                                                                    ),
-                                                                    // border: Border.all(color: Colors.grey, width: 1),
                                                                   ),
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
-                                                                  child:
-                                                                      TextFormField(
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .right,
-                                                                    keyboardType:
-                                                                        TextInputType
-                                                                            .number,
-                                                                    showCursor: _TransModels[indextran].docno_in ==
-                                                                                null ||
-                                                                            _TransModels[indextran].docno_in ==
-                                                                                ''
-                                                                        ? true
-                                                                        : false,
-                                                                    //add this line
-                                                                    readOnly: _TransModels[indextran].docno_in ==
-                                                                                null ||
-                                                                            _TransModels[indextran].docno_in ==
-                                                                                ''
-                                                                        ? false
-                                                                        : true,
-
-                                                                    initialValue:
-                                                                        _TransModels[indextran]
-                                                                            .nvalue,
-
-                                                                    // controller: Form_nameshop,
-                                                                    onFieldSubmitted:
-                                                                        (value) async {
-                                                                      if (indextran ==
-                                                                          0) {
-                                                                        SharedPreferences
-                                                                            preferences =
-                                                                            await SharedPreferences.getInstance();
-                                                                        String?
-                                                                            ren =
-                                                                            preferences.getString('renTalSer');
-                                                                        String?
-                                                                            ser_user =
-                                                                            preferences.getString('ser');
-
-                                                                        var qser_in =
-                                                                            _TransModels[indextran].ser_in;
-                                                                        var tran_expser =
-                                                                            _TransModels[indextran].expser;
-                                                                        var qser_inn =
-                                                                            _TransModels[indextran].ser_in;
-
-                                                                        var tran_ser =
-                                                                            _TransModels[indextran].ser;
-                                                                        var tran_sern =
-                                                                            _TransModels[indextran].ser;
-                                                                        var ovalue =
-                                                                            _TransModels[indextran].ovalue; // ก่อน
-                                                                        var nvalue =
-                                                                            _TransModels[indextran].nvalue; // หลัง
-                                                                        _celvat; //vat
-                                                                        _cqty_vat; // หน่วย
-
-                                                                        print(
-                                                                            'ovalue>>>. $ovalue  ---- nvalue>>>>>> $nvalue');
-
-                                                                        String
-                                                                            url =
-                                                                            '${MyConstant().domain}/UPC_Invoice.php?isAdd=true&ren=$ren&qser_in=$qser_in&qty=$value&ser_user=$ser_user&ovalue=$ovalue&nvalue=$nvalue&_celvat=$_celvat&_cqty_vat=$_cqty_vat&con_ser=$_cser&tran_ser=$tran_ser&tran_sern=$tran_sern&qser_inn=$qser_inn&tran_expser=$tran_expser';
-
-                                                                        try {
-                                                                          var response =
-                                                                              await http.get(Uri.parse(url));
-
-                                                                          var result =
-                                                                              json.decode(response.body);
-                                                                          print(
-                                                                              result);
-                                                                          if (result.toString() !=
-                                                                              'null') {
-                                                                            setState(() {
-                                                                              red_Trans(_cser);
-                                                                            });
-                                                                          }
-                                                                        } catch (e) {}
-                                                                      } else {
-                                                                        if (_TransModels[indextran].ovalue ==
-                                                                            null) {
-                                                                          if (_TransModels[indextran].ovalue ==
-                                                                              null) {
-                                                                            SharedPreferences
-                                                                                preferences =
-                                                                                await SharedPreferences.getInstance();
-                                                                            String?
-                                                                                ren =
-                                                                                preferences.getString('renTalSer');
-                                                                            String?
-                                                                                ser_user =
-                                                                                preferences.getString('ser');
-
-                                                                            var qser_in =
-                                                                                _TransModels[indextran].ser_in; // ser in
-
-                                                                            var tran_ser =
-                                                                                _TransModels[indextran].ser; // ser tran
-                                                                            var ovalue =
-                                                                                _TransModels[indextran - 1].nvalue; // ก่อน
-                                                                            var nvalue =
-                                                                                _TransModels[indextran].nvalue; // หลัง
-                                                                            _celvat; //vat
-                                                                            _cqty_vat; // หน่วย
-                                                                            print('1ovalue>>>. $ovalue  ---- nvalue>>>>>> $nvalue');
-                                                                            var oval =
-                                                                                '$_cnamex ${DateFormat.MMM('th_TH').format((DateTime.parse('${_TransModels[indextran].date} 00:00:00')))} ${DateTime.parse('${_TransModels[indextran].date} 00:00:00').year + 543}';
-                                                                            String
-                                                                                url =
-                                                                                '${MyConstant().domain}/InC_InvoiceNew.php?isAdd=true&ren=$ren&tran_ser=$tran_ser&qty=$value&ser_user=$ser_user&oval=$oval&ovalue=$ovalue&nvalue=$nvalue&_celvat=$_celvat&_cqty_vat=$_cqty_vat&con_ser=$_cser';
-
-                                                                            try {
-                                                                              var response = await http.get(Uri.parse(url));
-
-                                                                              var result = json.decode(response.body);
-                                                                              print(result);
-                                                                              if (result.toString() != 'null') {
-                                                                                setState(() {
-                                                                                  red_Trans(_cser);
-                                                                                });
-                                                                              }
-                                                                            } catch (e) {}
-                                                                          }
-                                                                        } else {
-                                                                          SharedPreferences
-                                                                              preferences =
-                                                                              await SharedPreferences.getInstance();
-                                                                          String?
-                                                                              ren =
-                                                                              preferences.getString('renTalSer');
-                                                                          String?
-                                                                              ser_user =
-                                                                              preferences.getString('ser');
-
-                                                                          var qser_in =
-                                                                              _TransModels[indextran].ser_in;
-                                                                          var qser_inn =
-                                                                              _TransModels[indextran].ser_in;
-                                                                          var tran_expser =
-                                                                              _TransModels[indextran].expser;
-                                                                          var tran_sern =
-                                                                              _TransModels[indextran].ser;
-                                                                          var tran_ser =
-                                                                              _TransModels[indextran].ser;
-                                                                          var ovalue =
-                                                                              _TransModels[indextran].ovalue; // ก่อน
-                                                                          var nvalue =
-                                                                              _TransModels[indextran].nvalue; // หลัง
-                                                                          _celvat; //vat
-                                                                          _cqty_vat; // หน่วย
-
-                                                                          print(
-                                                                              '2ovalue>>>. $ovalue  --$value-- nvalue>>>>>> $nvalue ');
-
-                                                                          if (double.parse(value) <
-                                                                              double.parse(ovalue!)) {
-                                                                            print('23ovalue>>>--$value-- น้อยกว่า  $ovalue');
-                                                                            showDialog<void>(
-                                                                                context: context,
-                                                                                barrierDismissible: false, // user must tap button!
-                                                                                builder: (BuildContext context) {
-                                                                                  return AlertDialog(
-                                                                                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
-                                                                                    // title: const Text('AlertDialog Title'),
-                                                                                    content: SingleChildScrollView(
-                                                                                      child: ListBody(
-                                                                                        children: <Widget>[
-                                                                                          Center(
-                                                                                            child: Column(
-                                                                                              mainAxisAlignment: MainAxisAlignment.center,
-                                                                                              children: [
-                                                                                                Padding(
-                                                                                                  padding: const EdgeInsets.all(8.0),
-                                                                                                  child: Icon(
-                                                                                                    Icons.report_problem,
-                                                                                                    size: 50,
-                                                                                                    color: Colors.yellow.shade800,
-                                                                                                  ),
-                                                                                                ),
-                                                                                                Padding(
-                                                                                                  padding: const EdgeInsets.all(8.0),
-                                                                                                  child: Text(
-                                                                                                    'เลขมิเตอร์น้อยกว่าเลขมิเตอร์ก่อนหน้า ต้องการเริ่มเลขมิเตอร์ใหม่',
-                                                                                                    textAlign: TextAlign.center,
-                                                                                                    style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
-                                                                                                        //fontSize: 10.0
-                                                                                                        ),
-                                                                                                  ),
-                                                                                                ),
-                                                                                              ],
-                                                                                            ),
-                                                                                          ),
-                                                                                        ],
-                                                                                      ),
-                                                                                    ),
-                                                                                    actions: <Widget>[
-                                                                                      Row(
-                                                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                                                        children: [
-                                                                                          Expanded(
-                                                                                            child: Container(
-                                                                                              child: Padding(
-                                                                                                padding: const EdgeInsets.all(8.0),
-                                                                                                child: InkWell(
-                                                                                                  child: Container(
-                                                                                                      width: 100,
-                                                                                                      decoration: BoxDecoration(
-                                                                                                        color: Colors.green.shade900,
-                                                                                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                                        // border: Border.all(color: Colors.white, width: 1),
-                                                                                                      ),
-                                                                                                      padding: const EdgeInsets.all(8.0),
-                                                                                                      child: const Center(
-                                                                                                          child: Text(
-                                                                                                        'ตกลง',
-                                                                                                        textAlign: TextAlign.center,
-                                                                                                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
-                                                                                                            //fontSize: 10.0
-                                                                                                            ),
-                                                                                                      ))),
-                                                                                                  onTap: () async {
-                                                                                                    String url = '${MyConstant().domain}/UPC_Invoice.php?isAdd=true&ren=$ren&qser_in=$qser_in&qty=$value&ser_user=$ser_user&ovalue=$ovalue&nvalue=$nvalue&_celvat=$_celvat&_cqty_vat=$_cqty_vat&con_ser=$_cser&tran_ser=$tran_ser&tran_sern=$tran_sern&qser_inn=$qser_inn&tran_expser=$tran_expser';
-
-                                                                                                    try {
-                                                                                                      var response = await http.get(Uri.parse(url));
-
-                                                                                                      var result = json.decode(response.body);
-                                                                                                      print(result);
-                                                                                                      if (result.toString() != 'null') {
-                                                                                                        setState(() {
-                                                                                                          Navigator.of(context).pop();
-                                                                                                          red_Trans(_cser);
-                                                                                                        });
-                                                                                                      }
-                                                                                                    } catch (e) {}
-                                                                                                  },
-                                                                                                ),
-                                                                                              ),
-                                                                                            ),
-                                                                                          ),
-                                                                                          Expanded(
-                                                                                            child: Container(
-                                                                                              child: Padding(
-                                                                                                padding: const EdgeInsets.all(8.0),
-                                                                                                child: InkWell(
-                                                                                                  child: Container(
-                                                                                                      width: 100,
-                                                                                                      decoration: const BoxDecoration(
-                                                                                                        color: Colors.black,
-                                                                                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                                        // border: Border.all(color: Colors.white, width: 1),
-                                                                                                      ),
-                                                                                                      padding: const EdgeInsets.all(8.0),
-                                                                                                      child: const Center(
-                                                                                                          child: Text(
-                                                                                                        'ปิด',
-                                                                                                        textAlign: TextAlign.center,
-                                                                                                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
-                                                                                                            //fontSize: 10.0
-                                                                                                            ),
-                                                                                                      ))),
-                                                                                                  onTap: () {
-                                                                                                    Navigator.of(context).pop();
-                                                                                                  },
-                                                                                                ),
-                                                                                              ),
-                                                                                            ),
-                                                                                          )
-                                                                                        ],
-                                                                                      ),
-                                                                                    ],
-                                                                                  );
-                                                                                });
-                                                                          } else {
-                                                                            String
-                                                                                url =
-                                                                                '${MyConstant().domain}/UPC_Invoice.php?isAdd=true&ren=$ren&qser_in=$qser_in&qty=$value&ser_user=$ser_user&ovalue=$ovalue&nvalue=$nvalue&_celvat=$_celvat&_cqty_vat=$_cqty_vat&con_ser=$_cser&tran_ser=$tran_ser&tran_sern=$tran_sern&qser_inn=$qser_inn&tran_expser=$tran_expser';
-
-                                                                            try {
-                                                                              var response = await http.get(Uri.parse(url));
-
-                                                                              var result = json.decode(response.body);
-                                                                              print(result);
-                                                                              if (result.toString() != 'null') {
-                                                                                setState(() {
-                                                                                  red_Trans(_cser);
-                                                                                });
-                                                                              }
-                                                                            } catch (e) {}
-                                                                          }
-
-                                                                          // String
-                                                                          //     url =
-                                                                          //     '${MyConstant().domain}/UPC_Invoice.php?isAdd=true&ren=$ren&qser_in=$qser_in&qty=$value&ser_user=$ser_user&ovalue=$ovalue&nvalue=$nvalue&_celvat=$_celvat&_cqty_vat=$_cqty_vat&con_ser=$_cser&tran_ser=$tran_ser&tran_sern=$tran_sern&qser_inn=$qser_inn&tran_expser=$tran_expser';
-
-                                                                          // try {
-                                                                          //   var response =
-                                                                          //       await http.get(Uri.parse(url));
-
-                                                                          //   var result =
-                                                                          //       json.decode(response.body);
-                                                                          //   print(result);
-                                                                          //   if (result.toString() !=
-                                                                          //       'null') {
-                                                                          //     setState(() {
-                                                                          //       red_Trans(_cser);
-                                                                          //     });
-                                                                          //   }
-                                                                          // } catch (e) {}
-                                                                        }
-                                                                      }
-                                                                    },
-                                                                    // cursorColor:
-                                                                    //     Colors
-                                                                    //         .green,
-                                                                    decoration: InputDecoration(
-                                                                        fillColor: Colors.white.withOpacity(0.3),
-                                                                        filled: true,
-                                                                        // prefixIcon:
-                                                                        //     const Icon(Icons.person, color: Colors.black),
-                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                        focusedBorder: const OutlineInputBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.only(
-                                                                            topRight:
-                                                                                Radius.circular(15),
-                                                                            topLeft:
-                                                                                Radius.circular(15),
-                                                                            bottomRight:
-                                                                                Radius.circular(15),
-                                                                            bottomLeft:
-                                                                                Radius.circular(15),
-                                                                          ),
-                                                                          borderSide:
-                                                                              BorderSide(
-                                                                            width:
-                                                                                1,
-                                                                            color:
-                                                                                Colors.black,
-                                                                          ),
-                                                                        ),
-                                                                        enabledBorder: const OutlineInputBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.only(
-                                                                            topRight:
-                                                                                Radius.circular(15),
-                                                                            topLeft:
-                                                                                Radius.circular(15),
-                                                                            bottomRight:
-                                                                                Radius.circular(15),
-                                                                            bottomLeft:
-                                                                                Radius.circular(15),
-                                                                          ),
-                                                                          borderSide:
-                                                                              BorderSide(
-                                                                            width:
-                                                                                1,
-                                                                            color:
-                                                                                Colors.grey,
-                                                                          ),
-                                                                        ),
-                                                                        // labelText: 'ระบุชื่อร้านค้า',
-                                                                        labelStyle: const TextStyle(
-                                                                            color: Colors.black54,
-
-                                                                            //fontWeight: FontWeight.bold,
-                                                                            fontFamily: Font_.Fonts_T)),
-                                                                    inputFormatters: <TextInputFormatter>[
-                                                                      // for below version 2 use this
-                                                                      FilteringTextInputFormatter
-                                                                          .allow(
-                                                                              RegExp(r'[0-9]')),
-                                                                      // for version 2 and greater youcan also use this
-                                                                      FilteringTextInputFormatter
-                                                                          .digitsOnly
-                                                                    ],
-                                                                  ),
-                                                                )
-                                                              : Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '${nFormat.format(double.parse(_TransModels[indextran].qty5!))}',
+                                                          // '${_TransModels[indextran].qty5}',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  //fontWeight: FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              electricityHistoryModels
+                                                                  .clear();
+                                                              unit1 = 0;
+                                                              unit2 = 0;
+                                                              unit3 = 0;
+                                                              unit4 = 0;
+                                                              unit5 = 0;
+                                                              unit6 = 0;
+                                                              sum1 = 0;
+                                                              sum2 = 0;
+                                                              sum3 = 0;
+                                                              sum4 = 0;
+                                                              sum5 = 0;
+                                                              sum6 = 0;
+                                                              unit = 0;
+                                                              unit1c = 0;
+                                                              unit2c = 0;
+                                                              unit3c = 0;
+                                                              unit4c = 0;
+                                                              unit5c = 0;
+                                                              unit6c = 0;
+                                                              ele_tf = 0.0000;
+                                                              ele_other = 0;
+                                                              ele_vat = 0;
+                                                              ele_one = 0;
+                                                              ele_mit_one = 0;
+                                                              ele_gob_one = 0;
+                                                              ele_two = 0;
+                                                              ele_mit_two = 0;
+                                                              ele_gob_two = 0;
+                                                              ele_three = 0;
+                                                              ele_mit_three = 0;
+                                                              ele_gob_three = 0;
+                                                              ele_tour = 0;
+                                                              ele_mit_tour = 0;
+                                                              ele_gob_tour = 0;
+                                                              ele_five = 0;
+                                                              ele_mit_five = 0;
+                                                              ele_gob_five = 0;
+                                                              ele_six = 0;
+                                                              ele_mit_six = 0;
+                                                              ele_gob_six = 0;
+                                                              sum = 0;
+                                                              sum_n = 0;
+                                                              sum_f = 0;
+                                                              sum_per = 0;
+                                                              sum_all = 0;
+                                                            });
+                                                            showmiter(
+                                                                indextran);
+                                                          },
+                                                          child: Text(
+                                                            '${nFormat.format(double.parse(_TransModels[indextran].amt!))}',
+                                                            //  '${_TransModels[indextran].amt}',
+                                                            textAlign:
+                                                                TextAlign.right,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style:
+                                                                const TextStyle(
+                                                                    color: PeopleChaoScreen_Color
+                                                                        .Colors_Text2_,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: (_TransModels[
+                                                                        indextran]
+                                                                    .docno_in !=
+                                                                '')
+                                                            ? SizedBox()
+                                                            : Padding(
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .fromLTRB(
+                                                                            15,
+                                                                            8,
+                                                                            15,
+                                                                            8),
+                                                                child: InkWell(
                                                                   child:
                                                                       Container(
                                                                     decoration:
                                                                         BoxDecoration(
                                                                       color: Colors
-                                                                          .grey
-                                                                          .shade300,
+                                                                              .green[
+                                                                          300],
                                                                       borderRadius:
                                                                           const BorderRadius
                                                                               .only(
@@ -2121,225 +2229,66 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                                               1),
                                                                     ),
                                                                     padding:
-                                                                        const EdgeInsets
-                                                                            .all(
-                                                                            8.0),
+                                                                        const EdgeInsets.all(
+                                                                            4.0),
                                                                     child: Text(
-                                                                      '${_TransModels[indextran].nvalue!.padLeft(4, '0')}', // '${nFormat.format(double.parse(_TransModels[indextran].nvalue!))}',
-                                                                      // '${_TransModels[indextran].nvalue}',
+                                                                      (_TransModels[indextran].img == null ||
+                                                                              _TransModels[indextran].img.toString() == '')
+                                                                          ? 'ไม่พบหลักฐาน'
+                                                                          : 'พบหลักฐาน',
+                                                                      maxLines:
+                                                                          1,
                                                                       textAlign:
                                                                           TextAlign
-                                                                              .right,
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
+                                                                              .center,
                                                                       style: const TextStyle(
-                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                          //fontWeight: FontWeight.bold,
-                                                                          fontFamily: Font_.Fonts_T),
+                                                                          color: Colors
+                                                                              .white,
+                                                                          fontWeight: FontWeight
+                                                                              .bold,
+                                                                          fontFamily:
+                                                                              FontWeight_.Fonts_T
+                                                                          //fontSize: 10.0
+                                                                          ),
                                                                     ),
                                                                   ),
-                                                                ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '${nFormat.format(double.parse(_TransModels[indextran].qty5!))}',
-                                                        // '${_TransModels[indextran].qty5}',
-                                                        textAlign:
-                                                            TextAlign.right,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: const TextStyle(
-                                                            color: PeopleChaoScreen_Color
-                                                                .Colors_Text2_,
-                                                            //fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: GestureDetector(
-                                                        onTap: () {
-                                                          setState(() {
-                                                            electricityHistoryModels
-                                                                .clear();
-                                                            unit1 = 0;
-                                                            unit2 = 0;
-                                                            unit3 = 0;
-                                                            unit4 = 0;
-                                                            unit5 = 0;
-                                                            unit6 = 0;
-                                                            sum1 = 0;
-                                                            sum2 = 0;
-                                                            sum3 = 0;
-                                                            sum4 = 0;
-                                                            sum5 = 0;
-                                                            sum6 = 0;
-                                                            unit = 0;
-                                                            unit1c = 0;
-                                                            unit2c = 0;
-                                                            unit3c = 0;
-                                                            unit4c = 0;
-                                                            unit5c = 0;
-                                                            unit6c = 0;
-                                                            ele_tf = 0.0000;
-                                                            ele_other = 0;
-                                                            ele_vat = 0;
-                                                            ele_one = 0;
-                                                            ele_mit_one = 0;
-                                                            ele_gob_one = 0;
-                                                            ele_two = 0;
-                                                            ele_mit_two = 0;
-                                                            ele_gob_two = 0;
-                                                            ele_three = 0;
-                                                            ele_mit_three = 0;
-                                                            ele_gob_three = 0;
-                                                            ele_tour = 0;
-                                                            ele_mit_tour = 0;
-                                                            ele_gob_tour = 0;
-                                                            ele_five = 0;
-                                                            ele_mit_five = 0;
-                                                            ele_gob_five = 0;
-                                                            ele_six = 0;
-                                                            ele_mit_six = 0;
-                                                            ele_gob_six = 0;
-                                                            sum = 0;
-                                                            sum_n = 0;
-                                                            sum_f = 0;
-                                                            sum_per = 0;
-                                                            sum_all = 0;
-                                                          });
-                                                          showmiter(indextran);
-                                                        },
-                                                        child: Text(
-                                                          '${nFormat.format(double.parse(_TransModels[indextran].amt!))}',
-                                                          //  '${_TransModels[indextran].amt}',
-                                                          textAlign:
-                                                              TextAlign.right,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style:
-                                                              const TextStyle(
-                                                                  color: PeopleChaoScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  //fontWeight: FontWeight.bold,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: (_TransModels[
-                                                                      indextran]
-                                                                  .docno_in !=
-                                                              '')
-                                                          ? SizedBox()
-                                                          : Padding(
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .fromLTRB(
-                                                                          15,
-                                                                          8,
-                                                                          15,
-                                                                          8),
-                                                              child: InkWell(
-                                                                child:
-                                                                    Container(
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    color: Colors
-                                                                            .green[
-                                                                        300],
-                                                                    borderRadius:
-                                                                        const BorderRadius
-                                                                            .only(
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    border: Border.all(
-                                                                        color: Colors
-                                                                            .grey,
-                                                                        width:
-                                                                            1),
-                                                                  ),
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .all(
-                                                                          4.0),
-                                                                  child: Text(
-                                                                    (_TransModels[indextran].img ==
-                                                                                null ||
-                                                                            _TransModels[indextran].img.toString() ==
-                                                                                '')
-                                                                        ? 'ไม่พบหลักฐาน'
-                                                                        : 'พบหลักฐาน',
-                                                                    maxLines: 1,
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style: const TextStyle(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T
-                                                                        //fontSize: 10.0
+                                                                  onTap: () {
+                                                                    if (_TransModels
+                                                                            .isEmpty ||
+                                                                        _TransModels[indextran].img.toString() ==
+                                                                            '' ||
+                                                                        _TransModels[indextran].img ==
+                                                                            null) {
+                                                                      uploadFile_Slip(
+                                                                          indextran);
+                                                                    } else {
+                                                                      showDialog(
+                                                                        context:
+                                                                            context,
+                                                                        builder:
+                                                                            (_) =>
+                                                                                Dialog(
+                                                                          child:
+                                                                              SizedBox(
+                                                                            // width: MediaQuery.of(context)
+                                                                            //     .size
+                                                                            //     .width,
+                                                                            child: (_TransModels.isEmpty || _TransModels[indextran].img.toString() == '' || _TransModels[indextran].img == null)
+                                                                                ? Center(child: Icon(Icons.image_not_supported))
+                                                                                : Image.network(
+                                                                                    // '${MyConstant().domain}/files/kad_taii/logo/${Img_logo_}',
+                                                                                    '${MyConstant().domain}/files/$foder/Meter/${_TransModels[indextran].img}',
+                                                                                    fit: BoxFit.cover,
+                                                                                  ),
+                                                                          ),
                                                                         ),
-                                                                  ),
-                                                                ),
-                                                                onTap: () {
-                                                                  if (_TransModels.isEmpty ||
-                                                                      _TransModels[indextran]
-                                                                              .img
-                                                                              .toString() ==
-                                                                          '' ||
-                                                                      _TransModels[indextran]
-                                                                              .img ==
-                                                                          null) {
-                                                                    uploadFile_Slip(
-                                                                        indextran);
-                                                                  } else {
-                                                                    showDialog(
-                                                                      context:
-                                                                          context,
-                                                                      builder:
-                                                                          (_) =>
-                                                                              Dialog(
-                                                                        child:
-                                                                            SizedBox(
-                                                                          // width: MediaQuery.of(context)
-                                                                          //     .size
-                                                                          //     .width,
-                                                                          child: (_TransModels.isEmpty || _TransModels[indextran].img.toString() == '' || _TransModels[indextran].img == null)
-                                                                              ? Center(child: Icon(Icons.image_not_supported))
-                                                                              : Image.network(
-                                                                                  // '${MyConstant().domain}/files/kad_taii/logo/${Img_logo_}',
-                                                                                  '${MyConstant().domain}/files/$foder/Meter/${_TransModels[indextran].img}',
-                                                                                  fit: BoxFit.cover,
-                                                                                ),
-                                                                        ),
-                                                                      ),
-                                                                    );
-                                                                  }
-                                                                },
-                                                              )),
-                                                    ),
-                                                  ],
+                                                                      );
+                                                                    }
+                                                                  },
+                                                                )),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             ),

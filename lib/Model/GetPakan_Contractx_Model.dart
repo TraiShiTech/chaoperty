@@ -37,6 +37,12 @@ class ContractxPakanModel {
   String? zser;
   String? zn;
   String? ln;
+  String? docno;
+  String? refno;
+  String? remark;
+  String? room_number;
+  String? name;
+  String? zn1;
 
   ContractxPakanModel({
     this.ser,
@@ -75,6 +81,12 @@ class ContractxPakanModel {
     this.zser,
     this.zn,
     this.ln,
+    this.docno,
+    this.refno,
+    this.remark,
+    this.room_number,
+    this.name,
+    this.zn1,
   });
 
   ContractxPakanModel.fromJson(Map<String, dynamic> json) {
@@ -116,6 +128,12 @@ class ContractxPakanModel {
     zser = json['zser'];
     zn = json['zn'];
     ln = json['ln'];
+    docno = json['docno'];
+    refno = json['refno'];
+    remark = json['remark'];
+    room_number = json['room_number'];
+    name = json['name'];
+    zn1 = json['zn1'];
   }
 
   Map<String, dynamic> toJson() {
@@ -158,6 +176,12 @@ class ContractxPakanModel {
     data['zser'] = this.zser;
     data['zn'] = this.zn;
     data['ln'] = this.ln;
+    data['docno'] = this.docno;
+    data['refno'] = this.refno;
+    data['remark'] = this.remark;
+    data['room_number'] = this.room_number;
+    data['name'] = this.name;
+    data['zn1'] = this.zn1;
 
     return data;
   }

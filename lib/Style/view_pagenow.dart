@@ -163,7 +163,7 @@ dynamic Now_viewpageAlldata(context, Ser_page) async {
                       ),
                       Container(
                         padding: const EdgeInsets.all(2.0),
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           color: AppbackgroundColor.TiTile_Colors,
                           // color: Colors.brown[200],
                           borderRadius: BorderRadius.only(

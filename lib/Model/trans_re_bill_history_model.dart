@@ -128,6 +128,9 @@ class TransReBillHistoryModel {
   String? znn;
   String? total_bill;
   String? total_dis;
+  String? count_inv;
+  String? inv_qty;
+  String? inv_end_date;
 
   TransReBillHistoryModel({
     this.ser,
@@ -254,6 +257,9 @@ class TransReBillHistoryModel {
     this.znn,
     this.total_bill,
     this.total_dis,
+    this.count_inv,
+    this.inv_qty,
+    this.inv_end_date,
   });
 
   TransReBillHistoryModel.fromJson(Map<String, dynamic> json) {
@@ -383,6 +389,10 @@ class TransReBillHistoryModel {
     znn = json['znn'];
     total_bill = json['total_bill'];
     total_dis = json['total_dis'];
+    count_inv = json['count_inv'];
+
+    inv_qty = json['inv_qty'];
+    inv_end_date = json['inv_end_date'];
   }
 
   Map<String, dynamic> toJson() {
@@ -512,6 +522,10 @@ class TransReBillHistoryModel {
     data['znn'] = this.znn;
     data['total_bill'] = this.total_bill;
     data['total_dis'] = this.total_dis;
+    data['count_inv'] = this.count_inv;
+
+    data['inv_qty'] = this.inv_qty;
+    data['inv_end_date'] = this.inv_end_date;
     return data;
   }
 }

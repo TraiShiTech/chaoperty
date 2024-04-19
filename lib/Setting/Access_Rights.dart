@@ -1117,6 +1117,78 @@ class _AccessrightsState extends State<Accessrights> {
     );
   }
 
+  Future<Null> infomation() async {
+    showDialog<String>(
+        // barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            title: const Center(
+                child: Text(
+              'Level Information',
+              style: TextStyle(
+                color: SettingScreen_Color.Colors_Text1_,
+                fontFamily: FontWeight_.Fonts_T,
+                fontWeight: FontWeight.bold,
+              ),
+            )),
+            content: Container(
+                padding: EdgeInsets.all(8),
+                decoration: const BoxDecoration(
+                  // color: Colors.grey[300],
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10)),
+                  // border: Border.all(color: Colors.white, width: 1),
+                ),
+                child: SingleChildScrollView(
+                    child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(flex: 1, child: Text('Level 1')),
+                        Expanded(flex: 6, child: Text('แสดงข้อมูล')),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(flex: 1, child: Text('Level 2')),
+                        Expanded(flex: 6, child: Text('บันทึกมิเตอร์')),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(flex: 1, child: Text('Level 3')),
+                        Expanded(
+                            flex: 6,
+                            child: Text('ทำสัญญา,รับชำระ,บันทึกมิเตอร์')),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(flex: 1, child: Text('Level 4')),
+                        Expanded(
+                            flex: 6,
+                            child: Text(
+                                'ทำสัญญา,รับชำระ,บันทึกมิเตอร์,แก้ไขทะเบียน,แก้ไขสัญญา')),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(flex: 1, child: Text('Level 5')),
+                        Expanded(
+                            flex: 6,
+                            child: Text(
+                                'ทำสัญญา,รับชำระ,บันทึกมิเตอร์,แก้ไขทะเบียน,แก้ไขสัญญา,ออกรายงาน,ตั้งค่าต่างๆ')),
+                      ],
+                    ),
+                  ],
+                )))));
+  }
+
 //////////------------------------------------------------>
   Future<Null> Edit_userAcess(int index) async {
     final _formKey = GlobalKey<FormState>();
@@ -1479,7 +1551,7 @@ class _AccessrightsState extends State<Accessrights> {
                               ),
                             ],
                           )),
-                      renTal_lavel <= 1
+                      renTal_lavel < 5
                           ? SizedBox()
                           : Expanded(
                               flex: 1,
@@ -1500,6 +1572,11 @@ class _AccessrightsState extends State<Accessrights> {
                                           ),
                                         ),
                                       ),
+                                      IconButton(
+                                          onPressed: () {
+                                            infomation();
+                                          },
+                                          icon: Icon(Icons.info_outline))
                                     ],
                                   ),
                                   Padding(
@@ -1569,6 +1646,30 @@ class _AccessrightsState extends State<Accessrights> {
                                             value: '3',
                                             child: Text(
                                               'Level 3',
+                                              style: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  // fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          DropdownMenuItem<String>(
+                                            value: '4',
+                                            child: Text(
+                                              'Level 4',
+                                              style: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  // fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          DropdownMenuItem<String>(
+                                            value: '5',
+                                            child: Text(
+                                              'Level 5',
                                               style: const TextStyle(
                                                   fontSize: 14,
                                                   color: PeopleChaoScreen_Color
@@ -2528,7 +2629,7 @@ class _AccessrightsState extends State<Accessrights> {
                       children: [
                         Container(
                           height: 50,
-                          decoration: const BoxDecoration(
+                          decoration:  BoxDecoration(
                             color: AppbackgroundColor.TiTile_Colors,
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(10),

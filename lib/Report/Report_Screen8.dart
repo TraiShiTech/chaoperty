@@ -18,6 +18,7 @@ import '../Model/GetType_Model.dart';
 import '../Model/GetZone_Model.dart';
 import '../Model/Get_maintenance_model.dart';
 import '../Model/Get_tran_meter_model.dart';
+import '../Model/Getexp_sz_model.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 import 'package:http/http.dart' as http;
@@ -44,6 +45,9 @@ class _ReportScreen8State extends State<ReportScreen8> {
   String Value_Report = ' ';
   String NameFile_ = '';
   String Pre_and_Dow = '';
+  String? expSZ_name;
+  String? expSZ_ser;
+
   final _formKey = GlobalKey<FormState>();
   final FormNameFile_text = TextEditingController();
 
@@ -61,6 +65,7 @@ class _ReportScreen8State extends State<ReportScreen8> {
   List<TransBillModel> TransBillModels_Select = [];
   List<TeNantModel> teNantModels = [];
   List<TeNantModel> _teNantModels = <TeNantModel>[];
+  List<ExpSZModel> expSZModels = [];
   List<String> YE_Th = [];
   List<String> Mont_Th = [];
 
@@ -127,6 +132,7 @@ class _ReportScreen8State extends State<ReportScreen8> {
     checkPreferance();
     read_GC_zone();
     read_GC_type();
+    red_exp_sz();
   }
 
   /////////------------------------------------------------------------->
@@ -153,7 +159,7 @@ class _ReportScreen8State extends State<ReportScreen8> {
       builder: (BuildContext context) => AlertDialog(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(20.0))),
-        title: Text(
+        title: const Text(
           '📢ขออภัย !!!! ',
           textAlign: TextAlign.end,
           style: TextStyle(
@@ -163,17 +169,17 @@ class _ReportScreen8State extends State<ReportScreen8> {
           ),
         ),
         content: Container(
-          decoration: BoxDecoration(
-            image: const DecorationImage(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
               image: AssetImage("images/pngegg.png"),
               // fit: BoxFit.cover,
             ),
           ),
-          child: SingleChildScrollView(
+          child: const SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0),
                   child: Text(
                     'ขออภัย ขณะนี้ฟังก์ชั่นก์ รายงานหน้า 7 อยู่ในช่วงทดสอบ... !!!!!! ',
                     textAlign: TextAlign.center,
@@ -259,7 +265,7 @@ class _ReportScreen8State extends State<ReportScreen8> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       Map<String, dynamic> map = Map();
       map['ser'] = '0';
       map['rser'] = '0';
@@ -306,6 +312,64 @@ class _ReportScreen8State extends State<ReportScreen8> {
     } catch (e) {}
   }
 
+  ////////--------------------------------------------------------------->
+  Future<Null> red_exp_sz() async {
+    if (expSZModels.length != 0) {
+      setState(() {
+        expSZModels.clear();
+      });
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    // var ciddoc = widget.Get_Value_cid;
+    // var qutser = widget.Get_Value_NameShop_index;
+
+    String url = '${MyConstant().domain}/GC_exp_sz.php?isAdd=true&ren=$ren';
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print('result $ciddoc');
+      if (result.toString() != 'null') {
+        Map<String, dynamic> map = Map();
+        map['ser'] = '0';
+        map['user'] = '0';
+        map['etype'] = '0';
+        map['exptser'] = '0';
+        map['expname'] = 'ทั้งหมด';
+        map['st'] = '0';
+        map['unit'] = '0';
+        map['sdate'] = '0';
+        map['vat'] = '0';
+        map['wht'] = '0';
+        map['cal'] = '0';
+        map['pri'] = '0';
+        map['rser'] = '0';
+        map['fine'] = '0';
+        map['fine_unit'] = '0';
+        map['fine_late'] = '0';
+        map['fine_cal'] = '0';
+        map['fine_pri'] = '0';
+        map['data_update'] = '0';
+
+        ExpSZModel expSZModel = ExpSZModel.fromJson(map);
+
+        setState(() {
+          expSZModels.add(expSZModel);
+        });
+
+        for (var map in result) {
+          ExpSZModel expSZModel = ExpSZModel.fromJson(map);
+          setState(() {
+            expSZModels.add(expSZModel);
+
+            // _TransBillModels.add(_TransBillModel);
+          });
+        }
+      }
+    } catch (e) {}
+  }
+
 ////////--------------------------------------------------------------->
   Future<Null> read_GC_type() async {
     if (typeModels.isNotEmpty) {
@@ -347,26 +411,34 @@ class _ReportScreen8State extends State<ReportScreen8> {
   // $Serzone = $_GET['serzone'];
   //   $monx_S = $_GET['monx'];
   //   $yex_S = $_GET['yex'];
+
   Future<Null> red_Trans_bill() async {
     setState(() {
       transMeterModels.clear();
       teNantModels.clear();
       Await_Status_Report1 = null;
     });
+
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
+    var expSZ_ser_ = (expSZ_ser == null || expSZ_ser == '') ? 0 : expSZ_ser;
 
-    String url = (zone_ser_transMeter.toString() == 'null')
-        ? (Ser_BodySta1 == 0)
-            ? '${MyConstant().domain}/GC_trans_mitter_Report.php?isAdd=true&ren=$ren&sertype=0&serzone=0&monx=$Mon_transMeter_Mon&yex=$YE_transMeter_Mon'
-            : (Ser_BodySta1 == 1)
-                ? '${MyConstant().domain}/GC_trans_mitter_Report.php?isAdd=true&ren=$ren&sertype=1&serzone=0&monx=$Mon_transMeter_Mon&yex=$YE_transMeter_Mon'
-                : '${MyConstant().domain}/GC_trans_mitter_Report.php?isAdd=true&ren=$ren&sertype=2&serzone=0&monx=$Mon_transMeter_Mon&yex=$YE_transMeter_Mon'
-        : (Ser_BodySta1 == 0)
-            ? '${MyConstant().domain}/GC_trans_mitter_Report.php?isAdd=true&ren=$ren&sertype=0&serzone=$zone_ser_transMeter&monx=$Mon_transMeter_Mon&yex=$YE_transMeter_Mon'
-            : (Ser_BodySta1 == 1)
-                ? '${MyConstant().domain}/GC_trans_mitter_Report.php?isAdd=true&ren=$ren&sertype=1&serzone=$zone_ser_transMeter&monx=$Mon_transMeter_Mon&yex=$YE_transMeter_Mon'
-                : '${MyConstant().domain}/GC_trans_mitter_Report.php?isAdd=true&ren=$ren&sertype=2&serzone=$zone_ser_transMeter&monx=$Mon_transMeter_Mon&yex=$YE_transMeter_Mon';
+    String url = (zone_ser_transMeter.toString() == 'null' ||
+            zone_ser_transMeter == null ||
+            zone_ser_transMeter! == '0')
+        ? '${MyConstant().domain}/GC_trans_mitter_ReportNew.php?isAdd=true&ren=$ren&serzone=0&monx=$Mon_transMeter_Mon&yex=$YE_transMeter_Mon&sertype=$expSZ_ser_'
+        : '${MyConstant().domain}/GC_trans_mitterZone_ReportNew.php?isAdd=true&ren=$ren&serzone=$zone_ser_transMeter&monx=$Mon_transMeter_Mon&yex=$YE_transMeter_Mon&sertype=$expSZ_ser_';
+    // String url = (zone_ser_transMeter.toString() == 'null')
+    //     ? (Ser_BodySta1 == 0)
+    //         ? '${MyConstant().domain}/GC_trans_mitter_Report.php?isAdd=true&ren=$ren&sertype=0&serzone=0&monx=$Mon_transMeter_Mon&yex=$YE_transMeter_Mon'
+    //         : (Ser_BodySta1 == 1)
+    //             ? '${MyConstant().domain}/GC_trans_mitter_Report.php?isAdd=true&ren=$ren&sertype=1&serzone=0&monx=$Mon_transMeter_Mon&yex=$YE_transMeter_Mon'
+    //             : '${MyConstant().domain}/GC_trans_mitter_Report.php?isAdd=true&ren=$ren&sertype=2&serzone=0&monx=$Mon_transMeter_Mon&yex=$YE_transMeter_Mon'
+    //     : (Ser_BodySta1 == 0)
+    //         ? '${MyConstant().domain}/GC_trans_mitter_Report.php?isAdd=true&ren=$ren&sertype=0&serzone=$zone_ser_transMeter&monx=$Mon_transMeter_Mon&yex=$YE_transMeter_Mon'
+    //         : (Ser_BodySta1 == 1)
+    //             ? '${MyConstant().domain}/GC_trans_mitter_Report.php?isAdd=true&ren=$ren&sertype=1&serzone=$zone_ser_transMeter&monx=$Mon_transMeter_Mon&yex=$YE_transMeter_Mon'
+    //             : '${MyConstant().domain}/GC_trans_mitter_Report.php?isAdd=true&ren=$ren&sertype=2&serzone=$zone_ser_transMeter&monx=$Mon_transMeter_Mon&yex=$YE_transMeter_Mon';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -386,12 +458,12 @@ class _ReportScreen8State extends State<ReportScreen8> {
         }
       }
 
-      Future.delayed(Duration(milliseconds: 800), () async {
+      Future.delayed(const Duration(milliseconds: 800), () async {
         setState(() {
           _transMeterModels = transMeterModels;
           Await_Status_Report1 = null;
         });
-        print('mitter : ${transMeterModels.length}');
+        // print('mitter : ${transMeterModels.length}');
       });
     } catch (e) {}
   }
@@ -461,12 +533,12 @@ class _ReportScreen8State extends State<ReportScreen8> {
         }
       } else {}
 
-      Future.delayed(Duration(milliseconds: 800), () async {
+      Future.delayed(const Duration(milliseconds: 800), () async {
         setState(() {
           _teNantModels = teNantModels;
           Await_Status_Report2 = null;
         });
-        print('tenant_Daily : ${teNantModels.length}');
+        // print('tenant_Daily : ${teNantModels.length}');
       });
     } catch (e) {}
   }
@@ -499,46 +571,20 @@ class _ReportScreen8State extends State<ReportScreen8> {
           TeNantModel teNantModel = TeNantModel.fromJson(map);
           setState(() {
             if (teNantModel.cid != '') {
-              var daterx = teNantModel.ldate;
-              if (daterx != null) {
-                int daysBetween(DateTime from, DateTime to) {
-                  from = DateTime(from.year, from.month, from.day);
-                  to = DateTime(to.year, to.month, to.day);
-                  return (to.difference(from).inHours / 24).round();
-                }
-
-                var birthday = DateTime.parse('$daterx 00:00:00.000')
-                    .add(const Duration(days: -30));
-                var date2 = DateTime.now();
-                var difference = daysBetween(birthday, date2);
-
-                //  print('difference == $difference');
-
-                var daterxNow = DateTime.now();
-
-                var daterxLdate = DateTime.parse('$daterx 00:00:00.000');
-
-                final now = DateTime.now();
-                final earlier = daterxLdate.subtract(const Duration(days: 0));
-                var daterxA = now.isAfter(earlier);
-                // print(now.isAfter(earlier)); // true
-                // print(now.isBefore(earlier)); // true
-
-                if (daterxA != true) {
-                  setState(() {
-                    teNantModels.add(teNantModel);
-                  });
-                }
+              if (teNantModel.invoice == null || teNantModel.invoice == '') {
+                setState(() {
+                  teNantModels.add(teNantModel);
+                });
               }
             }
           });
         }
-        Future.delayed(Duration(milliseconds: 800), () async {
+        Future.delayed(const Duration(milliseconds: 800), () async {
           setState(() {
             _teNantModels = teNantModels;
             Await_Status_Report3 = null;
           });
-          print('tenant_All : ${teNantModels.length}');
+          // print('tenant_All : ${teNantModels.length}');
         });
       } else {}
     } catch (e) {}
@@ -681,8 +727,9 @@ class _ReportScreen8State extends State<ReportScreen8> {
                               ),
                             ),
                             isExpanded: false,
-                            value:
-                                (Ser_BodySta1 != 1) ? null : Mon_transMeter_Mon,
+                            value: (Mon_transMeter_Mon == null)
+                                ? null
+                                : Mon_transMeter_Mon,
                             // hint: Text(
                             //   Mon_Income == null
                             //       ? 'เลือก'
@@ -793,8 +840,9 @@ class _ReportScreen8State extends State<ReportScreen8> {
                               ),
                             ),
                             isExpanded: false,
-                            value:
-                                (Ser_BodySta1 != 1) ? null : YE_transMeter_Mon,
+                            value: (YE_transMeter_Mon == null)
+                                ? null
+                                : YE_transMeter_Mon,
                             // hint: Text(
                             //   YE_Income == null
                             //       ? 'เลือก'
@@ -854,6 +902,109 @@ class _ReportScreen8State extends State<ReportScreen8> {
                       const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(
+                          'ประเภท :',
+                          style: TextStyle(
+                            color: ReportScreen_Color.Colors_Text2_,
+                            // fontWeight: FontWeight.bold,
+                            fontFamily: Font_.Fonts_T,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: AppbackgroundColor.Sub_Abg_Colors,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            // border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                          width: 260,
+                          padding: const EdgeInsets.all(8.0),
+                          child: DropdownButtonFormField2(
+                            value: (expSZ_name == null) ? null : expSZ_name,
+                            alignment: Alignment.center,
+                            focusColor: Colors.white,
+                            autofocus: false,
+                            decoration: InputDecoration(
+                              enabled: true,
+                              hoverColor: Colors.brown,
+                              prefixIconColor: Colors.blue,
+                              fillColor: Colors.white.withOpacity(0.05),
+                              filled: false,
+                              isDense: true,
+                              contentPadding: EdgeInsets.zero,
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(color: Colors.red),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  topLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                ),
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(255, 231, 227, 227),
+                                ),
+                              ),
+                            ),
+                            isExpanded: false,
+
+                            icon: const Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black,
+                            ),
+                            style: const TextStyle(
+                              color: Colors.grey,
+                            ),
+                            iconSize: 20,
+                            buttonHeight: 40,
+                            buttonWidth: 250,
+                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                            dropdownDecoration: BoxDecoration(
+                              // color: Colors
+                              //     .amber,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            items: expSZModels
+                                .map((item) => DropdownMenuItem<String>(
+                                      value: '${item.expname}',
+                                      child: Text(
+                                        '${item.expname}',
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          overflow: TextOverflow.ellipsis,
+                                          fontSize: 14,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ))
+                                .toList(),
+
+                            onChanged: (value) async {
+                              int selectedIndex = expSZModels
+                                  .indexWhere((item) => item.expname == value);
+
+                              setState(() {
+                                expSZ_name = value!;
+                                expSZ_ser = expSZModels[selectedIndex].ser!;
+                              });
+                              // print(
+                              //     'Selected Index: $expSZ_name  //${expSZ_ser}');
+                            },
+                          ),
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
                           'โซน :',
                           style: TextStyle(
                             color: ReportScreen_Color.Colors_Text2_,
@@ -877,7 +1028,7 @@ class _ReportScreen8State extends State<ReportScreen8> {
                           width: 260,
                           padding: const EdgeInsets.all(8.0),
                           child: DropdownButtonFormField2(
-                            value: (Ser_BodySta1 != 1)
+                            value: (zone_name_transMeter == null)
                                 ? null
                                 : zone_name_transMeter,
                             alignment: Alignment.center,
@@ -951,8 +1102,8 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                 zone_ser_transMeter =
                                     zoneModels_report[selectedIndex].ser!;
                               });
-                              print(
-                                  'Selected Index: $zone_name_transMeter  //${zone_ser_transMeter}');
+                              // print(
+                              //     'Selected Index: $zone_name_transMeter  //${zone_ser_transMeter}');
                             },
                           ),
                         ),
@@ -961,14 +1112,13 @@ class _ReportScreen8State extends State<ReportScreen8> {
                         padding: const EdgeInsets.all(8.0),
                         child: InkWell(
                           onTap: () async {
-                            setState(() {
-                              Ser_BodySta1 = 1;
-                            });
+                            // setState(() {
+                            //   Ser_BodySta1 = 1;
+                            // });
 
                             if (Mon_transMeter_Mon != null &&
                                 YE_transMeter_Mon != null &&
-                                zone_name_transMeter != null &&
-                                Ser_BodySta1 == 1) {
+                                zone_name_transMeter != null) {
                               setState(() {
                                 Await_Status_Report2 = 0;
                               });
@@ -989,7 +1139,7 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                     bottomLeft: Radius.circular(10),
                                     bottomRight: Radius.circular(10)),
                               ),
-                              child: Center(
+                              child: const Center(
                                 child: Text(
                                   'ค้นหา',
                                   style: TextStyle(
@@ -1051,568 +1201,44 @@ class _ReportScreen8State extends State<ReportScreen8> {
                               ),
                             ),
                             onTap: (transMeterModels.isEmpty ||
-                                    zone_name_transMeter == null ||
-                                    Ser_BodySta1 == 2)
+                                    zone_name_transMeter == null)
                                 ? null
                                 : () async {
                                     // Insert_log.Insert_logs(
                                     //     'รายงาน', 'กดดูรายงานการแจ้งซ่อม');
                                     Electric_Widget();
                                   }),
-                        (Ser_BodySta1 != 1)
-                            ? Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'รายงานมิเตอร์ไฟฟ้า',
-                                  style: TextStyle(
-                                    color: ReportScreen_Color.Colors_Text2_,
-                                    // fontWeight: FontWeight.bold,
-                                    fontFamily: Font_.Fonts_T,
-                                  ),
-                                ),
-                              )
-                            : (transMeterModels.isEmpty)
-                                ? Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      (Status_transMeter_ != null &&
-                                              transMeterModels.isEmpty &&
-                                              zone_name_transMeter != null &&
-                                              Await_Status_Report2 != null)
-                                          ? 'รายงานมิเตอร์ไฟฟ้า (ไม่พบข้อมูล ✖️)'
-                                          : 'รายงานมิเตอร์ไฟฟ้า',
-                                      style: const TextStyle(
-                                        color: ReportScreen_Color.Colors_Text2_,
-                                        // fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
-                                  )
-                                : (transMeterModels.length != 0 &&
-                                        Await_Status_Report1 != null &&
-                                        Ser_BodySta1 == 1)
-                                    ? SizedBox(
-                                        // height: 20,
-                                        child: Row(
-                                        children: [
-                                          Container(
-                                              padding:
-                                                  const EdgeInsets.all(4.0),
-                                              child:
-                                                  const CircularProgressIndicator()),
-                                          const Padding(
-                                            padding: EdgeInsets.all(8.0),
-                                            child: Text(
-                                              'กำลังโหลดรายงานมิเตอร์ไฟฟ้า...',
-                                              style: TextStyle(
-                                                color: ReportScreen_Color
-                                                    .Colors_Text2_,
-                                                // fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ))
-                                    : const Padding(
-                                        padding: EdgeInsets.all(8.0),
-                                        child: Text(
-                                          'รายงานมิเตอร์ไฟฟ้า ✔️',
-                                          style: TextStyle(
-                                            color: ReportScreen_Color
-                                                .Colors_Text2_,
-                                            // fontWeight: FontWeight.bold,
-                                            fontFamily: Font_.Fonts_T,
-                                          ),
-                                        ),
-                                      ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 5.0,
-              ),
-              Row(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width / 2,
-                    height: 4.0,
-                    child: Divider(
-                      color: Colors.grey[300],
-                      height: 4.0,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 5.0,
-              ),
-              ScrollConfiguration(
-                behavior:
-                    ScrollConfiguration.of(context).copyWith(dragDevices: {
-                  PointerDeviceKind.touch,
-                  PointerDeviceKind.mouse,
-                }),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'เดือน :',
-                          style: TextStyle(
-                            color: ReportScreen_Color.Colors_Text2_,
-                            // fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10)),
-                            // border: Border.all(color: Colors.grey, width: 1),
-                          ),
-                          width: 120,
-                          padding: const EdgeInsets.all(8.0),
-                          child: DropdownButtonFormField2(
-                            alignment: Alignment.center,
-                            focusColor: Colors.white,
-                            autofocus: false,
-                            decoration: InputDecoration(
-                              floatingLabelAlignment:
-                                  FloatingLabelAlignment.center,
-                              enabled: true,
-                              hoverColor: Colors.brown,
-                              prefixIconColor: Colors.blue,
-                              fillColor: Colors.white.withOpacity(0.05),
-                              filled: false,
-                              isDense: true,
-                              contentPadding: EdgeInsets.zero,
-                              border: OutlineInputBorder(
-                                borderSide: const BorderSide(color: Colors.red),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              focusedBorder: const OutlineInputBorder(
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(10),
-                                  topLeft: Radius.circular(10),
-                                  bottomRight: Radius.circular(10),
-                                  bottomLeft: Radius.circular(10),
-                                ),
-                                borderSide: BorderSide(
-                                  width: 1,
-                                  color: Color.fromARGB(255, 231, 227, 227),
-                                ),
-                              ),
-                            ),
-                            isExpanded: false,
-                            value:
-                                (Ser_BodySta1 != 2) ? null : Mon_transMeter_Mon,
-                            // hint: Text(
-                            //   Mon_Income == null
-                            //       ? 'เลือก'
-                            //       : '$Mon_Income',
-                            //   maxLines: 2,
-                            //   textAlign: TextAlign.center,
-                            //   style: const TextStyle(
-                            //     overflow:
-                            //         TextOverflow.ellipsis,
-                            //     fontSize: 14,
-                            //     color: Colors.grey,
-                            //   ),
-                            // ),
-                            icon: const Icon(
-                              Icons.arrow_drop_down,
-                              color: Colors.black,
-                            ),
-                            style: const TextStyle(
-                              color: Colors.grey,
-                            ),
-                            iconSize: 20,
-                            buttonHeight: 40,
-                            buttonWidth: 200,
-                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-                            dropdownDecoration: BoxDecoration(
-                              // color: Colors
-                              //     .amber,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: Colors.white, width: 1),
-                            ),
-                            items: [
-                              for (int item = 1; item < 13; item++)
-                                DropdownMenuItem<String>(
-                                  value: '${item}',
-                                  child: Text(
-                                    '${monthsInThai[item - 1]}',
-                                    //'${item}',
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      overflow: TextOverflow.ellipsis,
-                                      fontSize: 14,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                )
-                            ],
-
-                            onChanged: (value) async {
-                              Mon_transMeter_Mon = value;
-
-                              // if (Value_Chang_Zone_Income !=
-                              //     null) {
-                              //   red_Trans_billIncome();
-                              //   red_Trans_billMovemen();
-                              // }
-                            },
-                          ),
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'ปี :',
-                          style: TextStyle(
-                            color: ReportScreen_Color.Colors_Text2_,
-                            // fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10)),
-                            // border: Border.all(color: Colors.grey, width: 1),
-                          ),
-                          width: 120,
-                          padding: const EdgeInsets.all(8.0),
-                          child: DropdownButtonFormField2(
-                            alignment: Alignment.center,
-                            focusColor: Colors.white,
-                            autofocus: false,
-                            decoration: InputDecoration(
-                              floatingLabelAlignment:
-                                  FloatingLabelAlignment.center,
-                              enabled: true,
-                              hoverColor: Colors.brown,
-                              prefixIconColor: Colors.blue,
-                              fillColor: Colors.white.withOpacity(0.05),
-                              filled: false,
-                              isDense: true,
-                              contentPadding: EdgeInsets.zero,
-                              border: OutlineInputBorder(
-                                borderSide: const BorderSide(color: Colors.red),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              focusedBorder: const OutlineInputBorder(
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(10),
-                                  topLeft: Radius.circular(10),
-                                  bottomRight: Radius.circular(10),
-                                  bottomLeft: Radius.circular(10),
-                                ),
-                                borderSide: BorderSide(
-                                  width: 1,
-                                  color: Color.fromARGB(255, 231, 227, 227),
-                                ),
-                              ),
-                            ),
-                            isExpanded: false,
-                            value:
-                                (Ser_BodySta1 != 2) ? null : YE_transMeter_Mon,
-                            // hint: Text(
-                            //   YE_Income == null
-                            //       ? 'เลือก'
-                            //       : '$YE_Income',
-                            //   maxLines: 2,
-                            //   textAlign: TextAlign.center,
-                            //   style: const TextStyle(
-                            //     overflow:
-                            //         TextOverflow.ellipsis,
-                            //     fontSize: 14,
-                            //     color: Colors.grey,
-                            //   ),
-                            // ),
-                            icon: const Icon(
-                              Icons.arrow_drop_down,
-                              color: Colors.black,
-                            ),
-                            style: const TextStyle(
-                              color: Colors.grey,
-                            ),
-                            iconSize: 20,
-                            buttonHeight: 40,
-                            buttonWidth: 200,
-                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-                            dropdownDecoration: BoxDecoration(
-                              // color: Colors
-                              //     .amber,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: Colors.white, width: 1),
-                            ),
-                            items: YE_Th.map((item) => DropdownMenuItem<String>(
-                                  value: '${item}',
-                                  child: Text(
-                                    '${item}',
-                                    // '${int.parse(item) + 543}',
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      overflow: TextOverflow.ellipsis,
-                                      fontSize: 14,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                )).toList(),
-
-                            onChanged: (value) async {
-                              YE_transMeter_Mon = value;
-
-                              // if (Value_Chang_Zone_Income !=
-                              //     null) {
-                              //   red_Trans_billIncome();
-                              //   red_Trans_billMovemen();
-                              // }
-                            },
-                          ),
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'โซน :',
-                          style: TextStyle(
-                            color: ReportScreen_Color.Colors_Text2_,
-                            // fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10)),
-                            // border: Border.all(color: Colors.grey, width: 1),
-                          ),
-                          width: 260,
-                          padding: const EdgeInsets.all(8.0),
-                          child: DropdownButtonFormField2(
-                            value: (Ser_BodySta1 != 2)
-                                ? null
-                                : zone_name_transMeter,
-                            alignment: Alignment.center,
-                            focusColor: Colors.white,
-                            autofocus: false,
-                            decoration: InputDecoration(
-                              enabled: true,
-                              hoverColor: Colors.brown,
-                              prefixIconColor: Colors.blue,
-                              fillColor: Colors.white.withOpacity(0.05),
-                              filled: false,
-                              isDense: true,
-                              contentPadding: EdgeInsets.zero,
-                              border: OutlineInputBorder(
-                                borderSide: const BorderSide(color: Colors.red),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              focusedBorder: const OutlineInputBorder(
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(10),
-                                  topLeft: Radius.circular(10),
-                                  bottomRight: Radius.circular(10),
-                                  bottomLeft: Radius.circular(10),
-                                ),
-                                borderSide: BorderSide(
-                                  width: 1,
-                                  color: Color.fromARGB(255, 231, 227, 227),
-                                ),
-                              ),
-                            ),
-                            isExpanded: false,
-
-                            icon: const Icon(
-                              Icons.arrow_drop_down,
-                              color: Colors.black,
-                            ),
-                            style: const TextStyle(
-                              color: Colors.grey,
-                            ),
-                            iconSize: 20,
-                            buttonHeight: 40,
-                            buttonWidth: 250,
-                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-                            dropdownDecoration: BoxDecoration(
-                              // color: Colors
-                              //     .amber,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: Colors.white, width: 1),
-                            ),
-                            items: zoneModels_report
-                                .map((item) => DropdownMenuItem<String>(
-                                      value: '${item.zn}',
-                                      child: Text(
-                                        '${item.zn}',
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                          overflow: TextOverflow.ellipsis,
-                                          fontSize: 14,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                    ))
-                                .toList(),
-
-                            onChanged: (value) async {
-                              int selectedIndex = zoneModels_report
-                                  .indexWhere((item) => item.zn == value);
-
-                              setState(() {
-                                zone_name_transMeter = value!;
-                                zone_ser_transMeter =
-                                    zoneModels_report[selectedIndex].ser!;
-                              });
-                              print(
-                                  'Selected Index: $zone_name_transMeter  //${zone_ser_transMeter}');
-                            },
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: InkWell(
-                          onTap: () async {
-                            setState(() {
-                              Ser_BodySta1 = 2;
-                            });
-
-                            if (Mon_transMeter_Mon != null &&
-                                YE_transMeter_Mon != null &&
-                                zone_name_transMeter != null &&
-                                Ser_BodySta1 == 2) {
-                              setState(() {
-                                Await_Status_Report2 = 0;
-                              });
-                              Dia_log();
-                              red_Trans_bill();
-                            }
-                          },
-                          child: Container(
-                              width: 100,
-                              padding: const EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                color: Colors.green[700],
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'ค้นหา',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                  ),
-                                ),
-                              )),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    InkWell(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.yellow[600],
-                            borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10)),
-                            border: Border.all(color: Colors.grey, width: 1),
-                          ),
-                          padding: const EdgeInsets.all(8.0),
-                          child: const Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'เรียกดู',
-                                  style: TextStyle(
-                                    color: ReportScreen_Color.Colors_Text1_,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.navigate_next,
-                                  color: Colors.grey,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        onTap: (transMeterModels.isEmpty ||
-                                zone_name_transMeter == null ||
-                                Ser_BodySta1 == 1)
-                            ? null
-                            : () async {
-                                Electric_Widget();
-                                // Insert_log.Insert_logs(
-                                //     'รายงาน', 'กดดูรายงานการแจ้งซ่อม');
-                                // RE_maintenance_Widget();
-                              }),
-                    (Ser_BodySta1 != 2)
-                        ? Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'รายงานมิเตอร์น้ำ',
-                              style: TextStyle(
-                                color: ReportScreen_Color.Colors_Text2_,
-                                // fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T,
-                              ),
-                            ),
-                          )
-                        : (transMeterModels.isEmpty)
+                        // (Ser_BodySta1 != 1)
+                        //     ? Padding(
+                        //         padding: EdgeInsets.all(8.0),
+                        //         child: Text(
+                        //           'รายงานมิเตอร์น้ำ-ไฟฟ้า',
+                        //           style: TextStyle(
+                        //             color: ReportScreen_Color.Colors_Text2_,
+                        //             // fontWeight: FontWeight.bold,
+                        //             fontFamily: Font_.Fonts_T,
+                        //           ),
+                        //         ),
+                        //       )
+                        //     :
+                        (transMeterModels.isEmpty)
                             ? Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
                                   (Status_transMeter_ != null &&
                                           transMeterModels.isEmpty &&
                                           zone_name_transMeter != null &&
-                                          Await_Status_Report1 != null &&
-                                          Ser_BodySta1 != 1)
-                                      ? 'รายงานมิเตอร์น้ำ (ไม่พบข้อมูล ✖️)'
-                                      : 'รายงานมิเตอร์น้ำ',
+                                          Await_Status_Report2 != null)
+                                      ? (expSZ_name != null &&
+                                              expSZ_name.toString().trim() !=
+                                                  'ทั้งหมด')
+                                          ? 'รายงาน $expSZ_name (ไม่พบข้อมูล ✖️)'
+                                          : 'รายงาน [${expSZModels.where((model) => model.ser.toString() != '0').map((model) => model.expname).join(',')} ] (ไม่พบข้อมูล ✖️)'
+                                      : (expSZ_name != null &&
+                                              expSZ_name.toString().trim() !=
+                                                  'ทั้งหมด')
+                                          ? 'รายงาน $expSZ_name'
+                                          : 'รายงาน [${expSZModels.where((model) => model.ser.toString() != '0').map((model) => model.expname).join(',')} ]',
                                   style: const TextStyle(
                                     color: ReportScreen_Color.Colors_Text2_,
                                     // fontWeight: FontWeight.bold,
@@ -1621,8 +1247,7 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                 ),
                               )
                             : (transMeterModels.length != 0 &&
-                                    Await_Status_Report1 != null &&
-                                    Ser_BodySta1 == 2)
+                                    Await_Status_Report1 != null)
                                 ? SizedBox(
                                     // height: 20,
                                     child: Row(
@@ -1631,11 +1256,17 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                           padding: const EdgeInsets.all(4.0),
                                           child:
                                               const CircularProgressIndicator()),
-                                      const Padding(
-                                        padding: EdgeInsets.all(8.0),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
                                         child: Text(
-                                          'กำลังโหลดรายงานมิเตอร์น้ำ...',
-                                          style: TextStyle(
+                                          (expSZ_name != null &&
+                                                  expSZ_name
+                                                          .toString()
+                                                          .trim() !=
+                                                      'ทั้งหมด')
+                                              ? 'กำลังโหลดรายงาน $expSZ_name...'
+                                              : 'กำลังโหลดรายงาน [${expSZModels.where((model) => model.ser.toString() != '0').map((model) => model.expname).join(',')} ]...',
+                                          style: const TextStyle(
                                             color: ReportScreen_Color
                                                 .Colors_Text2_,
                                             // fontWeight: FontWeight.bold,
@@ -1645,20 +1276,554 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                       ),
                                     ],
                                   ))
-                                : const Padding(
-                                    padding: EdgeInsets.all(8.0),
+                                : Padding(
+                                    padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      'รายงานมิเตอร์น้ำ ✔️',
-                                      style: TextStyle(
+                                      (expSZ_name != null &&
+                                              expSZ_name.toString().trim() !=
+                                                  'ทั้งหมด')
+                                          ? 'รายงาน $expSZ_name ✔️'
+                                          : 'รายงาน [${expSZModels.where((model) => model.ser.toString() != '0').map((model) => model.expname).join(',')} ]✔️',
+                                      style: const TextStyle(
                                         color: ReportScreen_Color.Colors_Text2_,
                                         // fontWeight: FontWeight.bold,
                                         fontFamily: Font_.Fonts_T,
                                       ),
                                     ),
                                   ),
-                  ],
+                      ],
+                    ),
+                  ),
                 ),
               ),
+              // const SizedBox(
+              //   height: 5.0,
+              // ),
+              // Row(
+              //   children: [
+              //     Container(
+              //       width: MediaQuery.of(context).size.width / 2,
+              //       height: 4.0,
+              //       child: Divider(
+              //         color: Colors.grey[300],
+              //         height: 4.0,
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              // const SizedBox(
+              //   height: 5.0,
+              // ),
+              // ScrollConfiguration(
+              //   behavior:
+              //       ScrollConfiguration.of(context).copyWith(dragDevices: {
+              //     PointerDeviceKind.touch,
+              //     PointerDeviceKind.mouse,
+              //   }),
+              //   child: SingleChildScrollView(
+              //     scrollDirection: Axis.horizontal,
+              //     child: Row(
+              //       children: [
+              //         const Padding(
+              //           padding: EdgeInsets.all(8.0),
+              //           child: Text(
+              //             'เดือน :',
+              //             style: TextStyle(
+              //               color: ReportScreen_Color.Colors_Text2_,
+              //               // fontWeight: FontWeight.bold,
+              //               fontFamily: Font_.Fonts_T,
+              //             ),
+              //           ),
+              //         ),
+              //         Padding(
+              //           padding: const EdgeInsets.all(8.0),
+              //           child: Container(
+              //             decoration: const BoxDecoration(
+              //               color: AppbackgroundColor.Sub_Abg_Colors,
+              //               borderRadius: BorderRadius.only(
+              //                   topLeft: Radius.circular(10),
+              //                   topRight: Radius.circular(10),
+              //                   bottomLeft: Radius.circular(10),
+              //                   bottomRight: Radius.circular(10)),
+              //               // border: Border.all(color: Colors.grey, width: 1),
+              //             ),
+              //             width: 120,
+              //             padding: const EdgeInsets.all(8.0),
+              //             child: DropdownButtonFormField2(
+              //               alignment: Alignment.center,
+              //               focusColor: Colors.white,
+              //               autofocus: false,
+              //               decoration: InputDecoration(
+              //                 floatingLabelAlignment:
+              //                     FloatingLabelAlignment.center,
+              //                 enabled: true,
+              //                 hoverColor: Colors.brown,
+              //                 prefixIconColor: Colors.blue,
+              //                 fillColor: Colors.white.withOpacity(0.05),
+              //                 filled: false,
+              //                 isDense: true,
+              //                 contentPadding: EdgeInsets.zero,
+              //                 border: OutlineInputBorder(
+              //                   borderSide: const BorderSide(color: Colors.red),
+              //                   borderRadius: BorderRadius.circular(10),
+              //                 ),
+              //                 focusedBorder: const OutlineInputBorder(
+              //                   borderRadius: BorderRadius.only(
+              //                     topRight: Radius.circular(10),
+              //                     topLeft: Radius.circular(10),
+              //                     bottomRight: Radius.circular(10),
+              //                     bottomLeft: Radius.circular(10),
+              //                   ),
+              //                   borderSide: BorderSide(
+              //                     width: 1,
+              //                     color: Color.fromARGB(255, 231, 227, 227),
+              //                   ),
+              //                 ),
+              //               ),
+              //               isExpanded: false,
+              //               value:
+              //                   (Ser_BodySta1 != 2) ? null : Mon_transMeter_Mon,
+              //               // hint: Text(
+              //               //   Mon_Income == null
+              //               //       ? 'เลือก'
+              //               //       : '$Mon_Income',
+              //               //   maxLines: 2,
+              //               //   textAlign: TextAlign.center,
+              //               //   style: const TextStyle(
+              //               //     overflow:
+              //               //         TextOverflow.ellipsis,
+              //               //     fontSize: 14,
+              //               //     color: Colors.grey,
+              //               //   ),
+              //               // ),
+              //               icon: const Icon(
+              //                 Icons.arrow_drop_down,
+              //                 color: Colors.black,
+              //               ),
+              //               style: const TextStyle(
+              //                 color: Colors.grey,
+              //               ),
+              //               iconSize: 20,
+              //               buttonHeight: 40,
+              //               buttonWidth: 200,
+              //               // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+              //               dropdownDecoration: BoxDecoration(
+              //                 // color: Colors
+              //                 //     .amber,
+              //                 borderRadius: BorderRadius.circular(10),
+              //                 border: Border.all(color: Colors.white, width: 1),
+              //               ),
+              //               items: [
+              //                 for (int item = 1; item < 13; item++)
+              //                   DropdownMenuItem<String>(
+              //                     value: '${item}',
+              //                     child: Text(
+              //                       '${monthsInThai[item - 1]}',
+              //                       //'${item}',
+              //                       textAlign: TextAlign.center,
+              //                       style: const TextStyle(
+              //                         overflow: TextOverflow.ellipsis,
+              //                         fontSize: 14,
+              //                         color: Colors.grey,
+              //                       ),
+              //                     ),
+              //                   )
+              //               ],
+
+              //               onChanged: (value) async {
+              //                 Mon_transMeter_Mon = value;
+
+              //                 // if (Value_Chang_Zone_Income !=
+              //                 //     null) {
+              //                 //   red_Trans_billIncome();
+              //                 //   red_Trans_billMovemen();
+              //                 // }
+              //               },
+              //             ),
+              //           ),
+              //         ),
+              //         const Padding(
+              //           padding: EdgeInsets.all(8.0),
+              //           child: Text(
+              //             'ปี :',
+              //             style: TextStyle(
+              //               color: ReportScreen_Color.Colors_Text2_,
+              //               // fontWeight: FontWeight.bold,
+              //               fontFamily: Font_.Fonts_T,
+              //             ),
+              //           ),
+              //         ),
+              //         Padding(
+              //           padding: const EdgeInsets.all(8.0),
+              //           child: Container(
+              //             decoration: const BoxDecoration(
+              //               color: AppbackgroundColor.Sub_Abg_Colors,
+              //               borderRadius: BorderRadius.only(
+              //                   topLeft: Radius.circular(10),
+              //                   topRight: Radius.circular(10),
+              //                   bottomLeft: Radius.circular(10),
+              //                   bottomRight: Radius.circular(10)),
+              //               // border: Border.all(color: Colors.grey, width: 1),
+              //             ),
+              //             width: 120,
+              //             padding: const EdgeInsets.all(8.0),
+              //             child: DropdownButtonFormField2(
+              //               alignment: Alignment.center,
+              //               focusColor: Colors.white,
+              //               autofocus: false,
+              //               decoration: InputDecoration(
+              //                 floatingLabelAlignment:
+              //                     FloatingLabelAlignment.center,
+              //                 enabled: true,
+              //                 hoverColor: Colors.brown,
+              //                 prefixIconColor: Colors.blue,
+              //                 fillColor: Colors.white.withOpacity(0.05),
+              //                 filled: false,
+              //                 isDense: true,
+              //                 contentPadding: EdgeInsets.zero,
+              //                 border: OutlineInputBorder(
+              //                   borderSide: const BorderSide(color: Colors.red),
+              //                   borderRadius: BorderRadius.circular(10),
+              //                 ),
+              //                 focusedBorder: const OutlineInputBorder(
+              //                   borderRadius: BorderRadius.only(
+              //                     topRight: Radius.circular(10),
+              //                     topLeft: Radius.circular(10),
+              //                     bottomRight: Radius.circular(10),
+              //                     bottomLeft: Radius.circular(10),
+              //                   ),
+              //                   borderSide: BorderSide(
+              //                     width: 1,
+              //                     color: Color.fromARGB(255, 231, 227, 227),
+              //                   ),
+              //                 ),
+              //               ),
+              //               isExpanded: false,
+              //               value:
+              //                   (Ser_BodySta1 != 2) ? null : YE_transMeter_Mon,
+              //               // hint: Text(
+              //               //   YE_Income == null
+              //               //       ? 'เลือก'
+              //               //       : '$YE_Income',
+              //               //   maxLines: 2,
+              //               //   textAlign: TextAlign.center,
+              //               //   style: const TextStyle(
+              //               //     overflow:
+              //               //         TextOverflow.ellipsis,
+              //               //     fontSize: 14,
+              //               //     color: Colors.grey,
+              //               //   ),
+              //               // ),
+              //               icon: const Icon(
+              //                 Icons.arrow_drop_down,
+              //                 color: Colors.black,
+              //               ),
+              //               style: const TextStyle(
+              //                 color: Colors.grey,
+              //               ),
+              //               iconSize: 20,
+              //               buttonHeight: 40,
+              //               buttonWidth: 200,
+              //               // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+              //               dropdownDecoration: BoxDecoration(
+              //                 // color: Colors
+              //                 //     .amber,
+              //                 borderRadius: BorderRadius.circular(10),
+              //                 border: Border.all(color: Colors.white, width: 1),
+              //               ),
+              //               items: YE_Th.map((item) => DropdownMenuItem<String>(
+              //                     value: '${item}',
+              //                     child: Text(
+              //                       '${item}',
+              //                       // '${int.parse(item) + 543}',
+              //                       textAlign: TextAlign.center,
+              //                       style: const TextStyle(
+              //                         overflow: TextOverflow.ellipsis,
+              //                         fontSize: 14,
+              //                         color: Colors.grey,
+              //                       ),
+              //                     ),
+              //                   )).toList(),
+
+              //               onChanged: (value) async {
+              //                 YE_transMeter_Mon = value;
+
+              //                 // if (Value_Chang_Zone_Income !=
+              //                 //     null) {
+              //                 //   red_Trans_billIncome();
+              //                 //   red_Trans_billMovemen();
+              //                 // }
+              //               },
+              //             ),
+              //           ),
+              //         ),
+              //         const Padding(
+              //           padding: EdgeInsets.all(8.0),
+              //           child: Text(
+              //             'โซน :',
+              //             style: TextStyle(
+              //               color: ReportScreen_Color.Colors_Text2_,
+              //               // fontWeight: FontWeight.bold,
+              //               fontFamily: Font_.Fonts_T,
+              //             ),
+              //           ),
+              //         ),
+              //         Padding(
+              //           padding: const EdgeInsets.all(8.0),
+              //           child: Container(
+              //             decoration: const BoxDecoration(
+              //               color: AppbackgroundColor.Sub_Abg_Colors,
+              //               borderRadius: BorderRadius.only(
+              //                   topLeft: Radius.circular(10),
+              //                   topRight: Radius.circular(10),
+              //                   bottomLeft: Radius.circular(10),
+              //                   bottomRight: Radius.circular(10)),
+              //               // border: Border.all(color: Colors.grey, width: 1),
+              //             ),
+              //             width: 260,
+              //             padding: const EdgeInsets.all(8.0),
+              //             child: DropdownButtonFormField2(
+              //               value: (Ser_BodySta1 != 2)
+              //                   ? null
+              //                   : zone_name_transMeter,
+              //               alignment: Alignment.center,
+              //               focusColor: Colors.white,
+              //               autofocus: false,
+              //               decoration: InputDecoration(
+              //                 enabled: true,
+              //                 hoverColor: Colors.brown,
+              //                 prefixIconColor: Colors.blue,
+              //                 fillColor: Colors.white.withOpacity(0.05),
+              //                 filled: false,
+              //                 isDense: true,
+              //                 contentPadding: EdgeInsets.zero,
+              //                 border: OutlineInputBorder(
+              //                   borderSide: const BorderSide(color: Colors.red),
+              //                   borderRadius: BorderRadius.circular(10),
+              //                 ),
+              //                 focusedBorder: const OutlineInputBorder(
+              //                   borderRadius: BorderRadius.only(
+              //                     topRight: Radius.circular(10),
+              //                     topLeft: Radius.circular(10),
+              //                     bottomRight: Radius.circular(10),
+              //                     bottomLeft: Radius.circular(10),
+              //                   ),
+              //                   borderSide: BorderSide(
+              //                     width: 1,
+              //                     color: Color.fromARGB(255, 231, 227, 227),
+              //                   ),
+              //                 ),
+              //               ),
+              //               isExpanded: false,
+
+              //               icon: const Icon(
+              //                 Icons.arrow_drop_down,
+              //                 color: Colors.black,
+              //               ),
+              //               style: const TextStyle(
+              //                 color: Colors.grey,
+              //               ),
+              //               iconSize: 20,
+              //               buttonHeight: 40,
+              //               buttonWidth: 250,
+              //               // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+              //               dropdownDecoration: BoxDecoration(
+              //                 // color: Colors
+              //                 //     .amber,
+              //                 borderRadius: BorderRadius.circular(10),
+              //                 border: Border.all(color: Colors.white, width: 1),
+              //               ),
+              //               items: zoneModels_report
+              //                   .map((item) => DropdownMenuItem<String>(
+              //                         value: '${item.zn}',
+              //                         child: Text(
+              //                           '${item.zn}',
+              //                           textAlign: TextAlign.center,
+              //                           style: const TextStyle(
+              //                             overflow: TextOverflow.ellipsis,
+              //                             fontSize: 14,
+              //                             color: Colors.grey,
+              //                           ),
+              //                         ),
+              //                       ))
+              //                   .toList(),
+
+              //               onChanged: (value) async {
+              //                 int selectedIndex = zoneModels_report
+              //                     .indexWhere((item) => item.zn == value);
+
+              //                 setState(() {
+              //                   zone_name_transMeter = value!;
+              //                   zone_ser_transMeter =
+              //                       zoneModels_report[selectedIndex].ser!;
+              //                 });
+              //                 print(
+              //                     'Selected Index: $zone_name_transMeter  //${zone_ser_transMeter}');
+              //               },
+              //             ),
+              //           ),
+              //         ),
+              //         Padding(
+              //           padding: const EdgeInsets.all(8.0),
+              //           child: InkWell(
+              //             onTap: () async {
+              //               setState(() {
+              //                 Ser_BodySta1 = 2;
+              //               });
+
+              //               if (Mon_transMeter_Mon != null &&
+              //                   YE_transMeter_Mon != null &&
+              //                   zone_name_transMeter != null &&
+              //                   Ser_BodySta1 == 2) {
+              //                 setState(() {
+              //                   Await_Status_Report2 = 0;
+              //                 });
+              //                 Dia_log();
+              //                 red_Trans_bill();
+              //               }
+              //             },
+              //             child: Container(
+              //                 width: 100,
+              //                 padding: const EdgeInsets.all(8.0),
+              //                 decoration: BoxDecoration(
+              //                   color: Colors.green[700],
+              //                   borderRadius: const BorderRadius.only(
+              //                       topLeft: Radius.circular(10),
+              //                       topRight: Radius.circular(10),
+              //                       bottomLeft: Radius.circular(10),
+              //                       bottomRight: Radius.circular(10)),
+              //                 ),
+              //                 child: Center(
+              //                   child: Text(
+              //                     'ค้นหา',
+              //                     style: TextStyle(
+              //                       color: Colors.white,
+              //                       fontWeight: FontWeight.bold,
+              //                       fontFamily: FontWeight_.Fonts_T,
+              //                     ),
+              //                   ),
+              //                 )),
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: Row(
+              //     children: [
+              //       InkWell(
+              //           child: Container(
+              //             decoration: BoxDecoration(
+              //               color: Colors.yellow[600],
+              //               borderRadius: const BorderRadius.only(
+              //                   topLeft: Radius.circular(10),
+              //                   topRight: Radius.circular(10),
+              //                   bottomLeft: Radius.circular(10),
+              //                   bottomRight: Radius.circular(10)),
+              //               border: Border.all(color: Colors.grey, width: 1),
+              //             ),
+              //             padding: const EdgeInsets.all(8.0),
+              //             child: const Center(
+              //               child: Row(
+              //                 mainAxisAlignment: MainAxisAlignment.center,
+              //                 children: [
+              //                   Text(
+              //                     'เรียกดู',
+              //                     style: TextStyle(
+              //                       color: ReportScreen_Color.Colors_Text1_,
+              //                       fontWeight: FontWeight.bold,
+              //                       fontFamily: FontWeight_.Fonts_T,
+              //                     ),
+              //                   ),
+              //                   Icon(
+              //                     Icons.navigate_next,
+              //                     color: Colors.grey,
+              //                   )
+              //                 ],
+              //               ),
+              //             ),
+              //           ),
+              //           onTap: (transMeterModels.isEmpty ||
+              //                   zone_name_transMeter == null ||
+              //                   Ser_BodySta1 == 1)
+              //               ? null
+              //               : () async {
+              //                   Electric_Widget();
+              //                   // Insert_log.Insert_logs(
+              //                   //     'รายงาน', 'กดดูรายงานการแจ้งซ่อม');
+              //                   // RE_maintenance_Widget();
+              //                 }),
+              //       (Ser_BodySta1 != 2)
+              //           ? Padding(
+              //               padding: EdgeInsets.all(8.0),
+              //               child: Text(
+              //                 'รายงานมิเตอร์น้ำ',
+              //                 style: TextStyle(
+              //                   color: ReportScreen_Color.Colors_Text2_,
+              //                   // fontWeight: FontWeight.bold,
+              //                   fontFamily: Font_.Fonts_T,
+              //                 ),
+              //               ),
+              //             )
+              //           : (transMeterModels.isEmpty)
+              //               ? Padding(
+              //                   padding: const EdgeInsets.all(8.0),
+              //                   child: Text(
+              //                     (Status_transMeter_ != null &&
+              //                             transMeterModels.isEmpty &&
+              //                             zone_name_transMeter != null &&
+              //                             Await_Status_Report1 != null &&
+              //                             Ser_BodySta1 != 1)
+              //                         ? 'รายงานมิเตอร์น้ำ (ไม่พบข้อมูล ✖️)'
+              //                         : 'รายงานมิเตอร์น้ำ',
+              //                     style: const TextStyle(
+              //                       color: ReportScreen_Color.Colors_Text2_,
+              //                       // fontWeight: FontWeight.bold,
+              //                       fontFamily: Font_.Fonts_T,
+              //                     ),
+              //                   ),
+              //                 )
+              //               : (transMeterModels.length != 0 &&
+              //                       Await_Status_Report1 != null &&
+              //                       Ser_BodySta1 == 2)
+              //                   ? SizedBox(
+              //                       // height: 20,
+              //                       child: Row(
+              //                       children: [
+              //                         Container(
+              //                             padding: const EdgeInsets.all(4.0),
+              //                             child:
+              //                                 const CircularProgressIndicator()),
+              //                         const Padding(
+              //                           padding: EdgeInsets.all(8.0),
+              //                           child: Text(
+              //                             'กำลังโหลดรายงานมิเตอร์น้ำ...',
+              //                             style: TextStyle(
+              //                               color: ReportScreen_Color
+              //                                   .Colors_Text2_,
+              //                               // fontWeight: FontWeight.bold,
+              //                               fontFamily: Font_.Fonts_T,
+              //                             ),
+              //                           ),
+              //                         ),
+              //                       ],
+              //                     ))
+              //                   : const Padding(
+              //                       padding: EdgeInsets.all(8.0),
+              //                       child: Text(
+              //                         'รายงานมิเตอร์น้ำ ✔️',
+              //                         style: TextStyle(
+              //                           color: ReportScreen_Color.Colors_Text2_,
+              //                           // fontWeight: FontWeight.bold,
+              //                           fontFamily: Font_.Fonts_T,
+              //                         ),
+              //                       ),
+              //                     ),
+              //     ],
+              //   ),
+              // ),
               const SizedBox(
                 height: 5.0,
               ),
@@ -1829,8 +1994,8 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                 zone_ser_teNant_Daily =
                                     zoneModels_report[selectedIndex].ser!;
                               });
-                              print(
-                                  'Selected Index: $zone_name_teNant_Daily  //${zone_ser_teNant_Daily}');
+                              // print(
+                              //     'Selected Index: $zone_name_teNant_Daily  //${zone_ser_teNant_Daily}');
                             },
                           ),
                         ),
@@ -1859,7 +2024,7 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                     bottomLeft: Radius.circular(10),
                                     bottomRight: Radius.circular(10)),
                               ),
-                              child: Center(
+                              child: const Center(
                                 child: Text(
                                   'ค้นหา',
                                   style: TextStyle(
@@ -1931,7 +2096,7 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                   }
                                 : null),
                         (Ser_BodyOverdue != 1)
-                            ? Padding(
+                            ? const Padding(
                                 padding: EdgeInsets.all(8.0),
                                 child: Text(
                                   'รายงานค้างชำระรายวัน',
@@ -2152,8 +2317,8 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                 zone_ser_teNant_All =
                                     zoneModels_report[selectedIndex].ser!;
                               });
-                              print(
-                                  'Selected Index: $zone_name_teNant_All  //${zone_ser_teNant_All}');
+                              // print(
+                              //     'Selected Index: $zone_name_teNant_All  //${zone_ser_teNant_All}');
                             },
                           ),
                         ),
@@ -2181,7 +2346,7 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                     bottomLeft: Radius.circular(10),
                                     bottomRight: Radius.circular(10)),
                               ),
-                              child: Center(
+                              child: const Center(
                                 child: Text(
                                   'ค้นหา',
                                   style: TextStyle(
@@ -2253,7 +2418,7 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                   }
                                 : null),
                         (Ser_BodyOverdue != 2)
-                            ? Padding(
+                            ? const Padding(
                                 padding: EdgeInsets.all(8.0),
                                 child: Text(
                                   'รายงานค้างชำระทั้งหมด',
@@ -2332,7 +2497,7 @@ class _ReportScreen8State extends State<ReportScreen8> {
         barrierDismissible: false,
         context: context,
         builder: (_) {
-          Timer(Duration(milliseconds: 3600), () {
+          Timer(const Duration(milliseconds: 3600), () {
             Navigator.of(context).pop();
           });
           return Dialog(
@@ -2385,27 +2550,45 @@ class _ReportScreen8State extends State<ReportScreen8> {
             children: [
               //Mon_transMeter_Mon  YE_transMeter_Mon
               Center(
-                  child: (Ser_BodySta1 == 1)
-                      ? Text(
-                          (zone_name_transMeter == null)
-                              ? 'รายงานมิเตอร์ไฟฟ้า (กรุณาเลือกโซน)'
-                              : 'รายงานมิเตอร์ไฟฟ้า (โซน : $zone_name_transMeter) ',
-                          style: const TextStyle(
-                            color: ReportScreen_Color.Colors_Text1_,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: FontWeight_.Fonts_T,
-                          ),
-                        )
-                      : Text(
-                          (zone_name_transMeter == null)
-                              ? 'รายงานมิเตอร์น้ำ (กรุณาเลือกโซน)'
-                              : 'รายงานมิเตอร์น้ำ (โซน : $zone_name_transMeter) ',
-                          style: const TextStyle(
-                            color: ReportScreen_Color.Colors_Text1_,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: FontWeight_.Fonts_T,
-                          ),
-                        )),
+                  child: Text(
+                (zone_name_transMeter == null)
+                    ? (expSZ_name.toString().trim() != 'ทั้งหมด')
+                        ? 'รายงาน $expSZ_name (กรุณาเลือกโซน)'
+                        : 'รายงาน [${expSZModels.where((model) => model.ser.toString() != '0').map((model) => model.expname).join(',')} ]  (กรุณาเลือกโซน)'
+                    : (expSZ_name.toString().trim() != 'ทั้งหมด')
+                        ? 'รายงาน $expSZ_name  (โซน : $zone_name_transMeter)'
+                        : 'รายงาน [${expSZModels.where((model) => model.ser.toString() != '0').map((model) => model.expname).join(',')} ]  (โซน : $zone_name_transMeter)',
+                // (zone_name_transMeter == null)
+                //     ? 'รายงานมิเตอร์น้ำ-ไฟฟ้า (กรุณาเลือกโซน)'
+                //     : 'รายงานมิเตอร์น้ำ-ไฟฟ้า (โซน : $zone_name_transMeter) ',
+                style: const TextStyle(
+                  color: ReportScreen_Color.Colors_Text1_,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: FontWeight_.Fonts_T,
+                ),
+              )
+                  //  (Ser_BodySta1 == 1)
+                  //     ? Text(
+                  //         (zone_name_transMeter == null)
+                  //             ? 'รายงานมิเตอร์ไฟฟ้า (กรุณาเลือกโซน)'
+                  //             : 'รายงานมิเตอร์ไฟฟ้า (โซน : $zone_name_transMeter) ',
+                  //         style: const TextStyle(
+                  //           color: ReportScreen_Color.Colors_Text1_,
+                  //           fontWeight: FontWeight.bold,
+                  //           fontFamily: FontWeight_.Fonts_T,
+                  //         ),
+                  //       )
+                  //     : Text(
+                  //         (zone_name_transMeter == null)
+                  //             ? 'รายงานมิเตอร์น้ำ (กรุณาเลือกโซน)'
+                  //             : 'รายงานมิเตอร์น้ำ (โซน : $zone_name_transMeter) ',
+                  //         style: const TextStyle(
+                  //           color: ReportScreen_Color.Colors_Text1_,
+                  //           fontWeight: FontWeight.bold,
+                  //           fontFamily: FontWeight_.Fonts_T,
+                  //         ),
+                  //       )
+                  ),
               Row(
                 children: [
                   Expanded(
@@ -2447,7 +2630,7 @@ class _ReportScreen8State extends State<ReportScreen8> {
               Container(
                 width: MediaQuery.of(context).size.width,
                 // padding: EdgeInsets.all(10),
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     // Expanded(child: _searchBar_ChoArea()),
@@ -2502,7 +2685,7 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                   children: <Widget>[
                                     Container(
                                       // width: 1050,
-                                      decoration: const BoxDecoration(
+                                      decoration: BoxDecoration(
                                         color: AppbackgroundColor.TiTile_Colors,
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(10),
@@ -2513,7 +2696,20 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                       padding: const EdgeInsets.all(8.0),
                                       child: Row(
                                         children: [
-                                          Expanded(
+                                          const Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              'โซน',
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                color: ManageScreen_Color
+                                                    .Colors_Text1_,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: FontWeight_.Fonts_T,
+                                              ),
+                                            ),
+                                          ),
+                                          const Expanded(
                                             flex: 1,
                                             child: Text(
                                               'รหัสพื้นที่',
@@ -2526,7 +2722,7 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                               ),
                                             ),
                                           ),
-                                          Expanded(
+                                          const Expanded(
                                             flex: 1,
                                             child: Text(
                                               'เลขที่สัญญา',
@@ -2539,7 +2735,7 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                               ),
                                             ),
                                           ),
-                                          Expanded(
+                                          const Expanded(
                                             flex: 1,
                                             child: Text(
                                               'ชื่อร้านค้า',
@@ -2552,8 +2748,8 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                               ),
                                             ),
                                           ),
-                                          Expanded(
-                                            flex: 2,
+                                          const Expanded(
+                                            flex: 1,
                                             child: Text(
                                               'รายการ',
                                               textAlign: TextAlign.start,
@@ -2566,7 +2762,21 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                               ),
                                             ),
                                           ),
-                                          Expanded(
+                                          const Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              'วันที่',
+                                              textAlign: TextAlign.start,
+                                              maxLines: 1,
+                                              style: TextStyle(
+                                                color: ManageScreen_Color
+                                                    .Colors_Text1_,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: FontWeight_.Fonts_T,
+                                              ),
+                                            ),
+                                          ),
+                                          const Expanded(
                                             flex: 1,
                                             child: Text(
                                               'หมายเลขเครื่อง',
@@ -2592,9 +2802,10 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                                               .toString() ==
                                                           '')
                                                   ? 'เลขมิเตอร์เดือน(??)'
-                                                  : 'เลขมิเตอร์เดือน(${DateFormat.MMM('th_TH').format(DateTime.parse('${transMeterModels[0].date}').subtract(Duration(days: 30)))})',
+                                                  : 'เลขมิเตอร์เดือน(${DateFormat.MMM('th_TH').format(DateTime.parse('${DateFormat('yyyy').format(DateTime.parse('${transMeterModels[0].date}'))}-${(DateTime.parse('${transMeterModels[0].date}').month - 1).toString().padLeft(2, '0')}-${DateFormat('dd').format(DateTime.parse('${transMeterModels[0].date}'))} 00:00:00'))})',
+                                              // 'เลขมิเตอร์เดือน(${DateFormat.MMM('th_TH').format(DateTime.parse('${transMeterModels[0].date}'))})',
                                               textAlign: TextAlign.end,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 color: ManageScreen_Color
                                                     .Colors_Text1_,
                                                 fontWeight: FontWeight.bold,
@@ -2616,7 +2827,7 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                                   ? 'เลขมิเตอร์เดือน(??)'
                                                   : 'เลขมิเตอร์เดือน(${DateFormat.MMM('th_TH').format(DateTime.parse('${transMeterModels[0].date}'))})',
                                               textAlign: TextAlign.end,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 color: ManageScreen_Color
                                                     .Colors_Text1_,
                                                 fontWeight: FontWeight.bold,
@@ -2624,7 +2835,7 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                               ),
                                             ),
                                           ),
-                                          Expanded(
+                                          const Expanded(
                                             flex: 1,
                                             child: Text(
                                               'หน่วยที่ใช้',
@@ -2637,7 +2848,7 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                               ),
                                             ),
                                           ),
-                                          Expanded(
+                                          const Expanded(
                                             flex: 1,
                                             child: Text(
                                               'ราคาต่อหน่วย',
@@ -2650,7 +2861,7 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                               ),
                                             ),
                                           ),
-                                          Expanded(
+                                          const Expanded(
                                             flex: 1,
                                             child: Text(
                                               'รวม Vat',
@@ -2701,10 +2912,10 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                               });
                                             },
                                             title: Container(
-                                              decoration: BoxDecoration(
+                                              decoration: const BoxDecoration(
                                                 // color: Colors.green[100]!
                                                 //     .withOpacity(0.5),
-                                                border: const Border(
+                                                border: Border(
                                                   bottom: BorderSide(
                                                     color: Colors.black12,
                                                     width: 1,
@@ -2712,6 +2923,22 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                                 ),
                                               ),
                                               child: Row(children: [
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Text(
+                                                    '${transMeterModels[index].zn}',
+                                                    textAlign: TextAlign.start,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: const TextStyle(
+                                                      color: ManageScreen_Color
+                                                          .Colors_Text2_,
+                                                      // fontWeight: FontWeight.bold,
+                                                      fontFamily: Font_.Fonts_T,
+                                                      //fontSize: 10.0
+                                                    ),
+                                                  ),
+                                                ),
                                                 Expanded(
                                                   flex: 1,
                                                   child: Text(
@@ -2761,9 +2988,26 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                                   ),
                                                 ),
                                                 Expanded(
-                                                  flex: 2,
+                                                  flex: 1,
                                                   child: Text(
-                                                    '${transMeterModels[index].expname}(${DateFormat('dd-MM-yyyy').format(DateTime.parse('${transMeterModels[index].date}'))})',
+                                                    '${transMeterModels[index].expname}',
+                                                    textAlign: TextAlign.start,
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: const TextStyle(
+                                                      color: ManageScreen_Color
+                                                          .Colors_Text2_,
+                                                      // fontWeight: FontWeight.bold,
+                                                      fontFamily: Font_.Fonts_T,
+                                                      // fontSize: 12.0
+                                                    ),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Text(
+                                                    '${DateFormat('dd-MM').format(DateTime.parse('${transMeterModels[index].date}'))}-${int.parse('${DateFormat('yyyy').format(DateTime.parse('${transMeterModels[index].date}'))}') + 543}',
                                                     textAlign: TextAlign.start,
                                                     maxLines: 1,
                                                     overflow:
@@ -2845,12 +3089,20 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                                 Expanded(
                                                   flex: 1,
                                                   child: Text(
-                                                    '${nFormat.format(double.parse(transMeterModels[index].pri!))}',
-                                                    //  '${transMeterModels[index].pri}',
+                                                    transMeterModels[index]
+                                                                .ele_ty ==
+                                                            '0'
+                                                        ? '${nFormat.format(double.parse(transMeterModels[index].c_qty!))}'
+                                                        : 'อัตราพิเศษ',
                                                     textAlign: TextAlign.right,
-                                                    style: const TextStyle(
-                                                      color: ManageScreen_Color
-                                                          .Colors_Text2_,
+                                                    style: TextStyle(
+                                                      color: transMeterModels[
+                                                                      index]
+                                                                  .ele_ty ==
+                                                              '0'
+                                                          ? ManageScreen_Color
+                                                              .Colors_Text2_
+                                                          : Colors.orange,
                                                       // fontWeight:
                                                       //     FontWeight.bold,
                                                       fontFamily: Font_.Fonts_T,
@@ -2925,9 +3177,10 @@ class _ReportScreen8State extends State<ReportScreen8> {
                           ),
                           onTap: () async {
                             setState(() {
-                              Value_Report = (Ser_BodySta1 == 1)
-                                  ? 'รายงานมิเตอร์ไฟฟ้า'
-                                  : 'รายงานมิเตอร์น้ำ';
+                              Value_Report = 'รายงานมิเตอร์น้ำ-ไฟฟ้า';
+                              // Value_Report = (Ser_BodySta1 == 1)
+                              //     ? 'รายงานมิเตอร์ไฟฟ้า'
+                              //     : 'รายงานมิเตอร์น้ำ';
                               Pre_and_Dow = 'Download';
                             });
                             _showMyDialog_SAVE();
@@ -3060,7 +3313,7 @@ class _ReportScreen8State extends State<ReportScreen8> {
               Container(
                 width: MediaQuery.of(context).size.width,
                 // padding: EdgeInsets.all(10),
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     // Expanded(child: _searchBar_ChoArea()),
@@ -3115,7 +3368,7 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                   children: <Widget>[
                                     Container(
                                       // width: 1050,
-                                      decoration: const BoxDecoration(
+                                      decoration: BoxDecoration(
                                         color: AppbackgroundColor.TiTile_Colors,
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(10),
@@ -3124,7 +3377,7 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                             bottomRight: Radius.circular(0)),
                                       ),
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Row(
+                                      child: const Row(
                                         children: [
                                           Expanded(
                                             flex: 1,
@@ -3284,10 +3537,10 @@ class _ReportScreen8State extends State<ReportScreen8> {
                                               });
                                             },
                                             title: Container(
-                                              decoration: BoxDecoration(
+                                              decoration: const BoxDecoration(
                                                 // color: Colors.green[100]!
                                                 //     .withOpacity(0.5),
-                                                border: const Border(
+                                                border: Border(
                                                   bottom: BorderSide(
                                                     color: Colors.black12,
                                                     width: 1,
@@ -3918,7 +4171,7 @@ class _ReportScreen8State extends State<ReportScreen8> {
       if (_verticalGroupValue_PassW == 'PDF') {
         Navigator.of(context).pop();
       } else {
-        if (Value_Report == 'รายงานมิเตอร์ไฟฟ้า') {
+        if (Value_Report == 'รายงานมิเตอร์น้ำ-ไฟฟ้า') {
           Excgen_transMeterReport.exportExcel_transMeterReport(
               context,
               NameFile_,
@@ -3929,20 +4182,24 @@ class _ReportScreen8State extends State<ReportScreen8> {
               YE_transMeter_Mon,
               Status_transMeter_,
               zone_name_transMeter,
-              Ser_BodySta1);
-        } else if (Value_Report == 'รายงานมิเตอร์น้ำ') {
-          Excgen_transMeterReport.exportExcel_transMeterReport(
-              context,
-              NameFile_,
-              _verticalGroupValue_NameFile,
-              renTal_name,
-              transMeterModels,
-              Mon_transMeter_Mon,
-              YE_transMeter_Mon,
-              Status_transMeter_,
-              zone_name_transMeter,
-              Ser_BodySta1);
-        } else if (Value_Report == 'รายงานค้างชำระรายวัน') {
+              Ser_BodySta1,
+              expSZ_name,
+              expSZModels);
+        }
+        // else if (Value_Report == 'รายงานมิเตอร์น้ำ') {
+        //   Excgen_transMeterReport.exportExcel_transMeterReport(
+        //       context,
+        //       NameFile_,
+        //       _verticalGroupValue_NameFile,
+        //       renTal_name,
+        //       transMeterModels,
+        //       Mon_transMeter_Mon,
+        //       YE_transMeter_Mon,
+        //       Status_transMeter_,
+        //       zone_name_transMeter,
+        //       Ser_BodySta1);
+        // }
+        else if (Value_Report == 'รายงานค้างชำระรายวัน') {
           Excgen_OverdueReport.exportExcel_overdueReport(
               context,
               NameFile_,

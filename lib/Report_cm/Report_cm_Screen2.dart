@@ -109,7 +109,7 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       // Map<String, dynamic> map = Map();
       // map['ser'] = '0';
       // map['rser'] = '0';
@@ -171,7 +171,7 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
 
       for (var map in result) {
         ZoneModel zoneModel = ZoneModel.fromJson(map);
@@ -201,7 +201,7 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           ExpModel expModel = ExpModel.fromJson(map);
@@ -230,7 +230,7 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result.toString() != 'null') {
         for (var map in result) {
           TransReBillModelRECM transReBillModel =
@@ -241,7 +241,7 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
           });
         }
 
-        print('result ${_TransReBillModels_GropType_Mon.length}');
+        // print('result ${_TransReBillModels_GropType_Mon.length}');
       }
     } catch (e) {}
   }
@@ -261,7 +261,7 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result.toString() != 'null') {
         for (var map in result) {
           TransReBillModelRECM transReBillModel =
@@ -272,7 +272,7 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
           });
         }
 
-        print('result ${_TransReBillModels_GropType_Sub_zone.length}');
+        // print('result ${_TransReBillModels_GropType_Sub_zone.length}');
       }
     } catch (e) {}
   }
@@ -857,7 +857,7 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result.toString() != 'null') {
         for (var map in result) {
           TransReBillModelRECM transReBillModel =
@@ -868,7 +868,7 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
           });
         }
 
-        print('result ${_TransReBillModels_GropType_Mon.length}');
+        // print('result ${_TransReBillModels_GropType_Mon.length}');
       }
     } catch (e) {}
   }
@@ -888,7 +888,7 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result.toString() != 'null') {
         for (var map in result) {
           TransReBillModelRECM transReBillModel =
@@ -899,7 +899,7 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
           });
         }
 
-        print('result ${_TransReBillModels_GropType_Sub_zone.length}');
+        // print('result ${_TransReBillModels_GropType_Sub_zone.length}');
       }
     } catch (e) {}
   }
@@ -989,7 +989,7 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
           DateFormat('dd-MM-yyyy').parse('$Value_selectDate_Daily_Type_');
       var LDate = DateFormat('dd-MM-yyyy').parse('$result');
       if (picked != null) {
-        print('LDate is before SDate');
+        // print('LDate is before SDate');
         // TransReBillModels = [];
 
         var formatter = DateFormat('y-MM-d');
@@ -1766,7 +1766,7 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
                               children: [
                                 Container(
                                   // width: 1050,
-                                  decoration: const BoxDecoration(
+                                  decoration:  BoxDecoration(
                                     color: AppbackgroundColor.TiTile_Colors,
                                     borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(10),
@@ -3554,7 +3554,7 @@ class _Report_cm_Screen2State extends State<Report_cm_Screen2> {
                               children: [
                                 Container(
                                   // width: 1050,
-                                  decoration: const BoxDecoration(
+                                  decoration:  BoxDecoration(
                                     color: AppbackgroundColor.TiTile_Colors,
                                     borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(10),

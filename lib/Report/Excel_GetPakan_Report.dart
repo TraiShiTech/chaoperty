@@ -222,14 +222,15 @@ class Excgen_GetPakanReport {
     sheet.getRangeByName('K4').columnWidth = 18;
 
     sheet.getRangeByName('A4').setText('ลำดับ');
-    sheet.getRangeByName('B4').setText('โซน');
+    sheet.getRangeByName('B4').setText('เลขที่ใบเสร็จ');
     sheet.getRangeByName('C4').setText('เลขที่สัญญา');
-    sheet.getRangeByName('D4').setText('ชื่อผู้ติดต่อ');
-    sheet.getRangeByName('E4').setText('ชื่อร้านค้า');
+    sheet.getRangeByName('D4').setText('โซน');
+    sheet.getRangeByName('E4').setText('ชื่อผู้ติดต่อ');
+    sheet.getRangeByName('F4').setText('ชื่อร้านค้า');
 
-    sheet.getRangeByName('F4').setText('รายการ');
-    sheet.getRangeByName('G4').setText('ประเภท');
-    sheet.getRangeByName('H4').setText('ยอดสุทธิ');
+    sheet.getRangeByName('G4').setText('เลขตั้งหนี้');
+    sheet.getRangeByName('H4').setText('รายการ');
+    sheet.getRangeByName('I4').setText('ยอดสุทธิ');
     int index1 = 0;
     int indextotol = 0;
     List cid_number = [];
@@ -259,33 +260,36 @@ class Excgen_GetPakanReport {
       sheet.getRangeByName('I${index + 5}').cellStyle = numberColor;
       sheet.getRangeByName('J${index + 5}').cellStyle = numberColor;
       sheet.getRangeByName('K${index + 5}').cellStyle = numberColor;
-
-      sheet.getRangeByName('A${index + 5}').setText(
-            '${index + 1}',
-          );
+      sheet.getRangeByName('A${index + 5}').setText('${index + 1}');
       sheet
           .getRangeByName('B${index + 5}')
-          .setText('${contractxPakanModels[index].zn}');
-
+          .setText('${contractxPakanModels[index].docno}');
       sheet
           .getRangeByName('C${index + 5}')
           .setText('${contractxPakanModels[index].cid}');
+
       sheet.getRangeByName('D${index + 5}').setText(
-            '${contractxPakanModels[index].cname}',
-          );
+          (contractxPakanModels[index].zn != null)
+              ? '${contractxPakanModels[index].zn}'
+              : '${contractxPakanModels[index].zn1}');
       sheet.getRangeByName('E${index + 5}').setText(
-            '${contractxPakanModels[index].sname}',
+          (contractxPakanModels[index].cname == null)
+              ? '${contractxPakanModels[index].remark}'
+              : '${contractxPakanModels[index].cname}');
+      sheet.getRangeByName('F${index + 5}').setText(
+          (contractxPakanModels[index].sname == null)
+              ? '${contractxPakanModels[index].remark}'
+              : '${contractxPakanModels[index].sname}');
+
+      sheet.getRangeByName('G${index + 5}').setText(
+            '${contractxPakanModels[index].refno}',
           );
 
-      sheet.getRangeByName('F${index + 5}').setText(
+      sheet.getRangeByName('H${index + 5}').setText(
             '${contractxPakanModels[index].expname}',
           );
 
-      sheet.getRangeByName('G${index + 5}').setText(
-            '${contractxPakanModels[index].unit}',
-          );
-
-      sheet.getRangeByName('H${index + 5}').setNumber(
+      sheet.getRangeByName('I${index + 5}').setNumber(
             (contractxPakanModels[index].total == null)
                 ? 0.00
                 : double.parse('${contractxPakanModels[index].total}'),

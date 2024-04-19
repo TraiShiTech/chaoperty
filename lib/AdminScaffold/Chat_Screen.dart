@@ -65,6 +65,7 @@ class _ChatScreenState extends State<ChatScreen> {
     super.dispose();
   }
 
+
 ///////////------------------------------------------->
   // void startUpdates() {
   //   // Start periodic updates if not already started
@@ -146,6 +147,19 @@ class _ChatScreenState extends State<ChatScreen> {
         }
       } else {}
     } catch (e) {}
+    // if (renTalModels.isNotEmpty) {
+    //   dynamic colorsren = renTalModels[0].colors_ren;
+
+    //   if (colorsren is String) {
+    //     setState(() => pickerColor = Color(int.parse(colorsren)));
+    //     setState(() => AppBarColors.hexColor = Color(int.parse(colorsren)));
+    //     // print('Color(int.parse(colorsren))');
+    //     // print(Color(int.parse(colorsren)));
+    //     // print(pickerColor);
+    //   } else {
+    //     // Handle the case where colorsren is not a String
+    //   }
+    // }
   }
 
   Future<Null> red_Chat() async {
@@ -232,20 +246,43 @@ class _ChatScreenState extends State<ChatScreen> {
     // startUpdates();
   }
 
-  Future<Null> startTimer() async {
+  Future<void> startTimer() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    Timer.periodic(Duration(seconds: 5), (timer) {
+
+    void checkAndRedChat() {
       setState(() {
         Chat_no_read = preferences.getInt('Chatno_read')!;
       });
+
       if (no_read == true) {
         if (Chat_no_read != 0) {
         } else {
           red_Chat3();
         }
       } else {}
-    });
+
+      // Schedule the next check
+      Future.delayed(Duration(seconds: 5), checkAndRedChat);
+    }
+
+    // Start the initial check
+    checkAndRedChat();
   }
+
+  // Future<Null> startTimer() async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   Timer.periodic(Duration(seconds: 5), (timer) {
+  //     setState(() {
+  //       Chat_no_read = preferences.getInt('Chatno_read')!;
+  //     });
+  //     if (no_read == true) {
+  //       if (Chat_no_read != 0) {
+  //       } else {
+  //         red_Chat3();
+  //       }
+  //     } else {}
+  //   });
+  // }
 
   Future<Null> red_Chat3() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();

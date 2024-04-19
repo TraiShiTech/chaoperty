@@ -352,15 +352,24 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
 
         setState(() {
           _TransReBillModels = TransReBillModels_.where((transReBill) {
-            var notTitle = transReBill.cid.toString().toLowerCase();
-            var notTitle2 = transReBill.docno.toString().toLowerCase();
-            var notTitle3 = transReBill.ln.toString().toLowerCase();
-            var notTitle4 = transReBill.room_number.toString().toLowerCase();
-            var notTitle5 = transReBill.sname.toString().toLowerCase();
-            var notTitle6 = transReBill.cname.toString().toLowerCase();
-            var notTitle7 = transReBill.expname.toString().toLowerCase();
-            var notTitle8 = transReBill.date.toString().toLowerCase();
-            var notTitle9 = transReBill.remark.toString().toLowerCase();
+            var notTitle = transReBill.cid.toString();
+            var notTitle2 = transReBill.docno.toString();
+            var notTitle3 = transReBill.ln.toString();
+            var notTitle4 = transReBill.room_number.toString();
+            var notTitle5 = transReBill.sname.toString();
+            var notTitle6 = transReBill.cname.toString();
+            var notTitle7 = transReBill.expname.toString();
+            var notTitle8 = transReBill.date.toString();
+            var notTitle9 = transReBill.remark.toString();
+            // var notTitle = transReBill.cid.toString().toLowerCase();
+            // var notTitle2 = transReBill.docno.toString().toLowerCase();
+            // var notTitle3 = transReBill.ln.toString().toLowerCase();
+            // var notTitle4 = transReBill.room_number.toString().toLowerCase();
+            // var notTitle5 = transReBill.sname.toString().toLowerCase();
+            // var notTitle6 = transReBill.cname.toString().toLowerCase();
+            // var notTitle7 = transReBill.expname.toString().toLowerCase();
+            // var notTitle8 = transReBill.date.toString().toLowerCase();
+            // var notTitle9 = transReBill.remark.toString().toLowerCase();
             return notTitle.contains(text) ||
                 notTitle2.contains(text) ||
                 notTitle3.contains(text) ||
@@ -379,7 +388,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
     );
   }
 
-//////////////----------------------------->BodyStatus1_Web
+//////////////----------------------------->
   Future<Null> red_Trans_select(index) async {
     if (_TransReBillHistoryModels.length != 0) {
       setState(() {
@@ -1869,7 +1878,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                         width: (Responsive.isDesktop(context))
                             ? MediaQuery.of(context).size.width * 0.85
                             : 1200,
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           color: AppbackgroundColor.TiTile_Colors,
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(10),
@@ -2622,7 +2631,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                     .width *
                                                 0.85
                                             : 1200,
-                                        decoration: const BoxDecoration(
+                                        decoration: BoxDecoration(
                                           color:
                                               AppbackgroundColor.TiTile_Colors,
                                           borderRadius: BorderRadius.only(
@@ -3931,7 +3940,9 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                                 25,
                                                                             maxLines:
                                                                                 1,
-                                                                            '${DateFormat('dd-MM').format(DateTime.parse('${_TransReBillModels[index].daterec} 00:00:00'))}-${DateTime.parse('${_TransReBillModels[index].daterec} 00:00:00').year + 543}',
+                                                                            (_TransReBillModels[index].daterec == null)
+                                                                                ? ''
+                                                                                : '${DateFormat('dd-MM').format(DateTime.parse('${_TransReBillModels[index].daterec} 00:00:00'))}-${DateTime.parse('${_TransReBillModels[index].daterec} 00:00:00').year + 543}',
                                                                             textAlign:
                                                                                 TextAlign.center,
                                                                             overflow:
@@ -3972,7 +3983,9 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                                 25,
                                                                             maxLines:
                                                                                 1,
-                                                                            '${DateFormat('dd-MM').format(DateTime.parse('${_TransReBillModels[index].pdate} 00:00:00'))}-${DateTime.parse('${_TransReBillModels[index].pdate} 00:00:00').year + 543}',
+                                                                            (_TransReBillModels[index].pdate == null)
+                                                                                ? ''
+                                                                                : '${DateFormat('dd-MM').format(DateTime.parse('${_TransReBillModels[index].pdate} 00:00:00'))}-${DateTime.parse('${_TransReBillModels[index].pdate} 00:00:00').year + 543}',
                                                                             textAlign:
                                                                                 TextAlign.center,
                                                                             overflow:
@@ -4198,7 +4211,9 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                             maxLines:
                                                                                 1,
                                                                             _TransReBillModels[index].total_dis == null
-                                                                                ? '${nFormat.format(double.parse(_TransReBillModels[index].total_bill!))}'
+                                                                                ? (_TransReBillModels[index].total_bill == null)
+                                                                                    ? ''
+                                                                                    : '${nFormat.format(double.parse(_TransReBillModels[index].total_bill!))}'
                                                                                 : '${nFormat.format(double.parse(_TransReBillModels[index].total_dis!))}',
                                                                             textAlign:
                                                                                 TextAlign.right,

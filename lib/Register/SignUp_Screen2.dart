@@ -2003,6 +2003,8 @@ class _SingUpScreen2State extends State<SingUpScreen2> {
                                     var result = json.decode(response.body);
                                     print(result);
                                     if (result.toString() != 'Not data') {
+                                       var name_db;
+                                      var tr_ser;
                                       setState(() {
                                         Body3Form2_text.text = 'A';
                                         Body3Form3_text.text = '2';
@@ -2010,6 +2012,10 @@ class _SingUpScreen2State extends State<SingUpScreen2> {
                                       for (var map in result) {
                                         RenTalModel userModel =
                                             RenTalModel.fromJson(map);
+                                             setState(() {
+                                          name_db = userModel.dbn;
+                                          tr_ser = userModel.rtser;
+                                        });
                                         setState(() {
                                           // SerBody_Step3_ = 1;
                                           Value_lacotion_ =
@@ -2017,8 +2023,18 @@ class _SingUpScreen2State extends State<SingUpScreen2> {
                                           Value_Zone_ = Body3Form2_text.text;
                                           Value_QTYROOM_ = Body3Form3_text.text;
                                         });
-                                      }
-                                      upZoneTable();
+                                      }          upZoneTable();
+                                         String url_rental_data =
+                                          '${MyConstant().domain}/In_rental_data.php?isAdd=true&name_db=$name_db&tr_ser=$tr_ser';
+                                      try {
+                                        var response_rental_data = await http
+                                            .get(Uri.parse(url_rental_data));
+
+                                        var result = json
+                                            .decode(response_rental_data.body);
+                                        // print(result);
+                                      } catch (e) {}
+                            
                                     } else {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
@@ -3247,7 +3263,7 @@ class _SingUpScreen2State extends State<SingUpScreen2> {
                     Container(
                       width: 500,
                       height: 50,
-                      decoration: const BoxDecoration(
+                      decoration:  BoxDecoration(
                         color: AppbackgroundColor.TiTile_Colors,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(0),

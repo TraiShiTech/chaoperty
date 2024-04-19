@@ -17,7 +17,7 @@ class TransBillModel {
   String? vtype;
   String? vser;
   String? meter;
-  String? refno;
+  String? refno; String? ser_con;
 
   TransBillModel({
     this.ser,
@@ -39,6 +39,7 @@ class TransBillModel {
     this.vser,
     this.meter,
     this.refno,
+    this.ser_con,
   });
 
   TransBillModel.fromJson(Map<String, dynamic> json) {
@@ -61,6 +62,7 @@ class TransBillModel {
     vser = json['vser'];
     meter = json['meter'];
     refno = json['refno'];
+    ser_con = json['ser_con'];
   }
 
   Map<String, dynamic> toJson() {
@@ -83,6 +85,8 @@ class TransBillModel {
     data['vtype'] = this.vtype;
     data['vser'] = this.vser;
     data['meter'] = this.meter;   data['refno'] = this.refno;
+     data['ser_con'] = this.ser_con;
+    
 
     return data;
   }

@@ -172,7 +172,12 @@ class Mini_Ex_BankdailyReport {
     sheet.getRangeByName('O1').cellStyle = globalStyle22;
     sheet.getRangeByName('P1').cellStyle = globalStyle22;
     sheet.getRangeByName('Q1').cellStyle = globalStyle22;
+    sheet.getRangeByName('R1').cellStyle = globalStyle22;
+    sheet.getRangeByName('S1').cellStyle = globalStyle22;
+    sheet.getRangeByName('T1').cellStyle = globalStyle22;
+    // sheet.getRangeByName('O1').cellStyle = globalStyle22;
     final x.Range range = sheet.getRangeByName('E1');
+
     range.setText(
       (ser_type_repro == '1')
           ? 'รายงานการเคลื่อนไหวธนาคารประจำวันแบบย่อ ( โซน : $zone_name_Trans_Daily)'
@@ -183,7 +188,6 @@ class Mini_Ex_BankdailyReport {
                   : (ser_type_repro == '4')
                       ? 'รายงานการเคลื่อนไหวธนาคารประจำวันแบบย่อ เฉพาะรายการที่ออกใบกำกับภาษี ( โซน : $zone_name_Trans_Daily)'
                       : 'รายงานประวัติชำระรอตรวจสอบประจำวันแบบย่อ ( โซน : $zone_name_Trans_Daily)',
-      // 'รายงานการเคลื่อนไหวธนาคารประจำวันแบบย่อ ( โซน : $Value_Chang_Zone_Daily)'
     );
 // ExcelSheetProtectionOption
     final x.ExcelSheetProtectionOption options = x.ExcelSheetProtectionOption();
@@ -208,8 +212,15 @@ class Mini_Ex_BankdailyReport {
     sheet.getRangeByName('O2').cellStyle = globalStyle22;
     sheet.getRangeByName('P2').cellStyle = globalStyle22;
     sheet.getRangeByName('Q2').cellStyle = globalStyle22;
+    sheet.getRangeByName('R2').cellStyle = globalStyle22;
+    sheet.getRangeByName('S2').cellStyle = globalStyle22;
+    sheet.getRangeByName('T2').cellStyle = globalStyle22;
+
+    // sheet.getRangeByName('O2').cellStyle = globalStyle22;
     sheet.getRangeByName('A2').setText('${renTal_name}');
-    sheet.getRangeByName('K2').setText('วันที่ : ${Value_TransDate_Daily}');
+    sheet
+        .getRangeByName('I2')
+        .setText('วันที่รับชำระ : ${Value_TransDate_Daily}');
 
     globalStyle2.hAlign = x.HAlignType.center;
     sheet.getRangeByName('A2').cellStyle = globalStyle22;
@@ -231,6 +242,11 @@ class Mini_Ex_BankdailyReport {
     sheet.getRangeByName('O3').cellStyle = globalStyle22;
     sheet.getRangeByName('P3').cellStyle = globalStyle22;
     sheet.getRangeByName('Q3').cellStyle = globalStyle22;
+    sheet.getRangeByName('R3').cellStyle = globalStyle22;
+    sheet.getRangeByName('S3').cellStyle = globalStyle22;
+    sheet.getRangeByName('T3').cellStyle = globalStyle22;
+
+    // sheet.getRangeByName('O3').cellStyle = globalStyle22;
     sheet.getRangeByName('A3').setText('ใบเสร็จ : ${TransReBillBank.length}');
 
     sheet.getRangeByName('A3').columnWidth = 18;
@@ -250,6 +266,9 @@ class Mini_Ex_BankdailyReport {
     sheet.getRangeByName('O3').columnWidth = 18;
     sheet.getRangeByName('P3').columnWidth = 18;
     sheet.getRangeByName('Q3').columnWidth = 18;
+    sheet.getRangeByName('R3').columnWidth = 18;
+    sheet.getRangeByName('S3').columnWidth = 18;
+    sheet.getRangeByName('T3').columnWidth = 18;
 
     sheet.getRangeByName('A4').cellStyle = globalStyle1;
     sheet.getRangeByName('B4').cellStyle = globalStyle1;
@@ -268,6 +287,9 @@ class Mini_Ex_BankdailyReport {
     sheet.getRangeByName('O4').cellStyle = globalStyle1;
     sheet.getRangeByName('P4').cellStyle = globalStyle1;
     sheet.getRangeByName('Q4').cellStyle = globalStyle1;
+    sheet.getRangeByName('R4').cellStyle = globalStyle1;
+    sheet.getRangeByName('S4').cellStyle = globalStyle1;
+    sheet.getRangeByName('T4').cellStyle = globalStyle1;
     // sheet.getRangeByName('O4').cellStyle = globalStyle1;
 
     sheet.getRangeByName('A4').columnWidth = 18;
@@ -276,17 +298,14 @@ class Mini_Ex_BankdailyReport {
     sheet.getRangeByName('D4').columnWidth = 18;
     sheet.getRangeByName('E4').columnWidth = 18;
     sheet.getRangeByName('F4').columnWidth = 18;
-    sheet.getRangeByName('G4').columnWidth = 18;
-    sheet.getRangeByName('H4').columnWidth = 20;
+    sheet.getRangeByName('G4').columnWidth = 25;
+    sheet.getRangeByName('H4').columnWidth = 25;
     sheet.getRangeByName('I4').columnWidth = 25;
     sheet.getRangeByName('J4').columnWidth = 18;
     sheet.getRangeByName('K4').columnWidth = 18;
     sheet.getRangeByName('L4').columnWidth = 18;
     sheet.getRangeByName('M4').columnWidth = 18;
     sheet.getRangeByName('N4').columnWidth = 18;
-    sheet.getRangeByName('O4').columnWidth = 18;
-    sheet.getRangeByName('P4').columnWidth = 18;
-    sheet.getRangeByName('Q4').columnWidth = 18;
 
     // sheet.getRangeByName('O4').columnWidth = 18;
     sheet.getRangeByName('P4').columnWidth = 18;
@@ -300,7 +319,7 @@ class Mini_Ex_BankdailyReport {
 
     sheet.getRangeByName('A4').setText('ลำดับ');
     sheet.getRangeByName('B4').setText('เลขที่');
-    sheet.getRangeByName('C4').setText('วันที่');
+    sheet.getRangeByName('C4').setText('วันที่ชำระ');
     sheet.getRangeByName('D4').setText('รหัสโซน');
     sheet.getRangeByName('E4').setText('โซน');
     sheet.getRangeByName('F4').setText('รหัสพื้นที่');
@@ -309,15 +328,15 @@ class Mini_Ex_BankdailyReport {
     sheet.getRangeByName('I4').setText('ธนาคาร');
     sheet.getRangeByName('J4').setText('เลขบช.');
     sheet.getRangeByName('K4').setText('Slip');
-    // sheet.getRangeByName('L4').setText('ส่วนลด');
-    // sheet.getRangeByName('M4').setText('ราคารวม');
-    // sheet.getRangeByName('N4').setText('หักส่วนลด');
-    sheet.getRangeByName('L4').setText('ค่าธรรมเนียม');
+    sheet.getRangeByName('L4').setText('ส่วนลด');
     sheet.getRangeByName('M4').setText('ราคารวม');
     sheet.getRangeByName('N4').setText('ส่วนลด');
     sheet.getRangeByName('O4').setText('หักส่วนลด');
     sheet.getRangeByName('P4').setText('ประเภท');
     sheet.getRangeByName('Q4').setText('สถานะ');
+    sheet.getRangeByName('R4').setText('วันที่ทำรายการ');
+    sheet.getRangeByName('S4').setText('อ้างถึง');
+    sheet.getRangeByName('T4').setText('เลขที่สัญญา');
 
     ///---------------------------------------------------------->
     int all_Total = 0;
@@ -353,6 +372,9 @@ class Mini_Ex_BankdailyReport {
       sheet.getRangeByName('O${indextotol + 5 - 1}').cellStyle = numberColor;
       sheet.getRangeByName('P${indextotol + 5 - 1}').cellStyle = numberColor;
       sheet.getRangeByName('Q${indextotol + 5 - 1}').cellStyle = numberColor;
+      sheet.getRangeByName('R${indextotol + 5 - 1}').cellStyle = numberColor;
+      sheet.getRangeByName('S${indextotol + 5 - 1}').cellStyle = numberColor;
+      sheet.getRangeByName('T${indextotol + 5 - 1}').cellStyle = numberColor;
 
       sheet.getRangeByName('A${indextotol + 5 - 1}').setText('${index1 + 1}');
       sheet.getRangeByName('B${indextotol + 5 - 1}').setText(
@@ -362,9 +384,17 @@ class Mini_Ex_BankdailyReport {
                     ? '${TransReBillBank[index1].refno}'
                     : '${TransReBillBank[index1].docno}',
           );
-      sheet
-          .getRangeByName('C${indextotol + 5 - 1}')
-          .setText('${TransReBillBank[index1].daterec}');
+      sheet.getRangeByName('C${indextotol + 5 - 1}').setText((TransReBillBank[
+                      index1]
+                  .dateacc ==
+              null)
+          ? ''
+          : '${DateFormat('dd-MM').format(DateTime.parse('${TransReBillBank[index1].dateacc}'))}-${int.parse('${DateFormat('yyyy').format(DateTime.parse('${TransReBillBank[index1].dateacc}'))}') + 543}');
+
+      // sheet
+      //     .getRangeByName('C${indextotol + 5 - 1}')
+      //     .setText('${TransReBillBank[index1].dateacc}');
+
       sheet.getRangeByName('D${indextotol + 5 - 1}').setText(
             (TransReBillBank[index1].zser1 == null)
                 ? '${TransReBillBank[index1].zser}'
@@ -394,10 +424,12 @@ class Mini_Ex_BankdailyReport {
           (TransReBillBank[index1].bank == null)
               ? ''
               : '${TransReBillBank[index1].bank!}');
+
       sheet.getRangeByName('J${indextotol + 5 - 1}').setText(
           (TransReBillBank[index1].bno == null)
               ? ''
               : '${TransReBillBank[index1].bno!}');
+
       sheet.getRangeByName('K${indextotol + 5 - 1}').setText(
           (TransReBillBank[index1].slip == null ||
                   TransReBillBank[index1].slip! == 'null')
@@ -436,6 +468,27 @@ class Mini_Ex_BankdailyReport {
                     TransReBillBank[index1].doctax == null)
                 ? ''
                 : 'ใบกำกับภาษี',
+          );
+      sheet.getRangeByName('R${indextotol + 5 - 1}').setText((TransReBillBank[
+                      index1]
+                  .daterec ==
+              null)
+          ? ''
+          : '${DateFormat('dd-MM').format(DateTime.parse('${TransReBillBank[index1].daterec}'))}-${int.parse('${DateFormat('yyyy').format(DateTime.parse('${TransReBillBank[index1].daterec}'))}') + 543}');
+      // sheet
+      //     .getRangeByName('R${indextotol + 5 - 1}')
+      //     .setText('${TransReBillBank[index1].daterec}');
+      sheet.getRangeByName('S${indextotol + 5 - 1}').setText(
+            (TransReBillBank[index1].inv == '' ||
+                    TransReBillBank[index1].inv == null)
+                ? ''
+                : '${TransReBillBank[index1].inv}',
+          );
+      sheet.getRangeByName('T${indextotol + 5 - 1}').setText(
+            (TransReBillBank[index1].cid == '' ||
+                    TransReBillBank[index1].cid == null)
+                ? ''
+                : '${TransReBillBank[index1].cid}',
           );
       print('-------------------------');
     }
@@ -482,7 +535,7 @@ class Mini_Ex_BankdailyReport {
     sheet
         .getRangeByName('O${indextotol + 5 + 2}')
         .setFormula('=SUM(O5:O${indextotol + 5 - 1})');
-///////-------------------------------------------------------------------->
+    ///////-------------------------------------------------------------------->
 
     for (var index = 0; index < 3; index++) {
       sheet.getRangeByName('K${indextotol + 5 + index}').cellStyle =
@@ -496,7 +549,6 @@ class Mini_Ex_BankdailyReport {
       sheet.getRangeByName('O${indextotol + 5 + index}').cellStyle =
           globalStyle7;
     }
-
 /////////////////////////////////------------------------------------------------>
     sheet.getRangeByName('H${indextotol + 5 + 5}').setText('ธนาคาร');
     sheet.getRangeByName('I${indextotol + 5 + 5}').setText('ชื่อบช.');
@@ -539,7 +591,7 @@ class Mini_Ex_BankdailyReport {
           '=SUMIF(J5:J${indextotol + 5 - 1}, "${payMentModels[index].bno}", N5:N${indextotol + 5 - 1})');
       sheet.getRangeByName('O${indextotol + 5 + 6 + index}').setFormula(
           '=SUMIF(J5:J${indextotol + 5 - 1}, "${payMentModels[index].bno}", O5:O${indextotol + 5 - 1})');
-          
+
       sheet.getRangeByName('H${indextotol + 5 + 6 + index}').cellStyle =
           globalStyle22;
       sheet.getRangeByName('I${indextotol + 5 + 6 + index}').cellStyle =
@@ -575,7 +627,7 @@ class Mini_Ex_BankdailyReport {
                       : (ser_type_repro == '4')
                           ? 'รายงานการเคลื่อนไหวธนาคารประจำวันแบบย่อ เฉพาะรายการที่ออกใบกำกับภาษี ( โซน : $zone_name_Trans_Daily)'
                           : 'รายงานประวัติชำระรอตรวจสอบประจำวันประจำวันแบบย่อ ( โซน : $zone_name_Trans_Daily)',
-          // "รายงานการเคลื่อนไหวธนาคารประจำวันแบบย่อ",
+          // "รายงานการเคลื่อนไหวธนาคารแบบย่อ",
           data,
           "xlsx",
           mimeType: type);

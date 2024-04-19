@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:month_year_picker/month_year_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Register/SignIn_License.dart';
 import 'Register/SignIn_Screen.dart';
@@ -27,11 +28,12 @@ class MyHttpOverrides extends HttpOverrides {
 
 void main() {
   HttpOverrides.global = new MyHttpOverrides();
+
   runApp(const MyApp());
 }
 
 //
-//
+//4flyCpcNSikOdNJHIiWRF4F2zOkUHkV7E2VxSKpS1Fo=
 ///----------------------------------------------------->
 ///
 /// flutter run --enable-software-rendering
@@ -39,7 +41,8 @@ void main() {
 /// flutter run -d chrome  --no-sound-null-safety
 /// flutter run -d chrome --web-browser-flag "--disable-web-security" (แก้ปัญหา security  CORS (Cross-Origin Resource Sharing))
 /// flutter run -d web-server
-///----------------------------------------------------->
+///
+///---------------------------------->
 /// flutter build web --web-renderer html --release
 ///  flutter build web --release --no-sound-null-safety
 /// flutter build web --web-renderer html --release --no-sound-null-safety
@@ -67,7 +70,10 @@ void main() {
 //3.-------->git commit -m "commit message"
 //4.-----------> git push origin main
 //----------------------------------------------------->
+//ขออภัย ระบบจะมีการอัพเดต ณ. 10.40 -10.55 น.(09/04/2567)
+// อัพเดตระบบเสร็จสิ้นแล้ว 10.55 น.(09/04/2567) กรุณาออกจากระบบและรีเฟรช...
 // อัพเดตระบบเสร็จสิ้นแล้ว กรุณาออกจากระบบและรีเฟรช..
+// 1.ขออภัย เกิดข้อผิดพลาดเมนู บัญชี->ชำระบิล กรุณาหยุดใช้ชั่วคราวจนกว่าระบบจะมีการอัพเดต(09/04/2567) // 2. ขออภัย ระบบจะมีการอัพเดต ณ. 10.40 -10.55 น.(09/04/2567)
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   // This widget is the root of your application.
@@ -97,3 +103,12 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+// - แก้&เพิ่มรายงานหน้า1-4 (วันที่ขำระ,เลขที่อ้างอิง,เลขสัญญา) ✔️
+// - แก้รายงานประตูเชียงใหม่ ✔️
+// - เพิ่มรายงานเข้าใหม่ ✔️
+// - แก้รายงานรับ&คืนเงินประกัน ✔️
+// - แก้เช็คการชำวางบิล ✔️
+// - เพิ่มStandard QR เมนูชำระเอาQRมาแสดงเลย ✔️
+// - ตั้งค่า WEB markert  QR แสดงเข้าเว็ป✔️
+// - WEB markert ✔️

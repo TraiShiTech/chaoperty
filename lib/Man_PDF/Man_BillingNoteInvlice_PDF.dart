@@ -274,6 +274,18 @@ class Man_BillingNoteInvlice_PDF {
 
           ///---10
           '${_InvoiceHistoryModels[index].refno}',
+
+          ///---11
+          double.parse(_InvoiceHistoryModels[index].tf!) == 0.00
+              ? '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}'
+              : '(${int.parse(_InvoiceHistoryModels[index].ovalue!)} - ${int.parse(_InvoiceHistoryModels[index].nvalue!)}) ${double.parse(_InvoiceHistoryModels[index].qty!)}',
+
+          ///---12
+          double.parse(_InvoiceHistoryModels[index].tf!) != 0.00
+              ? '${nFormat.format(double.parse((_InvoiceHistoryModels[index].pri == null) ? '0.00' : _InvoiceHistoryModels[index].pri!))} (tf ${nFormat.format((double.parse((_InvoiceHistoryModels[index].amt == null) ? '0.00' : _InvoiceHistoryModels[index].amt!) - (double.parse((_InvoiceHistoryModels[index].vat == null) ? '0.00' : _InvoiceHistoryModels[index].vat!) + double.parse((_InvoiceHistoryModels[index].pvat == null) ? '0.00' : _InvoiceHistoryModels[index].pvat!))))})'
+              : '${nFormat.format(double.parse((_InvoiceHistoryModels[index].nvat == null) ? '0.00' : _InvoiceHistoryModels[index].nvat!))}',
+
+          ///---13
         ],
     ];
 
@@ -282,6 +294,11 @@ class Man_BillingNoteInvlice_PDF {
       if (tem_page_ser.toString() == '0' || tem_page_ser == null) {
         Pdfgen_BillingNoteInvlice_TP3.exportPDF_BillingNoteInvlice_TP3(
             foder,
+            Cust_no,
+            cid_,
+            Zone_s,
+            Ln_s,
+            fname,
             tableData003,
             context,
             Get_Value_cid,
@@ -315,10 +332,16 @@ class Man_BillingNoteInvlice_PDF {
             ptname1,
             img1,
             Preview_ser,
-            End_Bill_Paydate);
+            End_Bill_Paydate,
+            TitleType_Default_Receipt_Name);
       } else if (tem_page_ser.toString() == '1') {
         Pdfgen_BillingNoteInvlice_TP4.exportPDF_BillingNoteInvlice_TP4(
             foder,
+            Cust_no,
+            cid_,
+            Zone_s,
+            Ln_s,
+            fname,
             tableData003,
             context,
             Get_Value_cid,
@@ -352,10 +375,16 @@ class Man_BillingNoteInvlice_PDF {
             ptname1,
             img1,
             Preview_ser,
-            End_Bill_Paydate);
+            End_Bill_Paydate,
+            TitleType_Default_Receipt_Name);
       } else if (tem_page_ser.toString() == '2') {
         Pdfgen_BillingNoteInvlice_TP7.exportPDF_BillingNoteInvlice_TP7(
             foder,
+            Cust_no,
+            cid_,
+            Zone_s,
+            Ln_s,
+            fname,
             // ser,
             tableData003,
             context,

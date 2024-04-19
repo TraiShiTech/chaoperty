@@ -275,7 +275,9 @@ class Pdfgen_Temporary_receipt_TP3 {
                         height: 6,
                       ),
                       pw.Text(
-                        'ใบรับเงินชั่วคราว',
+                        (TitleType_Default_Receipt_Name != null)
+                            ? 'ใบรับเงินชั่วคราว [ $TitleType_Default_Receipt_Name ]'
+                            : 'ใบรับเงินชั่วคราว',
                         maxLines: 1,
                         textAlign: pw.TextAlign.right,
                         style: pw.TextStyle(

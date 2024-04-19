@@ -35,6 +35,7 @@ import '../Register/SignIn_Screen.dart';
 import '../Register/SignUp_Screen.dart';
 import '../Report/Report_Screen.dart';
 import 'package:http/http.dart' as http;
+import '../Report_Ortorkor/Report_Ortor_Screen.dart';
 import '../Report_cm/Report_cm_Screen.dart';
 import '../Responsive/responsive.dart';
 
@@ -113,7 +114,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
     readTime();
     read_GC_areak();
     initPlugin();
-    // changLogin();
+    changLogin();
   }
 
   String? system_datex_;
@@ -220,71 +221,139 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                       color: Colors.grey,
                       height: 4.0,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          children: [
-                            InkWell(
+                    if (Responsive.isDesktop(context))
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      accept_ = '0';
+                                    });
+                                  },
+                                  child: Icon(
+                                    (accept_ == '0')
+                                        ? Icons.check_box
+                                        : Icons.check_box_outline_blank,
+                                    color: (accept_ == '0')
+                                        ? Colors.red
+                                        : Colors.black,
+                                  )),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  'แสดง ทุกครั้ง/ออกจากระบบ ทุกครั้ง',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.blue[900],
+                                    fontFamily: Font_.Fonts_T,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              InkWell(
                                 onTap: () {
                                   setState(() {
-                                    accept_ = '0';
+                                    accept_ = '1';
                                   });
                                 },
                                 child: Icon(
-                                  (accept_ == '0')
-                                      ? Icons.check_box
-                                      : Icons.check_box_outline_blank,
-                                  color: (accept_ == '0')
-                                      ? Colors.red
-                                      : Colors.black,
-                                )),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                'แสดงทุกครั้ง',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.black,
-                                  fontFamily: Font_.Fonts_T,
+                                    (accept_ == '0')
+                                        ? Icons.check_box_outline_blank
+                                        : Icons.check_box,
+                                    color: (accept_ == '0')
+                                        ? Colors.black
+                                        : Colors.red),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  'แสดงอีกครั้งเมื่อมีการอัพเดต',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                    fontFamily: Font_.Fonts_T,
+                                  ),
                                 ),
                               ),
+                            ],
+                          )
+                        ],
+                      ),
+                    if (!Responsive.isDesktop(context))
+                      SizedBox(
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        accept_ = '0';
+                                      });
+                                    },
+                                    child: Icon(
+                                      (accept_ == '0')
+                                          ? Icons.check_box
+                                          : Icons.check_box_outline_blank,
+                                      color: (accept_ == '0')
+                                          ? Colors.red
+                                          : Colors.black,
+                                    )),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'แสดง ทุกครั้ง',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.blue[900],
+                                      fontFamily: Font_.Fonts_T,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
+                            Row(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      accept_ = '1';
+                                    });
+                                  },
+                                  child: Icon(
+                                      (accept_ == '0')
+                                          ? Icons.check_box_outline_blank
+                                          : Icons.check_box,
+                                      color: (accept_ == '0')
+                                          ? Colors.black
+                                          : Colors.red),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'แสดงอีกครั้งเมื่อมีการอัพเดต',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black,
+                                      fontFamily: Font_.Fonts_T,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
                           ],
                         ),
-                        Row(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  accept_ = '1';
-                                });
-                              },
-                              child: Icon(
-                                  (accept_ == '0')
-                                      ? Icons.check_box_outline_blank
-                                      : Icons.check_box,
-                                  color: (accept_ == '0')
-                                      ? Colors.black
-                                      : Colors.red),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                'แสดงอีกครั้งเมื่อมีการอัพเดต',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.black,
-                                  fontFamily: Font_.Fonts_T,
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
+                      ),
                     const SizedBox(
                       height: 5.0,
                     ),
@@ -336,6 +405,202 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                 } else {
                                   Navigator.pop(context, 'OK');
                                 }
+                                //   showDialog<String>(
+                                //   barrierDismissible: false,
+                                //   context: context,
+                                //   builder: (BuildContext context) =>
+                                //       AlertDialog(
+                                //     shape: const RoundedRectangleBorder(
+                                //         borderRadius: BorderRadius.all(
+                                //             Radius.circular(20.0))),
+                                //     title: Column(
+                                //       children: [
+                                //         const Center(
+                                //             child: Text(
+                                //           'ออกจากระบบ',
+                                //           style: TextStyle(
+                                //               color: AdminScafScreen_Color
+                                //                   .Colors_Text1_,
+                                //               fontWeight: FontWeight.bold,
+                                //               fontFamily: FontWeight_.Fonts_T),
+                                //         )),
+                                //         const Center(
+                                //             child: Text(
+                                //           '( บังคับออกจากระบบ เนื่องจากระบบได้มีการอัพเดต )',
+                                //           style: TextStyle(
+                                //               fontSize: 14,
+                                //               color: Colors.grey,
+                                //               fontFamily: Font_.Fonts_T),
+                                //         )),
+                                //         const Center(
+                                //             child: Text(
+                                //           '# กรุณาเข้าสู่ระบบอีกครั้ง ',
+                                //           style: TextStyle(
+                                //               fontSize: 14,
+                                //               color: Colors.grey,
+                                //               fontFamily: Font_.Fonts_T),
+                                //         )),
+                                //       ],
+                                //     ),
+                                //     actions: <Widget>[
+                                //       Column(
+                                //         children: [
+                                //           const SizedBox(
+                                //             height: 5.0,
+                                //           ),
+                                //           const Divider(
+                                //             color: Colors.grey,
+                                //             height: 4.0,
+                                //           ),
+                                //           const SizedBox(
+                                //             height: 5.0,
+                                //           ),
+                                //           Padding(
+                                //             padding: const EdgeInsets.all(8.0),
+                                //             child: Row(
+                                //               mainAxisAlignment:
+                                //                   MainAxisAlignment.center,
+                                //               children: [
+                                //                 Padding(
+                                //                   padding:
+                                //                       const EdgeInsets.all(8.0),
+                                //                   child: Container(
+                                //                     width: 100,
+                                //                     decoration:
+                                //                         const BoxDecoration(
+                                //                       color: Colors.red,
+                                //                       borderRadius:
+                                //                           BorderRadius.only(
+                                //                               topLeft: Radius
+                                //                                   .circular(10),
+                                //                               topRight: Radius
+                                //                                   .circular(10),
+                                //                               bottomLeft: Radius
+                                //                                   .circular(10),
+                                //                               bottomRight:
+                                //                                   Radius
+                                //                                       .circular(
+                                //                                           10)),
+                                //                     ),
+                                //                     padding:
+                                //                         const EdgeInsets.all(
+                                //                             8.0),
+                                //                     child: TextButton(
+                                //                       onPressed: () async {
+                                //                         deall_Trans_select();
+                                //                         SharedPreferences
+                                //                             preferences =
+                                //                             await SharedPreferences
+                                //                                 .getInstance();
+                                //                         var ser = preferences
+                                //                             .getString('ser');
+                                //                         var on = '0';
+                                //                         String url =
+                                //                             '${MyConstant().domain}/U_user_onoff.php?isAdd=true&ser=$ser&on=$on';
+
+                                //                         try {
+                                //                           var response =
+                                //                               await http.get(
+                                //                                   Uri.parse(
+                                //                                       url));
+
+                                //                           var result = json
+                                //                               .decode(response
+                                //                                   .body);
+                                //                           print(result);
+                                //                           if (result
+                                //                                   .toString() ==
+                                //                               'true') {
+                                //                             SharedPreferences
+                                //                                 preferences =
+                                //                                 await SharedPreferences
+                                //                                     .getInstance();
+                                //                             preferences.clear();
+                                //                             routToService(
+                                //                                 SignInScreen());
+                                //                           } else {
+                                //                             ScaffoldMessenger
+                                //                                     .of(context)
+                                //                                 .showSnackBar(
+                                //                               SnackBar(
+                                //                                   content: Text(
+                                //                                       '(ผิดพลาด)')),
+                                //                             );
+                                //                           }
+                                //                         } catch (e) {}
+                                //                       },
+                                //                       child: const Text(
+                                //                         'รับทราบ',
+                                //                         style: TextStyle(
+                                //                             color: Colors.white,
+                                //                             fontWeight:
+                                //                                 FontWeight.bold,
+                                //                             fontFamily:
+                                //                                 FontWeight_
+                                //                                     .Fonts_T),
+                                //                       ),
+                                //                     ),
+                                //                   ),
+                                //                 ),
+                                //                 // Padding(
+                                //                 //   padding:
+                                //                 //       const EdgeInsets.all(8.0),
+                                //                 //   child: Row(
+                                //                 //     mainAxisAlignment:
+                                //                 //         MainAxisAlignment
+                                //                 //             .center,
+                                //                 //     children: [
+                                //                 //       Container(
+                                //                 //         width: 100,
+                                //                 //         decoration:
+                                //                 //             const BoxDecoration(
+                                //                 //           color:
+                                //                 //               Colors.redAccent,
+                                //                 //           borderRadius: BorderRadius.only(
+                                //                 //               topLeft: Radius
+                                //                 //                   .circular(10),
+                                //                 //               topRight: Radius
+                                //                 //                   .circular(10),
+                                //                 //               bottomLeft: Radius
+                                //                 //                   .circular(10),
+                                //                 //               bottomRight:
+                                //                 //                   Radius
+                                //                 //                       .circular(
+                                //                 //                           10)),
+                                //                 //         ),
+                                //                 //         padding:
+                                //                 //             const EdgeInsets
+                                //                 //                 .all(8.0),
+                                //                 //         child: TextButton(
+                                //                 //           onPressed: () =>
+                                //                 //               Navigator.pop(
+                                //                 //                   context,
+                                //                 //                   'OK'),
+                                //                 //           child: const Text(
+                                //                 //             'ยกเลิก',
+                                //                 //             style: TextStyle(
+                                //                 //                 color: Colors
+                                //                 //                     .white,
+                                //                 //                 fontWeight:
+                                //                 //                     FontWeight
+                                //                 //                         .bold,
+                                //                 //                 fontFamily:
+                                //                 //                     FontWeight_
+                                //                 //                         .Fonts_T),
+                                //                 //           ),
+                                //                 //         ),
+                                //                 //       ),
+                                //                 //     ],
+                                //                 //   ),
+                                //                 // ),
+                                //               ],
+                                //             ),
+                                //           ),
+                                //         ],
+                                //       ),
+                                //     ],
+                                //   ),
+                                // );
                               },
                               child: const Text(
                                 'รับทราบ',
@@ -384,6 +649,8 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
     String url =
         '${MyConstant().domain}/changLoginOut.php?isAdd=true&user=$user&iplogin=$data0';
     // print(url.toString());
+
+    print('>>>>> login $login');
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -590,6 +857,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
 
       var result = json.decode(response.body);
       print('GC_rental_setring>> $result');
+
       if (result != null) {
         for (var map in result) {
           RenTalModel renTalModel = RenTalModel.fromJson(map);
@@ -627,6 +895,18 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
             data_update = data_updatex;
             renTalModels.add(renTalModel);
           });
+        }
+        if (renTalModels.isNotEmpty) {
+          dynamic colorsren = renTalModels[0].colors_ren;
+          if (colorsren is String) {
+            setState(() => AppBarColors.hexColor = Color(int.parse(colorsren)));
+            // setState(() => AppBarColors.ABar_Colors = Color(int.parse(colorsren)));
+            // print('Color(int.parse(colorsren))');
+            // print(Color(int.parse(colorsren)));
+            // print(pickerColor);
+          } else {
+            // Handle the case where colorsren is not a String
+          }
         }
       } else {}
     } catch (e) {}
@@ -1245,6 +1525,24 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
     );
   }
 
+  void changeColor() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    Color tiTileColorss1 = Color.fromARGB(255, 203, 200, 219);
+    Color tiTileColorss2 = Color(0xFFD9D9B7);
+
+    setState(() {
+      if (AppbackgroundColor.TiTile_Colors == tiTileColorss1) {
+        AppbackgroundColor.TiTile_Colors = tiTileColorss2;
+      } else {
+        AppbackgroundColor.TiTile_Colors = tiTileColorss1;
+      }
+    });
+    String? _route = preferences.getString('route');
+    MaterialPageRoute materialPageRoute = MaterialPageRoute(
+        builder: (BuildContext context) => AdminScafScreen(route: _route));
+    Navigator.pushAndRemoveUntil(context, materialPageRoute, (route) => false);
+  }
+
   @override
   Widget build(BuildContext context) {
     if (Responsive.isDesktop(context))
@@ -1354,6 +1652,17 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                         if (!Responsive.isMobile(context) &&
                             read_data_davtext != '')
                           Container(
+                            decoration: BoxDecoration(
+                              // color: Colors.white.withOpacity(0.3),
+                              // Colors.lightGreen[200],
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                              // border:
+                              //     Border.all(color: Colors.grey, width: 0.5),
+                            ),
                             width: (Responsive.isDesktop(context))
                                 ? MediaQuery.of(context).size.width / 4
                                 : MediaQuery.of(context).size.width / 2,
@@ -1363,7 +1672,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
 
                               // text: '$read_data_davtext',
                               style: TextStyle(
-                                  color: Color.fromARGB(255, 179, 92, 85),
+                                  color: Color.fromARGB(255, 253, 253, 253),
                                   fontWeight: FontWeight.bold,
                                   fontFamily: FontWeight_.Fonts_T),
                               scrollAxis: Axis.horizontal,
@@ -1379,6 +1688,73 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                             ),
                           ),
                       ],
+                    );
+                  }),
+              StreamBuilder(
+                  stream: Stream.periodic(const Duration(seconds: 1)),
+                  builder: (context, snapshot) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        // color: Colors.white.withOpacity(0.7),
+                        // Colors.lightGreen[200],
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10)),
+                        // border: Border.all(color: Colors.grey, width: 0.5),
+                      ),
+                      padding: const EdgeInsets.all(0.5),
+                      child: Container(
+                        width: 100,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Icon(
+                                Icons.sunny,
+                                size: 15.0,
+                                color: (AppbackgroundColor.TiTile_Colors ==
+                                        Color.fromARGB(255, 203, 200, 219))
+                                    ? Colors.white
+                                    : Colors.orange,
+                              ),
+                            ),
+                            (AppbackgroundColor.TiTile_Colors ==
+                                    Color.fromARGB(255, 203, 200, 219))
+                                ? InkWell(
+                                    onTap: () {
+                                      changeColor();
+                                    },
+                                    child: Icon(
+                                      Icons.toggle_on,
+                                      color: Colors.yellow[100],
+                                      size: 35.0,
+                                    ),
+                                  )
+                                : InkWell(
+                                    onTap: () {
+                                      changeColor();
+                                    },
+                                    child: Icon(
+                                      Icons.toggle_off,
+                                      color: Colors.orange[100],
+                                      size: 35.0,
+                                    ),
+                                  ),
+                            Expanded(
+                                flex: 1,
+                                child: Icon(
+                                  Icons.bedtime,
+                                  size: 15.0,
+                                  color: (AppbackgroundColor.TiTile_Colors ==
+                                          Color(0xFFD9D9B7))
+                                      ? Colors.white
+                                      : Colors.yellow,
+                                )),
+                          ],
+                        ),
+                      ),
                     );
                   }),
               if (pkldate != null)
@@ -1409,6 +1785,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                       ),
                     ),
                   ),
+
               if (Responsive.isDesktop(context) && ser_user == '63' ||
                   ser_user == '56' ||
                   ser_user == '61' ||
@@ -1538,7 +1915,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                                                 ),
                                                                 Container(
                                                                   decoration:
-                                                                      const BoxDecoration(
+                                                                      BoxDecoration(
                                                                     color: AppbackgroundColor
                                                                         .TiTile_Colors,
                                                                     borderRadius:
@@ -2264,6 +2641,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                 preferences.setString(
                     'route', perMissionModels[i].perm!.trim().toString());
                 setState(() {
+                  preferences.setString('Ser_Typepay', '0');
                   Value_Route = perMissionModels[i].perm!.trim();
                   _keybar.currentState?.closeDrawer();
                 });
@@ -2274,6 +2652,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                           Text('กรุณาเลือกสถานที่ของท่านเพื่อเรียกดูข้อมูล')),
                 );
               }
+              read_GC_rentalColor();
             }
           }
           // if (item.route == '/หน้าหลัก') {
@@ -2411,7 +2790,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
             ),
             child: Column(
               children: [
-                renTal_lavel! <= 1
+                renTal_lavel! <= 3
                     ? SizedBox()
                     : passcode == null
                         ? SizedBox()
@@ -2465,20 +2844,44 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                       : (Value_Route == 'จัดการ')
                           ? const ManageScreen()
                           : (Value_Route == 'รายงาน' &&
-                                  renTal_user.toString() == '65')
-                              ? const Report_cm_Screen()
+                                  (renTal_user.toString() == '72' ||
+                                      renTal_user.toString() == '92' ||
+                                      renTal_user.toString() == '93' ||
+                                      renTal_user.toString() == '94'))
+                              ? const Report_Ortor_Screen()
                               : (Value_Route == 'รายงาน' &&
-                                      renTal_user.toString() != '65')
-                                  ? ReportScreen()
-                                  : (Value_Route == 'ทะเบียน')
-                                      ? const BureauScreen()
-                                      : (Value_Route == 'ตั้งค่า')
-                                          ? const SettingScreen()
-                                          : (Value_Route ==
-                                                  'จัดการข้อมูลส่วนตัว')
-                                              ? const SettingUserScreen()
-                                              : const SettingUserScreen(),
+                                      renTal_user.toString() == '65')
+                                  ? const Report_cm_Screen()
+                                  : (Value_Route == 'รายงาน')
+                                      ? ReportScreen()
+                                      : (Value_Route == 'ทะเบียน')
+                                          ? const BureauScreen()
+                                          : (Value_Route == 'ตั้งค่า')
+                                              ? const SettingScreen()
+                                              : (Value_Route ==
+                                                      'จัดการข้อมูลส่วนตัว')
+                                                  ? const SettingUserScreen()
+                                                  : const SettingUserScreen(),
     );
+  }
+
+  Future<Null> infomation() async {
+    showDialog<String>(
+        // barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20.0))),
+              title: const Center(
+                  child: Text(
+                'Level ของคุณไม่สามารถเข้าถึงได้',
+                style: TextStyle(
+                  color: SettingScreen_Color.Colors_Text1_,
+                  fontFamily: FontWeight_.Fonts_T,
+                  fontWeight: FontWeight.bold,
+                ),
+              )),
+            ));
   }
 
   Scaffold adminmobile() {
@@ -2535,7 +2938,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                           renTal_name == null ? ' ภาพรวม' : ' $renTal_name',
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                              color: AdminScafScreen_Color.Colors_Text1_,
+                              color: Colors.white,
                               fontWeight: (Responsive.isDesktop(context))
                                   ? FontWeight.bold
                                   : null,
@@ -2561,43 +2964,110 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
         actions: [
           Row(
             children: [
-              (Responsive.isMobile(context))
-                  ? Text('')
-                  : StreamBuilder(
-                      stream: Stream.periodic(const Duration(seconds: 0)),
-                      builder: (context, snapshot) {
-                        return Row(
+              StreamBuilder(
+                  stream: Stream.periodic(const Duration(seconds: 1)),
+                  builder: (context, snapshot) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        // color: Colors.white.withOpacity(0.7),
+                        // Colors.lightGreen[200],
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10)),
+                        // border: Border.all(color: Colors.grey, width: 0.5),
+                      ),
+                      padding: const EdgeInsets.all(0.5),
+                      child: Container(
+                        width: 100,
+                        child: Row(
                           children: [
-                            if (read_data_davtext != '')
-                              Container(
-                                width: (Responsive.isDesktop(context))
-                                    ? MediaQuery.of(context).size.width / 4
-                                    : MediaQuery.of(context).size.width / 5,
-                                child: Marquee(
-                                  text:
-                                      '   📢 แจ้งเตือน : $read_data_davtext     ||   ',
-
-                                  /// velocity: 50.0, //speed
-                                  // text: '$read_data_davtext',
-                                  style: const TextStyle(
-                                      color: Color.fromARGB(255, 179, 92, 85),
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: FontWeight_.Fonts_T),
-                                  scrollAxis: Axis.horizontal,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  // blankSpace: 20.0,
-                                  // velocity: 100.0,
-                                  pauseAfterRound: Duration(seconds: 1),
-                                  // startPadding: 10.0,
-                                  // accelerationDuration: Duration(seconds: 5),
-                                  accelerationCurve: Curves.linear,
-                                  decelerationDuration: Duration(seconds: 5),
-                                  decelerationCurve: Curves.easeInOut,
-                                ),
+                            Expanded(
+                              flex: 1,
+                              child: Icon(
+                                Icons.sunny,
+                                size: 15.0,
+                                color: (AppbackgroundColor.TiTile_Colors ==
+                                        Color.fromARGB(255, 203, 200, 219))
+                                    ? Colors.white
+                                    : Colors.orange,
                               ),
+                            ),
+                            (AppbackgroundColor.TiTile_Colors ==
+                                    Color.fromARGB(255, 203, 200, 219))
+                                ? InkWell(
+                                    onTap: () {
+                                      changeColor();
+                                    },
+                                    child: Icon(
+                                      Icons.toggle_on,
+                                      color: Colors.yellow[100],
+                                      size: 35.0,
+                                    ),
+                                  )
+                                : InkWell(
+                                    onTap: () {
+                                      changeColor();
+                                    },
+                                    child: Icon(
+                                      Icons.toggle_off,
+                                      color: Colors.orange[100],
+                                      size: 35.0,
+                                    ),
+                                  ),
+                            Expanded(
+                                flex: 1,
+                                child: Icon(
+                                  Icons.bedtime,
+                                  size: 15.0,
+                                  color: (AppbackgroundColor.TiTile_Colors ==
+                                          Color(0xFFD9D9B7))
+                                      ? Colors.white
+                                      : Colors.yellow,
+                                )),
                           ],
-                        );
-                      }),
+                        ),
+                      ),
+                    );
+                  }),
+              // (Responsive.isMobile(context))
+              //     ? Text('')
+              //     : StreamBuilder(
+              //         stream: Stream.periodic(const Duration(seconds: 0)),
+              //         builder: (context, snapshot) {
+              //           return Row(
+              //             children: [
+              //               if (read_data_davtext != '')
+              //                 Container(
+              //                   width: (Responsive.isDesktop(context))
+              //                       ? MediaQuery.of(context).size.width / 4
+              //                       : MediaQuery.of(context).size.width / 5,
+              //                   child: Marquee(
+              //                     text:
+              //                         '   📢 แจ้งเตือน : $read_data_davtext     ||   ',
+
+              //                     /// velocity: 50.0, //speed
+              //                     // text: '$read_data_davtext',
+              //                     style: const TextStyle(
+              //                         color: Color.fromARGB(255, 179, 92, 85),
+              //                         fontWeight: FontWeight.bold,
+              //                         fontFamily: FontWeight_.Fonts_T),
+              //                     scrollAxis: Axis.horizontal,
+              //                     crossAxisAlignment: CrossAxisAlignment.center,
+              //                     // blankSpace: 20.0,
+              //                     // velocity: 100.0,
+              //                     pauseAfterRound: Duration(seconds: 1),
+              //                     // startPadding: 10.0,
+              //                     // accelerationDuration: Duration(seconds: 5),
+              //                     accelerationCurve: Curves.linear,
+              //                     decelerationDuration: Duration(seconds: 5),
+              //                     decelerationCurve: Curves.easeInOut,
+              //                   ),
+              //                 ),
+              //             ],
+              //           );
+              //         }),
               if (!Responsive.isMobile(context) && ser_user == '63' ||
                   ser_user == '56' ||
                   ser_user == '61' ||
@@ -2721,7 +3191,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                                                 ),
                                                                 Container(
                                                                   decoration:
-                                                                      const BoxDecoration(
+                                                                      BoxDecoration(
                                                                     color: AppbackgroundColor
                                                                         .TiTile_Colors,
                                                                     borderRadius:
@@ -3402,6 +3872,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                 preferences.setString(
                     'route', perMissionModels[i].perm!.trim().toString());
                 setState(() {
+                  preferences.setString('Ser_Typepay', '0');
                   Value_Route = perMissionModels[i].perm!.trim();
                   print(Value_Route);
                   Navigator.pop(context);
@@ -3543,19 +4014,26 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                       : (Value_Route == 'จัดการ')
                           ? const ManageScreen()
                           : (Value_Route == 'รายงาน' &&
-                                  renTal_user.toString() == '65')
-                              ? const Report_cm_Screen()
+                                  (renTal_user.toString() == '72' ||
+                                      renTal_user.toString() == '92' ||
+                                      renTal_user.toString() == '93' ||
+                                      renTal_user.toString() == '94' ||
+                                      renTal_user.toString() == '50'))
+                              ? const Report_Ortor_Screen()
                               : (Value_Route == 'รายงาน' &&
-                                      renTal_user.toString() != '65')
-                                  ? ReportScreen()
-                                  : (Value_Route == 'ทะเบียน')
-                                      ? const BureauScreen()
-                                      : (Value_Route == 'ตั้งค่า')
-                                          ? const SettingScreen()
-                                          : (Value_Route ==
-                                                  'จัดการข้อมูลส่วนตัว')
-                                              ? const Accessrights()
-                                              : const Accessrights(),
+                                      renTal_user.toString() == '65')
+                                  ? const Report_cm_Screen()
+                                  : (Value_Route == 'รายงาน' &&
+                                          renTal_user.toString() != '65')
+                                      ? ReportScreen()
+                                      : (Value_Route == 'ทะเบียน')
+                                          ? const BureauScreen()
+                                          : (Value_Route == 'ตั้งค่า')
+                                              ? const SettingScreen()
+                                              : (Value_Route ==
+                                                      'จัดการข้อมูลส่วนตัว')
+                                                  ? const Accessrights()
+                                                  : const Accessrights(),
     );
   }
 
@@ -3567,4 +4045,53 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
       return false;
     });
   }
+/////////------------------------------------------->
+
+  Future<Null> read_GC_rentalColor() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+
+    String url =
+        '${MyConstant().domain}/GC_rental_setring.php?isAdd=true&ren=$ren';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+
+      if (result != null) {
+        for (var map in result) {
+          RenTalModel renTalModels = RenTalModel.fromJson(map);
+          dynamic colorsren = renTalModels.colors_ren;
+          New_Appbar_color(colorsren);
+        }
+      } else {}
+    } catch (e) {}
+  }
+
+/////////------------------------------------------->
+  Future<Null> New_Appbar_color(colors_ren) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    dynamic colorsren = colors_ren;
+    var Check_New_color = preferences.getString('Check_New_color');
+
+    if (Check_New_color.toString() == colorsren.toString()) {
+      // print(Check_New_color.toString());
+      // print(colorsren.toString());
+    } else {
+      if (renTalModels.isNotEmpty) {
+        if (colorsren is String) {
+          setState(() => AppBarColors.hexColor = Color(int.parse(colorsren)));
+          preferences.setString('Check_New_color', '${colorsren}');
+        } else {}
+      }
+      String? _route = preferences.getString('route');
+      MaterialPageRoute materialPageRoute = MaterialPageRoute(
+          builder: (BuildContext context) => AdminScafScreen(route: _route));
+      Navigator.pushAndRemoveUntil(
+          context, materialPageRoute, (route) => false);
+    }
+  }
+
+/////////------------------------------------------->
 }

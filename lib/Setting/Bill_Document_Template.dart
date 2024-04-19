@@ -270,7 +270,7 @@ class _Bill_DocumentTemplateState extends State<Bill_DocumentTemplate> {
                               Container(
                                 width: 400,
                                 padding: const EdgeInsets.all(4.0),
-                                decoration: const BoxDecoration(
+                                decoration:  BoxDecoration(
                                   color: AppbackgroundColor.TiTile_Colors,
                                   borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(10),

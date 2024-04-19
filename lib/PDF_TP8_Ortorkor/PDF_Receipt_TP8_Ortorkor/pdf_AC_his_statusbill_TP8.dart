@@ -50,6 +50,7 @@ class Pdfgen_his_statusbill_TP8_Ortorkor {
       newValuePDFimg,
       numinvoice,
       numdoctax,
+      ref_invoice,
       finnancetransModels,
       date_Transaction,
       dayfinpay,
@@ -151,6 +152,14 @@ class Pdfgen_his_statusbill_TP8_Ortorkor {
     bool hasNonCashTransaction6 = finnancetransModels.any((transaction) {
       return transaction.dtype.toString() == 'FTA';
     }); ///// Online Payment
+//////////---------------------------------->
+    bool hasNonCashTransaction7 = finnancetransModels.any((transaction) {
+      return transaction.ref1.toString().trim() == '';
+    });
+    bool hasNonCashTransaction8 = finnancetransModels.any((transaction) {
+      return transaction.ptser.toString().trim() == '6';
+    });
+///// Online Standard QR
 //////////---------------------------------->
     pw.Widget Header(context) {
       return pw.Column(children: [
@@ -386,6 +395,7 @@ class Pdfgen_his_statusbill_TP8_Ortorkor {
                                         pw.CrossAxisAlignment.start,
                                     children: [
                                       pw.Text(
+                                        ///'นามลูกค้า /Name : ${(sname.toString() == '' || sname == null || sname.toString() == 'null') ? '-' : sname} (${(cname.toString() == '' || cname == null || cname.toString() == 'null') ? '-' : cname})',
                                         (sname.toString() == null ||
                                                 sname.toString() == '' ||
                                                 sname.toString() == 'null')
@@ -438,7 +448,7 @@ class Pdfgen_his_statusbill_TP8_Ortorkor {
                                         ),
                                       ),
                                       pw.Text(
-                                        'โซน /Zone : $Zone_s',
+                                        'โซน /Zone : $Zone_s (รหัสพื้นที่ /Area  : $Ln_s)',
                                         textAlign: pw.TextAlign.left,
                                         style: pw.TextStyle(
                                           fontSize: font_Size,
@@ -975,7 +985,7 @@ class Pdfgen_his_statusbill_TP8_Ortorkor {
               child: pw.Row(
                 children: [
                   pw.Container(
-                    width: 45,
+                    width: 30,
                     decoration: const pw.BoxDecoration(
                       // color: PdfColors.green100,
                       border: pw.Border(
@@ -1258,7 +1268,7 @@ class Pdfgen_his_statusbill_TP8_Ortorkor {
                   for (int index = 0; index < tableData00.length; index++)
                     pw.TableRow(children: [
                       pw.Container(
-                        width: 45,
+                        width: 30,
                         padding: const pw.EdgeInsets.all(2.0),
                         child: pw.Align(
                           alignment: pw.Alignment.topCenter,
@@ -1386,7 +1396,7 @@ class Pdfgen_his_statusbill_TP8_Ortorkor {
                   for (int index = 0; index < tableData01.length; index++)
                     pw.TableRow(children: [
                       pw.Container(
-                        width: 45,
+                        width: 30,
                         padding: const pw.EdgeInsets.all(2.0),
                         child: pw.Align(
                           alignment: pw.Alignment.topCenter,
@@ -2225,7 +2235,8 @@ class Pdfgen_his_statusbill_TP8_Ortorkor {
                                 ),
                                 pw.Text(
                                   (hasNonCashTransaction)
-                                      ? '      บัญชี ${finnancetransModels.where((model) => model.dtype == 'KP' && model.ptser != null && model.ptser != '1').map((model) => model.bank).join(', ')} เลขที่ ${finnancetransModels.where((model) => model.dtype == 'KP' && model.ptser != null && model.ptser != '1').map((model) => model.bno).join(', ')} [ ${finnancetransModels.where((model) => model.dtype == 'KP' && model.ptser != null && model.ptser != '1').map((model) => (model.ptname.toString() == 'Online Payment' ? 'PromptPay QR' : model.ptname == 'เงินโอน' ? 'เลขบัญชี' : 'Online Standard QR')).join(', ')} ]'
+                                      ? '      บัญชี ${finnancetransModels.where((model) => model.dtype == 'KP' && model.ptser != null && model.ptser != '1').map((model) => model.bank).join(', ')} เลขที่ ${finnancetransModels.where((model) => model.dtype == 'KP' && model.ptser != null && model.ptser != '1').map((model) => model.bno).join(', ')} [ ${finnancetransModels.where((model) => model.dtype == 'KP' && model.ptser != null && model.ptser != '1').map((model) => (model.ptname.toString() == 'Online Payment' ? 'PromptPay QR' : model.ptname == 'เงินโอน' ? 'เลขบัญชี' : model.ptname == 'Beam Checkout' ? 'Beam Checkout' : 'Online Standard QR')).join(', ')} ]'
+                                      // ? '      บัญชี ${finnancetransModels.where((model) => model.dtype == 'KP' && model.ptser != null && model.ptser != '1').map((model) => model.bank).join(', ')} เลขที่ ${finnancetransModels.where((model) => model.dtype == 'KP' && model.ptser != null && model.ptser != '1').map((model) => model.bno).join(', ')} [ ${finnancetransModels.where((model) => model.dtype == 'KP' && model.ptser != null && model.ptser != '1').map((model) => (model.ptname.toString() == 'Online Payment' ? 'PromptPay QR' : model.ptname == 'เงินโอน' ? 'เลขบัญชี' : 'Online Standard QR')).join(', ')} ]'
                                       : '      บัญชี...................................เลขที่...................................',
                                   textAlign: pw.TextAlign.left,
                                   style: pw.TextStyle(
@@ -2235,6 +2246,19 @@ class Pdfgen_his_statusbill_TP8_Ortorkor {
                                     color: Colors_pd,
                                   ),
                                 ),
+                                if (hasNonCashTransaction8)
+                                  pw.Text(
+                                    hasNonCashTransaction7
+                                        ? '      ( Ref1. ${finnancetransModels.where((model) => model.dtype == 'KP' && model.ptser != null && model.ptser != '1').map((model) => model.inv.replaceAll('-', '')).join(', ')} Ref2. ${DateFormat('ddMM').format(DateTime.parse(dayfinpay!))}${DateTime.parse('${dayfinpay}').year + 543} )'
+                                        : '      ( Ref1. ${finnancetransModels.where((model) => model.dtype == 'KP' && model.ptser != null && model.ptser != '1').map((model) => model.ref1).join(', ')} Ref2. ${DateFormat('ddMM').format(DateTime.parse(dayfinpay!))}${DateTime.parse('${dayfinpay}').year + 543} )',
+                                    textAlign: pw.TextAlign.left,
+                                    style: pw.TextStyle(
+                                      fontSize: font_Size,
+                                      font: ttf,
+                                      fontWeight: pw.FontWeight.bold,
+                                      color: Colors_pd,
+                                    ),
+                                  ),
                                 pw.Row(
                                   // mainAxisAlignment:
                                   //     pw.MainAxisAlignment.spaceBetween,
@@ -2310,7 +2334,7 @@ class Pdfgen_his_statusbill_TP8_Ortorkor {
                                   ),
                                 ),
                                 pw.Text(
-                                  'วันที่/Date...........................................',
+                                  'วันที่/Date.......................................................',
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     fontSize: font_Size,
@@ -2357,7 +2381,7 @@ class Pdfgen_his_statusbill_TP8_Ortorkor {
                                   ),
                                 ),
                                 pw.Text(
-                                  'วันที่/Date...........................................',
+                                  'วันที่/Date.......................................................',
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     fontSize: font_Size,

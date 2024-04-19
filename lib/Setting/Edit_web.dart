@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
+import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
@@ -27,6 +28,7 @@ import '../Model/GetUser_Model.dart';
 import '../Model/GetZone_Model.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
+import '../Style/downloadImage.dart';
 
 class EditwebScreen extends StatefulWidget {
   const EditwebScreen({super.key});
@@ -156,6 +158,7 @@ class _EditwebScreenState extends State<EditwebScreen> {
       tel_user,
       foder;
   String? renTal_name,
+      renTal_ser,
       renTal_addr,
       renTal_Porvi,
       type,
@@ -199,6 +202,8 @@ class _EditwebScreenState extends State<EditwebScreen> {
   final dialog_text = TextEditingController();
   final tel_text = TextEditingController();
 
+  final qrImageKey = GlobalKey();
+
   @override
   void initState() {
     signInThread();
@@ -212,7 +217,11 @@ class _EditwebScreenState extends State<EditwebScreen> {
   }
 
   void _launchURL() async {
-    final String url = 'https://www.dzentric.com/chaoperty_market/#/';
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+
+    final String url =
+        'https://www.dzentric.com/chaoperty_market/#/serrental=$ren';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -381,7 +390,7 @@ class _EditwebScreenState extends State<EditwebScreen> {
           setState(() {
             type = typexs;
             typex = typexx;
-
+            renTal_ser = renTalModel.ser;
             renTal_addr = renTalModel.bill_addr;
 
             foder = renTalModel.dbn.toString();
@@ -791,6 +800,19 @@ class _EditwebScreenState extends State<EditwebScreen> {
         });
   }
 
+  void changeColor() {
+    Color tiTileColorss1 = Color.fromARGB(255, 203, 200, 219);
+    Color tiTileColorss2 = Color(0xFFD9D9B7);
+
+    setState(() {
+      if (AppbackgroundColor.TiTile_Colors == tiTileColorss1) {
+        AppbackgroundColor.TiTile_Colors = tiTileColorss2;
+      } else {
+        AppbackgroundColor.TiTile_Colors = tiTileColorss1;
+      }
+    });
+  }
+
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
@@ -829,72 +851,186 @@ class _EditwebScreenState extends State<EditwebScreen> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.white30,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(0),
-                          topRight: Radius.circular(0),
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10)),
-                      // border: Border.all(color: Colors.white, width: 1),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                'ตั้งค่าหน้าเว็ป ',
-                                style: TextStyle(
-                                  color: SettingScreen_Color.Colors_Text1_,
-                                  fontFamily: FontWeight_.Fonts_T,
-                                  fontWeight: FontWeight.bold,
-                                  //fontSize: 10.0
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          colorFilter: new ColorFilter.mode(
+                              Colors.black.withOpacity(0.1), BlendMode.dstATop),
+                          image: AssetImage("images/BG_im.png"),
+                          fit: BoxFit.cover,
+                        ),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10)),
+                        // border: Border.all(color: Colors.white, width: 1),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'ตั้งค่าหน้าเว็ป ',
+                                  style: TextStyle(
+                                      color: SettingScreen_Color.Colors_Text1_,
+                                      fontFamily: FontWeight_.Fonts_T,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 25.0),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: InkWell(
-                            onTap: () => _launchURL(),
-                            child: Container(
-                              padding: const EdgeInsets.all(4.0),
-                              decoration: BoxDecoration(
-                                color: Colors.brown.withOpacity(0.5),
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(8),
-                                    topRight: Radius.circular(8),
-                                    bottomLeft: Radius.circular(8),
-                                    bottomRight: Radius.circular(8)),
-                                // border: Border.all(
-                                //     color: Colors.grey, width: 3),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  (renTal_nameTH != null ||
-                                          renTal_nameTH.toString().trim() !=
-                                              '' ||
-                                          renTal_nameTH.toString() != 'null')
-                                      ? '🌍 เปิดเว็ปไซต์ : $renTal_nameTH'
-                                      : '🌍 เปิดเว็ปไซต์ : $renTal_name',
-                                  style: TextStyle(
-                                    decoration: TextDecoration.underline,
-                                    color: Colors.red[900],
-                                    fontFamily: FontWeight_.Fonts_T,
-                                    fontWeight: FontWeight.bold,
-                                    //fontSize: 10.0
+                              // Container(
+                              //   height: 150,
+                              //   width: 300,
+                              //   decoration: BoxDecoration(
+                              //     image: DecorationImage(
+                              //       image: NetworkImage(
+                              //           "https://assets.designs.ai/images/creative_tools/logomaker.webp"),
+                              //       fit: BoxFit.cover,
+                              //     ),
+                              //   ),
+                              // ),
+                            ],
+                          ),
+                          // Container(
+                          //   height: 150,
+                          //   width: 300,
+                          //   decoration: BoxDecoration(
+                          //     image: DecorationImage(
+                          //       image: NetworkImage(
+                          //           "https://png.pngtree.com/png-clipart/20210311/original/pngtree-cartoon-painted-curved-arrow-png-image_6018663.jpg"),
+                          //       fit: BoxFit.cover,
+                          //     ),
+                          //   ),
+                          // ),
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Stack(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(4.0),
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(8),
+                                        topRight: Radius.circular(8),
+                                        bottomLeft: Radius.circular(8),
+                                        bottomRight: Radius.circular(8)),
+                                    border: Border.all(
+                                        color: Colors.grey, width: 3),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: RepaintBoundary(
+                                          key: qrImageKey,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(10),
+                                                  topRight: Radius.circular(10),
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                  bottomRight:
+                                                      Radius.circular(10)),
+                                              border: Border.all(
+                                                  color: Colors.grey, width: 1),
+                                            ),
+                                            padding: const EdgeInsets.all(4.0),
+                                            child: PrettyQr(
+                                              // typeNumber: 3,
+                                              image: AssetImage(
+                                                "images/Icon-chao.png",
+                                              ),
+                                              size: 120,
+                                              data:
+                                                  'https://www.dzentric.com/chaoperty_market/#/serrental=$renTal_ser',
+                                              errorCorrectLevel:
+                                                  QrErrorCorrectLevel.M,
+                                              roundEdges: true,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      InkWell(
+                                        onTap: () => _launchURL(),
+                                        child: Container(
+                                          padding: const EdgeInsets.all(4.0),
+                                          decoration: BoxDecoration(
+                                            color:
+                                                Colors.white.withOpacity(0.5),
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                                    topLeft: Radius.circular(8),
+                                                    topRight:
+                                                        Radius.circular(8),
+                                                    bottomLeft:
+                                                        Radius.circular(8),
+                                                    bottomRight:
+                                                        Radius.circular(8)),
+                                            // border: Border.all(
+                                            //     color: Colors.grey, width: 3),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              (renTal_nameTH != null ||
+                                                      renTal_nameTH
+                                                              .toString()
+                                                              .trim() !=
+                                                          '' ||
+                                                      renTal_nameTH
+                                                              .toString() !=
+                                                          'null')
+                                                  ? '🌍 เปิดเว็ปไซต์ : $renTal_nameTH'
+                                                  : '🌍 เปิดเว็ปไซต์ : $renTal_name',
+                                              style: TextStyle(
+                                                  decoration:
+                                                      TextDecoration.underline,
+                                                  color: Colors.black,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12.0),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ),
+                                Positioned(
+                                    top: 5,
+                                    right: 4,
+                                    child: InkWell(
+                                        onTap: () {
+                                          changeColor();
+                                          // Future.delayed(
+                                          //     const Duration(milliseconds: 300),
+                                          //     () async {
+                                          //   captureAndConvertToBase64(
+                                          //       qrImageKey, 'QR_WEB_');
+                                          // });
+                                        },
+                                        child: CircleAvatar(
+                                          radius: 12,
+                                          backgroundColor: Colors.green,
+                                          child: Icon(
+                                            Icons.download,
+                                            color: Colors.white,
+                                          ),
+                                        )))
+                              ],
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -8232,7 +8368,7 @@ class _EditwebScreenState extends State<EditwebScreen> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
                     child: Container(
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         color: AppbackgroundColor.TiTile_Colors,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(10),

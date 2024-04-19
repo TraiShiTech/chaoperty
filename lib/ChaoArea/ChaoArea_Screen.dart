@@ -138,6 +138,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
   //////////////---------------------------------------------->
   String? Name_, Img_, Img_logo_, Province_, DBN_, Typex_, Img_rental_;
   int open_set_date = 30;
+  int renTal_lavel = 0;
   @override
   void initState() {
     super.initState();
@@ -189,11 +190,31 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
     } catch (e) {}
   }
 
+  Future<Null> infomation() async {
+    showDialog<String>(
+        // barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20.0))),
+              title: const Center(
+                  child: Text(
+                'Level ของคุณไม่สามารถเข้าถึงได้',
+                style: TextStyle(
+                  color: SettingScreen_Color.Colors_Text1_,
+                  fontFamily: FontWeight_.Fonts_T,
+                  fontWeight: FontWeight.bold,
+                ),
+              )),
+            ));
+  }
+
   Future<Null> checkPreferance() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       renTal_user = preferences.getString('renTalSer');
       renTal_name = preferences.getString('renTalName');
+      renTal_lavel = int.parse(preferences.getString('lavel').toString());
     });
   }
 
@@ -244,7 +265,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
         }
       } else {}
     } catch (e) {}
-    print('name>>>>>  $renname');
+    // print('name>>>>>  $renname');
   }
 
   Future<Null> read_GC_zone() async {
@@ -366,7 +387,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
             areaModels.add(areaModel);
           });
 
-          if (areaModel.quantity != '1') {
+          if (areaModel.quantity != '1' && areaModel.quantity != null) {
             var qin = areaModel.ln_q;
             var qinser = areaModel.ser;
             String url =
@@ -376,7 +397,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
               var response = await http.get(Uri.parse(url));
 
               var result = json.decode(response.body);
-              print(result);
+              // print(result);
               if (result != null) {
                 for (var map in result) {
                   AreaQuotModel areaQuotModel = AreaQuotModel.fromJson(map);
@@ -415,11 +436,14 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
         zone_name = preferences.getString('zonesName');
       });
       _btnKeys = List.generate(areaModels.length, (_) => GlobalKey());
-      print(
-          'zoneModels >>. ${zoneModels.length} ${areaModels.map((e) => e.zser).toString()}');
+
+      // print(
+      //     'zoneModels >>. ${zoneModels.length} ${areaModels.map((e) => e.zser).toString()}');
     } catch (e) {}
   }
+////////////------------------------------------------>
 
+  ////////////------------------------------------------>
   Future<Null> loadareaQuot(index) async {
     if (areaQuotModels.isNotEmpty) {
       setState(() {
@@ -441,7 +465,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
         var response = await http.get(Uri.parse(url));
 
         var result = json.decode(response.body);
-        print(result);
+        // print(result);
         if (result != null) {
           for (var map in result) {
             AreaQuotModel areaQuotModel = AreaQuotModel.fromJson(map);
@@ -494,7 +518,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
     var ren = preferences.getString('renTalSer');
     var zone = preferences.getString('zoneSer');
 
-    print('>>>>>>>>>>>>>>>>>>>>>>>>>>>> $select');
+    // print('>>>>>>>>>>>>>>>>>>>>>>>>>>>> $select');
 
     if (select == 1) {
       String url = zone == null
@@ -507,7 +531,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
         var response = await http.get(Uri.parse(url));
 
         var result = json.decode(response.body);
-        print(result);
+        // print(result);
         if (result != null) {
           for (var map in result) {
             AreaModel areaModel = AreaModel.fromJson(map);
@@ -542,7 +566,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
         var response = await http.get(Uri.parse(url));
 
         var result = json.decode(response.body);
-        print(result);
+        // print(result);
         if (result != null) {
           for (var map in result) {
             AreaModel areaModel = AreaModel.fromJson(map);
@@ -560,7 +584,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
               var date2 = DateTime.now();
               var difference = daysBetween(birthday, date2);
 
-              print('difference == $difference');
+              // print('difference == $difference');
 
               if (difference < 30 && difference > 0) {
                 setState(() {
@@ -596,7 +620,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
         var response = await http.get(Uri.parse(url));
 
         var result = json.decode(response.body);
-        print(result);
+        // print(result);
         if (result != null) {
           for (var map in result) {
             AreaModel areaModel = AreaModel.fromJson(map);
@@ -633,7 +657,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
         var response = await http.get(Uri.parse(url));
 
         var result = json.decode(response.body);
-        print(result);
+        // print(result);
         if (result != null) {
           for (var map in result) {
             AreaModel areaModel = AreaModel.fromJson(map);
@@ -670,7 +694,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
         var response = await http.get(Uri.parse(url));
 
         var result = json.decode(response.body);
-        print(result);
+        // print(result);
         if (result != null) {
           for (var map in result) {
             AreaModel areaModel = AreaModel.fromJson(map);
@@ -717,7 +741,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
         var response = await http.get(Uri.parse(url));
 
         var result = json.decode(response.body);
-        print(result);
+        // print(result);
         if (result != null) {
           for (var map in result) {
             AreaModel areaModel = AreaModel.fromJson(map);
@@ -759,7 +783,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
         var response = await http.get(Uri.parse(url));
 
         var result = json.decode(response.body);
-        print(result);
+        // print(result);
         if (result != null) {
           for (var map in result) {
             AreaModel areaModel = AreaModel.fromJson(map);
@@ -1120,8 +1144,8 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                     var zones = value!.indexOf(',');
                                     var zoneSer = value.substring(0, zones);
                                     var zonesName = value.substring(zones + 1);
-                                    print(
-                                        'mmmmm ${zoneSer.toString()} $zonesName');
+                                    // print(
+                                    //     'mmmmm ${zoneSer.toString()} $zonesName');
 
                                     SharedPreferences preferences =
                                         await SharedPreferences.getInstance();
@@ -1252,7 +1276,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                               var zones = value!.indexOf(',');
                               var zoneSer = value.substring(0, zones);
                               var zonesName = value.substring(zones + 1);
-                              print('mmmmm ${zoneSer.toString()} $zonesName');
+                              // print('mmmmm ${zoneSer.toString()} $zonesName');
 
                               SharedPreferences preferences =
                                   await SharedPreferences.getInstance();
@@ -1266,7 +1290,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                       element.ser == zoneSer &&
                                       element.zn == zonesName);
 
-                              print('Selected index: $selectedIndex');
+                              // print('Selected index: $selectedIndex');
                               if (selectedIndex == 0) {
                               } else {
                                 Img_Zone =
@@ -1281,10 +1305,10 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                 areaFloorplanModels.clear;
                                 read_GC_area();
                               });
-                              print(selectedIndex);
-                              print(selectedIndex);
-                              print(selectedIndex);
-                              print(selectedIndex);
+                              // print(selectedIndex);
+                              // print(selectedIndex);
+                              // print(selectedIndex);
+                              // print(selectedIndex);
                             },
                             // onSaved: (value) {
                             //   // selectedValue = value.toString();
@@ -1621,30 +1645,36 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                             PopupMenuItem(
                               child: InkWell(
                                   onTap: () async {
-                                    SharedPreferences preferences =
-                                        await SharedPreferences.getInstance();
-                                    var zone = preferences.getString('zoneSer');
-                                    if (zone == '0' || zone == null) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                          'กรุณาเลือกโซนพื้นที่เช่า',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: Font_.Fonts_T),
-                                        )),
-                                      );
-                                    } else {
-                                      setState(() {
-                                        Ser_Body = 1;
-                                        a_ln = null;
-                                        a_ser = null;
-                                        a_area = null;
-                                        a_rent = null;
-                                        a_page = '0';
-                                      });
+                                    if (renTal_lavel <= 2) {
                                       Navigator.pop(context);
+                                      infomation();
+                                    } else {
+                                      SharedPreferences preferences =
+                                          await SharedPreferences.getInstance();
+                                      var zone =
+                                          preferences.getString('zoneSer');
+                                      if (zone == '0' || zone == null) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                              content: Text(
+                                            'กรุณาเลือกโซนพื้นที่เช่า',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: Font_.Fonts_T),
+                                          )),
+                                        );
+                                      } else {
+                                        setState(() {
+                                          Ser_Body = 1;
+                                          a_ln = null;
+                                          a_ser = null;
+                                          a_area = null;
+                                          a_rent = null;
+                                          a_page = '0';
+                                        });
+                                        Navigator.pop(context);
+                                      }
                                     }
                                   },
                                   child: Container(
@@ -1669,30 +1699,36 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                             PopupMenuItem(
                               child: InkWell(
                                   onTap: () async {
-                                    SharedPreferences preferences =
-                                        await SharedPreferences.getInstance();
-                                    var zone = preferences.getString('zoneSer');
-                                    if (zone == '0' || zone == null) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                          'กรุณาเลือกโซนพื้นที่เช่า',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: Font_.Fonts_T),
-                                        )),
-                                      );
-                                    } else {
-                                      setState(() {
-                                        Ser_Body = 2;
-                                        a_ln = null;
-                                        a_ser = null;
-                                        a_area = null;
-                                        a_rent = null;
-                                        a_page = '0';
-                                      });
+                                    if (renTal_lavel <= 2) {
                                       Navigator.pop(context);
+                                      infomation();
+                                    } else {
+                                      SharedPreferences preferences =
+                                          await SharedPreferences.getInstance();
+                                      var zone =
+                                          preferences.getString('zoneSer');
+                                      if (zone == '0' || zone == null) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                              content: Text(
+                                            'กรุณาเลือกโซนพื้นที่เช่า',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: Font_.Fonts_T),
+                                          )),
+                                        );
+                                      } else {
+                                        setState(() {
+                                          Ser_Body = 2;
+                                          a_ln = null;
+                                          a_ser = null;
+                                          a_area = null;
+                                          a_rent = null;
+                                          a_page = '0';
+                                        });
+                                        Navigator.pop(context);
+                                      }
                                     }
                                   },
                                   child: Container(
@@ -2174,7 +2210,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                 padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
                 child: Container(
                     width: MediaQuery.of(context).size.width,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       color: AppbackgroundColor.TiTile_Colors,
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(10),
@@ -2950,114 +2986,648 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                       ),
                       padding: const EdgeInsets.all(20),
                       // color: Colors.white,
-                      child: zone_ser == '0' ||
-                              zone_ser == '' ||
-                              zone_ser == null
-                          ? ListView.builder(
-                              physics: const AlwaysScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: zoneModels.length,
-                              itemBuilder: (BuildContext context, int zindex) {
-                                return zoneModels[zindex].ser == '0'
-                                    ? const SizedBox()
-                                    : Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                      child:
+                          zone_ser == '0' || zone_ser == '' || zone_ser == null
+                              ? ListView.builder(
+                                  physics:
+                                      const AlwaysScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: zoneModels.length,
+                                  itemBuilder:
+                                      (BuildContext context, int zindex) {
+                                    return zoneModels[zindex].ser == '0'
+                                        ? const SizedBox()
+                                        : Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Row(
+                                                        children: [
+                                                          Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: AppbackgroundColor
+                                                                    .TiTile_Colors,
+                                                                borderRadius:
+                                                                    const BorderRadius
+                                                                        .only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                ),
+                                                                border: Border.all(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    width: 2),
+                                                              ),
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(5.0),
+                                                              child: RichText(
+                                                                text: TextSpan(
+                                                                  text:
+                                                                      'โซน :  ${zoneModels[zindex].zn}  ',
+                                                                  style: const TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontFamily:
+                                                                          FontWeight_
+                                                                              .Fonts_T
+
+                                                                      //fontSize: 10.0
+                                                                      ),
+                                                                  children: <TextSpan>[
+                                                                    TextSpan(
+                                                                      text:
+                                                                          '[ ${areaModels.where((item) => item.zser == zoneModels[zindex].ser).toList().length} พื้นที่ ]',
+                                                                      style: TextStyle(
+                                                                          fontSize: 13,
+                                                                          color: Colors.grey.shade800.withOpacity(0.45),
+                                                                          // fontWeight: FontWeight
+                                                                          //     .bold,
+                                                                          fontFamily: Font_.Fonts_T
+
+                                                                          //fontSize: 10.0
+                                                                          ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              )),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    // Expanded(
+                                                    //     flex: 1, child: Text('')),
+                                                  ],
+                                                ),
+                                              ),
+                                              Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: ScrollConfiguration(
+                                                    behavior:
+                                                        ScrollConfiguration.of(
+                                                                context)
+                                                            .copyWith(
+                                                                dragDevices: {
+                                                          PointerDeviceKind
+                                                              .touch,
+                                                          PointerDeviceKind
+                                                              .mouse,
+                                                        }),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Container(
+                                                          width: MediaQuery.of(
+                                                                  context)
+                                                              .size
+                                                              .width,
+                                                          height: (areaModels
+                                                                  .where((item) =>
+                                                                      item.zser ==
+                                                                      zoneModels[
+                                                                              zindex]
+                                                                          .ser)
+                                                                  .toList()
+                                                                  .isEmpty)
+                                                              ? null
+                                                              : ((areaModels.where((item) => item.zser == zoneModels[zindex].ser).toList().length /
+                                                                          12) <
+                                                                      1.5)
+                                                                  ? 145
+                                                                  : ((areaModels.where((item) => item.zser == zoneModels[zindex].ser).toList().length /
+                                                                              12) <
+                                                                          2.5)
+                                                                      ? 245
+                                                                      : 320,
+                                                          // height: MediaQuery.of(
+                                                          //                 context)
+                                                          //             .size
+                                                          //             .shortestSide <
+                                                          //         MediaQuery.of(
+                                                          //                     context)
+                                                          //                 .size
+                                                          //                 .height *
+                                                          //             1
+                                                          //     ? 420
+                                                          //     : 320,
+                                                          child: (areaModels
+                                                                  .where((item) =>
+                                                                      item.zser ==
+                                                                      zoneModels[
+                                                                              zindex]
+                                                                          .ser)
+                                                                  .toList()
+                                                                  .isEmpty)
+                                                              ? SizedBox(
+                                                                  child: Column(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      StreamBuilder(
+                                                                        stream: Stream.periodic(
+                                                                            const Duration(milliseconds: 15),
+                                                                            (i) => i),
+                                                                        builder:
+                                                                            (context,
+                                                                                snapshot) {
+                                                                          if (!snapshot
+                                                                              .hasData)
+                                                                            return const Text('');
+                                                                          double
+                                                                              elapsed =
+                                                                              double.parse(snapshot.data.toString()) * 0.05;
+                                                                          return Column(
+                                                                            children: [
+                                                                              if (elapsed < 8.00)
+                                                                                CircularProgressIndicator(),
+                                                                              Padding(
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: (elapsed > 8.00)
+                                                                                    ? const Text(
+                                                                                        'ไม่พบข้อมูล',
+                                                                                        style: TextStyle(
+                                                                                          color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T, fontWeight: FontWeight.w500,
+                                                                                          //fontSize: 10.0
+                                                                                        ),
+                                                                                      )
+                                                                                    : Text(
+                                                                                        'ดาวน์โหลด : ${elapsed.toStringAsFixed(2)} s.',
+                                                                                        // 'Time : ${elapsed.toStringAsFixed(2)} seconds',
+                                                                                        style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T
+                                                                                            //fontSize: 10.0
+                                                                                            ),
+                                                                                      ),
+                                                                              ),
+                                                                            ],
+                                                                          );
+                                                                        },
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                )
+                                                              : GridView.count(
+                                                                  crossAxisCount: MediaQuery.of(context)
+                                                                              .size
+                                                                              .shortestSide <
+                                                                          MediaQuery.of(context).size.width *
+                                                                              1
+                                                                      ? 12
+                                                                      : (MediaQuery.of(context).size.width <
+                                                                              400)
+                                                                          ? 4
+                                                                          : 6,
+                                                                  children: [
+                                                                    for (int i =
+                                                                            0;
+                                                                        i <
+                                                                            areaModels
+                                                                                .length;
+                                                                        i++)
+                                                                      if (zoneModels[zindex]
+                                                                              .ser ==
+                                                                          areaModels[i]
+                                                                              .zser)
+                                                                        createCard(
+                                                                            i,
+                                                                            context),
+                                                                  ],
+                                                                ),
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 5.0,
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            Expanded(
+                                                              child: Divider(
+                                                                color: Colors
+                                                                    .grey[300],
+                                                                height: 4.0,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 5.0,
+                                                        ),
+
+                                                        // SizedBox(
+                                                        //   width: 300,
+                                                        // )
+
+                                                        // ScrollConfiguration(
+                                                        //   behavior: ScrollConfiguration
+                                                        //           .of(context)
+                                                        //       .copyWith(
+                                                        //           dragDevices: {
+                                                        //         PointerDeviceKind
+                                                        //             .touch,
+                                                        //         PointerDeviceKind
+                                                        //             .mouse,
+                                                        //       }),
+                                                        //   child:
+                                                        //       SingleChildScrollView(
+                                                        //     scrollDirection:
+                                                        //         Axis.vertical,
+                                                        //     dragStartBehavior:
+                                                        //         DragStartBehavior
+                                                        //             .start,
+                                                        //     child: Row(
+                                                        //         mainAxisAlignment:
+                                                        //             MainAxisAlignment
+                                                        //                 .start,
+                                                        //         children: [
+                                                        //           for (int i =
+                                                        //                   0;
+                                                        //               i <
+                                                        //                   areaModels
+                                                        //                       .length;
+                                                        //               i++)
+                                                        //             zoneModels[zindex].ser ==
+                                                        //                     areaModels[i].zser
+                                                        //                 ? Column(
+                                                        //                     crossAxisAlignment: CrossAxisAlignment.start,
+                                                        //                     children: [
+                                                        //                       areaModels[i].quantity == null
+                                                        //                           ? Row(
+                                                        //                               mainAxisAlignment: MainAxisAlignment.start,
+                                                        //                               children: [
+                                                        //                                 createCard(i),
+                                                        //                               ],
+                                                        //                             )
+                                                        //                           : SizedBox()
+                                                        //                     ],
+                                                        //                   )
+                                                        //                 : SizedBox(),
+                                                        //           SizedBox(
+                                                        //             width:
+                                                        //                 300,
+                                                        //           )
+                                                        //         ]),
+                                                        //   ),
+                                                        // ),
+                                                        // ScrollConfiguration(
+                                                        //   behavior: ScrollConfiguration
+                                                        //           .of(context)
+                                                        //       .copyWith(
+                                                        //           dragDevices: {
+                                                        //         PointerDeviceKind
+                                                        //             .touch,
+                                                        //         PointerDeviceKind
+                                                        //             .mouse,
+                                                        //       }),
+                                                        //   child:
+                                                        //       SingleChildScrollView(
+                                                        //     scrollDirection:
+                                                        //         Axis.horizontal,
+                                                        //     dragStartBehavior:
+                                                        //         DragStartBehavior
+                                                        //             .start,
+                                                        //     child: Row(
+                                                        //         mainAxisAlignment:
+                                                        //             MainAxisAlignment
+                                                        //                 .start,
+                                                        //         children: [
+                                                        //           for (int i =
+                                                        //                   0;
+                                                        //               i <
+                                                        //                   areaModels
+                                                        //                       .length;
+                                                        //               i++)
+                                                        //             zoneModels[zindex].ser ==
+                                                        //                     areaModels[i].zser
+                                                        //                 ? Column(
+                                                        //                     crossAxisAlignment: CrossAxisAlignment.start,
+                                                        //                     children: [
+                                                        //                       areaModels[i].quantity == '2'
+                                                        //                           ? Row(
+                                                        //                               mainAxisAlignment: MainAxisAlignment.start,
+                                                        //                               children: [
+                                                        //                                 createCard(i),
+                                                        //                               ],
+                                                        //                             )
+                                                        //                           : SizedBox(),
+                                                        //                     ],
+                                                        //                   )
+                                                        //                 : SizedBox(),
+                                                        //           SizedBox(
+                                                        //             width:
+                                                        //                 300,
+                                                        //           )
+                                                        //         ]),
+                                                        //   ),
+                                                        // ),
+                                                        // ScrollConfiguration(
+                                                        //   behavior: ScrollConfiguration
+                                                        //           .of(context)
+                                                        //       .copyWith(
+                                                        //           dragDevices: {
+                                                        //         PointerDeviceKind
+                                                        //             .touch,
+                                                        //         PointerDeviceKind
+                                                        //             .mouse,
+                                                        //       }),
+                                                        //   child:
+                                                        //       SingleChildScrollView(
+                                                        //     scrollDirection:
+                                                        //         Axis.horizontal,
+                                                        //     dragStartBehavior:
+                                                        //         DragStartBehavior
+                                                        //             .start,
+                                                        //     child: Row(
+                                                        //         mainAxisAlignment:
+                                                        //             MainAxisAlignment
+                                                        //                 .start,
+                                                        //         children: [
+                                                        //           for (int i =
+                                                        //                   0;
+                                                        //               i <
+                                                        //                   areaModels
+                                                        //                       .length;
+                                                        //               i++)
+                                                        //             zoneModels[zindex].ser ==
+                                                        //                     areaModels[i].zser
+                                                        //                 ? Column(
+                                                        //                     crossAxisAlignment: CrossAxisAlignment.start,
+                                                        //                     children: [
+                                                        //                       areaModels[i].quantity == '1'
+                                                        //                           ? Row(
+                                                        //                               mainAxisAlignment: MainAxisAlignment.start,
+                                                        //                               children: [
+                                                        //                                 createCard(i),
+                                                        //                               ],
+                                                        //                             )
+                                                        //                           : SizedBox(),
+                                                        //                     ],
+                                                        //                   )
+                                                        //                 : SizedBox(),
+                                                        //           SizedBox(
+                                                        //             width:
+                                                        //                 300,
+                                                        //           )
+                                                        //         ]),
+                                                        //   ),
+                                                        // ),
+                                                        // ScrollConfiguration(
+                                                        //   behavior: ScrollConfiguration
+                                                        //           .of(context)
+                                                        //       .copyWith(
+                                                        //           dragDevices: {
+                                                        //         PointerDeviceKind
+                                                        //             .touch,
+                                                        //         PointerDeviceKind
+                                                        //             .mouse,
+                                                        //       }),
+                                                        //   child:
+                                                        //       SingleChildScrollView(
+                                                        //     scrollDirection:
+                                                        //         Axis.horizontal,
+                                                        //     dragStartBehavior:
+                                                        //         DragStartBehavior
+                                                        //             .start,
+                                                        //     child: Row(
+                                                        //         mainAxisAlignment:
+                                                        //             MainAxisAlignment
+                                                        //                 .start,
+                                                        //         children: [
+                                                        //           for (int i =
+                                                        //                   0;
+                                                        //               i <
+                                                        //                   areaModels
+                                                        //                       .length;
+                                                        //               i++)
+                                                        //             zoneModels[zindex].ser ==
+                                                        //                     areaModels[i].zser
+                                                        //                 ? Column(
+                                                        //                     crossAxisAlignment: CrossAxisAlignment.start,
+                                                        //                     children: [
+                                                        //                       areaModels[i].quantity == '3'
+                                                        //                           ? Row(
+                                                        //                               mainAxisAlignment: MainAxisAlignment.start,
+                                                        //                               children: [
+                                                        //                                 createCard(i),
+                                                        //                               ],
+                                                        //                             )
+                                                        //                           : SizedBox(),
+                                                        //                     ],
+                                                        //                   )
+                                                        //                 : SizedBox(),
+                                                        //           SizedBox(
+                                                        //             width:
+                                                        //                 300,
+                                                        //           )
+                                                        //         ]),
+                                                        //   ),
+                                                        // ),
+                                                      ],
+                                                    ),
+                                                  ))
+                                            ],
+                                          );
+                                  })
+                              : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
                                         children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                          Expanded(
+                                            flex: 1,
                                             child: Row(
                                               children: [
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Row(
-                                                    children: [
-                                                      Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color:
-                                                              AppbackgroundColor
-                                                                  .TiTile_Colors,
-                                                          borderRadius:
-                                                              const BorderRadius
-                                                                  .only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    10),
-                                                          ),
-                                                          border: Border.all(
-                                                              color:
-                                                                  Colors.white,
-                                                              width: 2),
-                                                        ),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(5.0),
-                                                        child: Text(
-                                                          'โซน :  ${zoneModels[zindex].zn}  ',
-                                                          style: const TextStyle(
-                                                              color: PeopleChaoScreen_Color
-                                                                  .Colors_Text2_,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontFamily:
-                                                                  FontWeight_
-                                                                      .Fonts_T
-
-                                                              //fontSize: 10.0
-                                                              ),
-                                                        ),
+                                                Container(
+                                                    decoration: BoxDecoration(
+                                                      color: AppbackgroundColor
+                                                          .TiTile_Colors,
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .only(
+                                                        topLeft:
+                                                            Radius.circular(10),
+                                                        topRight:
+                                                            Radius.circular(10),
+                                                        bottomLeft:
+                                                            Radius.circular(10),
+                                                        bottomRight:
+                                                            Radius.circular(10),
                                                       ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                    flex: 1, child: Text('')),
+                                                      border: Border.all(
+                                                          color: Colors.white,
+                                                          width: 2),
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            5.0),
+                                                    child: RichText(
+                                                      text: TextSpan(
+                                                        text: zone_ser == null
+                                                            ? 'โซน ทั้งหมด  '
+                                                            : 'โซน $zone_name  ',
+                                                        style: const TextStyle(
+                                                            color: PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontFamily:
+                                                                FontWeight_
+                                                                    .Fonts_T
+
+                                                            //fontSize: 10.0
+                                                            ),
+                                                        children: <TextSpan>[
+                                                          TextSpan(
+                                                            text:
+                                                                '[ ${areaModels.where((item) => item.zser == zone_ser).toList().length} พื้นที่ ]',
+                                                            style: TextStyle(
+                                                                fontSize: 13,
+                                                                color: Colors
+                                                                    .grey
+                                                                    .shade800
+                                                                    .withOpacity(
+                                                                        0.45),
+                                                                // fontWeight: FontWeight
+                                                                //     .bold,
+                                                                fontFamily:
+                                                                    Font_
+                                                                        .Fonts_T
+
+                                                                //fontSize: 10.0
+                                                                ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    )
+                                                    // Text(
+                                                    //   zone_ser == null
+                                                    //       ? 'โซน ทั้งหมด'
+                                                    //       : 'โซน ($zone_name)',
+                                                    //   style: const TextStyle(
+                                                    //       color:
+                                                    //           PeopleChaoScreen_Color
+                                                    //               .Colors_Text2_,
+                                                    //       fontWeight: FontWeight.bold,
+                                                    //       fontFamily:
+                                                    //           FontWeight_.Fonts_T
+
+                                                    //       //fontSize: 10.0
+                                                    //       ),
+                                                    // ),
+                                                    ),
                                               ],
                                             ),
                                           ),
-                                          Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: ScrollConfiguration(
-                                                behavior:
-                                                    ScrollConfiguration.of(
-                                                            context)
-                                                        .copyWith(dragDevices: {
-                                                  PointerDeviceKind.touch,
-                                                  PointerDeviceKind.mouse,
-                                                }),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                      height: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .shortestSide <
-                                                              MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .height *
-                                                                  1
-                                                          ? 420
-                                                          : 320,
-                                                      child: GridView.count(
+                                          // Expanded(flex: 1, child: Text('')),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: ScrollConfiguration(
+                                          behavior:
+                                              ScrollConfiguration.of(context)
+                                                  .copyWith(dragDevices: {
+                                            PointerDeviceKind.touch,
+                                            PointerDeviceKind.mouse,
+                                          }),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                height: (areaModels.length == 0)
+                                                    ? MediaQuery.of(context)
+                                                            .size
+                                                            .height *
+                                                        0.6
+                                                    : 600,
+                                                child: (areaModels.length == 0)
+                                                    ? SizedBox(
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            StreamBuilder(
+                                                              stream: Stream.periodic(
+                                                                  const Duration(
+                                                                      milliseconds:
+                                                                          15),
+                                                                  (i) => i),
+                                                              builder: (context,
+                                                                  snapshot) {
+                                                                if (!snapshot
+                                                                    .hasData)
+                                                                  return const Text(
+                                                                      '');
+                                                                double elapsed =
+                                                                    double.parse(snapshot
+                                                                            .data
+                                                                            .toString()) *
+                                                                        0.05;
+                                                                return Column(
+                                                                  children: [
+                                                                    if (elapsed <
+                                                                        8.00)
+                                                                      CircularProgressIndicator(),
+                                                                    Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
+                                                                      child: (elapsed >
+                                                                              8.00)
+                                                                          ? const Text(
+                                                                              'ไม่พบข้อมูล',
+                                                                              style: TextStyle(
+                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                fontFamily: Font_.Fonts_T,
+                                                                                fontWeight: FontWeight.w500,
+                                                                                //fontSize: 10.0
+                                                                              ),
+                                                                            )
+                                                                          : Text(
+                                                                              'ดาวน์โหลด : ${elapsed.toStringAsFixed(2)} s.',
+                                                                              // 'Time : ${elapsed.toStringAsFixed(2)} seconds',
+                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T
+                                                                                  //fontSize: 10.0
+                                                                                  ),
+                                                                            ),
+                                                                    ),
+                                                                  ],
+                                                                );
+                                                              },
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      )
+                                                    : GridView.count(
                                                         crossAxisCount: MediaQuery.of(
                                                                         context)
                                                                     .size
@@ -3068,510 +3638,190 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                                                         .width *
                                                                     1
                                                             ? 12
-                                                            : 6,
+                                                            : (MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width <
+                                                                    400)
+                                                                ? 4
+                                                                : 6,
                                                         children: [
                                                           for (int i = 0;
                                                               i <
                                                                   areaModels
                                                                       .length;
                                                               i++)
-                                                            if (zoneModels[
-                                                                        zindex]
-                                                                    .ser ==
-                                                                areaModels[i]
-                                                                    .zser)
-                                                              createCard(
-                                                                  i, context),
+                                                            createCard(
+                                                                i, context),
                                                         ],
                                                       ),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 5.0,
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        Expanded(
-                                                          child: Divider(
-                                                            color: Colors
-                                                                .grey[300],
-                                                            height: 4.0,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 5.0,
-                                                    ),
-
-                                                    // SizedBox(
-                                                    //   width: 300,
-                                                    // )
-
-                                                    // ScrollConfiguration(
-                                                    //   behavior: ScrollConfiguration
-                                                    //           .of(context)
-                                                    //       .copyWith(
-                                                    //           dragDevices: {
-                                                    //         PointerDeviceKind
-                                                    //             .touch,
-                                                    //         PointerDeviceKind
-                                                    //             .mouse,
-                                                    //       }),
-                                                    //   child:
-                                                    //       SingleChildScrollView(
-                                                    //     scrollDirection:
-                                                    //         Axis.vertical,
-                                                    //     dragStartBehavior:
-                                                    //         DragStartBehavior
-                                                    //             .start,
-                                                    //     child: Row(
-                                                    //         mainAxisAlignment:
-                                                    //             MainAxisAlignment
-                                                    //                 .start,
-                                                    //         children: [
-                                                    //           for (int i =
-                                                    //                   0;
-                                                    //               i <
-                                                    //                   areaModels
-                                                    //                       .length;
-                                                    //               i++)
-                                                    //             zoneModels[zindex].ser ==
-                                                    //                     areaModels[i].zser
-                                                    //                 ? Column(
-                                                    //                     crossAxisAlignment: CrossAxisAlignment.start,
-                                                    //                     children: [
-                                                    //                       areaModels[i].quantity == null
-                                                    //                           ? Row(
-                                                    //                               mainAxisAlignment: MainAxisAlignment.start,
-                                                    //                               children: [
-                                                    //                                 createCard(i),
-                                                    //                               ],
-                                                    //                             )
-                                                    //                           : SizedBox()
-                                                    //                     ],
-                                                    //                   )
-                                                    //                 : SizedBox(),
-                                                    //           SizedBox(
-                                                    //             width:
-                                                    //                 300,
-                                                    //           )
-                                                    //         ]),
-                                                    //   ),
-                                                    // ),
-                                                    // ScrollConfiguration(
-                                                    //   behavior: ScrollConfiguration
-                                                    //           .of(context)
-                                                    //       .copyWith(
-                                                    //           dragDevices: {
-                                                    //         PointerDeviceKind
-                                                    //             .touch,
-                                                    //         PointerDeviceKind
-                                                    //             .mouse,
-                                                    //       }),
-                                                    //   child:
-                                                    //       SingleChildScrollView(
-                                                    //     scrollDirection:
-                                                    //         Axis.horizontal,
-                                                    //     dragStartBehavior:
-                                                    //         DragStartBehavior
-                                                    //             .start,
-                                                    //     child: Row(
-                                                    //         mainAxisAlignment:
-                                                    //             MainAxisAlignment
-                                                    //                 .start,
-                                                    //         children: [
-                                                    //           for (int i =
-                                                    //                   0;
-                                                    //               i <
-                                                    //                   areaModels
-                                                    //                       .length;
-                                                    //               i++)
-                                                    //             zoneModels[zindex].ser ==
-                                                    //                     areaModels[i].zser
-                                                    //                 ? Column(
-                                                    //                     crossAxisAlignment: CrossAxisAlignment.start,
-                                                    //                     children: [
-                                                    //                       areaModels[i].quantity == '2'
-                                                    //                           ? Row(
-                                                    //                               mainAxisAlignment: MainAxisAlignment.start,
-                                                    //                               children: [
-                                                    //                                 createCard(i),
-                                                    //                               ],
-                                                    //                             )
-                                                    //                           : SizedBox(),
-                                                    //                     ],
-                                                    //                   )
-                                                    //                 : SizedBox(),
-                                                    //           SizedBox(
-                                                    //             width:
-                                                    //                 300,
-                                                    //           )
-                                                    //         ]),
-                                                    //   ),
-                                                    // ),
-                                                    // ScrollConfiguration(
-                                                    //   behavior: ScrollConfiguration
-                                                    //           .of(context)
-                                                    //       .copyWith(
-                                                    //           dragDevices: {
-                                                    //         PointerDeviceKind
-                                                    //             .touch,
-                                                    //         PointerDeviceKind
-                                                    //             .mouse,
-                                                    //       }),
-                                                    //   child:
-                                                    //       SingleChildScrollView(
-                                                    //     scrollDirection:
-                                                    //         Axis.horizontal,
-                                                    //     dragStartBehavior:
-                                                    //         DragStartBehavior
-                                                    //             .start,
-                                                    //     child: Row(
-                                                    //         mainAxisAlignment:
-                                                    //             MainAxisAlignment
-                                                    //                 .start,
-                                                    //         children: [
-                                                    //           for (int i =
-                                                    //                   0;
-                                                    //               i <
-                                                    //                   areaModels
-                                                    //                       .length;
-                                                    //               i++)
-                                                    //             zoneModels[zindex].ser ==
-                                                    //                     areaModels[i].zser
-                                                    //                 ? Column(
-                                                    //                     crossAxisAlignment: CrossAxisAlignment.start,
-                                                    //                     children: [
-                                                    //                       areaModels[i].quantity == '1'
-                                                    //                           ? Row(
-                                                    //                               mainAxisAlignment: MainAxisAlignment.start,
-                                                    //                               children: [
-                                                    //                                 createCard(i),
-                                                    //                               ],
-                                                    //                             )
-                                                    //                           : SizedBox(),
-                                                    //                     ],
-                                                    //                   )
-                                                    //                 : SizedBox(),
-                                                    //           SizedBox(
-                                                    //             width:
-                                                    //                 300,
-                                                    //           )
-                                                    //         ]),
-                                                    //   ),
-                                                    // ),
-                                                    // ScrollConfiguration(
-                                                    //   behavior: ScrollConfiguration
-                                                    //           .of(context)
-                                                    //       .copyWith(
-                                                    //           dragDevices: {
-                                                    //         PointerDeviceKind
-                                                    //             .touch,
-                                                    //         PointerDeviceKind
-                                                    //             .mouse,
-                                                    //       }),
-                                                    //   child:
-                                                    //       SingleChildScrollView(
-                                                    //     scrollDirection:
-                                                    //         Axis.horizontal,
-                                                    //     dragStartBehavior:
-                                                    //         DragStartBehavior
-                                                    //             .start,
-                                                    //     child: Row(
-                                                    //         mainAxisAlignment:
-                                                    //             MainAxisAlignment
-                                                    //                 .start,
-                                                    //         children: [
-                                                    //           for (int i =
-                                                    //                   0;
-                                                    //               i <
-                                                    //                   areaModels
-                                                    //                       .length;
-                                                    //               i++)
-                                                    //             zoneModels[zindex].ser ==
-                                                    //                     areaModels[i].zser
-                                                    //                 ? Column(
-                                                    //                     crossAxisAlignment: CrossAxisAlignment.start,
-                                                    //                     children: [
-                                                    //                       areaModels[i].quantity == '3'
-                                                    //                           ? Row(
-                                                    //                               mainAxisAlignment: MainAxisAlignment.start,
-                                                    //                               children: [
-                                                    //                                 createCard(i),
-                                                    //                               ],
-                                                    //                             )
-                                                    //                           : SizedBox(),
-                                                    //                     ],
-                                                    //                   )
-                                                    //                 : SizedBox(),
-                                                    //           SizedBox(
-                                                    //             width:
-                                                    //                 300,
-                                                    //           )
-                                                    //         ]),
-                                                    //   ),
-                                                    // ),
-                                                  ],
-                                                ),
-                                              ))
-                                        ],
-                                      );
-                              })
-                          : Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 1,
-                                        child: Row(
-                                          children: [
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                color: AppbackgroundColor
-                                                    .TiTile_Colors,
-                                                borderRadius:
-                                                    const BorderRadius.only(
-                                                  topLeft: Radius.circular(10),
-                                                  topRight: Radius.circular(10),
-                                                  bottomLeft:
-                                                      Radius.circular(10),
-                                                  bottomRight:
-                                                      Radius.circular(10),
-                                                ),
-                                                border: Border.all(
-                                                    color: Colors.white,
-                                                    width: 2),
-                                              ),
-                                              padding:
-                                                  const EdgeInsets.all(5.0),
-                                              child: Text(
-                                                zone_ser == null
-                                                    ? 'โซน ทั้งหมด'
-                                                    : 'โซน ($zone_name)',
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T
-
-                                                    //fontSize: 10.0
-                                                    ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Expanded(flex: 1, child: Text('')),
-                                    ],
-                                  ),
+                                              )
+                                            ],
+                                          ),
+                                        )),
+                                    // Container(
+                                    //   width: MediaQuery.of(context).size.width,
+                                    //   height: 500,
+                                    //   child: Column(
+                                    //     crossAxisAlignment: CrossAxisAlignment.start,
+                                    //     children: [
+                                    //       ScrollConfiguration(
+                                    //         behavior: ScrollConfiguration.of(context)
+                                    //             .copyWith(dragDevices: {
+                                    //           PointerDeviceKind.touch,
+                                    //           PointerDeviceKind.mouse,
+                                    //         }),
+                                    //         child: SingleChildScrollView(
+                                    //           scrollDirection: Axis.horizontal,
+                                    //           dragStartBehavior: DragStartBehavior.start,
+                                    //           child: Row(
+                                    //               mainAxisAlignment:
+                                    //                   MainAxisAlignment.start,
+                                    //               children: [
+                                    //                 for (int i = 0;
+                                    //                     i < areaModels.length;
+                                    //                     i++)
+                                    //                   Column(
+                                    //                     crossAxisAlignment:
+                                    //                         CrossAxisAlignment.start,
+                                    //                     children: [
+                                    //                       areaModels[i].quantity == null
+                                    //                           ? Row(
+                                    //                               mainAxisAlignment:
+                                    //                                   MainAxisAlignment
+                                    //                                       .start,
+                                    //                               children: [
+                                    //                                 createCard(i),
+                                    //                               ],
+                                    //                             )
+                                    //                           : SizedBox()
+                                    //                     ],
+                                    //                   ),
+                                    //                 SizedBox(
+                                    //                   width: 300,
+                                    //                 )
+                                    //               ]),
+                                    //         ),
+                                    //       ),
+                                    //       ScrollConfiguration(
+                                    //         behavior: ScrollConfiguration.of(context)
+                                    //             .copyWith(dragDevices: {
+                                    //           PointerDeviceKind.touch,
+                                    //           PointerDeviceKind.mouse,
+                                    //         }),
+                                    //         child: SingleChildScrollView(
+                                    //           scrollDirection: Axis.horizontal,
+                                    //           dragStartBehavior: DragStartBehavior.start,
+                                    //           child: Row(
+                                    //               mainAxisAlignment:
+                                    //                   MainAxisAlignment.start,
+                                    //               children: [
+                                    //                 for (int i = 0;
+                                    //                     i < areaModels.length;
+                                    //                     i++)
+                                    //                   Column(
+                                    //                     crossAxisAlignment:
+                                    //                         CrossAxisAlignment.start,
+                                    //                     children: [
+                                    //                       areaModels[i].quantity == '2'
+                                    //                           ? Row(
+                                    //                               mainAxisAlignment:
+                                    //                                   MainAxisAlignment
+                                    //                                       .start,
+                                    //                               children: [
+                                    //                                 createCard(i),
+                                    //                               ],
+                                    //                             )
+                                    //                           : SizedBox(),
+                                    //                     ],
+                                    //                   ),
+                                    //                 SizedBox(
+                                    //                   width: 300,
+                                    //                 )
+                                    //               ]),
+                                    //         ),
+                                    //       ),
+                                    //       ScrollConfiguration(
+                                    //         behavior: ScrollConfiguration.of(context)
+                                    //             .copyWith(dragDevices: {
+                                    //           PointerDeviceKind.touch,
+                                    //           PointerDeviceKind.mouse,
+                                    //         }),
+                                    //         child: SingleChildScrollView(
+                                    //           scrollDirection: Axis.horizontal,
+                                    //           dragStartBehavior: DragStartBehavior.start,
+                                    //           child: Row(
+                                    //               mainAxisAlignment:
+                                    //                   MainAxisAlignment.start,
+                                    //               children: [
+                                    //                 for (int i = 0;
+                                    //                     i < areaModels.length;
+                                    //                     i++)
+                                    //                   Column(
+                                    //                     crossAxisAlignment:
+                                    //                         CrossAxisAlignment.start,
+                                    //                     children: [
+                                    //                       areaModels[i].quantity == '1'
+                                    //                           ? Row(
+                                    //                               mainAxisAlignment:
+                                    //                                   MainAxisAlignment
+                                    //                                       .start,
+                                    //                               children: [
+                                    //                                 createCard(i),
+                                    //                               ],
+                                    //                             )
+                                    //                           : SizedBox(),
+                                    //                     ],
+                                    //                   ),
+                                    //                 const SizedBox(
+                                    //                   width: 300,
+                                    //                 )
+                                    //               ]),
+                                    //         ),
+                                    //       ),
+                                    //       ScrollConfiguration(
+                                    //         behavior: ScrollConfiguration.of(context)
+                                    //             .copyWith(dragDevices: {
+                                    //           PointerDeviceKind.touch,
+                                    //           PointerDeviceKind.mouse,
+                                    //         }),
+                                    //         child: SingleChildScrollView(
+                                    //           scrollDirection: Axis.horizontal,
+                                    //           dragStartBehavior: DragStartBehavior.start,
+                                    //           child: Row(
+                                    //               mainAxisAlignment:
+                                    //                   MainAxisAlignment.start,
+                                    //               children: [
+                                    //                 for (int i = 0;
+                                    //                     i < areaModels.length;
+                                    //                     i++)
+                                    //                   Column(
+                                    //                     crossAxisAlignment:
+                                    //                         CrossAxisAlignment.start,
+                                    //                     children: [
+                                    //                       areaModels[i].quantity == '3'
+                                    //                           ? Row(
+                                    //                               mainAxisAlignment:
+                                    //                                   MainAxisAlignment
+                                    //                                       .start,
+                                    //                               children: [
+                                    //                                 createCard(i),
+                                    //                               ],
+                                    //                             )
+                                    //                           : SizedBox(),
+                                    //                     ],
+                                    //                   ),
+                                    //                 SizedBox(
+                                    //                   width: 300,
+                                    //                 )
+                                    //               ]),
+                                    //         ),
+                                    //       ),
+                                    //     ],
+                                    //   ),
+                                    // ),
+                                  ],
                                 ),
-                                Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: ScrollConfiguration(
-                                      behavior: ScrollConfiguration.of(context)
-                                          .copyWith(dragDevices: {
-                                        PointerDeviceKind.touch,
-                                        PointerDeviceKind.mouse,
-                                      }),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            height: 600,
-                                            child: GridView.count(
-                                              crossAxisCount:
-                                                  MediaQuery.of(context)
-                                                              .size
-                                                              .shortestSide <
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              1
-                                                      ? 12
-                                                      : 6,
-                                              children: [
-                                                for (int i = 0;
-                                                    i < areaModels.length;
-                                                    i++)
-                                                  createCard(i, context),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    )),
-                                // Container(
-                                //   width: MediaQuery.of(context).size.width,
-                                //   height: 500,
-                                //   child: Column(
-                                //     crossAxisAlignment: CrossAxisAlignment.start,
-                                //     children: [
-                                //       ScrollConfiguration(
-                                //         behavior: ScrollConfiguration.of(context)
-                                //             .copyWith(dragDevices: {
-                                //           PointerDeviceKind.touch,
-                                //           PointerDeviceKind.mouse,
-                                //         }),
-                                //         child: SingleChildScrollView(
-                                //           scrollDirection: Axis.horizontal,
-                                //           dragStartBehavior: DragStartBehavior.start,
-                                //           child: Row(
-                                //               mainAxisAlignment:
-                                //                   MainAxisAlignment.start,
-                                //               children: [
-                                //                 for (int i = 0;
-                                //                     i < areaModels.length;
-                                //                     i++)
-                                //                   Column(
-                                //                     crossAxisAlignment:
-                                //                         CrossAxisAlignment.start,
-                                //                     children: [
-                                //                       areaModels[i].quantity == null
-                                //                           ? Row(
-                                //                               mainAxisAlignment:
-                                //                                   MainAxisAlignment
-                                //                                       .start,
-                                //                               children: [
-                                //                                 createCard(i),
-                                //                               ],
-                                //                             )
-                                //                           : SizedBox()
-                                //                     ],
-                                //                   ),
-                                //                 SizedBox(
-                                //                   width: 300,
-                                //                 )
-                                //               ]),
-                                //         ),
-                                //       ),
-                                //       ScrollConfiguration(
-                                //         behavior: ScrollConfiguration.of(context)
-                                //             .copyWith(dragDevices: {
-                                //           PointerDeviceKind.touch,
-                                //           PointerDeviceKind.mouse,
-                                //         }),
-                                //         child: SingleChildScrollView(
-                                //           scrollDirection: Axis.horizontal,
-                                //           dragStartBehavior: DragStartBehavior.start,
-                                //           child: Row(
-                                //               mainAxisAlignment:
-                                //                   MainAxisAlignment.start,
-                                //               children: [
-                                //                 for (int i = 0;
-                                //                     i < areaModels.length;
-                                //                     i++)
-                                //                   Column(
-                                //                     crossAxisAlignment:
-                                //                         CrossAxisAlignment.start,
-                                //                     children: [
-                                //                       areaModels[i].quantity == '2'
-                                //                           ? Row(
-                                //                               mainAxisAlignment:
-                                //                                   MainAxisAlignment
-                                //                                       .start,
-                                //                               children: [
-                                //                                 createCard(i),
-                                //                               ],
-                                //                             )
-                                //                           : SizedBox(),
-                                //                     ],
-                                //                   ),
-                                //                 SizedBox(
-                                //                   width: 300,
-                                //                 )
-                                //               ]),
-                                //         ),
-                                //       ),
-                                //       ScrollConfiguration(
-                                //         behavior: ScrollConfiguration.of(context)
-                                //             .copyWith(dragDevices: {
-                                //           PointerDeviceKind.touch,
-                                //           PointerDeviceKind.mouse,
-                                //         }),
-                                //         child: SingleChildScrollView(
-                                //           scrollDirection: Axis.horizontal,
-                                //           dragStartBehavior: DragStartBehavior.start,
-                                //           child: Row(
-                                //               mainAxisAlignment:
-                                //                   MainAxisAlignment.start,
-                                //               children: [
-                                //                 for (int i = 0;
-                                //                     i < areaModels.length;
-                                //                     i++)
-                                //                   Column(
-                                //                     crossAxisAlignment:
-                                //                         CrossAxisAlignment.start,
-                                //                     children: [
-                                //                       areaModels[i].quantity == '1'
-                                //                           ? Row(
-                                //                               mainAxisAlignment:
-                                //                                   MainAxisAlignment
-                                //                                       .start,
-                                //                               children: [
-                                //                                 createCard(i),
-                                //                               ],
-                                //                             )
-                                //                           : SizedBox(),
-                                //                     ],
-                                //                   ),
-                                //                 const SizedBox(
-                                //                   width: 300,
-                                //                 )
-                                //               ]),
-                                //         ),
-                                //       ),
-                                //       ScrollConfiguration(
-                                //         behavior: ScrollConfiguration.of(context)
-                                //             .copyWith(dragDevices: {
-                                //           PointerDeviceKind.touch,
-                                //           PointerDeviceKind.mouse,
-                                //         }),
-                                //         child: SingleChildScrollView(
-                                //           scrollDirection: Axis.horizontal,
-                                //           dragStartBehavior: DragStartBehavior.start,
-                                //           child: Row(
-                                //               mainAxisAlignment:
-                                //                   MainAxisAlignment.start,
-                                //               children: [
-                                //                 for (int i = 0;
-                                //                     i < areaModels.length;
-                                //                     i++)
-                                //                   Column(
-                                //                     crossAxisAlignment:
-                                //                         CrossAxisAlignment.start,
-                                //                     children: [
-                                //                       areaModels[i].quantity == '3'
-                                //                           ? Row(
-                                //                               mainAxisAlignment:
-                                //                                   MainAxisAlignment
-                                //                                       .start,
-                                //                               children: [
-                                //                                 createCard(i),
-                                //                               ],
-                                //                             )
-                                //                           : SizedBox(),
-                                //                     ],
-                                //                   ),
-                                //                 SizedBox(
-                                //                   width: 300,
-                                //                 )
-                                //               ]),
-                                //         ),
-                                //       ),
-                                //     ],
-                                //   ),
-                                // ),
-                              ],
-                            ),
                     ),
                   )
                 ],
@@ -5039,7 +5289,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                                                                           onTap: () async {
                                                                                             int index = areaModels.indexWhere((area) => area.ser.toString().trim() == areaModel.ser);
                                                                                             onCountrySelected.call(areaModel);
-                                                                                            print('${areaModel.id}  ');
+                                                                                            // print('${areaModel.id}  ');
                                                                                             Future.delayed(const Duration(milliseconds: 200), () {
                                                                                               dialog_svg(index, context);
                                                                                             });
@@ -5780,7 +6030,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       areaxConModels.clear();
       for (var map in result) {
         AreaxConModel areaxConModel = AreaxConModel.fromJson(map);
@@ -5849,21 +6099,25 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
               if (areaModels[index].quantity != '1')
                 ListTile(
                     onTap: () async {
-                      SharedPreferences preferences =
-                          await SharedPreferences.getInstance();
-                      preferences.setString(
-                          'zoneSer', areaModels[index].zser.toString());
-                      preferences.setString(
-                          'zonesName', areaModels[index].zn.toString());
-                      setState(() {
-                        Ser_Body = 1;
-                        a_ln = areaModels[index].lncode;
-                        a_ser = areaModels[index].ser;
-                        a_area = areaModels[index].area;
-                        a_rent = areaModels[index].rent;
-                        a_page = '1';
-                      });
-                      Navigator.pop(context, 'OK');
+                      if (renTal_lavel <= 2) {
+                        infomation();
+                      } else {
+                        SharedPreferences preferences =
+                            await SharedPreferences.getInstance();
+                        preferences.setString(
+                            'zoneSer', areaModels[index].zser.toString());
+                        preferences.setString(
+                            'zonesName', areaModels[index].zn.toString());
+                        setState(() {
+                          Ser_Body = 1;
+                          a_ln = areaModels[index].lncode;
+                          a_ser = areaModels[index].ser;
+                          a_area = areaModels[index].area;
+                          a_rent = areaModels[index].rent;
+                          a_page = '1';
+                        });
+                        Navigator.pop(context, 'OK');
+                      }
                     },
                     title: Container(
                       decoration: const BoxDecoration(
@@ -5896,22 +6150,26 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
               if (areaModels[index].quantity != '1')
                 ListTile(
                     onTap: () async {
-                      SharedPreferences preferences =
-                          await SharedPreferences.getInstance();
-                      preferences.setString(
-                          'zoneSer', areaModels[index].zser.toString());
-                      preferences.setString(
-                          'zonesName', areaModels[index].zn.toString());
+                      if (renTal_lavel <= 2) {
+                        infomation();
+                      } else {
+                        SharedPreferences preferences =
+                            await SharedPreferences.getInstance();
+                        preferences.setString(
+                            'zoneSer', areaModels[index].zser.toString());
+                        preferences.setString(
+                            'zonesName', areaModels[index].zn.toString());
 
-                      setState(() {
-                        Ser_Body = 2;
-                        a_ln = areaModels[index].lncode;
-                        a_ser = areaModels[index].ser;
-                        a_area = areaModels[index].area;
-                        a_rent = areaModels[index].rent;
-                        a_page = '1';
-                      });
-                      Navigator.pop(context, 'OK');
+                        setState(() {
+                          Ser_Body = 2;
+                          a_ln = areaModels[index].lncode;
+                          a_ser = areaModels[index].ser;
+                          a_area = areaModels[index].area;
+                          a_rent = areaModels[index].rent;
+                          a_page = '1';
+                        });
+                        Navigator.pop(context, 'OK');
+                      }
                     },
                     title: Container(
                       decoration: BoxDecoration(
@@ -5946,13 +6204,17 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                 for (int i = 0; i < areaxConModels.length; i++)
                   ListTile(
                       onTap: () async {
-                        setState(() {
-                          Ser_Body = 3;
-                          Value_stasus = '0';
-                          Value_cid = areaxConModels[i].cser;
-                          ser_cidtan = '1';
-                        });
-                        Navigator.pop(context, 'OK');
+                        if (renTal_lavel <= 2) {
+                          infomation();
+                        } else {
+                          setState(() {
+                            Ser_Body = 3;
+                            Value_stasus = '0';
+                            Value_cid = areaxConModels[i].cser;
+                            ser_cidtan = '1';
+                          });
+                          Navigator.pop(context, 'OK');
+                        }
                       },
                       // title: '${areaxConModels[i].cser} (${areaxConModels[i].cname})',
                       // textStyle: const TextStyle(
@@ -5991,30 +6253,35 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                 if (areaModels[index].cid != areaModels[index].fid)
                   ListTile(
                       onTap: () async {
-                        setState(() {
-                          Ser_Body = 3;
-                          Value_stasus = areaModels[index].quantity == '1'
-                              ? datex.isAfter(DateTime.parse(
-                                              '${areaModels[index].ldate} 00:00:00.000')
-                                          .subtract(const Duration(days: 0))) ==
-                                      true
-                                  ? 'หมดสัญญา'
-                                  : datex.isAfter(DateTime.parse(
-                                                  '${areaModels[index].ldate} 00:00:00.000')
-                                              .subtract(Duration(
-                                                  days: open_set_date))) ==
-                                          true
-                                      ? 'ใกล้หมดสัญญา'
-                                      : 'เช่าอยู่'
-                              : areaModels[index].quantity == '2'
-                                  ? 'เสนอราคา'
-                                  : areaModels[index].quantity == '3'
-                                      ? 'เสนอราคา(มัดจำ)'
-                                      : 'ว่าง';
-                          Value_cid = areaModels[index].fid;
-                          ser_cidtan = '1';
-                        });
-                        Navigator.pop(context, 'OK');
+                        if (renTal_lavel <= 2) {
+                          infomation();
+                        } else {
+                          setState(() {
+                            Ser_Body = 3;
+                            Value_stasus = areaModels[index].quantity == '1'
+                                ? datex.isAfter(DateTime.parse(
+                                                '${areaModels[index].ldate} 00:00:00.000')
+                                            .subtract(
+                                                const Duration(days: 0))) ==
+                                        true
+                                    ? 'หมดสัญญา'
+                                    : datex.isAfter(DateTime.parse(
+                                                    '${areaModels[index].ldate} 00:00:00.000')
+                                                .subtract(Duration(
+                                                    days: open_set_date))) ==
+                                            true
+                                        ? 'ใกล้หมดสัญญา'
+                                        : 'เช่าอยู่'
+                                : areaModels[index].quantity == '2'
+                                    ? 'เสนอราคา'
+                                    : areaModels[index].quantity == '3'
+                                        ? 'เสนอราคา(มัดจำ)'
+                                        : 'ว่าง';
+                            Value_cid = areaModels[index].fid;
+                            ser_cidtan = '1';
+                          });
+                          Navigator.pop(context, 'OK');
+                        }
                       },
                       // title:
                       //     'เช่าอยู่: ${areaModels[index].cid} (${areaModels[index].cname})',
@@ -6055,30 +6322,34 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
               if (areaModels[index].quantity == '1')
                 ListTile(
                     onTap: () async {
-                      setState(() {
-                        Ser_Body = 3;
-                        Value_stasus = areaModels[index].quantity == '1'
-                            ? datex.isAfter(DateTime.parse(
-                                            '${areaModels[index].ldate} 00:00:00.000')
-                                        .subtract(const Duration(days: 0))) ==
-                                    true
-                                ? 'หมดสัญญา'
-                                : datex.isAfter(DateTime.parse(
-                                                '${areaModels[index].ldate} 00:00:00.000')
-                                            .subtract(Duration(
-                                                days: open_set_date))) ==
-                                        true
-                                    ? 'ใกล้หมดสัญญา'
-                                    : 'เช่าอยู่'
-                            : areaModels[index].quantity == '2'
-                                ? 'เสนอราคา'
-                                : areaModels[index].quantity == '3'
-                                    ? 'เสนอราคา(มัดจำ)'
-                                    : 'ว่าง';
-                        Value_cid = areaModels[index].cid;
-                        ser_cidtan = '1';
-                      });
-                      Navigator.pop(context, 'OK');
+                      if (renTal_lavel <= 2) {
+                        infomation();
+                      } else {
+                        setState(() {
+                          Ser_Body = 3;
+                          Value_stasus = areaModels[index].quantity == '1'
+                              ? datex.isAfter(DateTime.parse(
+                                              '${areaModels[index].ldate} 00:00:00.000')
+                                          .subtract(const Duration(days: 0))) ==
+                                      true
+                                  ? 'หมดสัญญา'
+                                  : datex.isAfter(DateTime.parse(
+                                                  '${areaModels[index].ldate} 00:00:00.000')
+                                              .subtract(Duration(
+                                                  days: open_set_date))) ==
+                                          true
+                                      ? 'ใกล้หมดสัญญา'
+                                      : 'เช่าอยู่'
+                              : areaModels[index].quantity == '2'
+                                  ? 'เสนอราคา'
+                                  : areaModels[index].quantity == '3'
+                                      ? 'เสนอราคา(มัดจำ)'
+                                      : 'ว่าง';
+                          Value_cid = areaModels[index].cid;
+                          ser_cidtan = '1';
+                        });
+                        Navigator.pop(context, 'OK');
+                      }
                     },
                     // title:
                     //     'เช่าอยู่: ${areaModels[index].cid} (${areaModels[index].cname})',
@@ -6119,30 +6390,34 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
               if (areaModels[index].quantity == '1')
                 ListTile(
                     onTap: () async {
-                      setState(() {
-                        Value_stasus = areaModels[index].quantity == '1'
-                            ? datex.isAfter(DateTime.parse(
-                                            '${areaModels[index].ldate} 00:00:00.000')
-                                        .subtract(const Duration(days: 0))) ==
-                                    true
-                                ? 'หมดสัญญา'
-                                : datex.isAfter(DateTime.parse(
-                                                '${areaModels[index].ldate} 00:00:00.000')
-                                            .subtract(Duration(
-                                                days: open_set_date))) ==
-                                        true
-                                    ? 'ใกล้หมดสัญญา'
-                                    : 'เช่าอยู่'
-                            : areaModels[index].quantity == '2'
-                                ? 'เสนอราคา'
-                                : areaModels[index].quantity == '3'
-                                    ? 'เสนอราคา(มัดจำ)'
-                                    : 'ว่าง';
-                        Ser_Body = 4;
-                        Value_cid = areaModels[index].cid;
-                        ser_cidtan = '1';
-                      });
-                      Navigator.pop(context, 'OK');
+                      if (renTal_lavel <= 2) {
+                        infomation();
+                      } else {
+                        setState(() {
+                          Value_stasus = areaModels[index].quantity == '1'
+                              ? datex.isAfter(DateTime.parse(
+                                              '${areaModels[index].ldate} 00:00:00.000')
+                                          .subtract(const Duration(days: 0))) ==
+                                      true
+                                  ? 'หมดสัญญา'
+                                  : datex.isAfter(DateTime.parse(
+                                                  '${areaModels[index].ldate} 00:00:00.000')
+                                              .subtract(Duration(
+                                                  days: open_set_date))) ==
+                                          true
+                                      ? 'ใกล้หมดสัญญา'
+                                      : 'เช่าอยู่'
+                              : areaModels[index].quantity == '2'
+                                  ? 'เสนอราคา'
+                                  : areaModels[index].quantity == '3'
+                                      ? 'เสนอราคา(มัดจำ)'
+                                      : 'ว่าง';
+                          Ser_Body = 4;
+                          Value_cid = areaModels[index].cid;
+                          ser_cidtan = '1';
+                        });
+                        Navigator.pop(context, 'OK');
+                      }
                     },
                     // title:
                     //     'รับชำระ: ${areaModels[index].cid} (${areaModels[index].cname})',
@@ -6187,13 +6462,17 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                       true)
                     ListTile(
                         onTap: () async {
-                          setState(() {
-                            Ser_Body = 3;
-                            Value_stasus = '1';
-                            Value_cid = areaQuotModels[i].docno;
-                            ser_cidtan = '2';
-                          });
-                          Navigator.pop(context, 'OK');
+                          if (renTal_lavel <= 2) {
+                            infomation();
+                          } else {
+                            setState(() {
+                              Ser_Body = 3;
+                              Value_stasus = '1';
+                              Value_cid = areaQuotModels[i].docno;
+                              ser_cidtan = '2';
+                            });
+                            Navigator.pop(context, 'OK');
+                          }
                         },
                         // title: 'เสนอราคา: ${areaQuotModels[i].docno}',
                         // textStyle: const TextStyle(
@@ -6239,13 +6518,17 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                       true)
                     ListTile(
                         onTap: () async {
-                          setState(() {
-                            Ser_Body = 3;
-                            Value_stasus = '1';
-                            Value_cid = areaQuotModels[i].docno;
-                            ser_cidtan = '2';
-                          });
-                          Navigator.pop(context, 'OK');
+                          if (renTal_lavel <= 2) {
+                            infomation();
+                          } else {
+                            setState(() {
+                              Ser_Body = 3;
+                              Value_stasus = '1';
+                              Value_cid = areaQuotModels[i].docno;
+                              ser_cidtan = '2';
+                            });
+                            Navigator.pop(context, 'OK');
+                          }
                         },
                         // title: 'เสนอราคา: (มัดจำ) ${areaQuotModels[i].docno}',
                         // textStyle: const TextStyle(
@@ -6378,21 +6661,26 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
               //     fontFamily: Font_.Fonts_T),
               image: InkWell(
                   onTap: () async {
-                    SharedPreferences preferences =
-                        await SharedPreferences.getInstance();
-                    preferences.setString(
-                        'zoneSer', areaModels[index].zser.toString());
-                    preferences.setString(
-                        'zonesName', areaModels[index].zn.toString());
-                    setState(() {
-                      Ser_Body = 1;
-                      a_ln = areaModels[index].lncode;
-                      a_ser = areaModels[index].ser;
-                      a_area = areaModels[index].area;
-                      a_rent = areaModels[index].rent;
-                      a_page = '1';
-                    });
-                    menu!.dismiss();
+                    if (renTal_lavel <= 2) {
+                      menu!.dismiss();
+                      infomation();
+                    } else {
+                      SharedPreferences preferences =
+                          await SharedPreferences.getInstance();
+                      preferences.setString(
+                          'zoneSer', areaModels[index].zser.toString());
+                      preferences.setString(
+                          'zonesName', areaModels[index].zn.toString());
+                      setState(() {
+                        Ser_Body = 1;
+                        a_ln = areaModels[index].lncode;
+                        a_ser = areaModels[index].ser;
+                        a_area = areaModels[index].area;
+                        a_rent = areaModels[index].rent;
+                        a_page = '1';
+                      });
+                      menu!.dismiss();
+                    }
                     // Navigator.pop(context);
                   },
                   child: Container(
@@ -6433,22 +6721,27 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
               //     fontFamily: Font_.Fonts_T),
               image: InkWell(
                   onTap: () async {
-                    SharedPreferences preferences =
-                        await SharedPreferences.getInstance();
-                    preferences.setString(
-                        'zoneSer', areaModels[index].zser.toString());
-                    preferences.setString(
-                        'zonesName', areaModels[index].zn.toString());
+                    if (renTal_lavel <= 2) {
+                      menu!.dismiss();
+                      infomation();
+                    } else {
+                      SharedPreferences preferences =
+                          await SharedPreferences.getInstance();
+                      preferences.setString(
+                          'zoneSer', areaModels[index].zser.toString());
+                      preferences.setString(
+                          'zonesName', areaModels[index].zn.toString());
 
-                    setState(() {
-                      Ser_Body = 2;
-                      a_ln = areaModels[index].lncode;
-                      a_ser = areaModels[index].ser;
-                      a_area = areaModels[index].area;
-                      a_rent = areaModels[index].rent;
-                      a_page = '1';
-                    });
-                    menu!.dismiss();
+                      setState(() {
+                        Ser_Body = 2;
+                        a_ln = areaModels[index].lncode;
+                        a_ser = areaModels[index].ser;
+                        a_area = areaModels[index].area;
+                        a_rent = areaModels[index].rent;
+                        a_page = '1';
+                      });
+                      menu!.dismiss();
+                    }
                     // Navigator.pop(context);
                   },
                   child: Container(
@@ -6490,13 +6783,18 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                 //     fontFamily: Font_.Fonts_T),
                 image: InkWell(
                     onTap: () async {
-                      setState(() {
-                        Ser_Body = 3;
-                        Value_stasus = '0';
-                        Value_cid = areaxConModels[i].cser;
-                        ser_cidtan = '1';
-                      });
-                      menu!.dismiss();
+                      if (renTal_lavel <= 2) {
+                        menu!.dismiss();
+                        infomation();
+                      } else {
+                        setState(() {
+                          Ser_Body = 3;
+                          Value_stasus = '0';
+                          Value_cid = areaxConModels[i].cser;
+                          ser_cidtan = '1';
+                        });
+                        menu!.dismiss();
+                      }
                       // Navigator.pop(context);
                     },
                     child: Container(
@@ -6538,30 +6836,35 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                 //     fontFamily: Font_.Fonts_T),
                 image: InkWell(
                     onTap: () async {
-                      setState(() {
-                        Ser_Body = 3;
-                        Value_stasus = areaModels[index].quantity == '1'
-                            ? datex.isAfter(DateTime.parse(
-                                            '${areaModels[index].ldate} 00:00:00.000')
-                                        .subtract(const Duration(days: 0))) ==
-                                    true
-                                ? 'หมดสัญญา'
-                                : datex.isAfter(DateTime.parse(
-                                                '${areaModels[index].ldate} 00:00:00.000')
-                                            .subtract(Duration(
-                                                days: open_set_date))) ==
-                                        true
-                                    ? 'ใกล้หมดสัญญา'
-                                    : 'เช่าอยู่'
-                            : areaModels[index].quantity == '2'
-                                ? 'เสนอราคา'
-                                : areaModels[index].quantity == '3'
-                                    ? 'เสนอราคา(มัดจำ)'
-                                    : 'ว่าง';
-                        Value_cid = areaModels[index].fid;
-                        ser_cidtan = '1';
-                      });
-                      menu!.dismiss();
+                      if (renTal_lavel <= 2) {
+                        menu!.dismiss();
+                        infomation();
+                      } else {
+                        setState(() {
+                          Ser_Body = 3;
+                          Value_stasus = areaModels[index].quantity == '1'
+                              ? datex.isAfter(DateTime.parse(
+                                              '${areaModels[index].ldate} 00:00:00.000')
+                                          .subtract(const Duration(days: 0))) ==
+                                      true
+                                  ? 'หมดสัญญา'
+                                  : datex.isAfter(DateTime.parse(
+                                                  '${areaModels[index].ldate} 00:00:00.000')
+                                              .subtract(Duration(
+                                                  days: open_set_date))) ==
+                                          true
+                                      ? 'ใกล้หมดสัญญา'
+                                      : 'เช่าอยู่'
+                              : areaModels[index].quantity == '2'
+                                  ? 'เสนอราคา'
+                                  : areaModels[index].quantity == '3'
+                                      ? 'เสนอราคา(มัดจำ)'
+                                      : 'ว่าง';
+                          Value_cid = areaModels[index].fid;
+                          ser_cidtan = '1';
+                        });
+                        menu!.dismiss();
+                      }
                       // Navigator.pop(context);
                     },
                     child: Container(
@@ -6603,30 +6906,35 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
               //     fontFamily: Font_.Fonts_T),
               image: InkWell(
                   onTap: () async {
-                    setState(() {
-                      Ser_Body = 3;
-                      Value_stasus = areaModels[index].quantity == '1'
-                          ? datex.isAfter(DateTime.parse(
-                                          '${areaModels[index].ldate} 00:00:00.000')
-                                      .subtract(const Duration(days: 0))) ==
-                                  true
-                              ? 'หมดสัญญา'
-                              : datex.isAfter(DateTime.parse(
-                                              '${areaModels[index].ldate} 00:00:00.000')
-                                          .subtract(
-                                              Duration(days: open_set_date))) ==
-                                      true
-                                  ? 'ใกล้หมดสัญญา'
-                                  : 'เช่าอยู่'
-                          : areaModels[index].quantity == '2'
-                              ? 'เสนอราคา'
-                              : areaModels[index].quantity == '3'
-                                  ? 'เสนอราคา(มัดจำ)'
-                                  : 'ว่าง';
-                      Value_cid = areaModels[index].cid;
-                      ser_cidtan = '1';
-                    });
-                    menu!.dismiss();
+                    if (renTal_lavel <= 2) {
+                      menu!.dismiss();
+                      infomation();
+                    } else {
+                      setState(() {
+                        Ser_Body = 3;
+                        Value_stasus = areaModels[index].quantity == '1'
+                            ? datex.isAfter(DateTime.parse(
+                                            '${areaModels[index].ldate} 00:00:00.000')
+                                        .subtract(const Duration(days: 0))) ==
+                                    true
+                                ? 'หมดสัญญา'
+                                : datex.isAfter(DateTime.parse(
+                                                '${areaModels[index].ldate} 00:00:00.000')
+                                            .subtract(Duration(
+                                                days: open_set_date))) ==
+                                        true
+                                    ? 'ใกล้หมดสัญญา'
+                                    : 'เช่าอยู่'
+                            : areaModels[index].quantity == '2'
+                                ? 'เสนอราคา'
+                                : areaModels[index].quantity == '3'
+                                    ? 'เสนอราคา(มัดจำ)'
+                                    : 'ว่าง';
+                        Value_cid = areaModels[index].cid;
+                        ser_cidtan = '1';
+                      });
+                      menu!.dismiss();
+                    }
                     // Navigator.pop(context);
                   },
                   child: Container(
@@ -6669,30 +6977,35 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
               //     fontFamily: Font_.Fonts_T),
               image: InkWell(
                   onTap: () async {
-                    setState(() {
-                      Value_stasus = areaModels[index].quantity == '1'
-                          ? datex.isAfter(DateTime.parse(
-                                          '${areaModels[index].ldate} 00:00:00.000')
-                                      .subtract(const Duration(days: 0))) ==
-                                  true
-                              ? 'หมดสัญญา'
-                              : datex.isAfter(DateTime.parse(
-                                              '${areaModels[index].ldate} 00:00:00.000')
-                                          .subtract(
-                                              Duration(days: open_set_date))) ==
-                                      true
-                                  ? 'ใกล้หมดสัญญา'
-                                  : 'เช่าอยู่'
-                          : areaModels[index].quantity == '2'
-                              ? 'เสนอราคา'
-                              : areaModels[index].quantity == '3'
-                                  ? 'เสนอราคา(มัดจำ)'
-                                  : 'ว่าง';
-                      Ser_Body = 4;
-                      Value_cid = areaModels[index].cid;
-                      ser_cidtan = '1';
-                    });
-                    menu!.dismiss();
+                    if (renTal_lavel <= 2) {
+                      menu!.dismiss();
+                      infomation();
+                    } else {
+                      setState(() {
+                        Value_stasus = areaModels[index].quantity == '1'
+                            ? datex.isAfter(DateTime.parse(
+                                            '${areaModels[index].ldate} 00:00:00.000')
+                                        .subtract(const Duration(days: 0))) ==
+                                    true
+                                ? 'หมดสัญญา'
+                                : datex.isAfter(DateTime.parse(
+                                                '${areaModels[index].ldate} 00:00:00.000')
+                                            .subtract(Duration(
+                                                days: open_set_date))) ==
+                                        true
+                                    ? 'ใกล้หมดสัญญา'
+                                    : 'เช่าอยู่'
+                            : areaModels[index].quantity == '2'
+                                ? 'เสนอราคา'
+                                : areaModels[index].quantity == '3'
+                                    ? 'เสนอราคา(มัดจำ)'
+                                    : 'ว่าง';
+                        Ser_Body = 4;
+                        Value_cid = areaModels[index].cid;
+                        ser_cidtan = '1';
+                      });
+                      menu!.dismiss();
+                    }
                     // Navigator.pop(context);
                   },
                   child: Container(
@@ -6738,13 +7051,18 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                   //     fontFamily: Font_.Fonts_T),
                   image: InkWell(
                       onTap: () async {
-                        setState(() {
-                          Ser_Body = 3;
-                          Value_stasus = '1';
-                          Value_cid = areaQuotModels[i].docno;
-                          ser_cidtan = '2';
-                        });
-                        menu!.dismiss();
+                        if (renTal_lavel <= 2) {
+                          menu!.dismiss();
+                          infomation();
+                        } else {
+                          setState(() {
+                            Ser_Body = 3;
+                            Value_stasus = '1';
+                            Value_cid = areaQuotModels[i].docno;
+                            ser_cidtan = '2';
+                          });
+                          menu!.dismiss();
+                        }
                         // Navigator.pop(context);
                       },
                       child: Container(
@@ -6791,13 +7109,18 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                   //     fontFamily: Font_.Fonts_T),
                   image: InkWell(
                       onTap: () async {
-                        setState(() {
-                          Ser_Body = 3;
-                          Value_stasus = '1';
-                          Value_cid = areaQuotModels[i].docno;
-                          ser_cidtan = '2';
-                        });
-                        menu!.dismiss();
+                        if (renTal_lavel <= 2) {
+                          menu!.dismiss();
+                          infomation();
+                        } else {
+                          setState(() {
+                            Ser_Body = 3;
+                            Value_stasus = '1';
+                            Value_cid = areaQuotModels[i].docno;
+                            ser_cidtan = '2';
+                          });
+                          menu!.dismiss();
+                        }
                         // Navigator.pop(context);
                       },
                       child: Container(
@@ -6898,9 +7221,9 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                     var oo = areaQuotModels[i]
                         .ln_q!
                         .contains(areaModels[index].ln.toString());
-                    print('$oo');
-                    print('${areaQuotModels[i].ln_q}');
-                    print('${areaModels[index].ln}');
+                    // print('$oo');
+                    // print('${areaQuotModels[i].ln_q}');
+                    // print('${areaModels[index].ln}');
                   }
                 }
 
@@ -6938,15 +7261,15 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                       Center(
                           child: AutoSizeText(
                         '${areaModels[index].lncode} (${areaModels[index].ln})',
-                        minFontSize: 10,
-                        maxFontSize: 18,
+                        minFontSize: 8,
+                        maxFontSize: (Responsive.isDesktop(context)) ? 18 : 12,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           // fontSize: 20,
                           fontFamily: Font_.Fonts_T,
                           color: PeopleChaoScreen_Color.Colors_Text2_,
                         ),
-                        maxLines: 4,
+                        maxLines: (Responsive.isDesktop(context)) ? 4 : 2,
                         overflow: TextOverflow.ellipsis,
                       )),
                       AutoSizeText(

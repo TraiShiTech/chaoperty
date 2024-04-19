@@ -122,6 +122,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
     'ต้นฉบับ',
     'สำเนา',
   ];
+
+    List Customer_stype = [];
   ////////------------------------------------>
   String? teNantcid, teNantsname, teNantnamenew;
   String? rtname,
@@ -241,6 +243,31 @@ class _LockpayScreenState extends State<LockpayScreen> {
     Value_newDateD1 = DateFormat('dd-MM-yyyy').format(newDatetime);
     Value_newDateY = DateFormat('yyyy-MM-dd').format(newDatetime);
     Value_newDateD = DateFormat('dd-MM-yyyy').format(newDatetime);
+      read_Customer_stype();
+  }
+  Future<Null> read_Customer_stype() async {
+    if (Customer_stype.length != 0) {
+      Customer_stype.clear();
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    var ren = preferences.getString('renTalSer');
+
+    String url =
+        '${MyConstant().domain}/GC_customer_type.php?isAdd=true&ren=$ren';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+
+      for (var map in result) {
+        CustomerModel customerModelss = CustomerModel.fromJson(map);
+        setState(() {
+          Customer_stype.add(customerModelss.stype);
+        });
+      }
+    } catch (e) {}
   }
 
   Future<Null> read_GC_areak() async {
@@ -3039,6 +3066,58 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                     //   FilteringTextInputFormatter.digitsOnly
                                     // ],
                                   ),
+                                ),
+                              ),
+                                     Center(
+                                child: PopupMenuButton(
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.brown.shade800,
+                                    child: Icon(Icons.search),
+                                  ),
+                                  itemBuilder: (BuildContext context) => [
+                                    for (int index = 0;
+                                        index < Customer_stype.length;
+                                        index++)
+                                      PopupMenuItem(
+                                          onTap: () async {
+                                            setState(() {
+                                              Status4Form_typeshop.text =
+                                                  Customer_stype[index]
+                                                      .toString();
+                                            });
+                                          },
+                                          child: Container(
+                                            decoration: const BoxDecoration(
+                                              // color: Colors.green[100]!
+                                              //     .withOpacity(0.5),
+                                              border: Border(
+                                                bottom: BorderSide(
+                                                  color: Colors.black12,
+                                                  width: 1,
+                                                ),
+                                              ),
+                                            ),
+                                            padding: const EdgeInsets.all(2.0),
+                                            // width: 200,
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Text(
+                                                    '${index + 1}. ${Customer_stype[index]}',
+                                                    style: const TextStyle(
+                                                      fontSize: 14,
+                                                      color: ReportScreen_Color
+                                                          .Colors_Text2_,
+                                                      // fontWeight: FontWeight.bold,
+                                                      fontFamily: Font_.Fonts_T,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )),
+                                  ],
                                 ),
                               ),
                             ],

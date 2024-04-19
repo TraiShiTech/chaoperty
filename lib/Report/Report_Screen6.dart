@@ -141,7 +141,7 @@ class _ReportScreen6State extends State<ReportScreen6> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       Map<String, dynamic> map = Map();
       map['ser'] = '0';
       map['rser'] = '0';
@@ -209,7 +209,7 @@ class _ReportScreen6State extends State<ReportScreen6> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           SyslogModel syslogModels = SyslogModel.fromJson(map);
@@ -220,7 +220,7 @@ class _ReportScreen6State extends State<ReportScreen6> {
           }
         }
 
-        print('00000000>>>>>>>>>>>>>>>>> ${syslogModel_Mon.length}');
+        // print('00000000>>>>>>>>>>>>>>>>> ${syslogModel_Mon.length}');
       } else {}
     } catch (e) {}
     setState(() {
@@ -249,7 +249,7 @@ class _ReportScreen6State extends State<ReportScreen6> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           SyslogModel syslogModels_User = SyslogModel.fromJson(map);
@@ -261,7 +261,7 @@ class _ReportScreen6State extends State<ReportScreen6> {
           }
         }
 
-        print('00000000>>>>>>>>>>>>>>>>> ${syslogModel_Mon_User.length}');
+        // print('00000000>>>>>>>>>>>>>>>>> ${syslogModel_Mon_User.length}');
       } else {}
     } catch (e) {}
     setState(() {
@@ -291,7 +291,7 @@ class _ReportScreen6State extends State<ReportScreen6> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           SyslogModel syslogModels = SyslogModel.fromJson(map);
@@ -303,7 +303,7 @@ class _ReportScreen6State extends State<ReportScreen6> {
           }
         }
 
-        print('00000000>>>>>>>>>>>>>>>>> ${syslogModel.length}');
+        // print('00000000>>>>>>>>>>>>>>>>> ${syslogModel.length}');
       } else {}
     } catch (e) {}
     setState(() {
@@ -333,7 +333,7 @@ class _ReportScreen6State extends State<ReportScreen6> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           SyslogModel syslogModels = SyslogModel.fromJson(map);
@@ -346,7 +346,7 @@ class _ReportScreen6State extends State<ReportScreen6> {
           }
         }
 
-        print('00000000>>>>>>>>>>>>>>>>> ${syslogModel_User.length}');
+        // print('00000000>>>>>>>>>>>>>>>>> ${syslogModel_User.length}');
       } else {}
     } catch (e) {}
     setState(() {
@@ -845,8 +845,8 @@ class _ReportScreen6State extends State<ReportScreen6> {
                                 Value_Chang_Menu_LogSytem_Ser_Mon =
                                     selectedIndex.toString();
                               });
-                              print(
-                                  'Selected Index: $Value_Chang_Menu_LogSytem_Mon  //${Value_Chang_Menu_LogSytem_Ser_Mon}');
+                              // print(
+                              //     'Selected Index: $Value_Chang_Menu_LogSytem_Mon  //${Value_Chang_Menu_LogSytem_Ser_Mon}');
                             },
                           ),
                         ),
@@ -1151,8 +1151,8 @@ class _ReportScreen6State extends State<ReportScreen6> {
                                 Value_Chang_Menu_LogSytem_Ser =
                                     selectedIndex.toString();
                               });
-                              print(
-                                  'Selected Index: $Value_Chang_Menu_LogSytem  //${Value_Chang_Menu_LogSytem_Ser}');
+                              // print(
+                              //     'Selected Index: $Value_Chang_Menu_LogSytem  //${Value_Chang_Menu_LogSytem_Ser}');
                             },
                           ),
                         ),
@@ -1640,8 +1640,8 @@ class _ReportScreen6State extends State<ReportScreen6> {
                                 Value_Chang_Menu_LogSytem_Ser_Mon_User =
                                     selectedIndex.toString();
                               });
-                              print(
-                                  'Selected Index: $Value_Chang_Menu_LogSytem_Mon_User  //${Value_Chang_Menu_LogSytem_Ser_Mon_User}');
+                              // print(
+                              //     'Selected Index: $Value_Chang_Menu_LogSytem_Mon_User  //${Value_Chang_Menu_LogSytem_Ser_Mon_User}');
                             },
                           ),
                         ),
@@ -1947,8 +1947,8 @@ class _ReportScreen6State extends State<ReportScreen6> {
                                 Value_Chang_Menu_LogSytem_Ser_User =
                                     selectedIndex.toString();
                               });
-                              print(
-                                  'Selected Index: $Value_Chang_Menu_LogSytem_User  //${Value_Chang_Menu_LogSytem_Ser_User}');
+                              // print(
+                              //     'Selected Index: $Value_Chang_Menu_LogSytem_User  //${Value_Chang_Menu_LogSytem_Ser_User}');
                             },
                           ),
                         ),
@@ -2190,7 +2190,7 @@ class _ReportScreen6State extends State<ReportScreen6> {
                                   children: <Widget>[
                                     Container(
                                       // width: 1050,
-                                      decoration: const BoxDecoration(
+                                      decoration: BoxDecoration(
                                         color: AppbackgroundColor.TiTile_Colors,
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(10),
@@ -2684,7 +2684,7 @@ class _ReportScreen6State extends State<ReportScreen6> {
                                   children: <Widget>[
                                     Container(
                                       // width: 1050,
-                                      decoration: const BoxDecoration(
+                                      decoration: BoxDecoration(
                                         color: AppbackgroundColor.TiTile_Colors,
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(10),
@@ -3179,7 +3179,7 @@ class _ReportScreen6State extends State<ReportScreen6> {
                                   children: <Widget>[
                                     Container(
                                       // width: 1050,
-                                      decoration: const BoxDecoration(
+                                      decoration: BoxDecoration(
                                         color: AppbackgroundColor.TiTile_Colors,
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(10),
@@ -3669,7 +3669,7 @@ class _ReportScreen6State extends State<ReportScreen6> {
                                   children: <Widget>[
                                     Container(
                                       // width: 1050,
-                                      decoration: const BoxDecoration(
+                                      decoration: BoxDecoration(
                                         color: AppbackgroundColor.TiTile_Colors,
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(10),

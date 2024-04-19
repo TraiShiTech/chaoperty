@@ -131,6 +131,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
   List<RenTalModel> renTalModels = [];
   List<ExpAutoModel> expAutoModels = [];
   List<String> amtlist = [];
+  List Customer_stype = [];
   @override
   void initState() {
     super.initState();
@@ -147,6 +148,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
     read_GC_rental();
     read_GC_ExpAuto();
     read_Electricity();
+    read_Customer_stype();
     Value_D_read = DateFormat('yyyy-MM-dd').format(_dateTime);
     _areaModels = areaModels;
     _customerModels = customerModels;
@@ -163,6 +165,31 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
     print('ssss>>>> $_area_sum    $_area_rent_sum');
     print(
         'aaaa>>>> ${_selecteSerbool.map((e) => e)}    ${_selecteSer.map((e) => e)} ');
+  }
+
+  Future<Null> read_Customer_stype() async {
+    if (Customer_stype.length != 0) {
+      Customer_stype.clear();
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    var ren = preferences.getString('renTalSer');
+
+    String url =
+        '${MyConstant().domain}/GC_customer_type.php?isAdd=true&ren=$ren';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+
+      for (var map in result) {
+        CustomerModel customerModelss = CustomerModel.fromJson(map);
+        setState(() {
+          Customer_stype.add(customerModelss.stype);
+        });
+      }
+    } catch (e) {}
   }
 
   Future<Null> read_Electricity() async {
@@ -479,8 +506,11 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
 
     var seruser = preferences.getString('ser');
     var utype = preferences.getString('utype');
+    var ren = preferences.getString('renTalSer');
     String url =
-        '${MyConstant().domain}/GC_rental.php?isAdd=true&ser=$seruser&type=$utype';
+        '${MyConstant().domain}/GC_rental_setring.php?isAdd=true&ren=$ren';
+    // String url =
+    //     '${MyConstant().domain}/GC_rental.php?isAdd=true&ser=$seruser&type=$utype';
 
     try {
       var response = await http.get(Uri.parse(url));
@@ -3128,6 +3158,57 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                               ),
                             ),
                           ),
+                          Center(
+                            child: PopupMenuButton(
+                              child: CircleAvatar(
+                                backgroundColor: Colors.brown.shade800,
+                                child: Icon(Icons.search),
+                              ),
+                              itemBuilder: (BuildContext context) => [
+                                for (int index = 0;
+                                    index < Customer_stype.length;
+                                    index++)
+                                  PopupMenuItem(
+                                      onTap: () async {
+                                        setState(() {
+                                          Form_typeshop.text =
+                                              Customer_stype[index].toString();
+                                        });
+                                      },
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                          // color: Colors.green[100]!
+                                          //     .withOpacity(0.5),
+                                          border: Border(
+                                            bottom: BorderSide(
+                                              color: Colors.black12,
+                                              width: 1,
+                                            ),
+                                          ),
+                                        ),
+                                        padding: const EdgeInsets.all(2.0),
+                                        // width: 200,
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: Text(
+                                                '${index + 1}. ${Customer_stype[index]}',
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: ReportScreen_Color
+                                                      .Colors_Text2_,
+                                                  // fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -4223,17 +4304,34 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
           // stream: Stream.periodic(const Duration(seconds: 0)),
           builder: (context, snapshot) {
         return AlertDialog(
+          backgroundColor: AppbackgroundColor.Sub_Abg_Colors,
+          titlePadding: const EdgeInsets.all(0.0),
+          contentPadding: const EdgeInsets.all(10.0),
+          actionsPadding: const EdgeInsets.all(6.0),
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(20.0))),
-          title: Column(
-            children: const [
-              Center(
-                child: Text(
-                  'เลือกรายชื่อจากทะเบียน',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
+          title: Row(
+            children: [
+              Expanded(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'เลือกรายชื่อจากทะเบียน',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Icon(Icons.highlight_off,
+                      size: 30, color: Colors.red[700]),
                 ),
               ),
             ],
@@ -4246,7 +4344,18 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: _searchBarAll(),
+                        child: Container(
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade600,
+                              borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(15),
+                                  topRight: Radius.circular(15),
+                                  bottomLeft: Radius.circular(0),
+                                  bottomRight: Radius.circular(0)),
+                            ),
+                            padding: const EdgeInsets.all(4.0),
+                            child: _searchBarAll()),
                       ),
                     ],
                   ),
@@ -4263,14 +4372,11 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                     child: Row(
                       children: [
                         Container(
-                          // height:
-                          //     MediaQuery.of(context).size.height /
-                          //         1.5,
-                          width: (!Responsive.isDesktop(context))
-                              ? 1000
-                              : MediaQuery.of(context).size.width / 1.2,
+                          width: (Responsive.isDesktop(context))
+                              ? MediaQuery.of(context).size.width * 0.85
+                              : 1000,
                           decoration: BoxDecoration(
-                            color: Colors.grey.shade100,
+                            color: AppbackgroundColor.Sub_Abg_Colors,
                             borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(10),
                                 topRight: Radius.circular(10),
@@ -4279,31 +4385,59 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                             // border: Border.all(color: Colors.white, width: 1),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(0.0),
                             child: Container(
                                 decoration: BoxDecoration(
-                                  color: Colors.grey.shade100,
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
                                   borderRadius: const BorderRadius.only(
                                       topLeft: Radius.circular(15),
                                       topRight: Radius.circular(15),
                                       bottomLeft: Radius.circular(15),
                                       bottomRight: Radius.circular(15)),
                                 ),
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(0.0),
                                 child: Column(
                                   children: [
                                     Container(
-                                      padding: const EdgeInsets.all(10),
+                                      padding: const EdgeInsets.all(4),
                                       decoration: BoxDecoration(
                                         color: Colors.grey.shade600,
                                         borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            topRight: Radius.circular(10),
+                                            topLeft: Radius.circular(0),
+                                            topRight: Radius.circular(0),
                                             bottomLeft: Radius.circular(0),
                                             bottomRight: Radius.circular(0)),
                                       ),
                                       child: Row(
                                         children: const [
+                                          Expanded(
+                                            flex: 2,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 18,
+                                              '...',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: FontWeight_.Fonts_T,
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 2,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 18,
+                                              'Img',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: FontWeight_.Fonts_T,
+                                              ),
+                                            ),
+                                          ),
                                           Expanded(
                                             flex: 2,
                                             child: AutoSizeText(
@@ -4373,15 +4507,15 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                       ),
                                     ),
                                     Container(
-                                        width: (!Responsive.isDesktop(context))
-                                            ? 1000
-                                            : MediaQuery.of(context)
+                                        width: (Responsive.isDesktop(context))
+                                            ? MediaQuery.of(context)
                                                     .size
-                                                    .width /
-                                                1.2,
+                                                    .width *
+                                                0.85
+                                            : 1000,
                                         height:
                                             MediaQuery.of(context).size.height *
-                                                0.4,
+                                                0.8,
                                         child: StreamBuilder(
                                             stream: Stream.periodic(
                                                 const Duration(seconds: 0)),
@@ -4396,9 +4530,21 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                       (BuildContext context,
                                                           int index) {
                                                     return Container(
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                        // color: Colors.green[100]!
+                                                        //     .withOpacity(0.5),
+                                                        border: Border(
+                                                          bottom: BorderSide(
+                                                            color:
+                                                                Colors.black12,
+                                                            width: 1,
+                                                          ),
+                                                        ),
+                                                      ),
                                                       padding:
                                                           const EdgeInsets.all(
-                                                              5),
+                                                              0),
                                                       child: ListTile(
                                                         onTap: () {
                                                           setState(() {
@@ -4465,6 +4611,154 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                         },
                                                         title: Row(
                                                           children: [
+                                                            Expanded(
+                                                              flex: 2,
+                                                              child:
+                                                                  AutoSizeText(
+                                                                minFontSize: 10,
+                                                                maxFontSize: 18,
+                                                                '${index + 1} ',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  // fontWeight: FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T,
+                                                                  // fontWeight: FontWeight.bold,
+                                                                  // fontWeight: FontWeight.bold,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              flex: 2,
+                                                              child: (customerModels[index]
+                                                                              .addr2 ==
+                                                                          null ||
+                                                                      customerModels[index]
+                                                                              .addr2 ==
+                                                                          '')
+                                                                  ? Container(
+                                                                      // padding:
+                                                                      //     const EdgeInsets
+                                                                      //             .all(
+                                                                      //         2.0),
+                                                                      // decoration: BoxDecoration(
+                                                                      //     color: Colors
+                                                                      //             .grey[
+                                                                      //         200],
+                                                                      //     borderRadius:
+                                                                      //         BorderRadius.all(
+                                                                      //             Radius.circular(100))),
+                                                                      child:
+                                                                          const Center(
+                                                                        child: Icon(
+                                                                            Icons.image_not_supported_rounded),
+                                                                      ),
+                                                                    )
+                                                                  : InkWell(
+                                                                      child:
+                                                                          Container(
+                                                                        // color: Colors
+                                                                        //     .black,
+                                                                        child:
+                                                                            CircleAvatar(
+                                                                          radius:
+                                                                              30.0,
+                                                                          backgroundImage:
+                                                                              NetworkImage(
+                                                                            '${MyConstant().domain}/files/$foder/contract/${customerModels[index].addr2}',
+                                                                          ),
+                                                                          backgroundColor:
+                                                                              Colors.transparent,
+                                                                        ),
+                                                                      ),
+                                                                      onTap:
+                                                                          () {
+                                                                        // setState(() {
+                                                                        //   tappedIndex_ = index.toString();
+                                                                        // });
+                                                                        showDialog<
+                                                                            String>(
+                                                                          context:
+                                                                              context,
+                                                                          builder: (BuildContext context) =>
+                                                                              AlertDialog(
+                                                                            shape:
+                                                                                const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                                                            // title: Container(
+                                                                            //     width: MediaQuery.of(context).size.width * 0.25,
+                                                                            //     height: MediaQuery.of(context).size.width * 0.35,
+                                                                            //     child: Image.network(
+                                                                            //       '${MyConstant().domain}/files/$foder/contract/${customer_Models[index].addr2}',
+                                                                            //       fit: BoxFit.contain,
+                                                                            //     )),
+                                                                            content:
+                                                                                Container(
+                                                                              // width: MediaQuery.of(context).size.width * 0.25,
+                                                                              // height: MediaQuery.of(context).size.width * 0.32,
+                                                                              child: SingleChildScrollView(
+                                                                                child: ListBody(
+                                                                                  children: <Widget>[
+                                                                                    Container(
+                                                                                      width: MediaQuery.of(context).size.width * 0.25,
+                                                                                      height: MediaQuery.of(context).size.width * 0.32,
+                                                                                      child: Image.network(
+                                                                                        '${MyConstant().domain}/files/$foder/contract/${customerModels[index].addr2}',
+                                                                                        fit: BoxFit.contain,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            actions: <Widget>[
+                                                                              Column(
+                                                                                children: [
+                                                                                  const SizedBox(
+                                                                                    height: 5.0,
+                                                                                  ),
+                                                                                  const Divider(
+                                                                                    color: Colors.grey,
+                                                                                    height: 4.0,
+                                                                                  ),
+                                                                                  const SizedBox(
+                                                                                    height: 5.0,
+                                                                                  ),
+                                                                                  Padding(
+                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                    child: Row(
+                                                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                                                      children: [
+                                                                                        Container(
+                                                                                          width: 100,
+                                                                                          decoration: const BoxDecoration(
+                                                                                            color: Colors.redAccent,
+                                                                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                          ),
+                                                                                          padding: const EdgeInsets.all(8.0),
+                                                                                          child: TextButton(
+                                                                                            onPressed: () => Navigator.pop(context, 'OK'),
+                                                                                            child: const Text(
+                                                                                              'ปิด',
+                                                                                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        );
+                                                                      },
+                                                                    ),
+                                                            ),
                                                             Expanded(
                                                               flex: 2,
                                                               child:
@@ -4545,22 +4839,53 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                 ),
                                                               ),
                                                             ),
-                                                            const Expanded(
+                                                            Expanded(
                                                               flex: 1,
-                                                              child:
-                                                                  AutoSizeText(
-                                                                minFontSize: 10,
-                                                                maxFontSize: 18,
-                                                                'Select',
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: PeopleChaoScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  // fontWeight: FontWeight.bold,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T,
-                                                                  // fontWeight: FontWeight.bold,
-                                                                  // fontWeight: FontWeight.bold,
+                                                              child: Container(
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      500],
+                                                                  borderRadius: BorderRadius.only(
+                                                                      topLeft:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              10)),
+                                                                ),
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        4.0),
+                                                                child:
+                                                                    AutoSizeText(
+                                                                  minFontSize:
+                                                                      10,
+                                                                  maxFontSize:
+                                                                      18,
+                                                                  'Select',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: PeopleChaoScreen_Color
+                                                                        .Colors_Text2_,
+                                                                    // fontWeight: FontWeight.bold,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T,
+                                                                    // fontWeight: FontWeight.bold,
+                                                                    // fontWeight: FontWeight.bold,
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ),
@@ -4582,38 +4907,43 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
             ),
           ),
           actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
-                    width: 100,
-                    decoration: const BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10)),
-                    ),
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text(
-                        'ยกเลิก',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: FontWeight_.Fonts_T,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+            Column(
+              children: [
+                const Divider(),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.end,
+                //     children: [
+                //       Container(
+                //         width: 100,
+                //         decoration: const BoxDecoration(
+                //           color: Colors.black,
+                //           borderRadius: BorderRadius.only(
+                //               topLeft: Radius.circular(10),
+                //               topRight: Radius.circular(10),
+                //               bottomLeft: Radius.circular(10),
+                //               bottomRight: Radius.circular(10)),
+                //         ),
+                //         padding: const EdgeInsets.all(8.0),
+                //         child: TextButton(
+                //           onPressed: () {
+                //             Navigator.pop(context);
+                //           },
+                //           child: const Text(
+                //             'ยกเลิก',
+                //             style: TextStyle(
+                //               color: Colors.white,
+                //               fontWeight: FontWeight.bold,
+                //               fontFamily: FontWeight_.Fonts_T,
+                //             ),
+                //           ),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+              ],
             ),
           ],
         );
@@ -4665,18 +4995,34 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
           // stream: Stream.periodic(const Duration(seconds: 0)),
           builder: (context, snapshot) {
         return AlertDialog(
+          backgroundColor: AppbackgroundColor.Sub_Abg_Colors,
+          titlePadding: const EdgeInsets.all(0.0),
+          contentPadding: const EdgeInsets.all(10.0),
+          actionsPadding: const EdgeInsets.all(6.0),
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(20.0))),
-          title: Column(
-            children: const [
-              Center(
-                child: Text(
-                  'เลือกรายชื่อจากใบเสนอราคา',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: FontWeight_.Fonts_T,
+          title: Row(
+            children: [
+              Expanded(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'เลือกรายชื่อจากใบเสนอราคา',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Icon(Icons.highlight_off,
+                      size: 30, color: Colors.red[700]),
                 ),
               ),
             ],
@@ -4689,7 +5035,18 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: _searchBar(),
+                        child: Container(
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade600,
+                              borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(15),
+                                  topRight: Radius.circular(15),
+                                  bottomLeft: Radius.circular(0),
+                                  bottomRight: Radius.circular(0)),
+                            ),
+                            padding: const EdgeInsets.all(4.0),
+                            child: _searchBar()),
                       ),
                     ],
                   ),
@@ -4709,11 +5066,11 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                           // height:
                           //     MediaQuery.of(context).size.height /
                           //         1.5,
-                          width: (!Responsive.isDesktop(context))
-                              ? 1000
-                              : MediaQuery.of(context).size.width / 1.2,
+                          width: (Responsive.isDesktop(context))
+                              ? MediaQuery.of(context).size.width * 0.85
+                              : 1000,
                           decoration: BoxDecoration(
-                            color: Colors.grey.shade100,
+                            color: AppbackgroundColor.Sub_Abg_Colors,
                             borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(10),
                                 topRight: Radius.circular(10),
@@ -4722,26 +5079,26 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                             // border: Border.all(color: Colors.white, width: 1),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(0.0),
                             child: Container(
                                 decoration: BoxDecoration(
-                                  color: Colors.grey.shade100,
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
                                   borderRadius: const BorderRadius.only(
                                       topLeft: Radius.circular(15),
                                       topRight: Radius.circular(15),
                                       bottomLeft: Radius.circular(15),
                                       bottomRight: Radius.circular(15)),
                                 ),
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(0.0),
                                 child: Column(
                                   children: [
                                     Container(
-                                      padding: const EdgeInsets.all(10),
+                                      padding: const EdgeInsets.all(4),
                                       decoration: BoxDecoration(
                                         color: Colors.grey.shade600,
                                         borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            topRight: Radius.circular(10),
+                                            topLeft: Radius.circular(0),
+                                            topRight: Radius.circular(0),
                                             bottomLeft: Radius.circular(0),
                                             bottomRight: Radius.circular(0)),
                                       ),
@@ -4842,15 +5199,15 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                       ),
                                     ),
                                     Container(
-                                        width: (!Responsive.isDesktop(context))
-                                            ? 1000
-                                            : MediaQuery.of(context)
+                                        width: (Responsive.isDesktop(context))
+                                            ? MediaQuery.of(context)
                                                     .size
-                                                    .width /
-                                                1.2,
+                                                    .width *
+                                                0.85
+                                            : 1000,
                                         height:
                                             MediaQuery.of(context).size.height *
-                                                0.4,
+                                                0.8,
                                         child: StreamBuilder(
                                             stream: Stream.periodic(
                                                 const Duration(seconds: 0)),
@@ -5225,38 +5582,43 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
             ),
           ),
           actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
-                    width: 100,
-                    decoration: const BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10)),
-                    ),
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text(
-                        'ยกเลิก',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: FontWeight_.Fonts_T,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+            Column(
+              children: [
+                const Divider(),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.end,
+                //     children: [
+                //       Container(
+                //         width: 100,
+                //         decoration: const BoxDecoration(
+                //           color: Colors.black,
+                //           borderRadius: BorderRadius.only(
+                //               topLeft: Radius.circular(10),
+                //               topRight: Radius.circular(10),
+                //               bottomLeft: Radius.circular(10),
+                //               bottomRight: Radius.circular(10)),
+                //         ),
+                //         padding: const EdgeInsets.all(8.0),
+                //         child: TextButton(
+                //           onPressed: () {
+                //             Navigator.pop(context);
+                //           },
+                //           child: const Text(
+                //             'ยกเลิก',
+                //             style: TextStyle(
+                //               color: Colors.white,
+                //               fontWeight: FontWeight.bold,
+                //               fontFamily: FontWeight_.Fonts_T,
+                //             ),
+                //           ),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+              ],
             ),
           ],
         );
@@ -5277,7 +5639,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
             ),
             decoration: InputDecoration(
               filled: true,
-              // fillColor: Colors.white,
+              fillColor: Colors.white,
               hintText: ' Search...',
               hintStyle: const TextStyle(
                 color: PeopleChaoScreen_Color.Colors_Text2_,
@@ -5333,7 +5695,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
             ),
             decoration: InputDecoration(
               filled: true,
-              // fillColor: Colors.white,
+              fillColor: Colors.white,
               hintText: ' Search...',
               hintStyle: const TextStyle(
                 color: PeopleChaoScreen_Color.Colors_Text1_,
@@ -7240,9 +7602,8 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                       flex: 6,
                                                                       child:
                                                                           Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            8.0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
                                                                         child:
                                                                             const AutoSizeText(
                                                                           maxLines:
@@ -7270,9 +7631,8 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                       flex: 1,
                                                                       child:
                                                                           Container(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            8.0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
                                                                         child:
                                                                             const AutoSizeText(
                                                                           maxLines:
@@ -7305,7 +7665,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                               Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .fromLTRB(
+                                                                            .fromLTRB(
                                                                         8,
                                                                         0,
                                                                         8,
@@ -7494,7 +7854,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                 .width *
                                                             0.826,
                                                     decoration:
-                                                        const BoxDecoration(
+                                                         BoxDecoration(
                                                       color: AppbackgroundColor
                                                           .TiTile_Colors,
                                                       borderRadius:
@@ -11040,7 +11400,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                 // color: AppbackgroundColor
                                                                 //     .TiTile_Colors,
                                                                 borderRadius: const BorderRadius
-                                                                    .only(
+                                                                        .only(
                                                                     topLeft:
                                                                         Radius.circular(
                                                                             6),
@@ -11107,7 +11467,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                               // color: AppbackgroundColor
                                                               //     .TiTile_Colors,
                                                               borderRadius: const BorderRadius
-                                                                  .only(
+                                                                      .only(
                                                                   topLeft: Radius
                                                                       .circular(
                                                                           6),
@@ -11184,7 +11544,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                             // color: AppbackgroundColor
                                                             //     .TiTile_Colors,
                                                             borderRadius: const BorderRadius
-                                                                .only(
+                                                                    .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         6),
@@ -11404,9 +11764,8 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                             50,
                                                                         color: AppbackgroundColor
                                                                             .TiTile_Colors,
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            8.0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
                                                                         child:
                                                                             const Center(
                                                                           child:
@@ -11433,9 +11792,8 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                             50,
                                                                         color: AppbackgroundColor
                                                                             .TiTile_Colors,
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            8.0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
                                                                         child:
                                                                             const Center(
                                                                           child:
@@ -11462,14 +11820,13 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                             50,
                                                                         color: AppbackgroundColor
                                                                             .TiTile_Colors,
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            8.0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
                                                                         child:
                                                                             const Center(
                                                                           child:
                                                                               Text(
-                                                                            'วิธีการคำนวน %',
+                                                                            '%',
                                                                             textAlign:
                                                                                 TextAlign.center,
                                                                             style:
@@ -11491,14 +11848,13 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                             50,
                                                                         color: AppbackgroundColor
                                                                             .TiTile_Colors,
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            8.0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
                                                                         child:
                                                                             const Center(
                                                                           child:
                                                                               Text(
-                                                                            'วิธีการคำนวน บาท',
+                                                                            'บาท',
                                                                             textAlign:
                                                                                 TextAlign.center,
                                                                             style:
@@ -11521,14 +11877,13 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                         color: Colors
                                                                             .red
                                                                             .shade200,
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            8.0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
                                                                         child:
                                                                             const Center(
                                                                           child:
                                                                               Text(
-                                                                            'เกินวันกำหนด',
+                                                                            'เกินกำหนด',
                                                                             textAlign:
                                                                                 TextAlign.center,
                                                                             style:
@@ -11551,14 +11906,13 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                         color: Colors
                                                                             .red
                                                                             .shade200,
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            8.0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
                                                                         child:
                                                                             const Center(
                                                                           child:
                                                                               Text(
-                                                                            'วิธีการคำนวน %',
+                                                                            '%',
                                                                             textAlign:
                                                                                 TextAlign.center,
                                                                             style:
@@ -11581,14 +11935,129 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                         color: Colors
                                                                             .red
                                                                             .shade200,
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            8.0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
                                                                         child:
                                                                             const Center(
                                                                           child:
                                                                               Text(
-                                                                            'วิธีการคำนวน บาท',
+                                                                            'บาท',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: SettingScreen_Color.Colors_Text1_,
+                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              //fontSize: 10.0
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      flex: 1,
+                                                                      child:
+                                                                          Container(
+                                                                        height:
+                                                                            50,
+                                                                        color: Colors
+                                                                            .purple
+                                                                            .shade200,
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            const Center(
+                                                                          child:
+                                                                              Text(
+                                                                            'เกินกำหนด',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: SettingScreen_Color.Colors_Text1_,
+                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              //fontSize: 10.0
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      flex: 1,
+                                                                      child:
+                                                                          Container(
+                                                                        height:
+                                                                            50,
+                                                                        color: Colors
+                                                                            .purple
+                                                                            .shade200,
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            const Center(
+                                                                          child:
+                                                                              Text(
+                                                                            '%',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: SettingScreen_Color.Colors_Text1_,
+                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              //fontSize: 10.0
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      flex: 1,
+                                                                      child:
+                                                                          Container(
+                                                                        height:
+                                                                            50,
+                                                                        color: Colors
+                                                                            .purple
+                                                                            .shade200,
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            const Center(
+                                                                          child:
+                                                                              Text(
+                                                                            'บาท',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: SettingScreen_Color.Colors_Text1_,
+                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              //fontSize: 10.0
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      flex: 1,
+                                                                      child:
+                                                                          Container(
+                                                                        height:
+                                                                            50,
+                                                                        color: Colors
+                                                                            .blueGrey
+                                                                            .shade200,
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            const Center(
+                                                                          child:
+                                                                              Text(
+                                                                            'สูงสุด บาท',
                                                                             textAlign:
                                                                                 TextAlign.center,
                                                                             style:
@@ -11608,7 +12077,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                               Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .fromLTRB(
+                                                                            .fromLTRB(
                                                                         8,
                                                                         0,
                                                                         8,
@@ -11813,6 +12282,96 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                                         ),
                                                                                       ),
                                                                                     ),
+                                                                                    Expanded(
+                                                                                      flex: 1,
+                                                                                      child: Container(
+                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                        child: AutoSizeText(
+                                                                                          maxLines: 2,
+                                                                                          minFontSize: 8,
+                                                                                          // maxFontSize: 15,
+                                                                                          '${expModels[index].fine_three}',
+                                                                                          textAlign: TextAlign.center,
+                                                                                          style: const TextStyle(
+                                                                                            color: Colors.black,
+
+                                                                                            //fontSize: 10.0
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                    Expanded(
+                                                                                      flex: 1,
+                                                                                      child: Container(
+                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                        child: AutoSizeText(
+                                                                                          maxLines: 2,
+                                                                                          minFontSize: 8,
+                                                                                          // maxFontSize: 15,
+                                                                                          '${expModels[index].fine_late_three}',
+                                                                                          textAlign: TextAlign.center,
+                                                                                          style: const TextStyle(
+                                                                                            color: Colors.black,
+
+                                                                                            //fontSize: 10.0
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                    Expanded(
+                                                                                      flex: 1,
+                                                                                      child: Container(
+                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                        child: AutoSizeText(
+                                                                                          maxLines: 2,
+                                                                                          minFontSize: 8,
+                                                                                          // maxFontSize: 15,
+                                                                                          '${expModels[index].fine_cal_three}',
+                                                                                          textAlign: TextAlign.center,
+                                                                                          style: const TextStyle(
+                                                                                            color: Colors.black,
+
+                                                                                            //fontSize: 10.0
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                    Expanded(
+                                                                                      flex: 1,
+                                                                                      child: Container(
+                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                        child: AutoSizeText(
+                                                                                          maxLines: 2,
+                                                                                          minFontSize: 8,
+                                                                                          // maxFontSize: 15,
+                                                                                          '${expModels[index].fine_cal_three}',
+                                                                                          textAlign: TextAlign.center,
+                                                                                          style: const TextStyle(
+                                                                                            color: Colors.black,
+
+                                                                                            //fontSize: 10.0
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                    Expanded(
+                                                                                      flex: 1,
+                                                                                      child: Container(
+                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                        child: AutoSizeText(
+                                                                                          maxLines: 2,
+                                                                                          minFontSize: 8,
+                                                                                          // maxFontSize: 15,
+                                                                                          '${expModels[index].fine_max}',
+                                                                                          textAlign: TextAlign.center,
+                                                                                          style: const TextStyle(
+                                                                                            color: Colors.black,
+
+                                                                                            //fontSize: 10.0
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
                                                                                   ],
                                                                                 )),
                                                                           );
@@ -11879,7 +12438,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                   .width *
                                                               0.825,
                                                       decoration:
-                                                          const BoxDecoration(
+                                                           BoxDecoration(
                                                         color:
                                                             AppbackgroundColor
                                                                 .TiTile_Colors,
@@ -11967,7 +12526,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                   EdgeInsets
                                                                       .all(8.0),
                                                               child: Text(
-                                                                'วิธีคำนวน เปอร์เซนต์/บาท',
+                                                                'เปอร์เซนต์/บาท',
                                                                 textAlign:
                                                                     TextAlign
                                                                         .center,
@@ -12019,7 +12578,85 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                   EdgeInsets
                                                                       .all(8.0),
                                                               child: Text(
-                                                                'วิธีคำนวน เปอร์เซนต์/บาท',
+                                                                'เปอร์เซนต์/บาท',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                  //fontSize: 10.0
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Padding(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(8.0),
+                                                              child: Text(
+                                                                'เกินวันที่กำหมด',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                  //fontSize: 10.0
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Padding(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(8.0),
+                                                              child: Text(
+                                                                'เปอร์เซนต์/บาท',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                  //fontSize: 10.0
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Padding(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(8.0),
+                                                              child: Text(
+                                                                'สูงสุด บาท',
                                                                 textAlign:
                                                                     TextAlign
                                                                         .center,
@@ -13331,6 +13968,775 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                       Expanded(
                                                                         flex: 1,
                                                                         child:
+                                                                            GestureDetector(
+                                                                          onTap:
+                                                                              () {
+                                                                            showDialog<void>(
+                                                                                context: context,
+                                                                                barrierDismissible: false, // user must tap button!
+                                                                                builder: (BuildContext context) {
+                                                                                  return AlertDialog(
+                                                                                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                                                                    // title: const Text('AlertDialog Title'),
+                                                                                    content: SingleChildScrollView(
+                                                                                      child: ListBody(
+                                                                                        children: <Widget>[
+                                                                                          Container(
+                                                                                            width: MediaQuery.of(context).size.width * 0.3,
+                                                                                            height: MediaQuery.of(context).size.width * 0.08,
+                                                                                            child: Center(
+                                                                                              child: Padding(
+                                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                                child: Column(
+                                                                                                  children: [
+                                                                                                    Container(
+                                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                                      child: AutoSizeText(
+                                                                                                        maxLines: 2,
+                                                                                                        minFontSize: 8,
+                                                                                                        // maxFontSize: 15,
+                                                                                                        'เกินวันที่กำหนด',
+                                                                                                        textAlign: TextAlign.start,
+                                                                                                        style: const TextStyle(
+                                                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                            // fontWeight: FontWeight.bold,
+                                                                                                            fontFamily: Font_.Fonts_T
+
+                                                                                                            //fontSize: 10.0
+                                                                                                            ),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                    TextFormField(
+                                                                                                      textAlign: TextAlign.right,
+                                                                                                      initialValue: double.parse(quotxSelectModels[index].fine_three!).toStringAsFixed(0),
+                                                                                                      onFieldSubmitted: (value) async {
+                                                                                                        SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                                        String? ren = preferences.getString('renTalSer');
+                                                                                                        String? ser_user = preferences.getString('ser');
+                                                                                                        var qser = quotxSelectModels[index].ser;
+                                                                                                        var qqtty = value;
+                                                                                                        var fines = 'fine_three';
+                                                                                                        String url = '${MyConstant().domain}/U_quotx_fine_three.php?isAdd=true&ren=$ren&qser=$qser&qty=$qqtty&ser_user=$ser_user&fines=$fines';
+
+                                                                                                        try {
+                                                                                                          var response = await http.get(Uri.parse(url));
+
+                                                                                                          var result = json.decode(response.body);
+                                                                                                          print(result);
+                                                                                                          if (result.toString() != 'null') {
+                                                                                                            if (quotxSelectModels.isNotEmpty) {
+                                                                                                              setState(() {
+                                                                                                                quotxSelectModels.clear();
+                                                                                                              });
+                                                                                                            }
+                                                                                                            for (var map in result) {
+                                                                                                              QuotxSelectModel quotxSelectModel = QuotxSelectModel.fromJson(map);
+                                                                                                              setState(() {
+                                                                                                                quotxSelectModels.add(quotxSelectModel);
+                                                                                                              });
+                                                                                                            }
+                                                                                                          } else {
+                                                                                                            setState(() {
+                                                                                                              quotxSelectModels.clear();
+                                                                                                            });
+                                                                                                          }
+                                                                                                        } catch (e) {}
+                                                                                                        Navigator.of(context).pop();
+                                                                                                      },
+                                                                                                      // maxLength: 13,
+                                                                                                      cursorColor: Colors.green,
+                                                                                                      decoration: InputDecoration(
+                                                                                                          fillColor: Colors.white.withOpacity(0.05),
+                                                                                                          filled: true,
+                                                                                                          // prefixIcon:
+                                                                                                          //     const Icon(Icons.key, color: Colors.black),
+                                                                                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                                          focusedBorder: const OutlineInputBorder(
+                                                                                                            borderRadius: BorderRadius.only(
+                                                                                                              topRight: Radius.circular(15),
+                                                                                                              topLeft: Radius.circular(15),
+                                                                                                              bottomRight: Radius.circular(15),
+                                                                                                              bottomLeft: Radius.circular(15),
+                                                                                                            ),
+                                                                                                            borderSide: BorderSide(
+                                                                                                              width: 1,
+                                                                                                              color: Colors.grey,
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          enabledBorder: const OutlineInputBorder(
+                                                                                                            borderRadius: BorderRadius.only(
+                                                                                                              topRight: Radius.circular(15),
+                                                                                                              topLeft: Radius.circular(15),
+                                                                                                              bottomRight: Radius.circular(15),
+                                                                                                              bottomLeft: Radius.circular(15),
+                                                                                                            ),
+                                                                                                            borderSide: BorderSide(
+                                                                                                              width: 1,
+                                                                                                              color: Colors.grey,
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          // labelText: 'เกินกำหนดชำระ',
+                                                                                                          labelStyle: const TextStyle(
+                                                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                              // fontWeight: FontWeight.bold,
+                                                                                                              fontFamily: Font_.Fonts_T)),
+                                                                                                      inputFormatters: <TextInputFormatter>[
+                                                                                                        // for below version 2 use this
+                                                                                                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                                                                                        // for version 2 and greater youcan also use this
+                                                                                                        FilteringTextInputFormatter.digitsOnly
+                                                                                                      ],
+                                                                                                    ),
+                                                                                                  ],
+                                                                                                ),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ),
+                                                                                    actions: <Widget>[
+                                                                                      Row(
+                                                                                        mainAxisAlignment: MainAxisAlignment.end,
+                                                                                        children: [
+                                                                                          Container(
+                                                                                            child: Padding(
+                                                                                              padding: const EdgeInsets.all(8.0),
+                                                                                              child: InkWell(
+                                                                                                child: Container(
+                                                                                                    width: 100,
+                                                                                                    decoration: const BoxDecoration(
+                                                                                                      color: Colors.black,
+                                                                                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                      // border: Border.all(color: Colors.white, width: 1),
+                                                                                                    ),
+                                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                                    child: const Center(
+                                                                                                        child: Text(
+                                                                                                      'ปิด',
+                                                                                                      textAlign: TextAlign.center,
+                                                                                                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                                          //fontSize: 10.0
+                                                                                                          ),
+                                                                                                    ))),
+                                                                                                onTap: () {
+                                                                                                  Navigator.of(context).pop();
+                                                                                                },
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ],
+                                                                                  );
+                                                                                });
+                                                                          },
+                                                                          child:
+                                                                              AutoSizeText(
+                                                                            maxLines:
+                                                                                2,
+                                                                            minFontSize:
+                                                                                8,
+                                                                            // maxFontSize: 15,
+                                                                            quotxSelectModels[index].fine_three == '0'
+                                                                                ? ''
+                                                                                : '${quotxSelectModels[index].fine_three} วัน',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                              //fontWeight: FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T,
+
+                                                                              //fontSize: 10.0
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
+                                                                            PopupMenuButton(
+                                                                          itemBuilder:
+                                                                              (BuildContext context) => [
+                                                                            PopupMenuItem(
+                                                                              child: InkWell(
+                                                                                  onTap: () async {
+                                                                                    showDialog<void>(
+                                                                                        context: context,
+                                                                                        barrierDismissible: false, // user must tap button!
+                                                                                        builder: (BuildContext context) {
+                                                                                          return AlertDialog(
+                                                                                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                                                                            // title: const Text('AlertDialog Title'),
+                                                                                            content: SingleChildScrollView(
+                                                                                              child: ListBody(
+                                                                                                children: <Widget>[
+                                                                                                  Container(
+                                                                                                    width: MediaQuery.of(context).size.width * 0.3,
+                                                                                                    height: MediaQuery.of(context).size.width * 0.08,
+                                                                                                    child: Center(
+                                                                                                      child: Padding(
+                                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                                        child: Column(
+                                                                                                          children: [
+                                                                                                            Container(
+                                                                                                              padding: const EdgeInsets.all(8.0),
+                                                                                                              child: AutoSizeText(
+                                                                                                                maxLines: 2,
+                                                                                                                minFontSize: 8,
+                                                                                                                // maxFontSize: 15,
+                                                                                                                'วิธีคิด/เปอร์เซนต์',
+                                                                                                                textAlign: TextAlign.start,
+                                                                                                                style: const TextStyle(
+                                                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                                    // fontWeight: FontWeight.bold,
+                                                                                                                    fontFamily: Font_.Fonts_T
+
+                                                                                                                    //fontSize: 10.0
+                                                                                                                    ),
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                            TextFormField(
+                                                                                                              textAlign: TextAlign.right,
+                                                                                                              initialValue: quotxSelectModels[index].fine_late_three,
+                                                                                                              onFieldSubmitted: (value) async {
+                                                                                                                SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                                                String? ren = preferences.getString('renTalSer');
+                                                                                                                String? ser_user = preferences.getString('ser');
+                                                                                                                var qser = quotxSelectModels[index].ser;
+                                                                                                                var qqtty = '0';
+                                                                                                                var qqttper = value;
+                                                                                                                var fines = 'fine_late_three';
+                                                                                                                String url = '${MyConstant().domain}/U_quotx_fine_three.php?isAdd=true&ren=$ren&qser=$qser&qty=$qqtty&qqttper=$qqttper&ser_user=$ser_user&fines=$fines';
+
+                                                                                                                try {
+                                                                                                                  var response = await http.get(Uri.parse(url));
+
+                                                                                                                  var result = json.decode(response.body);
+                                                                                                                  print(result);
+                                                                                                                  if (result.toString() != 'null') {
+                                                                                                                    if (quotxSelectModels.isNotEmpty) {
+                                                                                                                      setState(() {
+                                                                                                                        quotxSelectModels.clear();
+                                                                                                                      });
+                                                                                                                    }
+                                                                                                                    for (var map in result) {
+                                                                                                                      QuotxSelectModel quotxSelectModel = QuotxSelectModel.fromJson(map);
+                                                                                                                      setState(() {
+                                                                                                                        quotxSelectModels.add(quotxSelectModel);
+                                                                                                                      });
+                                                                                                                    }
+                                                                                                                  } else {
+                                                                                                                    setState(() {
+                                                                                                                      quotxSelectModels.clear();
+                                                                                                                    });
+                                                                                                                  }
+                                                                                                                } catch (e) {}
+                                                                                                                Navigator.of(context).pop();
+                                                                                                                Navigator.of(context).pop();
+                                                                                                              },
+                                                                                                              // maxLength: 13,
+                                                                                                              cursorColor: Colors.green,
+                                                                                                              decoration: InputDecoration(
+                                                                                                                  fillColor: Colors.white.withOpacity(0.05),
+                                                                                                                  filled: true,
+                                                                                                                  // prefixIcon:
+                                                                                                                  //     const Icon(Icons.key, color: Colors.black),
+                                                                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                                                  focusedBorder: const OutlineInputBorder(
+                                                                                                                    borderRadius: BorderRadius.only(
+                                                                                                                      topRight: Radius.circular(15),
+                                                                                                                      topLeft: Radius.circular(15),
+                                                                                                                      bottomRight: Radius.circular(15),
+                                                                                                                      bottomLeft: Radius.circular(15),
+                                                                                                                    ),
+                                                                                                                    borderSide: BorderSide(
+                                                                                                                      width: 1,
+                                                                                                                      color: Colors.grey,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                  enabledBorder: const OutlineInputBorder(
+                                                                                                                    borderRadius: BorderRadius.only(
+                                                                                                                      topRight: Radius.circular(15),
+                                                                                                                      topLeft: Radius.circular(15),
+                                                                                                                      bottomRight: Radius.circular(15),
+                                                                                                                      bottomLeft: Radius.circular(15),
+                                                                                                                    ),
+                                                                                                                    borderSide: BorderSide(
+                                                                                                                      width: 1,
+                                                                                                                      color: Colors.grey,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                  // labelText: 'เกินกำหนดชำระ',
+                                                                                                                  labelStyle: const TextStyle(
+                                                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                                      // fontWeight: FontWeight.bold,
+                                                                                                                      fontFamily: Font_.Fonts_T)),
+                                                                                                              inputFormatters: <TextInputFormatter>[
+                                                                                                                // for below version 2 use this
+                                                                                                                FilteringTextInputFormatter.allow(RegExp(r'[0-9 .]')),
+                                                                                                                // for version 2 and greater youcan also use this
+                                                                                                                // FilteringTextInputFormatter.digitsOnly
+                                                                                                              ],
+                                                                                                            ),
+                                                                                                          ],
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                            ),
+                                                                                            actions: <Widget>[
+                                                                                              Row(
+                                                                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                                                                children: [
+                                                                                                  Container(
+                                                                                                    child: Padding(
+                                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                                      child: InkWell(
+                                                                                                        child: Container(
+                                                                                                            width: 100,
+                                                                                                            decoration: const BoxDecoration(
+                                                                                                              color: Colors.black,
+                                                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                              // border: Border.all(color: Colors.white, width: 1),
+                                                                                                            ),
+                                                                                                            padding: const EdgeInsets.all(8.0),
+                                                                                                            child: const Center(
+                                                                                                                child: Text(
+                                                                                                              'ปิด',
+                                                                                                              textAlign: TextAlign.center,
+                                                                                                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                                                  //fontSize: 10.0
+                                                                                                                  ),
+                                                                                                            ))),
+                                                                                                        onTap: () {
+                                                                                                          Navigator.of(context).pop();
+                                                                                                        },
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                            ],
+                                                                                          );
+                                                                                        });
+                                                                                  },
+                                                                                  child: Container(
+                                                                                      padding: const EdgeInsets.all(10),
+                                                                                      width: MediaQuery.of(context).size.width,
+                                                                                      child: const Row(
+                                                                                        children: [
+                                                                                          Expanded(
+                                                                                            child: Text(
+                                                                                              'วิธีคิด/เปอร์เซนต์',
+                                                                                              style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                            ),
+                                                                                          )
+                                                                                        ],
+                                                                                      ))),
+                                                                            ),
+                                                                            PopupMenuItem(
+                                                                              child: InkWell(
+                                                                                  onTap: () async {
+                                                                                    showDialog<void>(
+                                                                                        context: context,
+                                                                                        barrierDismissible: false, // user must tap button!
+                                                                                        builder: (BuildContext context) {
+                                                                                          return AlertDialog(
+                                                                                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                                                                            // title: const Text('AlertDialog Title'),
+                                                                                            content: SingleChildScrollView(
+                                                                                              child: ListBody(
+                                                                                                children: <Widget>[
+                                                                                                  Container(
+                                                                                                    width: MediaQuery.of(context).size.width * 0.3,
+                                                                                                    height: MediaQuery.of(context).size.width * 0.08,
+                                                                                                    child: Center(
+                                                                                                      child: Padding(
+                                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                                        child: Column(
+                                                                                                          children: [
+                                                                                                            Container(
+                                                                                                              padding: const EdgeInsets.all(8.0),
+                                                                                                              child: AutoSizeText(
+                                                                                                                maxLines: 2,
+                                                                                                                minFontSize: 8,
+                                                                                                                // maxFontSize: 15,
+                                                                                                                'วิธีคิด/บาท',
+                                                                                                                textAlign: TextAlign.start,
+                                                                                                                style: const TextStyle(
+                                                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                                    // fontWeight: FontWeight.bold,
+                                                                                                                    fontFamily: Font_.Fonts_T
+
+                                                                                                                    //fontSize: 10.0
+                                                                                                                    ),
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                            TextFormField(
+                                                                                                              textAlign: TextAlign.right,
+                                                                                                              initialValue: quotxSelectModels[index].fine_cal_three,
+                                                                                                              onFieldSubmitted: (value) async {
+                                                                                                                SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                                                String? ren = preferences.getString('renTalSer');
+                                                                                                                String? ser_user = preferences.getString('ser');
+                                                                                                                var qser = quotxSelectModels[index].ser;
+                                                                                                                var qqtty = value;
+                                                                                                                var qqttper = '0';
+                                                                                                                var fines = 'fine_cal_three';
+                                                                                                                String url = '${MyConstant().domain}/U_quotx_fine_three.php?isAdd=true&ren=$ren&qser=$qser&qty=$qqtty&qqttper=$qqttper&ser_user=$ser_user&fines=$fines';
+
+                                                                                                                try {
+                                                                                                                  var response = await http.get(Uri.parse(url));
+
+                                                                                                                  var result = json.decode(response.body);
+                                                                                                                  print(result);
+                                                                                                                  if (result.toString() != 'null') {
+                                                                                                                    if (quotxSelectModels.isNotEmpty) {
+                                                                                                                      setState(() {
+                                                                                                                        quotxSelectModels.clear();
+                                                                                                                      });
+                                                                                                                    }
+                                                                                                                    for (var map in result) {
+                                                                                                                      QuotxSelectModel quotxSelectModel = QuotxSelectModel.fromJson(map);
+                                                                                                                      setState(() {
+                                                                                                                        quotxSelectModels.add(quotxSelectModel);
+                                                                                                                      });
+                                                                                                                    }
+                                                                                                                  } else {
+                                                                                                                    setState(() {
+                                                                                                                      quotxSelectModels.clear();
+                                                                                                                    });
+                                                                                                                  }
+                                                                                                                } catch (e) {}
+                                                                                                                Navigator.of(context).pop();
+                                                                                                                Navigator.of(context).pop();
+                                                                                                              },
+                                                                                                              // maxLength: 13,
+                                                                                                              cursorColor: Colors.green,
+                                                                                                              decoration: InputDecoration(
+                                                                                                                  fillColor: Colors.white.withOpacity(0.05),
+                                                                                                                  filled: true,
+                                                                                                                  // prefixIcon:
+                                                                                                                  //     const Icon(Icons.key, color: Colors.black),
+                                                                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                                                  focusedBorder: const OutlineInputBorder(
+                                                                                                                    borderRadius: BorderRadius.only(
+                                                                                                                      topRight: Radius.circular(15),
+                                                                                                                      topLeft: Radius.circular(15),
+                                                                                                                      bottomRight: Radius.circular(15),
+                                                                                                                      bottomLeft: Radius.circular(15),
+                                                                                                                    ),
+                                                                                                                    borderSide: BorderSide(
+                                                                                                                      width: 1,
+                                                                                                                      color: Colors.grey,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                  enabledBorder: const OutlineInputBorder(
+                                                                                                                    borderRadius: BorderRadius.only(
+                                                                                                                      topRight: Radius.circular(15),
+                                                                                                                      topLeft: Radius.circular(15),
+                                                                                                                      bottomRight: Radius.circular(15),
+                                                                                                                      bottomLeft: Radius.circular(15),
+                                                                                                                    ),
+                                                                                                                    borderSide: BorderSide(
+                                                                                                                      width: 1,
+                                                                                                                      color: Colors.grey,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                  // labelText: 'เกินกำหนดชำระ',
+                                                                                                                  labelStyle: const TextStyle(
+                                                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                                      // fontWeight: FontWeight.bold,
+                                                                                                                      fontFamily: Font_.Fonts_T)),
+                                                                                                              inputFormatters: <TextInputFormatter>[
+                                                                                                                // for below version 2 use this
+                                                                                                                FilteringTextInputFormatter.allow(RegExp(r'[0-9 .]')),
+                                                                                                                // for version 2 and greater youcan also use this
+                                                                                                                // FilteringTextInputFormatter.digitsOnly
+                                                                                                              ],
+                                                                                                            ),
+                                                                                                          ],
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                            ),
+                                                                                            actions: <Widget>[
+                                                                                              Row(
+                                                                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                                                                children: [
+                                                                                                  Container(
+                                                                                                    child: Padding(
+                                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                                      child: InkWell(
+                                                                                                        child: Container(
+                                                                                                            width: 100,
+                                                                                                            decoration: const BoxDecoration(
+                                                                                                              color: Colors.black,
+                                                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                              // border: Border.all(color: Colors.white, width: 1),
+                                                                                                            ),
+                                                                                                            padding: const EdgeInsets.all(8.0),
+                                                                                                            child: const Center(
+                                                                                                                child: Text(
+                                                                                                              'ปิด',
+                                                                                                              textAlign: TextAlign.center,
+                                                                                                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                                                  //fontSize: 10.0
+                                                                                                                  ),
+                                                                                                            ))),
+                                                                                                        onTap: () {
+                                                                                                          Navigator.of(context).pop();
+                                                                                                        },
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                            ],
+                                                                                          );
+                                                                                        });
+                                                                                  },
+                                                                                  child: Container(
+                                                                                      padding: const EdgeInsets.all(10),
+                                                                                      width: MediaQuery.of(context).size.width,
+                                                                                      child: const Row(
+                                                                                        children: [
+                                                                                          Expanded(
+                                                                                            child: Text(
+                                                                                              'วิธีคิด/บาท',
+                                                                                              style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                            ),
+                                                                                          )
+                                                                                        ],
+                                                                                      ))),
+                                                                            ),
+                                                                          ],
+                                                                          child:
+                                                                              AutoSizeText(
+                                                                            maxLines:
+                                                                                2,
+                                                                            minFontSize:
+                                                                                8,
+                                                                            // maxFontSize: 15,
+                                                                            quotxSelectModels[index].fine_three == '0'
+                                                                                ? ''
+                                                                                : double.parse(quotxSelectModels[index].fine_late_three!).toStringAsFixed(2) != '0.00'
+                                                                                    ? '${quotxSelectModels[index].fine_late_three} %'
+                                                                                    : '${quotxSelectModels[index].fine_cal_three} บาท',
+                                                                            textAlign:
+                                                                                TextAlign.right,
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                              //fontWeight: FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T,
+
+                                                                              //fontSize: 10.0
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child: InkWell(
+                                                                              onTap: () async {
+                                                                                showDialog<void>(
+                                                                                    context: context,
+                                                                                    barrierDismissible: false, // user must tap button!
+                                                                                    builder: (BuildContext context) {
+                                                                                      return AlertDialog(
+                                                                                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                                                                        // title: const Text('AlertDialog Title'),
+                                                                                        content: SingleChildScrollView(
+                                                                                          child: ListBody(
+                                                                                            children: <Widget>[
+                                                                                              Container(
+                                                                                                width: MediaQuery.of(context).size.width * 0.3,
+                                                                                                height: MediaQuery.of(context).size.width * 0.08,
+                                                                                                child: Center(
+                                                                                                  child: Padding(
+                                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                                    child: Column(
+                                                                                                      children: [
+                                                                                                        Container(
+                                                                                                          padding: const EdgeInsets.all(8.0),
+                                                                                                          child: AutoSizeText(
+                                                                                                            maxLines: 2,
+                                                                                                            minFontSize: 8,
+                                                                                                            // maxFontSize: 15,
+                                                                                                            'วิธีคิด/บาท',
+                                                                                                            textAlign: TextAlign.start,
+                                                                                                            style: const TextStyle(
+                                                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: Font_.Fonts_T
+
+                                                                                                                //fontSize: 10.0
+                                                                                                                ),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                        TextFormField(
+                                                                                                          textAlign: TextAlign.right,
+                                                                                                          initialValue: quotxSelectModels[index].fine_max,
+                                                                                                          onFieldSubmitted: (value) async {
+                                                                                                            SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                                            String? ren = preferences.getString('renTalSer');
+                                                                                                            String? ser_user = preferences.getString('ser');
+                                                                                                            var qser = quotxSelectModels[index].ser;
+                                                                                                            var qqtty = '0';
+                                                                                                            var qqttper = value;
+                                                                                                            var fines = 'fine_max';
+                                                                                                            String url = '${MyConstant().domain}/U_quotx_fine_three.php?isAdd=true&ren=$ren&qser=$qser&qty=$qqtty&qqttper=$qqttper&ser_user=$ser_user&fines=$fines';
+
+                                                                                                            try {
+                                                                                                              var response = await http.get(Uri.parse(url));
+
+                                                                                                              var result = json.decode(response.body);
+                                                                                                              print(result);
+                                                                                                              if (result.toString() != 'null') {
+                                                                                                                if (quotxSelectModels.isNotEmpty) {
+                                                                                                                  setState(() {
+                                                                                                                    quotxSelectModels.clear();
+                                                                                                                  });
+                                                                                                                }
+                                                                                                                for (var map in result) {
+                                                                                                                  QuotxSelectModel quotxSelectModel = QuotxSelectModel.fromJson(map);
+                                                                                                                  setState(() {
+                                                                                                                    quotxSelectModels.add(quotxSelectModel);
+                                                                                                                  });
+                                                                                                                }
+                                                                                                              } else {
+                                                                                                                setState(() {
+                                                                                                                  quotxSelectModels.clear();
+                                                                                                                });
+                                                                                                              }
+                                                                                                            } catch (e) {}
+                                                                                                            Navigator.of(context).pop();
+                                                                                                            // Navigator.of(context).pop();
+                                                                                                          },
+                                                                                                          // maxLength: 13,
+                                                                                                          cursorColor: Colors.green,
+                                                                                                          decoration: InputDecoration(
+                                                                                                              fillColor: Colors.white.withOpacity(0.05),
+                                                                                                              filled: true,
+                                                                                                              // prefixIcon:
+                                                                                                              //     const Icon(Icons.key, color: Colors.black),
+                                                                                                              // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                                              focusedBorder: const OutlineInputBorder(
+                                                                                                                borderRadius: BorderRadius.only(
+                                                                                                                  topRight: Radius.circular(15),
+                                                                                                                  topLeft: Radius.circular(15),
+                                                                                                                  bottomRight: Radius.circular(15),
+                                                                                                                  bottomLeft: Radius.circular(15),
+                                                                                                                ),
+                                                                                                                borderSide: BorderSide(
+                                                                                                                  width: 1,
+                                                                                                                  color: Colors.grey,
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                              enabledBorder: const OutlineInputBorder(
+                                                                                                                borderRadius: BorderRadius.only(
+                                                                                                                  topRight: Radius.circular(15),
+                                                                                                                  topLeft: Radius.circular(15),
+                                                                                                                  bottomRight: Radius.circular(15),
+                                                                                                                  bottomLeft: Radius.circular(15),
+                                                                                                                ),
+                                                                                                                borderSide: BorderSide(
+                                                                                                                  width: 1,
+                                                                                                                  color: Colors.grey,
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                              // labelText: 'เกินกำหนดชำระ',
+                                                                                                              labelStyle: const TextStyle(
+                                                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                                  // fontWeight: FontWeight.bold,
+                                                                                                                  fontFamily: Font_.Fonts_T)),
+                                                                                                          inputFormatters: <TextInputFormatter>[
+                                                                                                            // for below version 2 use this
+                                                                                                            FilteringTextInputFormatter.allow(RegExp(r'[0-9 .]')),
+                                                                                                            // for version 2 and greater youcan also use this
+                                                                                                            // FilteringTextInputFormatter.digitsOnly
+                                                                                                          ],
+                                                                                                        ),
+                                                                                                      ],
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ),
+                                                                                            ],
+                                                                                          ),
+                                                                                        ),
+                                                                                        actions: <Widget>[
+                                                                                          Row(
+                                                                                            mainAxisAlignment: MainAxisAlignment.end,
+                                                                                            children: [
+                                                                                              Container(
+                                                                                                child: Padding(
+                                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                                  child: InkWell(
+                                                                                                    child: Container(
+                                                                                                        width: 100,
+                                                                                                        decoration: const BoxDecoration(
+                                                                                                          color: Colors.black,
+                                                                                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                          // border: Border.all(color: Colors.white, width: 1),
+                                                                                                        ),
+                                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                                        child: const Center(
+                                                                                                            child: Text(
+                                                                                                          'ปิด',
+                                                                                                          textAlign: TextAlign.center,
+                                                                                                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                                              //fontSize: 10.0
+                                                                                                              ),
+                                                                                                        ))),
+                                                                                                    onTap: () {
+                                                                                                      Navigator.of(context).pop();
+                                                                                                    },
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ),
+                                                                                            ],
+                                                                                          ),
+                                                                                        ],
+                                                                                      );
+                                                                                    });
+                                                                              },
+                                                                              child: Container(
+                                                                                  padding: EdgeInsets.all(8),
+                                                                                  width: MediaQuery.of(context).size.width,
+                                                                                  child: Row(
+                                                                                    children: [
+                                                                                      Expanded(
+                                                                                        child: AutoSizeText(
+                                                                                          maxLines: 2,
+                                                                                          minFontSize: 8,
+                                                                                          // maxFontSize: 15,
+                                                                                          double.parse(quotxSelectModels[index].fine_max!).toStringAsFixed(2) == '0.00' ? '' : double.parse(quotxSelectModels[index].fine_max!).toStringAsFixed(2),
+                                                                                          textAlign: TextAlign.right,
+                                                                                          style: const TextStyle(
+                                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                            //fontWeight: FontWeight.bold,
+                                                                                            fontFamily: Font_.Fonts_T,
+
+                                                                                            //fontSize: 10.0
+                                                                                          ),
+                                                                                        ),
+                                                                                      )
+                                                                                    ],
+                                                                                  )))),
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
                                                                             Row(
                                                                           children: [
                                                                             Expanded(
@@ -13460,7 +14866,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                 // color: AppbackgroundColor
                                                                 //     .TiTile_Colors,
                                                                 borderRadius: const BorderRadius
-                                                                    .only(
+                                                                        .only(
                                                                     topLeft:
                                                                         Radius.circular(
                                                                             6),
@@ -13527,7 +14933,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                               // color: AppbackgroundColor
                                                               //     .TiTile_Colors,
                                                               borderRadius: const BorderRadius
-                                                                  .only(
+                                                                      .only(
                                                                   topLeft: Radius
                                                                       .circular(
                                                                           6),
@@ -13603,7 +15009,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                             // color: AppbackgroundColor
                                                             //     .TiTile_Colors,
                                                             borderRadius: const BorderRadius
-                                                                .only(
+                                                                    .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         6),
@@ -13772,7 +15178,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                       .width -
                                                                   200,
                                                           decoration:
-                                                              const BoxDecoration(
+                                                               BoxDecoration(
                                                             color: AppbackgroundColor
                                                                 .TiTile_Colors,
                                                             borderRadius: BorderRadius.only(
@@ -13836,7 +15242,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                       .width *
                                                                   0.83,
                                                           decoration:
-                                                              const BoxDecoration(
+                                                               BoxDecoration(
                                                             color: AppbackgroundColor
                                                                 .TiTile_Colors,
                                                             borderRadius: BorderRadius.only(
@@ -14476,7 +15882,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                     .size
                                                     .width *
                                                 0.825,
-                                        decoration: const BoxDecoration(
+                                        decoration:  BoxDecoration(
                                           color:
                                               AppbackgroundColor.TiTile_Colors,
                                           borderRadius: BorderRadius.only(
@@ -14675,9 +16081,8 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                           //               Radius.circular(10)),
                                                                           //   // border: Border.all(color: Colors.grey, width: 1),
                                                                           // ),
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
                                                                           child:
                                                                               AutoSizeText(
                                                                             maxLines:
@@ -14707,9 +16112,9 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                     flex: 1,
                                                                     child:
                                                                         Padding(
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           AutoSizeText(
                                                                         maxLines:
@@ -14737,9 +16142,9 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                     flex: 1,
                                                                     child:
                                                                         Padding(
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           AutoSizeText(
                                                                         maxLines:
@@ -14886,9 +16291,8 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                           //               Radius.circular(10)),
                                                                           //   // border: Border.all(color: Colors.grey, width: 1),
                                                                           // ),
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
                                                                           child:
                                                                               AutoSizeText(
                                                                             maxLines:
@@ -14914,43 +16318,43 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                       ],
                                                                     ),
                                                                   ),
-                                                                  Expanded(
-                                                                    flex: 1,
-                                                                    child:
-                                                                        Padding(
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
-                                                                      child:
-                                                                          AutoSizeText(
-                                                                        maxLines:
-                                                                            2,
-                                                                        minFontSize:
-                                                                            8,
-                                                                        // maxFontSize: 15,
-                                                                        '${double.parse(quotxSelectModels[index].qty!).toStringAsFixed(0)} วัน',
-                                                                        textAlign:
-                                                                            TextAlign.center,
-                                                                        style:
-                                                                            const TextStyle(
-                                                                          color:
-                                                                              PeopleChaoScreen_Color.Colors_Text2_,
-                                                                          // fontWeight: FontWeight.bold,
-                                                                          fontFamily:
-                                                                              Font_.Fonts_T,
+                                                                  // Expanded(
+                                                                  //   flex: 1,
+                                                                  //   child:
+                                                                  //       Padding(
+                                                                  //     padding: const EdgeInsets
+                                                                  //         .all(
+                                                                  //         8.0),
+                                                                  //     child:
+                                                                  //         AutoSizeText(
+                                                                  //       maxLines:
+                                                                  //           2,
+                                                                  //       minFontSize:
+                                                                  //           8,
+                                                                  //       // maxFontSize: 15,
+                                                                  //       '', //'${double.parse(quotxSelectModels[index].qty!).toStringAsFixed(0)} วัน',
+                                                                  //       textAlign:
+                                                                  //           TextAlign.center,
+                                                                  //       style:
+                                                                  //           const TextStyle(
+                                                                  //         color:
+                                                                  //             PeopleChaoScreen_Color.Colors_Text2_,
+                                                                  //         // fontWeight: FontWeight.bold,
+                                                                  //         fontFamily:
+                                                                  //             Font_.Fonts_T,
 
-                                                                          //fontSize: 10.0
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
+                                                                  //         //fontSize: 10.0
+                                                                  //       ),
+                                                                  //     ),
+                                                                  //   ),
+                                                                  // ),
                                                                   Expanded(
                                                                     flex: 1,
                                                                     child:
                                                                         Padding(
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           AutoSizeText(
                                                                         maxLines:
@@ -14960,8 +16364,8 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                         // maxFontSize: 15,
                                                                         quotxSelectModels[index].fineCal ==
                                                                                 '0.00'
-                                                                            ? '${nFormat.format(double.parse(quotxSelectModels[index].finePri!))} บาท'
-                                                                            : '${nFormat.format(double.parse(quotxSelectModels[index].fineCal!))} %',
+                                                                            ? '${double.parse(quotxSelectModels[index].qty!).toStringAsFixed(0)} วัน / ${nFormat.format(double.parse(quotxSelectModels[index].finePri!))} บาท'
+                                                                            : '${double.parse(quotxSelectModels[index].qty!).toStringAsFixed(0)} วัน / ${nFormat.format(double.parse(quotxSelectModels[index].fineCal!))} %',
                                                                         textAlign:
                                                                             TextAlign.center,
                                                                         style:
@@ -14977,6 +16381,34 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                       ),
                                                                     ),
                                                                   ),
+                                                                  // Expanded(
+                                                                  //   flex: 1,
+                                                                  //   child: AutoSizeText(
+                                                                  //     maxLines: 2,
+                                                                  //     minFontSize: 8,
+                                                                  //     // maxFontSize: 15,
+                                                                  //     double.parse(quotxSelectModels[
+                                                                  //                         index]
+                                                                  //                     .fine!)
+                                                                  //                 .toStringAsFixed(
+                                                                  //                     0) ==
+                                                                  //             '0'
+                                                                  //         ? ''
+                                                                  //         : 'เกิน ${double.parse(quotxSelectModels[index].fine!).toStringAsFixed(0)} วัน',
+                                                                  //     textAlign:
+                                                                  //         TextAlign.right,
+                                                                  //     style:
+                                                                  //         const TextStyle(
+                                                                  //       color: PeopleChaoScreen_Color
+                                                                  //           .Colors_Text2_,
+                                                                  //       // fontWeight: FontWeight.bold,
+                                                                  //       fontFamily:
+                                                                  //           Font_.Fonts_T,
+
+                                                                  //       //fontSize: 10.0
+                                                                  //     ),
+                                                                  //   ),
+                                                                  // ),
                                                                   Expanded(
                                                                     flex: 1,
                                                                     child:
@@ -14989,7 +16421,40 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                       double.parse(quotxSelectModels[index].fine!).toStringAsFixed(0) ==
                                                                               '0'
                                                                           ? ''
-                                                                          : 'เกิน ${double.parse(quotxSelectModels[index].fine!).toStringAsFixed(0)} วัน',
+                                                                          : double.parse(quotxSelectModels[index].fineUnit!).toStringAsFixed(0) == '0'
+                                                                              ? 'เกิน ${double.parse(quotxSelectModels[index].fine!).toStringAsFixed(0)} วัน / ${nFormat.format(double.parse(quotxSelectModels[index].fineLate!))} บาท'
+                                                                              : 'เกิน ${double.parse(quotxSelectModels[index].fine!).toStringAsFixed(0)} วัน / ${nFormat.format(double.parse(quotxSelectModels[index].fineUnit!))} %',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .right,
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        color: PeopleChaoScreen_Color
+                                                                            .Colors_Text2_,
+                                                                        // fontWeight: FontWeight.bold,
+                                                                        fontFamily:
+                                                                            Font_.Fonts_T,
+
+                                                                        //fontSize: 10.0
+                                                                      ),
+                                                                    ),
+                                                                  ),
+
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child:
+                                                                        AutoSizeText(
+                                                                      maxLines:
+                                                                          2,
+                                                                      minFontSize:
+                                                                          8,
+                                                                      // maxFontSize: 15,
+                                                                      double.parse(quotxSelectModels[index].fine_three!).toStringAsFixed(0) ==
+                                                                              '0'
+                                                                          ? ''
+                                                                          : double.parse(quotxSelectModels[index].fine_cal_three!).toStringAsFixed(0) != '0'
+                                                                              ? 'เกิน ${double.parse(quotxSelectModels[index].fine_three!).toStringAsFixed(0)} วัน / ${nFormat.format(double.parse(quotxSelectModels[index].fine_cal_three!))} บาท'
+                                                                              : 'เกิน ${double.parse(quotxSelectModels[index].fine_three!).toStringAsFixed(0)} วัน / ${nFormat.format(double.parse(quotxSelectModels[index].fine_late_three!))} %',
                                                                       textAlign:
                                                                           TextAlign
                                                                               .right,
@@ -15014,12 +16479,10 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                       minFontSize:
                                                                           8,
                                                                       // maxFontSize: 15,
-                                                                      double.parse(quotxSelectModels[index].fine!).toStringAsFixed(0) ==
+                                                                      double.parse(quotxSelectModels[index].fine_max!).toStringAsFixed(0) ==
                                                                               '0'
                                                                           ? ''
-                                                                          : double.parse(quotxSelectModels[index].fineUnit!).toStringAsFixed(0) == '0'
-                                                                              ? '${nFormat.format(double.parse(quotxSelectModels[index].fineLate!))} บาท'
-                                                                              : '${nFormat.format(double.parse(quotxSelectModels[index].fineUnit!))} %',
+                                                                          : 'ไม่เกิน ${nFormat.format(double.parse(quotxSelectModels[index].fine_max!))} บาท',
                                                                       textAlign:
                                                                           TextAlign
                                                                               .right,
@@ -16875,7 +18338,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                               color: Colors
                                                                   .red[600],
                                                               borderRadius: const BorderRadius
-                                                                  .only(
+                                                                      .only(
                                                                   topLeft:
                                                                       Radius.circular(
                                                                           10),
@@ -17292,9 +18755,9 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                     '${renTalModels[0].bill_tax}',
                                     '${renTalModels[0].bill_name}',
                                     newValuePDFimg,
-                                    tableData00
+                                    tableData00,
                                     // (ser_user == null) ? '' : ser_user
-                                    );
+                                    '');
                               },
                             ),
                           ),
@@ -17945,7 +19408,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                   ),
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child:
                                                                       const Center(
@@ -17995,7 +19458,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                       color: Colors.white,
                                                       borderRadius:
                                                           const BorderRadius
-                                                              .only(
+                                                                  .only(
                                                               topLeft: Radius
                                                                   .circular(8),
                                                               topRight: Radius
@@ -18068,7 +19531,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child:
                                                                       InkWell(
@@ -18077,8 +19540,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                         decoration: BoxDecoration(
                                                                           color:
                                                                               Colors.red[600],
-                                                                          borderRadius: const BorderRadius
-                                                                              .only(
+                                                                          borderRadius: const BorderRadius.only(
                                                                               topLeft: Radius.circular(10),
                                                                               topRight: Radius.circular(10),
                                                                               bottomLeft: Radius.circular(10),
@@ -18113,7 +19575,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child:
                                                                       InkWell(

@@ -49,7 +49,7 @@ class _AccountInvoiceState extends State<AccountInvoice> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
 
-    String url = '${MyConstant().domain}/GC_payMent.php?isAdd=true&ren=$ren}';
+    String url = '${MyConstant().domain}/GC_payMent.php?isAdd=true&ren=$ren';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -97,7 +97,7 @@ class _AccountInvoiceState extends State<AccountInvoice> {
           } else {}
         }
 
-        if (paymentName1 == null) {
+        if (paymentSer1 == null) {
           paymentSer1 = 0.toString();
           paymentName1 = 'เลือก'.toString();
         }
@@ -254,7 +254,7 @@ class _AccountInvoiceState extends State<AccountInvoice> {
                                                     .width *
                                                 0.85
                                             : 1200,
-                                        decoration: const BoxDecoration(
+                                        decoration:  BoxDecoration(
                                           color:
                                               AppbackgroundColor.TiTile_Colors,
                                           borderRadius: BorderRadius.only(
@@ -291,6 +291,9 @@ class _AccountInvoiceState extends State<AccountInvoice> {
                                                   ),
                                                   child: Row(
                                                     children: [
+                                                      SizedBox(
+                                                        width: 10,
+                                                      ),
                                                       Text(
                                                         'เดือน/ปี : ',
                                                         textAlign:
@@ -303,6 +306,9 @@ class _AccountInvoiceState extends State<AccountInvoice> {
                                                           fontFamily:
                                                               Font_.Fonts_T,
                                                         ),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 10,
                                                       ),
                                                       Padding(
                                                         padding:
@@ -373,303 +379,298 @@ class _AccountInvoiceState extends State<AccountInvoice> {
                                                       SizedBox(
                                                         width: 10,
                                                       ),
-                                                      Text(
-                                                        'รูปแบบชำระ',
-                                                        style: const TextStyle(
-                                                            color: PeopleChaoScreen_Color
-                                                                .Colors_Text2_,
-                                                            //fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T),
-                                                      ),
-                                                      Container(
-                                                        height: 50,
-                                                        color:
-                                                            AppbackgroundColor
-                                                                .Sub_Abg_Colors,
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: AppbackgroundColor
-                                                                .Sub_Abg_Colors,
-                                                            borderRadius: const BorderRadius
-                                                                    .only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                            // border: Border.all(
-                                                            //     color: Colors.grey, width: 1),
-                                                          ),
-                                                          width: 120,
-                                                          child:
-                                                              DropdownButtonFormField2(
-                                                            decoration:
-                                                                InputDecoration(
-                                                              //Add isDense true and zero Padding.
-                                                              //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
-                                                              isDense: true,
-                                                              contentPadding:
-                                                                  EdgeInsets
-                                                                      .zero,
-                                                              border:
-                                                                  OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            15),
-                                                              ),
-                                                              //Add more decoration as you want here
-                                                              //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
-                                                            ),
-                                                            isExpanded: true,
-                                                            // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
-                                                            hint: Row(
-                                                              children: [
-                                                                Text(
-                                                                  '$paymentName1',
-                                                                  style: const TextStyle(
-                                                                      fontSize: 14,
-                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                      // fontWeight: FontWeight.bold,
-                                                                      fontFamily: Font_.Fonts_T),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            icon: const Icon(
-                                                              Icons
-                                                                  .arrow_drop_down,
-                                                              color: Colors
-                                                                  .black45,
-                                                            ),
-                                                            iconSize: 25,
-                                                            buttonHeight: 42,
-                                                            buttonPadding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    left: 10,
-                                                                    right: 10),
-                                                            dropdownDecoration:
-                                                                BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          15),
-                                                            ),
-                                                            items: _PayMentModels
-                                                                .map((item) =>
-                                                                    DropdownMenuItem<
-                                                                        String>(
-                                                                      onTap:
-                                                                          () {
-                                                                        setState(
-                                                                            () {
-                                                                          selectedValue =
-                                                                              item.bno!;
-                                                                        });
-                                                                        print(
-                                                                            '**/*/*   --- ${selectedValue}');
-                                                                      },
-                                                                      value:
-                                                                          '${item.ser}:${item.ptname}',
-                                                                      child:
-                                                                          Row(
-                                                                        children: [
-                                                                          Expanded(
-                                                                            child:
-                                                                                Text(
-                                                                              '${item.ptname!}',
-                                                                              textAlign: TextAlign.start,
-                                                                              style: const TextStyle(
-                                                                                  fontSize: 14,
-                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight: FontWeight.bold,
-                                                                                  fontFamily: Font_.Fonts_T),
-                                                                            ),
-                                                                          ),
-                                                                          Expanded(
-                                                                            child:
-                                                                                Text(
-                                                                              '${item.bno!}',
-                                                                              textAlign: TextAlign.end,
-                                                                              style: const TextStyle(
-                                                                                  fontSize: 14,
-                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight: FontWeight.bold,
-                                                                                  fontFamily: Font_.Fonts_T),
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    )).toList(),
-                                                            onChanged:
-                                                                (value) async {
-                                                              print(value);
-                                                              // Do something when changing the item if you want.
-
-                                                              var zones = value!
-                                                                  .indexOf(':');
-                                                              var rtnameSer =
-                                                                  value.substring(
-                                                                      0, zones);
-                                                              var rtnameName =
-                                                                  value.substring(
-                                                                      zones +
-                                                                          1);
-                                                              // print(
-                                                              //     'mmmmm ${rtnameSer.toString()} $rtnameName');
-                                                              setState(() {
-                                                                paymentSer1 =
-                                                                    rtnameSer
-                                                                        .toString();
-
-                                                                if (rtnameSer
-                                                                        .toString() ==
-                                                                    '0') {
-                                                                  paymentName1 =
-                                                                      null;
-                                                                } else {
-                                                                  paymentName1 =
-                                                                      rtnameName
-                                                                          .toString();
-                                                                }
-                                                                paymentSer1 =
-                                                                    rtnameSer;
-                                                              });
-                                                              print(
-                                                                  'mmmmm ${rtnameSer.toString()} $rtnameName');
-                                                              // print(
-                                                              //     'pppppp $paymentSer1 $paymentName1');
-                                                              // print('Form_payment1.text');
-                                                              // print(Form_payment1.text);
-                                                              // print(Form_payment2.text);
-                                                              // print('Form_payment1.text');
-                                                            },
-                                                            // onSaved: (value) {
-
-                                                            // },
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        height: 40,
-                                                        child: InkWell(
-                                                          onTap: () async {
-                                                            select_Date(
-                                                                context);
-                                                          },
-                                                          child: Row(
-                                                            children: [
-                                                              Text(
-                                                                'วันที่ครบกำหนดชำระ : ',
-                                                                style: TextStyle(
-                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                    //fontWeight: FontWeight.bold,
-                                                                    fontFamily: Font_.Fonts_T),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .fromLTRB(
+                                                      (_TransModels.isEmpty)
+                                                          ? SizedBox()
+                                                          : SizedBox(
+                                                              height: 40,
+                                                              child: InkWell(
+                                                                onTap:
+                                                                    () async {
+                                                                  select_Date(
+                                                                      context);
+                                                                },
+                                                                child: Row(
+                                                                  children: [
+                                                                    Text(
+                                                                      'วันที่ครบกำหนดชำระ : ',
+                                                                      style: TextStyle(
+                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                          //fontWeight: FontWeight.bold,
+                                                                          fontFamily: Font_.Fonts_T),
+                                                                    ),
+                                                                    Padding(
+                                                                      padding: const EdgeInsets
+                                                                          .fromLTRB(
                                                                           6,
                                                                           6,
                                                                           0,
                                                                           6),
-                                                                  child:
-                                                                      Container(
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      color: Colors
-                                                                          .blue[
-                                                                              50]!
-                                                                          .withOpacity(
-                                                                              0.5),
-                                                                      borderRadius: const BorderRadius
-                                                                              .only(
-                                                                          topLeft: Radius.circular(
-                                                                              10),
-                                                                          topRight: Radius.circular(
-                                                                              0),
-                                                                          bottomLeft: Radius.circular(
-                                                                              10),
-                                                                          bottomRight:
-                                                                              Radius.circular(0)),
-                                                                      border: Border.all(
-                                                                          color: Colors
-                                                                              .grey,
-                                                                          width:
-                                                                              1),
-                                                                    ),
-                                                                    // width: 120,
-                                                                    padding:
-                                                                        const EdgeInsets.all(
-                                                                            2.0),
-                                                                    child:
-                                                                        Center(
                                                                       child:
-                                                                          Text(
-                                                                        '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${End_Bill_Paydate}'))}',
-                                                                        // '${End_Bill_Paydate}',
-                                                                        style: const TextStyle(
-                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                            //fontWeight: FontWeight.bold,
-                                                                            fontFamily: Font_.Fonts_T),
+                                                                          Container(
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          color:
+                                                                              Colors.white,
+                                                                          borderRadius: const BorderRadius
+                                                                              .only(
+                                                                              topLeft: Radius.circular(10),
+                                                                              topRight: Radius.circular(0),
+                                                                              bottomLeft: Radius.circular(10),
+                                                                              bottomRight: Radius.circular(0)),
+                                                                          border: Border.all(
+                                                                              color: Colors.grey,
+                                                                              width: 1),
+                                                                        ),
+                                                                        // width: 120,
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            2.0),
+                                                                        child:
+                                                                            Center(
+                                                                          child:
+                                                                              Text(
+                                                                            '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${End_Bill_Paydate}'))}',
+                                                                            // '${End_Bill_Paydate}',
+                                                                            style: const TextStyle(
+                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                //fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T),
+                                                                          ),
+                                                                        ),
                                                                       ),
                                                                     ),
-                                                                  ),
+                                                                    Container(
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          color:
+                                                                              Colors.white,
+                                                                          borderRadius: const BorderRadius
+                                                                              .only(
+                                                                              topLeft: Radius.circular(0),
+                                                                              topRight: Radius.circular(10),
+                                                                              bottomLeft: Radius.circular(0),
+                                                                              bottomRight: Radius.circular(10)),
+                                                                          border: Border.all(
+                                                                              color: Colors.grey,
+                                                                              width: 1),
+                                                                        ),
+                                                                        // width: 120,
+                                                                        child:
+                                                                            Icon(
+                                                                          Icons
+                                                                              .arrow_drop_down,
+                                                                          color:
+                                                                              Colors.black,
+                                                                        )),
+                                                                  ],
                                                                 ),
                                                               ),
-                                                              Container(
+                                                            ),
+                                                      (_TransModels.isEmpty)
+                                                          ? SizedBox()
+                                                          : SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                      (_TransModels.isEmpty)
+                                                          ? SizedBox()
+                                                          : Text(
+                                                              'รูปแบบชำระ',
+                                                              style:
+                                                                  const TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T),
+                                                            ),
+                                                      (_TransModels.isEmpty)
+                                                          ? SizedBox()
+                                                          : Container(
+                                                              height: 50,
+                                                              width: 350,
+                                                              // color:
+                                                              //     AppbackgroundColor
+                                                              //         .Sub_Abg_Colors,
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: Container(
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: AppbackgroundColor
+                                                                      .Sub_Abg_Colors,
+                                                                  borderRadius: const BorderRadius
+                                                                      .only(
+                                                                      topLeft:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              10)),
+                                                                  // border: Border.all(
+                                                                  //     color: Colors.grey, width: 1),
+                                                                ),
+                                                                width: 120,
+                                                                child:
+                                                                    DropdownButtonFormField2(
                                                                   decoration:
-                                                                      BoxDecoration(
-                                                                    color: Colors
-                                                                        .blue[
-                                                                            50]!
-                                                                        .withOpacity(
-                                                                            0.5),
-                                                                    borderRadius: const BorderRadius
-                                                                            .only(
-                                                                        topLeft:
-                                                                            Radius.circular(
-                                                                                0),
-                                                                        topRight:
-                                                                            Radius.circular(
-                                                                                10),
-                                                                        bottomLeft:
-                                                                            Radius.circular(
-                                                                                0),
-                                                                        bottomRight:
-                                                                            Radius.circular(10)),
-                                                                    border: Border.all(
-                                                                        color: Colors
-                                                                            .grey,
-                                                                        width:
-                                                                            1),
+                                                                      InputDecoration(
+                                                                    //Add isDense true and zero Padding.
+                                                                    //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
+                                                                    isDense:
+                                                                        true,
+                                                                    contentPadding:
+                                                                        EdgeInsets
+                                                                            .zero,
+                                                                    border:
+                                                                        OutlineInputBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              15),
+                                                                    ),
+                                                                    //Add more decoration as you want here
+                                                                    //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
                                                                   ),
-                                                                  // width: 120,
-                                                                  child: Icon(
+                                                                  isExpanded:
+                                                                      true,
+                                                                  // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
+                                                                  hint: Row(
+                                                                    children: [
+                                                                      Text(
+                                                                        '$paymentName1',
+                                                                        style: const TextStyle(
+                                                                            fontSize: 14,
+                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            // fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  icon:
+                                                                      const Icon(
                                                                     Icons
                                                                         .arrow_drop_down,
                                                                     color: Colors
-                                                                        .black,
-                                                                  )),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
+                                                                        .black45,
+                                                                  ),
+                                                                  iconSize: 25,
+                                                                  buttonHeight:
+                                                                      42,
+                                                                  // buttonPadding:
+                                                                  //     const EdgeInsets
+                                                                  //         .only(
+                                                                  //         left:
+                                                                  //             10,
+                                                                  //         right:
+                                                                  //             10),
+                                                                  dropdownDecoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            15),
+                                                                  ),
+                                                                  items: _PayMentModels.map((item) =>
+                                                                      DropdownMenuItem<
+                                                                          String>(
+                                                                        onTap:
+                                                                            () {
+                                                                          setState(
+                                                                              () {
+                                                                            selectedValue =
+                                                                                item.bno!;
+                                                                          });
+                                                                          print(
+                                                                              '**/*/*   --- ${selectedValue}');
+                                                                        },
+                                                                        value:
+                                                                            '${item.ser}:${item.ptname}',
+                                                                        child:
+                                                                            Row(
+                                                                          children: [
+                                                                            Expanded(
+                                                                              child: Text(
+                                                                                '${item.ptname!}',
+                                                                                textAlign: TextAlign.start,
+                                                                                style: const TextStyle(
+                                                                                    fontSize: 14,
+                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                    // fontWeight: FontWeight.bold,
+                                                                                    fontFamily: Font_.Fonts_T),
+                                                                              ),
+                                                                            ),
+                                                                            Expanded(
+                                                                              child: Text(
+                                                                                '${item.bno!}',
+                                                                                textAlign: TextAlign.end,
+                                                                                style: const TextStyle(
+                                                                                    fontSize: 14,
+                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                    // fontWeight: FontWeight.bold,
+                                                                                    fontFamily: Font_.Fonts_T),
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      )).toList(),
+                                                                  onChanged:
+                                                                      (value) async {
+                                                                    print(
+                                                                        value);
+                                                                    // Do something when changing the item if you want.
+
+                                                                    var zones = value!
+                                                                        .indexOf(
+                                                                            ':');
+                                                                    var rtnameSer =
+                                                                        value.substring(
+                                                                            0,
+                                                                            zones);
+                                                                    var rtnameName =
+                                                                        value.substring(
+                                                                            zones +
+                                                                                1);
+                                                                    // print(
+                                                                    //     'mmmmm ${rtnameSer.toString()} $rtnameName');
+                                                                    setState(
+                                                                        () {
+                                                                      paymentSer1 =
+                                                                          rtnameSer
+                                                                              .toString();
+
+                                                                      if (rtnameSer
+                                                                              .toString() ==
+                                                                          '0') {
+                                                                        paymentName1 =
+                                                                            null;
+                                                                      } else {
+                                                                        paymentName1 =
+                                                                            rtnameName.toString();
+                                                                      }
+                                                                      // paymentSer1 =
+                                                                      //     rtnameSer;
+                                                                    });
+                                                                    print(
+                                                                        'mmmmm ${rtnameSer.toString()} $rtnameName');
+                                                                    // print(
+                                                                    //     'pppppp $paymentSer1 $paymentName1');
+                                                                    // print('Form_payment1.text');
+                                                                    // print(Form_payment1.text);
+                                                                    // print(Form_payment2.text);
+                                                                    // print('Form_payment1.text');
+                                                                  },
+                                                                  // onSaved: (value) {
+
+                                                                  // },
+                                                                ),
+                                                              ),
+                                                            ),
                                                     ],
                                                   ),
                                                 ),
@@ -1344,6 +1345,7 @@ class _AccountInvoiceState extends State<AccountInvoice> {
                 padding: const EdgeInsets.all(2.0),
                 child: TextButton(
                   onPressed: () async {
+                    print('docno$paymentSer1>>>>  $End_Bill_Paydate');
                     showDialog<String>(
                       barrierDismissible: false,
                       context: context,
@@ -1394,6 +1396,8 @@ class _AccountInvoiceState extends State<AccountInvoice> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: InkWell(
                                           onTap: () {
+                                            print(
+                                                'docno$paymentSer1>>>>  $End_Bill_Paydate');
                                             if (_TransModels.length != 0) {
                                               in_Trans_invoice_all();
                                             } else {
@@ -1556,8 +1560,10 @@ class _AccountInvoiceState extends State<AccountInvoice> {
     var c_payment_Ser = paymentSer1;
     var End_Bill_Paydate_ = End_Bill_Paydate;
 
+    print('docno$paymentSer1>>>>  $End_Bill_Paydate');
+
     String url =
-        '${MyConstant().domain}/In_tran_invoice_all_account.php?isAdd=true&ren=$ren&user=$user&serMONTH=$serMONTH&serYEAR=$serYEAR&pay_Ser1=$c_payment_Ser&pay_date=$End_Bill_Paydate_';
+        '${MyConstant().domain}/In_tran_invoice_all_account.php?isAdd=true&ren=$ren&user=$user&serMONTH=$serMONTH&serYEAR=$serYEAR&pay_Ser1=$paymentSer1&pay_date=$End_Bill_Paydate';
     try {
       var response = await http.get(Uri.parse(url));
 

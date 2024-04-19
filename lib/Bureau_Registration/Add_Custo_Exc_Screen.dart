@@ -662,7 +662,7 @@ class _Add_Custo_EXC_ScreenState extends State<Add_Custo_EXC_Screen> {
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
                               padding: const EdgeInsets.all(8),
-                              decoration: const BoxDecoration(
+                              decoration:  BoxDecoration(
                                 color: AppbackgroundColor.TiTile_Colors,
                                 borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(10),

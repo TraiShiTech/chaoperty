@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'dart:html';
 import 'dart:typed_data';
+import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:chaoperty/Setting/createDocument2.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/services.dart';
 import 'package:html/parser.dart' as htmlParser;
-import 'package:htmltopdfwidgets/htmltopdfwidgets.dart';
+// import 'package:htmltopdfwidgets/htmltopdfwidgets.dart';
 import 'package:universal_html/html.dart';
 import 'package:universal_html/html.dart';
 import '../PeopleChao/Pays_.dart';

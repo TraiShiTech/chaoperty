@@ -145,9 +145,9 @@ class _Dashboard_Screen7State extends State<Dashboard_Screen7> {
               .compareTo(b.zn!); // sort other elements in ascending order
         }
       });
-      print(
-        zoneModels.length,
-      );
+      // print(
+      //   zoneModels.length,
+      // );
     } catch (e) {}
     data_tatol_Maintenance = List.generate(zoneModels_report.length, (_) => []);
   }
@@ -280,7 +280,7 @@ class _Dashboard_Screen7State extends State<Dashboard_Screen7> {
                   children: [
                     Container(
                       width: MediaQuery.of(context).size.width,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         color: AppbackgroundColor.TiTile_Colors,
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(10),
@@ -649,7 +649,7 @@ class _Dashboard_Screen7State extends State<Dashboard_Screen7> {
                                         Status_maintenance_ser =
                                             '${selectedIndex}';
                                       });
-                                      print(Status_maintenance_ser);
+                                      // print(Status_maintenance_ser);
                                     },
                                   ),
                                 ),

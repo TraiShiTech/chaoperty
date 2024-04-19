@@ -5,21 +5,16 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:crypto/crypto.dart';
 import 'package:flutter/gestures.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../AdminScaffold/AdminScaffold.dart';
-import '../AdminScaffold/Chat_Screen.dart';
-import '../AdminScaffold/Chat_ScreenAdmin.dart';
 import '../Constant/Myconstant.dart';
 import '../INSERT_Log/Insert_log.dart';
-import '../Model/GC_keyuser.dart';
 import '../Model/GC_package_model.dart';
 import '../Model/GetC_Otp.dart';
 import '../Model/GetLicensekey_Modely.dart';
@@ -29,11 +24,10 @@ import '../Model/GetUser_Model.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 import '../Model/GetUser_Model.dart';
-import 'dart:html' as html;
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class SignUnAdmin extends StatefulWidget {
-  final vel_key;
-  const SignUnAdmin({super.key, this.vel_key});
+  const SignUnAdmin({super.key});
 
   @override
   State<SignUnAdmin> createState() => _SignUnAdminState();
@@ -46,10 +40,7 @@ class _SignUnAdminState extends State<SignUnAdmin> {
   List<LicensekeyUPModel> licensekeyUPModels = [];
   List<OtpModel> otpModels = [];
   List<UserModel> userModels = [];
-  List<KeyuserModel> keyuserModel = [];
-  List<UserModel> userModels_chat = [];
   DateTime datenow = DateTime.now();
-  var Value_randomNumber;
   String? packSelext,
       day_date = 'D',
       _Licens,
@@ -70,36 +61,18 @@ class _SignUnAdminState extends State<SignUnAdmin> {
     read_GC_package();
     read_GC_packageGen();
     read_GC_otp();
-    Keyuseremail();
   }
 
-  Future<Null> Keyuseremail() async {
-    if (keyuserModel.isNotEmpty) {
-      keyuserModel.clear();
-    }
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var ren = preferences.getString('renTalSer');
-    String url = '${MyConstant().domain}/Gc_Keyuseremail.php?isAdd=true';
-    int indexfor = 0;
-    try {
-      var response = await http.get(Uri.parse(url));
-
-      var result = json.decode(response.body);
-      // print(result);
-      if (result != null) {
-        for (var map in result) {
-          KeyuserModel keyuserModels = KeyuserModel.fromJson(map);
-          if (keyuserModels.use.toString() == '1') {
-            setState(() {
-              keyuserModel.add(keyuserModels);
-            });
-          }
-        }
-      } else {}
-    } catch (e) {}
-    // print('name>>>>>  $renname');
+///////------------------------->
+  Color pickerColor = const Color.fromARGB(255, 227, 228, 230);
+  Color currentColor = Color.fromARGB(255, 178, 196, 241);
+  // var pickerColor, currentColor;
+// ValueChanged<Color> callback
+  void changeColors(Color color) {
+    setState(() => pickerColor = color);
   }
 
+///////------------------------->
   Future<Null> userModelsAddmin() async {
     if (userModels.isNotEmpty) {
       userModels.clear();
@@ -167,6 +140,9 @@ class _SignUnAdminState extends State<SignUnAdmin> {
       length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
 
   Future<Null> read_GC_rental() async {
+    setState(() {
+      renTalModels.clear();
+    });
     String url = '${MyConstant().domain}/GC_rental_admin.php?isAdd=true';
 
     try {
@@ -180,6 +156,17 @@ class _SignUnAdminState extends State<SignUnAdmin> {
         setState(() {
           renTalModels.add(renTalModel);
         });
+      }
+      if (renTalModels.isNotEmpty) {
+        dynamic colorsren = renTalModels[0].colors_ren;
+        if (colorsren is String) {
+          setState(() => pickerColor = Color(int.parse(colorsren)));
+          // print('Color(int.parse(colorsren))');
+          // print(Color(int.parse(colorsren)));
+          // print(pickerColor);
+        } else {
+          // Handle the case where colorsren is not a String
+        }
       }
     } catch (e) {}
   }
@@ -233,344 +220,533 @@ class _SignUnAdminState extends State<SignUnAdmin> {
     } catch (e) {}
   }
 
-  Future<void> createFolderAndFile() async {
-    // Get the application documents directory
-    final directory = await getApplicationDocumentsDirectory();
-
-    // Create a new folder named 'new_folder'
-    final newFolder = Directory('${directory.path}/new_folder');
-    newFolder.createSync();
-
-    // Create a sample file inside the folder
-    final sampleFile = File('${newFolder.path}/sample.txt');
-    sampleFile.writeAsStringSync('Hello, this is a sample file content.');
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.lightGreen[600],
-          leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(
-              Icons.arrow_back_outlined,
-              color: Colors.white,
+            backgroundColor: pickerColor,
+            leading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(
+                Icons.arrow_back_outlined,
+                color: Colors.white,
+              ),
             ),
-          ),
-          centerTitle: true,
-          title: Row(
-            children: [
+            centerTitle: true,
+            title: Row(children: [
               Expanded(
-                child: Text(
-                  "Admin Program ${keyuserModel.length}",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontFamily: Font_.Fonts_T,
+                child: InkWell(
+                  onTap: () async {
+                    userModelsAddmin();
+                    DialogEmailAdmin();
+                  },
+                  child: Text(
+                    "Admin Program ",
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontFamily: Font_.Fonts_T,
+                    ),
                   ),
                 ),
               ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.lightGreen[200],
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(0),
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(0)),
-                  // border: Border.all(color: Colors.grey, width: 0.5),
-                ),
-                padding: const EdgeInsets.all(0.5),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(4, 8, 4, 8),
-                  child: StreamBuilder(
-                      stream: Stream.periodic(const Duration(seconds: 0)),
-                      builder: (context, snapshot) {
-                        return Text(
-                          keyuserModel
-                                  .where((model) =>
-                                      model.key == '${widget.vel_key}')
-                                  .map((userModel) => userModel.email)
-                                  .isEmpty
-                              ? 'Hi คุณ ??'
-                              : 'Hi คุณ' +
-                                  keyuserModel
-                                      .firstWhere((model) =>
-                                          model.key == '${widget.vel_key}')
-                                      .email
-                                      .toString(),
-                          // 'Hi คุณ ${widget.vel_key} ...',
-                          style: TextStyle(
-                              color: AdminScafScreen_Color.Colors_Text1_,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: FontWeight_.Fonts_T),
-                        );
-                      }),
-                ),
-              ),
-              PopupMenuButton<int>(
-                color: Colors.green[50],
-                tooltip: '',
-                child: Icon(
-                  Icons.menu,
-                  color: Colors.black,
-                  size: 20,
-                ),
-                itemBuilder: (context) {
-                  return [
-                    PopupMenuItem<int>(
-                        value: 1,
-                        child: Container(
-                            decoration: BoxDecoration(
-                              // color: Colors.green[100]!
-                              //     .withOpacity(0.5),
-                              border: const Border(
-                                bottom: BorderSide(
-                                  color: Colors.black12,
-                                  width: 1,
-                                ),
-                              ),
-                            ),
-                            width: 220,
-                            child: Text("EmailAdmin",
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    color: AdminScafScreen_Color.Colors_Text1_,
-                                    fontFamily: Font_.Fonts_T)))),
-                  ];
+              OutlinedButton(
+                onPressed: () {
+                  showDialog<void>(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        backgroundColor: Colors.grey[350],
+                        title: const Text('ตั้งค่าสี ทุกตลาด'),
+                        content: ColorPicker(
+                          pickerColor: pickerColor,
+                          onColorChanged: changeColors,
+                        ),
+                        actions: <Widget>[
+                          ElevatedButton(
+                            child: const Text('คืนค่า Default'),
+                            onPressed: () async {
+                              var hexColor = 0xFF102456;
+                              String url =
+                                  '${MyConstant().domain}/UP_ColorsRen.php?isAdd=true&colors_ren=${hexColor}&colors_type=0';
+
+                              try {
+                                var response = await http.get(Uri.parse(url));
+
+                                var result = json.decode(response.body);
+                                if (result.toString() == 'true') {
+                                  Future.delayed(Duration(milliseconds: 500),
+                                      () {
+                                    setState(() {
+                                      read_GC_rental();
+                                      read_GC_package();
+                                      read_GC_packageGen();
+                                      read_GC_otp();
+                                    });
+                                  });
+
+                                  Navigator.of(context).pop();
+                                }
+                              } catch (e) {
+                                Navigator.of(context).pop();
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blue,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 20),
+                                textStyle: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.bold)),
+                          ),
+                          ElevatedButton(
+                            child: const Text('ยกเลิก'),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 20),
+                                textStyle: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.bold)),
+                            onPressed: () async {
+                              read_GC_rental();
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          ElevatedButton(
+                            child: const Text('บันทึก'),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.green,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 20),
+                                textStyle: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.bold)),
+                            onPressed: () async {
+                              // setState(() => currentColor = pickerColor);
+
+                              String colorString = pickerColor.toString();
+                              int startIndex = colorString.indexOf('(') + 1;
+                              int endIndex = colorString.indexOf(')');
+                              String hexColor =
+                                  colorString.substring(startIndex, endIndex);
+                              // print(hexColor);
+
+                              if (hexColor != '' && hexColor != null) {
+                                String url =
+                                    '${MyConstant().domain}/UP_ColorsRen.php?isAdd=true&colors_ren=${hexColor}&colors_type=0';
+
+                                try {
+                                  var response = await http.get(Uri.parse(url));
+
+                                  var result = json.decode(response.body);
+                                  if (result.toString() == 'true') {
+                                    Future.delayed(Duration(milliseconds: 500),
+                                        () {
+                                      setState(() {
+                                        read_GC_rental();
+                                        read_GC_package();
+                                        read_GC_packageGen();
+                                        read_GC_otp();
+                                      });
+                                    });
+
+                                    Navigator.of(context).pop();
+                                  }
+                                } catch (e) {
+                                  Navigator.of(context).pop();
+                                }
+                              } else {}
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
-                onOpened: () {},
-                onCanceled: () {},
-                onSelected: (value) async {
-                  if (value == 1) {
-                    userModelsAddmin();
-                    DialogEmailAdmin();
-                  } else {}
-                },
+                child: const Text(
+                  'Setting Color',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: FontWeight_.Fonts_T),
+                ),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    textStyle:
+                        TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
               ),
-            ],
-          ),
-        ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+            ])),
+        body: ScrollConfiguration(
+          behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+            PointerDeviceKind.touch,
+            PointerDeviceKind.mouse,
+          }),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
               children: [
-                Expanded(
+                Container(
+                  width: (Responsive.isDesktop(context))
+                      ? MediaQuery.of(context).size.width
+                      : 1000,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'Location',
-                              maxLines: 1,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: FontWeight_.Fonts_T,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: Responsive.isDesktop(context)
-                            ? MediaQuery.of(context).size.height -
-                                (MediaQuery.of(context).size.width * 0.1)
-                            : MediaQuery.of(context).size.height -
-                                (MediaQuery.of(context).size.width * 0.2),
-                        child: GridView.count(
-                          crossAxisCount: Responsive.isDesktop(context) ? 5 : 2,
-                          children: [
-                            for (int i = 0; i < renTalModels.length; i++)
-                              Card(
-                                color: Colors.white,
-                                child: Column(
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Row(
                                   children: [
-                                    Container(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          Align(
-                                            alignment: Alignment.topRight,
-                                            child: Padding(
-                                              padding: EdgeInsets.fromLTRB(
-                                                  1, 1, 0, 1),
-                                              child: InkWell(
-                                                onTap: () async {
-                                                  if (widget.vel_key
-                                                          .toString()
-                                                          .trim() ==
-                                                      'DzenCha0') {
-                                                    // var serren =
-                                                    //     renTalModels[i].ser;
-                                                    // signInThread(serren);
-                                                  } else {
-                                                    Admin_select(i);
-                                                  }
-                                                },
-                                                child: Icon(
-                                                  Icons.login,
-                                                  color: Colors.green,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-
-                                          // Align(
-                                          //   alignment: Alignment.topRight,
-                                          //   child: Padding(
-                                          //     padding: EdgeInsets.fromLTRB(
-                                          //         4, 1, 0, 1),
-                                          //     child: ChatAdminScreen(
-                                          //       ser_user:
-                                          //           '${keyuserModel.firstWhere((model) => model.key == '${widget.vel_key}').seruser.toString()}',
-                                          //       ser_ren:
-                                          //           '${renTalModels[i].ser}',
-                                          //     ),
-                                          //   ),
-                                          // ),
-                                        ],
-                                      ),
-                                    ),
                                     Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                                      child: const Divider(
-                                        color:
-                                            Color.fromARGB(255, 211, 209, 209),
-                                        height: 0.5,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'Location',
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: FontWeight_.Fonts_T,
+                                        ),
                                       ),
                                     ),
-                                    Expanded(
-                                      child: InkWell(
-                                        onTap: () async {
-                                          SharedPreferences preferences =
-                                              await SharedPreferences
-                                                  .getInstance();
-                                          preferences.setString('renTalSer',
-                                              renTalModels[i].ser.toString());
-                                          setState(() {
-                                            _Licens = null;
-                                          });
-                                          genORsign(i);
-                                        },
-                                        child: Column(
-                                          children: [
-                                            Padding(
+                                  ],
+                                ),
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: Responsive.isDesktop(context)
+                                      ? MediaQuery.of(context).size.height -
+                                          (MediaQuery.of(context).size.width *
+                                              0.1)
+                                      : MediaQuery.of(context).size.height *
+                                              0.95 -
+                                          (MediaQuery.of(context).size.width *
+                                              0.2),
+                                  child: GridView.count(
+                                    crossAxisCount:
+                                        Responsive.isDesktop(context) ? 5 : 2,
+                                    children: [
+                                      for (int i = 0;
+                                          i < renTalModels.length;
+                                          i++)
+                                        Card(
+                                          color: Colors.white,
+                                          child: InkWell(
+                                            onTap: () async {
+                                              setState(() {
+                                                _Licens = null;
+                                              });
+                                              genORsign(i);
+                                            },
+                                            child: Padding(
                                               padding:
-                                                  const EdgeInsets.all(4.0),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                                  const EdgeInsets.all(8.0),
+                                              child: Column(
                                                 children: [
-                                                  Expanded(
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        AutoSizeText(
-                                                          minFontSize: 10,
-                                                          maxFontSize: 14,
-                                                          maxLines: 1,
-                                                          '${renTalModels[i].pn}',
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: const TextStyle(
-                                                              color: PeopleChaoScreen_Color
-                                                                  .Colors_Text2_,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontFamily: Font_
-                                                                  .Fonts_T),
-                                                        ),
-                                                        AutoSizeText(
-                                                          minFontSize: 10,
-                                                          maxFontSize: 12,
-                                                          maxLines: 2,
-                                                          '${renTalModels[i].bill_name}',
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.grey,
-                                                              //fontWeight: FontWeight.bold,
-                                                              fontFamily: Font_
-                                                                  .Fonts_T),
-                                                        ),
-                                                        AutoSizeText(
-                                                          minFontSize: 10,
-                                                          maxFontSize: 12,
-                                                          maxLines: 1,
-                                                          renTalModels[i]
-                                                                      .pkldate ==
-                                                                  '0000-00-00'
-                                                              ? '( Free )'
-                                                              : '( ${renTalModels[i].pkldate} )',
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                              color: renTalModels[
-                                                                              i]
+                                                  OutlinedButton(
+                                                    onPressed: () {
+                                                      showDialog<void>(
+                                                        barrierDismissible:
+                                                            false,
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return AlertDialog(
+                                                            backgroundColor:
+                                                                Colors
+                                                                    .grey[350],
+                                                            title: const Text(
+                                                                'ตั้งค่าสี ทุกตลาด'),
+                                                            content:
+                                                                ColorPicker(
+                                                              pickerColor:
+                                                                  pickerColor,
+                                                              onColorChanged:
+                                                                  changeColors,
+                                                            ),
+                                                            actions: <Widget>[
+                                                              ElevatedButton(
+                                                                child: const Text(
+                                                                    'คืนค่า Default'),
+                                                                onPressed:
+                                                                    () async {
+                                                                  var hexColor =
+                                                                      0xFF102456;
+                                                                  String url =
+                                                                      '${MyConstant().domain}/UP_ColorsRen.php?isAdd=true&colors_ren=${hexColor}&colors_type=1&ser_ren=${renTalModels[i].ser}';
+
+                                                                  try {
+                                                                    var response =
+                                                                        await http
+                                                                            .get(Uri.parse(url));
+
+                                                                    var result =
+                                                                        json.decode(
+                                                                            response.body);
+                                                                    if (result
+                                                                            .toString() ==
+                                                                        'true') {
+                                                                      Future.delayed(
+                                                                          Duration(
+                                                                              milliseconds: 500),
+                                                                          () {
+                                                                        setState(
+                                                                            () {
+                                                                          read_GC_rental();
+                                                                          read_GC_package();
+                                                                          read_GC_packageGen();
+                                                                          read_GC_otp();
+                                                                        });
+                                                                      });
+
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    }
+                                                                  } catch (e) {
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop();
+                                                                  }
+                                                                },
+                                                                style: ElevatedButton.styleFrom(
+                                                                    backgroundColor:
+                                                                        Colors
+                                                                            .blue,
+                                                                    padding: EdgeInsets.symmetric(
+                                                                        horizontal:
+                                                                            20,
+                                                                        vertical:
+                                                                            20),
+                                                                    textStyle: TextStyle(
+                                                                        fontSize:
+                                                                            14,
+                                                                        fontWeight:
+                                                                            FontWeight.bold)),
+                                                              ),
+                                                              ElevatedButton(
+                                                                child: const Text(
+                                                                    'ยกเลิก'),
+                                                                style: ElevatedButton.styleFrom(
+                                                                    backgroundColor:
+                                                                        Colors
+                                                                            .red,
+                                                                    padding: EdgeInsets.symmetric(
+                                                                        horizontal:
+                                                                            20,
+                                                                        vertical:
+                                                                            20),
+                                                                    textStyle: TextStyle(
+                                                                        fontSize:
+                                                                            14,
+                                                                        fontWeight:
+                                                                            FontWeight.bold)),
+                                                                onPressed:
+                                                                    () async {
+                                                                  read_GC_rental();
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                              ),
+                                                              ElevatedButton(
+                                                                child: const Text(
+                                                                    'บันทึก'),
+                                                                style: ElevatedButton.styleFrom(
+                                                                    backgroundColor:
+                                                                        Colors
+                                                                            .green,
+                                                                    padding: EdgeInsets.symmetric(
+                                                                        horizontal:
+                                                                            20,
+                                                                        vertical:
+                                                                            20),
+                                                                    textStyle: TextStyle(
+                                                                        fontSize:
+                                                                            14,
+                                                                        fontWeight:
+                                                                            FontWeight.bold)),
+                                                                onPressed:
+                                                                    () async {
+                                                                  // setState(() => currentColor = pickerColor);
+
+                                                                  String
+                                                                      colorString =
+                                                                      pickerColor
+                                                                          .toString();
+                                                                  int startIndex =
+                                                                      colorString
+                                                                              .indexOf('(') +
+                                                                          1;
+                                                                  int endIndex =
+                                                                      colorString
+                                                                          .indexOf(
+                                                                              ')');
+                                                                  String
+                                                                      hexColor =
+                                                                      colorString.substring(
+                                                                          startIndex,
+                                                                          endIndex);
+                                                                  // print(hexColor);
+
+                                                                  if (hexColor !=
+                                                                          '' &&
+                                                                      hexColor !=
+                                                                          null) {
+                                                                    String url =
+                                                                        '${MyConstant().domain}/UP_ColorsRen.php?isAdd=true&colors_ren=${hexColor}&colors_type=1&ser_ren=${renTalModels[i].ser}';
+
+                                                                    try {
+                                                                      var response =
+                                                                          await http
+                                                                              .get(Uri.parse(url));
+
+                                                                      var result =
+                                                                          json.decode(
+                                                                              response.body);
+                                                                      if (result
+                                                                              .toString() ==
+                                                                          'true') {
+                                                                        Future.delayed(
+                                                                            Duration(milliseconds: 500),
+                                                                            () {
+                                                                          setState(
+                                                                              () {
+                                                                            read_GC_rental();
+                                                                            read_GC_package();
+                                                                            read_GC_packageGen();
+                                                                            read_GC_otp();
+                                                                          });
+                                                                        });
+
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                      }
+                                                                    } catch (e) {
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    }
+                                                                  } else {}
+                                                                },
+                                                              ),
+                                                            ],
+                                                          );
+                                                        },
+                                                      );
+                                                    },
+                                                    child: Icon(
+                                                        Icons.color_lens,
+                                                        color: Colors.white),
+                                                    style: ElevatedButton.styleFrom(
+                                                        backgroundColor: (renTalModels[i].colors_ren ==
+                                                                    null ||
+                                                                renTalModels[i]
+                                                                        .colors_ren
+                                                                        .toString() ==
+                                                                    '')
+                                                            ? Colors.white
+                                                            : Color(int.parse(
+                                                                renTalModels[i]
+                                                                    .colors_ren
+                                                                    .toString())),
+                                                        padding:
+                                                            EdgeInsets.symmetric(
+                                                                horizontal: 10,
+                                                                vertical: 10),
+                                                        textStyle: TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.bold)),
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Expanded(
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            AutoSizeText(
+                                                              minFontSize: 10,
+                                                              maxFontSize: 15,
+                                                              maxLines: 1,
+                                                              '${renTalModels[i].pn}',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: const TextStyle(
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T),
+                                                            ),
+                                                            AutoSizeText(
+                                                              minFontSize: 10,
+                                                              maxFontSize: 15,
+                                                              maxLines: 2,
+                                                              '${renTalModels[i].bill_name}',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  //fontWeight: FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T),
+                                                            ),
+                                                            AutoSizeText(
+                                                              minFontSize: 10,
+                                                              maxFontSize: 15,
+                                                              maxLines: 1,
+                                                              renTalModels[i]
                                                                           .pkldate ==
                                                                       '0000-00-00'
-                                                                  ? Colors.blue
-                                                                      .shade900
-                                                                  : Colors
-                                                                      .black,
-                                                              //fontWeight: FontWeight.bold,
-                                                              fontFamily: Font_
-                                                                  .Fonts_T),
-                                                        ),
-                                                        datenow.isAfter(DateTime.parse(renTalModels[i].pkldate ==
-                                                                            '0000-00-00'
-                                                                        ? '${renTalModels[i].data_update}'
-                                                                        : '${renTalModels[i].pkldate} 00:00:00.000')
-                                                                    .subtract(
-                                                                        const Duration(
-                                                                            days:
-                                                                                7))) ==
-                                                                true
-                                                            ? AutoSizeText(
-                                                                minFontSize: 10,
-                                                                maxFontSize: 12,
-                                                                maxLines: 1,
-                                                                '- ใกล้หมดอายุ -',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style: TextStyle(
-                                                                    color: Colors.red,
-                                                                    //fontWeight: FontWeight.bold,
-                                                                    fontFamily: Font_.Fonts_T),
-                                                              )
-                                                            : datenow.isAfter(DateTime.parse(renTalModels[i].pkldate ==
+                                                                  ? '( Free )'
+                                                                  : '( ${renTalModels[i].pkldate} )',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                  color: renTalModels[i]
+                                                                              .pkldate ==
+                                                                          '0000-00-00'
+                                                                      ? Colors
+                                                                          .blue
+                                                                          .shade900
+                                                                      : Colors
+                                                                          .black,
+                                                                  //fontWeight: FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T),
+                                                            ),
+                                                            datenow.isAfter(DateTime.parse(renTalModels[i].pkldate ==
                                                                                 '0000-00-00'
                                                                             ? '${renTalModels[i].data_update}'
                                                                             : '${renTalModels[i].pkldate} 00:00:00.000')
-                                                                        .subtract(
-                                                                            const Duration(days: 0))) ==
+                                                                        .subtract(const Duration(
+                                                                            days:
+                                                                                7))) ==
                                                                     true
                                                                 ? AutoSizeText(
                                                                     minFontSize:
                                                                         10,
                                                                     maxFontSize:
-                                                                        12,
+                                                                        15,
                                                                     maxLines: 1,
-                                                                    '- หมดอายุ -',
+                                                                    '- ใกล้หมดอายุ -',
                                                                     textAlign:
                                                                         TextAlign
                                                                             .center,
@@ -579,106 +755,339 @@ class _SignUnAdminState extends State<SignUnAdmin> {
                                                                         //fontWeight: FontWeight.bold,
                                                                         fontFamily: Font_.Fonts_T),
                                                                   )
-                                                                : SizedBox(),
-                                                      ],
-                                                    ),
-                                                  )
+                                                                : datenow.isAfter(DateTime.parse(renTalModels[i].pkldate == '0000-00-00'
+                                                                                ? '${renTalModels[i].data_update}'
+                                                                                : '${renTalModels[i].pkldate} 00:00:00.000')
+                                                                            .subtract(const Duration(days: 0))) ==
+                                                                        true
+                                                                    ? AutoSizeText(
+                                                                        minFontSize:
+                                                                            10,
+                                                                        maxFontSize:
+                                                                            15,
+                                                                        maxLines:
+                                                                            1,
+                                                                        '- หมดอายุ -',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style: TextStyle(
+                                                                            color: Colors.red,
+                                                                            //fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      )
+                                                                    : SizedBox(),
+                                                          ],
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
                                                 ],
                                               ),
                                             ),
-                                          ],
+                                          ),
+                                        )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                              child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Package',
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: Responsive.isDesktop(context)
+                                    ? MediaQuery.of(context).size.height -
+                                        (MediaQuery.of(context).size.width *
+                                            0.1)
+                                    : MediaQuery.of(context).size.height *
+                                            0.95 -
+                                        (MediaQuery.of(context).size.width *
+                                            0.2),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ScrollConfiguration(
+                                      behavior: ScrollConfiguration.of(context)
+                                          .copyWith(dragDevices: {
+                                        PointerDeviceKind.touch,
+                                        PointerDeviceKind.mouse,
+                                      }),
+                                      child: SingleChildScrollView(
+                                        child: Container(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          height: Responsive.isDesktop(context)
+                                              ? MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.12
+                                              : MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.35,
+                                          child: GridView.count(
+                                            scrollDirection: Axis.horizontal,
+                                            crossAxisCount: 1,
+                                            children: [
+                                              for (int i = 0;
+                                                  i < packageModels.length;
+                                                  i++)
+                                                Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Container(
+                                                      width: Responsive
+                                                              .isDesktop(
+                                                                  context)
+                                                          ? MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.1
+                                                          : MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.22,
+                                                      child: InkWell(
+                                                        onTap: () async {
+                                                          setState(() {
+                                                            if (packSelext ==
+                                                                packageModels[i]
+                                                                    .ser) {
+                                                              packSelext = null;
+                                                              packint = 0;
+                                                            } else {
+                                                              packint = i;
+                                                              packSelext =
+                                                                  packageModels[
+                                                                          i]
+                                                                      .ser;
+                                                            }
+                                                          });
+                                                        },
+                                                        child: Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: packSelext ==
+                                                                    packageModels[
+                                                                            i]
+                                                                        .ser
+                                                                ? Colors.purple
+                                                                : Colors
+                                                                    .white38,
+                                                            borderRadius: const BorderRadius
+                                                                    .only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                            border: (packSelext ==
+                                                                    packageModels[
+                                                                            i]
+                                                                        .ser)
+                                                                ? Border.all(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    width: 1)
+                                                                : Border.all(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    width: 1),
+                                                          ),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Center(
+                                                            child: Column(
+                                                              children: [
+                                                                SizedBox(
+                                                                  height: 10,
+                                                                ),
+                                                                Text(
+                                                                  'Package ${packageModels[i].pk}',
+                                                                  maxLines: 1,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: (packSelext ==
+                                                                            packageModels[i]
+                                                                                .ser)
+                                                                        ? Colors
+                                                                            .white
+                                                                        : Colors
+                                                                            .green,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontFamily:
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                  height: 10,
+                                                                ),
+                                                                Text(
+                                                                  '${packageModels[i].qty}',
+                                                                  maxLines: 1,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: (packSelext ==
+                                                                            packageModels[i]
+                                                                                .ser)
+                                                                        ? Colors
+                                                                            .white
+                                                                        : Colors
+                                                                            .black,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontFamily:
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                  height: 10,
+                                                                ),
+                                                                Text(
+                                                                  'ล็อก/แผง',
+                                                                  maxLines: 1,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: (packSelext ==
+                                                                            packageModels[i]
+                                                                                .ser)
+                                                                        ? Colors
+                                                                            .white
+                                                                        : Colors
+                                                                            .black,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T,
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  '${packageModels[i].user} สิทธิผู้ใช้งาน',
+                                                                  maxLines: 1,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: (packSelext ==
+                                                                            packageModels[i]
+                                                                                .ser)
+                                                                        ? Colors
+                                                                            .white
+                                                                        : Colors
+                                                                            .black,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T,
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  '${NumberFormat("#,##0.00", "en_US").format(double.parse(packageModels[i].rpri!))} บาท/เดือน',
+                                                                  maxLines: 1,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: (packSelext ==
+                                                                            packageModels[i]
+                                                                                .ser)
+                                                                        ? Colors
+                                                                            .white
+                                                                        : Colors
+                                                                            .black,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ))
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ],
-                                ),
-                              )
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                    child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'Package',
-                            maxLines: 1,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: FontWeight_.Fonts_T,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: Responsive.isDesktop(context)
-                          ? MediaQuery.of(context).size.height -
-                              (MediaQuery.of(context).size.width * 0.1)
-                          : MediaQuery.of(context).size.height -
-                              (MediaQuery.of(context).size.width * 0.2),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ScrollConfiguration(
-                            behavior: ScrollConfiguration.of(context)
-                                .copyWith(dragDevices: {
-                              PointerDeviceKind.touch,
-                              PointerDeviceKind.mouse,
-                            }),
-                            child: SingleChildScrollView(
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: Responsive.isDesktop(context)
-                                    ? MediaQuery.of(context).size.width * 0.12
-                                    : MediaQuery.of(context).size.width * 0.35,
-                                child: GridView.count(
-                                  scrollDirection: Axis.horizontal,
-                                  crossAxisCount: 1,
-                                  children: [
-                                    for (int i = 0;
-                                        i < packageModels.length;
-                                        i++)
-                                      Padding(
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Padding(
                                           padding: const EdgeInsets.all(8.0),
-                                          child: Container(
-                                            width: Responsive.isDesktop(context)
-                                                ? MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.1
-                                                : MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.22,
-                                            child: InkWell(
-                                              onTap: () async {
-                                                setState(() {
-                                                  if (packSelext ==
-                                                      packageModels[i].ser) {
-                                                    packSelext = null;
-                                                    packint = 0;
-                                                  } else {
-                                                    packint = i;
-                                                    packSelext =
-                                                        packageModels[i].ser;
-                                                  }
-                                                });
-                                              },
+                                          child: Text(
+                                            'License Key',
+                                            maxLines: 1,
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          flex: 4,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              packSelext == null
+                                                  ? ""
+                                                  : 'Package ${packageModels[packint!].pk}',
+                                              maxLines: 1,
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.red,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: FontWeight_.Fonts_T,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                            flex: 1,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
                                               child: Container(
+                                                height: 50,
                                                 decoration: BoxDecoration(
-                                                  color: packSelext ==
-                                                          packageModels[i].ser
-                                                      ? Colors.purple
-                                                      : Colors.white38,
+                                                  color: Colors.green.shade900,
                                                   borderRadius:
                                                       const BorderRadius.only(
                                                           topLeft:
@@ -693,394 +1102,280 @@ class _SignUnAdminState extends State<SignUnAdmin> {
                                                           bottomRight:
                                                               Radius.circular(
                                                                   10)),
-                                                  border: (packSelext ==
-                                                          packageModels[i].ser)
-                                                      ? Border.all(
-                                                          color: Colors.white,
-                                                          width: 1)
-                                                      : Border.all(
-                                                          color: Colors.black,
-                                                          width: 1),
+                                                  border: Border.all(
+                                                      color: Colors.white,
+                                                      width: 1),
                                                 ),
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Center(
-                                                  child: Column(
-                                                    children: [
-                                                      SizedBox(
-                                                        height: 10,
+                                                child: InkWell(
+                                                  onTap: () async {
+                                                    // packint = i;
+                                                    //           packSelext =
+                                                    //               packageModels[i].ser;
+
+                                                    if (packSelext != null) {
+                                                      var vv =
+                                                          getRandomString(16);
+                                                      String url =
+                                                          '${MyConstant().domain}/In_Package.php?isAdd=true&serpk=$packSelext&lisen=$vv';
+
+                                                      try {
+                                                        var response =
+                                                            await http.get(
+                                                                Uri.parse(url));
+
+                                                        var result =
+                                                            json.decode(
+                                                                response.body);
+                                                        print(result);
+                                                        if (result.toString() ==
+                                                            'true') {
+                                                          setState(() {
+                                                            read_GC_packageGen();
+                                                          });
+                                                          print(
+                                                              '$vv  $packSelext  $packint');
+                                                        }
+                                                      } catch (e) {}
+                                                      setState(() {
+                                                        read_GC_packageGen();
+                                                      });
+                                                    }
+                                                  },
+                                                  child: Center(
+                                                    child: Text(
+                                                      'Generator',
+                                                      maxLines: 1,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontFamily:
+                                                            FontWeight_.Fonts_T,
                                                       ),
-                                                      Text(
-                                                        'Package ${packageModels[i].pk}',
-                                                        maxLines: 1,
-                                                        style: TextStyle(
-                                                          color: (packSelext ==
-                                                                  packageModels[
-                                                                          i]
-                                                                      .ser)
-                                                              ? Colors.white
-                                                              : Colors.green,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T,
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Text(
-                                                        '${packageModels[i].qty}',
-                                                        maxLines: 1,
-                                                        style: TextStyle(
-                                                          color: (packSelext ==
-                                                                  packageModels[
-                                                                          i]
-                                                                      .ser)
-                                                              ? Colors.white
-                                                              : Colors.black,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T,
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Text(
-                                                        'ล็อก/แผง',
-                                                        maxLines: 1,
-                                                        style: TextStyle(
-                                                          color: (packSelext ==
-                                                                  packageModels[
-                                                                          i]
-                                                                      .ser)
-                                                              ? Colors.white
-                                                              : Colors.black,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        '${packageModels[i].user} สิทธิผู้ใช้งาน',
-                                                        maxLines: 1,
-                                                        style: TextStyle(
-                                                          color: (packSelext ==
-                                                                  packageModels[
-                                                                          i]
-                                                                      .ser)
-                                                              ? Colors.white
-                                                              : Colors.black,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        '${NumberFormat("#,##0.00", "en_US").format(double.parse(packageModels[i].rpri!))} บาท/เดือน',
-                                                        maxLines: 1,
-                                                        style: TextStyle(
-                                                          color: (packSelext ==
-                                                                  packageModels[
-                                                                          i]
-                                                                      .ser)
-                                                              ? Colors.white
-                                                              : Colors.black,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ],
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          ))
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  'License Key',
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                flex: 4,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    packSelext == null
-                                        ? ""
-                                        : 'Package ${packageModels[packint!].pk}',
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: FontWeight_.Fonts_T,
+                                            ))
+                                      ],
                                     ),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                  flex: 1,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Container(
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                        color: Colors.green.shade900,
-                                        borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            topRight: Radius.circular(10),
-                                            bottomLeft: Radius.circular(10),
-                                            bottomRight: Radius.circular(10)),
-                                        border: Border.all(
-                                            color: Colors.white, width: 1),
-                                      ),
-                                      child: InkWell(
-                                        onTap: () async {
-                                          // packint = i;
-                                          //           packSelext =
-                                          //               packageModels[i].ser;
-
-                                          if (packSelext != null) {
-                                            var vv = getRandomString(16);
-                                            String url =
-                                                '${MyConstant().domain}/In_Package.php?isAdd=true&serpk=$packSelext&lisen=$vv';
-
-                                            try {
-                                              var response = await http
-                                                  .get(Uri.parse(url));
-
-                                              var result =
-                                                  json.decode(response.body);
-                                              print(result);
-                                              if (result.toString() == 'true') {
-                                                setState(() {
-                                                  read_GC_packageGen();
-                                                });
-                                                print(
-                                                    '$vv  $packSelext  $packint');
-                                              }
-                                            } catch (e) {}
-                                            setState(() {
-                                              read_GC_packageGen();
-                                            });
-                                          }
-                                        },
-                                        child: Center(
-                                          child: Text(
-                                            'Generator',
-                                            maxLines: 1,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T,
-                                            ),
+                                    Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                flex: 1,
+                                                child: Text(
+                                                  'Package',
+                                                  maxLines: 1,
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    // fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T,
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: Text(
+                                                  'Unit/User',
+                                                  maxLines: 1,
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    // fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T,
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 4,
+                                                child: Text(
+                                                  'KEY',
+                                                  maxLines: 1,
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    // fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T,
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: Text(
+                                                  'Status',
+                                                  maxLines: 1,
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    // fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T,
+                                                  ),
+                                                ),
+                                              )
+                                            ],
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                  ))
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 1,
-                                      child: Text(
-                                        'Package',
-                                        maxLines: 1,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          // fontWeight: FontWeight.bold,
-                                          fontFamily: FontWeight_.Fonts_T,
+                                        Container(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.3,
+                                          child: ListView.builder(
+                                              itemCount:
+                                                  licensekeyModels.length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                return Column(
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Row(
+                                                        children: [
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              'Package ${licensekeyModels[index].pk}',
+                                                              maxLines: 1,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .black,
+                                                                // fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              '${licensekeyModels[index].qty}/${licensekeyModels[index].user}',
+                                                              maxLines: 1,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .black,
+                                                                // fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 4,
+                                                            child: licensekeyModels[
+                                                                            index]
+                                                                        .use ==
+                                                                    '0'
+                                                                ? SelectableText(
+                                                                    '${licensekeyModels[index].key}',
+                                                                    maxLines: 1,
+                                                                    toolbarOptions: ToolbarOptions(
+                                                                        copy:
+                                                                            true,
+                                                                        selectAll:
+                                                                            true,
+                                                                        cut:
+                                                                            false,
+                                                                        paste:
+                                                                            false),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: Colors
+                                                                          .black,
+                                                                      // fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T,
+                                                                    ),
+                                                                  )
+                                                                : Text(
+                                                                    '${licensekeyModels[index].key}',
+                                                                    maxLines: 1,
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: Colors
+                                                                          .black,
+                                                                      // fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T,
+                                                                    ),
+                                                                  ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              licensekeyModels[
+                                                                              index]
+                                                                          .use ==
+                                                                      '0'
+                                                                  ? 'ใช้งานได้'
+                                                                  : 'ไม่สามารถใช้งานได้',
+                                                              maxLines: 1,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                color: licensekeyModels[index]
+                                                                            .use ==
+                                                                        '0'
+                                                                    ? Colors
+                                                                        .green
+                                                                    : Colors
+                                                                        .red,
+                                                                // fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                );
+                                              }),
                                         ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: Text(
-                                        'Unit/User',
-                                        maxLines: 1,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          // fontWeight: FontWeight.bold,
-                                          fontFamily: FontWeight_.Fonts_T,
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 4,
-                                      child: Text(
-                                        'KEY',
-                                        maxLines: 1,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          // fontWeight: FontWeight.bold,
-                                          fontFamily: FontWeight_.Fonts_T,
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: Text(
-                                        'Status',
-                                        maxLines: 1,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          // fontWeight: FontWeight.bold,
-                                          fontFamily: FontWeight_.Fonts_T,
-                                        ),
-                                      ),
+                                      ],
                                     )
                                   ],
                                 ),
                               ),
-                              Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.35,
-                                child: ListView.builder(
-                                    itemCount: licensekeyModels.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Column(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Row(
-                                              children: [
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    'Package ${licensekeyModels[index].pk}',
-                                                    maxLines: 1,
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      // fontWeight: FontWeight.bold,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    '${licensekeyModels[index].qty}/${licensekeyModels[index].user}',
-                                                    maxLines: 1,
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      // fontWeight: FontWeight.bold,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 4,
-                                                  child: licensekeyModels[index]
-                                                              .use ==
-                                                          '0'
-                                                      ? SelectableText(
-                                                          '${licensekeyModels[index].key}',
-                                                          maxLines: 1,
-                                                          toolbarOptions:
-                                                              ToolbarOptions(
-                                                                  copy: true,
-                                                                  selectAll:
-                                                                      true,
-                                                                  cut: false,
-                                                                  paste: false),
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                            color: Colors.black,
-                                                            // fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
-                                                        )
-                                                      : Text(
-                                                          '${licensekeyModels[index].key}',
-                                                          maxLines: 1,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                            color: Colors.black,
-                                                            // fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
-                                                        ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    licensekeyModels[index]
-                                                                .use ==
-                                                            '0'
-                                                        ? 'ใช้งานได้'
-                                                        : 'ไม่สามารถใช้งานได้',
-                                                    maxLines: 1,
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      color: licensekeyModels[
-                                                                      index]
-                                                                  .use ==
-                                                              '0'
-                                                          ? Colors.green
-                                                          : Colors.red,
-                                                      // fontWeight: FontWeight.bold,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    }),
-                              ),
                             ],
-                          )
+                          )),
                         ],
                       ),
-                    ),
-                  ],
-                )),
+                    ],
+                  ),
+                ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -2294,7 +2589,7 @@ class _SignUnAdminState extends State<SignUnAdmin> {
                               ],
                             ),
                             Container(
-                              decoration: const BoxDecoration(
+                              decoration: BoxDecoration(
                                 color: AppbackgroundColor.TiTile_Colors,
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(10),
@@ -2332,18 +2627,6 @@ class _SignUnAdminState extends State<SignUnAdmin> {
                                           fontFamily: FontWeight_.Fonts_T),
                                     ),
                                   ),
-                                  // Expanded(
-                                  //   flex: 1,
-                                  //   child: Text(
-                                  //     'Passw',
-                                  //     textAlign: TextAlign.start,
-                                  //     style: TextStyle(
-                                  //         color: AdminScafScreen_Color
-                                  //             .Colors_Text1_,
-                                  //         fontWeight: FontWeight.bold,
-                                  //         fontFamily: FontWeight_.Fonts_T),
-                                  //   ),
-                                  // ),
                                   Expanded(
                                     flex: 1,
                                     child: Text(
@@ -2446,151 +2729,6 @@ class _SignUnAdminState extends State<SignUnAdmin> {
                                                     fontFamily: Font_.Fonts_T),
                                               ),
                                             ),
-                                            // Expanded(
-                                            //   //ResetPass(context, ser_user, password_U)
-                                            //   flex: 1,
-                                            //   child: SizedBox(
-                                            //     height: 40,
-                                            //     child: Padding(
-                                            //       padding:
-                                            //           const EdgeInsets.all(4.0),
-                                            //       child: TextFormField(
-                                            //         keyboardType:
-                                            //             TextInputType.text,
-                                            //         // controller: Pasw1_text,
-                                            //         validator: (value) {
-                                            //           if (value == null ||
-                                            //               value.isEmpty) {
-                                            //             return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                            //           }
-                                            //           // if (int.parse(value.toString()) < 13) {
-                                            //           //   return '< 13';
-                                            //           // }
-                                            //           return null;
-                                            //         },
-                                            //         // maxLength: 13,
-                                            //         cursorColor: Colors.green,
-                                            //         decoration: InputDecoration(
-                                            //             fillColor: Colors.white
-                                            //                 .withOpacity(0.3),
-                                            //             filled: true,
-                                            //             // prefixIcon:
-                                            //             //     const Icon(Icons.person_pin, color: Colors.black),
-                                            //             // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                            //             focusedBorder:
-                                            //                 const OutlineInputBorder(
-                                            //               borderRadius:
-                                            //                   BorderRadius.only(
-                                            //                 topRight:
-                                            //                     Radius.circular(
-                                            //                         10),
-                                            //                 topLeft:
-                                            //                     Radius.circular(
-                                            //                         10),
-                                            //                 bottomRight:
-                                            //                     Radius.circular(
-                                            //                         10),
-                                            //                 bottomLeft:
-                                            //                     Radius.circular(
-                                            //                         10),
-                                            //               ),
-                                            //               borderSide:
-                                            //                   BorderSide(
-                                            //                 width: 1,
-                                            //                 color: Colors.black,
-                                            //               ),
-                                            //             ),
-                                            //             enabledBorder:
-                                            //                 const OutlineInputBorder(
-                                            //               borderRadius:
-                                            //                   BorderRadius.only(
-                                            //                 topRight:
-                                            //                     Radius.circular(
-                                            //                         10),
-                                            //                 topLeft:
-                                            //                     Radius.circular(
-                                            //                         10),
-                                            //                 bottomRight:
-                                            //                     Radius.circular(
-                                            //                         10),
-                                            //                 bottomLeft:
-                                            //                     Radius.circular(
-                                            //                         10),
-                                            //               ),
-                                            //               borderSide:
-                                            //                   BorderSide(
-                                            //                 width: 1,
-                                            //                 color: Colors.grey,
-                                            //               ),
-                                            //             ),
-                                            //             labelText:
-                                            //                 'รหัสผ่านใหม่',
-                                            //             labelStyle:
-                                            //                 const TextStyle(
-                                            //               color: Colors.black54,
-                                            //               fontFamily:
-                                            //                   FontWeight_
-                                            //                       .Fonts_T,
-                                            //             )),
-                                            //         onFieldSubmitted:
-                                            //             (value) async {
-                                            //           var password_U = md5
-                                            //               .convert(utf8.encode(
-                                            //                   value.toString()))
-                                            //               .toString();
-                                            //           print(userModels[index]
-                                            //               .ser);
-                                            //           print(password_U);
-                                            //           String url =
-                                            //               '${MyConstant().domain}/ResetPasswd.php?isAdd=true&ser_U=${userModels[index].ser}&pass_U=$password_U&type=0';
-                                            //           try {
-                                            //             var response =
-                                            //                 await http.get(
-                                            //                     Uri.parse(url));
-
-                                            //             var result =
-                                            //                 json.decode(
-                                            //                     response.body);
-
-                                            //             print(
-                                            //                 result.toString());
-                                            //           } catch (e) {
-                                            //             ScaffoldMessenger.of(
-                                            //                     context)
-                                            //                 .showSnackBar(
-                                            //               const SnackBar(
-                                            //                   content: Text(
-                                            //                       'การเชื่อมต่อผิดพลาด',
-                                            //                       style: TextStyle(
-                                            //                           color: Colors
-                                            //                               .black,
-                                            //                           fontFamily:
-                                            //                               Font_
-                                            //                                   .Fonts_T))),
-                                            //             );
-                                            //           }
-                                            //           Navigator.pop(
-                                            //               context, 'OK');
-                                            //         },
-                                            //         inputFormatters: <TextInputFormatter>[
-                                            //           FilteringTextInputFormatter
-                                            //               .deny(RegExp(r'\s')),
-                                            //         ],
-                                            //       ),
-                                            //     ),
-                                            //   ),
-
-                                            //   // Text(
-                                            //   //   textAlign: TextAlign.start,
-                                            //   //   maxLines: 2,
-                                            //   //   '${userModels[index].passwd}',
-                                            //   //   style: TextStyle(
-                                            //   //       color: AdminScafScreen_Color
-                                            //   //           .Colors_Text1_,
-                                            //   //       // fontWeight: FontWeight.bold,
-                                            //   //       fontFamily: Font_.Fonts_T),
-                                            //   // ),
-                                            // ),
                                             Expanded(
                                               flex: 1,
                                               child: Text(
@@ -2813,7 +2951,7 @@ class _SignUnAdminState extends State<SignUnAdmin> {
 
   Future<Null> signInThread(serren) async {
     String url =
-        '${MyConstant().domain}/GC_user.php?isAdd=true&email=T_T@gmail.com';
+        '${MyConstant().domain}/GC_user.php?isAdd=true&email=dzentric.com@gmail.com';
 
     try {
       var response = await http.get(Uri.parse(url));
@@ -2876,128 +3014,6 @@ class _SignUnAdminState extends State<SignUnAdmin> {
     preferences.setString('lavel', userModel.user_id.toString());
     preferences.setString('route', 'หน้าหลัก');
     preferences.setString('pakanPay', 0.toString());
-    Insert_log.Insert_logs('ล็อคอิน', 'เข้าสู่ระบบ');
-    MaterialPageRoute route = MaterialPageRoute(
-      builder: (context) => myWidget,
-    );
-    Navigator.pushAndRemoveUntil(context, route, (route) => false);
-  }
-
-////////////----------------------------------------------->
-  // Future<Null> ResetPass(context, ser_user, password) async {
-  //   var password_U = md5.convert(utf8.encode(password.toString())).toString();
-  //   String url =
-  //       '${MyConstant().domain}/ResetPasswd.php?isAdd=true&ser_U=$ser_user&pass_U=$password_U&type=0';
-  //   try {
-  //     var response = await http.get(Uri.parse(url));
-
-  //     var result = json.decode(response.body);
-
-  //     print(result.toString());
-  //   } catch (e) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(
-  //           content: Text('การเชื่อมต่อผิดพลาด',
-  //               style:
-  //                   TextStyle(color: Colors.black, fontFamily: Font_.Fonts_T))),
-  //     );
-  //   }
-  //   Navigator.pop(context, 'OK');
-  //   // Future.delayed(const Duration(milliseconds: 500), () {
-  //   //   ScaffoldMessenger.of(context).showSnackBar(
-  //   //     const SnackBar(
-  //   //         content: Text('การเชื่อมต่อผิดพลาด',
-  //   //             style:
-  //   //                 TextStyle(color: Colors.black, fontFamily: Font_.Fonts_T))),
-  //   //   );
-  //   // });
-  // }
-
-  Future<Null> Admin_select(index) async {
-    var ser_user_ = keyuserModel
-        .firstWhere((model) => model.key == '${widget.vel_key}')
-        .seruser
-        .toString();
-
-    try {
-      final url = '${MyConstant().domain}/UP_emailAdminSer.php';
-
-      final response = await http.post(Uri.parse(url), body: {
-        'isAdd': 'true',
-        'seruser': '${ser_user_}',
-        'serrenTal': '${renTalModels[index].ser}',
-      });
-      Future.delayed(const Duration(milliseconds: 500), () {
-        Admin_select2(index);
-      });
-    } catch (e) {}
-    //////------------------>
-  }
-
-  Future<Null> Admin_select2(index) async {
-    var ser_user_ = keyuserModel
-        .firstWhere((model) => model.key == '${widget.vel_key}')
-        .seruser
-        .toString();
-    var email_user_ = keyuserModel
-        .firstWhere((model) => model.key == '${widget.vel_key}')
-        .email
-        .toString();
-    Random random = Random();
-    int c = random.nextInt(9000) + 1000;
-    setState(() {
-      Value_randomNumber = c.toString();
-    });
-
-    print(ser_user_);
-
-    String url =
-        '${MyConstant().domain}/GC_user.php?isAdd=true&email=$email_user_';
-    try {
-      var response = await http.get(Uri.parse(url));
-
-      var result = json.decode(response.body);
-      print(result);
-      for (var map in result) {
-        UserModel userModel = UserModel.fromJson(map);
-        var onoff = int.parse(userModel.onoff!);
-        var ser = userModel.ser;
-        if (onoff == 0) {
-          if (ser_user_.toString().trim() == userModel.ser!.toString().trim()) {
-            String verify = userModel.verify!;
-            if (verify == "1") {
-              // Insert_log.Insert_logs('ล็อคอิน', 'เข้าสู่ระบบ');
-              routeToService2(AdminScafScreen(route: 'หน้าหลัก'), userModel);
-              var on = '1';
-              var randomNumber = Value_randomNumber;
-              String url =
-                  '${MyConstant().domain}/U_user_onoff.php?isAdd=true&ser=$ser&on=$on&randomNumber=$randomNumber';
-            } else {}
-          }
-        }
-      }
-    } catch (e) {}
-  }
-
-  Future<Null> routeToService2(
-    Widget myWidget,
-    UserModel userModel,
-  ) async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    preferences.setString('ser', userModel.ser.toString());
-    preferences.setString('position', userModel.position.toString());
-    preferences.setString('fname', userModel.fname.toString());
-    preferences.setString('lname', userModel.lname.toString());
-    preferences.setString('email', userModel.email.toString());
-    preferences.setString('utype', userModel.utype.toString());
-    preferences.setString('verify', userModel.verify.toString());
-    preferences.setString('permission', userModel.permission.toString());
-    preferences.setString('rser', userModel.rser.toString());
-    preferences.setString('Muser', userModel.user.toString());
-    preferences.setString('lavel', userModel.user_id.toString());
-    preferences.setString('route', 'หน้าหลัก');
-    preferences.setString('pakanPay', 0.toString());
-    preferences.setString('login', Value_randomNumber.toString());
     Insert_log.Insert_logs('ล็อคอิน', 'เข้าสู่ระบบ');
     MaterialPageRoute route = MaterialPageRoute(
       builder: (context) => myWidget,

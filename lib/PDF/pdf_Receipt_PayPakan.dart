@@ -1145,7 +1145,7 @@ class PdfgenReceipt_PayPakan {
                               // crossAxisAlignment: pw.CrossAxisAlignment.center,
                               children: [
                                 pw.Text(
-                                  'ลงชื่อ :',
+                                  'ลงชื่อ : ผู้รับเงิน',
                                   textAlign: pw.TextAlign.left,
                                   style: pw.TextStyle(
                                     fontSize: font_Size,
@@ -1192,7 +1192,7 @@ class PdfgenReceipt_PayPakan {
                               // crossAxisAlignment: pw.CrossAxisAlignment.center,
                               children: [
                                 pw.Text(
-                                  'ลงชื่อ :',
+                                  'ลงชื่อ : เจ้าหน้าที่/ผู้จัดการ',
                                   textAlign: pw.TextAlign.left,
                                   style: pw.TextStyle(
                                     fontSize: font_Size,
@@ -1232,51 +1232,51 @@ class PdfgenReceipt_PayPakan {
                                   ),
                                 ),
                               ])),
-                      pw.Expanded(
-                          flex: 1,
-                          child: pw.Column(
-                              mainAxisAlignment: pw.MainAxisAlignment.start,
-                              // crossAxisAlignment: pw.CrossAxisAlignment.center,
-                              children: [
-                                if (hasNonCashTransaction2)
-                                  pw.Container(
-                                    child: pw.BarcodeWidget(
-                                        data:
-                                            '|${finnancetransModels.where((model) => model.ptser == '6' && model.dtype == 'KP').map((model) => model.bno).join(', ')}\r$numinvoice\r${DateFormat('dd-MM-yyyy').format(DateTime.parse('${dayfinpay}'))}\r${newTotal_QR}\r',
-                                        barcode: pw.Barcode.qrCode(),
-                                        width: 55,
-                                        height: 55),
-                                  ),
-                                if (hasNonCashTransaction4)
-                                  pw.BarcodeWidget(
-                                      data: generateQRCode(
-                                          promptPayID:
-                                              "${finnancetransModels.where((model) => model.ptser == '5' && model.dtype == 'KP').map((model) => model.bno).join(', ')}",
-                                          amount: double.parse((Total == null ||
-                                                  Total == '')
-                                              ? '0'
-                                              : '${finnancetransModels.where((model) => model.ptser == '5' && model.dtype == 'KP').map((model) => model.total).join(', ')}')),
-                                      barcode: pw.Barcode.qrCode(),
-                                      width: 55,
-                                      height: 55),
-                                if (hasNonCashTransaction3)
-                                  for (var i = 0;
-                                      i < finnancetransModels.length;
-                                      i++)
-                                    if (finnancetransModels[i]
-                                                .ptser
-                                                .toString() ==
-                                            '2' &&
-                                        finnancetransModels[i]
-                                                .dtype
-                                                .toString() ==
-                                            'KP')
-                                      pw.Image(
-                                        (netImage_QR[i]),
-                                        height: 55,
-                                        width: 55,
-                                      ),
-                              ])),
+                      // pw.Expanded(
+                      //     flex: 1,
+                      //     child: pw.Column(
+                      //         mainAxisAlignment: pw.MainAxisAlignment.start,
+                      //         // crossAxisAlignment: pw.CrossAxisAlignment.center,
+                      //         children: [
+                      //           if (hasNonCashTransaction2)
+                      //             pw.Container(
+                      //               child: pw.BarcodeWidget(
+                      //                   data:
+                      //                       '|${finnancetransModels.where((model) => model.ptser == '6' && model.dtype == 'KP').map((model) => model.bno).join(', ')}\r$numinvoice\r${DateFormat('dd-MM-yyyy').format(DateTime.parse('${dayfinpay}'))}\r${newTotal_QR}\r',
+                      //                   barcode: pw.Barcode.qrCode(),
+                      //                   width: 55,
+                      //                   height: 55),
+                      //             ),
+                      //           if (hasNonCashTransaction4)
+                      //             pw.BarcodeWidget(
+                      //                 data: generateQRCode(
+                      //                     promptPayID:
+                      //                         "${finnancetransModels.where((model) => model.ptser == '5' && model.dtype == 'KP').map((model) => model.bno).join(', ')}",
+                      //                     amount: double.parse((Total == null ||
+                      //                             Total == '')
+                      //                         ? '0'
+                      //                         : '${finnancetransModels.where((model) => model.ptser == '5' && model.dtype == 'KP').map((model) => model.total).join(', ')}')),
+                      //                 barcode: pw.Barcode.qrCode(),
+                      //                 width: 55,
+                      //                 height: 55),
+                      //           if (hasNonCashTransaction3)
+                      //             for (var i = 0;
+                      //                 i < finnancetransModels.length;
+                      //                 i++)
+                      //               if (finnancetransModels[i]
+                      //                           .ptser
+                      //                           .toString() ==
+                      //                       '2' &&
+                      //                   finnancetransModels[i]
+                      //                           .dtype
+                      //                           .toString() ==
+                      //                       'KP')
+                      //                 pw.Image(
+                      //                   (netImage_QR[i]),
+                      //                   height: 55,
+                      //                   width: 55,
+                      //                 ),
+                      //         ])),
                     ],
                   )),
               pw.Row(

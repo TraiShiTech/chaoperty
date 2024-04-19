@@ -22,33 +22,35 @@ class PayMentModel {
   String? fine;
   String? fine_c;
   String? fine_a;
-  String?  ser_han;
+  String? ser_han;
+  String? key_b;
 
-  PayMentModel({
-    this.ser,
-    this.datex,
-    this.timex,
-    this.ptser,
-    this.ptname,
-    this.bser,
-    this.bank,
-    this.bno,
-    this.bname,
-    this.bsaka,
-    this.btser,
-    this.btype,
-    this.st,
-    this.rser,
-    this.accode,
-    this.co,
-    this.dataUpdate,
-    this.ser_payweb,
-    this.auto,
-    this.img,
-    this.fine,
-    this.fine_c,
-    this.fine_a,this.ser_han
-  });
+  PayMentModel(
+      {this.ser,
+      this.datex,
+      this.timex,
+      this.ptser,
+      this.ptname,
+      this.bser,
+      this.bank,
+      this.bno,
+      this.bname,
+      this.bsaka,
+      this.btser,
+      this.btype,
+      this.st,
+      this.rser,
+      this.accode,
+      this.co,
+      this.dataUpdate,
+      this.ser_payweb,
+      this.auto,
+      this.img,
+      this.fine,
+      this.fine_c,
+      this.fine_a,
+      this.ser_han,
+      this.key_b});
 
   PayMentModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -74,7 +76,8 @@ class PayMentModel {
     fine = json['fine'];
     fine_c = json['fine_c'];
     fine_a = json['fine_a'];
-    ser_han= json['ser_han'];
+    ser_han = json['ser_han'];
+    key_b = json['key_b'];
   }
 
   Map<String, dynamic> toJson() {
@@ -103,6 +106,7 @@ class PayMentModel {
     data['fine_c'] = this.fine_c;
     data['fine_a'] = this.fine_a;
     data['ser_han'] = this.ser_han;
+    data['key_b'] = this.key_b;
 
     return data;
   }

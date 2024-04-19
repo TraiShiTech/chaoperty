@@ -348,7 +348,9 @@ class Excgen_InvoiceReport {
               );
 
           sheet.getRangeByName('D${indextotol + 5 - 1}').setText(
-                '${_InvoiceHistoryModels[index2].scname}',
+                (_InvoiceHistoryModels[index2].scname == null)
+                    ? '-'
+                    : '${_InvoiceHistoryModels[index2].scname}',
               );
           sheet
               .getRangeByName('E${indextotol + 5 - 1}')
@@ -374,9 +376,7 @@ class Excgen_InvoiceReport {
           sheet.getRangeByName('O${indextotol + 5 - 1}').setNumber(
               (item.total_dis == null)
                   ? 0.00
-                  : double.parse(
-                          (item.total_bill == null) ? '0' : item.total_bill!) -
-                      double.parse(item.total_dis!));
+                  : double.parse((item.amt_dis == null) ? '0' : item.amt_dis!));
         });
       }
 
@@ -410,7 +410,9 @@ class Excgen_InvoiceReport {
             '${_InvoiceHistoryModels[index2].cid}',
           );
       sheet.getRangeByName('D${indextotol + 5 - 1}').setText(
-            '${_InvoiceHistoryModels[index2].scname}',
+            (_InvoiceHistoryModels[index2].scname == null)
+                ? '-'
+                : '${_InvoiceHistoryModels[index2].scname}',
           );
       sheet.getRangeByName('E${indextotol + 5 - 1}').setText(
             '${_InvoiceHistoryModels[index2].zser}',
@@ -432,60 +434,63 @@ class Excgen_InvoiceReport {
                 ? 0.00
                 : double.parse('${_InvoiceHistoryModels[index2].qty}'),
           );
-      sheet.getRangeByName('K${indextotol + 5 - 1}').setNumber(
-            (_InvoiceHistoryModels[index2].nvalue.toString() != '0')
-                ? double.parse('${_InvoiceHistoryModels[index2].pri}')
-                : double.parse('${_InvoiceHistoryModels[index2].nvat}'),
+      sheet.getRangeByName('K${indextotol + 5 - 1}').setText(
+            double.parse(_InvoiceHistoryModels[index2].tf!) != 0.00
+                ? '${double.parse(_InvoiceHistoryModels[index2].pri!)} (tf ${(double.parse(_InvoiceHistoryModels[index2].amt!) - (double.parse(_InvoiceHistoryModels[index2].vat!) + double.parse(_InvoiceHistoryModels[index2].pvat!)))})'
+                : '${double.parse(_InvoiceHistoryModels[index2].nvat!)}',
+            // (_InvoiceHistoryModels[index2].nvalue.toString() != '0')
+            //     ? double.parse('${_InvoiceHistoryModels[index2].pri}')
+            //     : double.parse('${_InvoiceHistoryModels[index2].nvat}'),
           );
 
       sheet.getRangeByName('L${indextotol + 5 - 1}').setNumber(
-            (_InvoiceHistoryModels[index2].vat == null)
+            (_InvoiceHistoryModels[index2].vat_t == null)
                 ? 0.00
-                : double.parse('${_InvoiceHistoryModels[index2].vat}'),
+                : double.parse('${_InvoiceHistoryModels[index2].vat_t}'),
           );
       sheet.getRangeByName('M${indextotol + 5 - 1}').setNumber(
-            (_InvoiceHistoryModels[index2].pvat == null)
+            (_InvoiceHistoryModels[index2].pvat_t == null)
                 ? 0.00
-                : double.parse('${_InvoiceHistoryModels[index2].pvat}'),
+                : double.parse('${_InvoiceHistoryModels[index2].pvat_t}'),
           );
       sheet.getRangeByName('N${indextotol + 5 - 1}').setNumber(
-            (_InvoiceHistoryModels[index2].amt == null)
+            (_InvoiceHistoryModels[index2].total_t == null)
                 ? 0.00
-                : double.parse('${_InvoiceHistoryModels[index2].amt}'),
+                : double.parse('${_InvoiceHistoryModels[index2].total_t}'),
           );
       sheet.getRangeByName('O${indextotol + 5 - 1}').setNumber(
             0.00,
           );
     }
-    sheet.getRangeByName('I${indextotol + 5}').cellStyle = globalStyle7;
-    sheet.getRangeByName('J${indextotol + 5}').cellStyle = globalStyle7;
-    sheet.getRangeByName('K${indextotol + 5}').cellStyle = globalStyle7;
-    sheet.getRangeByName('L${indextotol + 5}').cellStyle = globalStyle7;
-    sheet.getRangeByName('M${indextotol + 5}').cellStyle = globalStyle7;
-    sheet.getRangeByName('N${indextotol + 5}').cellStyle = globalStyle7;
-    sheet.getRangeByName('O${indextotol + 5}').cellStyle = globalStyle7;
-    sheet.getRangeByName('I${indextotol + 5}').setText(
-          'รวม',
-        );
+    // sheet.getRangeByName('I${indextotol + 5}').cellStyle = globalStyle7;
+    // sheet.getRangeByName('J${indextotol + 5}').cellStyle = globalStyle7;
+    // sheet.getRangeByName('K${indextotol + 5}').cellStyle = globalStyle7;
+    // sheet.getRangeByName('L${indextotol + 5}').cellStyle = globalStyle7;
+    // sheet.getRangeByName('M${indextotol + 5}').cellStyle = globalStyle7;
+    // sheet.getRangeByName('N${indextotol + 5}').cellStyle = globalStyle7;
+    // sheet.getRangeByName('O${indextotol + 5}').cellStyle = globalStyle7;
+    // sheet.getRangeByName('I${indextotol + 5}').setText(
+    //       'รวม',
+    //     );
 
-    sheet
-        .getRangeByName('J${indextotol + 5}')
-        .setFormula('=SUM(J5:J${indextotol + 5 - 1})');
-    sheet
-        .getRangeByName('K${indextotol + 5}')
-        .setFormula('=SUM(K5:K${indextotol + 5 - 1})');
-    sheet
-        .getRangeByName('L${indextotol + 5}')
-        .setFormula('=SUM(L5:L${indextotol + 5 - 1})');
-    sheet
-        .getRangeByName('M${indextotol + 5}')
-        .setFormula('=SUM(M5:M${indextotol + 5 - 1})');
-    sheet
-        .getRangeByName('N${indextotol + 5}')
-        .setFormula('=SUM(N5:N${indextotol + 5 - 1})');
-    sheet
-        .getRangeByName('O${indextotol + 5}')
-        .setFormula('=SUM(O5:O${indextotol + 5 - 1})');
+    // sheet
+    //     .getRangeByName('J${indextotol + 5}')
+    //     .setFormula('=SUM(J5:J${indextotol + 5 - 1})');
+    // sheet
+    //     .getRangeByName('K${indextotol + 5}')
+    //     .setFormula('=SUM(K5:K${indextotol + 5 - 1})');
+    // sheet
+    //     .getRangeByName('L${indextotol + 5}')
+    //     .setFormula('=SUM(L5:L${indextotol + 5 - 1})');
+    // sheet
+    //     .getRangeByName('M${indextotol + 5}')
+    //     .setFormula('=SUM(M5:M${indextotol + 5 - 1})');
+    // sheet
+    //     .getRangeByName('N${indextotol + 5}')
+    //     .setFormula('=SUM(N5:N${indextotol + 5 - 1})');
+    // sheet
+    //     .getRangeByName('O${indextotol + 5}')
+    //     .setFormula('=SUM(O5:O${indextotol + 5 - 1})');
 
     final List<int> bytes = workbook.saveAsStream();
     workbook.dispose();

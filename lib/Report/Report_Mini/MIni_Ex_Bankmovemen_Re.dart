@@ -173,6 +173,9 @@ class Mini_Ex_BankmovemenReport {
     sheet.getRangeByName('O1').cellStyle = globalStyle22;
     sheet.getRangeByName('P1').cellStyle = globalStyle22;
     sheet.getRangeByName('Q1').cellStyle = globalStyle22;
+    sheet.getRangeByName('R1').cellStyle = globalStyle22;
+    sheet.getRangeByName('S1').cellStyle = globalStyle22;
+    sheet.getRangeByName('T1').cellStyle = globalStyle22;
     // sheet.getRangeByName('O1').cellStyle = globalStyle22;
     final x.Range range = sheet.getRangeByName('E1');
     range.setText(
@@ -210,10 +213,13 @@ class Mini_Ex_BankmovemenReport {
     sheet.getRangeByName('O2').cellStyle = globalStyle22;
     sheet.getRangeByName('P2').cellStyle = globalStyle22;
     sheet.getRangeByName('Q2').cellStyle = globalStyle22;
+    sheet.getRangeByName('R2').cellStyle = globalStyle22;
+    sheet.getRangeByName('S2').cellStyle = globalStyle22;
+    sheet.getRangeByName('T2').cellStyle = globalStyle22;
     // sheet.getRangeByName('O2').cellStyle = globalStyle22;
     sheet.getRangeByName('A2').setText('${renTal_name}');
     sheet
-        .getRangeByName('K2')
+        .getRangeByName('I2')
         .setText('เดือน : ${Mon_Trans_Mon} (${YE_Trans_Mon}) ');
 
     globalStyle2.hAlign = x.HAlignType.center;
@@ -236,6 +242,9 @@ class Mini_Ex_BankmovemenReport {
     sheet.getRangeByName('O3').cellStyle = globalStyle22;
     sheet.getRangeByName('P3').cellStyle = globalStyle22;
     sheet.getRangeByName('Q3').cellStyle = globalStyle22;
+    sheet.getRangeByName('R3').cellStyle = globalStyle22;
+    sheet.getRangeByName('S3').cellStyle = globalStyle22;
+    sheet.getRangeByName('T3').cellStyle = globalStyle22;
     // sheet.getRangeByName('O3').cellStyle = globalStyle22;
     sheet.getRangeByName('A3').setText('ใบเสร็จ : ${TransReBillBank.length}');
 
@@ -256,6 +265,9 @@ class Mini_Ex_BankmovemenReport {
     sheet.getRangeByName('O3').columnWidth = 18;
     sheet.getRangeByName('P3').columnWidth = 18;
     sheet.getRangeByName('Q3').columnWidth = 18;
+    sheet.getRangeByName('R3').columnWidth = 18;
+    sheet.getRangeByName('S3').columnWidth = 18;
+    sheet.getRangeByName('T3').columnWidth = 18;
 
     sheet.getRangeByName('A4').cellStyle = globalStyle1;
     sheet.getRangeByName('B4').cellStyle = globalStyle1;
@@ -274,6 +286,9 @@ class Mini_Ex_BankmovemenReport {
     sheet.getRangeByName('O4').cellStyle = globalStyle1;
     sheet.getRangeByName('P4').cellStyle = globalStyle1;
     sheet.getRangeByName('Q4').cellStyle = globalStyle1;
+    sheet.getRangeByName('R4').cellStyle = globalStyle1;
+    sheet.getRangeByName('S4').cellStyle = globalStyle1;
+    sheet.getRangeByName('T4').cellStyle = globalStyle1;
     // sheet.getRangeByName('O4').cellStyle = globalStyle1;
 
     sheet.getRangeByName('A4').columnWidth = 18;
@@ -303,7 +318,7 @@ class Mini_Ex_BankmovemenReport {
 
     sheet.getRangeByName('A4').setText('ลำดับ');
     sheet.getRangeByName('B4').setText('เลขที่');
-    sheet.getRangeByName('C4').setText('วันที่');
+    sheet.getRangeByName('C4').setText('วันที่ชำระ');
     sheet.getRangeByName('D4').setText('รหัสโซน');
     sheet.getRangeByName('E4').setText('โซน');
     sheet.getRangeByName('F4').setText('รหัสพื้นที่');
@@ -318,6 +333,9 @@ class Mini_Ex_BankmovemenReport {
     sheet.getRangeByName('O4').setText('หักส่วนลด');
     sheet.getRangeByName('P4').setText('ประเภท');
     sheet.getRangeByName('Q4').setText('สถานะ');
+    sheet.getRangeByName('R4').setText('วันที่ทำรายการ');
+    sheet.getRangeByName('S4').setText('อ้างถึง');
+    sheet.getRangeByName('T4').setText('เลขที่สัญญา');
 
     ///---------------------------------------------------------->
     int all_Total = 0;
@@ -353,6 +371,9 @@ class Mini_Ex_BankmovemenReport {
       sheet.getRangeByName('O${indextotol + 5 - 1}').cellStyle = numberColor;
       sheet.getRangeByName('P${indextotol + 5 - 1}').cellStyle = numberColor;
       sheet.getRangeByName('Q${indextotol + 5 - 1}').cellStyle = numberColor;
+      sheet.getRangeByName('R${indextotol + 5 - 1}').cellStyle = numberColor;
+      sheet.getRangeByName('S${indextotol + 5 - 1}').cellStyle = numberColor;
+      sheet.getRangeByName('T${indextotol + 5 - 1}').cellStyle = numberColor;
 
       sheet.getRangeByName('A${indextotol + 5 - 1}').setText('${index1 + 1}');
       sheet.getRangeByName('B${indextotol + 5 - 1}').setText(
@@ -362,9 +383,16 @@ class Mini_Ex_BankmovemenReport {
                     ? '${TransReBillBank[index1].refno}'
                     : '${TransReBillBank[index1].docno}',
           );
-      sheet
-          .getRangeByName('C${indextotol + 5 - 1}')
-          .setText('${TransReBillBank[index1].daterec}');
+      sheet.getRangeByName('C${indextotol + 5 - 1}').setText((TransReBillBank[
+                      index1]
+                  .dateacc ==
+              null)
+          ? ''
+          : '${DateFormat('dd-MM').format(DateTime.parse('${TransReBillBank[index1].dateacc}'))}-${int.parse('${DateFormat('yyyy').format(DateTime.parse('${TransReBillBank[index1].dateacc}'))}') + 543}');
+      // sheet
+      //     .getRangeByName('C${indextotol + 5 - 1}')
+      //     .setText('${TransReBillBank[index1].dateacc}');
+
       sheet.getRangeByName('D${indextotol + 5 - 1}').setText(
             (TransReBillBank[index1].zser1 == null)
                 ? '${TransReBillBank[index1].zser}'
@@ -438,6 +466,27 @@ class Mini_Ex_BankmovemenReport {
                     TransReBillBank[index1].doctax == null)
                 ? ''
                 : 'ใบกำกับภาษี',
+          );
+      sheet.getRangeByName('R${indextotol + 5 - 1}').setText((TransReBillBank[
+                      index1]
+                  .daterec ==
+              null)
+          ? ''
+          : '${DateFormat('dd-MM').format(DateTime.parse('${TransReBillBank[index1].daterec}'))}-${int.parse('${DateFormat('yyyy').format(DateTime.parse('${TransReBillBank[index1].daterec}'))}') + 543}');
+      // sheet
+      //     .getRangeByName('R${indextotol + 5 - 1}')
+      //     .setText('${TransReBillBank[index1].daterec}');
+      sheet.getRangeByName('S${indextotol + 5 - 1}').setText(
+            (TransReBillBank[index1].inv == null ||
+                    TransReBillBank[index1].inv.toString() == '')
+                ? ''
+                : '${TransReBillBank[index1].inv}',
+          );
+      sheet.getRangeByName('T${indextotol + 5 - 1}').setText(
+            (TransReBillBank[index1].cid == null ||
+                    TransReBillBank[index1].cid.toString() == '')
+                ? ''
+                : '${TransReBillBank[index1].cid}',
           );
       print('-------------------------');
     }

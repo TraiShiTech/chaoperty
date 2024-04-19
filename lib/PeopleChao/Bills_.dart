@@ -366,6 +366,8 @@ class _BillsState extends State<Bills> {
     var ren = preferences.getString('renTalSer');
     var user = preferences.getString('ser');
     var ciddoc = widget.Get_Value_cid;
+                                                        
+                                                      
     var qutser = widget.Get_Value_NameShop_index;
 
     String url =
@@ -1205,9 +1207,7 @@ class _BillsState extends State<Bills> {
                                                         color: Colors
                                                             .grey.shade300,
                                                         borderRadius: const BorderRadius
-                                                                .only(
-                                                            topLeft: Radius
-                                                                .circular(10),
+                                                            .only(
                                                             topRight:
                                                                 Radius.circular(
                                                                     10),
@@ -1258,7 +1258,7 @@ class _BillsState extends State<Bills> {
                                                         color: Colors
                                                             .yellow.shade700,
                                                         borderRadius: const BorderRadius
-                                                                .only(
+                                                            .only(
                                                             topLeft: Radius
                                                                 .circular(10),
                                                             topRight:
@@ -2526,7 +2526,7 @@ class _BillsState extends State<Bills> {
                                             color: AppbackgroundColor
                                                 .Sub_Abg_Colors,
                                             borderRadius: const BorderRadius
-                                                    .only(
+                                                .only(
                                                 topLeft: Radius.circular(10),
                                                 topRight: Radius.circular(10),
                                                 bottomLeft: Radius.circular(10),
@@ -2673,6 +2673,28 @@ class _BillsState extends State<Bills> {
                         ),
                       ],
                     ),
+                     (paymentName1 == null ||
+                            paymentName1.toString() == 'เลือก' ||
+                            paymentSer1.toString() == '0' ||
+                            paymentSer1 == null)
+                        ? Row(children: [
+                            const Expanded(
+                              flex: 6,
+                              child: SizedBox(),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Center(
+                                  child: Text(
+                                '**กรุณาระบุ รูปแบบชำระ',
+                                style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T),
+                              )),
+                            )
+                          ])
+                        : 
                     Row(
                       children: [
                         const Expanded(
@@ -2684,8 +2706,11 @@ class _BillsState extends State<Bills> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: InkWell(
-                              onTap: (paymentName1 == null ||
-                                      paymentName1.toString() == 'เลือก')
+                              onTap:  (paymentName1 == null ||
+                                            paymentName1.toString() ==
+                                                'เลือก' ||
+                                            paymentSer1.toString() == '0' ||
+                                            paymentSer1 == null)
                                   ? null
                                   : () async {
                                       List newValuePDFimg = [];
@@ -2768,7 +2793,13 @@ class _BillsState extends State<Bills> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: InkWell(
-                              onTap: () {
+                              onTap:  (paymentName1 == null ||
+                                            paymentName1.toString() ==
+                                                'เลือก' ||
+                                            paymentSer1.toString() == '0' ||
+                                            paymentSer1 == null)
+                                        ? null
+                                        :() {
                                 in_Trans_invoice();
                               },
                               child: Container(
@@ -3162,7 +3193,7 @@ class _BillsState extends State<Bills> {
     var textadd = text_add.text;
     var priceadd = price_add.text;
     var dtypeadd = '';
-    var End_Bill_Paydate_ = End_Bill_Paydate;
+
     String url =
         '${MyConstant().domain}/In_tran_select_add.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&textadd=$textadd&priceadd=$priceadd&user=$user&dtypeadd=$dtypeadd';
     try {
@@ -3245,13 +3276,13 @@ class _BillsState extends State<Bills> {
     var qutser = widget.Get_Value_NameShop_index;
     var sumdis = sum_disamt.text;
     var sumdisp = sum_disp.text;
-    var c_payment_Ser = paymentSer1;
+    var c_payment_Ser = await paymentSer1;
+    var End_Bill_Paydate_ = await End_Bill_Paydate;
 
-    var End_Bill_Paydate_ = End_Bill_Paydate;
+    print('End_Bill_Paydate_>>>>  $End_Bill_Paydate_');
     String? cFinn;
     String url =
         '${MyConstant().domain}/In_tran_invoice.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&pay_Ser1=$c_payment_Ser&pay_date=$End_Bill_Paydate_';
-
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -3303,10 +3334,12 @@ class _BillsState extends State<Bills> {
     var qutser = widget.Get_Value_NameShop_index;
     var sumdis = sum_disamt.text;
     var sumdisp = sum_disp.text;
-    var c_payment_Ser = paymentSer1;
+    var c_payment_Ser = await paymentSer1;
+     var End_Bill_Paydate_ = await End_Bill_Paydate;
+
     String? cFinn;
     String url =
-        '${MyConstant().domain}/In_tran_invoice.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&pay_Ser1=$c_payment_Ser';
+        '${MyConstant().domain}/In_tran_invoice.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&pay_Ser1=$c_payment_Ser&pay_date=$End_Bill_Paydate_';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -3423,10 +3456,15 @@ class PreviewPdfgen_Bills extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: customSwatch,
-      ),
+     // title: 'Flutter Demo',
+      // theme: ThemeData(
+      //   primarySwatch: customSwatch.withOpacity(0.5),
+      // ),
+      // theme: ThemeData(
+      //   primarySwatch: Colors.green,
+      //   scrollbarTheme: ScrollbarThemeData().copyWith(
+      //     thumbColor: MaterialStateProperty.all(Colors.lightGreen[200]),
+      //   )),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(

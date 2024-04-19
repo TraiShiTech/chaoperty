@@ -122,9 +122,9 @@ class _Dashboard_Screen6State extends State<Dashboard_Screen6> {
               .compareTo(b.zn!); // sort other elements in ascending order
         }
       });
-      print(
-        zoneModels.length,
-      );
+      // print(
+      //   zoneModels.length,
+      // );
     } catch (e) {}
   }
 
@@ -204,7 +204,7 @@ class _Dashboard_Screen6State extends State<Dashboard_Screen6> {
                   var date2 = DateTime.now();
                   var difference = daysBetween(birthday, date2);
 
-                  print('difference == $difference');
+                  // print('difference == $difference');
 
                   if (difference < 30 && difference > 0) {
                     setState(() {
@@ -400,7 +400,7 @@ class _Dashboard_Screen6State extends State<Dashboard_Screen6> {
                 child: Column(
                   children: [
                     Container(
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         color: AppbackgroundColor.TiTile_Colors,
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(10),

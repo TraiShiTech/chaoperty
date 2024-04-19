@@ -369,33 +369,85 @@ class Excgen_CMon_income_Report {
 
     int indextotol = 1;
     int indextotol_ = 0;
+    //  for (int index1 = 0;
+    //                                         index1 < zoneModels_report.length;
+    //                                         index1++)
+    //                                       if (zoneModels_report[index1]
+    //                                               .sub_zone
+    //                                               .toString() ==
+    //                                           '0')
+    for (var index1 = 0; index1 < zoneModels_report.length; index1++) {
+      if (zoneModels_report[index1].sub_zone.toString() == '0') {
+        var index = indextotol;
+        dynamic numberColor = index1 % 2 == 0 ? globalStyle22 : globalStyle222;
 
-    // for (var index1 = 0; index1 < zoneModels_report.length; index1++) {
-    //   if (zoneModels_report[index1].sub_zone.toString() == '0') {
-    //     var index = indextotol;
-    //     dynamic numberColor = index1 % 2 == 0 ? globalStyle22 : globalStyle222;
+        dynamic numberColor_s =
+            index1 % 2 == 0 ? globalStyle220 : globalStyle2220;
 
-    //     dynamic numberColor_s =
-    //         index1 % 2 == 0 ? globalStyle220 : globalStyle2220;
+        dynamic numberColor_ss =
+            index1 % 2 == 0 ? globalStyle220D : globalStyle2220D;
 
-    //     dynamic numberColor_ss =
-    //         index1 % 2 == 0 ? globalStyle220D : globalStyle2220D;
+        sheet.getRangeByName('A${indextotol + 5 - 1}').cellStyle = numberColor;
 
-    //     indextotol = indextotol + 1;
-    //     sheet.getRangeByName('A${indextotol + 5 - 1}').cellStyle = numberColor;
+        sheet.getRangeByName('B${indextotol + 5 - 1}').cellStyle = numberColor;
+        // sheet.getRangeByName('C${indextotol + 5 - 1}').cellStyle = numberColor;
 
-    //     sheet.getRangeByName('B${indextotol + 5 - 1}').cellStyle = numberColor;
-    //     // sheet.getRangeByName('C${indextotol + 5 - 1}').cellStyle = numberColor;
+        sheet.getRangeByName('A${indextotol + 5 - 1}').columnWidth = 25;
+        sheet.getRangeByName('B${indextotol + 5 - 1}').columnWidth = 18;
+        // sheet.getRangeByName('C${indextotol + 5 - 1}').columnWidth = 18;
 
-    //     sheet.getRangeByName('A${indextotol + 5 - 1}').columnWidth = 25;
-    //     sheet.getRangeByName('B${indextotol + 5 - 1}').columnWidth = 18;
-    //     // sheet.getRangeByName('C${indextotol + 5 - 1}').columnWidth = 18;
+        sheet
+            .getRangeByName('A${indextotol + 5 - 1}')
+            .setText(zoneModels_report[index1].zn);
+        sheet.getRangeByName('B${indextotol + 5 - 1}').setNumber(
+              (_TransReBillModels_GropType.length == 0)
+                  ? 0.00
+                  :
+                  // double.parse((_TransReBillModels_GropType[0]
+                  //     .map((e) => (e.zser == null)
+                  //         ?
+                  //double.parse(e.zser1 ==
+                  //                     zoneModels_report[index1].ser &&
+                  //                 e.expser! == '1' &&
+                  //                 e.room_number.toString() != 'ล็อคเสียบ'
+                  //             ? e.total_expname == null || e.total_expname! == ''
+                  //                 ? 0.toString()
+                  //                 : e.total_expname.toString()
+                  //             : 0.toString())
+                  //         : double.parse(e.zser ==
+                  //                     zoneModels_report[index1].ser &&
+                  //                 e.expser! == '1' &&
+                  //                 e.room_number.toString() != 'ล็อคเสียบ'
+                  //             ? e.total_expname == null || e.total_expname! == ''
+                  //                 ? 0.toString()
+                  //                 : e.total_expname.toString()
+                  //             : 0.toString()))
+                  //     .reduce((a, b) => a + b)).toString())
+                  double.parse((_TransReBillModels_GropType.map((e) => (e
+                              .zser ==
+                          null)
+                      ? double.parse(e.zser1 == zoneModels_report[index1].ser &&
+                              e.expser! == '1' &&
+                              e.room_number.toString() != 'ล็อคเสียบ'
+                          ? e.total_expname == null || e.total_expname! == ''
+                              ? 0.toString()
+                              : e.total_expname.toString()
+                          : 0.toString())
+                      : double.parse(e.zser == zoneModels_report[index1].ser &&
+                              e.expser! == '1' &&
+                              e.room_number.toString() != 'ล็อคเสียบ'
+                          ? e.total_expname == null || e.total_expname! == ''
+                              ? 0.toString()
+                              : e.total_expname.toString()
+                          : 0.toString())).reduce((a, b) => a + b)).toString()),
+            );
 
-    //     sheet
-    //         .getRangeByName('A${indextotol + 5 - 1}')
-    //         .setText(zoneModels_report[index1].zn);
-    //   }
-    // }
+        if (index1 == 0) {
+        } else {
+          indextotol = indextotol + 1;
+        }
+      }
+    }
 
     for (var index3 = 0; index3 < zoneModels_report_Sub_zone.length; index3++) {
       var index = indextotol;
@@ -496,10 +548,18 @@ class Excgen_CMon_income_Report {
             (index6 == 0)
                 ? 'ยอดรวมทิพย์'
                 : (index6 == 1)
-                    ? 'นำส่งบริหาร'
-                    : 'นำส่งทิพย์',
+                    ? 'นำส่งทิพย์'
+                    : 'นำส่งบริหาร',
           );
-      sheet.getRangeByName('B${indextotol + 5 - 1}').setNumber(0.00);
+      if (index6 == 0) {
+        sheet
+            .getRangeByName('B${(indextotol + 5 - 1)}')
+            .setFormula('=SUM(B${indextotol + 5 - 3}:B${indextotol + 5 - 2})');
+      } else if (index6 == 1) {
+        sheet.getRangeByName('B${indextotol + 5 - 1}').setNumber(0.00);
+      } else if (index6 == 2) {
+        sheet.getRangeByName('B${indextotol + 5 - 1}').setNumber(0.00);
+      }
       indextotol = indextotol + 1;
       if ((index6 + 1) == zoneModels_report_Sub_zone.length) {
         sheet.getRangeByName('A${indextotol + 5 - 1}').cellStyle = globalStyle8;
@@ -582,7 +642,9 @@ class Excgen_CMon_income_Report {
         sheet.getRangeByName('B${(indextotol + 5 - 1)}').setFormula(
             '=SUM(B${(indextotol + 5 - 1) - expModels.length}:B${indextotol + 5 - 2})');
       } else {
-        sheet.getRangeByName('B${indextotol + 5 - 1}').setNumber(0.00);
+        sheet.getRangeByName('B${indextotol + 5 - 1}').setFormula(
+            '=SUM(B${indextotol + 5 - 14},B${indextotol + 5 - 9},B${indextotol + 5 - 2})');
+        // sheet.getRangeByName('B${indextotol + 5 - 1}').setNumber(0.00);
       }
 
       if ((index7 + 1) == zoneModels_report_Sub_zone.length) {

@@ -44,7 +44,12 @@ import '../Model/trans_re_bill_model.dart';
 
 import '../PeopleChao/PeopleChao_Screen.dart';
 import '../Report_Dashboard/Dashboard_Screen.dart';
+import '../Report_Ortorkor/Report_Ortor_ScreenA.dart';
+import '../Report_Ortorkor/Report_Ortor_ScreenB.dart';
 import '../Report_Ortorkor/Report_Screen9_1.dart';
+import '../Report_cm/Report_cm_ScreenA.dart';
+import '../Report_cm/Report_cm_ScreenB.dart';
+import '../Report_cm/Report_cm_ScreenC.dart';
 import '../Responsive/responsive.dart';
 import '../Setting/SettingScreen.dart';
 import '../Style/colors.dart';
@@ -68,6 +73,7 @@ import 'Pdf_IC_Report.dart';
 import 'Pdf__Daily_Report.dart';
 import 'Report_Screen1.dart';
 import 'Report_Screen10.dart';
+import 'Report_Screen11.dart';
 import 'Report_Screen3.dart';
 import 'Report_Mini/MIni_Ex_BankDaily_Re.dart';
 import 'Report_Mini/MIni_Ex_Bankmovemen_Re.dart';
@@ -89,6 +95,7 @@ class ReportScreen extends StatefulWidget {
 }
 
 class _ReportScreenState extends State<ReportScreen> {
+  int ser_pang_test = -4;
   int ser_pang = 0;
   DateTime datex = DateTime.now();
   int Status_ = 1;
@@ -234,7 +241,7 @@ class _ReportScreenState extends State<ReportScreen> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           UserModel userModel = UserModel.fromJson(map);
@@ -262,7 +269,7 @@ class _ReportScreenState extends State<ReportScreen> {
     var ren = preferences.getString('renTalSer');
     var zone = preferences.getString('zoneSer');
 
-    print('ren >>>>>> $ren');
+    // print('ren >>>>>> $ren');
 
     String url =
         '${MyConstant().domain}/GC_Bank_Paytype.php?isAdd=true&ren=$ren';
@@ -271,7 +278,7 @@ class _ReportScreenState extends State<ReportScreen> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           PayMentModel payMentModel = PayMentModel.fromJson(map);
@@ -298,7 +305,7 @@ class _ReportScreenState extends State<ReportScreen> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       Map<String, dynamic> map = Map();
       map['ser'] = '0';
       map['rser'] = '0';
@@ -466,7 +473,7 @@ class _ReportScreenState extends State<ReportScreen> {
         }
       } else {}
     } catch (e) {}
-    print('name>>>>>  $renname');
+    // print('name>>>>>  $renname');
   }
 
 /////////////////----https://flutterawesome.com/tag/dashboard-tag/------------------------------->(รวมรายรับ ชำระแล้ว)https://flutterawesome.com/responsive-flutter-bank-dashboard-ui/
@@ -528,351 +535,8 @@ class _ReportScreenState extends State<ReportScreen> {
                             double.parse(_TransReBillModels_Incomes.total_dis!))
                 : totalbank + 0.00;
           });
-          print(
-              '${_TransReBillModels_Incomes.type.toString().trim()} /// ${totalbank}');
-        }
-      }
-    } catch (e) {}
-  }
-
-/////////////////----------------------------------->(รวมรายรับ ทั้งหมด)
-  ///
-/////
-  ///
-///////////--------------------------------------------->(รายงานรายรับ)
-  Future<Null> red_Trans_billIncome() async {
-    int imd = 0;
-    if (_TransReBillModels_Income.length != 0) {
-      setState(() {
-        _TransReBillModels_Income.clear();
-      });
-    }
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var ren = preferences.getString('renTalSer');
-    // var ciddoc = widget.Get_Value_cid;
-    // var qutser = widget.Get_Value_NameShop_index;
-
-    // String url =
-    //     '${MyConstant().domain}/GC_bill_pay_BC.php?isAdd=true&ren=$ren';
-    String url = (Value_Chang_Zone_Ser_Income.toString() == '0')
-        ? '${MyConstant().domain}/GC_bill_pay_BC_IncomeReport_All.php?isAdd=true&ren=$ren&mont_h=$Mon_Income&yea_r=$YE_Income&serzone=$Value_Chang_Zone_Ser_Income'
-        : '${MyConstant().domain}/GC_bill_pay_BC_IncomeReport.php?isAdd=true&ren=$ren&mont_h=$Mon_Income&yea_r=$YE_Income&serzone=$Value_Chang_Zone_Ser_Income';
-    int index = 0;
-    try {
-      var response = await http.get(Uri.parse(url));
-
-      var result = json.decode(response.body);
-      // print('result $ciddoc');
-      if (result.toString() != 'null') {
-        for (var map in result) {
-          TransReBillModel _TransReBillModels_Incomes =
-              TransReBillModel.fromJson(map);
-          setState(() {
-            _TransReBillModels_Income.add(_TransReBillModels_Incomes);
-
-            // _TransBillModels.add(_TransBillModel);
-          });
-
-          var ciddoc = _TransReBillModels_Incomes.ser!;
-
-          var docnoin = (_TransReBillModels_Incomes.docno == null)
-              ? _TransReBillModels_Incomes.refno!
-              : _TransReBillModels_Incomes.docno!;
-          print('imd ${imd + 1}');
-          // red_Trans_selectIncome(ciddoc, docnoin, index);
-          index++;
-        }
-
-        print('result ${_TransReBillModels_Income.length}');
-
-        // TransReBillModels_Income =
-        //     List.generate(_TransReBillModels_Income.length, (_) => []);
-      }
-    } catch (e) {}
-  }
-
-///////////--------------------------------------------->(รายงานรายรับ)
-  Future<Null> red_Trans_selectIncome(ciddoc, docnoin, index) async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var ren = preferences.getString('renTalSer');
-    var user = preferences.getString('ser');
-
-    setState(() {
-      _TransReBillHistoryModels_Income.clear();
-    });
-    String url =
-        '${MyConstant().domain}/GC_bill_pay_history_DailyReport.php?isAdd=true&ren=$ren&user=$user&ciddoc=$ciddoc&docnoin=$docnoin';
-    try {
-      var response = await http.get(Uri.parse(url));
-
-      var result = json.decode(response.body);
-      print('red_Trans_selectIncome__${index}');
-      if (result.toString() != 'null') {
-        for (var map in result) {
-          TransReBillHistoryModel _TransReBillHistoryModels_Incomes =
-              TransReBillHistoryModel.fromJson(map);
-
-          var sum_pvatx = double.parse(
-              (_TransReBillHistoryModels_Incomes.pvat == null)
-                  ? '0.00'
-                  : _TransReBillHistoryModels_Incomes.pvat!);
-          var sum_vatx = double.parse(
-              (_TransReBillHistoryModels_Incomes.vat == null)
-                  ? '0.00'
-                  : _TransReBillHistoryModels_Incomes.vat!);
-          var sum_whtx = double.parse(
-              (_TransReBillHistoryModels_Incomes.wht == null)
-                  ? '0.00'
-                  : _TransReBillHistoryModels_Incomes.wht!);
-          var sum_amtx = double.parse(
-              (_TransReBillHistoryModels_Incomes.total == null)
-                  ? '0.00'
-                  : _TransReBillHistoryModels_Incomes.total!);
-
-          var numinvoiceent = _TransReBillHistoryModels_Incomes.docno;
-          setState(() {
-            sum_pvat = sum_pvat + sum_pvatx;
-            sum_vat = sum_vat + sum_vatx;
-            sum_wht = sum_wht + sum_whtx;
-            sum_amt = sum_amt + sum_amtx;
-
-            numinvoice = _TransReBillHistoryModels_Incomes.docno;
-            _TransReBillHistoryModels_Income.add(
-                _TransReBillHistoryModels_Incomes);
-          });
-        }
-      }
-    } catch (e) {}
-  }
-
-///////////--------------------------------------------->(รายงานการเคลื่อนไหวธนาคาร)
-  Future<Null> red_Trans_billMovemen() async {
-    if (_TransReBillModels_Bankmovemen.length != 0) {
-      setState(() {
-        _TransReBillModels_Bankmovemen.clear();
-      });
-    }
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var ren = preferences.getString('renTalSer');
-
-    String url = (Value_Chang_Zone_Ser_Income.toString() == '0')
-        ? '${MyConstant().domain}/GC_bill_pay_BC_BankmovemenReport_All.php?isAdd=true&ren=$ren&mont_h=$Mon_Income&yea_r=$YE_Income&serzone=$Value_Chang_Zone_Ser_Income'
-        : '${MyConstant().domain}/GC_bill_pay_BC_BankmovemenReport.php?isAdd=true&ren=$ren&mont_h=$Mon_Income&yea_r=$YE_Income&serzone=$Value_Chang_Zone_Ser_Income';
-    try {
-      var response = await http.get(Uri.parse(url));
-
-      var result = json.decode(response.body);
-      // print('result $ciddoc');
-      if (result.toString() != 'null') {
-        for (var map in result) {
-          TransReBillModel _TransReBillModels_Bankmovemens =
-              TransReBillModel.fromJson(map);
-          setState(() {
-            _TransReBillModels_Bankmovemen.add(_TransReBillModels_Bankmovemens);
-          });
-        }
-
-        print('result ${_TransReBillModels_Bankmovemen.length}');
-      }
-    } catch (e) {}
-  }
-
-  ///////////--------------------------------------------->(รายงานการเคลื่อนไหวธนาคาร)
-  Future<Null> red_Trans_selectMovemen(ciddoc, docnoin, index) async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var ren = preferences.getString('renTalSer');
-    var user = preferences.getString('ser');
-    setState(() {
-      _TransReBillHistoryModels_Bankmovemen.clear();
-    });
-
-    String url =
-        '${MyConstant().domain}/GC_bill_pay_history_MovemenReport.php?isAdd=true&ren=$ren&user=$user&ciddoc=$ciddoc&docnoin=$docnoin';
-    try {
-      var response = await http.get(Uri.parse(url));
-
-      var result = json.decode(response.body);
-      print(result);
-      if (result.toString() != 'null') {
-        for (var map in result) {
-          TransReBillHistoryModel _TransReBillHistoryModels_Bankmovemens =
-              TransReBillHistoryModel.fromJson(map);
-
-          var sum_pvatx = double.parse(
-              (_TransReBillHistoryModels_Bankmovemens.pvat == null)
-                  ? '0.00'
-                  : _TransReBillHistoryModels_Bankmovemens.pvat!);
-          var sum_vatx = double.parse(
-              (_TransReBillHistoryModels_Bankmovemens.vat == null)
-                  ? '0.00'
-                  : _TransReBillHistoryModels_Bankmovemens.vat!);
-          var sum_whtx = double.parse(
-              (_TransReBillHistoryModels_Bankmovemens.wht == null)
-                  ? '0.00'
-                  : _TransReBillHistoryModels_Bankmovemens.wht!);
-          var sum_amtx = double.parse(
-              (_TransReBillHistoryModels_Bankmovemens.total == null)
-                  ? '0.00'
-                  : _TransReBillHistoryModels_Bankmovemens.total!);
-
-          var numinvoiceent = _TransReBillHistoryModels_Bankmovemens.docno;
-          setState(() {
-            sum_pvat = sum_pvat + sum_pvatx;
-            sum_vat = sum_vat + sum_vatx;
-            sum_wht = sum_wht + sum_whtx;
-            sum_amt = sum_amt + sum_amtx;
-
-            numinvoice = _TransReBillHistoryModels_Bankmovemens.docno;
-            _TransReBillHistoryModels_Bankmovemen.add(
-                _TransReBillHistoryModels_Bankmovemens);
-          });
-        }
-      }
-    } catch (e) {}
-    // }
-  }
-
-///////////--------------------------------------------->(รายงานประจำวัน)
-  Future<Null> red_Trans_bill() async {
-    setState(() {
-      _TransReBillModels.clear();
-    });
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var ren = preferences.getString('renTalSer');
-
-    String url = (Value_Chang_Zone_Ser_Daily.toString() == '0')
-        ? '${MyConstant().domain}/GC_bill_pay_BC_DailyReport_All.php?isAdd=true&ren=$ren&date=$Value_selectDate_Daily&serzone=$Value_Chang_Zone_Ser_Daily'
-        : '${MyConstant().domain}/GC_bill_pay_BC_DailyReport.php?isAdd=true&ren=$ren&date=$Value_selectDate_Daily&serzone=$Value_Chang_Zone_Ser_Daily';
-    try {
-      var response = await http.get(Uri.parse(url));
-
-      var result = json.decode(response.body);
-      // print('result $ciddoc');
-      if (result.toString() != 'null') {
-        for (var map in result) {
-          TransReBillModel transReBillModel = TransReBillModel.fromJson(map);
-          setState(() {
-            _TransReBillModels.add(transReBillModel);
-          });
-        }
-      }
-    } catch (e) {}
-  }
-
-///////////--------------------------------------------->(รายงานประจำวัน)
-  Future<Null> red_Trans_select(ciddoc, docnoin, index) async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var ren = preferences.getString('renTalSer');
-    var user = preferences.getString('ser');
-    setState(() {
-      _TransReBillHistoryModels.clear();
-    });
-
-    String url =
-        '${MyConstant().domain}/GC_bill_pay_history_DailyReport.php?isAdd=true&ren=$ren&user=$user&ciddoc=$ciddoc&docnoin=$docnoin';
-    try {
-      var response = await http.get(Uri.parse(url));
-
-      var result = json.decode(response.body);
-      //  print(result);
-      if (result.toString() != 'null') {
-        for (var map in result) {
-          TransReBillHistoryModel _TransReBillHistoryModel =
-              TransReBillHistoryModel.fromJson(map);
-
-          var sum_pvatx = double.parse((_TransReBillHistoryModel.pvat == null)
-              ? '0.00'
-              : _TransReBillHistoryModel.pvat!);
-          var sum_vatx = double.parse((_TransReBillHistoryModel.vat == null)
-              ? '0.00'
-              : _TransReBillHistoryModel.vat!);
-          var sum_whtx = double.parse((_TransReBillHistoryModel.wht == null)
-              ? '0.00'
-              : _TransReBillHistoryModel.wht!);
-          var sum_amtx = double.parse((_TransReBillHistoryModel.total == null)
-              ? '0.00'
-              : _TransReBillHistoryModel.total!);
-          // var sum_disamtx = double.parse(_InvoiceHistoryModel.disendbill!);
-          // var sum_dispx = double.parse(_InvoiceHistoryModel.disendbillper!);
-          var numinvoiceent = _TransReBillHistoryModel.docno;
-          setState(() {
-            sum_pvat = sum_pvat + sum_pvatx;
-            sum_vat = sum_vat + sum_vatx;
-            sum_wht = sum_wht + sum_whtx;
-            sum_amt = sum_amt + sum_amtx;
-            // sum_disamt = sum_disamtx;
-            // sum_disp = sum_dispx;
-            numinvoice = _TransReBillHistoryModel.docno;
-            _TransReBillHistoryModels.add(_TransReBillHistoryModel);
-            // TransReBillModels[index].add(_TransReBillHistoryModel);
-          });
-        }
-      }
-    } catch (e) {}
-  }
-
-///////////--------------------------------------------->(รายงานการเคลื่อนไหวธนาคารประจำวัน)
-  Future<Null> red_Trans_billDailyBank() async {
-    if (_TransReBillDailyBank.length != 0) {
-      setState(() {
-        _TransReBillDailyBank.clear();
-        TransReBillDailyBank = [];
-      });
-    }
-
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var ren = preferences
-        .getString('renTalSer'); //GC_bill_pay_BC_Bank_DailyReport_All.php
-
-    String url = (Value_Chang_Zone_Ser_Daily.toString() == '0')
-        ? '${MyConstant().domain}/GC_bill_pay_BC_Bank_DailyReport_All.php?isAdd=true&ren=$ren&date=$Value_selectDate_Daily&serzone=$Value_Chang_Zone_Ser_Daily'
-        : '${MyConstant().domain}/GC_bill_pay_BC_Bank_DailyReport.php?isAdd=true&ren=$ren&date=$Value_selectDate_Daily&serzone=$Value_Chang_Zone_Ser_Daily';
-    try {
-      var response = await http.get(Uri.parse(url));
-
-      var result = json.decode(response.body);
-
-      if (result.toString() != 'null') {
-        for (var map in result) {
-          TransReBillModel transReBillModel = TransReBillModel.fromJson(map);
-          setState(() {
-            _TransReBillDailyBank.add(transReBillModel);
-          });
-        }
-
-        // print('result ${_TransReBillDailyBank.length}');
-
-        // TransReBillDailyBank =
-        //     List.generate(_TransReBillDailyBank.length, (_) => []);
-        // red_TransDailyBank_select();
-      }
-    } catch (e) {}
-  }
-
-  ///////////--------------------------------------------->(รายงานการเคลื่อนไหวธนาคารประจำวัน)
-  Future<Null> red_TransDailyBank_select(ciddoc, docnoin, index) async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var ren = preferences.getString('renTalSer');
-    var user = preferences.getString('ser');
-    setState(() {
-      _TransReBillHistoryModels_Bankmovemen.clear();
-    });
-
-    String url =
-        '${MyConstant().domain}/GC_bill_pay_historyBank_DailyReport.php?isAdd=true&ren=$ren&user=$user&ciddoc=$ciddoc&docnoin=$docnoin';
-    try {
-      var response = await http.get(Uri.parse(url));
-
-      var result = json.decode(response.body);
-      print(result);
-      if (result.toString() != 'null') {
-        for (var map in result) {
-          TransReBillHistoryModel _TransReBillHistoryModel =
-              TransReBillHistoryModel.fromJson(map);
-
-          setState(() {
-            _TransReBillHistoryModels_Bankmovemen.add(_TransReBillHistoryModel);
-          });
+          // print(
+          //     '${_TransReBillModels_Incomes.type.toString().trim()} /// ${totalbank}');
         }
       }
     } catch (e) {}
@@ -889,7 +553,7 @@ class _ReportScreenState extends State<ReportScreen> {
     var ren = preferences.getString('renTalSer');
     var zone = preferences.getString('zoneSer');
 
-    print('zone >>>>>> $zone');
+    // print('zone >>>>>> $zone');
 
     String url =
         '${MyConstant().domain}/GC_areaAll.php?isAdd=true&ren=$ren&zone=$zone';
@@ -912,16 +576,16 @@ class _ReportScreenState extends State<ReportScreen> {
             var now = DateTime.now();
             var difference = lastDateObject.difference(now).inDays;
             if (difference == 0) {
-              print('หมดสัญญาวันนี้');
+              // print('หมดสัญญาวันนี้');
             } else if (difference <= 90 && difference > 0) {
               setState(() {
                 areaModels1.add(areaModel);
               });
-              print('ใกล้หมดสัญญา');
+              // print('ใกล้หมดสัญญา');
             } else if (difference < 0) {
-              print('หมดสัญญา');
+              // print('หมดสัญญา');
             } else {
-              print('ไม่ใกล้หมดสัญญา');
+              // print('ไม่ใกล้หมดสัญญา');
             }
           } else {}
         }
@@ -943,9 +607,9 @@ class _ReportScreenState extends State<ReportScreen> {
     } catch (e) {}
     var end = DateTime.now();
     var difference = end.difference(start);
-    print('Time read_GC_area(): ${difference.inSeconds} seconds');
-    print('Time read_GC_area(): ${difference.inSeconds} seconds');
-    print('Time read_GC_area(): ${difference.inSeconds} seconds');
+    // print('Time read_GC_area(): ${difference.inSeconds} seconds');
+    // print('Time read_GC_area(): ${difference.inSeconds} seconds');
+    // print('Time read_GC_area(): ${difference.inSeconds} seconds');
   }
 
 ///////////--------------------------------------------->(รวม ว่าง ให้เช่า)
@@ -964,7 +628,7 @@ class _ReportScreenState extends State<ReportScreen> {
     var ren = preferences.getString('renTalSer');
     var zone = preferences.getString('zoneSer');
 
-    print('zone >>>>>> $zone');
+    // print('zone >>>>>> $zone');
 
     String url = zone == null
         ? '${MyConstant().domain}/GC_areaAll.php?isAdd=true&ren=$ren&zone=$zone'
@@ -976,7 +640,7 @@ class _ReportScreenState extends State<ReportScreen> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           AreaModel areaModel = AreaModel.fromJson(map);
@@ -1008,9 +672,9 @@ class _ReportScreenState extends State<ReportScreen> {
     } catch (e) {}
     var end = DateTime.now();
     var difference = end.difference(start);
-    print('Time read_GC_area(): ${difference.inSeconds} seconds');
-    print('Time read_GC_area(): ${difference.inSeconds} seconds');
-    print('Time read_GC_area(): ${difference.inSeconds} seconds');
+    // print('Time read_GC_area(): ${difference.inSeconds} seconds');
+    // print('Time read_GC_area(): ${difference.inSeconds} seconds');
+    // print('Time read_GC_area(): ${difference.inSeconds} seconds');
   }
 
   ///////---------------------------------------------------->
@@ -1072,7 +736,7 @@ class _ReportScreenState extends State<ReportScreen> {
       initialDatePickerMode: DatePickerMode.day,
       firstDate: DateTime(2023, 1, 1),
       lastDate: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day),
+          DateTime.now().year, DateTime.now().month, DateTime.now().day + 20),
       // selectableDayPredicate: _decideWhichDayToEnable,
       builder: (context, child) {
         return Theme(
@@ -1123,7 +787,7 @@ class _ReportScreenState extends State<ReportScreen> {
       initialDatePickerMode: DatePickerMode.day,
       firstDate: DateTime(2023, 1, 1),
       lastDate: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day),
+          DateTime.now().year, DateTime.now().month, DateTime.now().day + 20),
       // selectableDayPredicate: _decideWhichDayToEnable,
       builder: (context, child) {
         return Theme(
@@ -1169,7 +833,7 @@ class _ReportScreenState extends State<ReportScreen> {
       initialDatePickerMode: DatePickerMode.day,
       firstDate: DateTime(2023, 1, 1),
       lastDate: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day),
+          DateTime.now().year, DateTime.now().month, DateTime.now().day + 20),
       // selectableDayPredicate: _decideWhichDayToEnable,
       builder: (context, child) {
         return Theme(
@@ -1214,7 +878,7 @@ class _ReportScreenState extends State<ReportScreen> {
       initialDatePickerMode: DatePickerMode.day,
       firstDate: DateTime(2023, 1, 1),
       lastDate: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day),
+          DateTime.now().year, DateTime.now().month, DateTime.now().day + 20),
       // selectableDayPredicate: _decideWhichDayToEnable,
       builder: (context, child) {
         return Theme(
@@ -1257,7 +921,7 @@ class _ReportScreenState extends State<ReportScreen> {
       initialDatePickerMode: DatePickerMode.day,
       firstDate: DateTime(2023, 1, 1),
       lastDate: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day),
+          DateTime.now().year, DateTime.now().month, DateTime.now().day + 20),
       // selectableDayPredicate: _decideWhichDayToEnable,
       builder: (context, child) {
         return Theme(
@@ -1513,12 +1177,12 @@ class _ReportScreenState extends State<ReportScreen> {
                       ),
                     ),
                   ),
-                  Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                  const Padding(
+                      padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          const Expanded(
+                          Expanded(
                             flex: 4,
                             child: Column(
                               children: [
@@ -1605,371 +1269,338 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                       .circular(
                                                                           10)),
                                                     ),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment.end,
-                                                      children: [
-                                                        SizedBox(
-                                                            height: 35,
-                                                            child: Row(
-                                                              children: [
-                                                                const Padding(
-                                                                  padding:
-                                                                      EdgeInsets
-                                                                          .all(
+                                                    child: ScrollConfiguration(
+                                                      behavior:
+                                                          ScrollConfiguration
+                                                                  .of(context)
+                                                              .copyWith(
+                                                                  dragDevices: {
+                                                            PointerDeviceKind
+                                                                .touch,
+                                                            PointerDeviceKind
+                                                                .mouse,
+                                                          }),
+                                                      child:
+                                                          SingleChildScrollView(
+                                                        scrollDirection:
+                                                            Axis.horizontal,
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            SizedBox(
+                                                                height: 35,
+                                                                child: Row(
+                                                                  children: [
+                                                                    const Padding(
+                                                                      padding:
+                                                                          EdgeInsets.all(
                                                                               4.0),
-                                                                  child: Text(
-                                                                    'รายรับ :',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: ReportScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontFamily:
-                                                                          FontWeight_
-                                                                              .Fonts_T,
+                                                                      child:
+                                                                          Text(
+                                                                        'รายรับ :',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              ReportScreen_Color.Colors_Text2_,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                          fontFamily:
+                                                                              FontWeight_.Fonts_T,
+                                                                        ),
+                                                                      ),
                                                                     ),
-                                                                  ),
-                                                                ),
-                                                                const Padding(
-                                                                  padding:
-                                                                      EdgeInsets
-                                                                          .all(
+                                                                    const Padding(
+                                                                      padding:
+                                                                          EdgeInsets.all(
                                                                               4.0),
-                                                                  child: Text(
-                                                                    'โซน ',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: ReportScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      // fontWeight: FontWeight.bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T,
+                                                                      child:
+                                                                          Text(
+                                                                        'โซน ',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              ReportScreen_Color.Colors_Text2_,
+                                                                          // fontWeight: FontWeight.bold,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T,
+                                                                        ),
+                                                                      ),
                                                                     ),
-                                                                  ),
-                                                                ),
-                                                                Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          4.0),
-                                                                  child:
-                                                                      Container(
-                                                                    decoration:
-                                                                        const BoxDecoration(
-                                                                      color: AppbackgroundColor
-                                                                          .Sub_Abg_Colors,
-                                                                      borderRadius: BorderRadius.only(
-                                                                          topLeft: Radius.circular(
-                                                                              10),
-                                                                          topRight: Radius.circular(
-                                                                              10),
-                                                                          bottomLeft: Radius.circular(
-                                                                              10),
-                                                                          bottomRight:
-                                                                              Radius.circular(10)),
-                                                                      // border: Border.all(color: Colors.grey, width: 1),
+                                                                    Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              4.0),
+                                                                      child:
+                                                                          Container(
+                                                                        decoration:
+                                                                            const BoxDecoration(
+                                                                          color:
+                                                                              AppbackgroundColor.Sub_Abg_Colors,
+                                                                          borderRadius: BorderRadius.only(
+                                                                              topLeft: Radius.circular(10),
+                                                                              topRight: Radius.circular(10),
+                                                                              bottomLeft: Radius.circular(10),
+                                                                              bottomRight: Radius.circular(10)),
+                                                                          // border: Border.all(color: Colors.grey, width: 1),
+                                                                        ),
+                                                                        width:
+                                                                            260,
+                                                                        // height: 40,
+                                                                        padding:
+                                                                            const EdgeInsets.all(4.0),
+                                                                        child:
+                                                                            DropdownButtonFormField2(
+                                                                          alignment:
+                                                                              Alignment.center,
+                                                                          focusColor:
+                                                                              Colors.white,
+                                                                          autofocus:
+                                                                              false,
+                                                                          decoration:
+                                                                              InputDecoration(
+                                                                            enabled:
+                                                                                true,
+                                                                            hoverColor:
+                                                                                Colors.brown,
+                                                                            prefixIconColor:
+                                                                                Colors.blue,
+                                                                            fillColor:
+                                                                                Colors.white.withOpacity(0.05),
+                                                                            filled:
+                                                                                false,
+                                                                            isDense:
+                                                                                true,
+                                                                            contentPadding:
+                                                                                EdgeInsets.zero,
+                                                                            border:
+                                                                                OutlineInputBorder(
+                                                                              borderSide: const BorderSide(color: Colors.red),
+                                                                              borderRadius: BorderRadius.circular(10),
+                                                                            ),
+                                                                            focusedBorder:
+                                                                                const OutlineInputBorder(
+                                                                              borderRadius: BorderRadius.only(
+                                                                                topRight: Radius.circular(10),
+                                                                                topLeft: Radius.circular(10),
+                                                                                bottomRight: Radius.circular(10),
+                                                                                bottomLeft: Radius.circular(10),
+                                                                              ),
+                                                                              borderSide: BorderSide(
+                                                                                width: 1,
+                                                                                color: Color.fromARGB(255, 231, 227, 227),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          isExpanded:
+                                                                              false,
+                                                                          value:
+                                                                              overview_Zone_,
+                                                                          // hint: Text(
+                                                                          //   Value_Chang_Zone_Income ==
+                                                                          //           null
+                                                                          //       ? 'เลือก'
+                                                                          //       : '$Value_Chang_Zone_Income',
+                                                                          //   maxLines: 2,
+                                                                          //   textAlign: TextAlign.center,
+                                                                          //   style: const TextStyle(
+                                                                          //     overflow:
+                                                                          //         TextOverflow.ellipsis,
+                                                                          //     fontSize: 14,
+                                                                          //     color: Colors.grey,
+                                                                          //   ),
+                                                                          // ),
+                                                                          icon:
+                                                                              const Icon(
+                                                                            Icons.arrow_drop_down,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
+                                                                          style:
+                                                                              const TextStyle(
+                                                                            color:
+                                                                                Colors.grey,
+                                                                          ),
+                                                                          iconSize:
+                                                                              20,
+
+                                                                          buttonHeight:
+                                                                              40,
+                                                                          buttonWidth:
+                                                                              250,
+                                                                          dropdownDecoration:
+                                                                              BoxDecoration(
+                                                                            // color: Colors
+                                                                            //     .amber,
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(10),
+                                                                            border:
+                                                                                Border.all(color: Colors.white, width: 1),
+                                                                          ),
+                                                                          items: zoneModels_report
+                                                                              .map((item) => DropdownMenuItem<String>(
+                                                                                    value: '${item.zn}',
+                                                                                    child: Text(
+                                                                                      '${item.zn}',
+                                                                                      textAlign: TextAlign.center,
+                                                                                      style: const TextStyle(
+                                                                                        overflow: TextOverflow.ellipsis,
+                                                                                        fontSize: 14,
+                                                                                        color: Colors.grey,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ))
+                                                                              .toList(),
+
+                                                                          onChanged:
+                                                                              (value) async {
+                                                                            int selectedIndex = zoneModels_report.indexWhere((item) =>
+                                                                                item.zn ==
+                                                                                value);
+                                                                            setState(() {
+                                                                              overview_Zone_ = value!;
+                                                                              overview_Ser_Zone_ = '${zoneModels_report[selectedIndex].ser}';
+                                                                            });
+
+                                                                            red_Sum_billIncome();
+                                                                          },
+                                                                        ),
+                                                                      ),
                                                                     ),
-                                                                    width: 260,
-                                                                    // height: 40,
+                                                                  ],
+                                                                )),
+                                                            SizedBox(
+                                                              child: Row(
+                                                                children: [
+                                                                  const Padding(
                                                                     padding:
-                                                                        const EdgeInsets.all(
-                                                                            4.0),
-                                                                    child:
-                                                                        DropdownButtonFormField2(
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .center,
-                                                                      focusColor:
-                                                                          Colors
-                                                                              .white,
-                                                                      autofocus:
-                                                                          false,
-                                                                      decoration:
-                                                                          InputDecoration(
-                                                                        enabled:
-                                                                            true,
-                                                                        hoverColor:
-                                                                            Colors.brown,
-                                                                        prefixIconColor:
-                                                                            Colors.blue,
-                                                                        fillColor: Colors
-                                                                            .white
-                                                                            .withOpacity(0.05),
-                                                                        filled:
-                                                                            false,
-                                                                        isDense:
-                                                                            true,
-                                                                        contentPadding:
-                                                                            EdgeInsets.zero,
-                                                                        border:
-                                                                            OutlineInputBorder(
-                                                                          borderSide:
-                                                                              const BorderSide(color: Colors.red),
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(10),
-                                                                        ),
-                                                                        focusedBorder:
-                                                                            const OutlineInputBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.only(
-                                                                            topRight:
-                                                                                Radius.circular(10),
-                                                                            topLeft:
-                                                                                Radius.circular(10),
-                                                                            bottomRight:
-                                                                                Radius.circular(10),
-                                                                            bottomLeft:
-                                                                                Radius.circular(10),
-                                                                          ),
-                                                                          borderSide:
-                                                                              BorderSide(
-                                                                            width:
-                                                                                1,
-                                                                            color: Color.fromARGB(
-                                                                                255,
-                                                                                231,
-                                                                                227,
-                                                                                227),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      isExpanded:
-                                                                          false,
-                                                                      value:
-                                                                          overview_Zone_,
-                                                                      // hint: Text(
-                                                                      //   Value_Chang_Zone_Income ==
-                                                                      //           null
-                                                                      //       ? 'เลือก'
-                                                                      //       : '$Value_Chang_Zone_Income',
-                                                                      //   maxLines: 2,
-                                                                      //   textAlign: TextAlign.center,
-                                                                      //   style: const TextStyle(
-                                                                      //     overflow:
-                                                                      //         TextOverflow.ellipsis,
-                                                                      //     fontSize: 14,
-                                                                      //     color: Colors.grey,
-                                                                      //   ),
-                                                                      // ),
-                                                                      icon:
-                                                                          const Icon(
-                                                                        Icons
-                                                                            .arrow_drop_down,
-                                                                        color: Colors
-                                                                            .black,
-                                                                      ),
+                                                                        EdgeInsets.all(
+                                                                            8.0),
+                                                                    child: Text(
+                                                                      'วันที่ ',
                                                                       style:
-                                                                          const TextStyle(
-                                                                        color: Colors
-                                                                            .grey,
+                                                                          TextStyle(
+                                                                        color: ReportScreen_Color
+                                                                            .Colors_Text2_,
+                                                                        // fontWeight: FontWeight.bold,
+                                                                        fontFamily:
+                                                                            Font_.Fonts_T,
                                                                       ),
-                                                                      iconSize:
-                                                                          20,
-
-                                                                      buttonHeight:
-                                                                          40,
-                                                                      buttonWidth:
-                                                                          250,
-                                                                      dropdownDecoration:
-                                                                          BoxDecoration(
-                                                                        // color: Colors
-                                                                        //     .amber,
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(10),
-                                                                        border: Border.all(
-                                                                            color:
-                                                                                Colors.white,
-                                                                            width: 1),
-                                                                      ),
-                                                                      items: zoneModels_report
-                                                                          .map((item) => DropdownMenuItem<String>(
-                                                                                value: '${item.zn}',
-                                                                                child: Text(
-                                                                                  '${item.zn}',
-                                                                                  textAlign: TextAlign.center,
-                                                                                  style: const TextStyle(
-                                                                                    overflow: TextOverflow.ellipsis,
-                                                                                    fontSize: 14,
-                                                                                    color: Colors.grey,
-                                                                                  ),
-                                                                                ),
-                                                                              ))
-                                                                          .toList(),
-
-                                                                      onChanged:
-                                                                          (value) async {
-                                                                        int selectedIndex = zoneModels_report.indexWhere((item) =>
-                                                                            item.zn ==
-                                                                            value);
-                                                                        setState(
-                                                                            () {
-                                                                          overview_Zone_ =
-                                                                              value!;
-                                                                          overview_Ser_Zone_ =
-                                                                              '${zoneModels_report[selectedIndex].ser}';
-                                                                        });
-
-                                                                        red_Sum_billIncome();
-                                                                      },
                                                                     ),
                                                                   ),
-                                                                ),
-                                                              ],
-                                                            )),
-                                                        SizedBox(
-                                                          child: Row(
-                                                            children: [
-                                                              const Padding(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            8.0),
-                                                                child: Text(
-                                                                  'วันที่ ',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: ReportScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    // fontWeight: FontWeight.bold,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .fromLTRB(
-                                                                        8,
-                                                                        0,
-                                                                        8,
-                                                                        0),
-                                                                child: InkWell(
-                                                                  onTap: () {
-                                                                    _select_financial_StartDate(
-                                                                        context);
-                                                                  },
-                                                                  child: Container(
-                                                                      decoration: BoxDecoration(
-                                                                        color: AppbackgroundColor
-                                                                            .Sub_Abg_Colors,
-                                                                        borderRadius: const BorderRadius.only(
-                                                                            topLeft:
-                                                                                Radius.circular(10),
-                                                                            topRight: Radius.circular(10),
-                                                                            bottomLeft: Radius.circular(10),
-                                                                            bottomRight: Radius.circular(10)),
-                                                                        border: Border.all(
+                                                                  Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.fromLTRB(
+                                                                            8,
+                                                                            0,
+                                                                            8,
+                                                                            0),
+                                                                    child:
+                                                                        InkWell(
+                                                                      onTap:
+                                                                          () {
+                                                                        _select_financial_StartDate(
+                                                                            context);
+                                                                      },
+                                                                      child: Container(
+                                                                          decoration: BoxDecoration(
                                                                             color:
-                                                                                Colors.grey,
-                                                                            width: 1),
-                                                                      ),
-                                                                      height: 25,
-                                                                      width: 120,
-                                                                      padding: const EdgeInsets.all(2.0),
-                                                                      child: Center(
-                                                                        child:
-                                                                            Text(
-                                                                          (SDatex_total1_ == null)
-                                                                              ? 'เลือก'
-                                                                              : '$SDatex_total1_',
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            fontSize:
-                                                                                12,
-                                                                            color:
-                                                                                ReportScreen_Color.Colors_Text2_,
-                                                                            // fontWeight: FontWeight.bold,
-                                                                            fontFamily:
-                                                                                Font_.Fonts_T,
+                                                                                AppbackgroundColor.Sub_Abg_Colors,
+                                                                            borderRadius: const BorderRadius.only(
+                                                                                topLeft: Radius.circular(10),
+                                                                                topRight: Radius.circular(10),
+                                                                                bottomLeft: Radius.circular(10),
+                                                                                bottomRight: Radius.circular(10)),
+                                                                            border:
+                                                                                Border.all(color: Colors.grey, width: 1),
                                                                           ),
-                                                                        ),
-                                                                      )),
-                                                                ),
-                                                              ),
-                                                              const Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .fromLTRB(
-                                                                        8,
-                                                                        0,
-                                                                        8,
-                                                                        0),
-                                                                child: Text(
-                                                                  'ถึง',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: ReportScreen_Color
-                                                                        .Colors_Text1_,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontFamily:
-                                                                        FontWeight_
-                                                                            .Fonts_T,
+                                                                          height: 25,
+                                                                          width: 120,
+                                                                          padding: const EdgeInsets.all(2.0),
+                                                                          child: Center(
+                                                                            child:
+                                                                                Text(
+                                                                              (SDatex_total1_ == null) ? 'เลือก' : '$SDatex_total1_',
+                                                                              style: const TextStyle(
+                                                                                fontSize: 12,
+                                                                                color: ReportScreen_Color.Colors_Text2_,
+                                                                                // fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T,
+                                                                              ),
+                                                                            ),
+                                                                          )),
+                                                                    ),
                                                                   ),
-                                                                ),
-                                                              ),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .fromLTRB(
-                                                                        8,
-                                                                        0,
-                                                                        8,
-                                                                        0),
-                                                                child: InkWell(
-                                                                  onTap: () {
-                                                                    _select_financial_LtartDate(
-                                                                        context);
-                                                                  },
-                                                                  child: Container(
-                                                                      decoration: BoxDecoration(
-                                                                        color: AppbackgroundColor
-                                                                            .Sub_Abg_Colors,
-                                                                        borderRadius: const BorderRadius.only(
-                                                                            topLeft:
-                                                                                Radius.circular(10),
-                                                                            topRight: Radius.circular(10),
-                                                                            bottomLeft: Radius.circular(10),
-                                                                            bottomRight: Radius.circular(10)),
-                                                                        border: Border.all(
-                                                                            color:
-                                                                                Colors.grey,
-                                                                            width: 1),
+                                                                  const Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.fromLTRB(
+                                                                            8,
+                                                                            0,
+                                                                            8,
+                                                                            0),
+                                                                    child: Text(
+                                                                      'ถึง',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: ReportScreen_Color
+                                                                            .Colors_Text1_,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        fontFamily:
+                                                                            FontWeight_.Fonts_T,
                                                                       ),
-                                                                      height: 25,
-                                                                      width: 120,
-                                                                      padding: const EdgeInsets.all(2.0),
-                                                                      child: Center(
-                                                                        child:
-                                                                            Text(
-                                                                          (LDatex_total1_ == null)
-                                                                              ? 'เลือก'
-                                                                              : '$LDatex_total1_',
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            fontSize:
-                                                                                12,
+                                                                    ),
+                                                                  ),
+                                                                  Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.fromLTRB(
+                                                                            8,
+                                                                            0,
+                                                                            8,
+                                                                            0),
+                                                                    child:
+                                                                        InkWell(
+                                                                      onTap:
+                                                                          () {
+                                                                        _select_financial_LtartDate(
+                                                                            context);
+                                                                      },
+                                                                      child: Container(
+                                                                          decoration: BoxDecoration(
                                                                             color:
-                                                                                ReportScreen_Color.Colors_Text2_,
-                                                                            // fontWeight: FontWeight.bold,
-                                                                            fontFamily:
-                                                                                Font_.Fonts_T,
+                                                                                AppbackgroundColor.Sub_Abg_Colors,
+                                                                            borderRadius: const BorderRadius.only(
+                                                                                topLeft: Radius.circular(10),
+                                                                                topRight: Radius.circular(10),
+                                                                                bottomLeft: Radius.circular(10),
+                                                                                bottomRight: Radius.circular(10)),
+                                                                            border:
+                                                                                Border.all(color: Colors.grey, width: 1),
                                                                           ),
-                                                                        ),
-                                                                      )),
-                                                                ),
+                                                                          height: 25,
+                                                                          width: 120,
+                                                                          padding: const EdgeInsets.all(2.0),
+                                                                          child: Center(
+                                                                            child:
+                                                                                Text(
+                                                                              (LDatex_total1_ == null) ? 'เลือก' : '$LDatex_total1_',
+                                                                              style: const TextStyle(
+                                                                                fontSize: 12,
+                                                                                color: ReportScreen_Color.Colors_Text2_,
+                                                                                // fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T,
+                                                                              ),
+                                                                            ),
+                                                                          )),
+                                                                    ),
+                                                                  ),
+                                                                ],
                                                               ),
-                                                            ],
-                                                          ),
-                                                        )
-                                                      ],
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
                                                 )
@@ -2383,31 +2014,33 @@ class _ReportScreenState extends State<ReportScreen> {
                                                   ? 10.00
                                                   : 16.0,
                                           mainAxisSpacing:
-                                              ((MediaQuery.of(context).size.width) < 650)
+                                              ((MediaQuery.of(context).size.width) <
+                                                      650)
                                                   ? 10.00
                                                   : 16.0,
                                           crossAxisCount:
-                                              (MediaQuery.of(context).size.width) < 650
+                                              (MediaQuery.of(context).size.width) <
+                                                      650
                                                   ? 2
-                                                  : 4,
-                                          childAspectRatio:
-                                              ((MediaQuery.of(context)
+                                                  : (MediaQuery.of(context)
                                                               .size
                                                               .width) <
-                                                          650 &&
-                                                      (MediaQuery.of(context)
-                                                              .size
-                                                              .width) >
-                                                          500)
-                                                  ? 1.2
-                                                  : ((MediaQuery.of(context)
-                                                              .size
-                                                              .width) <
-                                                          500)
-                                                      ? 0.8
-                                                      : 2,
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
+                                                          1330
+                                                      ? 2
+                                                      : 4,
+                                          childAspectRatio: ((MediaQuery.of(context)
+                                                          .size
+                                                          .width) <
+                                                      650 &&
+                                                  (MediaQuery.of(context)
+                                                          .size
+                                                          .width) >
+                                                      500)
+                                              ? 1.2
+                                              : ((MediaQuery.of(context).size.width) < 500)
+                                                  ? 0.8
+                                                  : 2,
+                                          physics: const NeverScrollableScrollPhysics(),
                                           shrinkWrap: true,
                                           children: <Widget>[
                                             Container(
@@ -2539,7 +2172,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                   ),
                                                   Row(
                                                     children: [
-                                                      const Expanded(
+                                                      Expanded(
                                                         // width: ((MediaQuery.of(
                                                         //                 context)
                                                         //             .size
@@ -2548,7 +2181,11 @@ class _ReportScreenState extends State<ReportScreen> {
                                                         //     ? 40
                                                         //     : 100,
                                                         child: Text(
-                                                          'ว่าง',
+                                                          (areaModels2.length ==
+                                                                  0)
+                                                              ? 'ว่าง [0%]'
+                                                              : 'ว่าง [${(((areaModels2.length ?? 0.0) * 100) / areaModels.length ?? 0.0).toStringAsFixed(2)}%]',
+                                                          // 'ว่าง',
                                                           maxLines: 2,
                                                           overflow: TextOverflow
                                                               .ellipsis,
@@ -2598,7 +2235,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                   ),
                                                   Row(
                                                     children: [
-                                                      const Expanded(
+                                                      Expanded(
                                                         // width: ((MediaQuery.of(
                                                         //                 context)
                                                         //             .size
@@ -2607,7 +2244,11 @@ class _ReportScreenState extends State<ReportScreen> {
                                                         //     ? 40
                                                         //     : 100,
                                                         child: Text(
-                                                          'ใกล้หมดสัญญา',
+                                                          (areaModels1.length ==
+                                                                  0)
+                                                              ? 'ใกล้หมดสัญญา [0%]'
+                                                              : 'ใกล้หมดสัญญา [${(((areaModels1.length ?? 0.0) * 100) / areaModels.length ?? 0.0).toStringAsFixed(2)}%]',
+                                                          // 'ใกล้หมดสัญญา',
                                                           maxLines: 3,
                                                           overflow: TextOverflow
                                                               .ellipsis,
@@ -2821,7 +2462,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                   ),
                                                   Row(
                                                     children: [
-                                                      const Expanded(
+                                                      Expanded(
                                                         // width: ((MediaQuery.of(
                                                         //                 context)
                                                         //             .size
@@ -2830,7 +2471,10 @@ class _ReportScreenState extends State<ReportScreen> {
                                                         //     ? 40
                                                         //     : 100,
                                                         child: Text(
-                                                          'ใช้งานวันนี้',
+                                                          (user_today == 0.00)
+                                                              ? 'วันนี้ [0%]'
+                                                              : 'วันนี้ [${(((user_today ?? 0.0) * 100) / userModels.length ?? 0.0).toStringAsFixed(2)}%]',
+                                                          // 'ใช้งานวันนี้',
                                                           maxLines: 2,
                                                           overflow: TextOverflow
                                                               .ellipsis,
@@ -2947,7 +2591,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                   ),
                                                   Row(
                                                     children: [
-                                                      const Expanded(
+                                                      Expanded(
                                                         // width: ((MediaQuery.of(
                                                         //                 context)
                                                         //             .size
@@ -2956,7 +2600,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                         //     ? 40
                                                         //     : 100,
                                                         child: Text(
-                                                          'ทั้งหมด',
+                                                          'ทั้งหมด ',
                                                           maxLines: 2,
                                                           overflow: TextOverflow
                                                               .ellipsis,
@@ -2995,7 +2639,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                   ),
                                                   Row(
                                                     children: [
-                                                      const Expanded(
+                                                      Expanded(
                                                         // width: ((MediaQuery.of(
                                                         //                 context)
                                                         //             .size
@@ -3004,7 +2648,9 @@ class _ReportScreenState extends State<ReportScreen> {
                                                         //     ? 40
                                                         //     : 100,
                                                         child: Text(
-                                                          'Cash',
+                                                          (totalcash_ == 0.00)
+                                                              ? 'Cash [0%]'
+                                                              : 'Cash [${(((totalcash_ ?? 0.0) * 100) / total1_ ?? 0.0).toStringAsFixed(2)}%]',
                                                           maxLines: 2,
                                                           overflow: TextOverflow
                                                               .ellipsis,
@@ -3044,7 +2690,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                   ),
                                                   Row(
                                                     children: [
-                                                      const Expanded(
+                                                      Expanded(
                                                         // width: ((MediaQuery.of(
                                                         //                 context)
                                                         //             .size
@@ -3053,7 +2699,9 @@ class _ReportScreenState extends State<ReportScreen> {
                                                         //     ? 40
                                                         //     : 100,
                                                         child: Text(
-                                                          'Bank',
+                                                          (totalbank == 0.00)
+                                                              ? 'Bank [0%]'
+                                                              : 'Bank [${(((totalbank ?? 0.0) * 100) / total1_ ?? 0.0).toStringAsFixed(2)}%]',
                                                           maxLines: 2,
                                                           overflow: TextOverflow
                                                               .ellipsis,
@@ -3228,7 +2876,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                         //     ? 40
                                                         //     : 100,
                                                         child: Text(
-                                                          'ไม่หักส่วนลด',
+                                                          'ก่อน-หักส่วนลด',
                                                           maxLines: 2,
                                                           overflow: TextOverflow
                                                               .ellipsis,
@@ -3277,7 +2925,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                         //     ? 40
                                                         //     : 100,
                                                         child: Text(
-                                                          'หักส่วนลด',
+                                                          'หลัง-หักส่วนลด',
                                                           maxLines: 2,
                                                           overflow: TextOverflow
                                                               .ellipsis,
@@ -3326,113 +2974,298 @@ class _ReportScreenState extends State<ReportScreen> {
                         ),
                       )),
                   /////////--------------------------------------------->
-                  Row(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'รายงาน : ',
-                          style: TextStyle(
-                            color: ReportScreen_Color.Colors_Text1_,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: FontWeight_.Fonts_T,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: ScrollConfiguration(
-                          behavior: ScrollConfiguration.of(context)
-                              .copyWith(dragDevices: {
-                            PointerDeviceKind.touch,
-                            PointerDeviceKind.mouse,
-                          }),
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: [
-                                for (int index = 0; index < 10; index++)
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          ser_pang = index + 1;
-                                        });
-                                      },
-                                      child: Container(
-                                        width: 100,
-                                        decoration: BoxDecoration(
-                                          // color: (ser_pang == index + 1 ||
-                                          //         ser_pang + index == 0)
-                                          //     ? Colors.black54
-                                          //     : Colors.black26,
-                                          color: (ser_pang == index + 1 ||
-                                                  ser_pang + index == 0)
-                                              ? Colors.deepPurple
-                                              : Colors.deepPurple[200],
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            topRight: Radius.circular(10),
-                                            bottomLeft: Radius.circular(10),
-                                            bottomRight: Radius.circular(10),
-                                          ),
-                                          border: Border.all(
-                                              color: Colors.white, width: 2),
-                                        ),
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: Center(
-                                          child: AutoSizeText(
-                                            minFontSize: 10,
-                                            maxFontSize: 20,
-                                            'หน้า ${index + 1}',
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              // fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T,
-                                              fontWeight: FontWeight.bold,
+
+                  (renTal_user.toString() == '50')
+                      ? Row(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                'รายงาน : ',
+                                style: TextStyle(
+                                  color: ReportScreen_Color.Colors_Text1_,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: FontWeight_.Fonts_T,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: ScrollConfiguration(
+                                behavior: ScrollConfiguration.of(context)
+                                    .copyWith(dragDevices: {
+                                  PointerDeviceKind.touch,
+                                  PointerDeviceKind.mouse,
+                                }),
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: [
+                                      for (int index = -4; index < 1; index++)
+                                        Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                ser_pang_test = index;
+                                                // if (index == 0) {
+                                                //   ser_pang_test = -2;
+                                                // } else if (index == 1) {
+                                                //   ser_pang_test = -1;
+                                                // } else {
+                                                //   ser_pang_test = 0;
+                                                // }
+                                              });
+                                            },
+                                            child: Container(
+                                              width: 150,
+                                              decoration: BoxDecoration(
+                                                color: (index > -2)
+                                                    ? (ser_pang_test == index)
+                                                        ? Colors.red
+                                                        : Colors.red[200]
+                                                    : (ser_pang_test == index)
+                                                        ? Colors.blueGrey
+                                                        : Colors.blueGrey[200],
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  topLeft: Radius.circular(10),
+                                                  topRight: Radius.circular(10),
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                  bottomRight:
+                                                      Radius.circular(10),
+                                                ),
+                                                border: Border.all(
+                                                    color: Colors.white,
+                                                    width: 2),
+                                              ),
+                                              padding:
+                                                  const EdgeInsets.all(5.0),
+                                              child: Center(
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 20,
+                                                  (index == -4)
+                                                      ? 'Exclu - A(ประตูCM)'
+                                                      : (index == -3)
+                                                          ? 'Exclu - B(ประตูCM)'
+                                                          : (index == -2)
+                                                              ? 'Exclu - C(ประตูCM)'
+                                                              : (index == -1)
+                                                                  ? 'Exclu - A(อ.ต.)'
+                                                                  : 'Exclu - B(อ.ต.)',
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                    // fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                  )
-                              ],
+                                      for (int index = 1; index < 12; index++)
+                                        Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                ser_pang_test = index;
+                                              });
+                                            },
+                                            child: Container(
+                                              width: 100,
+                                              decoration: BoxDecoration(
+                                                // color: (ser_pang == index + 1 ||
+                                                //         ser_pang + index == 0)
+                                                //     ? Colors.black54
+                                                //     : Colors.black26,
+                                                color: (ser_pang_test == index)
+                                                    ? Colors.deepPurple
+                                                    : Colors.deepPurple[200],
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  topLeft: Radius.circular(10),
+                                                  topRight: Radius.circular(10),
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                  bottomRight:
+                                                      Radius.circular(10),
+                                                ),
+                                                border: Border.all(
+                                                    color: Colors.white,
+                                                    width: 2),
+                                              ),
+                                              padding:
+                                                  const EdgeInsets.all(5.0),
+                                              child: Center(
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 20,
+                                                  'หน้า ${index}',
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                    // fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
+                        )
+                      : Row(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                'รายงาน : ',
+                                style: TextStyle(
+                                  color: ReportScreen_Color.Colors_Text1_,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: FontWeight_.Fonts_T,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: ScrollConfiguration(
+                                behavior: ScrollConfiguration.of(context)
+                                    .copyWith(dragDevices: {
+                                  PointerDeviceKind.touch,
+                                  PointerDeviceKind.mouse,
+                                }),
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: [
+                                      for (int index = 0; index < 11; index++)
+                                        Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                ser_pang = index + 1;
+                                              });
+                                            },
+                                            child: Container(
+                                              width: 100,
+                                              decoration: BoxDecoration(
+                                                // color: (ser_pang == index + 1 ||
+                                                //         ser_pang + index == 0)
+                                                //     ? Colors.black54
+                                                //     : Colors.black26,
+                                                color: (ser_pang == index + 1 ||
+                                                        ser_pang + index == 0)
+                                                    ? Colors.deepPurple
+                                                    : Colors.deepPurple[200],
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  topLeft: Radius.circular(10),
+                                                  topRight: Radius.circular(10),
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                  bottomRight:
+                                                      Radius.circular(10),
+                                                ),
+                                                border: Border.all(
+                                                    color: Colors.white,
+                                                    width: 2),
+                                              ),
+                                              padding:
+                                                  const EdgeInsets.all(5.0),
+                                              child: Center(
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 20,
+                                                  'หน้า ${index + 1}',
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                    // fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
 
                   /////////--------------------------------------------->
-                  (ser_pang == 1 || ser_pang == 0)
-                      ? const ReportScreen1()
-                      : (ser_pang == 2)
-                          ? const ReportScreen2()
-                          : (ser_pang == 3)
-                              ? const ReportScreen3()
-                              : (ser_pang == 4)
-                                  ? const ReportScreen4()
-                                  : (ser_pang == 5)
-                                      ? const ReportScreen5()
-                                      : (ser_pang == 6)
-                                          ? const ReportScreen6()
-                                          : (ser_pang == 7)
-                                              ? const ReportScreen7()
-                                              : (ser_pang == 8)
-                                                  ? const ReportScreen8()
-                                                  : (ser_pang == 9)
-                                                      ? (rtser.toString() ==
-                                                                  '72' ||
-                                                              rtser.toString() ==
-                                                                  '92' ||
-                                                              rtser.toString() ==
-                                                                  '93' ||
-                                                              rtser.toString() ==
-                                                                  '94')
-                                                          ? const ReportScreen9_1() ////องค์การตลาด กระทรวงมหาดไทย
-                                                          : const ReportScreen9()
-                                                      : const ReportScreen10()
+                  (renTal_user.toString() == '50')
+                      ? (ser_pang_test == -4)
+                          ? Report_cm_ScreenA()
+                          : (ser_pang_test == -3)
+                              ? Report_cm_ScreenB()
+                              : (ser_pang_test == -2)
+                                  ? Report_cm_ScreenC()
+                                  : (ser_pang_test == -1)
+                                      ? Report_Ortor_ScreenA()
+                                      : (ser_pang_test == 0)
+                                          ? Report_Ortor_ScreenB()
+                                          : (ser_pang_test == 1)
+                                              ? const ReportScreen1()
+                                              : (ser_pang_test == 2)
+                                                  ? const ReportScreen2()
+                                                  : (ser_pang_test == 3)
+                                                      ? const ReportScreen3()
+                                                      : (ser_pang_test == 4)
+                                                          ? const ReportScreen4()
+                                                          : (ser_pang_test == 5)
+                                                              ? const ReportScreen5()
+                                                              : (ser_pang_test ==
+                                                                      6)
+                                                                  ? const ReportScreen6()
+                                                                  : (ser_pang_test ==
+                                                                          7)
+                                                                      ? const ReportScreen7()
+                                                                      : (ser_pang_test ==
+                                                                              8)
+                                                                          ? const ReportScreen8()
+                                                                          : (ser_pang_test == 9)
+                                                                              ? const ReportScreen9()
+                                                                              : (ser_pang_test == 10)
+                                                                                  ? const ReportScreen10()
+                                                                                  : const ReportScreen11()
+                      //     /////////--------------------------------------------->
+                      : (ser_pang == 1 || ser_pang == 0)
+                          ? const ReportScreen1()
+                          : (ser_pang == 2)
+                              ? const ReportScreen2()
+                              : (ser_pang == 3)
+                                  ? const ReportScreen3()
+                                  : (ser_pang == 4)
+                                      ? const ReportScreen4()
+                                      : (ser_pang == 5)
+                                          ? const ReportScreen5()
+                                          : (ser_pang == 6)
+                                              ? const ReportScreen6()
+                                              : (ser_pang == 7)
+                                                  ? const ReportScreen7()
+                                                  : (ser_pang == 8)
+                                                      ? const ReportScreen8()
+                                                      : (ser_pang == 9)
+                                                          ? const ReportScreen9()
+                                                          : (ser_pang == 10)
+                                                              ? const ReportScreen10()
+                                                              : const ReportScreen11()
                   /////////--------------------------------------------->DeC_area ////DeC_Zone
                 ],
               ),

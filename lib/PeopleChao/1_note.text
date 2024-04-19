@@ -23,4 +23,85 @@ Tap รับชำระ  >>>
 
 ---> รับชำระ    ==>>  (ผ่าน)  (_TransReBillHistoryModels )    ==>>   (  in_Trans_re_invoice_refno )  ==>>   (Receipt_Tempage) ==>>    (  Pdf_genReceipt.exportPDF_Receipt   )
 
-||||||||||||---------------------------------------------------->
+||||||||||||---------------------------------------------------->'$payment_ptSer1 // $payment_ptSer2'
+
+   (paymentName1.toString().trim() == 'Beam Checkout' ||
+                                paymentName2.toString().trim() ==
+                                    'Beam Checkout' ||
+                                payment_ptSer1.toString().trim() == '7' ||
+                                payment_ptSer2.toString().trim() == '7')
+
+
+                                
+     if (paymentName1.toString().trim() == 'Beam Checkout' ||
+            paymentName2.toString().trim() == 'Beam Checkout') {
+          String url_beam =
+              '${MyConstant().domain}/Pay_Beam_Step1.php?isAdd=true&ren=$ren&ciddoc=$cFinn';
+
+          try {
+            var response_s = await http.get(Uri.parse(url_beam));
+
+            var result_s = json.decode(response_s.body);
+            print(result_s);
+            if (result_s.toString() == 'true') {
+              Future.delayed(Duration(milliseconds: 200), () async {
+                print('Pay_Beam_Step1//---------> true <** in_Trans_invoice');
+                read_GC_beamcheckout(
+                    cFinn, payment1, ciddoc, tableData00, newValuePDFimg);
+              });
+            }
+          } catch (e) {}
+        } else {
+          //////-------------------------------->
+          Insert_log.Insert_logs(
+              'บัญชี',
+              (Slip_status.toString() == '1')
+                  ? 'รับชำระ:$numinvoice '
+                  : 'รับชำระ:$cFinn ');
+          (Default_Receipt_type == 1)
+              ? Show_Dialog()
+              : Receipt_Tempage_Pay(tableData00, newValuePDFimg);
+
+          setState(() async {
+            await red_Trans_bill();
+            red_Trans_select2();
+            read_GC_pkan_total();
+            preferences.setString('pakanPay', 1.toString());
+            sum_disamtx.text = '0.00';
+            sum_disamt = 0.00;
+            sum_dispx.clear();
+            Form_payment1.clear();
+            Form_payment2.clear();
+            Form_time.clear();
+            Form_note.clear();
+            dis_sum_Pakan = 0.00;
+            dis_Pakan = 0;
+            dis_matjum = 0;
+            sum_matjum = 0.00;
+            dis_sum_Matjum = 0.00;
+            fine_total = 0;
+            fine_total2 = 0;
+            pamentpage = 0;
+            bills_name_ = 'บิลธรรมดา';
+            cFinn = null;
+            // Value_newDateD = '';
+            discount_ = null;
+            base64_Slip = null;
+            tableData00 = [];
+            Refpay_1 = null;
+            Refpay_2 = null;
+            Refpay_3 = null;
+          });
+          print('rrrrrrrrrrrrrr');
+          //////-------------------------------->
+        }
+
+        model.ptname.toString() == 'Online Payment' 
+        ? 'PromptPay QR' 
+        : model.ptname == 'เงินโอน' 
+        
+        ? 'เลขบัญชี' 
+        :model.ptname == 'Beam Checkout' 
+        
+        ? 'Beam Checkout' 
+        : 'Online Standard QR')

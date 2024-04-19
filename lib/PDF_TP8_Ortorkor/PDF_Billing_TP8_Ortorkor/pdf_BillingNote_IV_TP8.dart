@@ -375,6 +375,8 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
                                         pw.CrossAxisAlignment.start,
                                     children: [
                                       pw.Text(
+                                        //  'นามลูกค้า /Name : ${(sname_.toString() == '' || sname_ == null || sname_.toString() == 'null') ? '-' : sname_} (${(cname_.toString() == '' || cname_ == null || cname_.toString() == 'null') ? '-' : cname_})',
+
                                         (sname_.toString() == null ||
                                                 sname_.toString() == '' ||
                                                 sname_.toString() == 'null')
@@ -427,7 +429,7 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
                                         ),
                                       ),
                                       pw.Text(
-                                        'โซน /Zone : $Zone_s ',
+                                        'โซน /Zone : $Zone_s (รหัสพื้นที่ /Area  : $Ln_s)',
                                         textAlign: pw.TextAlign.left,
                                         style: pw.TextStyle(
                                           fontSize: font_Size,
@@ -883,8 +885,14 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
                                       //   ),
                                       // ),
                                       pw.Text(
-                                        'วันที่ 5 ของเดือน',
+                                        (End_Bill_Paydate == null ||
+                                                End_Bill_Paydate.toString() ==
+                                                    '')
+                                            ? 'วันที่ ${End_Bill_Paydate} '
+                                            : 'วันที่ ${DateFormat('dd/MM').format(DateTime.parse(End_Bill_Paydate!))}/${DateTime.parse('${End_Bill_Paydate}').year + 543}',
+                                        // 'วันที่ 5 ของเดือน',
                                         textAlign: pw.TextAlign.center,
+                                        maxLines: 2,
                                         style: pw.TextStyle(
                                           fontSize: font_Size,
                                           font: ttf,
@@ -1345,7 +1353,7 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
                   pw.Container(
                     padding: const pw.EdgeInsets.all(4.0),
                     child: pw.Text(
-                      'กำหนดชำระเงิน ภายในวันที่ 5 ของเดือน',
+                      'กำหนดชำระเงิน ภายในวันที่ 5 ของเดือน *เฉพาะสำนักงานตลาดสาขาบางคล้า ภายในวันที่ 10 ของเดือน',
                       style: pw.TextStyle(
                           fontSize: font_Size,
                           fontWeight: pw.FontWeight.bold,
@@ -1353,7 +1361,7 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
                           color: PdfColors.grey800),
                     ),
                   ),
-                  pw.Spacer(flex: 6),
+                  pw.Spacer(flex: 2),
                   pw.Expanded(
                     flex: 4,
                     child: pw.Column(
@@ -1814,7 +1822,7 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
                   child: pw.Row(
                     children: [
                       pw.Expanded(
-                          flex: 2,
+                          flex: 3,
                           child: pw.Column(
                               mainAxisAlignment: pw.MainAxisAlignment.start,
                               crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -1830,30 +1838,39 @@ class Pdfgen_BillingNoteInvlice_TP8_Ortorkor {
                                   ),
                                 ),
                                 pw.Text(
-                                  '1. ชำระเงินที่สำนักงานโดยการ Scan QR Code ผ่านเครื่อง EDC ภายในวันที่ 1-5 ของเดือน ตั้งแต่เวลา 08.30 - 16.30 น.',
-                                  textAlign: pw.TextAlign.left,
-                                  style: pw.TextStyle(
-                                    fontSize: font_Size,
-                                    font: ttf,
-                                    fontWeight: pw.FontWeight.bold,
-                                    color: Colors_pd,
-                                  ),
-                                ),
-                                pw.Text(
-                                  '2. Scan QR Code เพื่อชำระเงินผ่าน ATM , Mobile Banking ของธนาคารกรุงไทยและธนาคารที่เข้าร่วมโครงการ Cross Bank Bill Payment ไม่เกินวันที่กำหนด',
-                                  textAlign: pw.TextAlign.left,
-                                  style: pw.TextStyle(
-                                    fontSize: font_Size,
-                                    font: ttf,
-                                    fontWeight: pw.FontWeight.bold,
-                                    color: Colors_pd,
-                                  ),
-                                ),
-                                pw.Text(
+                                  // (End_Bill_Paydate == null ||
+                                  //               End_Bill_Paydate.toString() ==
+                                  //                   '')
+                                  //           ? 'วันที่ ${End_Bill_Paydate} '
+                                  //           : 'วันที่ ${DateFormat('dd/MM').format(DateTime.parse(End_Bill_Paydate!))}/${DateTime.parse('${End_Bill_Paydate}').year + 543}',
                                   (End_Bill_Paydate == null ||
                                           End_Bill_Paydate.toString() == '')
-                                      ? '3. ค่าปรับผิดนักชำระ วันละ 100.00 บาท (หลังวันที่ ${End_Bill_Paydate}) '
-                                      : '3. ค่าปรับผิดนักชำระ วันละ 100.00 บาท (หลังวันที่ ${DateFormat('dd/MM').format(DateTime.parse(End_Bill_Paydate!))}/${DateTime.parse('${End_Bill_Paydate}').year + 543})',
+                                      ? '1. ชำระเงินที่สำนักงานโดยการ Scan QR Code ผ่านเครื่อง POS / EDC ภายในวันที่ 1-5 ของเดือน ตั้งแต่เวลา 08.30 น.-16.30 น. *เฉพาะสำนักงานตลาดสาขาบางคล้า ภายในวันที่ 1-10 ของเดือน ตั้งแต่เวลา 08.30 น.-16.30 น.'
+                                      : '1. ชำระเงินที่สำนักงานโดยการ Scan QR Code ผ่านเครื่อง POS / EDC ภายในวันที่ 1-${DateFormat('d').format(DateTime.parse(End_Bill_Paydate!))} ของเดือน ตั้งแต่เวลา 08.30 น.-16.30 น. *เฉพาะสำนักงานตลาดสาขาบางคล้า ภายในวันที่ 1-10 ของเดือน ตั้งแต่เวลา 08.30 น.-16.30 น.',
+                                  textAlign: pw.TextAlign.left,
+                                  style: pw.TextStyle(
+                                    fontSize: font_Size,
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.bold,
+                                    color: Colors_pd,
+                                  ),
+                                ),
+                                pw.Text(
+                                  '2. Scan QR Code เพื่อชำระผ่านเงินผ่าน ATM, Mobile Banking ของธนาคารกรุงไทย และธนาคารที่เข้าร่วมโครงการ Cross Bank Bill Payment ไม่เกินวันที่กำหนด',
+                                  textAlign: pw.TextAlign.left,
+                                  style: pw.TextStyle(
+                                    fontSize: font_Size,
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.bold,
+                                    color: Colors_pd,
+                                  ),
+                                ),
+                                pw.Text(
+                                  '3. ค่าปรับผิดนัดชำระ วันละ 100 บาท (หลังวันที่ 5 ของเดือน) *เฉพาะสำนักงานตลาดสาขาบางคล้า (หลังวันที่ 10 ของเดือน)',
+                                  // (End_Bill_Paydate == null ||
+                                  //         End_Bill_Paydate.toString() == '')
+                                  //     ? '3. ค่าปรับผิดนักชำระ วันละ 100.00 บาท (หลังวันที่ ${End_Bill_Paydate}) '
+                                  //     : '3. ค่าปรับผิดนักชำระ วันละ 100.00 บาท (หลังวันที่ ${DateFormat('dd/MM').format(DateTime.parse(End_Bill_Paydate!))}/${DateTime.parse('${End_Bill_Paydate}').year + 543})',
                                   // '3. ค่าปรับผิดนักชำระ วันละ 100.00 บาท (หลังวันที่ 5 ของเดือน)',
                                   textAlign: pw.TextAlign.left,
                                   style: pw.TextStyle(

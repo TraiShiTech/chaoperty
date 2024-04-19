@@ -67,6 +67,7 @@ class ManPay_Receipt_PDF {
         sum_fee = 0.00;
     String numinvoice = '';
     String numdoctax = '';
+    List<String> ref_invoice = [];
     String com_ment = '';
     var scname_, cname_, addr_, tax_, tel_, email_, stype_, type_, ser_user;
     var docno_,
@@ -111,7 +112,9 @@ class ManPay_Receipt_PDF {
           Zone_s = (readDataONBillPDFModels.zn == null)
               ? readDataONBillPDFModels.znn
               : readDataONBillPDFModels.zn;
-          Ln_s = readDataONBillPDFModels.ln;
+          Ln_s = (readDataONBillPDFModels.ln == null)
+              ? readDataONBillPDFModels.room_number
+              : readDataONBillPDFModels.ln;
           ser_user = readDataONBillPDFModels.user;
           docno_ = readDataONBillPDFModels.docno;
           doctax_ = readDataONBillPDFModels.doctax!;
@@ -120,7 +123,7 @@ class ManPay_Receipt_PDF {
           dateacc_ = readDataONBillPDFModels.dateacc;
           room_number_ = readDataONBillPDFModels.room_number;
           date_Transaction = readDataONBillPDFModels.daterec;
-          date_pay = readDataONBillPDFModels.dateacc;
+          date_pay = readDataONBillPDFModels.pdate;
           Howto_LockJonPay = readDataONBillPDFModels.room_number;
           Cust_no = readDataONBillPDFModels.custno;
           print(
@@ -244,6 +247,7 @@ class ManPay_Receipt_PDF {
             // sum_disp = sum_dispx;
             numinvoice = _TransReBillHistoryModel.docno!;
             numdoctax = _TransReBillHistoryModel.doctax!;
+            ref_invoice.add(_TransReBillHistoryModel.inv!);
             _TransReBillHistoryModels.add(_TransReBillHistoryModel);
           } else if (dtypeinvoiceent == '!Z') {
             sum_pvat = sum_pvat + sum_pvatx;
@@ -264,66 +268,139 @@ class ManPay_Receipt_PDF {
     } catch (e) {}
 
     /////////////////------------------------------------------>
-    print(
-        '${finnancetransModels.length}///${dis_sum_Matjum}  // ${sum_amt} //${_TransReBillHistoryModels.length}////$docnoin');
 
-    final tableData00 = [
-      for (int index = 0; index < _TransReBillHistoryModels.length; index++)
-        if (_TransReBillHistoryModels[index].fine.toString() != '1.00' &&
-            _TransReBillHistoryModels[index].expser.toString().trim() != '0')
-          [
-            '${_TransReBillHistoryModels[index].unitser}',
+    int count_inv = _TransReBillHistoryModels.where((element) =>
+        element.count_inv != '0' || element.count_inv == '0.00').length;
 
-            ///---0
-            '${_TransReBillHistoryModels[index].date}',
-
-            ///---1
-            '${_TransReBillHistoryModels[index].expname.toString().trim()}',
-
-            ///---2
-            '${nFormat.format((_TransReBillHistoryModels[index].vat == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].vat!))}',
-
-            ///---3
-            '${nFormat.format((_TransReBillHistoryModels[index].wht == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].wht!))}',
-
-            ///---4
-            '${nFormat.format((_TransReBillHistoryModels[index].amt == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].pvat!))}',
-
-            ///---5
-            '${nFormat.format((_TransReBillHistoryModels[index].total == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].total!))}',
-
-            ///---6
-            '${nFormat.format((_TransReBillHistoryModels[index].pri == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].pri!))}',
-
-            ///---7
-            '${_TransReBillHistoryModels[index].ovalue}',
-
-            ///---8
-            '${_TransReBillHistoryModels[index].nvalue}',
-
-            ///---9
-            '${nFormat.format((_TransReBillHistoryModels[index].qty == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].qty!))}',
-
-            ///---10
-            '${_TransReBillHistoryModels[index].refno}',
-
-            ///---11
-
-            '${nFormat.format((_TransReBillHistoryModels[index].dis == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].dis!))}',
-
-            ///---12
-            (_TransReBillHistoryModels[index].total == null)
-                ? '${nFormat.format(0.00 - ((_TransReBillHistoryModels[index].dis == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].dis!)))}'
-                : '${nFormat.format(double.parse(_TransReBillHistoryModels[index].total!) - ((_TransReBillHistoryModels[index].dis == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].dis!)))}'
-
-            ///---13
-          ],
-    ];
-    final tableData01 = [];
     int sum_fine = _TransReBillHistoryModels.where(
         (element) => element.fine == '1' || element.fine == '1.00').length;
+    /////////////////------------------------------------------>
 
-    if (sum_fine != 0) {
+    final tableData00 = (count_inv != 0)
+        ? [
+            for (int index = 0;
+                index < _TransReBillHistoryModels.length;
+                index++)
+              [
+                '${_TransReBillHistoryModels[index].unitser}',
+
+                ///---0
+                '${_TransReBillHistoryModels[index].date}',
+
+                ///---1
+                (_TransReBillHistoryModels[index].fine.toString() == '1.00' &&
+                        _TransReBillHistoryModels[index]
+                                .expname
+                                .toString()
+                                .trim() ==
+                            'null')
+                    ? 'ค่าปรับ [${_TransReBillHistoryModels[index].inv}]'
+                    : '${_TransReBillHistoryModels[index].expname.toString().trim()}',
+
+                ///---2
+                '${nFormat.format((_TransReBillHistoryModels[index].vat == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].vat!))}',
+
+                ///---3
+                '${nFormat.format((_TransReBillHistoryModels[index].wht == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].wht!))}',
+
+                ///---4
+                '${nFormat.format((_TransReBillHistoryModels[index].amt == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].pvat!))}',
+
+                ///---5
+                '${nFormat.format((_TransReBillHistoryModels[index].total == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].total!))}',
+
+                ///---6
+                '${nFormat.format((_TransReBillHistoryModels[index].pri == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].pri!))}',
+
+                ///---7
+                '${_TransReBillHistoryModels[index].ovalue}',
+
+                ///---8
+                '${_TransReBillHistoryModels[index].nvalue}',
+
+                ///---9
+                '${nFormat.format((_TransReBillHistoryModels[index].qty == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].qty!))}',
+
+                ///---10
+                (_TransReBillHistoryModels[index].fine.toString() == '1.00' &&
+                        _TransReBillHistoryModels[index]
+                                .refno
+                                .toString()
+                                .trim() ==
+                            'null')
+                    ? '-'
+                    : '${_TransReBillHistoryModels[index].refno}',
+
+                ///---11
+
+                '${nFormat.format((_TransReBillHistoryModels[index].dis == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].dis!))}',
+
+                ///---12
+                (_TransReBillHistoryModels[index].total == null)
+                    ? '${nFormat.format(0.00 - ((_TransReBillHistoryModels[index].dis == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].dis!)))}'
+                    : '${nFormat.format(double.parse(_TransReBillHistoryModels[index].total!) - ((_TransReBillHistoryModels[index].dis == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].dis!)))}'
+
+                ///---13
+              ]
+          ]
+        : [
+            for (int index = 0;
+                index < _TransReBillHistoryModels.length;
+                index++)
+              if (_TransReBillHistoryModels[index].fine.toString() != '1.00')
+                // if (_TransReBillHistoryModels[index].fine.toString() != '1.00' &&
+                //     _TransReBillHistoryModels[index].expser.toString().trim() != '0')
+                [
+                  '${_TransReBillHistoryModels[index].unitser}',
+
+                  ///---0
+                  '${_TransReBillHistoryModels[index].date}',
+
+                  ///---1
+                  '${_TransReBillHistoryModels[index].expname.toString().trim()}',
+
+                  ///---2
+                  '${nFormat.format((_TransReBillHistoryModels[index].vat == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].vat!))}',
+
+                  ///---3
+                  '${nFormat.format((_TransReBillHistoryModels[index].wht == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].wht!))}',
+
+                  ///---4
+                  '${nFormat.format((_TransReBillHistoryModels[index].amt == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].pvat!))}',
+
+                  ///---5
+                  '${nFormat.format((_TransReBillHistoryModels[index].total == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].total!))}',
+
+                  ///---6
+                  '${nFormat.format((_TransReBillHistoryModels[index].pri == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].pri!))}',
+
+                  ///---7
+                  '${_TransReBillHistoryModels[index].ovalue}',
+
+                  ///---8
+                  '${_TransReBillHistoryModels[index].nvalue}',
+
+                  ///---9
+                  '${nFormat.format((_TransReBillHistoryModels[index].qty == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].qty!))}',
+
+                  ///---10
+                  '${_TransReBillHistoryModels[index].refno}',
+
+                  ///---11
+
+                  '${nFormat.format((_TransReBillHistoryModels[index].dis == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].dis!))}',
+
+                  ///---12
+                  (_TransReBillHistoryModels[index].total == null)
+                      ? '${nFormat.format(0.00 - ((_TransReBillHistoryModels[index].dis == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].dis!)))}'
+                      : '${nFormat.format(double.parse(_TransReBillHistoryModels[index].total!) - ((_TransReBillHistoryModels[index].dis == null) ? 0.00 : double.parse(_TransReBillHistoryModels[index].dis!)))}'
+
+                  ///---13
+                ],
+          ];
+    final tableData01 = [];
+
+    if (sum_fine != 0 && count_inv == 0) {
       tableData01.add(
         [
           '${_TransReBillHistoryModels.where((model) => model.fine == '1' || model.fine == '1.00').map((model) => model.unitser.toString()).first}',
@@ -375,6 +452,10 @@ class ManPay_Receipt_PDF {
     Future.delayed(Duration(milliseconds: 500), () async {
       if (tem_page_ser.toString() == '0' || tem_page_ser == null) {
         Pdfgen_his_statusbill_TP3.exportPDF_statusbill_TP3(
+            Cust_no,
+            cid_,
+            Zone_s,
+            Ln_s,
             foder,
             tableData00,
             tableData01,
@@ -402,6 +483,7 @@ class ManPay_Receipt_PDF {
             newValuePDFimg,
             numinvoice,
             numdoctax,
+            ref_invoice,
             finnancetransModels,
             date_Transaction,
             date_pay,
@@ -413,6 +495,11 @@ class ManPay_Receipt_PDF {
             com_ment);
       } else if (tem_page_ser.toString() == '1') {
         Pdfgen_his_statusbill_TP4.exportPDF_statusbill_TP4(
+            Cust_no,
+            cid_,
+            Zone_s,
+            Ln_s,
+            fname,
             foder,
             tableData00,
             tableData01,
@@ -440,6 +527,7 @@ class ManPay_Receipt_PDF {
             newValuePDFimg,
             numinvoice,
             numdoctax,
+            ref_invoice,
             finnancetransModels,
             date_Transaction,
             date_pay,
@@ -451,6 +539,11 @@ class ManPay_Receipt_PDF {
             com_ment);
       } else if (tem_page_ser.toString() == '2') {
         Pdfgen_his_statusbill_TP7.exportPDF_statusbill_TP7(
+            Cust_no,
+            cid_,
+            Zone_s,
+            Ln_s,
+            fname,
             foder,
             tableData00,
             tableData01,
@@ -478,6 +571,7 @@ class ManPay_Receipt_PDF {
             newValuePDFimg,
             numinvoice,
             numdoctax,
+            ref_invoice,
             finnancetransModels,
             date_Transaction,
             date_pay,
@@ -525,6 +619,7 @@ class ManPay_Receipt_PDF {
               newValuePDFimg,
               numinvoice,
               numdoctax,
+              ref_invoice,
               finnancetransModels,
               date_Transaction,
               date_pay,
@@ -568,6 +663,7 @@ class ManPay_Receipt_PDF {
               newValuePDFimg,
               numinvoice,
               numdoctax,
+              ref_invoice,
               finnancetransModels,
               date_Transaction,
               date_pay,

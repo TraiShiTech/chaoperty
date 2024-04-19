@@ -23,6 +23,9 @@ class Read_DataONBill_PDFModel {
   String? custno;
   String? remark;
   String? user;
+  String? scname1;
+  String? cname1;
+  String? pdate;
 
   Read_DataONBill_PDFModel(
       {this.ser,
@@ -48,7 +51,10 @@ class Read_DataONBill_PDFModel {
       this.ln,
       this.custno,
       this.remark,
-      this.user});
+      this.user,
+      this.scname1,
+      this.cname1,
+      this.pdate});
 
   Read_DataONBill_PDFModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -75,6 +81,9 @@ class Read_DataONBill_PDFModel {
     custno = json['custno'];
     remark = json['remark'];
     user = json['user'];
+    scname1 = json['scname1'];
+    cname1 = json['cname1'];
+    pdate = json['pdate'];
   }
 
   Map<String, dynamic> toJson() {
@@ -103,6 +112,9 @@ class Read_DataONBill_PDFModel {
     data['custno'] = this.custno;
     data['remark'] = this.remark;
     data['user'] = this.user;
+    data['scname1'] = this.scname1;
+    data['cname1'] = this.cname1;
+    data['pdate'] = this.pdate;
     return data;
   }
 }

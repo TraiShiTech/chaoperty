@@ -51,7 +51,7 @@ class _PeopleChaoScreen3State extends State<PeopleChaoScreen3> {
           child: Container(
             height: 50,
             width: MediaQuery.of(context).size.width,
-            decoration: const BoxDecoration(
+            decoration:  BoxDecoration(
               color: AppbackgroundColor.TiTile_Colors,
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(10),

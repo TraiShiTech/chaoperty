@@ -268,7 +268,7 @@ class _ReportScreen5State extends State<ReportScreen5> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       Map<String, dynamic> map = Map();
       map['ser'] = '0';
       map['rser'] = '0';
@@ -371,7 +371,7 @@ class _ReportScreen5State extends State<ReportScreen5> {
     var ren = preferences.getString('renTalSer');
     var zone = Value_Chang_Zone_People_Ser;
 
-    print('>>>>>>>>>>>>>>>>>>>>>>>>>>>> $Status_pe_ser');
+    // print('>>>>>>>>>>>>>>>>>>>>>>>>>>>> $Status_pe_ser');
 
     if (Status_pe_ser == '1') {
       String url = zone == null
@@ -405,7 +405,7 @@ class _ReportScreen5State extends State<ReportScreen5> {
                 var date2 = DateTime.now();
                 var difference = daysBetween(birthday, date2);
 
-                print('difference == $difference');
+                // print('difference == $difference');
 
                 var daterx_now = DateTime.now();
 
@@ -414,8 +414,8 @@ class _ReportScreen5State extends State<ReportScreen5> {
                 final now = DateTime.now();
                 final earlier = daterx_ldate.subtract(const Duration(days: 0));
                 var daterx_A = now.isAfter(earlier);
-                print(now.isAfter(earlier)); // true
-                print(now.isBefore(earlier)); // true
+                // print(now.isAfter(earlier)); // true
+                // print(now.isBefore(earlier)); // true
 
                 if (daterx_A != true) {
                   setState(() {
@@ -467,7 +467,7 @@ class _ReportScreen5State extends State<ReportScreen5> {
               var date2 = DateTime.now();
               var difference = daysBetween(birthday, date2);
 
-              print('difference == $difference');
+              // print('difference == $difference');
 
               var daterx_now = DateTime.now();
 
@@ -476,8 +476,8 @@ class _ReportScreen5State extends State<ReportScreen5> {
               final now = DateTime.now();
               final earlier = daterx_ldate.subtract(const Duration(days: 0));
               var daterx_A = now.isAfter(earlier);
-              print(now.isAfter(earlier)); // true
-              print(now.isBefore(earlier)); // true
+              // print(now.isAfter(earlier)); // true
+              // print(now.isBefore(earlier)); // true
 
               if (daterx_A == true) {
                 setState(() {
@@ -511,7 +511,7 @@ class _ReportScreen5State extends State<ReportScreen5> {
         var response = await http.get(Uri.parse(url));
 
         var result = json.decode(response.body);
-        print(result);
+        // print(result);
         if (result != null) {
           for (var map in result) {
             TeNantModel teNantModel = TeNantModel.fromJson(map);
@@ -536,7 +536,7 @@ class _ReportScreen5State extends State<ReportScreen5> {
                   var date2 = DateTime.now();
                   var difference = daysBetween(birthday, date2);
 
-                  print('difference == $difference');
+                  // print('difference == $difference');
 
                   var daterx_now = DateTime.now();
 
@@ -546,8 +546,8 @@ class _ReportScreen5State extends State<ReportScreen5> {
                   final earlier =
                       daterx_ldate.subtract(const Duration(days: 0));
                   var daterx_A = now.isAfter(earlier);
-                  print(now.isAfter(earlier)); // true
-                  print(now.isBefore(earlier)); // true
+                  // print(now.isAfter(earlier)); // true
+                  // print(now.isBefore(earlier)); // true
 
                   if (daterx_A != true) {
                     setState(() {
@@ -621,7 +621,7 @@ class _ReportScreen5State extends State<ReportScreen5> {
     var ren = preferences.getString('renTalSer');
     var zone = Value_Chang_Zone_People_Ser;
 
-    print('>>>>>>>>>>>>>>>>>>>>>>>>>>>> $Status_pe_ser');
+    // print('>>>>>>>>>>>>>>>>>>>>>>>>>>>> $Status_pe_ser');
 
     if (Status_pe_ser == '1') {
       String url = zone == null
@@ -655,7 +655,7 @@ class _ReportScreen5State extends State<ReportScreen5> {
                 var date2 = DateTime.now();
                 var difference = daysBetween(birthday, date2);
 
-                print('difference == $difference');
+                // print('difference == $difference');
 
                 var daterx_now = DateTime.now();
 
@@ -664,8 +664,8 @@ class _ReportScreen5State extends State<ReportScreen5> {
                 final now = DateTime.now();
                 final earlier = daterx_ldate.subtract(const Duration(days: 0));
                 var daterx_A = now.isAfter(earlier);
-                print(now.isAfter(earlier)); // true
-                print(now.isBefore(earlier)); // true
+                // print(now.isAfter(earlier)); // true
+                // print(now.isBefore(earlier)); // true
 
                 if (daterx_A != true) {
                   setState(() {
@@ -719,7 +719,7 @@ class _ReportScreen5State extends State<ReportScreen5> {
               var date2 = DateTime.now();
               var difference = daysBetween(birthday, date2);
 
-              print('difference == $difference');
+              // print('difference == $difference');
 
               var daterx_now = DateTime.now();
 
@@ -728,8 +728,8 @@ class _ReportScreen5State extends State<ReportScreen5> {
               final now = DateTime.now();
               final earlier = daterx_ldate.subtract(const Duration(days: 0));
               var daterx_A = now.isAfter(earlier);
-              print(now.isAfter(earlier)); // true
-              print(now.isBefore(earlier)); // true
+              // print(now.isAfter(earlier)); // true
+              // print(now.isBefore(earlier)); // true
 
               if (daterx_A == true) {
                 setState(() {
@@ -763,7 +763,7 @@ class _ReportScreen5State extends State<ReportScreen5> {
         var response = await http.get(Uri.parse(url));
 
         var result = json.decode(response.body);
-        print(result);
+        // print(result);
         if (result != null) {
           for (var map in result) {
             TeNantModel teNantModel = TeNantModel.fromJson(map);
@@ -788,7 +788,7 @@ class _ReportScreen5State extends State<ReportScreen5> {
                   var date2 = DateTime.now();
                   var difference = daysBetween(birthday, date2);
 
-                  print('difference == $difference');
+                  // print('difference == $difference');
 
                   var daterx_now = DateTime.now();
 
@@ -798,8 +798,8 @@ class _ReportScreen5State extends State<ReportScreen5> {
                   final earlier =
                       daterx_ldate.subtract(const Duration(days: 0));
                   var daterx_A = now.isAfter(earlier);
-                  print(now.isAfter(earlier)); // true
-                  print(now.isBefore(earlier)); // true
+                  // print(now.isAfter(earlier)); // true
+                  // print(now.isBefore(earlier)); // true
 
                   if (daterx_A != true) {
                     setState(() {
@@ -887,8 +887,8 @@ class _ReportScreen5State extends State<ReportScreen5> {
             // pic_plan = pic_planx;
             contractPhotoModels.add(contractPhotoModel);
           });
-          print('pic_tenantx');
-          print(pic_tenantx);
+          // print('pic_tenantx');
+          // print(pic_tenantx);
         }
       }
     } catch (e) {}
@@ -1059,7 +1059,7 @@ class _ReportScreen5State extends State<ReportScreen5> {
     var ren = preferences.getString('renTalSer');
     var zone = Value_Chang_Zone_People_Ser_Cancel;
 
-    print('zone>>>>>>zone>>>>>$zone');
+    // print('zone>>>>>>zone>>>>>$zone');
 
     String url = (zone != '0')
         ? '${MyConstant().domain}/GC_tenant_Cancel_ZoneReport.php?isAdd=true&ren=$ren&ser_zone=$zone&mon_s=$Mon_People_Cancel&ye_s=$YE_People_Cancel'
@@ -1078,7 +1078,7 @@ class _ReportScreen5State extends State<ReportScreen5> {
           });
         }
       } else {}
-      print('result ${teNantModels_Cancel.length}');
+      // print('result ${teNantModels_Cancel.length}');
       setState(() {
         _teNantModels_Cancel = teNantModels_Cancel;
       });
@@ -1379,7 +1379,7 @@ class _ReportScreen5State extends State<ReportScreen5> {
           }
         }
 
-        print('result ${_TransReBillModels_cancel.length}');
+        // print('result ${_TransReBillModels_cancel.length}');
       }
       setState(() {
         TransReBillModels_cancel_ = _TransReBillModels_cancel;
@@ -1681,7 +1681,7 @@ class _ReportScreen5State extends State<ReportScreen5> {
                               Status_pe = Status[selectedIndex]!;
                               Status_pe_ser = '${selectedIndex + 1}';
                             });
-                            print(selectedIndex);
+                            // print(selectedIndex);
                           },
                         ),
                       ),
@@ -1783,8 +1783,8 @@ class _ReportScreen5State extends State<ReportScreen5> {
                               Value_Chang_Zone_People_Ser =
                                   zoneModels_report[selectedIndex].ser!;
                             });
-                            print(
-                                'Selected Index: $Value_Chang_Zone_People  //${Value_Chang_Zone_People_Ser}');
+                            // print(
+                            //     'Selected Index: $Value_Chang_Zone_People  //${Value_Chang_Zone_People_Ser}');
                           },
                         ),
                       ),
@@ -1911,7 +1911,7 @@ class _ReportScreen5State extends State<ReportScreen5> {
                               Mon_Cid_ldate = null;
                             });
 
-                            print(Ser_Cid_ldate);
+                            // print(Ser_Cid_ldate);
                           },
                         ),
                       ),
@@ -3053,8 +3053,8 @@ class _ReportScreen5State extends State<ReportScreen5> {
                               Value_Chang_Zone_People_Ser_Cancel =
                                   zoneModels_report[selectedIndex].ser!;
                             });
-                            print(
-                                'Selected Index: $Value_Chang_Zone_People_Cancel  //${Value_Chang_Zone_People_Ser_Cancel}');
+                            // print(
+                            //     'Selected Index: $Value_Chang_Zone_People_Cancel  //${Value_Chang_Zone_People_Ser_Cancel}');
                           },
                         ),
                       ),
@@ -3363,8 +3363,8 @@ class _ReportScreen5State extends State<ReportScreen5> {
                               Value_Chang_Zone_historybill_Ser =
                                   zoneModels_report[selectedIndex].ser!;
                             });
-                            print(
-                                'Selected Index: $Value_Chang_Zone_historybill  //${Value_Chang_Zone_historybill_Ser}');
+                            // print(
+                            //     'Selected Index: $Value_Chang_Zone_historybill  //${Value_Chang_Zone_historybill_Ser}');
                           },
                         ),
                       ),
@@ -3735,7 +3735,7 @@ class _ReportScreen5State extends State<ReportScreen5> {
                                   children: <Widget>[
                                     Container(
                                       // width: 1050,
-                                      decoration: const BoxDecoration(
+                                      decoration: BoxDecoration(
                                         color: AppbackgroundColor.TiTile_Colors,
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(10),
@@ -5597,7 +5597,7 @@ class _ReportScreen5State extends State<ReportScreen5> {
                                   children: <Widget>[
                                     Container(
                                       // width: 1050,
-                                      decoration: const BoxDecoration(
+                                      decoration: BoxDecoration(
                                         color: AppbackgroundColor.TiTile_Colors,
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(10),
@@ -6347,7 +6347,7 @@ class _ReportScreen5State extends State<ReportScreen5> {
                                   children: <Widget>[
                                     Container(
                                       // width: 1050,
-                                      decoration: const BoxDecoration(
+                                      decoration: BoxDecoration(
                                         color: AppbackgroundColor.TiTile_Colors,
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(10),
@@ -7467,7 +7467,7 @@ class _ReportScreen5State extends State<ReportScreen5> {
                                   children: <Widget>[
                                     Container(
                                       // width: 1050,
-                                      decoration: const BoxDecoration(
+                                      decoration: BoxDecoration(
                                         color: AppbackgroundColor.TiTile_Colors,
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(10),

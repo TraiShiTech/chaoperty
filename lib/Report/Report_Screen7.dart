@@ -170,7 +170,7 @@ class _ReportScreen7State extends State<ReportScreen7> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       Map<String, dynamic> map = Map();
       map['ser'] = '0';
       map['rser'] = '0';
@@ -301,7 +301,7 @@ class _ReportScreen7State extends State<ReportScreen7> {
     var ren = preferences.getString('renTalSer');
     var zone = Value_Chang_Zone_Area_Ser;
 
-    print('>>>>>>>>>>>>>>>>>>>>>>>>>>>> $Status_Area_ser');
+    // print('>>>>>>>>>>>>>>>>>>>>>>>>>>>> $Status_Area_ser');
 
     if (Status_Area_ser == '1') {
       String url = (zone == '0')
@@ -311,7 +311,7 @@ class _ReportScreen7State extends State<ReportScreen7> {
         var response = await http.get(Uri.parse(url));
 
         var result = json.decode(response.body);
-        print(result);
+        // print(result);
         if (result != null) {
           for (var map in result) {
             AreaModel areaModel = AreaModel.fromJson(map);
@@ -333,7 +333,7 @@ class _ReportScreen7State extends State<ReportScreen7> {
         var response = await http.get(Uri.parse(url));
 
         var result = json.decode(response.body);
-        print(result);
+        // print(result);
         if (result != null) {
           for (var map in result) {
             AreaModel areaModel = AreaModel.fromJson(map);
@@ -351,7 +351,7 @@ class _ReportScreen7State extends State<ReportScreen7> {
               var date2 = DateTime.now();
               var difference = daysBetween(birthday, date2);
 
-              print('difference == $difference');
+              // print('difference == $difference');
 
               if (difference < 30 && difference > 0) {
                 setState(() {
@@ -374,7 +374,7 @@ class _ReportScreen7State extends State<ReportScreen7> {
         var response = await http.get(Uri.parse(url));
 
         var result = json.decode(response.body);
-        print(result);
+        // print(result);
         if (result != null) {
           for (var map in result) {
             AreaModel areaModel = AreaModel.fromJson(map);
@@ -398,7 +398,7 @@ class _ReportScreen7State extends State<ReportScreen7> {
         var response = await http.get(Uri.parse(url));
 
         var result = json.decode(response.body);
-        print(result);
+        // print(result);
         if (result != null) {
           for (var map in result) {
             AreaModel areaModel = AreaModel.fromJson(map);
@@ -421,7 +421,7 @@ class _ReportScreen7State extends State<ReportScreen7> {
         var response = await http.get(Uri.parse(url));
 
         var result = json.decode(response.body);
-        print(result);
+        // print(result);
         if (result != null) {
           for (var map in result) {
             AreaModel areaModel = AreaModel.fromJson(map);
@@ -444,7 +444,7 @@ class _ReportScreen7State extends State<ReportScreen7> {
         var response = await http.get(Uri.parse(url));
 
         var result = json.decode(response.body);
-        print(result);
+        // print(result);
         if (result != null) {
           for (var map in result) {
             AreaModel areaModel = AreaModel.fromJson(map);
@@ -468,7 +468,7 @@ class _ReportScreen7State extends State<ReportScreen7> {
         var response = await http.get(Uri.parse(url));
 
         var result = json.decode(response.body);
-        print(result);
+        // print(result);
         if (result != null) {
           for (var map in result) {
             AreaModel areaModel = AreaModel.fromJson(map);
@@ -674,7 +674,7 @@ class _ReportScreen7State extends State<ReportScreen7> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result.toString() != 'null') {
         for (var map in result) {
           CustomerModel customerModel = CustomerModel.fromJson(map);
@@ -765,7 +765,7 @@ class _ReportScreen7State extends State<ReportScreen7> {
     var ren = preferences.getString('renTalSer');
     var zone = Value_Chang_Zone_People_Ser_History_debt;
 
-    print('>>>>>>>>>>>>>>>>>>>>>>>>>>>> $Status_pe_ser_History_debt');
+    // print('>>>>>>>>>>>>>>>>>>>>>>>>>>>> $Status_pe_ser_History_debt');
 
     if (Status_pe_ser_History_debt == '1') {
       String url = (zone == '0')
@@ -796,7 +796,7 @@ class _ReportScreen7State extends State<ReportScreen7> {
                 var date2 = DateTime.now();
                 var difference = daysBetween(birthday, date2);
 
-                print('difference == $difference');
+                // print('difference == $difference');
 
                 var daterx_now = DateTime.now();
 
@@ -805,8 +805,8 @@ class _ReportScreen7State extends State<ReportScreen7> {
                 final now = DateTime.now();
                 final earlier = daterx_ldate.subtract(const Duration(days: 0));
                 var daterx_A = now.isAfter(earlier);
-                print(now.isAfter(earlier)); // true
-                print(now.isBefore(earlier)); // true
+                // print(now.isAfter(earlier)); // true
+                // print(now.isBefore(earlier)); // true
 
                 if (daterx_A != true) {
                   setState(() {
@@ -851,7 +851,7 @@ class _ReportScreen7State extends State<ReportScreen7> {
               var date2 = DateTime.now();
               var difference = daysBetween(birthday, date2);
 
-              print('difference == $difference');
+              // print('difference == $difference');
 
               var daterx_now = DateTime.now();
 
@@ -860,8 +860,8 @@ class _ReportScreen7State extends State<ReportScreen7> {
               final now = DateTime.now();
               final earlier = daterx_ldate.subtract(const Duration(days: 0));
               var daterx_A = now.isAfter(earlier);
-              print(now.isAfter(earlier)); // true
-              print(now.isBefore(earlier)); // true
+              // print(now.isAfter(earlier)); // true
+              // print(now.isBefore(earlier)); // true
 
               if (daterx_A == true) {
                 setState(() {
@@ -1205,7 +1205,7 @@ class _ReportScreen7State extends State<ReportScreen7> {
                                 Status_Area = Status_Area_[selectedIndex]!;
                                 Status_Area_ser = '${selectedIndex + 1}';
                               });
-                              print(selectedIndex);
+                              // print(selectedIndex);
                             },
                           ),
                         ),
@@ -1308,8 +1308,8 @@ class _ReportScreen7State extends State<ReportScreen7> {
                                 Value_Chang_Zone_Area_Ser =
                                     zoneModels_report[selectedIndex].ser!;
                               });
-                              print(
-                                  'Selected Index: $Value_Chang_Zone_Area  //${Value_Chang_Zone_Area_Ser}');
+                              // print(
+                              //     'Selected Index: $Value_Chang_Zone_Area  //${Value_Chang_Zone_Area_Ser}');
                             },
                           ),
                         ),
@@ -1787,7 +1787,7 @@ class _ReportScreen7State extends State<ReportScreen7> {
                                 Status_maintenance_ = value!;
                                 Status_maintenance_ser = '${selectedIndex}';
                               });
-                              print(Status_maintenance_ser);
+                              // print(Status_maintenance_ser);
                             },
                           ),
                         ),
@@ -1890,8 +1890,8 @@ class _ReportScreen7State extends State<ReportScreen7> {
                                 zone_ser_maintenance =
                                     zoneModels_report[selectedIndex].ser!;
                               });
-                              print(
-                                  'Selected Index: $zone_name_maintenance  //${zone_ser_maintenance}');
+                              // print(
+                              //     'Selected Index: $zone_name_maintenance  //${zone_ser_maintenance}');
                             },
                           ),
                         ),
@@ -2140,7 +2140,7 @@ class _ReportScreen7State extends State<ReportScreen7> {
                                 Status_Type_cus_ser =
                                     '${typeModels[selectedIndex].ser}';
                               });
-                              print(Status_Type_cus_ser);
+                              // print(Status_Type_cus_ser);
                             },
                           ),
                         ),
@@ -2362,7 +2362,7 @@ class _ReportScreen7State extends State<ReportScreen7> {
                                 Status_pe_ser_History_debt =
                                     '${selectedIndex + 1}';
                               });
-                              print(selectedIndex);
+                              // print(selectedIndex);
                             },
                           ),
                         ),
@@ -2464,8 +2464,8 @@ class _ReportScreen7State extends State<ReportScreen7> {
                                 Value_Chang_Zone_People_Ser_History_debt =
                                     zoneModels_report[selectedIndex].ser!;
                               });
-                              print(
-                                  'Selected Index: $Value_Chang_Zone_People_History_debt  //${Value_Chang_Zone_People_Ser_History_debt}');
+                              // print(
+                              //     'Selected Index: $Value_Chang_Zone_People_History_debt  //${Value_Chang_Zone_People_Ser_History_debt}');
                             },
                           ),
                         ),
@@ -2699,7 +2699,7 @@ class _ReportScreen7State extends State<ReportScreen7> {
                                   children: <Widget>[
                                     Container(
                                       // width: 1050,
-                                      decoration: const BoxDecoration(
+                                      decoration:  BoxDecoration(
                                         color: AppbackgroundColor.TiTile_Colors,
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(10),
@@ -3406,7 +3406,7 @@ class _ReportScreen7State extends State<ReportScreen7> {
                                   children: <Widget>[
                                     Container(
                                       // width: 1050,
-                                      decoration: const BoxDecoration(
+                                      decoration:  BoxDecoration(
                                         color: AppbackgroundColor.TiTile_Colors,
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(10),
@@ -4481,7 +4481,7 @@ class _ReportScreen7State extends State<ReportScreen7> {
                                   children: <Widget>[
                                     Container(
                                       // width: 1050,
-                                      decoration: const BoxDecoration(
+                                      decoration:  BoxDecoration(
                                         color: AppbackgroundColor.TiTile_Colors,
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(10),

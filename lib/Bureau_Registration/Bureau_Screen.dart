@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Style/colors.dart';
 import '../Style/view_pagenow.dart';
@@ -22,6 +23,20 @@ class BureauScreen extends StatefulWidget {
 }
 
 class _BureauScreenState extends State<BureauScreen> {
+  int renTal_lavel = 0;
+  @override
+  void initState() {
+    super.initState();
+    checkPreferance();
+  }
+
+  Future<Null> checkPreferance() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      renTal_lavel = int.parse(preferences.getString('lavel').toString());
+    });
+  }
+
   @override
   int Status_ = 1;
   String Ser_nowpage = '6';
@@ -41,158 +56,176 @@ class _BureauScreenState extends State<BureauScreen> {
       // color: AppbackgroundColor.Sub_Abg_Colors,
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
-      child: Column(children: [
-        Row(
-          children: [
-            Expanded(
+      child: renTal_lavel <= 3
+          ? Container(
+              height: 500,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 8, 8, 0),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 8, 2, 0),
-                    child: Container(
-                      width: 100,
-                      decoration: BoxDecoration(
-                        color: AppbackgroundColor.TiTile_Box,
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10),
-                        ),
-                        border: Border.all(color: Colors.white, width: 2),
-                      ),
-                      padding: const EdgeInsets.all(5.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          AutoSizeText(
-                            'ทะเบียน ',
-                            overflow: TextOverflow.ellipsis,
-                            minFontSize: 8,
-                            maxFontSize: 20,
-                            style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              color: ReportScreen_Color.Colors_Text1_,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: FontWeight_.Fonts_T,
-                            ),
-                          ),
-                          AutoSizeText(
-                            ' > >',
-                            overflow: TextOverflow.ellipsis,
-                            minFontSize: 8,
-                            maxFontSize: 20,
-                            style: TextStyle(
-                              color: Colors.green,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: FontWeight_.Fonts_T,
-                            ),
-                          ),
-                        ],
-                      ),
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: Text(
+                    'Level ของคุณไม่สามารถเข้าถึงได้',
+                    style: TextStyle(
+                      color: ReportScreen_Color.Colors_Text1_,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: FontWeight_.Fonts_T,
                     ),
                   ),
                 ),
               ),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: viewpage(context, '$Ser_nowpage'),
-            ),
-          ],
-        ),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.end,
-        //   children: [
-        //     Align(
-        //       alignment: Alignment.topLeft,
-        //       child: viewpage(context, '$Ser_nowpage'),
-        //     ),
-        //   ],
-        // ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            decoration: const BoxDecoration(
-              color: AppbackgroundColor.TiTile_Box,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10)),
-              // border: Border.all(color: Colors.grey, width: 1),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: ScrollConfiguration(
-                behavior:
-                    ScrollConfiguration.of(context).copyWith(dragDevices: {
-                  PointerDeviceKind.touch,
-                  PointerDeviceKind.mouse,
-                }),
-                child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(children: [
-                      for (int i = 0; i < Status.length; i++)
-                        Padding(
-                            padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
-                            child: InkWell(
-                              onTap: () {
-                                setState(() {
-                                  Status_ = i + 1;
-                                });
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: (i + 1 == 1)
-                                      ? Colors.deepPurple[300]
-                                      : (i + 1 == 2)
-                                          ? Colors.green[300]
-                                          : (i + 1 == 3)
-                                              ? Colors.orange[300]
-                                              : Colors.teal[300],
-                                  borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(10),
-                                      topRight: Radius.circular(10),
-                                      bottomLeft: Radius.circular(10),
-                                      bottomRight: Radius.circular(10)),
-                                  border: (Status_ == i + 1)
-                                      ? Border.all(
-                                          color: Colors.white, width: 1)
-                                      : null,
-                                ),
-                                padding: const EdgeInsets.all(8.0),
-                                child: Center(
-                                  child: Text(
-                                    Status[i],
-                                    style: TextStyle(
-                                        color: (Status_ == i + 1)
-                                            ? Colors.white
-                                            : Colors.black,
-                                        fontFamily: FontWeight_.Fonts_T),
+            )
+          : Column(children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 8, 8, 0),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(8, 8, 2, 0),
+                          child: Container(
+                            width: 100,
+                            decoration: BoxDecoration(
+                              color: AppbackgroundColor.TiTile_Box,
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10),
+                              ),
+                              border: Border.all(color: Colors.white, width: 2),
+                            ),
+                            padding: const EdgeInsets.all(5.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                AutoSizeText(
+                                  'ทะเบียน ',
+                                  overflow: TextOverflow.ellipsis,
+                                  minFontSize: 8,
+                                  maxFontSize: 20,
+                                  style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    color: ReportScreen_Color.Colors_Text1_,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T,
                                   ),
                                 ),
-                              ),
-                            )),
-                    ])),
+                                AutoSizeText(
+                                  ' > >',
+                                  overflow: TextOverflow.ellipsis,
+                                  minFontSize: 8,
+                                  maxFontSize: 20,
+                                  style: TextStyle(
+                                    color: Colors.green,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: viewpage(context, '$Ser_nowpage'),
+                  ),
+                ],
               ),
-            ),
-          ),
-        ),
-        Status_ == 1
-            ? CustomerScreen()
-            : Status_ == 2
-                ?
-                //     ? Add_Custo_Screen(
-                //         updateMessage: updateMessage,
-                //       )
-                //     :
-                SystemlogScreen()
-                : ReadCard()
-      ]),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.end,
+              //   children: [
+              //     Align(
+              //       alignment: Alignment.topLeft,
+              //       child: viewpage(context, '$Ser_nowpage'),
+              //     ),
+              //   ],
+              // ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  decoration: const BoxDecoration(
+                    color: AppbackgroundColor.TiTile_Box,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
+                        bottomLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(10)),
+                    // border: Border.all(color: Colors.grey, width: 1),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: ScrollConfiguration(
+                      behavior: ScrollConfiguration.of(context)
+                          .copyWith(dragDevices: {
+                        PointerDeviceKind.touch,
+                        PointerDeviceKind.mouse,
+                      }),
+                      child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(children: [
+                            for (int i = 0; i < Status.length; i++)
+                              Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(8, 4, 8, 4),
+                                  child: InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        Status_ = i + 1;
+                                      });
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: (i + 1 == 1)
+                                            ? Colors.deepPurple[300]
+                                            : (i + 1 == 2)
+                                                ? Colors.green[300]
+                                                : (i + 1 == 3)
+                                                    ? Colors.orange[300]
+                                                    : Colors.teal[300],
+                                        borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(10),
+                                            topRight: Radius.circular(10),
+                                            bottomLeft: Radius.circular(10),
+                                            bottomRight: Radius.circular(10)),
+                                        border: (Status_ == i + 1)
+                                            ? Border.all(
+                                                color: Colors.white, width: 1)
+                                            : null,
+                                      ),
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(
+                                        child: Text(
+                                          Status[i],
+                                          style: TextStyle(
+                                              color: (Status_ == i + 1)
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                              fontFamily: FontWeight_.Fonts_T),
+                                        ),
+                                      ),
+                                    ),
+                                  )),
+                          ])),
+                    ),
+                  ),
+                ),
+              ),
+              Status_ == 1
+                  ? CustomerScreen()
+                  : Status_ == 2
+                      ?
+                      //     ? Add_Custo_Screen(
+                      //         updateMessage: updateMessage,
+                      //       )
+                      //     :
+                      SystemlogScreen()
+                      : ReadCard()
+            ]),
     );
   }
 }

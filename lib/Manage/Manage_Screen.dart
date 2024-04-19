@@ -108,7 +108,7 @@ class _ManageScreenState extends State<ManageScreen> {
       foder,
       bills_name_,
       renTal_name;
-
+  int renTal_lavel = 0;
   @override
   void initState() {
     // TODO: implement initState
@@ -149,6 +149,25 @@ class _ManageScreenState extends State<ManageScreen> {
   //     } else {}
   //   } catch (e) {}
   // }
+
+  Future<Null> infomation() async {
+    showDialog<String>(
+        // barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20.0))),
+              title: const Center(
+                  child: Text(
+                'Level ของคุณไม่สามารถเข้าถึงได้',
+                style: TextStyle(
+                  color: SettingScreen_Color.Colors_Text1_,
+                  fontFamily: FontWeight_.Fonts_T,
+                  fontWeight: FontWeight.bold,
+                ),
+              )),
+            ));
+  }
 
   Future<Null> read_GC_Sub_zone() async {
     if (subzoneModels.length != 0) {
@@ -252,6 +271,7 @@ class _ManageScreenState extends State<ManageScreen> {
     setState(() {
       zone_ser = preferences.getString('zonePSer');
       zone_name = preferences.getString('zonesPName');
+      renTal_lavel = int.parse(preferences.getString('lavel').toString());
     });
   }
 
@@ -398,30 +418,15 @@ class _ManageScreenState extends State<ManageScreen> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
     var zone_Sub = preferences.getString('zoneSubSer');
+    print('Ser_BodySta1 >>>>  $Ser_BodySta1');
 
     String url = zone_Sub == null || zone_Sub == '0'
         ? (zone_ser.toString() == 'null')
-            ? (Ser_BodySta1 == 0)
-                ? '${MyConstant().domain}/GC_trans_mitter.php?isAdd=true&ren=$ren&sertype=0&serzone=0'
-                : (Ser_BodySta1 == 1)
-                    ? '${MyConstant().domain}/GC_trans_mitter.php?isAdd=true&ren=$ren&sertype=1&serzone=0'
-                    : '${MyConstant().domain}/GC_trans_mitter.php?isAdd=true&ren=$ren&sertype=2&serzone=0'
-            : (Ser_BodySta1 == 0)
-                ? '${MyConstant().domain}/GC_trans_mitter.php?isAdd=true&ren=$ren&sertype=0&serzone=$zone_ser'
-                : (Ser_BodySta1 == 1)
-                    ? '${MyConstant().domain}/GC_trans_mitter.php?isAdd=true&ren=$ren&sertype=1&serzone=$zone_ser'
-                    : '${MyConstant().domain}/GC_trans_mitter.php?isAdd=true&ren=$ren&sertype=2&serzone=$zone_ser'
+            ? '${MyConstant().domain}/GC_trans_mitter.php?isAdd=true&ren=$ren&sertype=$Ser_BodySta1&serzone=0'
+            : '${MyConstant().domain}/GC_trans_mitter.php?isAdd=true&ren=$ren&sertype=$Ser_BodySta1&serzone=$zone_ser'
         : (zone_ser.toString() == 'null')
-            ? (Ser_BodySta1 == 0)
-                ? '${MyConstant().domain}/GC_trans_mitter_sub.php?isAdd=true&ren=$ren&sertype=0&serzone=0&serzonesub=$zone_Sub'
-                : (Ser_BodySta1 == 1)
-                    ? '${MyConstant().domain}/GC_trans_mitter_sub.php?isAdd=true&ren=$ren&sertype=1&serzone=0&serzonesub=$zone_Sub'
-                    : '${MyConstant().domain}/GC_trans_mitter_sub.php?isAdd=true&ren=$ren&sertype=2&serzone=0&serzonesub=$zone_Sub'
-            : (Ser_BodySta1 == 0)
-                ? '${MyConstant().domain}/GC_trans_mitter_sub.php?isAdd=true&ren=$ren&sertype=0&serzone=$zone_ser&serzonesub=$zone_Sub'
-                : (Ser_BodySta1 == 1)
-                    ? '${MyConstant().domain}/GC_trans_mitter_sub.php?isAdd=true&ren=$ren&sertype=1&serzone=$zone_ser&serzonesub=$zone_Sub'
-                    : '${MyConstant().domain}/GC_trans_mitter_sub.php?isAdd=true&ren=$ren&sertype=2&serzone=$zone_ser&serzonesub=$zone_Sub';
+            ? '${MyConstant().domain}/GC_trans_mitter_sub.php?isAdd=true&ren=$ren&sertype=$Ser_BodySta1&serzone=0&serzonesub=$zone_Sub'
+            : '${MyConstant().domain}/GC_trans_mitter_sub.php?isAdd=true&ren=$ren&sertype=$Ser_BodySta1&serzone=$zone_ser&serzonesub=$zone_Sub';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -452,38 +457,38 @@ class _ManageScreenState extends State<ManageScreen> {
     );
   }
 
-  Future<Null> red_Trans_bill_exp(int expser) async {
-    if (transMeterModels.length != 0) {
-      setState(() {
-        transMeterModels.clear();
-      });
-    }
+  // Future<Null> red_Trans_bill_exp(int expser) async {
+  //   if (transMeterModels.length != 0) {
+  //     setState(() {
+  //       transMeterModels.clear();
+  //     });
+  //   }
 
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var ren = preferences.getString('renTalSer');
-    // var ciddoc = widget.Get_Value_cid;
-    // var qutser = widget.Get_Value_NameShop_index;
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   var ren = preferences.getString('renTalSer');
+  //   // var ciddoc = widget.Get_Value_cid;
+  //   // var qutser = widget.Get_Value_NameShop_index;
 
-    String url = expser == 0
-        ? '${MyConstant().domain}/GC_trans_mitter.php?isAdd=true&ren=$ren'
-        : '${MyConstant().domain}/GC_expser.php?isAdd=true&ren=$ren&expser=$expser';
-    try {
-      var response = await http.get(Uri.parse(url));
+  //   String url = expser == 0
+  //       ? '${MyConstant().domain}/GC_trans_mitter.php?isAdd=true&ren=$ren'
+  //       : '${MyConstant().domain}/GC_expser.php?isAdd=true&ren=$ren&expser=$expser';
+  //   try {
+  //     var response = await http.get(Uri.parse(url));
 
-      var result = json.decode(response.body);
-      // print('result $ciddoc');
-      if (result.toString() != 'null') {
-        for (var map in result) {
-          TransMeterModel transMeterModel = TransMeterModel.fromJson(map);
-          setState(() {
-            transMeterModels.add(transMeterModel);
+  //     var result = json.decode(response.body);
+  //     // print('result $ciddoc');
+  //     if (result.toString() != 'null') {
+  //       for (var map in result) {
+  //         TransMeterModel transMeterModel = TransMeterModel.fromJson(map);
+  //         setState(() {
+  //           transMeterModels.add(transMeterModel);
 
-            // _TransBillModels.add(_TransBillModel);
-          });
-        }
-      }
-    } catch (e) {}
-  }
+  //           // _TransBillModels.add(_TransBillModel);
+  //         });
+  //       }
+  //     }
+  //   } catch (e) {}
+  // }
 
   Future<Null> red_exp_sz() async {
     if (expSZModels.length != 0) {
@@ -682,11 +687,16 @@ class _ManageScreenState extends State<ManageScreen> {
         if (Status_ == 1) {
           setState(() {
             transMeterModels = _transMeterModels.where((transMeterModels) {
-              var notTitle = transMeterModels.ln.toString().toLowerCase();
-              var notTitle2 = transMeterModels.sname.toString().toLowerCase();
+                           var notTitle = transMeterModels.ln.toString();
+              var notTitle2 = transMeterModels.sname.toString();
               var notTitle3 =
-                  transMeterModels.num_meter.toString().toLowerCase();
-              var notTitle4 = transMeterModels.refno.toString().toLowerCase();
+                  transMeterModels.num_meter.toString();
+              var notTitle4 = transMeterModels.refno.toString();
+              // var notTitle = transMeterModels.ln.toString().toLowerCase();
+              // var notTitle2 = transMeterModels.sname.toString().toLowerCase();
+              // var notTitle3 =
+              //     transMeterModels.num_meter.toString().toLowerCase();
+              // var notTitle4 = transMeterModels.refno.toString().toLowerCase();
               return notTitle.contains(text) ||
                   notTitle2.contains(text) ||
                   notTitle3.contains(text) ||
@@ -696,8 +706,10 @@ class _ManageScreenState extends State<ManageScreen> {
         } else if (Status_ == 2) {
           setState(() {
             maintenanceModels = _maintenanceModels.where((maintenanceModelss) {
-              var notTitle = maintenanceModelss.lncode.toString().toLowerCase();
-              var notTitle2 = maintenanceModelss.sname.toString().toLowerCase();
+                    var notTitle = maintenanceModelss.lncode.toString();
+              var notTitle2 = maintenanceModelss.sname.toString();
+              // var notTitle = maintenanceModelss.lncode.toString().toLowerCase();
+              // var notTitle2 = maintenanceModelss.sname.toString().toLowerCase();
 
               return notTitle.contains(text) || notTitle2.contains(text);
             }).toList();
@@ -1430,7 +1442,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                           // red_Trans_bill_exp(0);
                                         });
                                         print(Status_);
-                                        red_Trans_bill_exp(0);
+                                        // red_Trans_bill_exp(0);
                                         red_Trans_c_maintenance_exp(0);
                                         checkPreferance();
                                         red_Trans_bill();
@@ -1495,178 +1507,195 @@ class _ManageScreenState extends State<ManageScreen> {
                                           Container(
                                             child: Row(
                                               children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: InkWell(
-                                                    child: Container(
-                                                      width: 100,
-                                                      decoration: BoxDecoration(
-                                                        color:
-                                                            Colors.brown[400],
-                                                        borderRadius:
-                                                            const BorderRadius
-                                                                .only(
-                                                          topLeft:
-                                                              Radius.circular(
-                                                                  10),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  10),
-                                                          bottomLeft:
-                                                              Radius.circular(
-                                                                  10),
-                                                          bottomRight:
-                                                              Radius.circular(
-                                                                  10),
+                                                for (int index = 0;
+                                                    index < expSZModels.length;
+                                                    index++)
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: InkWell(
+                                                      child: Container(
+                                                        width: 100,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: (index == 0)
+                                                              ? Colors
+                                                                  .brown[400]
+                                                              : (index == 1)
+                                                                  ? Colors.red
+                                                                  : (index == 2)
+                                                                      ? Colors
+                                                                          .blue
+                                                                      : Colors.purple[
+                                                                          400],
+                                                          borderRadius:
+                                                              const BorderRadius
+                                                                  .only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                          ),
                                                         ),
-                                                      ),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              4.0),
-                                                      child: Center(
-                                                        child: Text(
-                                                          'ทั้งหมด',
-                                                          style: TextStyle(
-                                                            // fontSize: 15,
-                                                            color:
-                                                                (Ser_BodySta1 ==
-                                                                        0)
-                                                                    ? Colors
-                                                                        .white
-                                                                    : Colors.grey[
-                                                                        800],
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T,
+                                                        padding:
+                                                            EdgeInsets.all(4.0),
+                                                        child: Center(
+                                                          child: Text(
+                                                            '${expSZModels[index].expname}',
+                                                            style: TextStyle(
+                                                              // fontSize: 15,
+                                                              color: (Ser_BodySta1 ==
+                                                                      int.parse(
+                                                                          expSZModels[index]
+                                                                              .ser!))
+                                                                  ? Colors.white
+                                                                  : Colors.grey[
+                                                                      800],
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
+                                                      onTap: () {
+                                                        setState(() {
+                                                          Ser_BodySta1 =
+                                                              int.parse(
+                                                                  expSZModels[
+                                                                          index]
+                                                                      .ser!);
+                                                        });
+                                                        red_Trans_bill();
+                                                      },
                                                     ),
-                                                    onTap: () {
-                                                      setState(() {
-                                                        Ser_BodySta1 = 0;
-                                                      });
-                                                      red_Trans_bill();
-                                                    },
                                                   ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: InkWell(
-                                                    child: Container(
-                                                      width: 100,
-                                                      decoration:
-                                                          const BoxDecoration(
-                                                        color: Colors.red,
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                          topLeft:
-                                                              Radius.circular(
-                                                                  10),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  10),
-                                                          bottomLeft:
-                                                              Radius.circular(
-                                                                  10),
-                                                          bottomRight:
-                                                              Radius.circular(
-                                                                  10),
-                                                        ),
-                                                      ),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              4.0),
-                                                      child: Center(
-                                                        child: Text(
-                                                          'ไฟฟ้า',
-                                                          style: TextStyle(
-                                                            // fontSize: 15,
-                                                            color:
-                                                                (Ser_BodySta1 ==
-                                                                        1)
-                                                                    ? Colors
-                                                                        .white
-                                                                    : Colors.grey[
-                                                                        800],
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    onTap: () {
-                                                      setState(() {
-                                                        Ser_BodySta1 = 1;
-                                                      });
-                                                      red_Trans_bill();
-                                                    },
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: InkWell(
-                                                    child: Container(
-                                                      width: 100,
-                                                      decoration:
-                                                          const BoxDecoration(
-                                                        color: Colors.blue,
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                          topLeft:
-                                                              Radius.circular(
-                                                                  10),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  10),
-                                                          bottomLeft:
-                                                              Radius.circular(
-                                                                  10),
-                                                          bottomRight:
-                                                              Radius.circular(
-                                                                  10),
-                                                        ),
-                                                      ),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              4.0),
-                                                      child: Center(
-                                                        child: Text(
-                                                          'น้ำ',
-                                                          style: TextStyle(
-                                                            // fontSize: 15,
-                                                            color:
-                                                                (Ser_BodySta1 ==
-                                                                        2)
-                                                                    ? Colors
-                                                                        .white
-                                                                    : Colors.grey[
-                                                                        800],
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    onTap: () {
-                                                      setState(() {
-                                                        Ser_BodySta1 = 2;
-                                                      });
-                                                      red_Trans_bill();
-                                                    },
-                                                  ),
-                                                ),
+                                                // Padding(
+                                                //   padding:
+                                                //       const EdgeInsets.all(8.0),
+                                                //   child: InkWell(
+                                                //     child: Container(
+                                                //       width: 100,
+                                                //       decoration:
+                                                //           const BoxDecoration(
+                                                //         color: Colors.red,
+                                                //         borderRadius:
+                                                //             BorderRadius.only(
+                                                //           topLeft:
+                                                //               Radius.circular(
+                                                //                   10),
+                                                //           topRight:
+                                                //               Radius.circular(
+                                                //                   10),
+                                                //           bottomLeft:
+                                                //               Radius.circular(
+                                                //                   10),
+                                                //           bottomRight:
+                                                //               Radius.circular(
+                                                //                   10),
+                                                //         ),
+                                                //       ),
+                                                //       padding:
+                                                //           const EdgeInsets.all(
+                                                //               4.0),
+                                                //       child: Center(
+                                                //         child: Text(
+                                                //           'ไฟฟ้า',
+                                                //           style: TextStyle(
+                                                //             // fontSize: 15,
+                                                //             color:
+                                                //                 (Ser_BodySta1 ==
+                                                //                         1)
+                                                //                     ? Colors
+                                                //                         .white
+                                                //                     : Colors.grey[
+                                                //                         800],
+                                                //             fontWeight:
+                                                //                 FontWeight.bold,
+                                                //             fontFamily:
+                                                //                 FontWeight_
+                                                //                     .Fonts_T,
+                                                //           ),
+                                                //         ),
+                                                //       ),
+                                                //     ),
+                                                //     onTap: () {
+                                                //       setState(() {
+                                                //         Ser_BodySta1 = 1;
+                                                //       });
+                                                //       red_Trans_bill();
+                                                //     },
+                                                //   ),
+                                                // ),
+                                                // Padding(
+                                                //   padding:
+                                                //       const EdgeInsets.all(8.0),
+                                                //   child: InkWell(
+                                                //     child: Container(
+                                                //       width: 100,
+                                                //       decoration:
+                                                //           const BoxDecoration(
+                                                //         color: Colors.blue,
+                                                //         borderRadius:
+                                                //             BorderRadius.only(
+                                                //           topLeft:
+                                                //               Radius.circular(
+                                                //                   10),
+                                                //           topRight:
+                                                //               Radius.circular(
+                                                //                   10),
+                                                //           bottomLeft:
+                                                //               Radius.circular(
+                                                //                   10),
+                                                //           bottomRight:
+                                                //               Radius.circular(
+                                                //                   10),
+                                                //         ),
+                                                //       ),
+                                                //       padding:
+                                                //           const EdgeInsets.all(
+                                                //               4.0),
+                                                //       child: Center(
+                                                //         child: Text(
+                                                //           'น้ำ',
+                                                //           style: TextStyle(
+                                                //             // fontSize: 15,
+                                                //             color:
+                                                //                 (Ser_BodySta1 ==
+                                                //                         2)
+                                                //                     ? Colors
+                                                //                         .white
+                                                //                     : Colors.grey[
+                                                //                         800],
+                                                //             fontWeight:
+                                                //                 FontWeight.bold,
+                                                //             fontFamily:
+                                                //                 FontWeight_
+                                                //                     .Fonts_T,
+                                                //           ),
+                                                //         ),
+                                                //       ),
+                                                //     ),
+                                                //     onTap: () {
+                                                //       setState(() {
+                                                //         Ser_BodySta1 = 2;
+                                                //       });
+                                                //       red_Trans_bill();
+                                                //     },
+                                                //   ),
+                                                // ),
                                               ],
                                             ),
                                           ),
@@ -1712,7 +1741,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                                               AppbackgroundColor
                                                                   .Sub_Abg_Colors,
                                                           borderRadius: const BorderRadius
-                                                                  .only(
+                                                              .only(
                                                               topLeft: Radius
                                                                   .circular(10),
                                                               topRight: Radius
@@ -1811,12 +1840,20 @@ class _ManageScreenState extends State<ManageScreen> {
                                                                       print(
                                                                           'mmmmm ${zoneSer.toString()} $zonesName');
 
+                                                                      // setState(
+                                                                      //     () {
+
+                                                                      // red_Trans_bill_exp(
+                                                                      //     int.parse(zoneSer));
+                                                                      // });
+
                                                                       setState(
                                                                           () {
                                                                         typezonesName =
                                                                             zonesName;
-                                                                        red_Trans_bill_exp(
-                                                                            int.parse(zoneSer));
+                                                                        Ser_BodySta1 =
+                                                                            int.parse(zoneSer);
+                                                                        red_Trans_bill();
                                                                       });
                                                                     } else {}
                                                                   },
@@ -2015,332 +2052,329 @@ class _ManageScreenState extends State<ManageScreen> {
                                                                 ],
                                                               )),
                                                           onTap: () {
-                                                            showDialog(
-                                                                context:
-                                                                    context,
-                                                                barrierDismissible:
-                                                                    false, // user must tap button!
-                                                                builder:
-                                                                    (BuildContext
-                                                                        context) {
-                                                                  return AlertDialog(
-                                                                    shape: const RoundedRectangleBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.all(Radius.circular(20.0))),
-                                                                    title:
-                                                                        Column(
-                                                                      children: [
-                                                                        Row(
-                                                                          children: [
-                                                                            Expanded(
-                                                                                flex: 1,
-                                                                                child: Row(
-                                                                                  mainAxisAlignment: MainAxisAlignment.end,
-                                                                                  children: [],
-                                                                                )),
-                                                                            Expanded(
-                                                                              flex: 4,
-                                                                              child: Text(
-                                                                                'วางบิล น้ำ-ไฟ เดือน ${DateFormat.MMM('th_TH').format(datex)}',
-                                                                                textAlign: TextAlign.center,
-                                                                                style: TextStyle(
-                                                                                  // fontSize: 20,
-                                                                                  color: SettingScreen_Color.Colors_Text1_,
-                                                                                  fontFamily: FontWeight_.Fonts_T,
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                            Expanded(
-                                                                                flex: 1,
-                                                                                child: Row(
-                                                                                  mainAxisAlignment: MainAxisAlignment.end,
-                                                                                  children: [
-                                                                                    IconButton(
-                                                                                        onPressed: () {
-                                                                                          Navigator.of(context).pop();
-                                                                                        },
-                                                                                        icon: Icon(Icons.close)),
-                                                                                  ],
-                                                                                )),
-                                                                          ],
-                                                                        ),
-                                                                        Divider(),
-                                                                        Container(
-                                                                          color: Colors
-                                                                              .indigo
-                                                                              .shade100,
-                                                                          child:
-                                                                              Padding(
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                Row(
-                                                                              children: [
-                                                                                Expanded(
-                                                                                  child: Text(
-                                                                                    'รหัสพื้นที่',
-                                                                                    textAlign: TextAlign.center,
-                                                                                    style: TextStyle(
-                                                                                      color: SettingScreen_Color.Colors_Text1_,
-                                                                                      fontFamily: Font_.Fonts_T,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                                Expanded(
-                                                                                  child: Text(
-                                                                                    'เลขที่สัญญา',
-                                                                                    textAlign: TextAlign.center,
-                                                                                    style: TextStyle(
-                                                                                      color: SettingScreen_Color.Colors_Text1_,
-                                                                                      fontFamily: Font_.Fonts_T,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                                Expanded(
-                                                                                  child: Text(
-                                                                                    'ชื่อร้านค้า',
-                                                                                    textAlign: TextAlign.center,
-                                                                                    style: TextStyle(
-                                                                                      color: SettingScreen_Color.Colors_Text1_,
-                                                                                      fontFamily: Font_.Fonts_T,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                                Expanded(
-                                                                                  child: Text(
-                                                                                    'รายการ',
-                                                                                    textAlign: TextAlign.center,
-                                                                                    style: TextStyle(
-                                                                                      color: SettingScreen_Color.Colors_Text1_,
-                                                                                      fontFamily: Font_.Fonts_T,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                                Expanded(
-                                                                                  child: Text(
-                                                                                    'เลขเครื่อง',
-                                                                                    textAlign: TextAlign.center,
-                                                                                    style: TextStyle(
-                                                                                      color: SettingScreen_Color.Colors_Text1_,
-                                                                                      fontFamily: Font_.Fonts_T,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                                Expanded(
-                                                                                  child: Text(
-                                                                                    'เลขครั้งก่อน',
-                                                                                    textAlign: TextAlign.center,
-                                                                                    style: TextStyle(
-                                                                                      color: SettingScreen_Color.Colors_Text1_,
-                                                                                      fontFamily: Font_.Fonts_T,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                                Expanded(
-                                                                                  child: Text(
-                                                                                    'เลขปัจจุบัน',
-                                                                                    textAlign: TextAlign.center,
-                                                                                    style: TextStyle(
-                                                                                      color: SettingScreen_Color.Colors_Text1_,
-                                                                                      fontFamily: Font_.Fonts_T,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                                Expanded(
-                                                                                  child: Text(
-                                                                                    'หน่วยที่ใช้',
-                                                                                    textAlign: TextAlign.center,
-                                                                                    style: TextStyle(
-                                                                                      color: SettingScreen_Color.Colors_Text1_,
-                                                                                      fontFamily: Font_.Fonts_T,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                                Expanded(
-                                                                                  child: Text(
-                                                                                    'ยอดชำระ',
-                                                                                    textAlign: TextAlign.center,
-                                                                                    style: TextStyle(
-                                                                                      color: SettingScreen_Color.Colors_Text1_,
-                                                                                      fontFamily: Font_.Fonts_T,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                    content:
-                                                                        Container(
-                                                                      width: MediaQuery.of(context)
-                                                                              .size
-                                                                              .width *
-                                                                          0.8,
-                                                                      height: MediaQuery.of(context)
-                                                                              .size
-                                                                              .width *
-                                                                          0.5,
-                                                                      child:
-                                                                          SingleChildScrollView(
-                                                                        child:
-                                                                            Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(10.0),
-                                                                          child:
-                                                                              Column(
-                                                                            children: [
-                                                                              for (int index = 0; index < transMeterModels.length; index++)
-                                                                                if (transMeterModels[index].nvalue != '0')
-                                                                                  Row(
-                                                                                    children: [
-                                                                                      Expanded(
-                                                                                        child: Text(
-                                                                                          '${transMeterModels[index].ln}',
-                                                                                          textAlign: TextAlign.start,
-                                                                                          style: TextStyle(
-                                                                                            color: SettingScreen_Color.Colors_Text1_,
-                                                                                            fontFamily: Font_.Fonts_T,
-                                                                                          ),
-                                                                                        ),
-                                                                                      ),
-                                                                                      Expanded(
-                                                                                        child: Text(
-                                                                                          '${transMeterModels[index].refno}',
-                                                                                          textAlign: TextAlign.start,
-                                                                                          style: TextStyle(
-                                                                                            color: SettingScreen_Color.Colors_Text1_,
-                                                                                            fontFamily: Font_.Fonts_T,
-                                                                                          ),
-                                                                                        ),
-                                                                                      ),
-                                                                                      Expanded(
-                                                                                        child: Text(
-                                                                                          '${transMeterModels[index].sname}',
-                                                                                          textAlign: TextAlign.start,
-                                                                                          style: TextStyle(
-                                                                                            color: SettingScreen_Color.Colors_Text1_,
-                                                                                            fontFamily: Font_.Fonts_T,
-                                                                                          ),
-                                                                                        ),
-                                                                                      ),
-                                                                                      Expanded(
-                                                                                        child: Text(
-                                                                                          '${transMeterModels[index].expname}',
-                                                                                          textAlign: TextAlign.start,
-                                                                                          style: TextStyle(
-                                                                                            color: SettingScreen_Color.Colors_Text1_,
-                                                                                            fontFamily: Font_.Fonts_T,
-                                                                                          ),
-                                                                                        ),
-                                                                                      ),
-                                                                                      Expanded(
-                                                                                        child: Text(
-                                                                                          '${transMeterModels[index].num_meter}',
-                                                                                          textAlign: TextAlign.start,
-                                                                                          style: TextStyle(
-                                                                                            color: SettingScreen_Color.Colors_Text1_,
-                                                                                            fontFamily: Font_.Fonts_T,
-                                                                                          ),
-                                                                                        ),
-                                                                                      ),
-                                                                                      Expanded(
-                                                                                        child: Text(
-                                                                                          '${transMeterModels[index].ovalue}',
-                                                                                          textAlign: TextAlign.center,
-                                                                                          style: TextStyle(
-                                                                                            color: SettingScreen_Color.Colors_Text1_,
-                                                                                            fontFamily: Font_.Fonts_T,
-                                                                                          ),
-                                                                                        ),
-                                                                                      ),
-                                                                                      Expanded(
-                                                                                        child: Text(
-                                                                                          '${transMeterModels[index].nvalue}',
-                                                                                          textAlign: TextAlign.center,
-                                                                                          style: TextStyle(
-                                                                                            color: SettingScreen_Color.Colors_Text1_,
-                                                                                            fontFamily: Font_.Fonts_T,
-                                                                                          ),
-                                                                                        ),
-                                                                                      ),
-                                                                                      Expanded(
-                                                                                        child: Text(
-                                                                                          '${transMeterModels[index].qty}',
-                                                                                          textAlign: TextAlign.center,
-                                                                                          style: TextStyle(
-                                                                                            color: SettingScreen_Color.Colors_Text1_,
-                                                                                            fontFamily: Font_.Fonts_T,
-                                                                                          ),
-                                                                                        ),
-                                                                                      ),
-                                                                                      Expanded(
-                                                                                        child: Text(
-                                                                                          '${transMeterModels[index].c_amt}',
-                                                                                          textAlign: TextAlign.end,
-                                                                                          style: TextStyle(
-                                                                                            color: SettingScreen_Color.Colors_Text1_,
-                                                                                            fontFamily: Font_.Fonts_T,
-                                                                                          ),
-                                                                                        ),
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
-                                                                            ],
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    actions: <Widget>[
-                                                                      Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.end,
+                                                            if (renTal_lavel <=
+                                                                1) {
+                                                              infomation();
+                                                            } else {
+                                                              showDialog(
+                                                                  context:
+                                                                      context,
+                                                                  barrierDismissible:
+                                                                      false, // user must tap button!
+                                                                  builder:
+                                                                      (BuildContext
+                                                                          context) {
+                                                                    return AlertDialog(
+                                                                      shape: const RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.all(Radius.circular(20.0))),
+                                                                      title:
+                                                                          Column(
                                                                         children: [
-                                                                          Container(
-                                                                            child: Padding(
-                                                                                padding: const EdgeInsets.all(8.0),
+                                                                          Row(
+                                                                            children: [
+                                                                              Expanded(
+                                                                                  flex: 1,
+                                                                                  child: Row(
+                                                                                    mainAxisAlignment: MainAxisAlignment.end,
+                                                                                    children: [],
+                                                                                  )),
+                                                                              Expanded(
+                                                                                flex: 4,
                                                                                 child: Text(
-                                                                                  '***หมายเหตุ เลขที่สัญญาเดียวกันจะรวมบิลอัตโนมัติ  ',
+                                                                                  'วางบิล น้ำ-ไฟ เดือน ${DateFormat.MMM('th_TH').format(datex)}',
                                                                                   textAlign: TextAlign.center,
                                                                                   style: TextStyle(
-                                                                                    color: Colors.red,
-                                                                                    fontFamily: Font_.Fonts_T,
+                                                                                    // fontSize: 20,
+                                                                                    color: SettingScreen_Color.Colors_Text1_,
+                                                                                    fontFamily: FontWeight_.Fonts_T,
                                                                                   ),
-                                                                                )),
+                                                                                ),
+                                                                              ),
+                                                                              Expanded(
+                                                                                  flex: 1,
+                                                                                  child: Row(
+                                                                                    mainAxisAlignment: MainAxisAlignment.end,
+                                                                                    children: [
+                                                                                      IconButton(
+                                                                                          onPressed: () {
+                                                                                            Navigator.of(context).pop();
+                                                                                          },
+                                                                                          icon: Icon(Icons.close)),
+                                                                                    ],
+                                                                                  )),
+                                                                            ],
                                                                           ),
+                                                                          Divider(),
                                                                           Container(
+                                                                            color:
+                                                                                Colors.indigo.shade100,
                                                                             child:
                                                                                 Padding(
                                                                               padding: const EdgeInsets.all(8.0),
-                                                                              child: InkWell(
-                                                                                child: Container(
-                                                                                    width: 200,
-                                                                                    decoration: const BoxDecoration(
-                                                                                      color: Colors.black,
-                                                                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                      // border: Border.all(color: Colors.white, width: 1),
-                                                                                    ),
-                                                                                    padding: const EdgeInsets.all(8.0),
-                                                                                    child: const Center(
-                                                                                        child: Text(
-                                                                                      'บันทึกวางบิล',
+                                                                              child: Row(
+                                                                                children: [
+                                                                                  Expanded(
+                                                                                    child: Text(
+                                                                                      'รหัสพื้นที่',
                                                                                       textAlign: TextAlign.center,
-                                                                                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
-                                                                                          //fontSize: 10.0
-                                                                                          ),
-                                                                                    ))),
-                                                                                onTap: () {
-                                                                                  in_Trans_invoice().then((value) => Navigator.of(context).pop());
-                                                                                },
+                                                                                      style: TextStyle(
+                                                                                        color: SettingScreen_Color.Colors_Text1_,
+                                                                                        fontFamily: Font_.Fonts_T,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                  Expanded(
+                                                                                    child: Text(
+                                                                                      'เลขที่สัญญา',
+                                                                                      textAlign: TextAlign.center,
+                                                                                      style: TextStyle(
+                                                                                        color: SettingScreen_Color.Colors_Text1_,
+                                                                                        fontFamily: Font_.Fonts_T,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                  Expanded(
+                                                                                    child: Text(
+                                                                                      'ชื่อร้านค้า',
+                                                                                      textAlign: TextAlign.center,
+                                                                                      style: TextStyle(
+                                                                                        color: SettingScreen_Color.Colors_Text1_,
+                                                                                        fontFamily: Font_.Fonts_T,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                  Expanded(
+                                                                                    child: Text(
+                                                                                      'รายการ',
+                                                                                      textAlign: TextAlign.center,
+                                                                                      style: TextStyle(
+                                                                                        color: SettingScreen_Color.Colors_Text1_,
+                                                                                        fontFamily: Font_.Fonts_T,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                  Expanded(
+                                                                                    child: Text(
+                                                                                      'เลขเครื่อง',
+                                                                                      textAlign: TextAlign.center,
+                                                                                      style: TextStyle(
+                                                                                        color: SettingScreen_Color.Colors_Text1_,
+                                                                                        fontFamily: Font_.Fonts_T,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                  Expanded(
+                                                                                    child: Text(
+                                                                                      'เลขครั้งก่อน',
+                                                                                      textAlign: TextAlign.center,
+                                                                                      style: TextStyle(
+                                                                                        color: SettingScreen_Color.Colors_Text1_,
+                                                                                        fontFamily: Font_.Fonts_T,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                  Expanded(
+                                                                                    child: Text(
+                                                                                      'เลขปัจจุบัน',
+                                                                                      textAlign: TextAlign.center,
+                                                                                      style: TextStyle(
+                                                                                        color: SettingScreen_Color.Colors_Text1_,
+                                                                                        fontFamily: Font_.Fonts_T,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                  Expanded(
+                                                                                    child: Text(
+                                                                                      'หน่วยที่ใช้',
+                                                                                      textAlign: TextAlign.center,
+                                                                                      style: TextStyle(
+                                                                                        color: SettingScreen_Color.Colors_Text1_,
+                                                                                        fontFamily: Font_.Fonts_T,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                  Expanded(
+                                                                                    child: Text(
+                                                                                      'ยอดชำระ',
+                                                                                      textAlign: TextAlign.center,
+                                                                                      style: TextStyle(
+                                                                                        color: SettingScreen_Color.Colors_Text1_,
+                                                                                        fontFamily: Font_.Fonts_T,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
                                                                               ),
                                                                             ),
                                                                           ),
                                                                         ],
                                                                       ),
-                                                                    ],
-                                                                  );
-                                                                });
+                                                                      content:
+                                                                          Container(
+                                                                        width: MediaQuery.of(context).size.width *
+                                                                            0.8,
+                                                                        height: MediaQuery.of(context).size.width *
+                                                                            0.5,
+                                                                        child:
+                                                                            SingleChildScrollView(
+                                                                          child:
+                                                                              Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.all(10.0),
+                                                                            child:
+                                                                                Column(
+                                                                              children: [
+                                                                                for (int index = 0; index < transMeterModels.length; index++)
+                                                                                  if (transMeterModels[index].nvalue != '0')
+                                                                                    Row(
+                                                                                      children: [
+                                                                                        Expanded(
+                                                                                          child: Text(
+                                                                                            '${transMeterModels[index].ln}',
+                                                                                            textAlign: TextAlign.start,
+                                                                                            style: TextStyle(
+                                                                                              color: SettingScreen_Color.Colors_Text1_,
+                                                                                              fontFamily: Font_.Fonts_T,
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                        Expanded(
+                                                                                          child: Text(
+                                                                                            '${transMeterModels[index].refno}',
+                                                                                            textAlign: TextAlign.start,
+                                                                                            style: TextStyle(
+                                                                                              color: SettingScreen_Color.Colors_Text1_,
+                                                                                              fontFamily: Font_.Fonts_T,
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                        Expanded(
+                                                                                          child: Text(
+                                                                                            '${transMeterModels[index].sname}',
+                                                                                            textAlign: TextAlign.start,
+                                                                                            style: TextStyle(
+                                                                                              color: SettingScreen_Color.Colors_Text1_,
+                                                                                              fontFamily: Font_.Fonts_T,
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                        Expanded(
+                                                                                          child: Text(
+                                                                                            '${transMeterModels[index].expname}',
+                                                                                            textAlign: TextAlign.start,
+                                                                                            style: TextStyle(
+                                                                                              color: SettingScreen_Color.Colors_Text1_,
+                                                                                              fontFamily: Font_.Fonts_T,
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                        Expanded(
+                                                                                          child: Text(
+                                                                                            '${transMeterModels[index].num_meter}',
+                                                                                            textAlign: TextAlign.start,
+                                                                                            style: TextStyle(
+                                                                                              color: SettingScreen_Color.Colors_Text1_,
+                                                                                              fontFamily: Font_.Fonts_T,
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                        Expanded(
+                                                                                          child: Text(
+                                                                                            '${transMeterModels[index].ovalue}',
+                                                                                            textAlign: TextAlign.center,
+                                                                                            style: TextStyle(
+                                                                                              color: SettingScreen_Color.Colors_Text1_,
+                                                                                              fontFamily: Font_.Fonts_T,
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                        Expanded(
+                                                                                          child: Text(
+                                                                                            '${transMeterModels[index].nvalue}',
+                                                                                            textAlign: TextAlign.center,
+                                                                                            style: TextStyle(
+                                                                                              color: SettingScreen_Color.Colors_Text1_,
+                                                                                              fontFamily: Font_.Fonts_T,
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                        Expanded(
+                                                                                          child: Text(
+                                                                                            '${transMeterModels[index].qty}',
+                                                                                            textAlign: TextAlign.center,
+                                                                                            style: TextStyle(
+                                                                                              color: SettingScreen_Color.Colors_Text1_,
+                                                                                              fontFamily: Font_.Fonts_T,
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                        Expanded(
+                                                                                          child: Text(
+                                                                                            '${transMeterModels[index].c_amt}',
+                                                                                            textAlign: TextAlign.end,
+                                                                                            style: TextStyle(
+                                                                                              color: SettingScreen_Color.Colors_Text1_,
+                                                                                              fontFamily: Font_.Fonts_T,
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      actions: <Widget>[
+                                                                        Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.end,
+                                                                          children: [
+                                                                            Container(
+                                                                              child: Padding(
+                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                  child: Text(
+                                                                                    '***หมายเหตุ เลขที่สัญญาเดียวกันจะรวมบิลอัตโนมัติ  ',
+                                                                                    textAlign: TextAlign.center,
+                                                                                    style: TextStyle(
+                                                                                      color: Colors.red,
+                                                                                      fontFamily: Font_.Fonts_T,
+                                                                                    ),
+                                                                                  )),
+                                                                            ),
+                                                                            Container(
+                                                                              child: Padding(
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: InkWell(
+                                                                                  child: Container(
+                                                                                      width: 200,
+                                                                                      decoration: const BoxDecoration(
+                                                                                        color: Colors.black,
+                                                                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                        // border: Border.all(color: Colors.white, width: 1),
+                                                                                      ),
+                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                      child: const Center(
+                                                                                          child: Text(
+                                                                                        'บันทึกวางบิล',
+                                                                                        textAlign: TextAlign.center,
+                                                                                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                            //fontSize: 10.0
+                                                                                            ),
+                                                                                      ))),
+                                                                                  onTap: () {
+                                                                                    in_Trans_invoice().then((value) => Navigator.of(context).pop());
+                                                                                  },
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ],
+                                                                    );
+                                                                  });
+                                                            }
                                                           },
                                                         ),
                                                       ],
@@ -2743,7 +2777,7 @@ class _ManageScreenState extends State<ManageScreen> {
                               ),
                               Container(
                                 height: 50,
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   color: AppbackgroundColor.TiTile_Colors,
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(0),
@@ -3087,7 +3121,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .fromLTRB(
+                                                                .fromLTRB(
                                                                 2, 0, 2, 0),
                                                         child: Text(
                                                           '${transMeterModels[index].ln}',
@@ -3112,7 +3146,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .fromLTRB(
+                                                                .fromLTRB(
                                                                 2, 0, 2, 0),
                                                         child: Text(
                                                           '${transMeterModels[index].refno}',
@@ -3137,7 +3171,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .fromLTRB(
+                                                                .fromLTRB(
                                                                 2, 0, 2, 0),
                                                         child: Text(
                                                           '${transMeterModels[index].sname}',
@@ -3162,7 +3196,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .fromLTRB(
+                                                                .fromLTRB(
                                                                 2, 0, 2, 0),
                                                         child: Text(
                                                           '${transMeterModels[index].expname} ${transMeterModels[index].date}',
@@ -3188,7 +3222,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .fromLTRB(
+                                                                .fromLTRB(
                                                                 2, 0, 2, 0),
                                                         child: Text(
                                                           '${transMeterModels[index].num_meter}',
@@ -3214,7 +3248,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .fromLTRB(
+                                                                .fromLTRB(
                                                                 2, 0, 2, 0),
                                                         child: Text(
                                                           '${nFormat.format(double.parse(transMeterModels[index].ovalue!))}',
@@ -3242,10 +3276,17 @@ class _ManageScreenState extends State<ManageScreen> {
                                                         child: SizedBox(
                                                           height: 40,
                                                           child: TextFormField(
-                                                            autofocus:
-                                                                tappedIndex_ +
+                                                            autofocus: renTal_lavel <=
+                                                                    1
+                                                                ? false
+                                                                : tappedIndex_ +
                                                                             1 ==
                                                                         index
+                                                                    ? true
+                                                                    : false,
+                                                            readOnly:
+                                                                renTal_lavel <=
+                                                                        1
                                                                     ? true
                                                                     : false,
                                                             // focusNode: myFocusNode,
@@ -3943,7 +3984,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                                         child: Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                      .fromLTRB(
+                                                                  .fromLTRB(
                                                                   8, 2, 8, 2),
                                                           child: InkWell(
                                                             child: Container(
@@ -3958,7 +3999,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                                                     : Colors
                                                                         .green,
                                                                 borderRadius: const BorderRadius
-                                                                        .only(
+                                                                    .only(
                                                                     topLeft:
                                                                         Radius.circular(
                                                                             10),
@@ -4001,35 +4042,40 @@ class _ManageScreenState extends State<ManageScreen> {
                                                               ),
                                                             ),
                                                             onTap: () {
-                                                              var doc =
-                                                                  transMeterModels[
-                                                                          index]
-                                                                      .docno;
-                                                              var cid =
-                                                                  transMeterModels[
-                                                                          index]
-                                                                      .refno;
-                                                              var ser =
-                                                                  transMeterModels[
-                                                                          index]
-                                                                      .ser;
-                                                              print(
-                                                                  '$ser /// $doc // $cid   //   ');
-
-                                                              if (transMeterModels[
-                                                                          index]
-                                                                      .img !=
-                                                                  '') {
-                                                                Dialog_img_Meter(
-                                                                    doc,
-                                                                    cid,
-                                                                    ser,
-                                                                    index);
+                                                              if (renTal_lavel <=
+                                                                  1) {
+                                                                infomation();
                                                               } else {
-                                                                uploadFile_Slip(
-                                                                    doc,
-                                                                    cid,
-                                                                    ser);
+                                                                var doc =
+                                                                    transMeterModels[
+                                                                            index]
+                                                                        .docno;
+                                                                var cid =
+                                                                    transMeterModels[
+                                                                            index]
+                                                                        .refno;
+                                                                var ser =
+                                                                    transMeterModels[
+                                                                            index]
+                                                                        .ser;
+                                                                print(
+                                                                    '$ser /// $doc // $cid   //   ');
+
+                                                                if (transMeterModels[
+                                                                            index]
+                                                                        .img !=
+                                                                    '') {
+                                                                  Dialog_img_Meter(
+                                                                      doc,
+                                                                      cid,
+                                                                      ser,
+                                                                      index);
+                                                                } else {
+                                                                  uploadFile_Slip(
+                                                                      doc,
+                                                                      cid,
+                                                                      ser);
+                                                                }
                                                               }
                                                             },
                                                           ),
@@ -4316,7 +4362,7 @@ class _ManageScreenState extends State<ManageScreen> {
                               ),
                               Container(
                                 height: 50,
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   color: AppbackgroundColor.TiTile_Colors,
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(0),
@@ -4732,8 +4778,9 @@ class _ManageScreenState extends State<ManageScreen> {
                                                                               .center,
                                                                       children: [
                                                                         Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               Row(
                                                                             mainAxisAlignment:
@@ -4855,8 +4902,9 @@ class _ManageScreenState extends State<ManageScreen> {
                                                                           ],
                                                                         ),
                                                                         Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               TextFormField(
                                                                             keyboardType:
@@ -4936,8 +4984,9 @@ class _ManageScreenState extends State<ManageScreen> {
                                                                               .center,
                                                                       children: [
                                                                         Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               Row(
                                                                             mainAxisAlignment:
@@ -5025,8 +5074,9 @@ class _ManageScreenState extends State<ManageScreen> {
                                                                           ),
                                                                         ),
                                                                         Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               Row(
                                                                             mainAxisAlignment:

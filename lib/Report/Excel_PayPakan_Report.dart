@@ -222,13 +222,15 @@ class Excgen_PayPakanReport {
     sheet.getRangeByName('K4').columnWidth = 18;
 
     sheet.getRangeByName('A4').setText('ลำดับ');
-    sheet.getRangeByName('B4').setText('โซน');
-    sheet.getRangeByName('C4').setText('เลขที่สัญญา');
-    sheet.getRangeByName('D4').setText('ชื่อร้านค้า');
-    sheet.getRangeByName('E4').setText('เลขที่ใบเสร็จ');
-    sheet.getRangeByName('F4').setText('วันที่');
-    sheet.getRangeByName('G4').setText('รูปแบบชำระ');
-    sheet.getRangeByName('H4').setText('ยอดคืนสุทธิ');
+    sheet.getRangeByName('B4').setText('เลขที่ใบเสร็จ');
+    sheet.getRangeByName('C4').setText('วันที่');
+    sheet.getRangeByName('D4').setText('โซน');
+    sheet.getRangeByName('E4').setText('รหัสพื้นที่');
+    sheet.getRangeByName('F4').setText('เลขที่สัญญา');
+    sheet.getRangeByName('G4').setText('ชื่อผู้ติดต่อ');
+    sheet.getRangeByName('H4').setText('ชื่อร้านค้า');
+    sheet.getRangeByName('I4').setText('รูปแบบชำระ');
+    sheet.getRangeByName('J4').setText('ยอดคืนสุทธิ');
     int index1 = 0;
     int indextotol = 0;
     List cid_number = [];
@@ -264,27 +266,34 @@ class Excgen_PayPakanReport {
           );
       sheet
           .getRangeByName('B${index + 5}')
-          .setText('${transKonModels[index].zn}');
+          .setText('${transKonModels[index].docno}');
+
+      sheet.getRangeByName('C${index + 5}').setText(
+          '${DateFormat('dd-MM').format(DateTime.parse('${transKonModels[index].pdate} 00:00:00'))}-${int.parse('${DateFormat('yyyy').format(DateTime.parse('${transKonModels[index].pdate} 00:00:00'))}') + 543}');
+      sheet.getRangeByName('D${index + 5}').setText(
+          (transKonModels[index].zn != null)
+              ? '${transKonModels[index].zn}'
+              : '${transKonModels[index].zn1}');
+      sheet
+          .getRangeByName('E${index + 5}')
+          .setText('${transKonModels[index].ln}');
 
       sheet
-          .getRangeByName('C${index + 5}')
+          .getRangeByName('F${index + 5}')
           .setText('${transKonModels[index].cid}');
-      sheet.getRangeByName('D${index + 5}').setText(
-            '${transKonModels[index].cname}',
-          );
-      sheet.getRangeByName('E${index + 5}').setText(
-            '${transKonModels[index].docno}',
-          );
 
-      sheet.getRangeByName('F${index + 5}').setText(
-            '${DateFormat('dd-MM').format(DateTime.parse('${transKonModels[index].pdate} 00:00:00'))}-${int.parse('${DateFormat('yyyy').format(DateTime.parse('${transKonModels[index].pdate} 00:00:00'))}') + 543}',
-          );
+      sheet
+          .getRangeByName('G${index + 5}')
+          .setText('${transKonModels[index].cname}');
 
-      sheet.getRangeByName('G${index + 5}').setText(
-            '${transKonModels[index].type}',
-          );
+      sheet
+          .getRangeByName('H${index + 5}')
+          .setText('${transKonModels[index].sname}');
 
-      sheet.getRangeByName('H${index + 5}').setNumber(
+      sheet
+          .getRangeByName('I${index + 5}')
+          .setText('${transKonModels[index].type}');
+      sheet.getRangeByName('J${index + 5}').setNumber(
             (transKonModels[index].total == null)
                 ? 0.00
                 : double.parse('${transKonModels[index].total}'),

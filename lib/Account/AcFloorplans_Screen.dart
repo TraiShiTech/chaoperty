@@ -966,7 +966,7 @@ class _AcFloorplans_ScreenState extends State<AcFloorplans_Screen> {
           Padding(
             padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
             child: Container(
-              decoration: const BoxDecoration(
+              decoration:  BoxDecoration(
                 color: AppbackgroundColor.TiTile_Colors,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(10),

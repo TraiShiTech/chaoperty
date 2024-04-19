@@ -156,23 +156,20 @@ class _CustomerScreenState extends State<CustomerScreen> {
       renTal_name = preferences.getString('renTalName');
     });
   }
-
   Future<Null> read_GC_rental() async {
     if (renTalModels.isNotEmpty) {
       renTalModels.clear();
     }
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
-    var utype = preferences.getString('utype');
-    var seruser = preferences.getString('ser');
     String url =
-        '${MyConstant().domain}/GC_rental.php?isAdd=true&ser=$seruser&type=$utype';
+        '${MyConstant().domain}/GC_rental_setring.php?isAdd=true&ren=$ren';
 
     try {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      // print(result);
+      //  print(result);
       if (result != null) {
         for (var map in result) {
           RenTalModel renTalModel = RenTalModel.fromJson(map);
@@ -186,7 +183,9 @@ class _CustomerScreenState extends State<CustomerScreen> {
           var foderx = renTalModel.dbn;
           var img = renTalModel.img;
           var imglogo = renTalModel.imglogo;
+          var open_set_datex = int.parse(renTalModel.open_set_date!);
           setState(() {
+            // open_set_date = open_set_datex == 0 ? 30 : open_set_datex;
             foder = foderx;
             rtname = rtnamex;
             type = typexs;
@@ -194,9 +193,11 @@ class _CustomerScreenState extends State<CustomerScreen> {
             renname = name;
             pkqty = pkqtyx;
             pkuser = pkuserx;
+            // DBN_ = renTalModel.dbn;
             pkname = pkx;
             img_ = img;
             img_logo = imglogo;
+            // ser_Floor_plans = renTalModel.Floor_plans!;
             renTalModels.add(renTalModel);
           });
         }
@@ -204,6 +205,53 @@ class _CustomerScreenState extends State<CustomerScreen> {
     } catch (e) {}
     print('name>>>>>  $renname');
   }
+  // Future<Null> read_GC_rental() async {
+  //   if (renTalModels.isNotEmpty) {
+  //     renTalModels.clear();
+  //   }
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   var ren = preferences.getString('renTalSer');
+  //   var utype = preferences.getString('utype');
+  //   var seruser = preferences.getString('ser');
+  //   String url =
+  //       '${MyConstant().domain}/GC_rental.php?isAdd=true&ser=$seruser&type=$utype';
+
+  //   try {
+  //     var response = await http.get(Uri.parse(url));
+
+  //     var result = json.decode(response.body);
+  //     // print(result);
+  //     if (result != null) {
+  //       for (var map in result) {
+  //         RenTalModel renTalModel = RenTalModel.fromJson(map);
+  //         var rtnamex = renTalModel.rtname;
+  //         var typexs = renTalModel.type;
+  //         var typexx = renTalModel.typex;
+  //         var name = renTalModel.pn!.trim();
+  //         var pkqtyx = int.parse(renTalModel.pkqty!);
+  //         var pkuserx = int.parse(renTalModel.pkuser!);
+  //         var pkx = renTalModel.pk!.trim();
+  //         var foderx = renTalModel.dbn;
+  //         var img = renTalModel.img;
+  //         var imglogo = renTalModel.imglogo;
+  //         setState(() {
+  //           foder = foderx;
+  //           rtname = rtnamex;
+  //           type = typexs;
+  //           typex = typexx;
+  //           renname = name;
+  //           pkqty = pkqtyx;
+  //           pkuser = pkuserx;
+  //           pkname = pkx;
+  //           img_ = img;
+  //           img_logo = imglogo;
+  //           renTalModels.add(renTalModel);
+  //         });
+  //       }
+  //     } else {}
+  //   } catch (e) {}
+  //   print('name>>>>>  $renname');
+  // }
 
   Future<Null> read_GC_Contract(custno_) async {
     if (contractModels.isNotEmpty) {
@@ -736,7 +784,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
 
               // print(customerModels.map((e) => e.docno));
               // print(_customerModels.map((e) => e.docno));
-
+///_customerModels
               setState(() {
                 customerModels = _customerModels.where((customerModel) {
                   var notTitle = customerModel.cname.toString().toLowerCase();
@@ -2746,9 +2794,9 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                             children: [
                                               Container(
                                                   padding:
-                                                      const EdgeInsets.all(5),
+                                                       EdgeInsets.all(5),
                                                   decoration:
-                                                      const BoxDecoration(
+                                                       BoxDecoration(
                                                     color: AppbackgroundColor
                                                         .TiTile_Colors,
                                                     borderRadius:
@@ -2914,7 +2962,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                           const EdgeInsets.all(
                                                               5),
                                                       decoration:
-                                                          const BoxDecoration(
+                                                           BoxDecoration(
                                                         color:
                                                             AppbackgroundColor
                                                                 .TiTile_Colors,
@@ -3652,7 +3700,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                     padding:
                                                         const EdgeInsets.all(5),
                                                     decoration:
-                                                        const BoxDecoration(
+                                                         BoxDecoration(
                                                       color: AppbackgroundColor
                                                           .TiTile_Colors,
                                                       borderRadius:
@@ -5605,7 +5653,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                   children: [
                                     Container(
                                         padding: const EdgeInsets.all(5),
-                                        decoration: const BoxDecoration(
+                                        decoration:  BoxDecoration(
                                           color:
                                               AppbackgroundColor.TiTile_Colors,
                                           borderRadius: BorderRadius.only(
@@ -5780,7 +5828,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               ? 80
                                                                               : 50,
                                                                           decoration:
-                                                                              const BoxDecoration(
+                                                                               BoxDecoration(
                                                                             color:
                                                                                 AppbackgroundColor.TiTile_Colors,
                                                                             borderRadius: BorderRadius.only(
@@ -6250,7 +6298,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               ? 80
                                                                               : 50,
                                                                           decoration:
-                                                                              const BoxDecoration(
+                                                                               BoxDecoration(
                                                                             color:
                                                                                 AppbackgroundColor.TiTile_Colors,
                                                                             borderRadius: BorderRadius.only(
@@ -6393,7 +6441,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               ? 80
                                                                               : 50,
                                                                           decoration:
-                                                                              const BoxDecoration(
+                                                                               BoxDecoration(
                                                                             color:
                                                                                 AppbackgroundColor.TiTile_Colors,
                                                                             borderRadius: BorderRadius.only(
@@ -6536,7 +6584,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               ? 80
                                                                               : 50,
                                                                           decoration:
-                                                                              const BoxDecoration(
+                                                                               BoxDecoration(
                                                                             color:
                                                                                 AppbackgroundColor.TiTile_Colors,
                                                                             borderRadius: BorderRadius.only(
@@ -6678,7 +6726,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               ? 80
                                                                               : 50,
                                                                           decoration:
-                                                                              const BoxDecoration(
+                                                                               BoxDecoration(
                                                                             color:
                                                                                 AppbackgroundColor.TiTile_Colors,
                                                                             borderRadius: BorderRadius.only(
@@ -6820,7 +6868,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               ? 80
                                                                               : 50,
                                                                           decoration:
-                                                                              const BoxDecoration(
+                                                                               BoxDecoration(
                                                                             color:
                                                                                 AppbackgroundColor.TiTile_Colors,
                                                                             borderRadius: BorderRadius.only(
@@ -6962,7 +7010,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               ? 80
                                                                               : 50,
                                                                           decoration:
-                                                                              const BoxDecoration(
+                                                                               BoxDecoration(
                                                                             color:
                                                                                 AppbackgroundColor.TiTile_Colors,
                                                                             borderRadius: BorderRadius.only(
@@ -7195,7 +7243,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                         )),
                                     Container(
                                       padding: const EdgeInsets.all(5),
-                                      decoration: const BoxDecoration(
+                                      decoration:  BoxDecoration(
                                         color: AppbackgroundColor.TiTile_Colors,
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(0),
@@ -7402,7 +7450,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                       //         .tappedIndex_Colors
                                                       //         .withOpacity(0.5)
                                                       //     : null,
-                                                      child: ListTile(
+                                                      child:ListTile(
                                                         onTap: () {
                                                           setState(() {
                                                             tappedIndex_2 =

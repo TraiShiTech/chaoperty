@@ -27,6 +27,12 @@ class Report_cm_ScreenC extends StatefulWidget {
 class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
   var nFormat = NumberFormat("#,##0.00", "en_US");
   var nFormat2 = NumberFormat("#,##0", "en_US");
+  int? Await_Status_Report1,
+      Await_Status_Report2,
+      Await_Status_Report3,
+      Await_Status_Report4,
+      Await_Status_Report5,
+      Await_Status_Report6;
   List<ZoneModel> zoneModels_report = [];
   List<ZoneModel> zoneModels_report_Sub_zone = [];
   List<ZoneModel> zoneModeels_report_Ser_Sub_zone = [];
@@ -122,7 +128,7 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       // Map<String, dynamic> map = Map();
       // map['ser'] = '0';
       // map['rser'] = '0';
@@ -184,7 +190,7 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
 
       for (var map in result) {
         ZoneModel zoneModel = ZoneModel.fromJson(map);
@@ -214,7 +220,7 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           ExpModel expModel = ExpModel.fromJson(map);
@@ -243,7 +249,7 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result.toString() != 'null') {
         for (var map in result) {
           TransReBillModelRECM transReBillModel =
@@ -255,7 +261,7 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
         }
       }
     } catch (e) {}
-    print('result ${_TransReBillModels_GropType_Mon[0].length}  ****');
+    // print('result ${_TransReBillModels_GropType_Mon[0].length}  ****');
   }
 
   Future<Null> red_Trans_bill_Groptype_Mon_Sub_zone() async {
@@ -273,7 +279,7 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result.toString() != 'null') {
         for (var map in result) {
           TransReBillModelRECM transReBillModel =
@@ -284,7 +290,7 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
           });
         }
 
-        print('result ${_TransReBillModels_GropType_Sub_zone[0].length}');
+        // print('result ${_TransReBillModels_GropType_Sub_zone[0].length}');
       }
     } catch (e) {}
   }
@@ -1111,11 +1117,14 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
   Future<Null> red_Trans_bill_Groptype_daly() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
+    setState(() {
+      Await_Status_Report2 = 0;
+    });
     for (int index = 0; index < 5; index++) {
       var NEW_Value_select_lastDate_Daily_Type_ = (index == 0)
           ? '${DateFormat('yyyy-MM-dd').format(DateTime.parse(Value_selectDate_Daily_Type_.toString()).add(Duration(days: 0)))}'
           : '${DateFormat('yyyy-MM-dd').format(DateTime.parse(Value_selectDate_Daily_Type_.toString()).add(Duration(days: index)))}';
-      print(NEW_Value_select_lastDate_Daily_Type_);
+      // print(NEW_Value_select_lastDate_Daily_Type_);
       if (_TransReBillModels_GropType_Mon[index].length != 0) {
         setState(() {
           _TransReBillModels_GropType_Mon[index].clear();
@@ -1128,7 +1137,7 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
         var response = await http.get(Uri.parse(url));
 
         var result = json.decode(response.body);
-        print(result);
+        // print(result);
         if (result.toString() != 'null') {
           for (var map in result) {
             TransReBillModelRECM transReBillModel =
@@ -1139,10 +1148,15 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
             });
           }
 
-          print('result ${_TransReBillModels_GropType_Mon[index].length}');
+          // print('result ${_TransReBillModels_GropType_Mon[index].length}');
         }
       } catch (e) {}
     }
+    Future.delayed(Duration(milliseconds: 700), () async {
+      setState(() {
+        Await_Status_Report2 = null;
+      });
+    });
   }
 
 ///////--------------------------------------------------->
@@ -1157,7 +1171,7 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
       var NEW_Value_select_lastDate_Daily_Type_ = (index == 0)
           ? '${DateFormat('yyyy-MM-dd').format(DateTime.parse(Value_selectDate_Daily_Type_.toString()).add(Duration(days: 0)))}'
           : '${DateFormat('yyyy-MM-dd').format(DateTime.parse(Value_selectDate_Daily_Type_.toString()).add(Duration(days: index)))}';
-      print(NEW_Value_select_lastDate_Daily_Type_);
+      // print(NEW_Value_select_lastDate_Daily_Type_);
       String url =
           '${MyConstant().domain}/GC_bill_pay_BC_DailyReport_CMma_type_Sub_zone.php?isAdd=true&ren=$ren&date=$NEW_Value_select_lastDate_Daily_Type_&ldate=$NEW_Value_select_lastDate_Daily_Type_';
       try {
@@ -1175,8 +1189,8 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
             });
           }
 
-          print(
-              'result $index / ${_TransReBillModels_GropType_Sub_zone[index].length}');
+          // print(
+          //     'result $index / ${_TransReBillModels_GropType_Sub_zone[index].length}');
         }
       } catch (e) {}
     }
@@ -1220,7 +1234,7 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
       if (picked != null) {
         // TransReBillModels = [];
 
-        var formatter = DateFormat('y-MM-d');
+        var formatter = DateFormat('yyyy-MM-dd');
         print("${formatter.format(result!)}");
         setState(() {
           Value_select_lastDate_Daily_Type_ = null;
@@ -1267,7 +1281,7 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
           DateFormat('dd-MM-yyyy').parse('$Value_selectDate_Daily_Type_');
       var LDate = DateFormat('dd-MM-yyyy').parse('$result');
       if (picked != null) {
-        print('LDate is before SDate');
+        // print('LDate is before SDate');
         // TransReBillModels = [];
 
         var formatter = DateFormat('y-MM-d');
@@ -1698,49 +1712,75 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                         ),
                       ),
                     ),
-                    onTap: (_TransReBillModels_GropType_Mon[0].length == 0 &&
-                            _TransReBillModels_GropType_Sub_zone[0].length ==
-                                0 &&
-                            Value_selectDate_Daily_Type_ == null &&
-                            Value_select_lastDate_Daily_Type_ == null)
-                        ? null
-                        : (YE_Income_Type_Mon_User == null ||
-                                Mon_Income_Type_Mon_User == null)
-                            ? null
-                            : () {
-                                RE_IncomeMont_Type_Widget();
-                              },
+                    onTap: (_TransReBillModels_GropType_Mon[0].length != 0 ||
+                            _TransReBillModels_GropType_Mon[1].length != 0 ||
+                            _TransReBillModels_GropType_Mon[2].length != 0 ||
+                            _TransReBillModels_GropType_Mon[3].length != 0 ||
+                            _TransReBillModels_GropType_Mon[4].length != 0 ||
+                            _TransReBillModels_GropType_Sub_zone[0].length !=
+                                0 ||
+                            _TransReBillModels_GropType_Sub_zone[1].length !=
+                                0 ||
+                            _TransReBillModels_GropType_Sub_zone[2].length !=
+                                0 ||
+                            _TransReBillModels_GropType_Sub_zone[3].length !=
+                                0 ||
+                            _TransReBillModels_GropType_Sub_zone[4].length != 0)
+                        ? () {
+                            RE_IncomeMont_Type_Widget();
+                          }
+                        : null,
+
+                    //  (_TransReBillModels_GropType_Mon[0].length == 0 &&
+                    //         _TransReBillModels_GropType_Sub_zone[0].length ==
+                    //             0 &&
+                    //         Value_selectDate_Daily_Type_ == null &&
+                    //         Value_select_lastDate_Daily_Type_ == null)
+                    //     ? null
+                    //     : (YE_Income_Type_Mon_User == null ||
+                    //             Mon_Income_Type_Mon_User == null)
+                    //         ? null
+                    //         : () {
+                    //             RE_IncomeMont_Type_Widget();
+                    //           },
                   ),
+
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      (Value_selectDate_Daily_Type_ != null ||
-                              Value_select_lastDate_Daily_Type_ != null)
-                          ? 'รายงาน แสดงรายได้ (รายเดือน)'
+                      // (Value_selectDate_Daily_Type_ == null ||
+                      //         Await_Status_Report2 == null)
+                      //     ? 'รายงาน แสดงรายได้ (รายวัน)'
+                      //     :
+                      (YE_Income_Type_Mon_User == null ||
+                              Mon_Income_Type_Mon_User == null)
+                          ? 'รายงาน แสดงรายได้ (รายเดือน ) '
                           : (_TransReBillModels_GropType_Mon[0].length != 0 ||
+                                  _TransReBillModels_GropType_Mon[1].length !=
+                                      0 ||
+                                  _TransReBillModels_GropType_Mon[2].length !=
+                                      0 ||
+                                  _TransReBillModels_GropType_Mon[3].length !=
+                                      0 ||
+                                  _TransReBillModels_GropType_Mon[4].length !=
+                                      0 ||
                                   _TransReBillModels_GropType_Sub_zone[0]
                                           .length !=
+                                      0 ||
+                                  _TransReBillModels_GropType_Sub_zone[1]
+                                          .length !=
+                                      0 ||
+                                  _TransReBillModels_GropType_Sub_zone[2]
+                                          .length !=
+                                      0 ||
+                                  _TransReBillModels_GropType_Sub_zone[3]
+                                          .length !=
+                                      0 ||
+                                  _TransReBillModels_GropType_Sub_zone[4]
+                                          .length !=
                                       0)
-                              ? (YE_Income_Type_Mon_User != null &&
-                                          Mon_Income_Type_Mon_User != null ||
-                                      _TransReBillModels_GropType_Mon[0]
-                                              .length !=
-                                          0 ||
-                                      _TransReBillModels_GropType_Sub_zone[0]
-                                              .length !=
-                                          0)
-                                  ? 'รายงาน แสดงรายได้ (รายเดือน) (พบข้อมูล ✔️)'
-                                  : 'รายงาน แสดงรายได้ (รายเดือน) (ไม่พบข้อมูล ✖️)'
-                              : 'รายงาน แสดงรายได้ (รายเดือน)',
-                      // (YE_Income_Type_Mon_User != null &&
-                      //         _TransReBillModels_GropType_Mon.length == 0 &&
-                      //         Mon_Income_Type_Mon_User != null)
-                      //     ? 'รายงาน รายรับแยกตามประเภท (รายเดือน) (ไม่พบข้อมูล ✖️)'
-                      //     : (YE_Income_Type_Mon_User != null &&
-                      //             _TransReBillModels_GropType_Mon.length != 0 &&
-                      //             Mon_Income_Type_Mon_User != null)
-                      //         ? 'รายงาน รายรับแยกตามประเภท (รายเดือน) (ไม่พบข้อมูล ✔️)'
-                      //         : 'รายงาน รายรับแยกตามประเภท (รายเดือน)',
+                              ? 'รายงาน แสดงรายได้ (รายเดือน) (พบข้อมูล ✔️)'
+                              : 'รายงาน แสดงรายได้ (รายเดือน ) ',
                       style: const TextStyle(
                         color: ReportScreen_Color.Colors_Text2_,
                         // fontWeight: FontWeight.bold,
@@ -1748,6 +1788,35 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                       ),
                     ),
                   ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(8.0),
+                  //   child: Text(
+                  //     (Value_selectDate_Daily_Type_ != null ||
+                  //             Value_select_lastDate_Daily_Type_ != null)
+                  //         ? 'รายงาน แสดงรายได้ (รายเดือน)'
+                  //         : (_TransReBillModels_GropType_Mon[0].length != 0 ||
+                  //                 _TransReBillModels_GropType_Sub_zone[0]
+                  //                         .length !=
+                  //                     0)
+                  //             ? (YE_Income_Type_Mon_User != null &&
+                  //                         Mon_Income_Type_Mon_User != null ||
+                  //                     _TransReBillModels_GropType_Mon[0]
+                  //                             .length !=
+                  //                         0 ||
+                  //                     _TransReBillModels_GropType_Sub_zone[0]
+                  //                             .length !=
+                  //                         0)
+                  //                 ? 'รายงาน แสดงรายได้ (รายเดือน) (พบข้อมูล ✔️)'
+                  //                 : 'รายงาน แสดงรายได้ (รายเดือน) (ไม่พบข้อมูล ✖️)'
+                  //             : 'รายงาน แสดงรายได้ (รายเดือน)',
+
+                  //     style: const TextStyle(
+                  //       color: ReportScreen_Color.Colors_Text2_,
+                  //       // fontWeight: FontWeight.bold,
+                  //       fontFamily: Font_.Fonts_T,
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
               const SizedBox(
@@ -1846,7 +1915,7 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                             child: Text(
                               (Value_selectDate_Daily_Type_ == null)
                                   ? 'เลือก'
-                                  : '${DateFormat('yyyy-MM-dd').format(DateTime.parse(Value_selectDate_Daily_Type_.toString()).add(Duration(days: 4)))}',
+                                  : '${DateFormat('yyyy-MM-d').format(DateTime.parse(Value_selectDate_Daily_Type_.toString()).add(Duration(days: 4)))}',
                               style: const TextStyle(
                                 color: ReportScreen_Color.Colors_Text2_,
                                 // fontWeight: FontWeight.bold,
@@ -1854,41 +1923,15 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                               ),
                             ),
                           )),
-                      // InkWell(
-                      //   onTap: () {
-                      //     _select_LastDate_Daily_type(context);
-                      //   },
-                      //   child:
-                      // Container(
-                      //       decoration: BoxDecoration(
-                      //         color: AppbackgroundColor.Sub_Abg_Colors,
-                      //         borderRadius: const BorderRadius.only(
-                      //             topLeft: Radius.circular(10),
-                      //             topRight: Radius.circular(10),
-                      //             bottomLeft: Radius.circular(10),
-                      //             bottomRight: Radius.circular(10)),
-                      //         border: Border.all(color: Colors.grey, width: 1),
-                      //       ),
-                      //       width: 120,
-                      //       padding: const EdgeInsets.all(8.0),
-                      //       child: Center(
-                      //         child: Text(
-                      //           (Value_select_lastDate_Daily_Type_ == null)
-                      //               ? 'เลือก'
-                      //               : '$Value_select_lastDate_Daily_Type_',
-                      //           style: const TextStyle(
-                      //             color: ReportScreen_Color.Colors_Text2_,
-                      //             // fontWeight: FontWeight.bold,
-                      //             fontFamily: Font_.Fonts_T,
-                      //           ),
-                      //         ),
-                      //       )),
-                      // ),
                     ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: InkWell(
                       onTap: () async {
+                        setState(() {
+                          YE_Income_Type_Mon_User = null;
+                          Mon_Income_Type_Mon_User = null;
+                        });
                         red_Trans_bill_Groptype_daly();
                         red_Trans_bill_Groptype_daly_Sub_zone();
                         // setState(() {
@@ -1964,40 +2007,60 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                         ),
                       ),
                     ),
-                    onTap:
-                        // (YE_Income_Type_Mon_User != null ||
-                        //         Mon_Income_Type_Mon_User != null)
-                        //     ? null
-                        //     : (Value_selectDate_Daily_Type_ == null ||
-                        //             Value_select_lastDate_Daily_Type_ == null)
-                        //         ? null
-                        //         :
-                        () {
-                      RE_Income_Daily_Type_Widget();
-                    },
+                    onTap: (_TransReBillModels_GropType_Mon[0].length != 0 ||
+                            _TransReBillModels_GropType_Mon[1].length != 0 ||
+                            _TransReBillModels_GropType_Mon[2].length != 0 ||
+                            _TransReBillModels_GropType_Mon[3].length != 0 ||
+                            _TransReBillModels_GropType_Mon[4].length != 0 ||
+                            _TransReBillModels_GropType_Sub_zone[0].length !=
+                                0 ||
+                            _TransReBillModels_GropType_Sub_zone[1].length !=
+                                0 ||
+                            _TransReBillModels_GropType_Sub_zone[2].length !=
+                                0 ||
+                            _TransReBillModels_GropType_Sub_zone[3].length !=
+                                0 ||
+                            _TransReBillModels_GropType_Sub_zone[4].length != 0)
+                        ? () {
+                            RE_Income_Daily_Type_Widget();
+                          }
+                        : null,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      (YE_Income_Type_Mon_User != null ||
-                              Mon_Income_Type_Mon_User != null)
-                          ? 'รายงาน แสดงรายได้ (รายวัน)'
+                      // (Value_selectDate_Daily_Type_ == null ||
+                      //         Await_Status_Report2 == null)
+                      //     ? 'รายงาน แสดงรายได้ (รายวัน)'
+                      //     :
+                      (Value_selectDate_Daily_Type_ == null)
+                          ? 'รายงาน แสดงรายได้ (รายวัน ) '
                           : (_TransReBillModels_GropType_Mon[0].length != 0 ||
+                                  _TransReBillModels_GropType_Mon[1].length !=
+                                      0 ||
+                                  _TransReBillModels_GropType_Mon[2].length !=
+                                      0 ||
+                                  _TransReBillModels_GropType_Mon[3].length !=
+                                      0 ||
+                                  _TransReBillModels_GropType_Mon[4].length !=
+                                      0 ||
                                   _TransReBillModels_GropType_Sub_zone[0]
                                           .length !=
+                                      0 ||
+                                  _TransReBillModels_GropType_Sub_zone[1]
+                                          .length !=
+                                      0 ||
+                                  _TransReBillModels_GropType_Sub_zone[2]
+                                          .length !=
+                                      0 ||
+                                  _TransReBillModels_GropType_Sub_zone[3]
+                                          .length !=
+                                      0 ||
+                                  _TransReBillModels_GropType_Sub_zone[4]
+                                          .length !=
                                       0)
-                              ? (Value_selectDate_Daily_Type_ != null &&
-                                          Value_select_lastDate_Daily_Type_ !=
-                                              null ||
-                                      _TransReBillModels_GropType_Mon[0]
-                                              .length !=
-                                          0 ||
-                                      _TransReBillModels_GropType_Sub_zone[0]
-                                              .length !=
-                                          0)
-                                  ? 'รายงาน แสดงรายได้ (รายวัน) (พบข้อมูล ✔️)'
-                                  : 'รายงาน แสดงรายได้ (รายวัน ) (ไม่พบข้อมูล ✖️)'
-                              : 'รายงาน แสดงรายได้ (รายวัน)',
+                              ? 'รายงาน แสดงรายได้ (รายวัน) (พบข้อมูล ✔️)'
+                              : 'รายงาน แสดงรายได้ (รายวัน ) ',
                       style: const TextStyle(
                         color: ReportScreen_Color.Colors_Text2_,
                         // fontWeight: FontWeight.bold,
@@ -2088,7 +2151,7 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                               children: [
                                 Container(
                                   // width: 1050,
-                                  decoration: const BoxDecoration(
+                                  decoration: BoxDecoration(
                                     color: AppbackgroundColor.TiTile_Colors,
                                     borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(10),
@@ -3238,8 +3301,22 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                 setState(() {
                                   Mon_Income_Type_Mon_User = null;
                                   YE_Income_Type_Mon_User = null;
-                                  // _TransReBillModels_GropType_Mon[0].clear();
+                                });
+                                setState(() {
+                                  _TransReBillModels_GropType_Mon[0].clear();
+                                  _TransReBillModels_GropType_Mon[1].clear();
+                                  _TransReBillModels_GropType_Mon[2].clear();
+                                  _TransReBillModels_GropType_Mon[3].clear();
+                                  _TransReBillModels_GropType_Mon[4].clear();
                                   _TransReBillModels_GropType_Sub_zone[0]
+                                      .clear();
+                                  _TransReBillModels_GropType_Sub_zone[1]
+                                      .clear();
+                                  _TransReBillModels_GropType_Sub_zone[2]
+                                      .clear();
+                                  _TransReBillModels_GropType_Sub_zone[3]
+                                      .clear();
+                                  _TransReBillModels_GropType_Sub_zone[4]
                                       .clear();
                                 });
                                 Navigator.of(context).pop();
@@ -3298,7 +3375,8 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                     Expanded(
                         flex: 1,
                         child: Text(
-                          'ทั้งหมด: ${zoneModels_report.length}',
+                          '',
+                          // 'ทั้งหมด: ${zoneModels_report.length}',
                           textAlign: TextAlign.end,
                           style: const TextStyle(
                             fontSize: 14,
@@ -3339,7 +3417,7 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                               children: [
                                 Container(
                                   // width: 1050,
-                                  decoration: const BoxDecoration(
+                                  decoration: BoxDecoration(
                                     color: AppbackgroundColor.TiTile_Colors,
                                     borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(10),
@@ -4566,8 +4644,22 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                   Value_selectDate_Daily_Type_ = null;
                                   Mon_Income_Type_Mon_User = null;
                                   YE_Income_Type_Mon_User = null;
+                                });
+                                setState(() {
                                   _TransReBillModels_GropType_Mon[0].clear();
+                                  _TransReBillModels_GropType_Mon[1].clear();
+                                  _TransReBillModels_GropType_Mon[2].clear();
+                                  _TransReBillModels_GropType_Mon[3].clear();
+                                  _TransReBillModels_GropType_Mon[4].clear();
                                   _TransReBillModels_GropType_Sub_zone[0]
+                                      .clear();
+                                  _TransReBillModels_GropType_Sub_zone[1]
+                                      .clear();
+                                  _TransReBillModels_GropType_Sub_zone[2]
+                                      .clear();
+                                  _TransReBillModels_GropType_Sub_zone[3]
+                                      .clear();
+                                  _TransReBillModels_GropType_Sub_zone[4]
                                       .clear();
                                 });
                                 Navigator.of(context).pop();
@@ -4794,7 +4886,7 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
               _TransReBillModels_GropType_Sub_zone[0],
               expModels);
         } else if (Value_Report == 'รายงานรายรับรายวันแยกตามประเภท') {
-          print('รายงานรายรับรายวันแยกตามประเภท');
+          // print('รายงานรายรับรายวันแยกตามประเภท');
           Excgen_CDaily_income_Report.excgen_CDaily_income_Report(
               '2',
               context,

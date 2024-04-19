@@ -36,18 +36,22 @@ class Rental_customers extends StatefulWidget {
 
 class _Rental_customersState extends State<Rental_customers> {
   var nFormat = NumberFormat("#,##0.00", "en_US");
+  /////--------------------------->
+  int limit = 50; // The maximum number of items you want
+  int offset = 0; // The starting index of items you want
+  int endIndex = 0;
+  /////--------------------------->
   DateTime datex = DateTime.now();
   String tappedIndex_ = '';
   ScrollController _scrollController2 = ScrollController();
   List<TransBillModel> _TransBillModels = [];
   List<ZoneModel> zoneModels = [];
   int Count_OFF_SET = 0;
+  List<TeNantModel> limitedList_teNantModels = [];
   List<TeNantModel> teNantModels = [];
   List<TeNantModel> teNantModels_Sum = [];
-  // List<List<TeNantModel>> teNantModels_Save = [];
   List<TeNantModel> _teNantModels = <TeNantModel>[];
   List<AreaModel> areaModels = [];
-
   List<c_regis_Model> regisModels = [];
   String? renTal_user, renTal_name, Value_cid, custno_;
 
@@ -80,39 +84,14 @@ class _Rental_customersState extends State<Rental_customers> {
     super.initState();
   }
 
-  @override
-  void didUpdateWidget(Rental_customers oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.updatesearch != oldWidget.updatesearch) {
-      // Call _searchBar when widget.updatesearch changes
-      _searchBar();
-    }
-  }
-
-  void _searchBar() {
-    text_data = widget.updatesearch.toString();
-    var text = text_data.toLowerCase();
-    setState(() {
-      teNantModels = _teNantModels.where((teNantModels) {
-        var notTitle = teNantModels.cid.toString().toLowerCase();
-        var notTitle2 = teNantModels.docno.toString().toLowerCase();
-        var notTitle3 = teNantModels.invoice.toString().toLowerCase();
-        var notTitle4 = teNantModels.ln_c.toString().toLowerCase();
-        var notTitle5 = teNantModels.sname.toString().toLowerCase();
-        var notTitle6 = teNantModels.cname.toString().toLowerCase();
-        var notTitle7 = teNantModels.expname.toString().toLowerCase();
-        var notTitle8 = teNantModels.custno.toString().toLowerCase();
-        return notTitle.contains(text) ||
-            notTitle2.contains(text) ||
-            notTitle3.contains(text) ||
-            notTitle4.contains(text) ||
-            notTitle5.contains(text) ||
-            notTitle6.contains(text) ||
-            notTitle7.contains(text) ||
-            notTitle8.contains(text);
-      }).toList();
-    });
-  }
+  // @override
+  // void didUpdateWidget(Rental_customers oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //   if (widget.updatesearch != oldWidget.updatesearch) {
+  //     // Call _searchBar when widget.updatesearch changes
+  //     _searchBar();
+  //   }
+  // }
 
   Future<Null> checkPreferance() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -180,15 +159,15 @@ class _Rental_customersState extends State<Rental_customers> {
   }
 
   Future<Null> read_GC_tenant() async {
-    if (teNantModels.isNotEmpty) {
-      teNantModels.clear();
+    if (limitedList_teNantModels.isNotEmpty) {
+      limitedList_teNantModels.clear();
     }
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     var ren = preferences.getString('renTalSer');
     var zone = preferences.getString('zonePSer');
     String url =
-        '${MyConstant().domain}/peploe_chaoAll_GrupBy.php?isAdd=true&ren=$ren&zone=$zone&count_OFFSET=$Count_OFF_SET';
+        '${MyConstant().domain}/peploe_chaoAll_GrupBy.php?isAdd=true&ren=$ren&zone=$zone';
     // zone == null
     //     ? '${MyConstant().domain}/peploe_chaoAll_GrupBy.php?isAdd=true&ren=$ren&zone=$zone'
     //     : zone == '0'
@@ -233,13 +212,14 @@ class _Rental_customersState extends State<Rental_customers> {
 
               if (daterx_A != true) {
                 setState(() {
-                  teNantModels.add(teNantModel);
+                  limitedList_teNantModels.add(teNantModel);
                 });
               }
             }
-            // setState(() {
-            //   teNantModels.add(teNantModel);
-            // });
+
+            setState(() {
+              _teNantModels = limitedList_teNantModels;
+            });
           }
           // setState(() {
           //   teNantModels.add(teNantModel);
@@ -247,13 +227,25 @@ class _Rental_customersState extends State<Rental_customers> {
         }
       } else {}
 
-      setState(() {
-        _teNantModels = teNantModels;
-      });
+      read_tenant_limit();
       read_GC_tenant_SUM();
     } catch (e) {}
   }
 
+  /////////////////--------------------------->
+  Future<Null> read_tenant_limit() async {
+    setState(() {
+      endIndex = offset + limit;
+      teNantModels = limitedList_teNantModels.sublist(
+          offset, // Start index
+          (endIndex <= limitedList_teNantModels.length)
+              ? endIndex
+              : limitedList_teNantModels.length // End index
+          );
+    });
+  }
+
+  /////////////////--------------------------->
   _moveUp2() {
     _scrollController2.animateTo(_scrollController2.offset - 250,
         curve: Curves.linear, duration: const Duration(milliseconds: 500));
@@ -394,56 +386,149 @@ class _Rental_customersState extends State<Rental_customers> {
     });
   }
 
-  // _searchBar() {
-  //   return TextField(
-  //     autofocus: false,
-  //     keyboardType: TextInputType.text,
-  //     style: const TextStyle(
-  //         color: PeopleChaoScreen_Color.Colors_Text2_,
-  //         fontFamily: Font_.Fonts_T),
-  //     decoration: InputDecoration(
-  //       filled: true,
-  //       // fillColor: Colors.white,
-  //       hintText: ' Search...',
-  //       hintStyle: const TextStyle(
-  //           color: PeopleChaoScreen_Color.Colors_Text2_,
-  //           fontFamily: Font_.Fonts_T),
-  //       contentPadding:
-  //           const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
-  //       // focusedBorder: OutlineInputBorder(
-  //       //   borderSide: const BorderSide(color: Colors.white),
-  //       //   borderRadius: BorderRadius.circular(10),
-  //       // ),
-  //       enabledBorder: UnderlineInputBorder(
-  //         borderSide: const BorderSide(color: Colors.white),
-  //         borderRadius: BorderRadius.circular(10),
-  //       ),
-  //     ),
-  //     onChanged: (text) {
-  //       print(text);
-  //       // search_ = text;
-  //       text = text.toLowerCase();
-  //       setState(() {
-  //         teNantModels = _teNantModels.where((teNantModels) {
-  //           var notTitle = teNantModels.lncode.toString().toLowerCase();
-  //           var notTitle2 = teNantModels.cid.toString().toLowerCase();
-  //           var notTitle3 = teNantModels.docno.toString().toLowerCase();
-  //           var notTitle4 = teNantModels.sname.toString().toLowerCase();
-  //           var notTitle5 = teNantModels.cname.toString().toLowerCase();
-  //           var notTitle6 = teNantModels.zn.toString().toLowerCase();
-  //           var notTitle7 = teNantModels.zser.toString().toLowerCase();
-  //           return notTitle.contains(text) ||
-  //               notTitle2.contains(text) ||
-  //               notTitle3.contains(text) ||
-  //               notTitle4.contains(text) ||
-  //               notTitle5.contains(text) ||
-  //               notTitle6.contains(text) ||
-  //               notTitle7.contains(text);
-  //         }).toList();
-  //       });
-  //     },
-  //   );
-  // }
+  ///----------------------->
+  _searchBar() {
+    return TextField(
+        autofocus: false,
+        keyboardType: TextInputType.text,
+        style: const TextStyle(
+            color: PeopleChaoScreen_Color.Colors_Text2_,
+            fontFamily: Font_.Fonts_T),
+        decoration: InputDecoration(
+          filled: true,
+          // fillColor: Colors.white,
+          hintText: ' Search...',
+          hintStyle: const TextStyle(
+              color: PeopleChaoScreen_Color.Colors_Text2_,
+              fontFamily: Font_.Fonts_T),
+          contentPadding:
+              const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+          // focusedBorder: OutlineInputBorder(
+          //   borderSide: const BorderSide(color: Colors.white),
+          //   borderRadius: BorderRadius.circular(10),
+          // ),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: const BorderSide(color: Colors.white),
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        onChanged: (text) {
+          print(text);
+          text = text.toLowerCase();
+          setState(
+            () {
+              teNantModels = _teNantModels.where((teNantModels) {
+                var notTitle = teNantModels.custno.toString().toLowerCase();
+                var notTitle2 = teNantModels.sname.toString().toLowerCase();
+                var notTitle3 = teNantModels.cname.toString().toLowerCase();
+
+                var notTitle8 = teNantModels.custno.toString().toLowerCase();
+                return notTitle.contains(text) ||
+                    notTitle2.contains(text) ||
+                    notTitle3.contains(text);
+              }).toList();
+            },
+          );
+          if (text.isEmpty) {
+            read_tenant_limit();
+          } else {}
+        });
+  }
+
+  ///----------------------->
+  Widget Next_page() {
+    return Row(
+      children: [
+        Expanded(child: Text('')),
+        StreamBuilder(
+            stream: Stream.periodic(const Duration(milliseconds: 300)),
+            builder: (context, snapshot) {
+              return Container(
+                decoration: const BoxDecoration(
+                  color: AppbackgroundColor.Sub_Abg_Colors,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10)),
+                ),
+                padding: const EdgeInsets.all(4.0),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.menu_book,
+                      color: Colors.grey,
+                      size: 20,
+                    ),
+                    InkWell(
+                        onTap: (offset == 0)
+                            ? null
+                            : () async {
+                                if (offset == 0) {
+                                } else {
+                                  setState(() {
+                                    offset = offset - limit;
+
+                                    read_tenant_limit();
+                                    tappedIndex_ = '';
+                                  });
+                                  _scrollController2.animateTo(
+                                    0,
+                                    duration: const Duration(seconds: 1),
+                                    curve: Curves.easeOut,
+                                  );
+                                }
+                              },
+                        child: Icon(
+                          Icons.arrow_left,
+                          color:
+                              (offset == 0) ? Colors.grey[200] : Colors.black,
+                          size: 25,
+                        )),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                      child: Text(
+                        /// '*//$endIndex /${limitedList_teNantModels.length} ///${(endIndex / limit)}/${(limitedList_teNantModels.length / limit).ceil()}',
+                        '${(endIndex / limit)}/${(limitedList_teNantModels.length / limit).ceil()}',
+                        textAlign: TextAlign.start,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: FontWeight_.Fonts_T,
+                          //fontSize: 10.0
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                        onTap: (endIndex >= limitedList_teNantModels.length)
+                            ? null
+                            : () async {
+                                setState(() {
+                                  offset = offset + limit;
+                                  tappedIndex_ = '';
+                                  read_tenant_limit();
+                                });
+                                _scrollController2.animateTo(
+                                  0,
+                                  duration: const Duration(seconds: 1),
+                                  curve: Curves.easeOut,
+                                );
+                              },
+                        child: Icon(
+                          Icons.arrow_right,
+                          color: (endIndex >= limitedList_teNantModels.length)
+                              ? Colors.grey[200]
+                              : Colors.black,
+                          size: 25,
+                        )),
+                  ],
+                ),
+              );
+            }),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -558,7 +643,7 @@ class _Rental_customersState extends State<Rental_customers> {
                                                           .width *
                                                       0.85
                                                   : 1200,
-                                              decoration: const BoxDecoration(
+                                              decoration:  BoxDecoration(
                                                 color: AppbackgroundColor
                                                     .TiTile_Colors,
                                                 borderRadius: BorderRadius.only(
@@ -575,138 +660,69 @@ class _Rental_customersState extends State<Rental_customers> {
                                                   const EdgeInsets.all(8.0),
                                               child: Column(
                                                 children: [
-                                                  Row(
-                                                    children: [
-                                                      Expanded(child: Text('')),
-                                                      StreamBuilder(
-                                                          stream: Stream.periodic(
-                                                              const Duration(
-                                                                  milliseconds:
-                                                                      300)),
-                                                          builder: (context,
-                                                              snapshot) {
-                                                            return Container(
-                                                              decoration:
-                                                                  const BoxDecoration(
-                                                                color: AppbackgroundColor
-                                                                    .Sub_Abg_Colors,
-                                                                borderRadius: BorderRadius.only(
-                                                                    topLeft: Radius
-                                                                        .circular(
-                                                                            10),
-                                                                    topRight: Radius
-                                                                        .circular(
-                                                                            10),
-                                                                    bottomLeft:
-                                                                        Radius.circular(
-                                                                            10),
-                                                                    bottomRight:
-                                                                        Radius.circular(
-                                                                            10)),
-                                                              ),
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(4.0),
-                                                              child: Row(
-                                                                children: [
-                                                                  Icon(
-                                                                    Icons
-                                                                        .menu_book,
-                                                                    color: Colors
-                                                                        .grey,
-                                                                    size: 20,
-                                                                  ),
-                                                                  InkWell(
-                                                                      onTap: (Count_OFF_SET ==
-                                                                              0)
-                                                                          ? null
-                                                                          : () async {
-                                                                              if (Count_OFF_SET == 0) {
-                                                                              } else {
-                                                                                Count_OFF_SET = Count_OFF_SET - 50;
-                                                                                setState(() {
-                                                                                  checkPreferance();
-                                                                                  read_GC_rental();
-
-                                                                                  read_GC_tenant();
-                                                                                  read_GC_Regis();
-                                                                                });
-                                                                              }
-                                                                            },
-                                                                      child:
-                                                                          Icon(
-                                                                        Icons
-                                                                            .arrow_left,
-                                                                        color: (Count_OFF_SET ==
-                                                                                0)
-                                                                            ? Colors.grey[200]
-                                                                            : Colors.black,
-                                                                        size:
-                                                                            25,
-                                                                      )),
-                                                                  Padding(
-                                                                    padding:
-                                                                        const EdgeInsets
-                                                                            .fromLTRB(
-                                                                            4,
-                                                                            0,
-                                                                            4,
-                                                                            0),
-                                                                    child: Text(
-                                                                      // '$Count_OFF_SET',
-                                                                      (Count_OFF_SET ==
-                                                                              0)
-                                                                          ? '${Count_OFF_SET + 1}'
-                                                                          : '${(Count_OFF_SET / 50) + 1}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .start,
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        fontSize:
-                                                                            14,
-                                                                        color: Colors
-                                                                            .green,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T,
-                                                                        //fontSize: 10.0
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  InkWell(
-                                                                      onTap: (teNantModels.length ==
-                                                                              0)
-                                                                          ? null
-                                                                          : () async {
-                                                                              Count_OFF_SET = Count_OFF_SET + 50;
-                                                                              setState(() {
-                                                                                checkPreferance();
-                                                                                read_GC_rental();
-
-                                                                                read_GC_tenant();
-                                                                                read_GC_Regis();
-                                                                              });
-                                                                            },
-                                                                      child:
-                                                                          Icon(
-                                                                        Icons
-                                                                            .arrow_right,
-                                                                        color: (teNantModels.length ==
-                                                                                0)
-                                                                            ? Colors.grey[200]
-                                                                            : Colors.black,
-                                                                        size:
-                                                                            25,
-                                                                      )),
-                                                                ],
-                                                              ),
-                                                            );
-                                                          }),
-                                                    ],
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            2.0),
+                                                    child: Row(
+                                                      children: [
+                                                        const Padding(
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  2.0),
+                                                          child: Text(
+                                                            'ค้นหา :',
+                                                            style: TextStyle(
+                                                              color: ReportScreen_Color
+                                                                  .Colors_Text2_,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  Font_.Fonts_T,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          // flex: 1,
+                                                          child: Container(
+                                                            height:
+                                                                35, //Date_ser
+                                                            // width: 150,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: AppbackgroundColor
+                                                                  .Sub_Abg_Colors,
+                                                              borderRadius: const BorderRadius
+                                                                      .only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          8),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          8),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          8),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          8)),
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  width: 1),
+                                                            ),
+                                                            child: _searchBar(),
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                            width: 150,
+                                                            child: Next_page())
+                                                      ],
+                                                    ),
                                                   ),
-                                                  Row(
+                                                  const Divider(),
+                                                  const Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
                                                             .center,
@@ -960,7 +976,7 @@ class _Rental_customersState extends State<Rental_customers> {
                                                                 return Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child: (elapsed >
                                                                           8.00)
@@ -1038,16 +1054,27 @@ class _Rental_customersState extends State<Rental_customers> {
                                                                         // });
                                                                       },
                                                                       title:
-                                                                          Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.center,
-                                                                        children: [
-                                                                          Expanded(
-                                                                            flex:
-                                                                                1,
-                                                                            child:
-                                                                                Padding(
-                                                                              padding: const EdgeInsets.all(8.0),
+                                                                          Container(
+                                                                        decoration:
+                                                                            const BoxDecoration(
+                                                                          // color: Colors.green[100]!
+                                                                          //     .withOpacity(0.5),
+                                                                          border:
+                                                                              Border(
+                                                                            bottom:
+                                                                                BorderSide(
+                                                                              color: Colors.black12,
+                                                                              width: 1,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        child:
+                                                                            Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.center,
+                                                                          children: [
+                                                                            Expanded(
+                                                                              flex: 1,
                                                                               child: AutoSizeText(
                                                                                 minFontSize: 10,
                                                                                 maxFontSize: 25,
@@ -1058,13 +1085,8 @@ class _Rental_customersState extends State<Rental_customers> {
                                                                                 style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
                                                                               ),
                                                                             ),
-                                                                          ),
-                                                                          Expanded(
-                                                                            flex:
-                                                                                1,
-                                                                            child:
-                                                                                Padding(
-                                                                              padding: const EdgeInsets.all(8.0),
+                                                                            Expanded(
+                                                                              flex: 1,
                                                                               child: Tooltip(
                                                                                 richMessage: TextSpan(
                                                                                   text: '${teNantModels[index].cname}',
@@ -1090,464 +1112,460 @@ class _Rental_customersState extends State<Rental_customers> {
                                                                                 ),
                                                                               ),
                                                                             ),
-                                                                          ),
-                                                                          Expanded(
-                                                                            flex:
-                                                                                1,
-                                                                            child:
-                                                                                Tooltip(
-                                                                              richMessage: TextSpan(
-                                                                                text: '${teNantModels[index].sname}',
-                                                                                style: const TextStyle(
-                                                                                  color: HomeScreen_Color.Colors_Text1_,
-                                                                                  fontWeight: FontWeight.bold,
-                                                                                  fontFamily: FontWeight_.Fonts_T,
-                                                                                  //fontSize: 10.0
+                                                                            Expanded(
+                                                                              flex: 1,
+                                                                              child: Tooltip(
+                                                                                richMessage: TextSpan(
+                                                                                  text: '${teNantModels[index].sname}',
+                                                                                  style: const TextStyle(
+                                                                                    color: HomeScreen_Color.Colors_Text1_,
+                                                                                    fontWeight: FontWeight.bold,
+                                                                                    fontFamily: FontWeight_.Fonts_T,
+                                                                                    //fontSize: 10.0
+                                                                                  ),
+                                                                                ),
+                                                                                decoration: BoxDecoration(
+                                                                                  borderRadius: BorderRadius.circular(5),
+                                                                                  color: Colors.grey[200],
+                                                                                ),
+                                                                                child: AutoSizeText(
+                                                                                  minFontSize: 10,
+                                                                                  maxFontSize: 25,
+                                                                                  maxLines: 1,
+                                                                                  '${teNantModels[index].sname}',
+                                                                                  textAlign: TextAlign.start,
+                                                                                  overflow: TextOverflow.ellipsis,
+                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
                                                                                 ),
                                                                               ),
-                                                                              decoration: BoxDecoration(
-                                                                                borderRadius: BorderRadius.circular(5),
-                                                                                color: Colors.grey[200],
-                                                                              ),
-                                                                              child: AutoSizeText(
-                                                                                minFontSize: 10,
-                                                                                maxFontSize: 25,
-                                                                                maxLines: 1,
-                                                                                '${teNantModels[index].sname}',
-                                                                                textAlign: TextAlign.start,
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                              ),
                                                                             ),
-                                                                          ),
-                                                                          // Expanded(
-                                                                          //   flex:
-                                                                          //       1,
-                                                                          //   child:
-                                                                          //       Align(
-                                                                          //     alignment: Alignment.centerLeft,
-                                                                          //     child: Padding(
-                                                                          //       padding: const EdgeInsets.all(4.0),
-                                                                          //       child: (regisModels.where((model) => model.rser == '$ser_ren' && model.custno == '${teNantModels[index].custno}').map((model) => model.username).join(', ').toString() != '')
-                                                                          //           ? TextFormField(
-                                                                          //               readOnly: true,
-                                                                          //               style: TextStyle(fontFamily: Font_.Fonts_T, fontSize: 12),
-                                                                          //               textAlign: TextAlign.start,
-                                                                          //               // controller:
-                                                                          //               //     Add_Number_area_,
-                                                                          //               validator: (value) {
-                                                                          //                 if (value == null || value.isEmpty) {
-                                                                          //                   return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                                                          //                 }
-                                                                          //                 // if (int.parse(value.toString()) < 13) {
-                                                                          //                 //   return '< 13';
-                                                                          //                 // }
-                                                                          //                 return null;
-                                                                          //               },
-                                                                          //               initialValue: regisModels.where((model) => model.rser == '$ser_ren' && model.custno == '${teNantModels[index].custno}').map((model) => model.username).join(', ').toString(),
-                                                                          //               cursorColor: Colors.green,
-                                                                          //               decoration: InputDecoration(
-                                                                          //                   fillColor: Colors.grey[300]!.withOpacity(0.4),
-                                                                          //                   filled: true,
-                                                                          //                   // prefixIcon:
-                                                                          //                   //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                          //                   // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                          //                   focusedBorder: const OutlineInputBorder(
-                                                                          //                     borderRadius: BorderRadius.only(
-                                                                          //                       topRight: Radius.circular(15),
-                                                                          //                       topLeft: Radius.circular(15),
-                                                                          //                       bottomRight: Radius.circular(15),
-                                                                          //                       bottomLeft: Radius.circular(15),
-                                                                          //                     ),
-                                                                          //                     borderSide: BorderSide(
-                                                                          //                       width: 1,
-                                                                          //                       color: Colors.black,
-                                                                          //                     ),
-                                                                          //                   ),
-                                                                          //                   enabledBorder: const OutlineInputBorder(
-                                                                          //                     borderRadius: BorderRadius.only(
-                                                                          //                       topRight: Radius.circular(15),
-                                                                          //                       topLeft: Radius.circular(15),
-                                                                          //                       bottomRight: Radius.circular(15),
-                                                                          //                       bottomLeft: Radius.circular(15),
-                                                                          //                     ),
-                                                                          //                     borderSide: BorderSide(
-                                                                          //                       width: 1,
-                                                                          //                       color: Colors.grey,
-                                                                          //                     ),
-                                                                          //                   ),
-                                                                          //                   // labelText:
-                                                                          //                   //     'เลขเรื่มต้น 1-xxx',
-                                                                          //                   labelStyle: const TextStyle(
-                                                                          //                     fontSize: 12,
-                                                                          //                     color: Colors.black54,
-                                                                          //                     fontFamily: FontWeight_.Fonts_T,
-                                                                          //                   )),
-                                                                          //             )
-                                                                          //           : TextFormField(
-                                                                          //               style: TextStyle(fontFamily: Font_.Fonts_T, fontSize: 12),
-                                                                          //               textAlign: TextAlign.start,
-                                                                          //               // controller:
-                                                                          //               //     Add_Number_area_,
-                                                                          //               validator: (value) {
-                                                                          //                 if (value == null || value.isEmpty) {
-                                                                          //                   return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                                                          //                 }
-                                                                          //                 // if (int.parse(value.toString()) < 13) {
-                                                                          //                 //   return '< 13';
-                                                                          //                 // }
-                                                                          //                 return null;
-                                                                          //               },
-                                                                          //               // initialValue: teNantModels[index].user_name,
-                                                                          //               onFieldSubmitted: (value) async {
-                                                                          //                 SharedPreferences preferences = await SharedPreferences.getInstance();
-                                                                          //                 String? ren = preferences.getString('renTalSer');
-                                                                          //                 String? renTalname_s = preferences.getString('renTalName');
+                                                                            // Expanded(
+                                                                            //   flex:
+                                                                            //       1,
+                                                                            //   child:
+                                                                            //       Align(
+                                                                            //     alignment: Alignment.centerLeft,
+                                                                            //     child: Padding(
+                                                                            //       padding: const EdgeInsets.all(4.0),
+                                                                            //       child: (regisModels.where((model) => model.rser == '$ser_ren' && model.custno == '${teNantModels[index].custno}').map((model) => model.username).join(', ').toString() != '')
+                                                                            //           ? TextFormField(
+                                                                            //               readOnly: true,
+                                                                            //               style: TextStyle(fontFamily: Font_.Fonts_T, fontSize: 12),
+                                                                            //               textAlign: TextAlign.start,
+                                                                            //               // controller:
+                                                                            //               //     Add_Number_area_,
+                                                                            //               validator: (value) {
+                                                                            //                 if (value == null || value.isEmpty) {
+                                                                            //                   return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                                            //                 }
+                                                                            //                 // if (int.parse(value.toString()) < 13) {
+                                                                            //                 //   return '< 13';
+                                                                            //                 // }
+                                                                            //                 return null;
+                                                                            //               },
+                                                                            //               initialValue: regisModels.where((model) => model.rser == '$ser_ren' && model.custno == '${teNantModels[index].custno}').map((model) => model.username).join(', ').toString(),
+                                                                            //               cursorColor: Colors.green,
+                                                                            //               decoration: InputDecoration(
+                                                                            //                   fillColor: Colors.grey[300]!.withOpacity(0.4),
+                                                                            //                   filled: true,
+                                                                            //                   // prefixIcon:
+                                                                            //                   //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                            //                   // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                            //                   focusedBorder: const OutlineInputBorder(
+                                                                            //                     borderRadius: BorderRadius.only(
+                                                                            //                       topRight: Radius.circular(15),
+                                                                            //                       topLeft: Radius.circular(15),
+                                                                            //                       bottomRight: Radius.circular(15),
+                                                                            //                       bottomLeft: Radius.circular(15),
+                                                                            //                     ),
+                                                                            //                     borderSide: BorderSide(
+                                                                            //                       width: 1,
+                                                                            //                       color: Colors.black,
+                                                                            //                     ),
+                                                                            //                   ),
+                                                                            //                   enabledBorder: const OutlineInputBorder(
+                                                                            //                     borderRadius: BorderRadius.only(
+                                                                            //                       topRight: Radius.circular(15),
+                                                                            //                       topLeft: Radius.circular(15),
+                                                                            //                       bottomRight: Radius.circular(15),
+                                                                            //                       bottomLeft: Radius.circular(15),
+                                                                            //                     ),
+                                                                            //                     borderSide: BorderSide(
+                                                                            //                       width: 1,
+                                                                            //                       color: Colors.grey,
+                                                                            //                     ),
+                                                                            //                   ),
+                                                                            //                   // labelText:
+                                                                            //                   //     'เลขเรื่มต้น 1-xxx',
+                                                                            //                   labelStyle: const TextStyle(
+                                                                            //                     fontSize: 12,
+                                                                            //                     color: Colors.black54,
+                                                                            //                     fontFamily: FontWeight_.Fonts_T,
+                                                                            //                   )),
+                                                                            //             )
+                                                                            //           : TextFormField(
+                                                                            //               style: TextStyle(fontFamily: Font_.Fonts_T, fontSize: 12),
+                                                                            //               textAlign: TextAlign.start,
+                                                                            //               // controller:
+                                                                            //               //     Add_Number_area_,
+                                                                            //               validator: (value) {
+                                                                            //                 if (value == null || value.isEmpty) {
+                                                                            //                   return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                                            //                 }
+                                                                            //                 // if (int.parse(value.toString()) < 13) {
+                                                                            //                 //   return '< 13';
+                                                                            //                 // }
+                                                                            //                 return null;
+                                                                            //               },
+                                                                            //               // initialValue: teNantModels[index].user_name,
+                                                                            //               onFieldSubmitted: (value) async {
+                                                                            //                 SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                            //                 String? ren = preferences.getString('renTalSer');
+                                                                            //                 String? renTalname_s = preferences.getString('renTalName');
 
-                                                                          //                 var Cust_n = '${teNantModels[index].custno}';
-                                                                          //                 var Cid = '';
-                                                                          //                 var User_U = '$value';
-                                                                          //                 var Pass_U = '';
-                                                                          //                 var Accesstoken = '';
-                                                                          //                 var Idtoken = '';
-                                                                          //                 var Userid = '';
-                                                                          //                 var Displayname = '';
-                                                                          //                 var C_name = '${teNantModels[index].cname}';
-                                                                          //                 var Type = '${teNantModels[index].stype}';
+                                                                            //                 var Cust_n = '${teNantModels[index].custno}';
+                                                                            //                 var Cid = '';
+                                                                            //                 var User_U = '$value';
+                                                                            //                 var Pass_U = '';
+                                                                            //                 var Accesstoken = '';
+                                                                            //                 var Idtoken = '';
+                                                                            //                 var Userid = '';
+                                                                            //                 var Displayname = '';
+                                                                            //                 var C_name = '${teNantModels[index].cname}';
+                                                                            //                 var Type = '${teNantModels[index].stype}';
 
-                                                                          //                 String url = '${MyConstant().domain}/UpC_custno_cid_Informa.php?isAdd=true&ren=$ren&Pn=$renTalname_s&cust_no=$Cust_n&Cid=$Cid&user_U=$User_U&pass_U=$Pass_U&Accesstoken=$Accesstoken&Idtoken=$Idtoken&Userid=$Userid&Displayname=$Displayname&c_name=$C_name';
+                                                                            //                 String url = '${MyConstant().domain}/UpC_custno_cid_Informa.php?isAdd=true&ren=$ren&Pn=$renTalname_s&cust_no=$Cust_n&Cid=$Cid&user_U=$User_U&pass_U=$Pass_U&Accesstoken=$Accesstoken&Idtoken=$Idtoken&Userid=$Userid&Displayname=$Displayname&c_name=$C_name';
 
-                                                                          //                 try {
-                                                                          //                   var response = await http.get(Uri.parse(url));
+                                                                            //                 try {
+                                                                            //                   var response = await http.get(Uri.parse(url));
 
-                                                                          //                   var result = json.decode(response.body);
-                                                                          //                   print('result');
-                                                                          //                   print(result);
-                                                                          //                   print(result);
-                                                                          //                   if (result.toString() == 'true' && regisModels.where((model) => model.rser == '$ser_ren' && model.custno == '${teNantModels[index].custno}').map((model) => model.username.toString()).first.toString() != '$value') {
-                                                                          //                     Insert_log.Insert_logs('บัญชี', 'บัญชี>>บัญชีผู้เช่า>>User>>$value(${teNantModels[index].custno})');
+                                                                            //                   var result = json.decode(response.body);
+                                                                            //                   print('result');
+                                                                            //                   print(result);
+                                                                            //                   print(result);
+                                                                            //                   if (result.toString() == 'true' && regisModels.where((model) => model.rser == '$ser_ren' && model.custno == '${teNantModels[index].custno}').map((model) => model.username.toString()).first.toString() != '$value') {
+                                                                            //                     Insert_log.Insert_logs('บัญชี', 'บัญชี>>บัญชีผู้เช่า>>User>>$value(${teNantModels[index].custno})');
 
-                                                                          //                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('แก้ไขข้อมูลเสร็จสิ้น !!', style: TextStyle(color: Colors.black, fontFamily: Font_.Fonts_T))));
-                                                                          //                   } else {
-                                                                          //                     ScaffoldMessenger.of(context).showSnackBar(
-                                                                          //                       const SnackBar(content: Text('เกิดข้อผิดพลาด', style: TextStyle(color: Colors.red, fontFamily: Font_.Fonts_T))),
-                                                                          //                     );
-                                                                          //                   }
-                                                                          //                 } catch (e) {
-                                                                          //                   ScaffoldMessenger.of(context).showSnackBar(
-                                                                          //                     const SnackBar(content: Text('เกิดข้อผิดพลาด', style: TextStyle(color: Colors.red, fontFamily: Font_.Fonts_T))),
-                                                                          //                   );
-                                                                          //                 }
-                                                                          //                 setState(() {
-                                                                          //                   checkPreferance();
-                                                                          //                   read_GC_rental();
+                                                                            //                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('แก้ไขข้อมูลเสร็จสิ้น !!', style: TextStyle(color: Colors.black, fontFamily: Font_.Fonts_T))));
+                                                                            //                   } else {
+                                                                            //                     ScaffoldMessenger.of(context).showSnackBar(
+                                                                            //                       const SnackBar(content: Text('เกิดข้อผิดพลาด', style: TextStyle(color: Colors.red, fontFamily: Font_.Fonts_T))),
+                                                                            //                     );
+                                                                            //                   }
+                                                                            //                 } catch (e) {
+                                                                            //                   ScaffoldMessenger.of(context).showSnackBar(
+                                                                            //                     const SnackBar(content: Text('เกิดข้อผิดพลาด', style: TextStyle(color: Colors.red, fontFamily: Font_.Fonts_T))),
+                                                                            //                   );
+                                                                            //                 }
+                                                                            //                 setState(() {
+                                                                            //                   checkPreferance();
+                                                                            //                   read_GC_rental();
 
-                                                                          //                   read_GC_tenant();
-                                                                          //                   read_GC_Regis();
-                                                                          //                 });
-                                                                          //               },
+                                                                            //                   read_GC_tenant();
+                                                                            //                   read_GC_Regis();
+                                                                            //                 });
+                                                                            //               },
 
-                                                                          //               // maxLength: 4,
-                                                                          //               cursorColor: Colors.green,
-                                                                          //               decoration: InputDecoration(
-                                                                          //                   hintStyle: TextStyle(
-                                                                          //                     fontSize: 10.5,
-                                                                          //                     fontFamily: Font_.Fonts_T,
-                                                                          //                   ),
-                                                                          //                   labelText: 'กำหนด Username',
-                                                                          //                   hintText: 'ใส่ได้เฉพาะ A-Z a-z 0-9 _ @ .',
-                                                                          //                   fillColor: Colors.white.withOpacity(0.3),
-                                                                          //                   filled: true,
-                                                                          //                   // prefixIcon:
-                                                                          //                   //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                          //                   // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                          //                   focusedBorder: const OutlineInputBorder(
-                                                                          //                     borderRadius: BorderRadius.only(
-                                                                          //                       topRight: Radius.circular(15),
-                                                                          //                       topLeft: Radius.circular(15),
-                                                                          //                       bottomRight: Radius.circular(15),
-                                                                          //                       bottomLeft: Radius.circular(15),
-                                                                          //                     ),
-                                                                          //                     borderSide: BorderSide(
-                                                                          //                       width: 1,
-                                                                          //                       color: Colors.black,
-                                                                          //                     ),
-                                                                          //                   ),
-                                                                          //                   enabledBorder: const OutlineInputBorder(
-                                                                          //                     borderRadius: BorderRadius.only(
-                                                                          //                       topRight: Radius.circular(15),
-                                                                          //                       topLeft: Radius.circular(15),
-                                                                          //                       bottomRight: Radius.circular(15),
-                                                                          //                       bottomLeft: Radius.circular(15),
-                                                                          //                     ),
-                                                                          //                     borderSide: BorderSide(
-                                                                          //                       width: 1,
-                                                                          //                       color: Colors.grey,
-                                                                          //                     ),
-                                                                          //                   ),
-                                                                          //                   // labelText:
-                                                                          //                   //     'เลขเรื่มต้น 1-xxx',
-                                                                          //                   labelStyle: TextStyle(
-                                                                          //                     fontSize: 11,
-                                                                          //                     color: Colors.red[700],
-                                                                          //                     fontFamily: Font_.Fonts_T,
-                                                                          //                   )),
-                                                                          //               inputFormatters: <TextInputFormatter>[
-                                                                          //                 FilteringTextInputFormatter.allow(RegExp(r'[A-Za-z0-9_.@]')),
-                                                                          //               ],
-                                                                          //             ),
-                                                                          //     ),
-                                                                          //   ),
-                                                                          // ),
-                                                                          // Expanded(
-                                                                          //   flex:
-                                                                          //       1,
-                                                                          //   child:
-                                                                          //       Align(
-                                                                          //     alignment: Alignment.centerLeft,
-                                                                          //     child: Padding(
-                                                                          //       padding: const EdgeInsets.all(4.0),
-                                                                          //       child: (regisModels.where((model) => model.rser == '$ser_ren' && model.custno == '${teNantModels[index].custno}').map((model) => model.username).join(', ').toString() == '')
-                                                                          //           ? Text('')
-                                                                          //           : TextFormField(  readOnly: true,
-                                                                          //               style: TextStyle(fontFamily: Font_.Fonts_T, fontSize: 12),
-                                                                          //               textAlign: TextAlign.start,
-                                                                          //               // controller:
-                                                                          //               //     Add_Number_area_,
-                                                                          //               validator: (value) {
-                                                                          //                 if (value == null || value.isEmpty) {
-                                                                          //                   return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                                                          //                 }
-                                                                          //                 // if (int.parse(value.toString()) < 13) {
-                                                                          //                 //   return '< 13';
-                                                                          //                 // }
-                                                                          //                 return null;
-                                                                          //               },
+                                                                            //               // maxLength: 4,
+                                                                            //               cursorColor: Colors.green,
+                                                                            //               decoration: InputDecoration(
+                                                                            //                   hintStyle: TextStyle(
+                                                                            //                     fontSize: 10.5,
+                                                                            //                     fontFamily: Font_.Fonts_T,
+                                                                            //                   ),
+                                                                            //                   labelText: 'กำหนด Username',
+                                                                            //                   hintText: 'ใส่ได้เฉพาะ A-Z a-z 0-9 _ @ .',
+                                                                            //                   fillColor: Colors.white.withOpacity(0.3),
+                                                                            //                   filled: true,
+                                                                            //                   // prefixIcon:
+                                                                            //                   //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                            //                   // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                            //                   focusedBorder: const OutlineInputBorder(
+                                                                            //                     borderRadius: BorderRadius.only(
+                                                                            //                       topRight: Radius.circular(15),
+                                                                            //                       topLeft: Radius.circular(15),
+                                                                            //                       bottomRight: Radius.circular(15),
+                                                                            //                       bottomLeft: Radius.circular(15),
+                                                                            //                     ),
+                                                                            //                     borderSide: BorderSide(
+                                                                            //                       width: 1,
+                                                                            //                       color: Colors.black,
+                                                                            //                     ),
+                                                                            //                   ),
+                                                                            //                   enabledBorder: const OutlineInputBorder(
+                                                                            //                     borderRadius: BorderRadius.only(
+                                                                            //                       topRight: Radius.circular(15),
+                                                                            //                       topLeft: Radius.circular(15),
+                                                                            //                       bottomRight: Radius.circular(15),
+                                                                            //                       bottomLeft: Radius.circular(15),
+                                                                            //                     ),
+                                                                            //                     borderSide: BorderSide(
+                                                                            //                       width: 1,
+                                                                            //                       color: Colors.grey,
+                                                                            //                     ),
+                                                                            //                   ),
+                                                                            //                   // labelText:
+                                                                            //                   //     'เลขเรื่มต้น 1-xxx',
+                                                                            //                   labelStyle: TextStyle(
+                                                                            //                     fontSize: 11,
+                                                                            //                     color: Colors.red[700],
+                                                                            //                     fontFamily: Font_.Fonts_T,
+                                                                            //                   )),
+                                                                            //               inputFormatters: <TextInputFormatter>[
+                                                                            //                 FilteringTextInputFormatter.allow(RegExp(r'[A-Za-z0-9_.@]')),
+                                                                            //               ],
+                                                                            //             ),
+                                                                            //     ),
+                                                                            //   ),
+                                                                            // ),
+                                                                            // Expanded(
+                                                                            //   flex:
+                                                                            //       1,
+                                                                            //   child:
+                                                                            //       Align(
+                                                                            //     alignment: Alignment.centerLeft,
+                                                                            //     child: Padding(
+                                                                            //       padding: const EdgeInsets.all(4.0),
+                                                                            //       child: (regisModels.where((model) => model.rser == '$ser_ren' && model.custno == '${teNantModels[index].custno}').map((model) => model.username).join(', ').toString() == '')
+                                                                            //           ? Text('')
+                                                                            //           : TextFormField(  readOnly: true,
+                                                                            //               style: TextStyle(fontFamily: Font_.Fonts_T, fontSize: 12),
+                                                                            //               textAlign: TextAlign.start,
+                                                                            //               // controller:
+                                                                            //               //     Add_Number_area_,
+                                                                            //               validator: (value) {
+                                                                            //                 if (value == null || value.isEmpty) {
+                                                                            //                   return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                                            //                 }
+                                                                            //                 // if (int.parse(value.toString()) < 13) {
+                                                                            //                 //   return '< 13';
+                                                                            //                 // }
+                                                                            //                 return null;
+                                                                            //               },
 
-                                                                          //               initialValue: (regisModels.where((model) => model.rser == '$ser_ren' && model.custno == '${teNantModels[index].custno}').map((model) => model.passwd).join(', ').toString() != '') ? 'XXXXXX' : '',
-                                                                          //               onFieldSubmitted: (value) async {
-                                                                          //                 String password = md5.convert(utf8.encode(value)).toString();
+                                                                            //               initialValue: (regisModels.where((model) => model.rser == '$ser_ren' && model.custno == '${teNantModels[index].custno}').map((model) => model.passwd).join(', ').toString() != '') ? 'XXXXXX' : '',
+                                                                            //               onFieldSubmitted: (value) async {
+                                                                            //                 String password = md5.convert(utf8.encode(value)).toString();
 
-                                                                          //                 SharedPreferences preferences = await SharedPreferences.getInstance();
-                                                                          //                 String? ren = preferences.getString('renTalSer');
-                                                                          //                 String? renTalname_s = preferences.getString('renTalName');
+                                                                            //                 SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                            //                 String? ren = preferences.getString('renTalSer');
+                                                                            //                 String? renTalname_s = preferences.getString('renTalName');
 
-                                                                          //                 var Cust_n = '${teNantModels[index].custno}';
-                                                                          //                 var Cid = '';
-                                                                          //                 var User_U = '${regisModels.where((model) => model.rser == '$ser_ren' && model.custno == '${teNantModels[index].custno}').map((model) => model.username.toString()).first}';
+                                                                            //                 var Cust_n = '${teNantModels[index].custno}';
+                                                                            //                 var Cid = '';
+                                                                            //                 var User_U = '${regisModels.where((model) => model.rser == '$ser_ren' && model.custno == '${teNantModels[index].custno}').map((model) => model.username.toString()).first}';
 
-                                                                          //                 var Pass_U = '$password';
-                                                                          //                 var Accesstoken = '';
-                                                                          //                 var Idtoken = '';
-                                                                          //                 var Userid = '';
-                                                                          //                 var Displayname = '';
-                                                                          //                 var C_name = '${teNantModels[index].cname}';
+                                                                            //                 var Pass_U = '$password';
+                                                                            //                 var Accesstoken = '';
+                                                                            //                 var Idtoken = '';
+                                                                            //                 var Userid = '';
+                                                                            //                 var Displayname = '';
+                                                                            //                 var C_name = '${teNantModels[index].cname}';
 
-                                                                          //                 String url = '${MyConstant().domain}/UpC_custno_cid_Informa.php?isAdd=true&ren=$ren&Pn=$renTalname_s&cust_no=$Cust_n&Cid=$Cid&user_U=$User_U&pass_U=$Pass_U&Accesstoken=$Accesstoken&Idtoken=$Idtoken&Userid=$Userid&Displayname=$Displayname&c_name=$C_name';
+                                                                            //                 String url = '${MyConstant().domain}/UpC_custno_cid_Informa.php?isAdd=true&ren=$ren&Pn=$renTalname_s&cust_no=$Cust_n&Cid=$Cid&user_U=$User_U&pass_U=$Pass_U&Accesstoken=$Accesstoken&Idtoken=$Idtoken&Userid=$Userid&Displayname=$Displayname&c_name=$C_name';
 
-                                                                          //                 try {
-                                                                          //                   var response = await http.get(Uri.parse(url));
+                                                                            //                 try {
+                                                                            //                   var response = await http.get(Uri.parse(url));
 
-                                                                          //                   var result = json.decode(response.body);
-                                                                          //                   print(result);
-                                                                          //                   print(result);
-                                                                          //                   if (result.toString() == 'true') {
-                                                                          //                     Insert_log.Insert_logs('บัญชี', 'บัญชี>>บัญชีผู้เช่า>>Passwd>>$value(${teNantModels[index].custno})');
+                                                                            //                   var result = json.decode(response.body);
+                                                                            //                   print(result);
+                                                                            //                   print(result);
+                                                                            //                   if (result.toString() == 'true') {
+                                                                            //                     Insert_log.Insert_logs('บัญชี', 'บัญชี>>บัญชีผู้เช่า>>Passwd>>$value(${teNantModels[index].custno})');
 
-                                                                          //                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('แก้ไขข้อมูลเสร็จสิ้น !!', style: TextStyle(color: Colors.black, fontFamily: Font_.Fonts_T))));
-                                                                          //                   } else {
-                                                                          //                     ScaffoldMessenger.of(context).showSnackBar(
-                                                                          //                       const SnackBar(content: Text('เกิดข้อผิดพลาด', style: TextStyle(color: Colors.red, fontFamily: Font_.Fonts_T))),
-                                                                          //                     );
-                                                                          //                   }
-                                                                          //                 } catch (e) {
-                                                                          //                   ScaffoldMessenger.of(context).showSnackBar(
-                                                                          //                     const SnackBar(content: Text('เกิดข้อผิดพลาด', style: TextStyle(color: Colors.red, fontFamily: Font_.Fonts_T))),
-                                                                          //                   );
-                                                                          //                 }
-                                                                          //                 setState(() {
-                                                                          //                   checkPreferance();
-                                                                          //                   read_GC_rental();
+                                                                            //                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('แก้ไขข้อมูลเสร็จสิ้น !!', style: TextStyle(color: Colors.black, fontFamily: Font_.Fonts_T))));
+                                                                            //                   } else {
+                                                                            //                     ScaffoldMessenger.of(context).showSnackBar(
+                                                                            //                       const SnackBar(content: Text('เกิดข้อผิดพลาด', style: TextStyle(color: Colors.red, fontFamily: Font_.Fonts_T))),
+                                                                            //                     );
+                                                                            //                   }
+                                                                            //                 } catch (e) {
+                                                                            //                   ScaffoldMessenger.of(context).showSnackBar(
+                                                                            //                     const SnackBar(content: Text('เกิดข้อผิดพลาด', style: TextStyle(color: Colors.red, fontFamily: Font_.Fonts_T))),
+                                                                            //                   );
+                                                                            //                 }
+                                                                            //                 setState(() {
+                                                                            //                   checkPreferance();
+                                                                            //                   read_GC_rental();
 
-                                                                          //                   read_GC_tenant();
-                                                                          //                   read_GC_Regis();
-                                                                          //                 });
-                                                                          //               },
-                                                                          //               // maxLength: 4,
-                                                                          //               cursorColor: Colors.green,
-                                                                          //               decoration: InputDecoration(
-                                                                          //                   labelText: 'ใส่ได้เฉพาะ A-Z a-z 0-9 _ @ .',
-                                                                          //                   // hintText: 'ใส่ได้เฉพาะ A-Z a-z 0-9 _ @ .',
-                                                                          //                   fillColor: Colors.white.withOpacity(0.3),
-                                                                          //                   filled: true,
-                                                                          //                   // prefixIcon:
-                                                                          //                   //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                          //                   // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                          //                   focusedBorder: const OutlineInputBorder(
-                                                                          //                     borderRadius: BorderRadius.only(
-                                                                          //                       topRight: Radius.circular(15),
-                                                                          //                       topLeft: Radius.circular(15),
-                                                                          //                       bottomRight: Radius.circular(15),
-                                                                          //                       bottomLeft: Radius.circular(15),
-                                                                          //                     ),
-                                                                          //                     borderSide: BorderSide(
-                                                                          //                       width: 1,
-                                                                          //                       color: Colors.black,
-                                                                          //                     ),
-                                                                          //                   ),
-                                                                          //                   enabledBorder: const OutlineInputBorder(
-                                                                          //                     borderRadius: BorderRadius.only(
-                                                                          //                       topRight: Radius.circular(15),
-                                                                          //                       topLeft: Radius.circular(15),
-                                                                          //                       bottomRight: Radius.circular(15),
-                                                                          //                       bottomLeft: Radius.circular(15),
-                                                                          //                     ),
-                                                                          //                     borderSide: BorderSide(
-                                                                          //                       width: 1,
-                                                                          //                       color: Colors.grey,
-                                                                          //                     ),
-                                                                          //                   ),
-                                                                          //                   // labelText:
-                                                                          //                   //     'เลขเรื่มต้น 1-xxx',
-                                                                          //                   labelStyle: TextStyle(
-                                                                          //                     fontSize: 11,
-                                                                          //                     color: Colors.red[700],
-                                                                          //                     fontFamily: Font_.Fonts_T,
-                                                                          //                   )),
-                                                                          //               inputFormatters: <TextInputFormatter>[
-                                                                          //                 FilteringTextInputFormatter.allow(RegExp(r'[A-Za-z0-9_.@]')),
-                                                                          //               ],
-                                                                          //             ),
-                                                                          //     ),
-                                                                          //   ),
-                                                                          //   //     AutoSizeText(
-                                                                          //   //   minFontSize:
-                                                                          //   //       10,
-                                                                          //   //   maxFontSize:
-                                                                          //   //       25,
-                                                                          //   //   maxLines:
-                                                                          //   //       1,
-                                                                          //   //   (teNantModels[index].passw == null)
-                                                                          //   //       ? ''
-                                                                          //   //       : '******',
-                                                                          //   //   textAlign:
-                                                                          //   //       TextAlign.start,
-                                                                          //   //   style: const TextStyle(
-                                                                          //   //       color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                          //   //       fontFamily: Font_.Fonts_T),
-                                                                          //   // ),
-                                                                          // ),
-                                                                          Expanded(
+                                                                            //                   read_GC_tenant();
+                                                                            //                   read_GC_Regis();
+                                                                            //                 });
+                                                                            //               },
+                                                                            //               // maxLength: 4,
+                                                                            //               cursorColor: Colors.green,
+                                                                            //               decoration: InputDecoration(
+                                                                            //                   labelText: 'ใส่ได้เฉพาะ A-Z a-z 0-9 _ @ .',
+                                                                            //                   // hintText: 'ใส่ได้เฉพาะ A-Z a-z 0-9 _ @ .',
+                                                                            //                   fillColor: Colors.white.withOpacity(0.3),
+                                                                            //                   filled: true,
+                                                                            //                   // prefixIcon:
+                                                                            //                   //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                            //                   // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                            //                   focusedBorder: const OutlineInputBorder(
+                                                                            //                     borderRadius: BorderRadius.only(
+                                                                            //                       topRight: Radius.circular(15),
+                                                                            //                       topLeft: Radius.circular(15),
+                                                                            //                       bottomRight: Radius.circular(15),
+                                                                            //                       bottomLeft: Radius.circular(15),
+                                                                            //                     ),
+                                                                            //                     borderSide: BorderSide(
+                                                                            //                       width: 1,
+                                                                            //                       color: Colors.black,
+                                                                            //                     ),
+                                                                            //                   ),
+                                                                            //                   enabledBorder: const OutlineInputBorder(
+                                                                            //                     borderRadius: BorderRadius.only(
+                                                                            //                       topRight: Radius.circular(15),
+                                                                            //                       topLeft: Radius.circular(15),
+                                                                            //                       bottomRight: Radius.circular(15),
+                                                                            //                       bottomLeft: Radius.circular(15),
+                                                                            //                     ),
+                                                                            //                     borderSide: BorderSide(
+                                                                            //                       width: 1,
+                                                                            //                       color: Colors.grey,
+                                                                            //                     ),
+                                                                            //                   ),
+                                                                            //                   // labelText:
+                                                                            //                   //     'เลขเรื่มต้น 1-xxx',
+                                                                            //                   labelStyle: TextStyle(
+                                                                            //                     fontSize: 11,
+                                                                            //                     color: Colors.red[700],
+                                                                            //                     fontFamily: Font_.Fonts_T,
+                                                                            //                   )),
+                                                                            //               inputFormatters: <TextInputFormatter>[
+                                                                            //                 FilteringTextInputFormatter.allow(RegExp(r'[A-Za-z0-9_.@]')),
+                                                                            //               ],
+                                                                            //             ),
+                                                                            //     ),
+                                                                            //   ),
+                                                                            //   //     AutoSizeText(
+                                                                            //   //   minFontSize:
+                                                                            //   //       10,
+                                                                            //   //   maxFontSize:
+                                                                            //   //       25,
+                                                                            //   //   maxLines:
+                                                                            //   //       1,
+                                                                            //   //   (teNantModels[index].passw == null)
+                                                                            //   //       ? ''
+                                                                            //   //       : '******',
+                                                                            //   //   textAlign:
+                                                                            //   //       TextAlign.start,
+                                                                            //   //   style: const TextStyle(
+                                                                            //   //       color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            //   //       fontFamily: Font_.Fonts_T),
+                                                                            //   // ),
+                                                                            // ),
+                                                                            Expanded(
+                                                                                flex: 1,
+                                                                                child: StreamBuilder(
+                                                                                    stream: Stream<void>.periodic(const Duration(seconds: 1), (i) => i).take(1),
+                                                                                    // stream: Stream<void>.periodic(const Duration(seconds: 0)).take(1),
+                                                                                    builder: (context, snapshot) {
+                                                                                      return FutureBuilder<int>(
+                                                                                        future: read_GC_tenant_where(index),
+                                                                                        initialData: 0, // Set an initial value
+                                                                                        builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+                                                                                          if (snapshot.connectionState == ConnectionState.waiting) {
+                                                                                            return Row(
+                                                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                                                              children: [
+                                                                                                SizedBox(height: 50, child: CircularProgressIndicator()),
+                                                                                              ],
+                                                                                            );
+                                                                                          } else if (snapshot.hasError) {
+                                                                                            return Text('Error: ${snapshot.error}');
+                                                                                          } else {
+                                                                                            return Text(
+                                                                                              snapshot.data.toString(),
+                                                                                              maxLines: 1,
+                                                                                              textAlign: TextAlign.end,
+                                                                                              style: const TextStyle(
+                                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                fontFamily: Font_.Fonts_T,
+                                                                                              ),
+                                                                                            );
+                                                                                          }
+                                                                                        },
+                                                                                      );
+                                                                                    })),
+                                                                            Expanded(
+                                                                                flex: 1,
+                                                                                child: StreamBuilder(
+                                                                                    stream: Stream<void>.periodic(const Duration(seconds: 1), (i) => i).take(1),
+                                                                                    builder: (context, snapshot) {
+                                                                                      return FutureBuilder<String>(
+                                                                                        future: read_GC_tenant_wherecids(index),
+                                                                                        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                                                                                          if (snapshot.connectionState == ConnectionState.waiting) {
+                                                                                            return Row(
+                                                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                                                              children: [
+                                                                                                SizedBox(height: 50, child: CircularProgressIndicator()),
+                                                                                              ],
+                                                                                            );
+                                                                                          } else if (snapshot.hasError) {
+                                                                                            return Text('Error: ${snapshot.error}');
+                                                                                          } else {
+                                                                                            return Text(
+                                                                                              snapshot.data.toString(),
+                                                                                              maxLines: 1,
+                                                                                              textAlign: TextAlign.end,
+                                                                                              style: const TextStyle(
+                                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                fontFamily: Font_.Fonts_T,
+                                                                                              ),
+                                                                                            );
+                                                                                          }
+                                                                                        },
+                                                                                      );
+                                                                                    })),
+                                                                            Expanded(
                                                                               flex: 1,
-                                                                              child: StreamBuilder(
-                                                                                  stream: Stream<void>.periodic(const Duration(seconds: 1), (i) => i).take(1),
-                                                                                  // stream: Stream<void>.periodic(const Duration(seconds: 0)).take(1),
-                                                                                  builder: (context, snapshot) {
-                                                                                    return FutureBuilder<int>(
-                                                                                      future: read_GC_tenant_where(index),
-                                                                                      initialData: 0, // Set an initial value
-                                                                                      builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-                                                                                        if (snapshot.connectionState == ConnectionState.waiting) {
-                                                                                          return Row(
-                                                                                            mainAxisAlignment: MainAxisAlignment.center,
-                                                                                            children: [
-                                                                                              SizedBox(height: 50, child: CircularProgressIndicator()),
-                                                                                            ],
-                                                                                          );
-                                                                                        } else if (snapshot.hasError) {
-                                                                                          return Text('Error: ${snapshot.error}');
-                                                                                        } else {
-                                                                                          return Text(
-                                                                                            snapshot.data.toString(),
-                                                                                            maxLines: 1,
-                                                                                            textAlign: TextAlign.end,
-                                                                                            style: const TextStyle(
-                                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                              fontFamily: Font_.Fonts_T,
-                                                                                            ),
-                                                                                          );
-                                                                                        }
-                                                                                      },
-                                                                                    );
-                                                                                  })),
-                                                                          Expanded(
-                                                                              flex: 1,
-                                                                              child: StreamBuilder(
-                                                                                  stream: Stream<void>.periodic(const Duration(seconds: 1), (i) => i).take(1),
-                                                                                  builder: (context, snapshot) {
-                                                                                    return FutureBuilder<String>(
-                                                                                      future: read_GC_tenant_wherecids(index),
-                                                                                      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                                                                                        if (snapshot.connectionState == ConnectionState.waiting) {
-                                                                                          return Row(
-                                                                                            mainAxisAlignment: MainAxisAlignment.center,
-                                                                                            children: [
-                                                                                              SizedBox(height: 50, child: CircularProgressIndicator()),
-                                                                                            ],
-                                                                                          );
-                                                                                        } else if (snapshot.hasError) {
-                                                                                          return Text('Error: ${snapshot.error}');
-                                                                                        } else {
-                                                                                          return Text(
-                                                                                            snapshot.data.toString(),
-                                                                                            maxLines: 1,
-                                                                                            textAlign: TextAlign.end,
-                                                                                            style: const TextStyle(
-                                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                              fontFamily: Font_.Fonts_T,
-                                                                                            ),
-                                                                                          );
-                                                                                        }
-                                                                                      },
-                                                                                    );
-                                                                                  })),
-                                                                          Expanded(
-                                                                            flex:
-                                                                                1,
-                                                                            child:
-                                                                                Row(
-                                                                              mainAxisAlignment: MainAxisAlignment.end,
-                                                                              children: [
-                                                                                Padding(
-                                                                                  padding: const EdgeInsets.all(8.0),
-                                                                                  child: InkWell(
-                                                                                    onTap: () {
-                                                                                      print(teNantModels[index].custno);
-                                                                                      setState(() {
-                                                                                        // widget.updateMessage('0');
-                                                                                        Status_cuspang = 1;
+                                                                              child: Row(
+                                                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                                                children: [
+                                                                                  Padding(
+                                                                                    padding: const EdgeInsets.all(0.0),
+                                                                                    child: InkWell(
+                                                                                      onTap: () {
+                                                                                        print(teNantModels[index].custno);
+                                                                                        setState(() {
+                                                                                          // widget.updateMessage('0');
+                                                                                          Status_cuspang = 1;
 
-                                                                                        cust_no = teNantModels[index].custno!;
-                                                                                      });
-                                                                                      // Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-                                                                                      //   return Details_Rental_customer(
-                                                                                      //     name_custno: cust_no,
-                                                                                      //   );
-                                                                                      // }));
-                                                                                    },
-                                                                                    child: Container(
-                                                                                      width: 130,
-                                                                                      decoration: BoxDecoration(
-                                                                                        color: Colors.deepPurple.shade100,
-                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                        border: Border.all(color: Colors.white, width: 1),
-                                                                                      ),
-                                                                                      padding: const EdgeInsets.all(8.0),
-                                                                                      child: const AutoSizeText(
-                                                                                        minFontSize: 10,
-                                                                                        maxFontSize: 25,
-                                                                                        maxLines: 1,
-                                                                                        'เรียกดู',
-                                                                                        textAlign: TextAlign.center,
-                                                                                        style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                          cust_no = teNantModels[index].custno!;
+                                                                                        });
+                                                                                        // Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+                                                                                        //   return Details_Rental_customer(
+                                                                                        //     name_custno: cust_no,
+                                                                                        //   );
+                                                                                        // }));
+                                                                                      },
+                                                                                      child: Container(
+                                                                                        width: 130,
+                                                                                        decoration: BoxDecoration(
+                                                                                          color: Colors.indigo.shade100,
+                                                                                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                          border: Border.all(color: Colors.white, width: 1),
+                                                                                        ),
+                                                                                        padding: const EdgeInsets.all(2.0),
+                                                                                        child: const AutoSizeText(
+                                                                                          minFontSize: 10,
+                                                                                          maxFontSize: 25,
+                                                                                          maxLines: 1,
+                                                                                          'เรียกดู',
+                                                                                          textAlign: TextAlign.center,
+                                                                                          style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                        ),
                                                                                       ),
                                                                                     ),
                                                                                   ),
-                                                                                ),
-                                                                              ],
+                                                                                ],
+                                                                              ),
                                                                             ),
-                                                                          ),
-                                                                        ],
+                                                                          ],
+                                                                        ),
                                                                       )),
                                                                   // if (index +
                                                                   //         1 ==
@@ -1631,7 +1649,7 @@ class _Rental_customersState extends State<Rental_customers> {
                                                       //     .TiTile_Colors,
                                                       borderRadius:
                                                           const BorderRadius
-                                                              .only(
+                                                                  .only(
                                                               topLeft: Radius
                                                                   .circular(6),
                                                               topRight: Radius

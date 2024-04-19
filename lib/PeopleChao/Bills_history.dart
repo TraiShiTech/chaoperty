@@ -540,7 +540,7 @@ class _BillsHistoryState extends State<BillsHistory> {
                                       _InvoiceModels[index].ptname;
                                   payment_Bno1 = _InvoiceModels[index].bno;
 
-                                  Datex_invoice = _InvoiceModels[index].daterec;
+                                  Datex_invoice = _InvoiceModels[index].date;
                                 });
 
                                 red_Trans_select(index);
@@ -1434,6 +1434,78 @@ class _BillsHistoryState extends State<BillsHistory> {
                   ),
                 ],
               ),
+                 Row(
+                children: [
+                  Expanded(
+                    flex: 6,
+                    child: SizedBox(),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: AppbackgroundColor.Sub_Abg_Colors,
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(0),
+                            topRight: Radius.circular(0),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10)),
+                      ),
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          const AutoSizeText(
+                            minFontSize: 10,
+                            maxFontSize: 15,
+                            textAlign: TextAlign.start,
+                            'วันที่ครบกำหนดชำระ : ',
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                //fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: AppbackgroundColor.Sub_Abg_Colors,
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                border:
+                                    Border.all(color: Colors.grey, width: 1),
+                              ),
+                              width: 120,
+                              child: Center(
+                                child: AutoSizeText(
+                                  minFontSize: 8,
+                                  maxFontSize: 12,
+                                  textAlign: TextAlign.end,
+                                  (Datex_invoice == null)
+                                      ? 'วันที่ครบ ( ไม่พบ ) !!!'
+                                      : (Datex_invoice == null)
+                                          ? '${Datex_invoice}  '
+                                          : '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${Datex_invoice}'))}',
+                                  style: TextStyle(
+                                      color: (Datex_invoice == null)
+                                          ? Colors.red
+                                          : PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                      //fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               Row(
                 children: [
                   Expanded(
@@ -1628,12 +1700,14 @@ class _BillsHistoryState extends State<BillsHistory> {
                                   maxFontSize: 12,
                                   textAlign: TextAlign.end,
                                   (payment_Ptname1 == null)
-                                      ? 'รูปแบบ'
+                                       ? 'รูปแบบ ( ไม่พบ ) !!!'
                                       : (payment_Bno1 == null)
                                           ? '${payment_Ptname1}  '
                                           : '${payment_Ptname1} : ${payment_Bno1}',
                                   style: TextStyle(
-                                      color:
+                                      color:(payment_Ptname1 == null)
+                                          ? Colors.red
+                                          :
                                           PeopleChaoScreen_Color.Colors_Text2_,
                                       //fontWeight: FontWeight.bold,
                                       fontFamily: Font_.Fonts_T),
@@ -1655,7 +1729,46 @@ class _BillsHistoryState extends State<BillsHistory> {
                   ),
                   Expanded(
                     flex: 1,
-                    child: Padding(
+                    child:(payment_Ptname1 == null ||
+                            payment_Ptname1.toString() == '')
+                        ? Container(
+                            padding: const EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(6),
+                                  topRight: Radius.circular(6),
+                                  bottomLeft: Radius.circular(6),
+                                  bottomRight: Radius.circular(6)),
+                              border: Border.all(color: Colors.grey, width: 1),
+                            ),
+                            child: Column(
+                              children: [
+                                Text(
+                                  'พิมพ์ ไม่ได้ไม่พบช่องทางรับชำระ !!!',
+                                  style: TextStyle(
+                                    color: Colors.orange, fontSize: 12,
+                                    // fontWeight:
+                                    //     FontWeight.bold,
+                                    fontFamily: Font_.Fonts_T,
+                                  ),
+                                ),
+                                Text(
+                                  '( โปรดตรวจสอบหรือยกเลิก )',
+                                  style: TextStyle(
+                                    color: Colors.orange, fontSize: 12,
+                                    // fontWeight:
+                                    // fontWeight:
+                                    //     FontWeight.bold,
+                                    fontFamily: Font_.Fonts_T,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : 
+                    
+                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: InkWell(
                         onTap: () async {
@@ -1725,7 +1838,7 @@ class _BillsHistoryState extends State<BillsHistory> {
                         child: Container(
                             height: 50,
                             decoration: const BoxDecoration(
-                              color: Colors.orange,
+                              color: Colors.blue,
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(10),
                                   topRight: Radius.circular(10),
@@ -1929,7 +2042,7 @@ class _BillsHistoryState extends State<BillsHistory> {
                         child: Container(
                             height: 50,
                             decoration: BoxDecoration(
-                              color: Colors.green.shade900,
+                              color: Colors.red.shade900,
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(10),
                                   topRight: Radius.circular(10),

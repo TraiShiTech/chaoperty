@@ -198,7 +198,7 @@ class _Dashboard_Screen1State extends State<Dashboard_Screen1> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       Map<String, dynamic> map = Map();
       map['ser'] = '0';
       map['rser'] = '0';
@@ -276,7 +276,7 @@ class _Dashboard_Screen1State extends State<Dashboard_Screen1> {
               });
             }
             await Future.delayed(const Duration(milliseconds: 200));
-            print('result ${_TransReBillModels_Income.length}');
+            // print('result ${_TransReBillModels_Income.length}');
           }
         } catch (e) {}
         await Future.delayed(Duration(milliseconds: 100));
@@ -345,7 +345,7 @@ class _Dashboard_Screen1State extends State<Dashboard_Screen1> {
             }
           }
 
-          print('result ${_TransReBillModels_Income.length}');
+          // print('result ${_TransReBillModels_Income.length}');
         }
       } catch (e) {}
       await Future.delayed(const Duration(milliseconds: 200));
@@ -491,7 +491,7 @@ class _Dashboard_Screen1State extends State<Dashboard_Screen1> {
                   children: [
                     Container(
                       width: MediaQuery.of(context).size.width,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         color: AppbackgroundColor.TiTile_Colors,
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(10),

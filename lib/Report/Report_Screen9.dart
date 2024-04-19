@@ -148,7 +148,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
     var ren = preferences.getString('renTalSer');
     var zone = preferences.getString('zoneSer');
 
-    print('ren >>>>>> $ren');
+    // print('ren >>>>>> $ren');
 
     String url =
         '${MyConstant().domain}/GC_Bank_Paytype.php?isAdd=true&ren=$ren';
@@ -157,7 +157,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           PayMentModel payMentModel = PayMentModel.fromJson(map);
@@ -240,7 +240,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
         }
       } else {}
     } catch (e) {
-      print('Error-Dis(read_GC_rental) : ${e}');
+      // print('Error-Dis(read_GC_rental) : ${e}');
     }
     // print('name>>>>>  $renname');
   }
@@ -360,7 +360,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           ExpModel expModel = ExpModel.fromJson(map);
@@ -389,7 +389,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       Map<String, dynamic> map = Map();
       map['ser'] = '0';
       map['rser'] = '0';
@@ -450,8 +450,8 @@ class _ReportScreen9State extends State<ReportScreen9> {
     var ren = preferences.getString('renTalSer');
 
     String url = (Serdata.toString() == 'All')
-        ? '${MyConstant().domain}/GC_bill_invoiceMon_historyReport.php?isAdd=true&ren=$ren&Serdata=$Serdata&serzone=$zone_ser_Invoice_Mon&_monts=$Mon_Invoice_Mon&yex=$YE_Invoice_Mon'
-        : '${MyConstant().domain}/GC_bill_invoiceMon_historyReport.php?isAdd=true&ren=$ren&Serdata=$Serdata&serzone=$zone_ser_Invoice_Mon&_monts=$Mon_Invoice_Mon&yex=$YE_Invoice_Mon';
+        ? '${MyConstant().domain}/GC_bill_invoiceMon_historyReport9.php?isAdd=true&ren=$ren&Serdata=$Serdata&serzone=$zone_ser_Invoice_Mon&_monts=$Mon_Invoice_Mon&yex=$YE_Invoice_Mon'
+        : '${MyConstant().domain}/GC_bill_invoiceMon_historyReport9.php?isAdd=true&ren=$ren&Serdata=$Serdata&serzone=$zone_ser_Invoice_Mon&_monts=$Mon_Invoice_Mon&yex=$YE_Invoice_Mon';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -608,7 +608,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
         }
       }
     } catch (e) {
-      print('Error-Dis(red_Trans_selectIncome) : ${e}');
+      // print('Error-Dis(red_Trans_selectIncome) : ${e}');
     }
   }
 
@@ -640,7 +640,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
         }
       }
     } catch (e) {
-      print('Error-Dis(red_Trans_selectIncomeAll) : ${e}');
+      // print('Error-Dis(red_Trans_selectIncomeAll) : ${e}');
     }
   }
 
@@ -729,7 +729,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
           setState(() {
             Await_Status_Report3 = null;
           });
-          print('red_Trans_bill_Mon : ${TransReBillModels_.length}');
+          // print('red_Trans_bill_Mon : ${TransReBillModels_.length}');
         });
       }
     } catch (e) {}
@@ -761,7 +761,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
           setState(() {
             Await_Status_Report4 = null;
           });
-          print('red_Trans_bill_Daily : ${TransReBillModels_.length}');
+          // print('red_Trans_bill_Daily : ${TransReBillModels_.length}');
         });
       }
     } catch (e) {}
@@ -969,7 +969,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
                       const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(
-                          'เดือน :',
+                          'เดือนที่ครบกำหนดชำระ :',
                           style: TextStyle(
                             color: ReportScreen_Color.Colors_Text2_,
                             // fontWeight: FontWeight.bold,
@@ -1089,7 +1089,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
                       const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(
-                          'ปี :',
+                          'ปีที่ที่ครบกำหนดชำระ :',
                           style: TextStyle(
                             color: ReportScreen_Color.Colors_Text2_,
                             // fontWeight: FontWeight.bold,
@@ -1314,8 +1314,8 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                 zone_ser_Invoice_Mon =
                                     zoneModels_report[selectedIndex].ser!;
                               });
-                              print(
-                                  'Selected Index: $zone_ser_Invoice_Mon  //${zone_name_Invoice_Mon}');
+                              // print(
+                              //     'Selected Index: $zone_ser_Invoice_Mon  //${zone_name_Invoice_Mon}');
                             },
                           ),
                         ),
@@ -1523,7 +1523,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
                       const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(
-                          'วันที่ :',
+                          'วันที่ที่ครบกำหนดชำระ :',
                           style: TextStyle(
                             color: ReportScreen_Color.Colors_Text2_,
                             // fontWeight: FontWeight.bold,
@@ -1662,8 +1662,8 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                 zone_ser_Invoice_Daily =
                                     zoneModels_report[selectedIndex].ser!;
                               });
-                              print(
-                                  'Selected Index: $zone_name_Invoice_Daily  //${zone_ser_Invoice_Daily}');
+                              // print(
+                              //     'Selected Index: $zone_name_Invoice_Daily  //${zone_ser_Invoice_Daily}');
                             },
                           ),
                         ),
@@ -2233,8 +2233,8 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                 zone_ser_BillAwatCheck_Mon =
                                     zoneModels_report[selectedIndex].ser!;
                               });
-                              print(
-                                  'Selected Index: $zone_ser_BillAwatCheck_Mon  //${zone_name_BillAwatCheck_Mon}');
+                              // print(
+                              //     'Selected Index: $zone_ser_BillAwatCheck_Mon  //${zone_name_BillAwatCheck_Mon}');
                             },
                           ),
                         ),
@@ -2617,8 +2617,8 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                 zone_ser_BillAwatCheck_Daily =
                                     zoneModels_report[selectedIndex].ser!;
                               });
-                              print(
-                                  'Selected Index: $zone_name_BillAwatCheck_Daily  //${zone_ser_BillAwatCheck_Daily}');
+                              // print(
+                              //     'Selected Index: $zone_name_BillAwatCheck_Daily  //${zone_ser_BillAwatCheck_Daily}');
                             },
                           ),
                         ),
@@ -2996,7 +2996,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                   children: <Widget>[
                                     Container(
                                       // width: 1050,
-                                      decoration: const BoxDecoration(
+                                      decoration: BoxDecoration(
                                         color: AppbackgroundColor.TiTile_Colors,
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(10),
@@ -3062,7 +3062,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                           const Expanded(
                                             flex: 1,
                                             child: Text(
-                                              'วันที่ออกใบแจ้งหนี้',
+                                              'วันที่ออก',
                                               textAlign: TextAlign.start,
                                               maxLines: 1,
                                               style: TextStyle(
@@ -3073,25 +3073,25 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                               ),
                                             ),
                                           ),
-                                          // Expanded(
-                                          //   flex: 2,
-                                          //   child: Text(
-                                          //     'วันที่ครบกำหนด',
-                                          //     textAlign: TextAlign.start,
-                                          //     maxLines: 1,
-                                          //     style: TextStyle(
-                                          //       color: ManageScreen_Color
-                                          //           .Colors_Text1_,
-                                          //       fontWeight: FontWeight.bold,
-                                          //       fontFamily: FontWeight_.Fonts_T,
-                                          //     ),
-                                          //   ),
-                                          // ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              'วันที่ครบกำหนด',
+                                              textAlign: TextAlign.start,
+                                              maxLines: 1,
+                                              style: TextStyle(
+                                                color: ManageScreen_Color
+                                                    .Colors_Text1_,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: FontWeight_.Fonts_T,
+                                              ),
+                                            ),
+                                          ),
                                           const Expanded(
                                             flex: 2,
                                             child: Text(
                                               'ชื่อลูกค้า',
-                                              textAlign: TextAlign.center,
+                                              textAlign: TextAlign.start,
                                               style: TextStyle(
                                                 color: ManageScreen_Color
                                                     .Colors_Text1_,
@@ -3348,7 +3348,36 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                                     Expanded(
                                                       flex: 1,
                                                       child: Text(
-                                                        '${DateFormat('dd-MM').format(DateTime.parse('${InvoiceModels[index].daterec}'))}-${DateTime.parse('${InvoiceModels[index].daterec}').year + 543}',
+                                                        (InvoiceModels[index]
+                                                                    .daterec ==
+                                                                null)
+                                                            ? '${InvoiceModels[index].daterec}'
+                                                            : '${DateFormat('dd-MM').format(DateTime.parse('${InvoiceModels[index].daterec}'))}-${DateTime.parse('${InvoiceModels[index].daterec}').year + 543}',
+                                                        //'${DateFormat('dd-MM-yyyy').format(DateTime.parse('${InvoiceModels[index].daterec}'))}',
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: const TextStyle(
+                                                          color:
+                                                              ManageScreen_Color
+                                                                  .Colors_Text2_,
+                                                          // fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T,
+                                                          // fontSize: 12.0
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Text(
+                                                        (InvoiceModels[index]
+                                                                    .date ==
+                                                                null)
+                                                            ? '${InvoiceModels[index].date}'
+                                                            : '${DateFormat('dd-MM').format(DateTime.parse('${InvoiceModels[index].date}'))}-${DateTime.parse('${InvoiceModels[index].date}').year + 543}',
                                                         //'${DateFormat('dd-MM-yyyy').format(DateTime.parse('${InvoiceModels[index].daterec}'))}',
                                                         textAlign:
                                                             TextAlign.start,
@@ -3369,10 +3398,14 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                                     Expanded(
                                                       flex: 2,
                                                       child: Text(
-                                                        '${InvoiceModels[index].scname}',
+                                                        (InvoiceModels[index]
+                                                                    .scname ==
+                                                                null)
+                                                            ? '-'
+                                                            : '${InvoiceModels[index].scname}',
                                                         // '${transMeterModels[index].ovalue}',
                                                         textAlign:
-                                                            TextAlign.center,
+                                                            TextAlign.start,
                                                         style: const TextStyle(
                                                           color:
                                                               ManageScreen_Color
@@ -3423,8 +3456,8 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                                     Expanded(
                                                       flex: 1,
                                                       child: Text(
-                                                        //'${InvoiceModels[index].total_bill}',
-                                                        '${nFormat.format(double.parse(InvoiceModels[index].total_bill.toString()) - double.parse(InvoiceModels[index].total_dis.toString()))}',
+                                                        '${nFormat.format(double.parse(InvoiceModels[index].amt_dis.toString()))}',
+                                                        // '${nFormat.format(double.parse(InvoiceModels[index].total_bill.toString()) - double.parse(InvoiceModels[index].total_dis.toString()))}',
                                                         textAlign:
                                                             TextAlign.end,
                                                         style: const TextStyle(
@@ -3691,7 +3724,32 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                                         ),
                                                       ),
                                                       Expanded(
-                                                        flex: 1,
+                                                        flex: 2,
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  2.0),
+                                                          child: Text(
+                                                            'เลขตั้งหนี้',
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            style: TextStyle(
+                                                                color: PeopleChaoScreen_Color
+                                                                    .Colors_Text1_,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T
+                                                                //fontSize: 10.0
+                                                                //fontSize: 10.0
+                                                                ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 2,
                                                         child: Padding(
                                                           padding:
                                                               EdgeInsets.all(
@@ -3803,7 +3861,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                                       Expanded(
                                                         flex: 1,
                                                         child: Text(
-                                                          'ราคารวม Vat',
+                                                          'ยอดสุทธิ',
                                                           textAlign:
                                                               TextAlign.end,
                                                           style: TextStyle(
@@ -3913,12 +3971,31 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                                           ),
                                                         ),
                                                         Expanded(
-                                                          flex: 2,
+                                                          flex: 1,
                                                           child: AutoSizeText(
                                                             minFontSize: 10,
                                                             maxFontSize: 15,
                                                             maxLines: 1,
                                                             '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_InvoiceHistoryModels[index2].date} 00:00:00'))}',
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            style:
+                                                                const TextStyle(
+                                                                    color: PeopleChaoScreen_Color
+                                                                        .Colors_Text2_,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T),
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          flex: 2,
+                                                          child: AutoSizeText(
+                                                            minFontSize: 10,
+                                                            maxFontSize: 15,
+                                                            maxLines: 1,
+                                                            '${_InvoiceHistoryModels[index2].refno}',
                                                             textAlign:
                                                                 TextAlign.start,
                                                             style:
@@ -3956,31 +4033,13 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                                             minFontSize: 10,
                                                             maxFontSize: 15,
                                                             maxLines: 1,
-                                                            '${_InvoiceHistoryModels[index2].qty}',
-                                                            textAlign:
-                                                                TextAlign.end,
-                                                            style:
-                                                                const TextStyle(
-                                                                    color: PeopleChaoScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    //fontWeight: FontWeight.bold,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T),
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: AutoSizeText(
-                                                            minFontSize: 10,
-                                                            maxFontSize: 15,
-                                                            maxLines: 1,
-                                                            _InvoiceHistoryModels[
+                                                            double.parse(_InvoiceHistoryModels[
                                                                             index2]
-                                                                        .nvalue !=
-                                                                    '0'
-                                                                ? '${nFormat.format(double.parse(_InvoiceHistoryModels[index2].pri!))}'
-                                                                : '${_InvoiceHistoryModels[index2].nvat}',
+                                                                        .tf!) ==
+                                                                    0.00
+                                                                ? '${nFormat.format(double.parse(_InvoiceHistoryModels[index2].qty!))}'
+                                                                : 'ก่อน-หลัง (${int.parse(_InvoiceHistoryModels[index2].ovalue!)} - ${int.parse(_InvoiceHistoryModels[index2].nvalue!)}) ${double.parse(_InvoiceHistoryModels[index2].qty!)}',
+                                                            // '${_InvoiceHistoryModels[index2].qty}',
                                                             textAlign:
                                                                 TextAlign.end,
                                                             style:
@@ -3999,7 +4058,12 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                                             minFontSize: 10,
                                                             maxFontSize: 15,
                                                             maxLines: 1,
-                                                            '${_InvoiceHistoryModels[index2].vat}',
+                                                            double.parse(_InvoiceHistoryModels[
+                                                                            index2]
+                                                                        .tf!) !=
+                                                                    0.00
+                                                                ? '${nFormat.format(double.parse(_InvoiceHistoryModels[index2].pri!))} (tf ${nFormat.format((double.parse(_InvoiceHistoryModels[index2].amt!) - (double.parse(_InvoiceHistoryModels[index2].vat!) + double.parse(_InvoiceHistoryModels[index2].pvat!))))})'
+                                                                : '${nFormat.format(double.parse(_InvoiceHistoryModels[index2].nvat!))}',
                                                             textAlign:
                                                                 TextAlign.end,
                                                             style:
@@ -4018,7 +4082,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                                             minFontSize: 10,
                                                             maxFontSize: 15,
                                                             maxLines: 1,
-                                                            '${_InvoiceHistoryModels[index2].pvat}',
+                                                            '${nFormat.format(double.parse(_InvoiceHistoryModels[index2].vat_t!))}',
                                                             textAlign:
                                                                 TextAlign.end,
                                                             style:
@@ -4037,7 +4101,26 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                                             minFontSize: 10,
                                                             maxFontSize: 15,
                                                             maxLines: 1,
-                                                            '${_InvoiceHistoryModels[index2].amt}',
+                                                            '${nFormat.format(double.parse(_InvoiceHistoryModels[index2].pvat_t!))}',
+                                                            textAlign:
+                                                                TextAlign.end,
+                                                            style:
+                                                                const TextStyle(
+                                                                    color: PeopleChaoScreen_Color
+                                                                        .Colors_Text2_,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T),
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          flex: 1,
+                                                          child: AutoSizeText(
+                                                            minFontSize: 10,
+                                                            maxFontSize: 15,
+                                                            maxLines: 1,
+                                                            '${nFormat.format(double.parse(_InvoiceHistoryModels[index2].total_t!))}',
                                                             textAlign:
                                                                 TextAlign.end,
                                                             style:
@@ -4310,7 +4393,7 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                                     children: [
                                                       Container(
                                                         decoration:
-                                                            const BoxDecoration(
+                                                            BoxDecoration(
                                                           color:
                                                               AppbackgroundColor
                                                                   .TiTile_Colors,

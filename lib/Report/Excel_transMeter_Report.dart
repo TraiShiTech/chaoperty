@@ -28,7 +28,9 @@ class Excgen_transMeterReport {
       YE_transMeter_Mon,
       Status_transMeter_,
       zone_name_transMeter,
-      Ser_BodySta1) async {
+      Ser_BodySta1,
+      expSZ_name,
+      expSZModels) async {
     var nFormat = NumberFormat("#,##0.00", "en_US");
     var nFormat2 = NumberFormat("###0.00", "en_US");
     DateTime datex = DateTime.now();
@@ -158,16 +160,29 @@ class Excgen_transMeterReport {
     sheet.getRangeByName('J1').cellStyle = globalStyle22;
     sheet.getRangeByName('K1').cellStyle = globalStyle22;
     sheet.getRangeByName('L1').cellStyle = globalStyle22;
+    sheet.getRangeByName('M1').cellStyle = globalStyle22;
+    sheet.getRangeByName('N1').cellStyle = globalStyle22;
+    sheet.getRangeByName('O1').cellStyle = globalStyle22;
 
     final x.Range range = sheet.getRangeByName('D1');
     range.setText(
-      (Ser_BodySta1 == 1)
-          ? (zone_name_transMeter == null)
-              ? 'รายงานมิเตอร์ไฟฟ้า (กรุณาเลือกโซน)'
-              : 'รายงานมิเตอร์ไฟฟ้า (โซน : $zone_name_transMeter) '
-          : (zone_name_transMeter == null)
-              ? 'รายงานมิเตอร์น้ำ (กรุณาเลือกโซน)'
-              : 'รายงานมิเตอร์น้ำ (โซน : $zone_name_transMeter) ',
+      (zone_name_transMeter == null)
+          ? (expSZ_name.toString().trim() != 'ทั้งหมด')
+              ? 'รายงาน $expSZ_name (กรุณาเลือกโซน)'
+              : 'รายงาน [${expSZModels.where((model) => model.ser.toString() != '0').map((model) => model.expname).join(',')} ]  (กรุณาเลือกโซน)'
+          : (expSZ_name.toString().trim() != 'ทั้งหมด')
+              ? 'รายงาน $expSZ_name  (โซน : $zone_name_transMeter)'
+              : 'รายงาน [${expSZModels.where((model) => model.ser.toString() != '0').map((model) => model.expname).join(',')} ]  (โซน : $zone_name_transMeter)',
+      // (zone_name_transMeter == null)
+      //     ? 'รายงานมิเตอร์น้ำ-ไฟฟ้า (กรุณาเลือกโซน)'
+      //     : 'รายงานมิเตอร์น้ำ-ไฟฟ้า (โซน : $zone_name_transMeter) ',
+      // (Ser_BodySta1 == 1)
+      //     ? (zone_name_transMeter == null)
+      //         ? 'รายงานมิเตอร์ไฟฟ้า (กรุณาเลือกโซน)'
+      //         : 'รายงานมิเตอร์ไฟฟ้า (โซน : $zone_name_transMeter) '
+      //     : (zone_name_transMeter == null)
+      //         ? 'รายงานมิเตอร์น้ำ (กรุณาเลือกโซน)'
+      //         : 'รายงานมิเตอร์น้ำ (โซน : $zone_name_transMeter) ',
     );
 // ExcelSheetProtectionOption
     final x.ExcelSheetProtectionOption options = x.ExcelSheetProtectionOption();
@@ -187,6 +202,9 @@ class Excgen_transMeterReport {
     sheet.getRangeByName('J2').cellStyle = globalStyle22;
     sheet.getRangeByName('K2').cellStyle = globalStyle22;
     sheet.getRangeByName('L2').cellStyle = globalStyle22;
+    sheet.getRangeByName('M2').cellStyle = globalStyle22;
+    sheet.getRangeByName('N2').cellStyle = globalStyle22;
+    sheet.getRangeByName('O2').cellStyle = globalStyle22;
     sheet.getRangeByName('A2').setText(
           (Mon_transMeter_Mon == null || YE_transMeter_Mon == null)
               ? 'เดือน: กรุณาเลือก'
@@ -208,6 +226,9 @@ class Excgen_transMeterReport {
     sheet.getRangeByName('J3').cellStyle = globalStyle22;
     sheet.getRangeByName('K3').cellStyle = globalStyle22;
     sheet.getRangeByName('L3').cellStyle = globalStyle22;
+    sheet.getRangeByName('M3').cellStyle = globalStyle22;
+    sheet.getRangeByName('N3').cellStyle = globalStyle22;
+    sheet.getRangeByName('O3').cellStyle = globalStyle22;
     // sheet.getRangeByName('H2').setText(' ข้อมูล ณ วันที่: ${day_}');
     globalStyle2.hAlign = x.HAlignType.center;
     sheet.getRangeByName('A4').cellStyle = globalStyle1;
@@ -222,6 +243,9 @@ class Excgen_transMeterReport {
     sheet.getRangeByName('J4').cellStyle = globalStyle1;
     sheet.getRangeByName('K4').cellStyle = globalStyle1;
     sheet.getRangeByName('L4').cellStyle = globalStyle1;
+    sheet.getRangeByName('M4').cellStyle = globalStyle1;
+    sheet.getRangeByName('N4').cellStyle = globalStyle1;
+    sheet.getRangeByName('O4').cellStyle = globalStyle1;
     sheet.getRangeByName('A4').columnWidth = 10;
     sheet.getRangeByName('B4').columnWidth = 25;
     sheet.getRangeByName('C4').columnWidth = 25;
@@ -234,44 +258,57 @@ class Excgen_transMeterReport {
     sheet.getRangeByName('J4').columnWidth = 18;
     sheet.getRangeByName('K4').columnWidth = 18;
     sheet.getRangeByName('L4').columnWidth = 18;
+    sheet.getRangeByName('M4').columnWidth = 18;
+    sheet.getRangeByName('N4').columnWidth = 18;
+    sheet.getRangeByName('O4').columnWidth = 18;
 
     sheet.getRangeByName('A4').setText('ลำดับ');
-    sheet.getRangeByName('B4').setText('รหัสพื้นที่');
-    sheet.getRangeByName('C4').setText('เลขที่สัญญา');
-    sheet.getRangeByName('D4').setText('ชื่อร้านค้า');
-    sheet.getRangeByName('E4').setText('รายการ');
+    sheet.getRangeByName('B4').setText('รหัสโซน');
+    sheet.getRangeByName('C4').setText('โซน');
+    sheet.getRangeByName('D4').setText('รหัสพื้นที่');
+    sheet.getRangeByName('E4').setText('เลขที่สัญญา');
+    sheet.getRangeByName('F4').setText('ชื่อร้านค้า');
+    sheet.getRangeByName('G4').setText('รายการ');
+    sheet.getRangeByName('H4').setText('วันที่');
 
-    sheet.getRangeByName('F4').setText(
+    sheet.getRangeByName('I4').setText(
           'หมายเลขเครื่อง',
         );
-    sheet.getRangeByName('G4').setText(
+    sheet.getRangeByName('J4').setText(
           (transMeterModels.length == 0 ||
                   transMeterModels[0].date == null ||
                   transMeterModels[0].date.toString() == '')
               ? 'เลขมิเตอร์เดือน(??)'
-              : 'เลขมิเตอร์เดือน(${DateFormat.MMM('th_TH').format(DateTime.parse('${transMeterModels[0].date}').subtract(Duration(days: 30)))})',
+              : 'เลขมิเตอร์เดือน(${DateFormat.MMM('th_TH').format(DateTime.parse('${DateFormat('yyyy').format(DateTime.parse('${transMeterModels[0].date}'))}-${(DateTime.parse('${transMeterModels[0].date}').month - 1).toString().padLeft(2, '0')}-${DateFormat('dd').format(DateTime.parse('${transMeterModels[0].date}'))} 00:00:00'))})',
         );
 
-    sheet.getRangeByName('H4').setText((transMeterModels.length == 0 ||
+    sheet.getRangeByName('K4').setText((transMeterModels.length == 0 ||
             transMeterModels[0].date == null ||
             transMeterModels[0].date.toString() == '')
         ? 'เลขมิเตอร์เดือน(??)'
         : 'เลขมิเตอร์เดือน(${DateFormat.MMM('th_TH').format(DateTime.parse('${transMeterModels[0].date}'))})');
-    sheet.getRangeByName('I4').setText(
+    sheet.getRangeByName('L4').setText(
           'หน่วยที่ใช้',
         );
-    sheet.getRangeByName('J4').setText(
+    sheet.getRangeByName('M4').setText(
           'ราคาต่อหน่วย',
         );
-    sheet.getRangeByName('K4').setText(
+    sheet.getRangeByName('N4').setText(
           'รวม Vat',
         );
-    sheet.getRangeByName('L4').setText(
+    sheet.getRangeByName('O4').setText(
           'หลักฐาน',
         );
+
     int index1 = 0;
+    String Cid_now = '';
     for (int index = 0; index < transMeterModels.length; index++) {
-      dynamic numberColor = (0 * transMeterModels.length + index) % 2 == 0
+      if (Cid_now.toString() == '${transMeterModels[index].refno}') {
+      } else {
+        Cid_now = '${transMeterModels[index].refno}';
+        index1 = index1 + 1;
+      }
+      dynamic numberColor = (0 * transMeterModels.length + index1) % 2 == 0
           ? globalStyle22
           : globalStyle222;
       sheet.getRangeByName('A${index + 5}').cellStyle = numberColor;
@@ -286,103 +323,130 @@ class Excgen_transMeterReport {
       sheet.getRangeByName('J${index + 5}').cellStyle = numberColor;
       sheet.getRangeByName('K${index + 5}').cellStyle = numberColor;
       sheet.getRangeByName('L${index + 5}').cellStyle = numberColor;
-
+      sheet.getRangeByName('M${index + 5}').cellStyle = numberColor;
+      sheet.getRangeByName('N${index + 5}').cellStyle = numberColor;
+      sheet.getRangeByName('O${index + 5}').cellStyle = numberColor;
       sheet.getRangeByName('A${index + 5}').setText(
             '${index + 1}',
           );
       sheet.getRangeByName('B${index + 5}').setText(
-            '${transMeterModels[index].ln}',
+            '${transMeterModels[index].ser_zone}',
           );
       sheet.getRangeByName('C${index + 5}').setText(
-            '${transMeterModels[index].refno}',
+            '${transMeterModels[index].zn}',
           );
       sheet.getRangeByName('D${index + 5}').setText(
-            '${transMeterModels[index].sname}',
+            '${transMeterModels[index].ln}',
           );
       sheet.getRangeByName('E${index + 5}').setText(
+            '${transMeterModels[index].refno}',
+          );
+      sheet.getRangeByName('F${index + 5}').setText(
+            '${transMeterModels[index].sname}',
+          );
+      sheet.getRangeByName('G${index + 5}').setText(
+            '${transMeterModels[index].expname}',
+          );
+      sheet.getRangeByName('H${index + 5}').setText(
             (transMeterModels[index].date == null ||
                     transMeterModels[index].date.toString() == '')
                 ? ''
-                : '${transMeterModels[index].expname}(${DateFormat('dd-MM-yyyy').format(DateTime.parse('${transMeterModels[index].date}'))})',
+                : '${DateFormat('dd-MM').format(DateTime.parse('${transMeterModels[index].date}'))}-${int.parse('${DateFormat('yyyy').format(DateTime.parse('${transMeterModels[index].date}'))}') + 543}',
           );
 
-      sheet.getRangeByName('F${index + 5}').setText(
+      sheet.getRangeByName('I${index + 5}').setText(
             '${transMeterModels[index].num_meter}',
           );
 
-      sheet.getRangeByName('G${index + 5}').setNumber(
+      sheet.getRangeByName('J${index + 5}').setNumber(
             (transMeterModels[index].ovalue == null)
                 ? 0.00
                 : double.parse(transMeterModels[index].ovalue!),
           );
 
-      sheet.getRangeByName('H${index + 5}').setNumber(
+      sheet.getRangeByName('K${index + 5}').setNumber(
             (transMeterModels[index].nvalue == null)
                 ? 0.00
                 : double.parse(transMeterModels[index].nvalue!),
           );
-      sheet.getRangeByName('I${index + 5}').setNumber(
+      sheet.getRangeByName('L${index + 5}').setNumber(
             (transMeterModels[index].qty == null)
                 ? 0.00
                 : double.parse(transMeterModels[index].qty!),
           );
-      sheet.getRangeByName('J${index + 5}').setNumber(
-            (transMeterModels[index].pri == null)
-                ? 0.00
-                : double.parse(transMeterModels[index].pri!),
+      sheet.getRangeByName('M${index + 5}').setText(
+            transMeterModels[index].ele_ty == '0'
+                ? '${double.parse(transMeterModels[index].c_qty!)}'
+                : 'อัตราพิเศษ',
+            // (transMeterModels[index].pri == null)
+            //     ? 0.00
+            //     : double.parse(transMeterModels[index].c_qty!),
           );
 
-      sheet.getRangeByName('K${index + 5}').setNumber(
+      sheet.getRangeByName('N${index + 5}').setNumber(
             (transMeterModels[index].c_amt == null)
                 ? 0.00
                 : double.parse(transMeterModels[index].c_amt!),
           );
       sheet
-          .getRangeByName('L${index + 5}')
+          .getRangeByName('O${index + 5}')
           .setText((transMeterModels[index].img != '') ? 'พบ' : 'ไม่พบ');
     }
 
-    sheet.getRangeByName('H${transMeterModels.length + 5}').cellStyle =
-        globalStyle7;
-    sheet.getRangeByName('I${transMeterModels.length + 5}').cellStyle =
-        globalStyle7;
-    sheet.getRangeByName('J${transMeterModels.length + 5}').cellStyle =
-        globalStyle7;
+    // sheet.getRangeByName('H${transMeterModels.length + 5}').cellStyle =
+    //     globalStyle7;
+    // sheet.getRangeByName('I${transMeterModels.length + 5}').cellStyle =
+    //     globalStyle7;
     sheet.getRangeByName('K${transMeterModels.length + 5}').cellStyle =
         globalStyle7;
     sheet.getRangeByName('L${transMeterModels.length + 5}').cellStyle =
         globalStyle7;
+    sheet.getRangeByName('M${transMeterModels.length + 5}').cellStyle =
+        globalStyle7;
+    sheet.getRangeByName('N${transMeterModels.length + 5}').cellStyle =
+        globalStyle7;
 
-    sheet.getRangeByName('H${transMeterModels.length + 5}').setText(
+    sheet.getRangeByName('K${transMeterModels.length + 5}').setText(
           'รวม',
         );
-    sheet.getRangeByName('I${transMeterModels.length + 5}').setFormula(
-          '=SUM(I5:I${transMeterModels.length + 5 - 1})',
-        );
-    sheet.getRangeByName('J${transMeterModels.length + 5}').setFormula(
+    sheet.getRangeByName('L${transMeterModels.length + 5}').setFormula(
           '=SUM(J5:J${transMeterModels.length + 5 - 1})',
         );
-    sheet.getRangeByName('K${transMeterModels.length + 5}').setFormula(
-          '=SUM(K5:K${transMeterModels.length + 5 - 1})',
+    // sheet.getRangeByName('L${transMeterModels.length + 5}').setFormula(
+    //       '=SUM(K5:K${transMeterModels.length + 5 - 1})',
+    //     );
+    sheet.getRangeByName('N${transMeterModels.length + 5}').setFormula(
+          '=SUM(L5:L${transMeterModels.length + 5 - 1})',
         );
-    sheet.getRangeByName('L${transMeterModels.length + 5}').setNumber(
-          transMeterModels.fold(
-              0.0,
-              (previousValue, element) =>
-                  previousValue + (element.img != '' ? 1.00 : 0.00)),
-        );
-
+    // sheet.getRangeByName('M${transMeterModels.length + 5}').setNumber(
+    //       transMeterModels.fold(
+    //           0.0,
+    //           (previousValue, element) =>
+    //               previousValue + (element.img != '' ? 1.00 : 0.00)),
+    //     );
+    var name_File = (zone_name_transMeter == null)
+        ? (expSZ_name.toString().trim() != 'ทั้งหมด')
+            ? 'รายงาน$expSZ_name(กรุณาเลือกโซน)'
+            : 'รายงาน[${expSZModels.where((model) => model.ser.toString() != '0').map((model) => model.expname).join(',')} ](กรุณาเลือกโซน)'
+        : (expSZ_name.toString().trim() != 'ทั้งหมด')
+            ? 'รายงาน$expSZ_name(โซน : $zone_name_transMeter)'
+            : 'รายงาน[${expSZModels.where((model) => model.ser.toString() != '0').map((model) => model.expname).join(',')} ](โซน : $zone_name_transMeter)';
     final List<int> bytes = workbook.saveAsStream();
     workbook.dispose();
     Uint8List data = Uint8List.fromList(bytes);
     MimeType type = MimeType.MICROSOFTEXCEL;
-    String path = (Ser_BodySta1 == 1)
-        ? await FileSaver.instance.saveFile(
-            'รายงานมิเตอร์ไฟฟ้า (โซน : $zone_name_transMeter) ', data, "xlsx",
-            mimeType: type)
-        : await FileSaver.instance.saveFile(
-            'รายงานมิเตอร์น้ำ (โซน : $zone_name_transMeter) ', data, "xlsx",
-            mimeType: type);
+    String path = await FileSaver.instance.saveFile(
+        '$name_File[เดือน ${Mon_transMeter_Mon}ปี${YE_transMeter_Mon}]',
+        data,
+        "xlsx",
+        mimeType: type);
+    // (Ser_BodySta1 == 1)
+    //     ? await FileSaver.instance.saveFile(
+    //         'รายงานมิเตอร์ไฟฟ้า (โซน : $zone_name_transMeter) ', data, "xlsx",
+    //         mimeType: type)
+    //     : await FileSaver.instance.saveFile(
+    //         'รายงานมิเตอร์น้ำ (โซน : $zone_name_transMeter) ', data, "xlsx",
+    //         mimeType: type);
     log(path);
     // if (_verticalGroupValue_NameFile.toString() == 'จากระบบ') {
     //   String path = await FileSaver.instance.saveFile(

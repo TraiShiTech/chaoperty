@@ -3484,10 +3484,20 @@ class _Verifi_Exc_BillingState extends State<Verifi_Exc_Billing> {
 
 ////////////////////----------------------------->
 
-  bool checkInvoice_docno(index) {
-    return bankExcBilling.any((item) =>
-        item.ref1.toString().trim() ==
-        InvoiceModels[index].docno!.replaceAll('-', '').toString().trim());
+  // bool checkInvoice_docno(index) {
+  //   return bankExcBilling.any((item) =>
+  //       item.ref1.toString().trim() ==
+  //       InvoiceModels[index].docno!.replaceAll('-', '').toString().trim());
+  // }
+  bool checkInvoice_docno(int index) {
+    String targetDocno = InvoiceModels[index].docno!.replaceAll('-', '').trim();
+
+    // Create a Set or Map containing only the docno values
+    Set<String> docnoSet =
+        bankExcBilling.map((item) => item.ref1.toString().trim()).toSet();
+
+    // Check if the targetDocno exists in the docnoSet
+    return docnoSet.contains(targetDocno);
   }
 
   bool checkInvoice_bno(index) {

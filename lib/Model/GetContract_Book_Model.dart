@@ -41,6 +41,8 @@ class ContractBookModel {
   String? cc_remark;
   String? total;
   String? slip;
+  String? date_book;
+  String? expname;
 
   ContractBookModel({
     this.ser,
@@ -84,6 +86,8 @@ class ContractBookModel {
     this.cc_remark,
     this.total,
     this.slip,
+    this.date_book,
+    this.expname,
   });
 
   ContractBookModel.fromJson(Map<String, dynamic> json) {
@@ -129,6 +133,8 @@ class ContractBookModel {
     cc_remark = json['cc_remark'];
     total = json['total'];
     slip = json['slip'];
+    date_book = json['date_book'];
+    expname = json['expname'];
   }
 
   Map<String, dynamic> toJson() {
@@ -175,6 +181,8 @@ class ContractBookModel {
     data['cc_remark'] = this.cc_remark;
     data['total'] = this.total;
     data['slip'] = this.slip;
+    data['date_book'] = this.date_book;
+    data['expname'] = this.expname;
     return data;
   }
 }

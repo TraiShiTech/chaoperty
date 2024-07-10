@@ -59,7 +59,8 @@ class Pdfgen_his_statusbill_TP8_Ortorkor {
       TitleType_Default_Receipt_Name,
       dis_sum_Pakan,
       sum_fee,
-      com_ment) async {
+      com_ment,
+      rt_Language) async {
     ////
     //// ------------>(ใบเสร็จรับเงิน)
     ///////
@@ -506,48 +507,108 @@ class Pdfgen_his_statusbill_TP8_Ortorkor {
                                           crossAxisAlignment:
                                               pw.CrossAxisAlignment.center,
                                           children: [
-                                            pw.Text(
-                                              (TitleType_Default_Receipt_Name !=
-                                                      null)
-                                                  ? (numdoctax.toString() == '')
-                                                      ? 'ใบเสร็จรับเงิน [ $TitleType_Default_Receipt_Name ]'
-                                                      : 'ใบเสร็จรับเงิน/ใบกำกับภาษี [ $TitleType_Default_Receipt_Name ]'
-                                                  : (numdoctax.toString() == '')
-                                                      ? 'ใบเสร็จรับเงิน'
-                                                      : 'ใบเสร็จรับเงิน/ใบกำกับภาษี',
-                                              textAlign: pw.TextAlign.center,
-                                              style: pw.TextStyle(
-                                                fontSize: 14,
-                                                font: ttf,
-                                                fontWeight: pw.FontWeight.bold,
-                                                color: Colors_pd,
-                                              ),
-                                            ),
-                                            pw.Text(
-                                              (TitleType_Default_Receipt_Name !=
-                                                      null)
-                                                  ? (numdoctax.toString() == '')
-                                                      ? (TitleType_Default_Receipt_Name
-                                                                  .toString() ==
-                                                              'ต้นฉบับ')
-                                                          ? 'Receipt Original'
-                                                          : 'Receipt Copy'
-                                                      : (TitleType_Default_Receipt_Name
-                                                                  .toString() ==
-                                                              'ต้นฉบับ')
-                                                          ? 'Receipt/Tax Invoice Original'
-                                                          : 'Receipt/Tax Invoice Copy'
-                                                  : (numdoctax.toString() == '')
-                                                      ? 'Receipt'
-                                                      : 'Receipt/Tax Invoice',
-                                              textAlign: pw.TextAlign.center,
-                                              style: pw.TextStyle(
-                                                fontSize: 14,
-                                                font: ttf,
-                                                fontWeight: pw.FontWeight.bold,
-                                                color: Colors_pd,
-                                              ),
-                                            ),
+                                            (hasNonCashTransaction1)
+                                                ? pw.Text(
+                                                    (TitleType_Default_Receipt_Name !=
+                                                            null)
+                                                        ? (numdoctax.toString() ==
+                                                                '')
+                                                            ? 'บิลเงินสด [ $TitleType_Default_Receipt_Name ]'
+                                                            : 'บิลเงินสด/ใบกำกับภาษี [ $TitleType_Default_Receipt_Name ]'
+                                                        : (numdoctax.toString() ==
+                                                                '')
+                                                            ? 'บิลเงินสด'
+                                                            : 'บิลเงินสด/ใบกำกับภาษี',
+                                                    textAlign:
+                                                        pw.TextAlign.center,
+                                                    style: pw.TextStyle(
+                                                      fontSize: 14,
+                                                      font: ttf,
+                                                      fontWeight:
+                                                          pw.FontWeight.bold,
+                                                      color: Colors_pd,
+                                                    ),
+                                                  )
+                                                : pw.Text(
+                                                    (TitleType_Default_Receipt_Name !=
+                                                            null)
+                                                        ? (numdoctax.toString() ==
+                                                                '')
+                                                            ? 'ใบเสร็จรับเงิน [ $TitleType_Default_Receipt_Name ]'
+                                                            : 'ใบเสร็จรับเงิน/ใบกำกับภาษี [ $TitleType_Default_Receipt_Name ]'
+                                                        : (numdoctax.toString() ==
+                                                                '')
+                                                            ? 'ใบเสร็จรับเงิน'
+                                                            : 'ใบเสร็จรับเงิน/ใบกำกับภาษี',
+                                                    textAlign:
+                                                        pw.TextAlign.center,
+                                                    style: pw.TextStyle(
+                                                      fontSize: 14,
+                                                      font: ttf,
+                                                      fontWeight:
+                                                          pw.FontWeight.bold,
+                                                      color: Colors_pd,
+                                                    ),
+                                                  ),
+                                            (hasNonCashTransaction1)
+                                                ? pw.Text(
+                                                    (TitleType_Default_Receipt_Name !=
+                                                            null)
+                                                        ? (numdoctax.toString() ==
+                                                                '')
+                                                            ? (TitleType_Default_Receipt_Name
+                                                                        .toString() ==
+                                                                    'ต้นฉบับ')
+                                                                ? 'Cash Sell Original'
+                                                                : 'Cash Sell Copy'
+                                                            : (TitleType_Default_Receipt_Name
+                                                                        .toString() ==
+                                                                    'ต้นฉบับ')
+                                                                ? 'Cash Sell/Tax Invoice Original'
+                                                                : 'Cash Sell/Tax Invoice Copy'
+                                                        : (numdoctax.toString() ==
+                                                                '')
+                                                            ? 'Cash Sell'
+                                                            : 'Cash Sell/Tax Invoice',
+                                                    textAlign:
+                                                        pw.TextAlign.center,
+                                                    style: pw.TextStyle(
+                                                      fontSize: 14,
+                                                      font: ttf,
+                                                      fontWeight:
+                                                          pw.FontWeight.bold,
+                                                      color: Colors_pd,
+                                                    ),
+                                                  )
+                                                : pw.Text(
+                                                    (TitleType_Default_Receipt_Name !=
+                                                            null)
+                                                        ? (numdoctax.toString() ==
+                                                                '')
+                                                            ? (TitleType_Default_Receipt_Name
+                                                                        .toString() ==
+                                                                    'ต้นฉบับ')
+                                                                ? 'Receipt Original'
+                                                                : 'Receipt Copy'
+                                                            : (TitleType_Default_Receipt_Name
+                                                                        .toString() ==
+                                                                    'ต้นฉบับ')
+                                                                ? 'Receipt/Tax Invoice Original'
+                                                                : 'Receipt/Tax Invoice Copy'
+                                                        : (numdoctax.toString() ==
+                                                                '')
+                                                            ? 'Receipt'
+                                                            : 'Receipt/Tax Invoice',
+                                                    textAlign:
+                                                        pw.TextAlign.center,
+                                                    style: pw.TextStyle(
+                                                      fontSize: 14,
+                                                      font: ttf,
+                                                      fontWeight:
+                                                          pw.FontWeight.bold,
+                                                      color: Colors_pd,
+                                                    ),
+                                                  ),
                                           ]),
                                     ),
                                   ],
@@ -1346,9 +1407,13 @@ class Pdfgen_his_statusbill_TP8_Ortorkor {
                             child: pw.Align(
                               alignment: pw.Alignment.topRight,
                               child: pw.Text(
-                                (tableData00[index][7].toString() == '0.00')
-                                    ? '${tableData00[index][5]}'
-                                    : '${tableData00[index][7]}',
+                                (tableData00[index][14].toString() != '0' &&
+                                        tableData00[index][14] != null)
+                                    ? 'อัตราพิเศษ'
+                                    : (tableData00[index][7].toString() ==
+                                            '0.00')
+                                        ? '${tableData00[index][5]}'
+                                        : '${tableData00[index][7]}',
                                 maxLines: 2,
                                 textAlign: pw.TextAlign.right,
                                 style: pw.TextStyle(

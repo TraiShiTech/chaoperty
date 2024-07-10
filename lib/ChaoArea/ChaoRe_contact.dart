@@ -16411,7 +16411,8 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                     '${renTalModels[0].bill_name}',
                                     newValuePDFimg,
                                     '',
-                                    ''
+                                    '', 
+                                    '${DateFormat('dd-MM-yyyy').format(DateTime.now())}'
                                     // (ser_user == null) ? '' : ser_user
                                     );
                               },

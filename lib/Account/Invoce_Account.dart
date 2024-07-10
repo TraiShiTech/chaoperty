@@ -251,7 +251,7 @@ class _InvoceAccountState extends State<InvoceAccount> {
                                                     .width *
                                                 0.85
                                             : 1200,
-                                        decoration:  BoxDecoration(
+                                        decoration: BoxDecoration(
                                           color:
                                               AppbackgroundColor.TiTile_Colors,
                                           borderRadius: BorderRadius.only(

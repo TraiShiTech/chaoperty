@@ -32,31 +32,36 @@ import '../../Constant/Myconstant.dart';
 
 class Pdfgen_hisbill_Market {
   static void exportPDF_hisbill_market(
-      context,
-      Ser,
-      TextForm_name,
-      TextForm_tel,
-      TextForm_time,
-      paymentName1,
-      fileNameSlip_,
-      serUser,
-      cFinn,
-      zoneser,
-      selected_Area,
-      datex_selected,
-      datexPay,
-      bname1,
-      bill_addr,
-      bill_email,
-      bill_tel,
-      bill_tax,
-      bill_name,
-      zoneName,
-      _TransReBillModels,
-      Total,
-      Areaqty,
-      bno1,
-      bank1) async {
+    context,
+    Ser,
+    TextForm_name,
+    TextForm_tel,
+    TextForm_time,
+    paymentName1,
+    fileNameSlip_,
+    serUser,
+    cFinn,
+    zoneser,
+    selected_Area,
+    datex,
+    datexPay,
+    datexbook,
+    bname1,
+    bill_addr,
+    bill_email,
+    bill_tel,
+    bill_tax,
+    bill_name,
+    zoneName,
+    _TransReBillModels,
+    Total,
+    Areaqty,
+    pos,
+    url,
+    pay_ptset,
+    bno1,
+    bank1,
+  ) async {
     ///////
     final pdf = pw.Document();
     final font = await rootBundle.load("fonts/THSarabunNew.ttf");
@@ -174,19 +179,101 @@ class Pdfgen_hisbill_Market {
               crossAxisAlignment: pw.CrossAxisAlignment.center,
               mainAxisAlignment: pw.MainAxisAlignment.end,
               children: [
+                // pw.Container(
+                //   // height: 60,
+                //   // width: 200,
+                //   decoration: const pw.BoxDecoration(
+                //     color: PdfColors.grey200,
+                //     border: pw.Border(
+                //       right: pw.BorderSide(color: PdfColors.grey300),
+                //       left: pw.BorderSide(color: PdfColors.grey300),
+                //       top: pw.BorderSide(color: PdfColors.grey300),
+                //       bottom: pw.BorderSide(color: PdfColors.grey300),
+                //     ),
+                //   ),
+                //   padding: const pw.EdgeInsets.all(2.0),
+                //   child: pw.Text(
+                //     (pos.toString() == '1' && pay_ptset.toString() != '7')
+                //         ? 'ชำระแล้ว (รอตรวจสอบอนุมัติ)'
+                //         : (pos.toString() == '1' && pay_ptset.toString() == '7')
+                //             ? 'ยังไม่ได้ชำระ (รอรับชำระ)'
+                //             : (datexPay == null || datexPay.toString() == '')
+                //                 ? '-'
+                //                 : 'ชำระแล้ว',
+                //     textAlign: pw.TextAlign.center,
+                //     style: pw.TextStyle(
+                //       color: PdfColors.black,
+                //       // fontWeight: FontWeight.bold,
+                //       font: ttf,
+                //       fontSize: 12,
+                //     ),
+                //   ),
+                // )
                 pw.Center(
                   child: pw.Container(
                     child: pw.BarcodeWidget(
                         color: PdfColors.grey800,
-                        data: (cFinn.toString() == '') ? '-' : '$cFinn ',
+                        data: (pos.toString() == '1' &&
+                                pay_ptset.toString() != '7')
+                            ? '$url'
+                            : (url.toString() == '')
+                                ? '-'
+                                : '$url ',
                         barcode: pw.Barcode.qrCode(),
                         width: 50,
                         height: 50),
                   ),
                 ),
+                // pw.Container(
+                //   // height: 60,
+                //   // width: 200,
+                //   decoration: const pw.BoxDecoration(
+                //     color: PdfColors.grey200,
+                //     border: pw.Border(
+                //       right: pw.BorderSide(color: PdfColors.grey300),
+                //       left: pw.BorderSide(color: PdfColors.grey300),
+                //       top: pw.BorderSide(color: PdfColors.grey300),
+                //       bottom: pw.BorderSide(color: PdfColors.grey300),
+                //     ),
+                //   ),
+                //   padding: const pw.EdgeInsets.all(2.0),
+                //   child: pw.Text(
+                //     (pos.toString() == '1' && pay_ptset.toString() != '7')
+                //         ? 'ชำระแล้ว (รอตรวจสอบอนุมัติ)'
+                //         : (pos.toString() == '1' && pay_ptset.toString() == '7')
+                //             ? 'ยังไม่ได้ชำระ (รอรับชำระ)'
+                //             : (datexPay == null || datexPay.toString() == '')
+                //                 ? '-'
+                //                 : 'ชำระแล้ว',
+                //     textAlign: pw.TextAlign.center,
+                //     style: pw.TextStyle(
+                //       color: PdfColors.black,
+                //       // fontWeight: FontWeight.bold,
+                //       font: ttf,
+                //       fontSize: 12,
+                //     ),
+                //   ),
+                // )
+                pw.Text(
+                  (pos.toString() == '1' && pay_ptset.toString() != '7')
+                      ? 'ชำระแล้ว (รอตรวจสอบอนุมัติ)'
+                      : (pos.toString() == '1' && pay_ptset.toString() == '7')
+                          ? 'ยังไม่ได้ชำระ (รอรับชำระ)'
+                          : (datexPay == null || datexPay.toString() == '')
+                              ? '-'
+                              : 'ชำระแล้ว',
+                  textAlign: pw.TextAlign.center,
+                  style: pw.TextStyle(
+                    color: PdfColors.black,
+                    // fontWeight: FontWeight.bold,
+                    font: ttf,
+                    fontSize: 12,
+                  ),
+                ),
                 // pw.SizedBox(
                 //   height: 10,
-                //   child: pw.Text(
+                //   child:
+                // pw.Text(
                 //     '$cFinn',
                 //     textAlign: pw.TextAlign.center,
                 //     style: pw.TextStyle(
@@ -238,7 +325,7 @@ class Pdfgen_hisbill_Market {
                           ))),
                       padding: const pw.EdgeInsets.all(4.0),
                       child: pw.Text(
-                        'ข้อมูลการจองพื้นที่ ขาจร/ล็อกเสียบ',
+                        'ข้อมูลการจองพื้นที่ รายวัน/ล็อคเสียบ',
                         textAlign: pw.TextAlign.center,
                         style: pw.TextStyle(
                             fontSize: 12.00,
@@ -314,7 +401,7 @@ class Pdfgen_hisbill_Market {
             //         flex: 1,
             //         child: pw.Text(
             //           'ชื่อผู้เช่า/บริษัท : ',
-            //           textAlign: pw.TextAlign.start,
+            //           textAlign: pw.TextAlign.left,
             //           style: pw.TextStyle(
             //             color: PdfColors.black,
             //             // fontWeight: FontWeight.bold,
@@ -327,7 +414,7 @@ class Pdfgen_hisbill_Market {
             //         flex: 5,
             //         child: pw.Text(
             //           '${TextForm_name.text}',
-            //           textAlign: pw.TextAlign.start,
+            //           textAlign: pw.TextAlign.left,
             //           style: pw.TextStyle(
             //             color: PdfColors.black,
             //             fontSize: 12,
@@ -381,7 +468,15 @@ class Pdfgen_hisbill_Market {
                   pw.Expanded(
                     flex: 2,
                     child: pw.Text(
-                      '${datex_selected}',
+                      (datexbook.length == 0)
+                          ? '-'
+                          : (datexbook.length == 1)
+                              ? '${datexbook.map((model) => '${DateFormat('dd-MM').format(DateTime.parse('${model} 00:00:00'))}-${DateTime.parse('${model} 00:00:00').year + 543}').join('')}'
+                              : '${datexbook.map((model) => '${DateFormat('dd-MM').format(DateTime.parse('${model} 00:00:00'))}-${DateTime.parse('${model} 00:00:00').year + 543}').join(', ')}',
+                      // (datexbook == null || datexbook.toString() == '')
+                      //     ? '${datexbook}'
+                      //     : '${DateFormat('dd-MM').format(DateTime.parse('${datexbook} 00:00:00'))}-${DateTime.parse('${datexbook} 00:00:00').year + 543}',
+                      // '${datex_selected}',
                       textAlign: pw.TextAlign.left,
                       style: pw.TextStyle(
                         color: PdfColors.black,
@@ -470,7 +565,10 @@ class Pdfgen_hisbill_Market {
                   pw.Expanded(
                     flex: 2,
                     child: pw.Text(
-                      '${datex_selected}',
+                      (datex == null || datex.toString() == '')
+                          ? '${datex}'
+                          : '${DateFormat('dd-MM').format(DateTime.parse('${datex} 00:00:00'))}-${DateTime.parse('${datex} 00:00:00').year + 543}',
+                      // '${datexbook}',
                       textAlign: pw.TextAlign.left,
                       style: pw.TextStyle(
                         color: PdfColors.black,
@@ -494,7 +592,15 @@ class Pdfgen_hisbill_Market {
                   pw.Expanded(
                     flex: 2,
                     child: pw.Text(
-                      '${datexPay}',
+                      (pos.toString() == '1' && pay_ptset.toString() != '7')
+                          ? '${DateFormat('dd-MM').format(DateTime.parse('${datexPay} 00:00:00'))}-${DateTime.parse('${datexPay} 00:00:00').year + 543} (รอตรวจสอบอนุมัติ)'
+                          : (pos.toString() == '1' &&
+                                  pay_ptset.toString() == '7')
+                              ? ' ยังไม่ได้ชำระ (รอรับชำระ)'
+                              : (datexPay == null || datexPay.toString() == '')
+                                  ? '${datexPay}'
+                                  : '${DateFormat('dd-MM').format(DateTime.parse('${datexPay} 00:00:00'))}-${DateTime.parse('${datexPay} 00:00:00').year + 543}',
+                      // '${datexPay}',pay_ptset
                       textAlign: pw.TextAlign.left,
                       style: pw.TextStyle(
                         color: PdfColors.black,
@@ -549,7 +655,68 @@ class Pdfgen_hisbill_Market {
                   pw.Expanded(
                     flex: 2,
                     child: pw.Text(
-                      '${TextForm_time}',
+                      (pos.toString() == '1' && pay_ptset.toString() != '7')
+                          ? '${TextForm_time} (รอตรวจสอบอนุมัติ)'
+                          : (pos.toString() == '1' &&
+                                  pay_ptset.toString() == '7')
+                              ? ' ยังไม่ได้ชำระ (รอรับชำระ)'
+                              : '${TextForm_time}',
+                      textAlign: pw.TextAlign.left,
+                      style: pw.TextStyle(
+                        color: PdfColors.black,
+                        fontSize: 12,
+                        font: ttf,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            pw.Padding(
+              padding: const pw.EdgeInsets.all(1.0),
+              child: pw.Row(
+                children: [
+                  pw.Expanded(
+                    flex: 1,
+                    child: pw.Text(
+                      'ชื่อบัญชี : ',
+                      textAlign: pw.TextAlign.left,
+                      style: pw.TextStyle(
+                        color: PdfColors.black,
+                        fontSize: 12,
+                        font: ttf,
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 2,
+                    child: pw.Text(
+                      '${bname1}',
+                      textAlign: pw.TextAlign.left,
+                      style: pw.TextStyle(
+                        color: PdfColors.black,
+                        fontSize: 12,
+                        font: ttf,
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 1,
+                    child: pw.Text(
+                      'ธนาคาร/เลขที่บัญชี : ',
+                      textAlign: pw.TextAlign.left,
+                      style: pw.TextStyle(
+                        color: PdfColors.black,
+                        fontSize: 12,
+                        font: ttf,
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 2,
+                    child: pw.Text(
+                      '${bank1}(${bno1})',
                       textAlign: pw.TextAlign.left,
                       style: pw.TextStyle(
                         color: PdfColors.black,
@@ -568,62 +735,12 @@ class Pdfgen_hisbill_Market {
                   pw.Expanded(
                     flex: 1,
                     child: pw.Text(
-                      'ธนาคาร : ',
-                      textAlign: pw.TextAlign.left,
-                      style: pw.TextStyle(
-                        color: PdfColors.black,
-                        fontSize: 12,
-                        font: ttf,
-                      ),
-                    ),
-                  ),
-                  pw.Expanded(
-                    flex: 2,
-                    child: pw.Text(
-                      '$bank1',
-                      textAlign: pw.TextAlign.left,
-                      style: pw.TextStyle(
-                        color: PdfColors.black,
-                        fontSize: 12,
-                        font: ttf,
-                      ),
-                    ),
-                  ),
-                  pw.Expanded(
-                    flex: 1,
-                    child: pw.Text(
-                      'บัญชี : ',
-                      textAlign: pw.TextAlign.left,
-                      style: pw.TextStyle(
-                        color: PdfColors.black,
-                        fontSize: 12,
-                        font: ttf,
-                      ),
-                    ),
-                  ),
-                  pw.Expanded(
-                    flex: 2,
-                    child: pw.Text(
-                      '$bname1  ( ${bno1} )',
-                      textAlign: pw.TextAlign.left,
-                      style: pw.TextStyle(
-                        color: PdfColors.black,
-                        fontSize: 12,
-                        font: ttf,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            pw.Padding(
-              padding: const pw.EdgeInsets.all(1.0),
-              child: pw.Row(
-                children: [
-                  pw.Expanded(
-                    flex: 1,
-                    child: pw.Text(
-                      'หลักฐาน : ${fileNameSlip_}',
+                      (pos.toString() == '1' && pay_ptset.toString() != '7')
+                          ? 'หลักฐาน : ${fileNameSlip_} (รอตรวจสอบอนุมัติ)'
+                          : (pos.toString() == '1' &&
+                                  pay_ptset.toString() == '7')
+                              ? 'หลักฐาน : ยังไม่ได้ชำระ (รอรับชำระ)'
+                              : 'หลักฐาน : ${fileNameSlip_}',
                       textAlign: pw.TextAlign.left,
                       style: pw.TextStyle(
                         color: PdfColors.black,
@@ -685,7 +802,25 @@ class Pdfgen_hisbill_Market {
                             child: pw.Align(
                               alignment: pw.Alignment.center,
                               child: pw.Text(
-                                'ลำดับ',
+                                'ลำดับ - No',
+                                maxLines: 2,
+                                textAlign: pw.TextAlign.center,
+                                style: pw.TextStyle(
+                                    fontSize: font_Size,
+                                    fontWeight: pw.FontWeight.bold,
+                                    font: ttf,
+                                    color: PdfColors.grey800),
+                              ),
+                            ),
+                          ),
+                          pw.Container(
+                            color: PdfColors.grey200,
+                            width: 15,
+                            padding: const pw.EdgeInsets.all(2.0),
+                            child: pw.Align(
+                              alignment: pw.Alignment.center,
+                              child: pw.Text(
+                                'วันที่ - Datex',
                                 maxLines: 2,
                                 textAlign: pw.TextAlign.center,
                                 style: pw.TextStyle(
@@ -703,7 +838,7 @@ class Pdfgen_hisbill_Market {
                             child: pw.Align(
                               alignment: pw.Alignment.center,
                               child: pw.Text(
-                                'รายการ',
+                                'รายการ - Product',
                                 maxLines: 2,
                                 textAlign: pw.TextAlign.center,
                                 style: pw.TextStyle(
@@ -721,7 +856,7 @@ class Pdfgen_hisbill_Market {
                             child: pw.Align(
                               alignment: pw.Alignment.center,
                               child: pw.Text(
-                                'ราคา',
+                                'ราคา - Price',
                                 maxLines: 2,
                                 textAlign: pw.TextAlign.center,
                                 style: pw.TextStyle(
@@ -739,7 +874,7 @@ class Pdfgen_hisbill_Market {
                             child: pw.Align(
                               alignment: pw.Alignment.center,
                               child: pw.Text(
-                                'จำนวน',
+                                'จำนวน - Quantity',
                                 maxLines: 2,
                                 textAlign: pw.TextAlign.center,
                                 style: pw.TextStyle(
@@ -757,7 +892,7 @@ class Pdfgen_hisbill_Market {
                             child: pw.Align(
                               alignment: pw.Alignment.center,
                               child: pw.Text(
-                                'ราคารวม',
+                                'ราคารวม - Total',
                                 maxLines: 2,
                                 textAlign: pw.TextAlign.center,
                                 style: pw.TextStyle(
@@ -774,20 +909,19 @@ class Pdfgen_hisbill_Market {
                       index < _TransReBillModels.length;
                       index++)
                     pw.Table(
-                      border: const pw.TableBorder(
-                          left:
-                              pw.BorderSide(color: PdfColors.grey600, width: 1),
-                          right:
-                              pw.BorderSide(color: PdfColors.grey600, width: 1),
-                          // bottom: pw.BorderSide(
-                          //     color: PdfColors.grey600, width: 1),
-                          verticalInside: pw.BorderSide(
-                              width: 1,
-                              color: PdfColors.grey600,
-                              style: pw.BorderStyle.solid)),
-                      children: [
-                        pw.TableRow(
-                          children: [
+                        border: const pw.TableBorder(
+                            left: pw.BorderSide(
+                                color: PdfColors.grey600, width: 1),
+                            right: pw.BorderSide(
+                                color: PdfColors.grey600, width: 1),
+                            // bottom: pw.BorderSide(
+                            //     color: PdfColors.grey600, width: 1),
+                            verticalInside: pw.BorderSide(
+                                width: 1,
+                                color: PdfColors.grey600,
+                                style: pw.BorderStyle.solid)),
+                        children: [
+                          pw.TableRow(children: [
                             pw.Container(
                               width: 15,
                               padding: const pw.EdgeInsets.all(2.0),
@@ -795,6 +929,29 @@ class Pdfgen_hisbill_Market {
                                 alignment: pw.Alignment.topCenter,
                                 child: pw.Text(
                                   '${index + 1}',
+                                  maxLines: 2,
+                                  textAlign: pw.TextAlign.center,
+                                  style: pw.TextStyle(
+                                      fontSize: font_Size,
+                                      font: ttf,
+                                      color: PdfColors.grey800),
+                                ),
+                              ),
+                            ),
+                            pw.Container(
+                              width: 15,
+                              padding: const pw.EdgeInsets.all(2.0),
+                              child: pw.Align(
+                                alignment: pw.Alignment.topCenter,
+                                child: pw.Text(
+                                  (_TransReBillModels[index].datex == null ||
+                                          _TransReBillModels[index]
+                                                  .datex
+                                                  .toString() ==
+                                              '')
+                                      ? '${_TransReBillModels[index].datex}'
+                                      : '${DateFormat('dd-MM').format(DateTime.parse('${_TransReBillModels[index].datex} 00:00:00'))}-${DateTime.parse('${_TransReBillModels[index].datex} 00:00:00').year + 543}',
+                                  // '${_TransReBillModels[index].datex}',
                                   maxLines: 2,
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
@@ -827,10 +984,7 @@ class Pdfgen_hisbill_Market {
                                 alignment: pw.Alignment.topRight,
                                 child: pw.Text(
                                   (_TransReBillModels[index].pri_book == null)
-                                      ? (_TransReBillModels[index].total ==
-                                              null)
-                                          ? '0.00'
-                                          : '${nFormat.format(double.parse(_TransReBillModels[index].total!))}'
+                                      ? '${nFormat.format(double.parse(_TransReBillModels[index].total!))}'
                                       : '${nFormat.format(double.parse(_TransReBillModels[index].pri_book!))}',
                                   maxLines: 2,
                                   textAlign: pw.TextAlign.right,
@@ -869,9 +1023,7 @@ class Pdfgen_hisbill_Market {
                               child: pw.Align(
                                 alignment: pw.Alignment.topRight,
                                 child: pw.Text(
-                                  (_TransReBillModels[index].total == null)
-                                      ? '0.00'
-                                      : '${nFormat.format(double.parse(_TransReBillModels[index].total!))}',
+                                  '${nFormat.format(double.parse(_TransReBillModels[index].total!))}',
                                   maxLines: 2,
                                   textAlign: pw.TextAlign.right,
                                   style: pw.TextStyle(
@@ -881,10 +1033,8 @@ class Pdfgen_hisbill_Market {
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ])
+                        ]),
                   pw.Divider(
                     height: 2,
                   )
@@ -898,10 +1048,10 @@ class Pdfgen_hisbill_Market {
                   pw.Expanded(
                     flex: 4,
                     child: pw.Text(
-                      // '${Total}',
-                      (Total == null || Total.toString() == '')
-                          ? 'ตัวอักษร (~${convertToThaiBaht(0.00)}~)'
-                          : 'ตัวอักษร (~${convertToThaiBaht(double.parse(Total.toString()))}~)',
+                      '',
+                      // (selected_Area.length == 0)
+                      //     ? 'ตัวอักษร (~${convertToThaiBaht(0.00)}~)'
+                      //     : 'ตัวอักษร (~${convertToThaiBaht(double.parse((selected_Area.fold(0.0, (previousValue, element) => previousValue + ((element.rent != null) ? double.parse(element.rent!) : 0) * selected_Area.length).toString())) + double.parse((expModels.fold(0.0, (previousValue, element) => previousValue + ((element.pri_book != null) ? double.parse(element.pri_book!) : 0) * selected_Area.length).toString())))}~)',
                       textAlign: pw.TextAlign.left,
                       style: pw.TextStyle(
                         color: PdfColors.black,
@@ -938,10 +1088,12 @@ class Pdfgen_hisbill_Market {
                       padding: const pw.EdgeInsets.all(2.0),
                       child: pw.Center(
                         child: pw.Text(
-                          // '${Total}',
                           (Total == null || Total.toString() == '')
                               ? '0.00'
-                              : '${nFormat.format(double.parse(Total.toString()))}',
+                              : '${nFormat.format(double.parse('$Total'))}',
+                          // (selected_Area.length == 0)
+                          //     ? '0.00'
+                          //     : '${nFormat.format(double.parse((selected_Area.fold(0.0, (previousValue, element) => previousValue + ((element.rent != null) ? double.parse(element.rent!) : 0) * selected_Area.length).toString())) + double.parse((expModels.fold(0.0, (previousValue, element) => previousValue + ((element.pri_book != null) ? double.parse(element.pri_book!) : 0) * selected_Area.length).toString())))}',
                           textAlign: pw.TextAlign.center,
                           style: pw.TextStyle(
                             color: PdfColors.black,
@@ -1008,11 +1160,85 @@ class Pdfgen_hisbill_Market {
             )
           ]);
         }));
+
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => PreviewPdfgen_Bills(
+          builder: (context) => PreviewPdfgen_BillsMarket(
               doc: pdf, nameBills: 'หลักฐานการจอง จากเว็ปMarket ${cFinn}'),
         ));
+  }
+}
+
+class PreviewPdfgen_BillsMarket extends StatelessWidget {
+  final pw.Document doc;
+  final renTal_name;
+  final nameBills;
+  const PreviewPdfgen_BillsMarket(
+      {Key? key, required this.doc, this.renTal_name, this.nameBills})
+      : super(key: key);
+
+  static const customSwatch = MaterialColor(
+    0xFF8DB95A,
+    <int, Color>{
+      50: Color(0xFFC2FD7F),
+      100: Color(0xFFB6EE77),
+      200: Color(0xFFB2E875),
+      300: Color(0xFFACDF71),
+      400: Color(0xFFA7DA6E),
+      500: Color(0xFFA1D16A),
+      600: Color(0xFF94BF62),
+      700: Color(0xFF90B961),
+      800: Color(0xFF85AB5A),
+      900: Color(0xFF7A9B54),
+    },
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      // title: 'Flutter Demo',
+      // theme: ThemeData(
+      //   primarySwatch: customSwatch.withOpacity(0.5),
+      // ),
+      // theme: ThemeData(
+      //   primarySwatch: Colors.green,
+      //   scrollbarTheme: ScrollbarThemeData().copyWith(
+      //     thumbColor: MaterialStateProperty.all(Colors.lightGreen[200]),
+      //   )),
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          backgroundColor: AppBarColors.hexColor,
+          leading: IconButton(
+            onPressed: () async {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.arrow_back_outlined,
+              color: Colors.white,
+            ),
+          ),
+          centerTitle: true,
+          title: Text(
+            "$nameBills",
+            style: const TextStyle(
+              color: Colors.white,
+              fontFamily: Font_.Fonts_T,
+            ),
+          ),
+        ),
+        body: PdfPreview(
+          build: (format) => doc.save(),
+          allowSharing: true,
+          allowPrinting: true, canDebug: false,
+          canChangeOrientation: false, canChangePageFormat: false,
+          maxPageWidth: MediaQuery.of(context).size.width * 0.6,
+          // scrollViewDecoration:,
+          initialPageFormat: PdfPageFormat.a4,
+          pdfFileName: "$nameBills.pdf",
+        ),
+      ),
+    );
   }
 }

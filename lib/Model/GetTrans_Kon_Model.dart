@@ -117,6 +117,9 @@ class TransKonModel {
   String? room_number;
   String? ln;
   String? zn1;
+  String? stype;
+  String? cc_remark;
+  String? cc_date;
 
   TransKonModel({
     this.ser,
@@ -234,6 +237,9 @@ class TransKonModel {
     this.room_number,
     this.ln,
     this.zn1,
+    this.stype,
+    this.cc_remark,
+    this.cc_date,
   });
 
   TransKonModel.fromJson(Map<String, dynamic> json) {
@@ -354,6 +360,9 @@ class TransKonModel {
     room_number = json['room_number'];
     ln = json['ln'];
     zn1 = json['zn1'];
+    stype = json['stype'];
+    cc_remark = json['cc_remark'];
+    cc_date = json['cc_date'];
   }
 
   Map<String, dynamic> toJson() {
@@ -475,6 +484,9 @@ class TransKonModel {
     data['room_number'] = this.room_number;
     data['ln'] = this.ln;
     data['zn1'] = this.zn1;
+    data['stype'] = this.stype;
+    data['cc_remark'] = this.cc_remark;
+    data['cc_date'] = this.cc_date;
     return data;
   }
 }

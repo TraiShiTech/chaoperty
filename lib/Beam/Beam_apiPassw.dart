@@ -19,8 +19,9 @@ String generateBasicAuth(String decodedPassword) {
   // String input = 'xxxxxx';
   // var key = utf8.encode(input);
 
-  // final String base64 = base64Encode(key); YncydTBQL2hMbFc3NkpKTFkvWkJRV0lKM2lYbkFqNzVBd1hQc0FvSUs1WT0=
+  // final String base64 = base64Encode(key);  YncydTBQL2hMbFc3NkpKTFkvWkJRV0lKM2lYbkFqNzVBd1hQc0FvSUs1WT0=
   // print(base64); //เก็บลงฐาน
+  
 }
 
 dynamic https_Request() {

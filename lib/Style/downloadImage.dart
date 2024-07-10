@@ -20,7 +20,7 @@ dynamic captureAndConvertToBase64(chartKey, Name) async {
   // Encode the bytes to base64
   final base64String = base64Encode(buffer);
   int timestamp = DateTime.now().millisecondsSinceEpoch;
-  print(base64String);
+  // print(base64String);
   String fileName = '${Name}_$timestamp.png';
   await Future.delayed(Duration(milliseconds: 100));
   String Foder_ = '';
@@ -44,7 +44,8 @@ dynamic captureAndConvertToBase64(chartKey, Name) async {
       //         '${Form_Img_}')
       //     .deleteFile(fileName_Slip);
     } else {
-      print('Image upload failed');
+      downloadImage(fileName);
+      print('Image upload failed $Foder_ // $fileName');
     }
   } catch (e) {
     print('Error during image processing: $e');

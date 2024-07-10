@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Constant/Myconstant.dart';
 import '../Model/GetContract_Model.dart';
 import '../Model/GetFinnancetrans_Model.dart';
@@ -14,6 +15,7 @@ class ManPay_ReceiptMarket_PDF {
   static void ManPayReceiptMarket_PDF(
     context,
     Ser,
+    foder,
     cFinn,
     bill_addr,
     bill_email,
@@ -21,9 +23,11 @@ class ManPay_ReceiptMarket_PDF {
     bill_tax,
     bill_name,
   ) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var rt_Language = preferences.getString('renTal_Language');
     String domain_Market =
         'https://dzentric.com/chaoperty_market/Chaoperty_market_API';
-    var nFormat = NumberFormat("#,##0.00", "en_US");
+
     //GC_select_bill
     //
     var TextForm_name,
@@ -40,10 +44,16 @@ class ManPay_ReceiptMarket_PDF {
         bank1,
         bname1,
         bno1,
-        datex_selected,
-        datexPay;
-    var Areaqty;
+        datex,
+        datexPay,
+        url;
+    var Areaqty, pos, pay_ptset;
+    var fonts_pdf = (rt_Language.toString().trim() == 'LA')
+        ? await 'fonts/NotoSansLao.ttf'
+        : await 'fonts/THSarabunNew.ttf';
+    var nFormat = (rt_Language.toString().trim() == 'LA');
     double Total = 0.00;
+    List datexbook = [];
     List<TransReBillModel> _TransReBillModels = [];
     ///////////------------------------------------>
     String url_1 =
@@ -80,13 +90,24 @@ class ManPay_ReceiptMarket_PDF {
               ? 0.00
               : double.parse(finnancetransModel.total.toString());
           paymentName1 = finnancetransModel.ptname.toString();
-          fileNameSlip_ = finnancetransModel.slip.toString();
+          fileNameSlip_ = (finnancetransModel.ptser.toString() != '7')
+              ? finnancetransModel.slip.toString()
+              : (finnancetransModel.ref1 != null ||
+                      finnancetransModel.ref1.toString() != '')
+                  ? finnancetransModel.ref1.toString()
+                  : finnancetransModel.slip.toString();
           TextForm_time = finnancetransModel.ptime.toString();
-          bank1 = finnancetransModel.bank.toString();
           bname1 = finnancetransModel.bname.toString();
+          datexbook.add(finnancetransModel.date_book.toString());
+          datex = finnancetransModel.daterec.toString();
+          datexPay = finnancetransModel.dateacc.toString();
+          pos = finnancetransModel.pos.toString();
+          pay_ptset = finnancetransModel.ptser.toString();
+          url = (finnancetransModel.ptser.toString() != '7')
+              ? '${MyConstant().domain}/files/$foder/slip/${finnancetransModel.slip}'
+              : finnancetransModel.slip.toString();
           bno1 = finnancetransModel.bno.toString();
-          datex_selected = finnancetransModel.daterec.toString();
-          datexPay = finnancetransModel.pdate.toString();
+          bank1 = finnancetransModel.bank.toString();
         }
       }
     } catch (e) {}
@@ -127,8 +148,9 @@ class ManPay_ReceiptMarket_PDF {
         cFinn,
         zoneser,
         selected_Area,
-        datex_selected,
+        datex,
         datexPay,
+        datexbook,
         bname1,
         bill_addr,
         bill_email,
@@ -139,6 +161,9 @@ class ManPay_ReceiptMarket_PDF {
         _TransReBillModels,
         Total,
         Areaqty,
+        pos,
+        url,
+        pay_ptset,
         bno1,
         bank1);
   }

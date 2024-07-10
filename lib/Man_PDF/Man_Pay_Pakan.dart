@@ -24,6 +24,7 @@ import '../PDF_TP8/PDF_Pakan_TP8/pdf_Receipt_PayPakan_TP8.dart';
 import '../PDF_TP8/PDF_Receipt_TP8/pdf_AC_his_statusbill_TP8.dart';
 import '../PDF_TP8_Ortorkor/PDF_Pakan_TP8_Ortorkor/pdf_Receipt_PayPakan_TP8.dart';
 import '../PDF_TP8_Ortorkor/PDF_Receipt_TP8_Ortorkor/pdf_AC_his_statusbill_TP8.dart';
+import '../PDF_TP9_Lao/PDF_Pakan_TP9/pdf_Receipt_PayPakan_TP9.dart';
 
 class ManPay_Receipt_PakanPDF {
   // --------------------------------> PDF Pakan
@@ -48,13 +49,13 @@ class ManPay_Receipt_PakanPDF {
 
       ///----->ser เทมเพลต
       bills_name) async {
-    var nFormat = NumberFormat("#,##0.00", "en_US");
     List<FinnancetransModel> finnancetransModels = [];
     List<TransReBillHistoryModel> _TransReBillHistoryModels = [];
 
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
     var rtser = preferences.getString('renTalSer');
+    var rt_Language = preferences.getString('renTal_Language');
     var user = preferences.getString('ser');
     var fname;
     var email = preferences.getString('email');
@@ -62,6 +63,13 @@ class ManPay_Receipt_PakanPDF {
     var qutser = '';
     var docnoin = docno;
     var pdate;
+    var fonts_pdf = (rt_Language.toString().trim() == 'LA')
+        ? await 'fonts/NotoSansLao.ttf'
+        : await 'fonts/THSarabunNew.ttf';
+    var nFormat = (rt_Language.toString().trim() == 'LA')
+        ? NumberFormat("#,##0", "en_US")
+        : NumberFormat("#,##0.00", "en_US");
+
     String? Cust_no, Ln_s, Zone_s;
     double sum_pvat = 0.00,
         sum_vat = 0.00,
@@ -310,7 +318,8 @@ class ManPay_Receipt_PakanPDF {
             dis_sum_Matjum,
             TitleType_Default_Receipt_Name,
             dis_sum_Pakan,
-            sum_fee);
+            sum_fee,
+            fonts_pdf);
       } else if (tem_page_ser.toString() == '1') {
         PdfgenReceipt_PayPakan_TP4.exportPDF_Receipt_PayPakan_TP4(
             foder,
@@ -347,7 +356,8 @@ class ManPay_Receipt_PakanPDF {
             dis_sum_Matjum,
             TitleType_Default_Receipt_Name,
             dis_sum_Pakan,
-            sum_fee);
+            sum_fee,
+            fonts_pdf);
       } else if (tem_page_ser.toString() == '2') {
         PdfgenReceipt_PayPakan_TP7.exportPDF_Receipt_PayPakan_TP7(
             foder,
@@ -384,7 +394,8 @@ class ManPay_Receipt_PakanPDF {
             dis_sum_Matjum,
             TitleType_Default_Receipt_Name,
             dis_sum_Pakan,
-            sum_fee);
+            sum_fee,
+            fonts_pdf);
       } else if (tem_page_ser.toString() == '3') {
         if (rtser.toString() == '72' ||
             rtser.toString() == '92' ||
@@ -431,7 +442,8 @@ class ManPay_Receipt_PakanPDF {
                   Zone_s,
                   Ln_s,
                   cid_,
-                  fname);
+                  fname,
+                  fonts_pdf);
         } else {
           PdfgenReceipt_PayPakan_TP8.exportPDF_Receipt_PayPakan_TP8(
               foder,
@@ -473,8 +485,52 @@ class ManPay_Receipt_PakanPDF {
               Zone_s,
               Ln_s,
               cid_,
-              fname);
+              fname,
+              fonts_pdf);
         }
+      } else if (tem_page_ser.toString() == '4') {
+        PdfgenReceipt_PayPakan_TP9_Lao.exportPDF_Receipt_PayPakan_TP9_Lao(
+            foder,
+            tableData00,
+            tableData01,
+            context,
+            _TransReBillHistoryModels,
+            'Num_cid',
+            'Namenew',
+            '${sum_pvat}',
+            sum_vat,
+            sum_wht,
+            sum_amt,
+            sum_disp,
+            sum_disamt,
+            '${(sum_amt - sum_disamt)}',
+            renTal_name,
+            scname_,
+            cname_,
+            addr_,
+            tax_,
+            bill_addr,
+            bill_email,
+            bill_tel,
+            bill_tax,
+            bill_name,
+            newValuePDFimg,
+            numinvoice,
+            numdoctax,
+            finnancetransModels,
+            date_Transaction,
+            date_pay,
+            Howto_LockJonPay,
+            dis_sum_Matjum,
+            TitleType_Default_Receipt_Name,
+            dis_sum_Pakan,
+            sum_fee,
+            Cust_no,
+            Zone_s,
+            Ln_s,
+            cid_,
+            fname,
+            fonts_pdf);
       }
     });
 

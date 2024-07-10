@@ -3713,62 +3713,62 @@ class _BillingScreenState extends State<BillingScreen> {
                                                                 Font_.Fonts_T),
                                                       ),
                                                     ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: AutoSizeText(
-                                                        minFontSize: 8,
-                                                        maxFontSize: 14,
-                                                        maxLines: 1,
-                                                        double.parse(_InvoiceHistoryModels[
-                                                                        index]
-                                                                    .tf!) !=
-                                                                0.00
-                                                            ? '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pri!))} (tf ${nFormat.format((double.parse(_InvoiceHistoryModels[index].amt!) - (double.parse(_InvoiceHistoryModels[index].vat!) + double.parse(_InvoiceHistoryModels[index].pvat!))))})'
-                                                            : '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
-                                                        textAlign:
-                                                            TextAlign.start,
-                                                        style: const TextStyle(
-                                                            color: PeopleChaoScreen_Color
-                                                                .Colors_Text2_,
-                                                            //fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: AutoSizeText(
-                                                        minFontSize: 8,
-                                                        maxFontSize: 14,
-                                                        maxLines: 1,
-                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat_t!))}',
-                                                        textAlign:
-                                                            TextAlign.end,
-                                                        style: const TextStyle(
-                                                            color: PeopleChaoScreen_Color
-                                                                .Colors_Text2_,
-                                                            //fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: AutoSizeText(
-                                                        minFontSize: 8,
-                                                        maxFontSize: 14,
-                                                        maxLines: 1,
-                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat_t!))}',
-                                                        textAlign:
-                                                            TextAlign.end,
-                                                        style: const TextStyle(
-                                                            color: PeopleChaoScreen_Color
-                                                                .Colors_Text2_,
-                                                            //fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T),
-                                                      ),
-                                                    ),
+                                                    // Expanded(
+                                                    //   flex: 1,
+                                                    //   child: AutoSizeText(
+                                                    //     minFontSize: 8,
+                                                    //     maxFontSize: 14,
+                                                    //     maxLines: 1,
+                                                    //     double.parse(_InvoiceHistoryModels[
+                                                    //                     index]
+                                                    //                 .tf!) !=
+                                                    //             0.00
+                                                    //         ? '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pri!))} (tf ${nFormat.format((double.parse(_InvoiceHistoryModels[index].amt!) - (double.parse(_InvoiceHistoryModels[index].vat!) + double.parse(_InvoiceHistoryModels[index].pvat!))))})'
+                                                    //         : '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
+                                                    //     textAlign:
+                                                    //         TextAlign.start,
+                                                    //     style: const TextStyle(
+                                                    //         color: PeopleChaoScreen_Color
+                                                    //             .Colors_Text2_,
+                                                    //         //fontWeight: FontWeight.bold,
+                                                    //         fontFamily:
+                                                    //             Font_.Fonts_T),
+                                                    //   ),
+                                                    // ),
+                                                    // Expanded(
+                                                    //   flex: 1,
+                                                    //   child: AutoSizeText(
+                                                    //     minFontSize: 8,
+                                                    //     maxFontSize: 14,
+                                                    //     maxLines: 1,
+                                                    //     '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat_t!))}',
+                                                    //     textAlign:
+                                                    //         TextAlign.end,
+                                                    //     style: const TextStyle(
+                                                    //         color: PeopleChaoScreen_Color
+                                                    //             .Colors_Text2_,
+                                                    //         //fontWeight: FontWeight.bold,
+                                                    //         fontFamily:
+                                                    //             Font_.Fonts_T),
+                                                    //   ),
+                                                    // ),
+                                                    // Expanded(
+                                                    //   flex: 1,
+                                                    //   child: AutoSizeText(
+                                                    //     minFontSize: 8,
+                                                    //     maxFontSize: 14,
+                                                    //     maxLines: 1,
+                                                    //     '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat_t!))}',
+                                                    //     textAlign:
+                                                    //         TextAlign.end,
+                                                    //     style: const TextStyle(
+                                                    //         color: PeopleChaoScreen_Color
+                                                    //             .Colors_Text2_,
+                                                    //         //fontWeight: FontWeight.bold,
+                                                    //         fontFamily:
+                                                    //             Font_.Fonts_T),
+                                                    //   ),
+                                                    // ),
                                                     // Expanded(
                                                     //   flex: 1,
                                                     //   child: AutoSizeText(
@@ -3786,23 +3786,23 @@ class _BillingScreenState extends State<BillingScreen> {
                                                     //             Font_.Fonts_T),
                                                     //   ),
                                                     // ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: AutoSizeText(
-                                                        minFontSize: 8,
-                                                        maxFontSize: 14,
-                                                        maxLines: 1,
-                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].total_t!))}',
-                                                        textAlign:
-                                                            TextAlign.end,
-                                                        style: const TextStyle(
-                                                            color: PeopleChaoScreen_Color
-                                                                .Colors_Text2_,
-                                                            //fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T),
-                                                      ),
-                                                    ),
+                                                    // Expanded(
+                                                    //   flex: 1,
+                                                    //   child: AutoSizeText(
+                                                    //     minFontSize: 8,
+                                                    //     maxFontSize: 14,
+                                                    //     maxLines: 1,
+                                                    //     '${nFormat.format(double.parse(_InvoiceHistoryModels[index].total_t!))}',
+                                                    //     textAlign:
+                                                    //         TextAlign.end,
+                                                    //     style: const TextStyle(
+                                                    //         color: PeopleChaoScreen_Color
+                                                    //             .Colors_Text2_,
+                                                    //         //fontWeight: FontWeight.bold,
+                                                    //         fontFamily:
+                                                    //             Font_.Fonts_T),
+                                                    //   ),
+                                                    // ),
                                                   ],
                                                 ),
                                               ),

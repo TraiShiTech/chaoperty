@@ -47,6 +47,9 @@ import '../Report_Dashboard/Dashboard_Screen.dart';
 import '../Report_Ortorkor/Report_Ortor_ScreenA.dart';
 import '../Report_Ortorkor/Report_Ortor_ScreenB.dart';
 import '../Report_Ortorkor/Report_Screen9_1.dart';
+import '../Report_choice/Report_Choice_ScreenA.dart';
+import '../Report_choice/Report_Choice_ScreenB.dart';
+import '../Report_choice/Report_Choice_ScreenC.dart';
 import '../Report_cm/Report_cm_ScreenA.dart';
 import '../Report_cm/Report_cm_ScreenB.dart';
 import '../Report_cm/Report_cm_ScreenC.dart';
@@ -95,8 +98,17 @@ class ReportScreen extends StatefulWidget {
 }
 
 class _ReportScreenState extends State<ReportScreen> {
-  int ser_pang_test = -4;
+  int ser_pang_test = -7;
   int ser_pang = 0;
+  ////////--------------------------->
+  int ser_pang_CM = -2;
+  int ser_pang_Ortor = -1;
+  int ser_pang_Choice = -2;
+
+  ///
+  ///
+  ///
+  ////////--------------------------->
   DateTime datex = DateTime.now();
   int Status_ = 1;
   int PerandDow_ = 1;
@@ -1222,8 +1234,9 @@ class _ReportScreenState extends State<ReportScreen> {
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         // height: 270,
-                        decoration: const BoxDecoration(
-                          color: AppbackgroundColor.TiTile_Box,
+                        decoration: BoxDecoration(
+                          color: AppbackgroundColor.TiTile_Colors,
+                          // color: AppbackgroundColor.TiTile_Box,
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(10),
                               topRight: Radius.circular(10),
@@ -3000,7 +3013,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                   scrollDirection: Axis.horizontal,
                                   child: Row(
                                     children: [
-                                      for (int index = -4; index < 1; index++)
+                                      for (int index = -7; index < 1; index++)
                                         Padding(
                                           padding: const EdgeInsets.all(4.0),
                                           child: InkWell(
@@ -3019,13 +3032,20 @@ class _ReportScreenState extends State<ReportScreen> {
                                             child: Container(
                                               width: 150,
                                               decoration: BoxDecoration(
-                                                color: (index > -2)
+                                                color: (index > -3)
                                                     ? (ser_pang_test == index)
-                                                        ? Colors.red
-                                                        : Colors.red[200]
-                                                    : (ser_pang_test == index)
-                                                        ? Colors.blueGrey
-                                                        : Colors.blueGrey[200],
+                                                        ? Colors.teal[600]
+                                                        : Colors.teal[200]
+                                                    : (index > -5)
+                                                        ? (ser_pang_test ==
+                                                                index)
+                                                            ? Colors.red
+                                                            : Colors.red[200]
+                                                        : (ser_pang_test ==
+                                                                index)
+                                                            ? Colors.blueGrey
+                                                            : Colors
+                                                                .blueGrey[200],
                                                 borderRadius:
                                                     const BorderRadius.only(
                                                   topLeft: Radius.circular(10),
@@ -3045,15 +3065,23 @@ class _ReportScreenState extends State<ReportScreen> {
                                                 child: AutoSizeText(
                                                   minFontSize: 10,
                                                   maxFontSize: 20,
-                                                  (index == -4)
-                                                      ? 'Exclu - A(ประตูCM)'
-                                                      : (index == -3)
-                                                          ? 'Exclu - B(ประตูCM)'
-                                                          : (index == -2)
-                                                              ? 'Exclu - C(ประตูCM)'
-                                                              : (index == -1)
-                                                                  ? 'Exclu - A(อ.ต.)'
-                                                                  : 'Exclu - B(อ.ต.)',
+                                                  (index == -7)
+                                                      ? 'A-(ประตูCM)'
+                                                      : (index == -6)
+                                                          ? 'B-(ประตูCM)'
+                                                          : (index == -5)
+                                                              ? 'C-(ประตูCM)'
+                                                              : (index == -4)
+                                                                  ? 'A-(อ.ต.)'
+                                                                  : (index ==
+                                                                          -3)
+                                                                      ? 'B-(อ.ต.)'
+                                                                      : (index ==
+                                                                              -2)
+                                                                          ? 'A-(ChoiceMini)'
+                                                                          : (index == -1)
+                                                                              ? 'B-(ChoiceMini)'
+                                                                              : 'C-(ChoiceMini)',
                                                   style: const TextStyle(
                                                     color: Colors.white,
                                                     // fontWeight: FontWeight.bold,
@@ -3146,130 +3174,750 @@ class _ReportScreenState extends State<ReportScreen> {
                                 }),
                                 child: SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
-                                  child: Row(
-                                    children: [
-                                      for (int index = 0; index < 11; index++)
-                                        Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                ser_pang = index + 1;
-                                              });
-                                            },
-                                            child: Container(
-                                              width: 100,
-                                              decoration: BoxDecoration(
-                                                // color: (ser_pang == index + 1 ||
-                                                //         ser_pang + index == 0)
-                                                //     ? Colors.black54
-                                                //     : Colors.black26,
-                                                color: (ser_pang == index + 1 ||
-                                                        ser_pang + index == 0)
-                                                    ? Colors.deepPurple
-                                                    : Colors.deepPurple[200],
-                                                borderRadius:
-                                                    const BorderRadius.only(
-                                                  topLeft: Radius.circular(10),
-                                                  topRight: Radius.circular(10),
-                                                  bottomLeft:
-                                                      Radius.circular(10),
-                                                  bottomRight:
-                                                      Radius.circular(10),
-                                                ),
-                                                border: Border.all(
-                                                    color: Colors.white,
-                                                    width: 2),
-                                              ),
-                                              padding:
-                                                  const EdgeInsets.all(5.0),
-                                              child: Center(
-                                                child: AutoSizeText(
-                                                  minFontSize: 10,
-                                                  maxFontSize: 20,
-                                                  'หน้า ${index + 1}',
-                                                  style: const TextStyle(
-                                                    color: Colors.white,
-                                                    // fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
+                                  child: (rtser.toString() == '65')
+                                      ? Row(
+                                          children: [
+                                            for (int index = 0;
+                                                index < 3;
+                                                index++)
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(4.0),
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      if (index == 0) {
+                                                        ser_pang_CM = -2;
+                                                      } else if (index == 1) {
+                                                        ser_pang_CM = -1;
+                                                      } else {
+                                                        ser_pang_CM = 0;
+                                                      }
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                    width: 125,
+                                                    decoration: BoxDecoration(
+                                                      color: (ser_pang_CM ==
+                                                                  -2 &&
+                                                              index == 0)
+                                                          ? Colors.blueGrey
+                                                          : (ser_pang_CM ==
+                                                                      -1 &&
+                                                                  index == 1)
+                                                              ? Colors.blueGrey
+                                                              : (ser_pang_CM ==
+                                                                          0 &&
+                                                                      index ==
+                                                                          2)
+                                                                  ? Colors
+                                                                      .blueGrey
+                                                                  : Colors.blueGrey[
+                                                                      200],
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .only(
+                                                        topLeft:
+                                                            Radius.circular(10),
+                                                        topRight:
+                                                            Radius.circular(10),
+                                                        bottomLeft:
+                                                            Radius.circular(10),
+                                                        bottomRight:
+                                                            Radius.circular(10),
+                                                      ),
+                                                      border: Border.all(
+                                                          color: Colors.white,
+                                                          width: 2),
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            5.0),
+                                                    child: Center(
+                                                      child: AutoSizeText(
+                                                        minFontSize: 10,
+                                                        maxFontSize: 20,
+                                                        (index == 0)
+                                                            ? 'Exclusive - A'
+                                                            : (index == 1)
+                                                                ? 'Exclusive - B'
+                                                                : 'Exclusive - C',
+                                                        style: const TextStyle(
+                                                          color: Colors.white,
+                                                          // fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          ),
+                                            for (int index = 1;
+                                                index < 12;
+                                                index++)
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(4.0),
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      ser_pang_CM = index;
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                    width: 100,
+                                                    decoration: BoxDecoration(
+                                                      // color: (ser_pang == index + 1 ||
+                                                      //         ser_pang + index == 0)
+                                                      //     ? Colors.black54
+                                                      //     : Colors.black26,
+                                                      color: (ser_pang_CM ==
+                                                              index)
+                                                          ? Colors.deepPurple
+                                                          : Colors
+                                                              .deepPurple[200],
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .only(
+                                                        topLeft:
+                                                            Radius.circular(10),
+                                                        topRight:
+                                                            Radius.circular(10),
+                                                        bottomLeft:
+                                                            Radius.circular(10),
+                                                        bottomRight:
+                                                            Radius.circular(10),
+                                                      ),
+                                                      border: Border.all(
+                                                          color: Colors.white,
+                                                          width: 2),
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            5.0),
+                                                    child: Center(
+                                                      child: AutoSizeText(
+                                                        minFontSize: 10,
+                                                        maxFontSize: 20,
+                                                        'หน้า ${index}',
+                                                        style: const TextStyle(
+                                                          color: Colors.white,
+                                                          // fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                          ],
                                         )
-                                    ],
-                                  ),
+                                      : (rtser.toString() == '72' ||
+                                              rtser.toString() == '92' ||
+                                              rtser.toString() == '93' ||
+                                              rtser.toString() == '94')
+                                          ? Row(
+                                              children: [
+                                                for (int index = 1;
+                                                    index < 3;
+                                                    index++)
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            4.0),
+                                                    child: InkWell(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          if (index == 0) {
+                                                            ser_pang_Ortor = -2;
+                                                          } else if (index ==
+                                                              1) {
+                                                            ser_pang_Ortor = -1;
+                                                          } else {
+                                                            ser_pang_Ortor = 0;
+                                                          }
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                        width: 125,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: (ser_pang_Ortor ==
+                                                                      -2 &&
+                                                                  index == 0)
+                                                              ? Colors.blueGrey
+                                                              : (ser_pang_Ortor ==
+                                                                          -1 &&
+                                                                      index ==
+                                                                          1)
+                                                                  ? Colors
+                                                                      .blueGrey
+                                                                  : (ser_pang_Ortor ==
+                                                                              0 &&
+                                                                          index ==
+                                                                              2)
+                                                                      ? Colors
+                                                                          .blueGrey
+                                                                      : Colors.blueGrey[
+                                                                          200],
+                                                          borderRadius:
+                                                              const BorderRadius
+                                                                  .only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                          ),
+                                                          border: Border.all(
+                                                              color:
+                                                                  Colors.white,
+                                                              width: 2),
+                                                        ),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(5.0),
+                                                        child: Center(
+                                                          child: AutoSizeText(
+                                                            minFontSize: 10,
+                                                            maxFontSize: 20,
+                                                            // 'Exclusive - A',
+                                                            // (index == 0)
+                                                            //     ? 'Exclusive - A'
+                                                            //     :
+                                                            (index == 1)
+                                                                ? 'Exclusive - A'
+                                                                : 'Exclusive - B',
+                                                            style:
+                                                                const TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              // fontWeight: FontWeight.bold,
+                                                              fontFamily:
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                for (int index = 1;
+                                                    index < 12;
+                                                    index++)
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            4.0),
+                                                    child: InkWell(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          ser_pang_Ortor =
+                                                              index;
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                        width: 100,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          // color: (ser_pang == index + 1 ||
+                                                          //         ser_pang + index == 0)
+                                                          //     ? Colors.black54
+                                                          //     : Colors.black26,
+                                                          color: (ser_pang_Ortor ==
+                                                                  index)
+                                                              ? Colors
+                                                                  .deepPurple
+                                                              : Colors.deepPurple[
+                                                                  200],
+                                                          borderRadius:
+                                                              const BorderRadius
+                                                                  .only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                          ),
+                                                          border: Border.all(
+                                                              color:
+                                                                  Colors.white,
+                                                              width: 2),
+                                                        ),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(5.0),
+                                                        child: Center(
+                                                          child: AutoSizeText(
+                                                            minFontSize: 10,
+                                                            maxFontSize: 20,
+                                                            'หน้า ${index}',
+                                                            style:
+                                                                const TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              // fontWeight: FontWeight.bold,
+                                                              fontFamily:
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
+                                              ],
+                                            )
+                                          : (rtser.toString() == '106')
+                                              ? Row(
+                                                  children: [
+                                                    for (int index = -2;
+                                                        index < 1;
+                                                        index++)
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(4.0),
+                                                        child: InkWell(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              ser_pang_Choice =
+                                                                  index;
+                                                            });
+                                                          },
+                                                          child: Container(
+                                                            width: 125,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: (ser_pang_Choice ==
+                                                                      index)
+                                                                  ? Colors
+                                                                      .teal[600]
+                                                                  : Colors.teal[
+                                                                      200],
+                                                              borderRadius:
+                                                                  const BorderRadius
+                                                                      .only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight:
+                                                                    Radius
+                                                                        .circular(
+                                                                            10),
+                                                              ),
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  width: 2),
+                                                            ),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(5.0),
+                                                            child: Center(
+                                                              child:
+                                                                  AutoSizeText(
+                                                                minFontSize: 10,
+                                                                maxFontSize: 20,
+                                                                (index == -2)
+                                                                    ? 'Exclusive - A'
+                                                                    : (index ==
+                                                                            -1)
+                                                                        ? 'Exclusive - B'
+                                                                        : 'Exclusive - C',
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  // fontWeight: FontWeight.bold,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    for (int index = 1;
+                                                        index < 12;
+                                                        index++)
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(4.0),
+                                                        child: InkWell(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              ser_pang_Choice =
+                                                                  index;
+                                                            });
+                                                          },
+                                                          child: Container(
+                                                            width: 100,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              // color: (ser_pang == index + 1 ||
+                                                              //         ser_pang + index == 0)
+                                                              //     ? Colors.black54
+                                                              //     : Colors.black26,
+                                                              color: (ser_pang_Choice ==
+                                                                      index)
+                                                                  ? Colors
+                                                                      .deepPurple
+                                                                  : Colors.deepPurple[
+                                                                      200],
+                                                              borderRadius:
+                                                                  const BorderRadius
+                                                                      .only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight:
+                                                                    Radius
+                                                                        .circular(
+                                                                            10),
+                                                              ),
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  width: 2),
+                                                            ),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(5.0),
+                                                            child: Center(
+                                                              child:
+                                                                  AutoSizeText(
+                                                                minFontSize: 10,
+                                                                maxFontSize: 20,
+                                                                'หน้า ${index}',
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  // fontWeight: FontWeight.bold,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      )
+                                                  ],
+                                                )
+                                              : Row(
+                                                  children: [
+                                                    for (int index = 0;
+                                                        index < 11;
+                                                        index++)
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(4.0),
+                                                        child: InkWell(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              ser_pang =
+                                                                  index + 1;
+                                                            });
+                                                          },
+                                                          child: Container(
+                                                            width: 100,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              // color: (ser_pang == index + 1 ||
+                                                              //         ser_pang + index == 0)
+                                                              //     ? Colors.black54
+                                                              //     : Colors.black26,
+                                                              color: (ser_pang ==
+                                                                          index +
+                                                                              1 ||
+                                                                      ser_pang +
+                                                                              index ==
+                                                                          0)
+                                                                  ? Colors
+                                                                      .deepPurple
+                                                                  : Colors.deepPurple[
+                                                                      200],
+                                                              borderRadius:
+                                                                  const BorderRadius
+                                                                      .only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight:
+                                                                    Radius
+                                                                        .circular(
+                                                                            10),
+                                                              ),
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  width: 2),
+                                                            ),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(5.0),
+                                                            child: Center(
+                                                              child:
+                                                                  AutoSizeText(
+                                                                minFontSize: 10,
+                                                                maxFontSize: 20,
+                                                                'หน้า ${index + 1}',
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  // fontWeight: FontWeight.bold,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      )
+                                                  ],
+                                                ),
                                 ),
                               ),
                             ),
                           ],
                         ),
 
-                  /////////--------------------------------------------->
+                  /////////---------------------------------------------> Report_Choice_Screen
                   (renTal_user.toString() == '50')
-                      ? (ser_pang_test == -4)
+                      ? (ser_pang_test == -7)
                           ? Report_cm_ScreenA()
-                          : (ser_pang_test == -3)
+                          : (ser_pang_test == -6)
                               ? Report_cm_ScreenB()
-                              : (ser_pang_test == -2)
+                              : (ser_pang_test == -5)
                                   ? Report_cm_ScreenC()
-                                  : (ser_pang_test == -1)
+                                  : (ser_pang_test == -4)
                                       ? Report_Ortor_ScreenA()
-                                      : (ser_pang_test == 0)
+                                      : (ser_pang_test == -3)
                                           ? Report_Ortor_ScreenB()
-                                          : (ser_pang_test == 1)
-                                              ? const ReportScreen1()
-                                              : (ser_pang_test == 2)
-                                                  ? const ReportScreen2()
-                                                  : (ser_pang_test == 3)
-                                                      ? const ReportScreen3()
-                                                      : (ser_pang_test == 4)
-                                                          ? const ReportScreen4()
-                                                          : (ser_pang_test == 5)
-                                                              ? const ReportScreen5()
+                                          : (ser_pang_test == -2)
+                                              ? Report_Choice_ScreenA()
+                                              : (ser_pang_test == -1)
+                                                  ? Report_Choice_ScreenB()
+                                                  : (ser_pang_test == 0)
+                                                      ? Report_Choice_ScreenC()
+                                                      : (ser_pang_test == 1)
+                                                          ? const ReportScreen1()
+                                                          : (ser_pang_test == 2)
+                                                              ? const ReportScreen2()
                                                               : (ser_pang_test ==
-                                                                      6)
-                                                                  ? const ReportScreen6()
+                                                                      3)
+                                                                  ? const ReportScreen3()
                                                                   : (ser_pang_test ==
-                                                                          7)
-                                                                      ? const ReportScreen7()
+                                                                          4)
+                                                                      ? const ReportScreen4()
                                                                       : (ser_pang_test ==
-                                                                              8)
-                                                                          ? const ReportScreen8()
-                                                                          : (ser_pang_test == 9)
-                                                                              ? const ReportScreen9()
-                                                                              : (ser_pang_test == 10)
-                                                                                  ? const ReportScreen10()
-                                                                                  : const ReportScreen11()
+                                                                              5)
+                                                                          ? const ReportScreen5()
+                                                                          : (ser_pang_test == 6)
+                                                                              ? const ReportScreen6()
+                                                                              : (ser_pang_test == 7)
+                                                                                  ? const ReportScreen7()
+                                                                                  : (ser_pang_test == 8)
+                                                                                      ? const ReportScreen8()
+                                                                                      : (ser_pang_test == 9)
+                                                                                          ? const ReportScreen9()
+                                                                                          : (ser_pang_test == 10)
+                                                                                              ? const ReportScreen10()
+                                                                                              : const ReportScreen11()
                       //     /////////--------------------------------------------->
-                      : (ser_pang == 1 || ser_pang == 0)
-                          ? const ReportScreen1()
-                          : (ser_pang == 2)
-                              ? const ReportScreen2()
-                              : (ser_pang == 3)
-                                  ? const ReportScreen3()
-                                  : (ser_pang == 4)
-                                      ? const ReportScreen4()
-                                      : (ser_pang == 5)
-                                          ? const ReportScreen5()
-                                          : (ser_pang == 6)
-                                              ? const ReportScreen6()
-                                              : (ser_pang == 7)
-                                                  ? const ReportScreen7()
-                                                  : (ser_pang == 8)
-                                                      ? const ReportScreen8()
-                                                      : (ser_pang == 9)
-                                                          ? const ReportScreen9()
-                                                          : (ser_pang == 10)
-                                                              ? const ReportScreen10()
-                                                              : const ReportScreen11()
+                      : Man_typeSer(context)
                   /////////--------------------------------------------->DeC_area ////DeC_Zone
                 ],
               ),
             ),
           );
+  }
+
+  Widget Man_typeSer(BuildContext context) {
+    return (rtser.toString() == '65')
+        ? CM(context)
+        : (rtser.toString() == '72' ||
+                rtser.toString() == '92' ||
+                rtser.toString() == '93' ||
+                rtser.toString() == '94')
+            ? Ortor(context)
+            : (rtser.toString() == '106')
+                ? Choice(context)
+                : Normal(context);
+  }
+
+  Widget Normal(BuildContext context) {
+    return (ser_pang == 1 || ser_pang == 0)
+        ? const ReportScreen1()
+        : (ser_pang == 2)
+            ? const ReportScreen2()
+            : (ser_pang == 3)
+                ? const ReportScreen3()
+                : (ser_pang == 4)
+                    ? const ReportScreen4()
+                    : (ser_pang == 5)
+                        ? const ReportScreen5()
+                        : (ser_pang == 6)
+                            ? const ReportScreen6()
+                            : (ser_pang == 7)
+                                ? const ReportScreen7()
+                                : (ser_pang == 8)
+                                    ? const ReportScreen8()
+                                    : (ser_pang == 9)
+                                        ? const ReportScreen9()
+                                        : (ser_pang == 10)
+                                            ? const ReportScreen10()
+                                            : const ReportScreen11();
+  }
+
+  Widget CM(BuildContext context) {
+    ////-----ser_pang_CM
+    return (ser_pang_CM == -2)
+        ? Report_cm_ScreenA()
+        : (ser_pang_CM == -1)
+            ? Report_cm_ScreenB()
+            : (ser_pang_CM == 0)
+                ? Report_cm_ScreenC()
+                : (ser_pang_CM == 1)
+                    ? const ReportScreen1()
+                    : (ser_pang_CM == 2)
+                        ? const ReportScreen2()
+                        : (ser_pang_CM == 3)
+                            ? const ReportScreen3()
+                            : (ser_pang_CM == 4)
+                                ? const ReportScreen4()
+                                : (ser_pang_CM == 5)
+                                    ? const ReportScreen5()
+                                    : (ser_pang_CM == 6)
+                                        ? const ReportScreen6()
+                                        : (ser_pang_CM == 7)
+                                            ? const ReportScreen7()
+                                            : (ser_pang_CM == 8)
+                                                ? const ReportScreen8()
+                                                : (ser_pang_CM == 9)
+                                                    ? const ReportScreen9()
+                                                    : (ser_pang_CM == 10)
+                                                        ? const ReportScreen10()
+                                                        : const ReportScreen11();
+  }
+
+  Widget Ortor(BuildContext context) {
+    return (ser_pang_Ortor == -1)
+        ? Report_Ortor_ScreenA()
+        : (ser_pang_Ortor == 0)
+            ? Report_Ortor_ScreenB()
+            : (ser_pang_Ortor == 1)
+                ? const ReportScreen1()
+                : (ser_pang_Ortor == 2)
+                    ? const ReportScreen2()
+                    : (ser_pang_Ortor == 3)
+                        ? const ReportScreen3()
+                        : (ser_pang_Ortor == 4)
+                            ? const ReportScreen4()
+                            : (ser_pang_Ortor == 5)
+                                ? const ReportScreen5()
+                                : (ser_pang_Ortor == 6)
+                                    ? const ReportScreen6()
+                                    : (ser_pang_Ortor == 7)
+                                        ? const ReportScreen7()
+                                        : (ser_pang_Ortor == 8)
+                                            ? const ReportScreen8()
+                                            : (ser_pang_Ortor == 9)
+                                                ? const ReportScreen9()
+                                                : (ser_pang_Ortor == 10)
+                                                    ? const ReportScreen10()
+                                                    : const ReportScreen11();
+  }
+
+  Widget Choice(BuildContext context) {
+    return (ser_pang_Choice == -2)
+        ? Report_Choice_ScreenA()
+        : (ser_pang_Choice == -1)
+            ? Report_Choice_ScreenB()
+            : (ser_pang_Choice == 0)
+                ? Report_Choice_ScreenC()
+                : (ser_pang_Choice == 1)
+                    ? const ReportScreen1()
+                    : (ser_pang_Choice == 2)
+                        ? const ReportScreen2()
+                        : (ser_pang_Choice == 3)
+                            ? const ReportScreen3()
+                            : (ser_pang_Choice == 4)
+                                ? const ReportScreen4()
+                                : (ser_pang_Choice == 5)
+                                    ? const ReportScreen5()
+                                    : (ser_pang_Choice == 6)
+                                        ? const ReportScreen6()
+                                        : (ser_pang_Choice == 7)
+                                            ? const ReportScreen7()
+                                            : (ser_pang_Choice == 8)
+                                                ? const ReportScreen8()
+                                                : (ser_pang_Choice == 9)
+                                                    ? const ReportScreen9()
+                                                    : (ser_pang_Choice == 10)
+                                                        ? const ReportScreen10()
+                                                        : const ReportScreen11();
   }
 }

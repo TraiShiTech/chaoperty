@@ -18,6 +18,7 @@ import 'package:slide_switcher/slide_switcher.dart';
 
 import '../Constant/Myconstant.dart';
 
+import '../Home/home_reservespace_calendar.dart';
 import '../Model/GetArea_Model.dart';
 import '../Model/GetArea_quot.dart';
 import '../Model/GetAreax_con_Model.dart';
@@ -338,11 +339,11 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
     if (selectedIndex == 0) {
     } else {
       Img_Zone =
-          '${MyConstant().domain}/files/${DBN_}/zone/${zoneModels[selectedIndex].img}';
+          '${MyConstant().domain}/files/$DBN_/zone/${zoneModels[selectedIndex].img}';
       // Img_Zone =
       //     'https://dzentric.com/chao_perty/chao_api/files/${DBN_}/zone/${zoneModels[selectedIndex].img}';
       Imgfloorplan =
-          '${MyConstant().domain}/files/${DBN_}/zone/${zoneModels[selectedIndex].img_floorplan}';
+          '${MyConstant().domain}/files/$DBN_/zone/${zoneModels[selectedIndex].img_floorplan}';
     }
 
     setState(() {
@@ -840,15 +841,19 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
         ),
       ),
       onChanged: (text) {
-        text = text.toLowerCase();
+        text = text;
         setState(() {
           areaModels = _areaModels.where((areaModel) {
-            var notTitle = areaModel.lncode.toString().toLowerCase();
-            var notsname = areaModel.sname.toString().toLowerCase();
-            var notcname = areaModel.cname.toString().toLowerCase();
-            var notcid = areaModel.cid.toString().toLowerCase();
-            var notfid = areaModel.fid.toString().toLowerCase();
+            var notTitle0 = areaModel.zn.toString();
+            var notTitle1 = areaModel.ln.toString();
+            var notTitle = areaModel.lncode.toString();
+            var notsname = areaModel.sname.toString();
+            var notcname = areaModel.cname.toString();
+            var notcid = areaModel.cid.toString();
+            var notfid = areaModel.fid.toString();
             return notTitle.contains(text) ||
+                notTitle0.contains(text) ||
+                notTitle1.contains(text) ||
                 notsname.contains(text) ||
                 notcname.contains(text) ||
                 notcid.contains(text) ||
@@ -965,7 +970,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
           //     ),
           //   ],
           // ),
-          if ((Ser_Body != 0))
+          if ((Ser_Body != 0 && Ser_Body != 5))
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -2115,9 +2120,14 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                           });
                                         } else if (index + 1 == 2) {
                                           setState(() {
+                                            Ser_Body = 5;
+                                            Visit_ = 'calendar';
+                                          });
+                                        } else if (index + 1 == 3) {
+                                          setState(() {
                                             Visit_ = 'list';
                                           });
-                                        } else {
+                                        } else if (index + 1 == 4) {
                                           setState(() {
                                             Visit_ = 'map';
                                           });
@@ -2125,12 +2135,18 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                         }
                                       },
                                       containerHeight: 40,
-                                      containerWight: 100,
+                                      containerWight: 130,
                                       containerColor: Colors.grey,
                                       children: [
                                         Icon(
                                           Icons.grid_view_rounded,
                                           color: (Visit_ == 'grid')
+                                              ? Colors.blue[900]
+                                              : Colors.black,
+                                        ),
+                                        Icon(
+                                          Icons.calendar_month_rounded,
+                                          color: (Visit_ == 'calendar')
                                               ? Colors.blue[900]
                                               : Colors.black,
                                         ),
@@ -2178,13 +2194,15 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                               Get_Value_indexpage: '0',
                               updateMessage: updateMessage,
                             )
-                          : PeopleChaoScreen2(
-                              Get_Value_cid: Value_cid,
-                              Get_Value_NameShop_index: ser_cidtan,
-                              Get_Value_status: Value_stasus,
-                              Get_Value_indexpage: '4',
-                              updateMessage: updateMessage,
-                            )
+                          : (Ser_Body == 4)
+                              ? PeopleChaoScreen2(
+                                  Get_Value_cid: Value_cid,
+                                  Get_Value_NameShop_index: ser_cidtan,
+                                  Get_Value_status: Value_stasus,
+                                  Get_Value_indexpage: '4',
+                                  updateMessage: updateMessage,
+                                )
+                              : Homereservespace_calendar()
         ],
       ),
     );
@@ -6250,7 +6268,8 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                         ),
                       )),
               if (areaModels[index].quantity == '1')
-                if (areaModels[index].cid != areaModels[index].fid)
+                if (areaModels[index].cid != areaModels[index].fid &&
+                    areaModels[index].con_st_cid == 'สัญญาปัจจุบัน')
                   ListTile(
                       onTap: () async {
                         if (renTal_lavel <= 2) {
@@ -6458,7 +6477,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                 for (int i = 0; i < areaQuotModels.length; i++)
                   if (areaQuotModels[i]
                           .ln_q!
-                          .contains(areaModels[index].ln.toString()) ==
+                          .contains(areaModels[index].lncode.toString()) ==
                       true)
                     ListTile(
                         onTap: () async {
@@ -6514,7 +6533,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                 for (int i = 0; i < areaQuotModels.length; i++)
                   if (areaQuotModels[i]
                           .ln_q!
-                          .contains(areaModels[index].ln.toString()) ==
+                          .contains(areaModels[index].lncode.toString()) ==
                       true)
                     ListTile(
                         onTap: () async {
@@ -6651,6 +6670,66 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
           lineColor: Colors.greenAccent,
           maxColumn: 10),
       items: [
+        if (areaModels[index].quantity == '1' &&
+            areaModels[index].docno != null)
+          PopUpMenuItem(
+              // title:
+              //     'เสนอราคา: ${areaModels[index].lncode} (${areaModels[index].ln})',
+              // textStyle: const TextStyle(
+              //     color: PeopleChaoScreen_Color.Colors_Text2_,
+              //     //fontWeight: FontWeight.bold,
+              //     fontFamily: Font_.Fonts_T),
+              image: InkWell(
+                  onTap: () async {
+                    if (renTal_lavel <= 2) {
+                      menu!.dismiss();
+                      infomation();
+                    } else {
+                      SharedPreferences preferences =
+                          await SharedPreferences.getInstance();
+                      preferences.setString(
+                          'zoneSer', areaModels[index].zser.toString());
+                      preferences.setString(
+                          'zonesName', areaModels[index].zn.toString());
+                      setState(() {
+                        Ser_Body = 1;
+                        a_ln = areaModels[index].lncode;
+                        a_ser = areaModels[index].ser;
+                        a_area = areaModels[index].area;
+                        a_rent = areaModels[index].rent;
+                        a_page = '1';
+                      });
+                      menu!.dismiss();
+                    }
+                    // Navigator.pop(context);
+                  },
+                  child: Container(
+                    decoration: const BoxDecoration(
+                        border: Border(
+                      bottom: BorderSide(
+                        //                    <--- top side
+                        width: 0.5,
+                      ),
+                    )),
+                    padding: const EdgeInsets.all(4.0),
+                    width: 270,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'เสนอราคา: ${areaModels[index].lncode} (${areaModels[index].ln})',
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                //fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T),
+                          ),
+                        ),
+                        Icon(Iconsax.arrow_circle_right,
+                            color: getRandomColor(index)),
+                      ],
+                    ),
+                  ))),
         if (areaModels[index].quantity != '1')
           PopUpMenuItem(
               // title:
@@ -6710,8 +6789,135 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                       ],
                     ),
                   ))),
+        if (areaModels[index].quantity == '1' &&
+            areaModels[index].cc_date != null &&
+            areaModels[index].cc_date.toString() != "0000-00-00")
+          PopUpMenuItem(
+              // title:
+              //     'เสนอราคา: ${areaModels[index].lncode} (${areaModels[index].ln})',
+              // textStyle: const TextStyle(
+              //     color: PeopleChaoScreen_Color.Colors_Text2_,
+              //     //fontWeight: FontWeight.bold,
+              //     fontFamily: Font_.Fonts_T),
+              image: InkWell(
+                  onTap: () async {
+                    if (renTal_lavel <= 2) {
+                      menu!.dismiss();
+                      infomation();
+                    } else {
+                      SharedPreferences preferences =
+                          await SharedPreferences.getInstance();
+                      preferences.setString(
+                          'zoneSer', areaModels[index].zser.toString());
+                      preferences.setString(
+                          'zonesName', areaModels[index].zn.toString());
+                      setState(() {
+                        Ser_Body = 1;
+                        a_ln = areaModels[index].lncode;
+                        a_ser = areaModels[index].ser;
+                        a_area = areaModels[index].area;
+                        a_rent = areaModels[index].rent;
+                        a_page = '1';
+                      });
+                      menu!.dismiss();
+                    }
+                    // Navigator.pop(context);
+                  },
+                  child: Container(
+                    decoration: const BoxDecoration(
+                        border: Border(
+                      bottom: BorderSide(
+                        //                    <--- top side
+                        width: 0.5,
+                      ),
+                    )),
+                    padding: const EdgeInsets.all(4.0),
+                    width: 270,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'เสนอราคา: ${areaModels[index].lncode} (${areaModels[index].ln})',
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                //fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T),
+                          ),
+                        ),
+                        Icon(Iconsax.arrow_circle_right,
+                            color: getRandomColor(index)),
+                      ],
+                    ),
+                  ))),
+
 ////////////-------------------------->
+        ///
         if (areaModels[index].quantity != '1')
+          PopUpMenuItem(
+              // title:
+              //     'ทำสัญญา: ${areaModels[index].lncode} (${areaModels[index].ln})',
+              // textStyle: const TextStyle(
+              //     color: PeopleChaoScreen_Color.Colors_Text2_,
+              //     //fontWeight: FontWeight.bold,
+              //     fontFamily: Font_.Fonts_T),
+              image: InkWell(
+                  onTap: () async {
+                    if (renTal_lavel <= 2) {
+                      menu!.dismiss();
+                      infomation();
+                    } else {
+                      SharedPreferences preferences =
+                          await SharedPreferences.getInstance();
+                      preferences.setString(
+                          'zoneSer', areaModels[index].zser.toString());
+                      preferences.setString(
+                          'zonesName', areaModels[index].zn.toString());
+
+                      setState(() {
+                        Ser_Body = 2;
+                        a_ln = areaModels[index].lncode;
+                        a_ser = areaModels[index].ser;
+                        a_area = areaModels[index].area;
+                        a_rent = areaModels[index].rent;
+                        a_page = '1';
+                      });
+                      menu!.dismiss();
+                    }
+                    // Navigator.pop(context);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border(
+                      bottom: BorderSide(
+                        //                    <--- top side
+                        color: Colors.grey,
+                        width: 0.5,
+                      ),
+                    )),
+                    padding: const EdgeInsets.all(4.0),
+                    width: 270,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'ทำสัญญา: ${areaModels[index].lncode} (${areaModels[index].ln})',
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                //fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T),
+                          ),
+                        ),
+                        Icon(Iconsax.arrow_circle_right,
+                            color: getRandomColor(index)),
+                      ],
+                    ),
+                  ))),
+
+        if (areaModels[index].quantity == '1' &&
+            areaModels[index].cc_date != null &&
+            areaModels[index].cc_date.toString() != "0000-00-00")
           PopUpMenuItem(
               // title:
               //     'ทำสัญญา: ${areaModels[index].lncode} (${areaModels[index].ln})',
@@ -6826,7 +7032,8 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                       ),
                     ))),
         if (areaModels[index].quantity == '1')
-          if (areaModels[index].cid != areaModels[index].fid)
+          if (areaModels[index].cid != areaModels[index].fid &&
+              areaModels[index].con_st_cid == 'สัญญาปัจจุบัน')
             PopUpMenuItem(
                 // title:
                 //     'เช่าอยู่: ${areaModels[index].cid} (${areaModels[index].cname})',
@@ -6952,7 +7159,9 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                       children: [
                         Expanded(
                           child: Text(
-                            'เช่าอยู่: ${areaModels[index].cid} (${areaModels[index].cname})',
+                            areaModels[index].scfid == 'N'
+                                ? 'N: ${areaModels[index].cid} (${areaModels[index].cname})'
+                                : 'เช่าอยู่: ${areaModels[index].cid} (${areaModels[index].cname})',
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                                 color: PeopleChaoScreen_Color.Colors_Text2_,
@@ -7023,7 +7232,9 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                       children: [
                         Expanded(
                           child: Text(
-                            'รับชำระ: ${areaModels[index].cid} (${areaModels[index].cname})',
+                            areaModels[index].scfid == 'N'
+                                ? 'N: ${areaModels[index].cid} (${areaModels[index].cname})'
+                                : 'รับชำระ: ${areaModels[index].cid} (${areaModels[index].cname})',
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                                 color: PeopleChaoScreen_Color.Colors_Text2_,
@@ -7041,7 +7252,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
           for (int i = 0; i < areaQuotModels.length; i++)
             if (areaQuotModels[i]
                     .ln_q!
-                    .contains(areaModels[index].ln.toString()) ==
+                    .contains(areaModels[index].lncode.toString()) ==
                 true)
               PopUpMenuItem(
                   // title: 'เสนอราคา: ${areaQuotModels[i].docno}',
@@ -7099,7 +7310,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
           for (int i = 0; i < areaQuotModels.length; i++)
             if (areaQuotModels[i]
                     .ln_q!
-                    .contains(areaModels[index].ln.toString()) ==
+                    .contains(areaModels[index].lncode.toString()) ==
                 true)
               PopUpMenuItem(
                   // title: 'เสนอราคา: (มัดจำ) ${areaQuotModels[i].docno}',
@@ -7151,6 +7362,76 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                           ],
                         ),
                       ))),
+
+        if (areaModels[index].quantity == '1' && areaModels[index].cfid != null)
+          PopUpMenuItem(
+              // title:
+              //     'เช่าอยู่: ${areaModels[index].cid} (${areaModels[index].cname})',
+              // textStyle: const TextStyle(
+              //     color: PeopleChaoScreen_Color.Colors_Text2_,
+              //     //fontWeight: FontWeight.bold,
+              //     fontFamily: Font_.Fonts_T),
+              image: InkWell(
+                  onTap: () async {
+                    if (renTal_lavel <= 2) {
+                      menu!.dismiss();
+                      infomation();
+                    } else {
+                      setState(() {
+                        Ser_Body = 3;
+                        Value_stasus = areaModels[index].quantity == '1'
+                            ? datex.isAfter(DateTime.parse(
+                                            '${areaModels[index].ldate} 00:00:00.000')
+                                        .subtract(const Duration(days: 0))) ==
+                                    true
+                                ? 'หมดสัญญา'
+                                : datex.isAfter(DateTime.parse(
+                                                '${areaModels[index].ldate} 00:00:00.000')
+                                            .subtract(Duration(
+                                                days: open_set_date))) ==
+                                        true
+                                    ? 'ใกล้หมดสัญญา'
+                                    : 'เช่าอยู่'
+                            : areaModels[index].quantity == '2'
+                                ? 'เสนอราคา'
+                                : areaModels[index].quantity == '3'
+                                    ? 'เสนอราคา(มัดจำ)'
+                                    : 'ว่าง';
+                        Value_cid = areaModels[index].cfid;
+                        ser_cidtan = '1';
+                      });
+                      menu!.dismiss();
+                    }
+                    // Navigator.pop(context);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border(
+                      bottom: BorderSide(
+                        //                    <--- top side
+                        color: Colors.grey,
+                        width: 0.5,
+                      ),
+                    )),
+                    padding: const EdgeInsets.all(4.0),
+                    width: 270,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'เช่าอยู่: ${areaModels[index].cfid}',
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                //fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T),
+                          ),
+                        ),
+                        Icon(Iconsax.arrow_circle_right,
+                            color: getRandomColor(index)),
+                      ],
+                    ),
+                  ))),
       ],
 
       // onDismiss: onDismiss,
@@ -7186,53 +7467,9 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
   Widget createCard(int index, context) {
     return (_btnKeys.length == 0)
         ? SizedBox()
-        : Card(
-            color: areaModels[index].quantity == '1'
-                ? (areaModels[index].ldate == null)
-                    ? Colors.red.shade200
-                    : datex.isAfter(DateTime.parse(
-                                    '${areaModels[index].ldate} 00:00:00.000')
-                                .subtract(Duration(days: open_set_date))) ==
-                            true //datex
-                        ? datex.isAfter(DateTime.parse(
-                                        '${areaModels[index].ldate} 00:00:00.000')
-                                    .subtract(Duration(days: 0))) ==
-                                false
-                            ? Colors.orange.shade200
-                            : Colors.grey.shade200
-                        : Colors.red.shade200
-                : areaModels[index].quantity == '2'
-                    ? Colors.blue.shade200
-                    : areaModels[index].quantity == '3'
-                        ? Colors.purple.shade200
-                        : Colors.green.shade200,
-            child: MaterialButton(
-              key: _btnKeys[index],
-              onPressed: () async {
-                setState(() {
-                  read_GC_con_area(index);
-                  // if (areaModels[index].quantity == '2' ||
-                  //     areaModels[index].quantity == '3') {
-                  //   loadareaQuot(index);
-                  // }
-                });
-                if (areaModels[index].quantity != '1') {
-                  for (int i = 0; i < areaQuotModels.length; i++) {
-                    var oo = areaQuotModels[i]
-                        .ln_q!
-                        .contains(areaModels[index].ln.toString());
-                    // print('$oo');
-                    // print('${areaQuotModels[i].ln_q}');
-                    // print('${areaModels[index].ln}');
-                  }
-                }
-
-                // showLoaderDialog(context);
-                Future.delayed(const Duration(milliseconds: 400), () {
-                  maxColumn(index, context);
-                });
-              },
-              child: Container(
+        : Stack(
+            children: [
+              Card(
                   color: areaModels[index].quantity == '1'
                       ? (areaModels[index].ldate == null)
                           ? Colors.red.shade200
@@ -7253,61 +7490,130 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                           : areaModels[index].quantity == '3'
                               ? Colors.purple.shade200
                               : Colors.green.shade200,
-                  width: MediaQuery.of(context).size.width * 0.1,
-                  height: 70,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Center(
-                          child: AutoSizeText(
-                        '${areaModels[index].lncode} (${areaModels[index].ln})',
-                        minFontSize: 8,
-                        maxFontSize: (Responsive.isDesktop(context)) ? 18 : 12,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          // fontSize: 20,
-                          fontFamily: Font_.Fonts_T,
-                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                        ),
-                        maxLines: (Responsive.isDesktop(context)) ? 4 : 2,
-                        overflow: TextOverflow.ellipsis,
-                      )),
-                      AutoSizeText(
-                        areaModels[index].quantity == '1'
+                  child: MaterialButton(
+                    key: _btnKeys[index],
+                    onPressed: () async {
+                      setState(() {
+                        read_GC_con_area(index);
+                        // if (areaModels[index].quantity == '2' ||
+                        //     areaModels[index].quantity == '3') {
+                        //   loadareaQuot(index);
+                        // }
+                      });
+                      if (areaModels[index].quantity != '1') {
+                        for (int i = 0; i < areaQuotModels.length; i++) {
+                          var oo = areaQuotModels[i]
+                              .ln_q!
+                              .contains(areaModels[index].ln.toString());
+                          // print('$oo');
+                          // print('${areaQuotModels[i].ln_q}');
+                          // print('${areaModels[index].ln}');
+                        }
+                      }
+
+                      // showLoaderDialog(context);
+                      Future.delayed(const Duration(milliseconds: 400), () {
+                        maxColumn(index, context);
+                      });
+                    },
+                    child: Container(
+                        color: areaModels[index].quantity == '1'
                             ? (areaModels[index].ldate == null)
-                                ? 'หมดสัญญา'
+                                ? Colors.red.shade200
                                 : datex.isAfter(DateTime.parse(
-                                                '${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000')
-                                            .subtract(
-                                                const Duration(days: 0))) ==
-                                        true
-                                    ? 'หมดสัญญา'
-                                    : datex.isAfter(DateTime.parse(
-                                                    '${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000')
-                                                .subtract(Duration(
-                                                    days: open_set_date))) ==
-                                            true
-                                        ? 'ใกล้หมดสัญญา'
-                                        : 'เช่าอยู่'
+                                                '${areaModels[index].ldate} 00:00:00.000')
+                                            .subtract(Duration(
+                                                days: open_set_date))) ==
+                                        true //datex
+                                    ? datex.isAfter(DateTime.parse(
+                                                    '${areaModels[index].ldate} 00:00:00.000')
+                                                .subtract(Duration(days: 0))) ==
+                                            false
+                                        ? Colors.orange.shade200
+                                        : Colors.grey.shade200
+                                    : Colors.red.shade200
                             : areaModels[index].quantity == '2'
-                                ? 'เสนอราคา'
+                                ? Colors.blue.shade200
                                 : areaModels[index].quantity == '3'
-                                    ? 'เสนอราคา(มัดจำ)'
-                                    : 'ว่าง',
-                        minFontSize: 8,
-                        maxFontSize: 12,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          // fontSize: 20,
-                          fontFamily: Font_.Fonts_T,
-                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      )
-                    ],
+                                    ? Colors.purple.shade200
+                                    : Colors.green.shade200,
+                        width: MediaQuery.of(context).size.width * 0.1,
+                        // height: 70,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Center(
+                                child: AutoSizeText(
+                              '${areaModels[index].lncode} (${areaModels[index].ln})',
+                              minFontSize: 8,
+                              maxFontSize:
+                                  (Responsive.isDesktop(context)) ? 18 : 12,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                // fontSize: 20,
+                                fontFamily: Font_.Fonts_T,
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                              ),
+                              maxLines: (Responsive.isDesktop(context)) ? 4 : 2,
+                              overflow: TextOverflow.ellipsis,
+                            )),
+                            AutoSizeText(
+                              areaModels[index].quantity == '1'
+                                  ? (areaModels[index].ldate == null)
+                                      ? 'หมดสัญญา'
+                                      : datex.isAfter(DateTime.parse(
+                                                      '${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000')
+                                                  .subtract(const Duration(
+                                                      days: 0))) ==
+                                              true
+                                          ? 'หมดสัญญา ${areaModels[index].cc_date != null ? areaModels[index].cc_date == "0000-00-00" ? '' : DateFormat('dd-MM-yyyy').format(DateTime.parse('${areaModels[index].cc_date} 00:00:00.000')) : ''}'
+                                          : datex.isAfter(DateTime.parse(
+                                                          '${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000')
+                                                      .subtract(Duration(
+                                                          days:
+                                                              open_set_date))) ==
+                                                  true
+                                              ? 'ใกล้หมดสัญญา ${areaModels[index].cc_date != null ? areaModels[index].cc_date == "0000-00-00" ? '' : DateFormat('dd-MM-yyyy').format(DateTime.parse('${areaModels[index].cc_date} 00:00:00.000')) : ''}'
+                                              : 'เช่าอยู่ ${areaModels[index].cc_date != null ? areaModels[index].cc_date == "0000-00-00" ? '' : DateFormat('dd-MM-yyyy').format(DateTime.parse('${areaModels[index].cc_date} 00:00:00.000')) : ''}'
+                                  : areaModels[index].quantity == '2'
+                                      ? 'เสนอราคา'
+                                      : areaModels[index].quantity == '3'
+                                          ? 'เสนอราคา(มัดจำ)'
+                                          : 'ว่าง',
+                              minFontSize: 8,
+                              maxFontSize: 12,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                // fontSize: 20,
+                                fontFamily: Font_.Fonts_T,
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            )
+                          ],
+                        )),
                   )),
-            ));
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      areaModels[index].cc_date != null
+                          ? areaModels[index].cc_date == "0000-00-00"
+                              ? SizedBox()
+                              : Icon(
+                                  Icons.closed_caption,
+                                )
+                          : SizedBox(),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          );
 
     // PopupMenuButton(
     //   onOpened: () {

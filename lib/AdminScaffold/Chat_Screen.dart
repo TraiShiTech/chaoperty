@@ -65,7 +65,6 @@ class _ChatScreenState extends State<ChatScreen> {
     super.dispose();
   }
 
-
 ///////////------------------------------------------->
   // void startUpdates() {
   //   // Start periodic updates if not already started
@@ -348,7 +347,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         bottomLeft: Radius.circular(20),
                         bottomRight: Radius.circular(20)),
                   ),
-                  padding: const EdgeInsets.all(6.0),
+                  padding: const EdgeInsets.all(4.0),
                   child: InkWell(
                     onTap: () async {
                       SharedPreferences preferences =

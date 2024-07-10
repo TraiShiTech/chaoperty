@@ -5820,7 +5820,7 @@ class _AccountInvoicePayState extends State<AccountInvoicePay> {
                                   // Dialog_cancellock(purchaseId_s);
 
                                   Beam_purchase_disabled(
-                                          purchaseId, Pay_Ke, ren, cFinnc_s)
+                                          purchaseId, Pay_Ke, ren, cFinnc_s,'')
                                       .then((value) => {
                                             _timer.cancel(),
                                             Navigator.pop(context),

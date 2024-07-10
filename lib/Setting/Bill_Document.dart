@@ -72,7 +72,8 @@ class _BillDocumentState extends State<BillDocument> {
       expbill_name,
       bill_default,
       bill_tser,
-      Receipt_default;
+      Receipt_default,
+      Language;
   int Receipt_defaultTitle = 0;
   String? rtname_Check,
       type_Check,
@@ -125,6 +126,7 @@ class _BillDocumentState extends State<BillDocument> {
           var bill_tserx = renTalModel.tser;
           var name = renTalModel.pn!.trim();
           setState(() {
+            Language = preferences.getString('renTal_Language');
             rtname = rtnamex;
             type = typexs;
             typex = typexx;
@@ -736,7 +738,7 @@ class _BillDocumentState extends State<BillDocument> {
                       child: Column(
                         children: [
                           Container(
-                            decoration:  BoxDecoration(
+                            decoration: BoxDecoration(
                               color: AppbackgroundColor.TiTile_Colors,
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(10),
@@ -1878,8 +1880,7 @@ class _BillDocumentState extends State<BillDocument> {
                                               flex: 2,
                                               child: Container(
                                                 child: Container(
-                                                  decoration:
-                                                       BoxDecoration(
+                                                  decoration: BoxDecoration(
                                                     color: AppbackgroundColor
                                                         .TiTile_Colors,
                                                     borderRadius:
@@ -1959,7 +1960,7 @@ class _BillDocumentState extends State<BillDocument> {
                                             Expanded(
                                               flex: 1,
                                               child: Container(
-                                                decoration:  BoxDecoration(
+                                                decoration: BoxDecoration(
                                                   color: AppbackgroundColor
                                                       .TiTile_Colors,
                                                   borderRadius:
@@ -2256,8 +2257,7 @@ class _BillDocumentState extends State<BillDocument> {
                                               flex: 2,
                                               child: Container(
                                                 child: Container(
-                                                  decoration:
-                                                       BoxDecoration(
+                                                  decoration: BoxDecoration(
                                                     color: AppbackgroundColor
                                                         .TiTile_Colors,
                                                     borderRadius:
@@ -2316,7 +2316,7 @@ class _BillDocumentState extends State<BillDocument> {
                                             Expanded(
                                               flex: 1,
                                               child: Container(
-                                                decoration:  BoxDecoration(
+                                                decoration: BoxDecoration(
                                                   color: AppbackgroundColor
                                                       .TiTile_Colors,
                                                   borderRadius:
@@ -2626,7 +2626,7 @@ class _BillDocumentState extends State<BillDocument> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Container(
-                                        height: 200,
+                                        height: 250,
                                         decoration: const BoxDecoration(
                                           color:
                                               AppbackgroundColor.Sub_Abg_Colors,
@@ -2643,7 +2643,7 @@ class _BillDocumentState extends State<BillDocument> {
                                         child: Column(
                                           children: [
                                             Container(
-                                              decoration:  BoxDecoration(
+                                              decoration: BoxDecoration(
                                                 color: AppbackgroundColor
                                                     .TiTile_Colors,
                                                 borderRadius: BorderRadius.only(
@@ -2728,7 +2728,7 @@ class _BillDocumentState extends State<BillDocument> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Container(
-                                        height: 200,
+                                        height: 250,
                                         decoration: const BoxDecoration(
                                           color:
                                               AppbackgroundColor.Sub_Abg_Colors,
@@ -2745,7 +2745,7 @@ class _BillDocumentState extends State<BillDocument> {
                                         child: Column(
                                           children: [
                                             Container(
-                                              decoration:  BoxDecoration(
+                                              decoration: BoxDecoration(
                                                 color: AppbackgroundColor
                                                     .TiTile_Colors,
                                                 borderRadius: BorderRadius.only(
@@ -2784,6 +2784,219 @@ class _BillDocumentState extends State<BillDocument> {
                                                   ),
                                                 ],
                                               ),
+                                            ),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Row(
+                                                      children: [
+                                                        Container(
+                                                          width: 80,
+                                                          child: const Padding(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    4.0),
+                                                            child: Text(
+                                                              'ภาษา',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              style: TextStyle(
+                                                                color: SettingScreen_Color
+                                                                    .Colors_Text2_,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                //fontSize: 10.0
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          child: Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: AppbackgroundColor
+                                                                  .Sub_Abg_Colors,
+                                                              borderRadius: const BorderRadius
+                                                                      .only(
+                                                                  topLeft:
+                                                                      Radius.circular(
+                                                                          10),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10)),
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  width: 1),
+                                                            ),
+                                                            width: 200,
+                                                            child:
+                                                                DropdownButtonFormField2(
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                isDense: true,
+                                                                contentPadding:
+                                                                    EdgeInsets
+                                                                        .zero,
+                                                                border:
+                                                                    OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10),
+                                                                ),
+                                                              ),
+                                                              isExpanded: true,
+                                                              hint: Text(
+                                                                (Language ==
+                                                                            'TH' ||
+                                                                        Language ==
+                                                                            null)
+                                                                    ? 'THI'
+                                                                    : 'LAO',
+                                                                style: const TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: SettingScreen_Color
+                                                                        .Colors_Text2_,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T),
+                                                              ),
+                                                              icon: const Icon(
+                                                                Icons
+                                                                    .arrow_drop_down,
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: Colors
+                                                                    .green,
+                                                              ),
+                                                              iconSize: 30,
+                                                              buttonHeight: 40,
+                                                              // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                                              dropdownDecoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                              ),
+                                                              items: [
+                                                                DropdownMenuItem<
+                                                                    String>(
+                                                                  value: 'TH',
+                                                                  child: Text(
+                                                                    'TH',
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      color: SettingScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      fontSize:
+                                                                          14,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                DropdownMenuItem<
+                                                                    String>(
+                                                                  value: 'LA',
+                                                                  child: Text(
+                                                                    'LA',
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      color: SettingScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      fontSize:
+                                                                          14,
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                              ],
+                                                              onChanged:
+                                                                  (value) async {
+                                                                var Language = (value ==
+                                                                            'TH' ||
+                                                                        value ==
+                                                                            null)
+                                                                    ? 'TH'
+                                                                    : 'LA';
+                                                                SharedPreferences
+                                                                    preferences =
+                                                                    await SharedPreferences
+                                                                        .getInstance();
+                                                                String? ren =
+                                                                    preferences
+                                                                        .getString(
+                                                                            'renTalSer');
+                                                                String?
+                                                                    ser_user =
+                                                                    preferences
+                                                                        .getString(
+                                                                            'ser');
+
+                                                                String url =
+                                                                    '${MyConstant().domain}/UpC_rentel_bill_set.php?isAdd=true&ren=$ren&Language=$Language&ser_user=$ser_user&sertype=3';
+
+                                                                try {
+                                                                  var response =
+                                                                      await http.get(
+                                                                          Uri.parse(
+                                                                              url));
+
+                                                                  var result =
+                                                                      json.decode(
+                                                                          response
+                                                                              .body);
+                                                                  print(result);
+                                                                  if (result
+                                                                          .toString() ==
+                                                                      'true') {
+                                                                    Insert_log.Insert_logs(
+                                                                        'ตั้งค่า',
+                                                                        'เอกสาร>>แก้ไข(DEFAULT การออกบิล)');
+                                                                    setState(
+                                                                        () {
+                                                                      read_GC_rental();
+                                                                    });
+                                                                  } else {}
+                                                                  // ScaffoldMessenger.of(context).showSnackBar(
+                                                                  //   SnackBar(
+                                                                  //       content: Text('บันทึกสำเร็จ',
+                                                                  //           style: TextStyle(
+                                                                  //               color: Colors.white,
+                                                                  //               fontFamily: Font_.Fonts_T))),
+                                                                  // );
+                                                                } catch (e) {}
+                                                              },
+                                                              onSaved: (value) {
+                                                                // selectedValue = value.toString();
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                             Row(
                                               children: [
@@ -3460,7 +3673,7 @@ class _BillDocumentState extends State<BillDocument> {
                         flex: 2,
                         child: Container(
                           child: Container(
-                            decoration:  BoxDecoration(
+                            decoration: BoxDecoration(
                               color: AppbackgroundColor.TiTile_Colors,
                               borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(10),
@@ -3522,7 +3735,7 @@ class _BillDocumentState extends State<BillDocument> {
                       Expanded(
                         flex: 1,
                         child: Container(
-                          decoration:  BoxDecoration(
+                          decoration: BoxDecoration(
                             color: AppbackgroundColor.TiTile_Colors,
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(0),
@@ -3768,7 +3981,7 @@ class _BillDocumentState extends State<BillDocument> {
                         flex: 2,
                         child: Container(
                           child: Container(
-                            decoration:  BoxDecoration(
+                            decoration: BoxDecoration(
                               color: AppbackgroundColor.TiTile_Colors,
                               borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(10),
@@ -3813,7 +4026,7 @@ class _BillDocumentState extends State<BillDocument> {
                       Expanded(
                         flex: 1,
                         child: Container(
-                          decoration:  BoxDecoration(
+                          decoration: BoxDecoration(
                             color: AppbackgroundColor.TiTile_Colors,
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(0),

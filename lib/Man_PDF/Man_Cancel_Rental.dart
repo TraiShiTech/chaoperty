@@ -14,6 +14,7 @@ import '../Model/trans_re_bill_history_model.dart';
 import '../PDF/PDF_Receipt/pdf_AC_his_statusbill.dart';
 import '../PDF/pdf_Cancel_Rental.dart';
 
+import '../PDF/pdf_Cancel_Rental_Lao.dart';
 import '../PDF_TP2/PDF_Receipt_TP2/pdf_AC_his_statusbill_TP2.dart';
 import '../PDF_TP3/PDF_Receipt_TP3/pdf_AC_his_statusbill_TP3.dart';
 import '../PDF_TP4/PDF_Receipt_TP4/pdf_AC_his_statusbill_TP4.dart';
@@ -55,7 +56,14 @@ class Man_CancelRental_PDF {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
     var rtser = preferences.getString('renTalSer');
+    var rt_Language = preferences.getString('renTal_Language');
     var user = preferences.getString('ser');
+    var fonts_pdf = (rt_Language.toString().trim() == 'LA')
+        ? await 'fonts/NotoSansLao.ttf'
+        : await 'fonts/THSarabunNew.ttf';
+    var nFormat = (rt_Language.toString().trim() == 'LA')
+        ? NumberFormat("#,##0", "en_US")
+        : NumberFormat("#,##0.00", "en_US");
     ///////////----------------------------------------------->
     String? TeNant_nameshop,
         TeNant_typeshop,
@@ -189,46 +197,89 @@ class Man_CancelRental_PDF {
       print(ciddoc);
       print(ciddoc);
       print('**ciddoc');
-      PdfgeCancel_Rental.exportPDF_Cancel_Rental(
-          context,
-          foder,
-          renTal_name,
-          bill_addr,
-          bill_email,
-          bill_tel,
-          bill_tax,
-          bill_name,
-          TeNant_nameshop,
-          TeNant_typeshop,
-          TeNant_bussshop,
-          TeNant_bussscontact,
-          TeNant_address,
-          TeNant_tel,
-          TeNant_email,
-          TeNant_rental_count,
-          TeNant_area,
-          TeNant_ln,
-          TeNant_sdate,
-          TeNant_ldate,
-          TeNant_period,
-          TeNant_rtname,
-          TeNant_docno,
-          TeNant_zn,
-          TeNant_aser,
-          TeNant_qty,
-          TeNant_cdate,
-          TeNant_tax,
-          TeNant_ctype,
-          TeNant_custno,
-          ciddoc,
-          qutser,
-          TeNant_verticalGroupValue,
-          newValuePDFimg,
-          Formbecause_cancel,
-          quotxSelectModels,
-          transKonModels,
-          TitleType_Default_Receipt_Name,
-          cc_date);
+      (rt_Language.toString().trim() == 'LA')
+          ? PdfgeCancel_Rental_Lao.exportPDF_Cancel_Rental_Lao(
+              context,
+              foder,
+              renTal_name,
+              bill_addr,
+              bill_email,
+              bill_tel,
+              bill_tax,
+              bill_name,
+              TeNant_nameshop,
+              TeNant_typeshop,
+              TeNant_bussshop,
+              TeNant_bussscontact,
+              TeNant_address,
+              TeNant_tel,
+              TeNant_email,
+              TeNant_rental_count,
+              TeNant_area,
+              TeNant_ln,
+              TeNant_sdate,
+              TeNant_ldate,
+              TeNant_period,
+              TeNant_rtname,
+              TeNant_docno,
+              TeNant_zn,
+              TeNant_aser,
+              TeNant_qty,
+              TeNant_cdate,
+              TeNant_tax,
+              TeNant_ctype,
+              TeNant_custno,
+              ciddoc,
+              qutser,
+              TeNant_verticalGroupValue,
+              newValuePDFimg,
+              Formbecause_cancel,
+              quotxSelectModels,
+              transKonModels,
+              TitleType_Default_Receipt_Name,
+              cc_date,
+              fonts_pdf)
+          : PdfgeCancel_Rental.exportPDF_Cancel_Rental(
+              context,
+              foder,
+              renTal_name,
+              bill_addr,
+              bill_email,
+              bill_tel,
+              bill_tax,
+              bill_name,
+              TeNant_nameshop,
+              TeNant_typeshop,
+              TeNant_bussshop,
+              TeNant_bussscontact,
+              TeNant_address,
+              TeNant_tel,
+              TeNant_email,
+              TeNant_rental_count,
+              TeNant_area,
+              TeNant_ln,
+              TeNant_sdate,
+              TeNant_ldate,
+              TeNant_period,
+              TeNant_rtname,
+              TeNant_docno,
+              TeNant_zn,
+              TeNant_aser,
+              TeNant_qty,
+              TeNant_cdate,
+              TeNant_tax,
+              TeNant_ctype,
+              TeNant_custno,
+              ciddoc,
+              qutser,
+              TeNant_verticalGroupValue,
+              newValuePDFimg,
+              Formbecause_cancel,
+              quotxSelectModels,
+              transKonModels,
+              TitleType_Default_Receipt_Name,
+              cc_date,
+              fonts_pdf);
     });
   }
 }

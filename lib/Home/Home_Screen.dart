@@ -31,7 +31,6 @@ import '../Model/trans_re_bill_model.dart';
 import '../PeopleChao/PeopleChao_Screen.dart';
 import '../Register/SignIn_License.dart';
 import '../Register/SignUp_Screen.dart';
-import '../Report/Report_Screen.dart';
 import 'package:http/http.dart' as http;
 import '../Responsive/responsive.dart';
 
@@ -40,6 +39,7 @@ import '../Setting/ttt.dart';
 import '../Style/colors.dart';
 import 'home_dashboard.dart';
 import 'home_reservespace.dart';
+import 'home_reservespace_calendar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -649,16 +649,30 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         serBody_modile_wiget = 0;
       });
-
     return (!Responsive.isDesktop(context))
         ? show_Dashboard == 1
             ? const HomeDashboard()
-            :  show_Dashboard == 2
-            ? HomeReserveSpace():BodyHome_mobile()
+            : show_Dashboard == 2
+                ? HomeReserveSpace()
+                : show_Dashboard == 3
+                    ? Homereservespace_calendar()
+                    : BodyHome_mobile()
         : show_Dashboard == 1
             ? const HomeDashboard()
-            :  show_Dashboard == 2
-            ? HomeReserveSpace(): BodyHome_Web();
+            : show_Dashboard == 2
+                ? HomeReserveSpace()
+                : show_Dashboard == 3
+                    ? Homereservespace_calendar()
+                    : BodyHome_Web();
+    // return (!Responsive.isDesktop(context))
+    //     ? show_Dashboard == 1
+    //         ? const HomeDashboard()
+    //         :  show_Dashboard == 2
+    //         ? HomeReserveSpace():BodyHome_mobile()
+    //     : show_Dashboard == 1
+    //         ? const HomeDashboard()
+    //         :  show_Dashboard == 2
+    //         ? HomeReserveSpace(): BodyHome_Web();
   }
 
 /////////////---------------------------------------------------------->
@@ -704,6 +718,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: Text(
                                     'Dashboard',
                                     style: TextStyle(
+                                      fontSize: 14,
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                       fontFamily: FontWeight_.Fonts_T,
@@ -740,6 +755,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: Text(
                                     'Reserve Space',
                                     style: TextStyle(
+                                      fontSize: 14,
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                       fontFamily: FontWeight_.Fonts_T,
@@ -749,6 +765,43 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
+                      // Expanded(
+                      //   flex: 2,
+                      //   child: Padding(
+                      //     padding: EdgeInsets.all(4.0),
+                      //     child: InkWell(
+                      //       onTap: () async {
+                      //         setState(() {
+                      //           show_Dashboard = 3;
+                      //         });
+                      //       },
+                      //       child: Container(
+                      //           width: 130,
+                      //           padding: const EdgeInsets.all(8.0),
+                      //           decoration: BoxDecoration(
+                      //             color: AppBarColors.hexColor.withOpacity(0.8),
+                      //             borderRadius: const BorderRadius.only(
+                      //                 topLeft: Radius.circular(8),
+                      //                 topRight: Radius.circular(8),
+                      //                 bottomLeft: Radius.circular(8),
+                      //                 bottomRight: Radius.circular(8)),
+                      //             border:
+                      //                 Border.all(color: Colors.white, width: 1),
+                      //           ),
+                      //           child: const Center(
+                      //             child: Text(
+                      //               'Reserve Space Calendar',
+                      //               style: TextStyle(
+                      //                 fontSize: 14,
+                      //                 color: Colors.white,
+                      //                 fontWeight: FontWeight.bold,
+                      //                 fontFamily: FontWeight_.Fonts_T,
+                      //               ),
+                      //             ),
+                      //           )),
+                      //     ),
+                      //   ),
+                      // ),
                       Expanded(flex: 4, child: SizedBox()),
                       Expanded(
                         flex: 2,

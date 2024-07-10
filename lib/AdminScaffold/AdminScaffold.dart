@@ -18,12 +18,15 @@ import 'package:side_sheet/side_sheet.dart';
 
 import '../Account/Account_Screen.dart';
 import '../Account/Play_column.dart';
+import '../Beam/Beam_api_check_Pay.dart';
 import '../Bureau_Registration/Bureau_Screen.dart';
 import '../ChaoArea/ChaoArea_Screen.dart';
 import '../Constant/Myconstant.dart';
 import '../Bureau_Registration/Customer_Screen.dart';
 import '../Home/Home_Screen.dart';
+import '../INSERT_Log/Insert_log.dart';
 import '../Manage/Manage_Screen.dart';
+import '../Model/GetPayMent_Model.dart';
 import '../Model/GetPerMission_Model.dart';
 import '../Model/GetRenTal_Model.dart';
 import '../Model/GetUser_Model.dart';
@@ -43,6 +46,7 @@ import '../Setting/Access_Rights.dart';
 import '../Setting/SettingScreen.dart';
 import '../Setting/SettingScreen_user.dart';
 import '../Setting/ttt.dart';
+import '../Setting_NainaService/Web_view_NainaSetting.dart';
 import '../Style/colors.dart';
 import 'Chat_Screen.dart';
 
@@ -72,6 +76,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
       permission_user,
       renTal_user,
       renTal_name,
+      ren_ser,
       renTal_Email,
       passcode;
   int? perMissioncount;
@@ -101,7 +106,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
   late StreamController<int> _streamController;
   late int _counter;
   late Timer _timer;
-
+  bool? isDark_Mode;
 ///////////------------------------------------------->
   @override
   void initState() {
@@ -141,8 +146,8 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
         }
       } else {}
     } catch (e) {}
-    print('userModel  --------- >${system_datex_}');
-    print('userModel  --------- >${showst_update_}');
+    // print('userModel  --------- >${system_datex_}');
+    // print('userModel  --------- >${showst_update_}');
     if (showst_update_ == '0') {
       System_New_Update();
     }
@@ -385,7 +390,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                 SharedPreferences preferences =
                                     await SharedPreferences.getInstance();
                                 var email_ = preferences.getString('email');
-                                print(accept_);
+                                // print(accept_);
                                 if (accept_ == '1') {
                                   String url =
                                       '${MyConstant().domain}/UP_Show_System.php?isAdd=true&email=$email_';
@@ -626,7 +631,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var email = preferences.getString('email');
     if (email != 'dzentric.com@gmail.com') {
-      Timer.periodic(const Duration(seconds: 15), (timer) {
+      Timer.periodic(const Duration(seconds: 35), (timer) {
         changLoginOut(timer);
       });
     }
@@ -650,12 +655,15 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
         '${MyConstant().domain}/changLoginOut.php?isAdd=true&user=$user&iplogin=$data0';
     // print(url.toString());
 
-    print('>>>>> login $login');
+    // print('>>>>> login $login');
     try {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print('changLoginOut>$login>$user>>${result.toString()}');
+      print('---------------->');
+      print('changLoginOut >$login>$user>');
+      // print('changLoginOut>$login>$user>>${result.toString()}');
+      Auto_Recheck_pay_Beam_Checkout();
       if (result.toString() != login) {
         deall_Trans_select();
         SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -666,6 +674,41 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
     } catch (e) {}
   }
 
+  //////////////----------------------------------------->
+  Future<Null> Auto_Recheck_pay_Beam_Checkout() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    String url = '${MyConstant().domain}/GC_payMent.php?isAdd=true&ren=$ren';
+    var Pay_Ke;
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      if (result.toString() != 'null') {
+        for (var map in result) {
+          PayMentModel _PayMentModel = PayMentModel.fromJson(map);
+
+          var paykey = _PayMentModel.key_b;
+          setState(() {
+            Pay_Ke = paykey.toString();
+          });
+        }
+        // Future.delayed(Duration(seconds: 100), () async {});
+
+        // read_CheckBeamAll(ren, Pay_Ke);
+        if (Pay_Ke == null ||
+            Pay_Ke.toString() == '' ||
+            Pay_Ke.toString() == 'null') {
+        } else {
+          read_CheckBeamAll(ren, Pay_Ke);
+        }
+        // RecheckAuto(ren, Pay_Ke);
+      }
+    } catch (e) {}
+  }
+
+  //////////////----------------------------------------->
   Future<Null> passcode_in() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
@@ -679,12 +722,12 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
       var result = json.decode(response.body);
       // print(result);
       if (result.toString() != 'false') {
-        print('Inc_passcode>>>>true');
+        // print('Inc_passcode>>>>true');
         setState(() {
           passcode = result.toString();
         });
       } else {
-        print('Inc_passcode>>>>false $result');
+        // print('Inc_passcode>>>>false $result');
       }
     } catch (e) {
       // print('rrrrrrrrrrrrrr $e');
@@ -705,7 +748,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
       // print(result);
       if (result.toString() == 'true') {
       } else if (result.toString() == 'false') {
-        print('rrrrrrrrrrrrrrfalse');
+        // print('rrrrrrrrrrrrrrfalse');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -753,7 +796,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
     DateTime currentTime = DateTime.now();
     String formattedDateTime =
         DateFormat('yyyy-MM-dd HH:mm:ss').format(currentTime);
-    print('$ren-----$user ----- ${formattedDateTime}');
+    // print('$ren-----$user ----- ${formattedDateTime}');
     String url =
         '${MyConstant().domain}/UP_Connected_User.php?isAdd=true&seruser=$user&value=$formattedDateTime';
     try {
@@ -767,7 +810,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
       //   print('HTTP Error: ${response.statusCode}');
       // }
     } catch (e) {
-      print('Error: $e');
+      // print('Error: $e');
     }
   }
 
@@ -856,7 +899,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print('GC_rental_setring>> $result');
+      // print('GC_rental_setring>> $result');
 
       if (result != null) {
         for (var map in result) {
@@ -875,11 +918,16 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
           var pkldatex = renTalModel.pkldate;
           var data_updatex = renTalModel.data_update;
           setState(() {
+            ren_ser = ren!.trim().toString();
             preferences.setString(
                 'renTalName', renTalModel.pn!.trim().toString());
             preferences.setString(
                 'renTalEmail', renTalModel.bill_email!.trim().toString());
+            preferences.setString(
+                'renTal_Language', renTalModel.lan_guage!.trim().toString());
+
             renTal_name = preferences.getString('renTalName');
+
             renTal_Email = renTalModel.bill_email.toString();
             foder = foderx;
             rtname = rtnamex;
@@ -897,10 +945,64 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
           });
         }
         if (renTalModels.isNotEmpty) {
-          dynamic colorsren = renTalModels[0].colors_ren;
+          dynamic colorsren = renTalModels[0].colors_ren.toString();
+          dynamic colorsren_sub = renTalModels[0].colors_subren;
+          dynamic colors_light = renTalModels[0].colors_light;
+          dynamic colors_dark = renTalModels[0].colors_dark;
           if (colorsren is String) {
-            setState(() => AppBarColors.hexColor = Color(int.parse(colorsren)));
-            // setState(() => AppBarColors.ABar_Colors = Color(int.parse(colorsren)));
+            if (renTalModels[0].colors_ren.toString() != '' &&
+                renTalModels[0].colors_ren != null &&
+                renTalModels[0].colors_ren.toString() != 'null') {
+              setState(
+                  () => AppBarColors.hexColor = Color(int.parse(colorsren)));
+            }
+            if (renTalModels[0].colors_subren.toString() != '' &&
+                renTalModels[0].colors_subren != null &&
+                renTalModels[0].colors_subren.toString() != 'null') {
+              setState(() => AppBarColors.ABar_Colors_tab =
+                  Color(int.parse(colorsren_sub)));
+            }
+
+            if (renTalModels[0].colors_light.toString() != '' &&
+                renTalModels[0].colors_light != null &&
+                renTalModels[0].colors_light.toString() != 'null') {
+              bool isDarkMode = preferences.getBool('isDarkMode') ?? false;
+              setState(() {
+                isDark_Mode = isDarkMode;
+              });
+              isDark_Mode == false
+                  ? setState(() => AppbackgroundColor.TiTile_Colors =
+                      Color(int.parse(colors_light)))
+                  : setState(() => AppbackgroundColor.TiTile_Colors =
+                      Color(int.parse(colors_dark)));
+            } else {
+              var Color_App_Bar = 0xFF102456;
+              var Color_Side_Bar = 0xFF8BB63B;
+              var Color_Light_Mode = 0xFFD9D9B7;
+              var Color_Dark_Mode = 0xff9ba2cb;
+              setState(() {
+                preferences.setBool('isDarkMode', false);
+              });
+              String url1 =
+                  '${MyConstant().domain}/UP_ColorsRen.php?isAdd=true&colors_ren=${Color_App_Bar}&colors_type=1&ser_ren=${ren}&ser_tap=0';
+              String url2 =
+                  '${MyConstant().domain}/UP_ColorsRen.php?isAdd=true&colors_ren=${Color_Side_Bar}&colors_type=1&ser_ren=${ren}&ser_tap=1';
+              String url3 =
+                  '${MyConstant().domain}/UP_ColorsRen_Mode.php?isAdd=true&colors_ren=${Color_Light_Mode}&colors_type=1&ser_ren=${ren}&ser_tap=2';
+              String url4 =
+                  '${MyConstant().domain}/UP_ColorsRen_Mode.php?isAdd=true&colors_ren=${Color_Dark_Mode}&colors_type=1&ser_ren=${ren}&ser_tap=3';
+              var response1 = await http.get(Uri.parse(url1));
+              var response2 = await http.get(Uri.parse(url2));
+              var response3 = await http.get(Uri.parse(url3));
+              var response4 = await http.get(Uri.parse(url4));
+              String? _route = preferences.getString('route');
+              MaterialPageRoute materialPageRoute = MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      AdminScafScreen(route: _route));
+              Navigator.pushAndRemoveUntil(
+                  context, materialPageRoute, (route) => false);
+            }
+
             // print('Color(int.parse(colorsren))');
             // print(Color(int.parse(colorsren)));
             // print(pickerColor);
@@ -911,6 +1013,86 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
       } else {}
     } catch (e) {}
   }
+  // Future<Null> read_GC_rental() async {
+  //   if (renTalModels.isNotEmpty) {
+  //     renTalModels.clear();
+  //   }
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   var ren = preferences.getString('renTalSer');
+  //   String url =
+  //       '${MyConstant().domain}/GC_rental_setring.php?isAdd=true&ren=$ren';
+
+  //   try {
+  //     var response = await http.get(Uri.parse(url));
+
+  //     var result = json.decode(response.body);
+  //     print('GC_rental_setring>> $result');
+
+  //     if (result != null) {
+  //       for (var map in result) {
+  //         RenTalModel renTalModel = RenTalModel.fromJson(map);
+  //         var rtnamex = renTalModel.rtname;
+  //         var typexs = renTalModel.type;
+  //         var typexx = renTalModel.typex;
+  //         var name = renTalModel.pn!.trim();
+  //         var pkqtyx = int.parse(renTalModel.pkqty!);
+  //         var pkuserx = int.parse(renTalModel.pkuser!);
+  //         var pkx = renTalModel.pk!.trim();
+  //         var foderx = renTalModel.dbn;
+  //         var img = renTalModel.img;
+  //         var imglogo = renTalModel.imglogo;
+  //         var pksdatex = renTalModel.pksdate;
+  //         var pkldatex = renTalModel.pkldate;
+  //         var data_updatex = renTalModel.data_update;
+  //         setState(() {
+  //           preferences.setString(
+  //               'renTalName', renTalModel.pn!.trim().toString());
+  //           preferences.setString(
+  //               'renTalEmail', renTalModel.bill_email!.trim().toString());
+  //           renTal_name = preferences.getString('renTalName');
+  //           renTal_Email = renTalModel.bill_email.toString();
+  //           foder = foderx;
+  //           rtname = rtnamex;
+  //           type = typexs;
+  //           typex = typexx;
+  //           renname = name;
+  //           pkqty = pkqtyx;
+  //           pkuser = pkuserx;
+  //           pkname = pkx;
+  //           img_ = img;
+  //           img_logo = imglogo;
+  //           pkldate = pkldatex;
+  //           data_update = data_updatex;
+  //           renTalModels.add(renTalModel);
+  //         });
+  //       }
+  //       if (renTalModels.isNotEmpty) {
+  //         dynamic colorsren = renTalModels[0].colors_ren;
+  //         dynamic colorsren_sub = renTalModels[0].colors_subren;
+  //         if (colorsren is String) {
+  //           if (renTalModels[0].colors_ren.toString() != '' &&
+  //               renTalModels[0].colors_ren != null &&
+  //               renTalModels[0].colors_ren.toString() != 'null') {
+  //             setState(
+  //                 () => AppBarColors.hexColor = Color(int.parse(colorsren)));
+  //           }
+  //           if (renTalModels[0].colors_subren.toString() != '' &&
+  //               renTalModels[0].colors_subren != null &&
+  //               renTalModels[0].colors_subren.toString() != 'null') {
+  //             setState(() => AppBarColors.ABar_Colors_tab =
+  //                 Color(int.parse(colorsren_sub)));
+  //           }
+
+  //           // print('Color(int.parse(colorsren))');
+  //           // print(Color(int.parse(colorsren)));
+  //           // print(pickerColor);
+  //         } else {
+  //           // Handle the case where colorsren is not a String
+  //         }
+  //       }
+  //     } else {}
+  //   } catch (e) {}
+  // }
 
   Future<Null> readTime() async {
     var now = DateTime.now();
@@ -1259,7 +1441,9 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
   }
 
   final Dev_text = TextEditingController();
-  Future<void> _showMyDialogDev() async {
+  Future<void> _showMyDialogDev(type_dev) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -1270,6 +1454,17 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
+                Center(
+                  child: Text(
+                    'แจ้งเตือน',
+                    style: TextStyle(
+                      // fontSize: 15,
+                      color: Colors.black,
+                      fontFamily: FontWeight_.Fonts_T,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
                 Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
@@ -1336,7 +1531,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: const Center(
                         child: Text(
-                          'ข้อความแจ้งเตือน',
+                          'บันทึกข้อความแจ้งเตือน',
                           style: TextStyle(
                             // fontSize: 15,
                             color: Colors.white,
@@ -1349,7 +1544,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                     onTap: () async {
                       if (Dev_text.text != '') {
                         String url =
-                            '${MyConstant().domain}/Awat_UP_sytem.php?isAdd=true&dev_tex=${Dev_text.text}';
+                            '${MyConstant().domain}/Awat_UP_sytem.php?isAdd=true&dev_tex=${Dev_text.text}&ser_ren=$ren&dev_type=$type_dev';
 
                         try {
                           var response = await http.get(Uri.parse(url));
@@ -1400,7 +1595,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                     onTap: () async {
                       String tex_t = '';
                       String url =
-                          '${MyConstant().domain}/Awat_UP_sytem.php?isAdd=true&dev_tex=${tex_t}';
+                          '${MyConstant().domain}/Awat_UP_sytem.php?isAdd=true&dev_tex=${tex_t}&ser_ren=$ren&dev_type=$type_dev';
 
                       try {
                         var response = await http.get(Uri.parse(url));
@@ -1430,59 +1625,61 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                 const SizedBox(
                   height: 5.0,
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: InkWell(
-                    child: Container(
-                      width: 250,
-                      decoration: const BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10),
+                if (type_dev.toString() == '0')
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      child: Container(
+                        width: 250,
+                        decoration: const BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10),
+                          ),
                         ),
-                      ),
-                      padding: const EdgeInsets.all(8.0),
-                      child: const Center(
-                        child: Text(
-                          'แจ้งเตือน Dialog หลังอัพเดต',
-                          style: TextStyle(
-                            // fontSize: 15,
-                            color: Colors.white,
-                            fontFamily: Font_.Fonts_T,
-                            fontWeight: FontWeight.bold,
+                        padding: const EdgeInsets.all(8.0),
+                        child: const Center(
+                          child: Text(
+                            'แจ้งเตือน Dialog หลังอัพเดต',
+                            style: TextStyle(
+                              // fontSize: 15,
+                              color: Colors.white,
+                              fontFamily: Font_.Fonts_T,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
+                      onTap: () async {
+                        DateTime now = DateTime.now();
+                        String formattedDate =
+                            DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
+
+                        String url =
+                            '${MyConstant().domain}/OK_UP_sytem.php?isAdd=true&datex=${formattedDate}';
+
+                        try {
+                          var response = await http.get(Uri.parse(url));
+
+                          var result = json.decode(response.body);
+                          if (result.toString() == 'true') {
+                            Navigator.of(context).pop();
+                          }
+                        } catch (e) {}
+                      },
                     ),
-                    onTap: () async {
-                      DateTime now = DateTime.now();
-                      String formattedDate =
-                          DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
-
-                      String url =
-                          '${MyConstant().domain}/OK_UP_sytem.php?isAdd=true&datex=${formattedDate}';
-
-                      try {
-                        var response = await http.get(Uri.parse(url));
-
-                        var result = json.decode(response.body);
-                        if (result.toString() == 'true') {
-                          Navigator.of(context).pop();
-                        }
-                      } catch (e) {}
-                    },
                   ),
-                ),
                 const SizedBox(
                   height: 5.0,
                 ),
-                const Divider(
-                  color: Colors.grey,
-                  height: 4.0,
-                ),
+                if (type_dev.toString() == '0')
+                  const Divider(
+                    color: Colors.grey,
+                    height: 4.0,
+                  ),
                 const SizedBox(
                   height: 5.0,
                 ),
@@ -1720,11 +1917,27 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                     : Colors.orange,
                               ),
                             ),
-                            (AppbackgroundColor.TiTile_Colors ==
-                                    Color.fromARGB(255, 203, 200, 219))
+                            (isDark_Mode == true)
                                 ? InkWell(
-                                    onTap: () {
-                                      changeColor();
+                                    onTap: () async {
+                                      SharedPreferences preferences =
+                                          await SharedPreferences.getInstance();
+                                      setState(() {
+                                        preferences.setBool(
+                                            'isDarkMode', false);
+                                      });
+                                      // print(preferences.getBool('isDarkMode'));
+                                      // print(isDark_Mode);
+                                      String? _route =
+                                          preferences.getString('route');
+                                      MaterialPageRoute materialPageRoute =
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  AdminScafScreen(
+                                                      route: _route));
+                                      Navigator.pushAndRemoveUntil(context,
+                                          materialPageRoute, (route) => false);
+                                      // changeColor();
                                     },
                                     child: Icon(
                                       Icons.toggle_on,
@@ -1733,8 +1946,24 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                     ),
                                   )
                                 : InkWell(
-                                    onTap: () {
-                                      changeColor();
+                                    onTap: () async {
+                                      SharedPreferences preferences =
+                                          await SharedPreferences.getInstance();
+                                      setState(() {
+                                        preferences.setBool('isDarkMode', true);
+                                      });
+
+                                      print(preferences.getBool('isDarkMode'));
+                                      String? _route =
+                                          preferences.getString('route');
+                                      MaterialPageRoute materialPageRoute =
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  AdminScafScreen(
+                                                      route: _route));
+                                      Navigator.pushAndRemoveUntil(context,
+                                          materialPageRoute, (route) => false);
+                                      // changeColor();
                                     },
                                     child: Icon(
                                       Icons.toggle_off,
@@ -1742,6 +1971,28 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                       size: 35.0,
                                     ),
                                   ),
+                            // (AppbackgroundColor.TiTile_Colors ==
+                            //         Color.fromARGB(255, 203, 200, 219))
+                            //     ? InkWell(
+                            //         onTap: () {
+                            //           changeColor();
+                            //         },
+                            //         child: Icon(
+                            //           Icons.toggle_on,
+                            //           color: Colors.yellow[100],
+                            //           size: 35.0,
+                            //         ),
+                            //       )
+                            //     : InkWell(
+                            //         onTap: () {
+                            //           changeColor();
+                            //         },
+                            //         child: Icon(
+                            //           Icons.toggle_off,
+                            //           color: Colors.orange[100],
+                            //           size: 35.0,
+                            //         ),
+                            //       ),
                             Expanded(
                                 flex: 1,
                                 child: Icon(
@@ -1786,29 +2037,53 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                     ),
                   ),
 
-              if (Responsive.isDesktop(context) && ser_user == '63' ||
-                  ser_user == '56' ||
-                  ser_user == '61' ||
-                  ser_user == '37')
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: InkWell(
-                    onTap: () {
-                      _showMyDialogDev();
-                    },
-                    child: Container(
-                      color: Colors.yellow,
-                      child: Center(
-                          child: Text(
-                        '  DEV  ',
-                        style: TextStyle(
-                            color: AdminScafScreen_Color.Colors_Text1_,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: FontWeight_.Fonts_T),
-                      )),
-                    ),
-                  ),
-                ),
+              (Responsive.isDesktop(context) &&
+                      (ser_user == '63' ||
+                          ser_user == '56' ||
+                          ser_user == '61' ||
+                          ser_user == '37' ||
+                          ser_user == '268'))
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        onTap: () {
+                          _showMyDialogDev(0);
+                        },
+                        child: Container(
+                          color: Colors.yellow,
+                          child: Center(
+                              child: Text(
+                            '  DEV  ',
+                            style: TextStyle(
+                                color: AdminScafScreen_Color.Colors_Text1_,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: FontWeight_.Fonts_T),
+                          )),
+                        ),
+                      ),
+                    )
+                  : (renTal_lavel.toString() != '5')
+                      ? SizedBox()
+                      : Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: InkWell(
+                            onTap: () {
+                              _showMyDialogDev(1);
+                            },
+                            child: CircleAvatar(
+                              // radius: 15.0,
+                              backgroundColor: Colors.deepOrange,
+                              child: Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Icon(
+                                  Icons.warning,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            //
+                          ),
+                        ),
               // ChatScreen(
               //     ser_user: ser_user,
               //     userModels_chat_: userModels_chat,
@@ -1827,6 +2102,224 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                 padding: const EdgeInsets.all(0.5),
                 child: Row(
                   children: [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(4, 1, 2, 1),
+                      child: InkWell(
+                        onTap: () async {
+                          SharedPreferences preferences =
+                              await SharedPreferences.getInstance();
+                          var Lang = preferences.getString('Language');
+                          List supportedLocales = [
+                            {
+                              "ser": "1",
+                              "code": "th",
+                              "ln": "ไทย",
+                              "url": "images/Thailand.png"
+                            },
+                            {
+                              "ser": "2",
+                              "code": "en",
+                              "ln": "English",
+                              "url": "images/English.png"
+                            },
+                            {
+                              "ser": "3",
+                              "code": "lo",
+                              "ln": "ລາວ",
+                              "url": "images/LAO.png"
+                            },
+                            {
+                              "ser": "4",
+                              "code": "ko",
+                              "ln": "Korea",
+                              "url": "images/Korea.png"
+                            },
+                            {
+                              "ser": "5",
+                              "code": "ja",
+                              "ln": "Japanese",
+                              "url": "images/Jpan.png"
+                            },
+                            {
+                              "ser": "6",
+                              "code": "zh-cn",
+                              "ln": "China",
+                              "url": "images/Chaina.png"
+                            },
+                          ];
+
+                          showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              backgroundColor:
+                                  Color.fromARGB(255, 247, 246, 246),
+                              titlePadding: const EdgeInsets.all(0.0),
+                              contentPadding: const EdgeInsets.all(10.0),
+                              actionsPadding: const EdgeInsets.all(6.0),
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0))),
+                              title: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  InkWell(
+                                    onTap: () async {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Icon(Icons.highlight_off,
+                                          size: 30, color: Colors.red[700]),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              content: SingleChildScrollView(
+                                child: ListBody(
+                                  children: <Widget>[
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    for (int index = 0;
+                                        index < supportedLocales.length;
+                                        index++)
+                                      Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: ListTile(
+                                            onTap: () async {
+                                              SharedPreferences preferences =
+                                                  await SharedPreferences
+                                                      .getInstance();
+                                              setState(() {
+                                                preferences.setString(
+                                                    'Language',
+                                                    '${supportedLocales[index]['code']}');
+                                              });
+                                              Navigator.pop(context);
+
+                                              String? _route = preferences
+                                                  .getString('route');
+
+                                              MaterialPageRoute route =
+                                                  MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AdminScafScreen(
+                                                        route: _route),
+                                              );
+                                              Navigator.pushAndRemoveUntil(
+                                                  context,
+                                                  route,
+                                                  (route) => false);
+                                            },
+                                            title: Container(
+                                              decoration: BoxDecoration(
+                                                color: Lang.toString() ==
+                                                        '${supportedLocales[index]['code']}'
+                                                    ? Colors.green[400]
+                                                    : Colors.white,
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  topLeft: Radius.circular(10),
+                                                  topRight: Radius.circular(10),
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                  bottomRight:
+                                                      Radius.circular(10),
+                                                ),
+                                                border: Border.all(
+                                                    color: Colors.grey,
+                                                    width: 0.5),
+                                                // border: Border(
+                                                //   bottom: BorderSide(
+                                                //     //                    <--- top side
+                                                //     width: 0.5,
+                                                //   ),
+                                                // )
+                                              ),
+                                              padding:
+                                                  const EdgeInsets.all(4.0),
+                                              width: 270,
+                                              child: Row(
+                                                children: [
+                                                  // Icon(
+                                                  //   Iconsax.check,
+                                                  //   // color: getRandomColor(index)
+                                                  // ),
+                                                  CircleAvatar(
+                                                    radius: 15,
+                                                    backgroundImage: AssetImage(
+                                                        '${supportedLocales[index]['url']}'),
+                                                  ),
+                                                  Expanded(
+                                                    child: Padding(
+                                                      padding: const EdgeInsets
+                                                              .fromLTRB(
+                                                          10, 4, 4, 4),
+                                                      child: Text(
+                                                        '${supportedLocales[index]['ln']}',
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: const TextStyle(
+                                                            color: PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontFamily:
+                                                                FontWeight_
+                                                                    .Fonts_T),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            )),
+                                      ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Center(
+                                      child: Text(
+                                        '# Comming soon.. ',
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                            color: Colors.red,
+                                            fontFamily: Font_.Fonts_T),
+                                      ),
+                                    ),
+                                    Center(
+                                      child: Text(
+                                        '(ขออภัยยังไม่สามารถใช้งานได้ ณ ขณะนี้)',
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                            color: Colors.red,
+                                            fontFamily: Font_.Fonts_T),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white60,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
+                                bottomLeft: Radius.circular(20),
+                                bottomRight: Radius.circular(20)),
+                          ),
+                          padding: const EdgeInsets.all(4.0),
+                          child: Icon(
+                            Icons.g_translate,
+                            // Icons.translate,
+                            color: Colors.indigo[600],
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ),
                     Padding(
                       padding: EdgeInsets.fromLTRB(4, 1, 0, 1),
                       child: StreamBuilder(
@@ -2439,7 +2932,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
 
                                                     var result = json
                                                         .decode(response.body);
-                                                    print(result);
+                                                    // print(result);
                                                     if (result.toString() ==
                                                         'true') {
                                                       SharedPreferences
@@ -2592,7 +3085,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
         textStyle:
             const TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T),
         iconColor: Colors.white,
-        backgroundColor: AppBarColors.ABar_Colors,
+        backgroundColor: AppBarColors.ABar_Colors_tab,
         items: [
           for (int i = 0; i < perMissionModels.length; i++)
             if (int.parse(perMissionModels[i].ser!) <= 3)
@@ -2719,13 +3212,13 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
           // }
         },
         header: Container(
-          color: AppBarColors.ABar_Colors,
+          color: AppBarColors.ABar_Colors_tab,
           child: Column(
             children: [
               Container(
                 // width: 200,
-                decoration: const BoxDecoration(
-                  color: AppBarColors.ABar_Colors,
+                decoration: BoxDecoration(
+                  color: AppBarColors.ABar_Colors_tab,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(0),
                       topRight: Radius.circular(0),
@@ -2745,6 +3238,8 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                   SharedPreferences preferences =
                       await SharedPreferences.getInstance();
                   preferences.setString('route', 'หน้าหลัก');
+                  var name = preferences.getString('fname');
+                  Insert_log.Insert_logs('หน้าหลัก', '$name>หน้าหลัก');
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -2777,7 +3272,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
         footer: Container(
           // height: 50,
           width: double.infinity,
-          color: AppBarColors.ABar_Colors,
+          color: AppBarColors.ABar_Colors_tab,
           child: Container(
             // height: 40,
             decoration: const BoxDecoration(
@@ -2790,6 +3285,65 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
             ),
             child: Column(
               children: [
+                // (ren_ser.toString() == '114')
+                //     ? Padding(
+                //         padding: EdgeInsets.all(4.0),
+                //         child: InkWell(
+                //           onTap: () async {
+                //             Navigator.push(
+                //               context,
+                //               MaterialPageRoute(
+                //                 builder: (context) => WebView_NainaSetting(),
+                //               ),
+                //             );
+                //           },
+                //           child: Container(
+                //             decoration: BoxDecoration(
+                //               color: AppBarColors.hexColor.withOpacity(0.9),
+                //               borderRadius: BorderRadius.only(
+                //                   topLeft: Radius.circular(10),
+                //                   topRight: Radius.circular(10),
+                //                   bottomLeft: Radius.circular(10),
+                //                   bottomRight: Radius.circular(10)),
+                //             ),
+                //             padding: EdgeInsets.all(4.0),
+                //             child: Row(
+                //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //               children: const [
+                //                 Icon(
+                //                   Icons.hotel,
+                //                   color: Colors.white,
+                //                 ),
+                //                 Text(
+                //                   'Nainaservice',
+                //                   maxLines: 1,
+                //                   overflow: TextOverflow.ellipsis,
+                //                   softWrap: false,
+                //                   textAlign: TextAlign.center,
+                //                   style: TextStyle(
+                //                       color: Colors.white,
+                //                       fontWeight: FontWeight.bold,
+                //                       fontFamily: Font_.Fonts_T,
+                //                       fontSize: 16.0),
+                //                 ),
+                //                 Text(
+                //                   '> >',
+                //                   maxLines: 1,
+                //                   overflow: TextOverflow.ellipsis,
+                //                   softWrap: false,
+                //                   textAlign: TextAlign.center,
+                //                   style: TextStyle(
+                //                       color: Colors.white,
+                //                       fontWeight: FontWeight.bold,
+                //                       fontFamily: Font_.Fonts_T,
+                //                       fontSize: 16.0),
+                //                 ),
+                //               ],
+                //             ),
+                //           ),
+                //         ),
+                //       )
+                //     :
                 renTal_lavel! <= 3
                     ? SizedBox()
                     : passcode == null
@@ -2843,25 +3397,45 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                       ? const AccountScreen()
                       : (Value_Route == 'จัดการ')
                           ? const ManageScreen()
-                          : (Value_Route == 'รายงาน' &&
-                                  (renTal_user.toString() == '72' ||
-                                      renTal_user.toString() == '92' ||
-                                      renTal_user.toString() == '93' ||
-                                      renTal_user.toString() == '94'))
-                              ? const Report_Ortor_Screen()
-                              : (Value_Route == 'รายงาน' &&
-                                      renTal_user.toString() == '65')
-                                  ? const Report_cm_Screen()
-                                  : (Value_Route == 'รายงาน')
-                                      ? ReportScreen()
-                                      : (Value_Route == 'ทะเบียน')
-                                          ? const BureauScreen()
-                                          : (Value_Route == 'ตั้งค่า')
-                                              ? const SettingScreen()
-                                              : (Value_Route ==
-                                                      'จัดการข้อมูลส่วนตัว')
-                                                  ? const SettingUserScreen()
-                                                  : const SettingUserScreen(),
+                          : (Value_Route == 'รายงาน')
+                              ? ReportScreen()
+                              : (Value_Route == 'ทะเบียน')
+                                  ? const BureauScreen()
+                                  : (Value_Route == 'ตั้งค่า')
+                                      ? const SettingScreen()
+                                      : (Value_Route == 'จัดการข้อมูลส่วนตัว')
+                                          ? const SettingUserScreen()
+                                          : const SettingUserScreen(),
+      // body: (Value_Route == 'หน้าหลัก')
+      //     ? const HomeScreen()
+      //     : (Value_Route == 'พื้นที่เช่า')
+      //         ? const ChaoAreaScreen()
+      //         : (Value_Route == 'ผู้เช่า')
+      //             ? const PeopleChaoScreen()
+      //             : (Value_Route == 'บัญชี')
+      //                 ? const AccountScreen()
+      //                 : (Value_Route == 'จัดการ')
+      //                     ? const ManageScreen()
+      //                     : (Value_Route == 'รายงาน' &&
+      //                             (renTal_user.toString() == '72' ||
+      //                                 renTal_user.toString() == '92' ||
+      //                                 renTal_user.toString() == '93' ||
+      //                                 renTal_user.toString() == '94'))
+      //                         ? const Report_Ortor_Screen()
+      //                         : (Value_Route == 'รายงาน' &&
+      //                                 renTal_user.toString() == '65')
+      //                             ? const Report_cm_Screen()
+      //                             : (Value_Route == 'รายงาน' &&
+      //                                     renTal_user.toString() != '65')
+      //                                 ? ReportScreen()
+      //                                 : (Value_Route == 'ทะเบียน')
+      //                                     ? const BureauScreen()
+      //                                     : (Value_Route == 'ตั้งค่า')
+      //                                         ? const SettingScreen()
+      //                                         : (Value_Route ==
+      //                                                 'จัดการข้อมูลส่วนตัว')
+      //                                             ? const SettingUserScreen()
+      //                                             : const SettingUserScreen(),
     );
   }
 
@@ -2994,11 +3568,27 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                     : Colors.orange,
                               ),
                             ),
-                            (AppbackgroundColor.TiTile_Colors ==
-                                    Color.fromARGB(255, 203, 200, 219))
+                            (isDark_Mode == true)
                                 ? InkWell(
-                                    onTap: () {
-                                      changeColor();
+                                    onTap: () async {
+                                      SharedPreferences preferences =
+                                          await SharedPreferences.getInstance();
+                                      setState(() {
+                                        preferences.setBool(
+                                            'isDarkMode', false);
+                                      });
+                                      // print(preferences.getBool('isDarkMode'));
+                                      // print(isDark_Mode);
+                                      String? _route =
+                                          preferences.getString('route');
+                                      MaterialPageRoute materialPageRoute =
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  AdminScafScreen(
+                                                      route: _route));
+                                      Navigator.pushAndRemoveUntil(context,
+                                          materialPageRoute, (route) => false);
+                                      // changeColor();
                                     },
                                     child: Icon(
                                       Icons.toggle_on,
@@ -3007,8 +3597,24 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                     ),
                                   )
                                 : InkWell(
-                                    onTap: () {
-                                      changeColor();
+                                    onTap: () async {
+                                      SharedPreferences preferences =
+                                          await SharedPreferences.getInstance();
+                                      setState(() {
+                                        preferences.setBool('isDarkMode', true);
+                                      });
+
+                                      // print(preferences.getBool('isDarkMode'));
+                                      String? _route =
+                                          preferences.getString('route');
+                                      MaterialPageRoute materialPageRoute =
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  AdminScafScreen(
+                                                      route: _route));
+                                      Navigator.pushAndRemoveUntil(context,
+                                          materialPageRoute, (route) => false);
+                                      // changeColor();
                                     },
                                     child: Icon(
                                       Icons.toggle_off,
@@ -3016,6 +3622,28 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                       size: 35.0,
                                     ),
                                   ),
+                            // (AppbackgroundColor.TiTile_Colors ==
+                            //         Color.fromARGB(255, 203, 200, 219))
+                            //     ? InkWell(
+                            //         onTap: () {
+                            //           changeColor();
+                            //         },
+                            //         child: Icon(
+                            //           Icons.toggle_on,
+                            //           color: Colors.yellow[100],
+                            //           size: 35.0,
+                            //         ),
+                            //       )
+                            //     : InkWell(
+                            //         onTap: () {
+                            //           changeColor();
+                            //         },
+                            //         child: Icon(
+                            //           Icons.toggle_off,
+                            //           color: Colors.orange[100],
+                            //           size: 35.0,
+                            //         ),
+                            //       ),
                             Expanded(
                                 flex: 1,
                                 child: Icon(
@@ -3031,6 +3659,73 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                       ),
                     );
                   }),
+              // StreamBuilder(
+              //     stream: Stream.periodic(const Duration(seconds: 1)),
+              //     builder: (context, snapshot) {
+              //       return Container(
+              //         decoration: BoxDecoration(
+              //           // color: Colors.white.withOpacity(0.7),
+              //           // Colors.lightGreen[200],
+              //           borderRadius: BorderRadius.only(
+              //               topLeft: Radius.circular(10),
+              //               topRight: Radius.circular(10),
+              //               bottomLeft: Radius.circular(10),
+              //               bottomRight: Radius.circular(10)),
+              //           // border: Border.all(color: Colors.grey, width: 0.5),
+              //         ),
+              //         padding: const EdgeInsets.all(0.5),
+              //         child: Container(
+              //           width: 100,
+              //           child: Row(
+              //             children: [
+              //               Expanded(
+              //                 flex: 1,
+              //                 child: Icon(
+              //                   Icons.sunny,
+              //                   size: 15.0,
+              //                   color: (AppbackgroundColor.TiTile_Colors ==
+              //                           Color.fromARGB(255, 203, 200, 219))
+              //                       ? Colors.white
+              //                       : Colors.orange,
+              //                 ),
+              //               ),
+              //               (AppbackgroundColor.TiTile_Colors ==
+              //                       Color.fromARGB(255, 203, 200, 219))
+              //                   ? InkWell(
+              //                       onTap: () {
+              //                         changeColor();
+              //                       },
+              //                       child: Icon(
+              //                         Icons.toggle_on,
+              //                         color: Colors.yellow[100],
+              //                         size: 35.0,
+              //                       ),
+              //                     )
+              //                   : InkWell(
+              //                       onTap: () {
+              //                         changeColor();
+              //                       },
+              //                       child: Icon(
+              //                         Icons.toggle_off,
+              //                         color: Colors.orange[100],
+              //                         size: 35.0,
+              //                       ),
+              //                     ),
+              //               Expanded(
+              //                   flex: 1,
+              //                   child: Icon(
+              //                     Icons.bedtime,
+              //                     size: 15.0,
+              //                     color: (AppbackgroundColor.TiTile_Colors ==
+              //                             Color(0xFFD9D9B7))
+              //                         ? Colors.white
+              //                         : Colors.yellow,
+              //                   )),
+              //             ],
+              //           ),
+              //         ),
+              //       );
+              //     }),
               // (Responsive.isMobile(context))
               //     ? Text('')
               //     : StreamBuilder(
@@ -3068,15 +3763,16 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
               //             ],
               //           );
               //         }),
-              if (!Responsive.isMobile(context) && ser_user == '63' ||
-                  ser_user == '56' ||
-                  ser_user == '61' ||
-                  ser_user == '37')
+              if (!Responsive.isMobile(context) &&
+                  (ser_user == '63' ||
+                      ser_user == '56' ||
+                      ser_user == '61' ||
+                      ser_user == '37'))
                 Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: InkWell(
                     onTap: () {
-                      _showMyDialogDev();
+                      _showMyDialogDev(0);
                     },
                     child: Container(
                       color: Colors.yellow,
@@ -3715,7 +4411,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
 
                                                     var result = json
                                                         .decode(response.body);
-                                                    print(result);
+                                                    // print(result);
                                                     if (result.toString() ==
                                                         'true') {
                                                       SharedPreferences
@@ -3823,7 +4519,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
         textStyle:
             const TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T),
         iconColor: Colors.white,
-        backgroundColor: AppBarColors.ABar_Colors,
+        backgroundColor: AppBarColors.ABar_Colors_tab,
         items: [
           for (int i = 0; i < perMissionModels.length; i++)
             if (int.parse(perMissionModels[i].ser!) <= 3)
@@ -3874,7 +4570,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                 setState(() {
                   preferences.setString('Ser_Typepay', '0');
                   Value_Route = perMissionModels[i].perm!.trim();
-                  print(Value_Route);
+                  // print(Value_Route);
                   Navigator.pop(context);
                 });
               } else {
@@ -3884,18 +4580,19 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                           Text('กรุณาเลือกสถานที่ของท่านเพื่อเรียกดูข้อมูล')),
                 );
               }
+              read_GC_rentalColor();
             }
           }
           // print(Value_Route);
         },
         header: Container(
-          color: AppBarColors.ABar_Colors,
+          color: AppBarColors.ABar_Colors_tab,
           child: Column(
             children: [
               Container(
                 padding: const EdgeInsets.all(4.0),
-                decoration: const BoxDecoration(
-                  color: AppBarColors.ABar_Colors,
+                decoration: BoxDecoration(
+                  color: AppBarColors.ABar_Colors_tab,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(0),
                       topRight: Radius.circular(0),
@@ -3947,7 +4644,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
         footer: Container(
           // height: 50,
           width: double.infinity,
-          color: AppBarColors.ABar_Colors,
+          color: AppBarColors.ABar_Colors_tab,
           child: Container(
             // height: 40,
             decoration: const BoxDecoration(
@@ -3960,7 +4657,66 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
             ),
             child: Column(
               children: [
-                renTal_lavel! <= 1
+                // (ren_ser.toString() == '114')
+                //     ? Padding(
+                //         padding: EdgeInsets.all(4.0),
+                //         child: InkWell(
+                //           onTap: () async {
+                //             Navigator.push(
+                //               context,
+                //               MaterialPageRoute(
+                //                 builder: (context) => WebView_NainaSetting(),
+                //               ),
+                //             );
+                //           },
+                //           child: Container(
+                //             decoration: BoxDecoration(
+                //               color: AppBarColors.hexColor.withOpacity(0.9),
+                //               borderRadius: BorderRadius.only(
+                //                   topLeft: Radius.circular(10),
+                //                   topRight: Radius.circular(10),
+                //                   bottomLeft: Radius.circular(10),
+                //                   bottomRight: Radius.circular(10)),
+                //             ),
+                //             padding: EdgeInsets.all(4.0),
+                //             child: Row(
+                //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //               children: const [
+                //                 Icon(
+                //                   Icons.hotel,
+                //                   color: Colors.white,
+                //                 ),
+                //                 Text(
+                //                   'Nainaservice',
+                //                   maxLines: 1,
+                //                   overflow: TextOverflow.ellipsis,
+                //                   softWrap: false,
+                //                   textAlign: TextAlign.center,
+                //                   style: TextStyle(
+                //                       color: Colors.white,
+                //                       fontWeight: FontWeight.bold,
+                //                       fontFamily: Font_.Fonts_T,
+                //                       fontSize: 16.0),
+                //                 ),
+                //                 Text(
+                //                   '> >',
+                //                   maxLines: 1,
+                //                   overflow: TextOverflow.ellipsis,
+                //                   softWrap: false,
+                //                   textAlign: TextAlign.center,
+                //                   style: TextStyle(
+                //                       color: Colors.white,
+                //                       fontWeight: FontWeight.bold,
+                //                       fontFamily: Font_.Fonts_T,
+                //                       fontSize: 16.0),
+                //                 ),
+                //               ],
+                //             ),
+                //           ),
+                //         ),
+                //       )
+                //     :
+                renTal_lavel! <= 3
                     ? SizedBox()
                     : passcode == null
                         ? SizedBox()
@@ -3981,6 +4737,27 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                               ),
                             ),
                           ),
+                // renTal_lavel! <= 1
+                //     ? SizedBox()
+                //     : passcode == null
+                //         ? SizedBox()
+                //         : Center(
+                //             child: Padding(
+                //               padding: EdgeInsets.all(8.0),
+                //               child: Text(
+                //                 '$passcode',
+                //                 maxLines: 1,
+                //                 overflow: TextOverflow.ellipsis,
+                //                 softWrap: false,
+                //                 textAlign: TextAlign.center,
+                //                 style: TextStyle(
+                //                     color: Colors.orange.shade900,
+                //                     fontWeight: FontWeight.bold,
+                //                     fontFamily: Font_.Fonts_T,
+                //                     fontSize: 20.0),
+                //               ),
+                //             ),
+                //           ),
                 const Center(
                   child: Padding(
                     padding: EdgeInsets.all(8.0),
@@ -4013,27 +4790,45 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                       ? const AccountScreen()
                       : (Value_Route == 'จัดการ')
                           ? const ManageScreen()
-                          : (Value_Route == 'รายงาน' &&
-                                  (renTal_user.toString() == '72' ||
-                                      renTal_user.toString() == '92' ||
-                                      renTal_user.toString() == '93' ||
-                                      renTal_user.toString() == '94' ||
-                                      renTal_user.toString() == '50'))
-                              ? const Report_Ortor_Screen()
-                              : (Value_Route == 'รายงาน' &&
-                                      renTal_user.toString() == '65')
-                                  ? const Report_cm_Screen()
-                                  : (Value_Route == 'รายงาน' &&
-                                          renTal_user.toString() != '65')
-                                      ? ReportScreen()
-                                      : (Value_Route == 'ทะเบียน')
-                                          ? const BureauScreen()
-                                          : (Value_Route == 'ตั้งค่า')
-                                              ? const SettingScreen()
-                                              : (Value_Route ==
-                                                      'จัดการข้อมูลส่วนตัว')
-                                                  ? const Accessrights()
-                                                  : const Accessrights(),
+                          : (Value_Route == 'รายงาน')
+                              ? ReportScreen()
+                              : (Value_Route == 'ทะเบียน')
+                                  ? const BureauScreen()
+                                  : (Value_Route == 'ตั้งค่า')
+                                      ? const SettingScreen()
+                                      : (Value_Route == 'จัดการข้อมูลส่วนตัว')
+                                          ? const SettingUserScreen()
+                                          : const SettingUserScreen(),
+      // body: (Value_Route == 'หน้าหลัก')
+      //     ? const HomeScreen()
+      //     : (Value_Route == 'พื้นที่เช่า')
+      //         ? const ChaoAreaScreen()
+      //         : (Value_Route == 'ผู้เช่า')
+      //             ? const PeopleChaoScreen()
+      //             : (Value_Route == 'บัญชี')
+      //                 ? const AccountScreen()
+      //                 : (Value_Route == 'จัดการ')
+      //                     ? const ManageScreen()
+      //                     : (Value_Route == 'รายงาน' &&
+      //                             (renTal_user.toString() == '72' ||
+      //                                 renTal_user.toString() == '92' ||
+      //                                 renTal_user.toString() == '93' ||
+      //                                 renTal_user.toString() == '94'))
+      //                         ? const Report_Ortor_Screen()
+      //                         : (Value_Route == 'รายงาน' &&
+      //                                 renTal_user.toString() == '65')
+      //                             ? const Report_cm_Screen()
+      //                             : (Value_Route == 'รายงาน' &&
+      //                                     renTal_user.toString() != '65')
+      //                                 ? ReportScreen()
+      //                                 : (Value_Route == 'ทะเบียน')
+      //                                     ? const BureauScreen()
+      //                                     : (Value_Route == 'ตั้งค่า')
+      //                                         ? const SettingScreen()
+      //                                         : (Value_Route ==
+      //                                                 'จัดการข้อมูลส่วนตัว')
+      //                                             ? const Accessrights()
+      //                                             : const Accessrights(),
     );
   }
 
@@ -4045,7 +4840,8 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
       return false;
     });
   }
-/////////------------------------------------------->
+
+  /////////------------------------------------------->
 
   Future<Null> read_GC_rentalColor() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -4063,26 +4859,41 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
         for (var map in result) {
           RenTalModel renTalModels = RenTalModel.fromJson(map);
           dynamic colorsren = renTalModels.colors_ren;
-          New_Appbar_color(colorsren);
+          dynamic colorsren_sub = renTalModels.colors_subren;
+          New_Appbar_color(colorsren, colorsren_sub);
         }
       } else {}
     } catch (e) {}
   }
 
 /////////------------------------------------------->
-  Future<Null> New_Appbar_color(colors_ren) async {
+  Future<Null> New_Appbar_color(colors_ren, colorsren_sub) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     dynamic colorsren = colors_ren;
     var Check_New_color = preferences.getString('Check_New_color');
+    var Check_New_colorsub = preferences.getString('Check_New_colorsub');
 
-    if (Check_New_color.toString() == colorsren.toString()) {
+    if (Check_New_color.toString() == colorsren.toString() &&
+        Check_New_colorsub.toString() == colorsren_sub.toString()) {
       // print(Check_New_color.toString());
       // print(colorsren.toString());
     } else {
       if (renTalModels.isNotEmpty) {
         if (colorsren is String) {
-          setState(() => AppBarColors.hexColor = Color(int.parse(colorsren)));
-          preferences.setString('Check_New_color', '${colorsren}');
+          if (colorsren != null &&
+              colorsren.toString() != '' &&
+              colorsren.toString() != 'null') {
+            setState(() => AppBarColors.hexColor = Color(int.parse(colorsren)));
+            preferences.setString('Check_New_color', '${colorsren}');
+          }
+
+          if (colorsren_sub != null &&
+              colorsren_sub.toString() != '' &&
+              colorsren_sub.toString() != 'null') {
+            setState(() =>
+                AppBarColors.ABar_Colors_tab = Color(int.parse(colorsren_sub)));
+            preferences.setString('Check_New_colorsub', '${colorsren_sub}');
+          }
         } else {}
       }
       String? _route = preferences.getString('route');

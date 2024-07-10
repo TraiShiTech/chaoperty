@@ -54,6 +54,7 @@ dependencies:
   # email_auth: ^1.0.0
   tap_debouncer: ^2.0.2
   image_picker: ^0.8.9
+  image_picker_web: ^3.1.1
   file_picker: ^5.2.2
   # mysql1: ^0.20.0
   # date_time_picker: ^2.1.0
@@ -133,6 +134,10 @@ dependencies:
   dropdown_search: ^5.0.6
   panara_dialogs: ^0.1.4
   flutter_colorpicker: ^1.0.3
+  api_guide: ^1.0.1
+  syncfusion_flutter_calendar: ^20.4.54
+  translator: ^0.1.7
+
 
 
 dev_dependencies:
@@ -169,6 +174,7 @@ flutter:
     - images/TP3/
     - images/TP4/
     - images/TP4_1/
+    - images/TP5/
     - images/LogoBank/
     - images/card/
     - images/audio/
@@ -235,6 +241,21 @@ flutter:
       fonts:
         - asset: fonts/Phetsarath-OT.ttf
 
+    - family: NotoSansLaos
+      fonts:
+        - asset: fonts/NotoSansLao.ttf
+
+    - family: NotoSerif
+      fonts:
+        - asset: fonts/NotoSerif.ttf
+
+    - family: Loas
+      fonts:
+        - asset: fonts/SAYSETTA.TTF
+
+    - family: NotoSansLaoRegular
+      fonts:
+        - asset: fonts/NotoSansLao-Regular.ttf
 
   #
   # For details regarding fonts from package dependencies,

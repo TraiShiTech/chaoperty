@@ -15,7 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 ///////////////----------------------------------------------------------->
 class AppBarColors {
   static const Color ABar_Colors = Color.fromARGB(255, 141, 185, 90);
-
+  static Color ABar_Colors_tab = Color.fromARGB(255, 141, 185, 90);
   static Color hexColor = Color(0xFF102456);
 }
 

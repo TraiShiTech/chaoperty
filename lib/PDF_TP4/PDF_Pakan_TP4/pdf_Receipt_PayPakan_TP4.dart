@@ -49,11 +49,12 @@ class PdfgenReceipt_PayPakan_TP4 {
       dis_sum_Matjum,
       TitleType_Default_Receipt_Name,
       dis_sum_Pakan,
-      sum_fee) async {
+      sum_fee,
+      fonts_pdf) async {
     //////--------------------------------------------->
 
     final pdf = pw.Document();
-    final font = await rootBundle.load("fonts/THSarabunNew.ttf");
+    final font = await rootBundle.load("${fonts_pdf}");
     var Colors_pd = PdfColors.black;
     // final font = await rootBundle.load("fonts/Sarabun-Medium.ttf");
 

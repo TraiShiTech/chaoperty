@@ -45,54 +45,65 @@ class RenTalModel {
   String? mass_on;
   String? imglineqr;
   String? colors_ren;
+  String? colors_subren;
+  String? colors_light;
+  String? colors_dark;
+  String? open_print;
+  String? lan_guage;
 
-  RenTalModel(
-      {this.ser,
-      this.user,
-      this.txser,
-      this.tser,
-      this.rtser,
-      this.pn,
-      this.img,
-      this.bill_name,
-      this.bill_addr,
-      this.bill_tax,
-      this.bill_tel,
-      this.bill_email,
-      this.tother,
-      this.period,
-      this.dbh,
-      this.dbu,
-      this.dbp,
-      this.dbn,
-      this.dbno,
-      this.datex,
-      this.rtname,
-      this.type,
-      this.typex,
-      this.pk,
-      this.pkqty,
-      this.pkuser,
-      this.bill_default,
-      this.data_update,
-      this.province,
-      this.imglogo,
-      this.pksdate,
-      this.acc2,
-      this.pkldate,
-      this.his,
-      this.tem_page,
-      this.html,
-      this.Floor_plans,
-      this.printbill_default,
-      this.receipt_title,
-      this.pn_TH,
-      this.open_set,
-      this.open_disinv,
-      this.open_set_date,
-      this.mass_on,
-      this.imglineqr,
-      this.colors_ren});
+  RenTalModel({
+    this.ser,
+    this.user,
+    this.txser,
+    this.tser,
+    this.rtser,
+    this.pn,
+    this.img,
+    this.bill_name,
+    this.bill_addr,
+    this.bill_tax,
+    this.bill_tel,
+    this.bill_email,
+    this.tother,
+    this.period,
+    this.dbh,
+    this.dbu,
+    this.dbp,
+    this.dbn,
+    this.dbno,
+    this.datex,
+    this.rtname,
+    this.type,
+    this.typex,
+    this.pk,
+    this.pkqty,
+    this.pkuser,
+    this.bill_default,
+    this.data_update,
+    this.province,
+    this.imglogo,
+    this.pksdate,
+    this.acc2,
+    this.pkldate,
+    this.his,
+    this.tem_page,
+    this.html,
+    this.Floor_plans,
+    this.printbill_default,
+    this.receipt_title,
+    this.pn_TH,
+    this.open_set,
+    this.open_disinv,
+    this.open_set_date,
+    this.mass_on,
+    this.imglineqr,
+    this.colors_ren,
+    this.colors_subren,
+    this.colors_light,
+    this.colors_dark,
+    this.open_print,
+    this.lan_guage,
+  });
 
   RenTalModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -141,6 +152,11 @@ class RenTalModel {
     mass_on = json['mass_on'];
     imglineqr = json['imglineqr'];
     colors_ren = json['colors_ren'];
+    colors_subren = json['colors_subren'];
+    colors_light = json['colors_light'];
+    colors_dark = json['colors_dark'];
+    open_print = json['open_print'];
+    lan_guage = json['lan_guage'];
   }
 
   Map<String, dynamic> toJson() {
@@ -191,6 +207,12 @@ class RenTalModel {
     data['mass_on'] = this.mass_on;
     data['imglineqr'] = this.imglineqr;
     data['colors_ren'] = this.colors_ren;
+    data['colors_subren'] = this.colors_subren;
+
+    data['colors_light'] = this.colors_light;
+    data['colors_dark'] = this.colors_dark;
+    data['colors_dark'] = this.open_print;
+    data['lan_guage'] = this.lan_guage;
 
     return data;
   }

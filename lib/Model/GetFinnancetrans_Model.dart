@@ -49,59 +49,60 @@ class FinnancetransModel {
   String? ref2;
   String? ref3;
   String? inv;
+  String? date_book;
 
-  FinnancetransModel({
-    this.ser,
-    this.datex,
-    this.timex,
-    this.user,
-    this.rser,
-    this.daterec,
-    this.timerec,
-    this.date,
-    this.dateacc,
-    this.dtype,
-    this.shopno,
-    this.pos,
-    this.docno,
-    this.custno,
-    this.supno,
-    this.refno,
-    this.receiptSer,
-    this.accode,
-    this.accodechq,
-    this.type,
-    this.bank,
-    this.bno,
-    this.chqno,
-    this.chqdate,
-    this.chqbank,
-    this.chqsaka,
-    this.exchange,
-    this.amt,
-    this.exrate,
-    this.refund,
-    this.total,
-    this.remark,
-    this.acFrom,
-    this.acTo,
-    this.checkSt,
-    this.descr,
-    this.slip,
-    this.pdate,
-    this.ptime,
-    this.disper,
-    this.dataUpdate,
-    this.ptser,
-    this.ptname,
-    this.img,
-    this.bname,
-    this.pay_by,
-    this.ref1,
-    this.ref2,
-    this.ref3,
-    this.inv,
-  });
+  FinnancetransModel(
+      {this.ser,
+      this.datex,
+      this.timex,
+      this.user,
+      this.rser,
+      this.daterec,
+      this.timerec,
+      this.date,
+      this.dateacc,
+      this.dtype,
+      this.shopno,
+      this.pos,
+      this.docno,
+      this.custno,
+      this.supno,
+      this.refno,
+      this.receiptSer,
+      this.accode,
+      this.accodechq,
+      this.type,
+      this.bank,
+      this.bno,
+      this.chqno,
+      this.chqdate,
+      this.chqbank,
+      this.chqsaka,
+      this.exchange,
+      this.amt,
+      this.exrate,
+      this.refund,
+      this.total,
+      this.remark,
+      this.acFrom,
+      this.acTo,
+      this.checkSt,
+      this.descr,
+      this.slip,
+      this.pdate,
+      this.ptime,
+      this.disper,
+      this.dataUpdate,
+      this.ptser,
+      this.ptname,
+      this.img,
+      this.bname,
+      this.pay_by,
+      this.ref1,
+      this.ref2,
+      this.ref3,
+      this.inv,
+      this.date_book});
 
   FinnancetransModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -154,6 +155,7 @@ class FinnancetransModel {
     ref2 = json['ref2'];
     ref3 = json['ref3'];
     inv = json['inv'];
+    date_book = json['date_book'];
   }
 
   Map<String, dynamic> toJson() {
@@ -208,7 +210,8 @@ class FinnancetransModel {
     data['ref2'] = this.ref2;
     data['ref3'] = this.ref3;
     data['inv'] = this.inv;
-
+    data['date_book'] = this.date_book;
+    ;
     return data;
   }
 }

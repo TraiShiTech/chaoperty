@@ -176,6 +176,7 @@ class Excgen_IncomeReport {
     sheet.getRangeByName('S1').cellStyle = globalStyle22;
     sheet.getRangeByName('T1').cellStyle = globalStyle22;
     sheet.getRangeByName('U1').cellStyle = globalStyle22;
+    sheet.getRangeByName('V1').cellStyle = globalStyle22;
 
     // sheet.getRangeByName('O1').cellStyle = globalStyle22;
     final x.Range range = sheet.getRangeByName('E1');
@@ -213,6 +214,7 @@ class Excgen_IncomeReport {
     sheet.getRangeByName('S2').cellStyle = globalStyle22;
     sheet.getRangeByName('T2').cellStyle = globalStyle22;
     sheet.getRangeByName('U2').cellStyle = globalStyle22;
+    sheet.getRangeByName('V2').cellStyle = globalStyle22;
 
     // sheet.getRangeByName('O2').cellStyle = globalStyle22;
     sheet.getRangeByName('A2').setText('${renTal_name}');
@@ -244,6 +246,7 @@ class Excgen_IncomeReport {
     sheet.getRangeByName('S3').cellStyle = globalStyle22;
     sheet.getRangeByName('T3').cellStyle = globalStyle22;
     sheet.getRangeByName('U3').cellStyle = globalStyle22;
+    sheet.getRangeByName('V3').cellStyle = globalStyle22;
     // sheet.getRangeByName('O3').cellStyle = globalStyle22;
     sheet.getRangeByName('A3').setText('ใบเสร็จ : ${TransReBillModels.length}');
     sheet.getRangeByName('B3').setText('รายการ : ${TranHisBillModels.length}');
@@ -268,6 +271,7 @@ class Excgen_IncomeReport {
     sheet.getRangeByName('S3').columnWidth = 18;
     sheet.getRangeByName('T3').columnWidth = 18;
     sheet.getRangeByName('U3').columnWidth = 18;
+    sheet.getRangeByName('V3').columnWidth = 18;
 
     sheet.getRangeByName('A4').cellStyle = globalStyle1;
     sheet.getRangeByName('B4').cellStyle = globalStyle1;
@@ -290,6 +294,7 @@ class Excgen_IncomeReport {
     sheet.getRangeByName('S4').cellStyle = globalStyle1;
     sheet.getRangeByName('T4').cellStyle = globalStyle1;
     sheet.getRangeByName('U4').cellStyle = globalStyle1;
+    sheet.getRangeByName('V4').cellStyle = globalStyle1;
 
     sheet.getRangeByName('A4').columnWidth = 18;
     sheet.getRangeByName('B4').columnWidth = 18;
@@ -340,6 +345,7 @@ class Excgen_IncomeReport {
     sheet.getRangeByName('S4').setText('สถานะ');
     sheet.getRangeByName('T4').setText('อ้างถึง');
     sheet.getRangeByName('U4').setText('เลขที่สัญญา');
+    sheet.getRangeByName('V4').setText('เวลา');
 
     int indextotol = 0;
     int indextotol_ = 0;
@@ -402,6 +408,8 @@ class Excgen_IncomeReport {
           sheet.getRangeByName('T${indextotol + 5 - 1}').cellStyle =
               globalStyle2220;
           sheet.getRangeByName('U${indextotol + 5 - 1}').cellStyle =
+              globalStyle2220;
+          sheet.getRangeByName('V${indextotol + 5 - 1}').cellStyle =
               globalStyle2220;
 
           sheet
@@ -479,6 +487,12 @@ class Excgen_IncomeReport {
                     ? ''
                     : '${TranHisBillModels[index2].cid}',
               );
+          sheet.getRangeByName('V${indextotol + 5 - 1}').setText(
+                (TranHisBillModels[index2].timex == '' ||
+                        TranHisBillModels[index2].timex == null)
+                    ? ''
+                    : '${TranHisBillModels[index2].timex}',
+              );
         });
       }
 
@@ -508,6 +522,7 @@ class Excgen_IncomeReport {
       sheet.getRangeByName('S${indextotol + 5 - 1}').cellStyle = globalStyle22;
       sheet.getRangeByName('T${indextotol + 5 - 1}').cellStyle = globalStyle22;
       sheet.getRangeByName('U${indextotol + 5 - 1}').cellStyle = globalStyle22;
+      sheet.getRangeByName('V${indextotol + 5 - 1}').cellStyle = globalStyle22;
 
       sheet
           .getRangeByName('A${indextotol + 5 - 1}')
@@ -604,6 +619,12 @@ class Excgen_IncomeReport {
                   TranHisBillModels[index2].cid == null)
               ? ''
               : '${TranHisBillModels[index2].cid}');
+      sheet.getRangeByName('V${indextotol + 5 - 1}').setText(
+            (TranHisBillModels[index2].timex == '' ||
+                    TranHisBillModels[index2].timex == null)
+                ? ''
+                : '${TranHisBillModels[index2].timex}',
+          );
     }
 
     /////////////////////////////////------------------------------------------------>

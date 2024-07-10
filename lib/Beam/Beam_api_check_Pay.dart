@@ -35,7 +35,7 @@ Future<void> read_CheckBeamAll(Ser_, Pay_Ke) async {
       // print('Failed with status code: ${response.statusCode}');
     }
   } catch (error) {
-    print('Response: error');
+    print('Response: error $Pay_Ke');
     // Error occurred during the request
     // print('Error: $error');
   }

@@ -297,11 +297,18 @@ class _Report_Ortor_ScreenAState extends State<Report_Ortor_ScreenA> {
         Await_Status_Report2 = 0;
       }
     });
+    var serzone_s = (Type_search.toString() == 'Mon')
+        ? (zone_ser_Trans_Mon == null)
+            ? 0
+            : zone_ser_Trans_Mon
+        : (zone_ser_Trans_Daily == null)
+            ? 0
+            : zone_ser_Trans_Daily;
 
     ///-------->debt
-    String url_Mon = (zone_ser_Trans_Mon.toString() == '0')
-        ? '${MyConstant().domain}/GC_bill_pay_BCOrtor_IncomeReport_All.php?isAdd=true&ren=$ren&mont_h=$Mon_Trans_Mon&yea_r=$YE_Trans_Mon&serzone=$zone_ser_Trans_Mon'
-        : '${MyConstant().domain}/GC_bill_pay_BCOrtor_IncomeReport.php?isAdd=true&ren=$ren&mont_h=$Mon_Trans_Mon&yea_r=$YE_Trans_Mon&serzone=$zone_ser_Trans_Mon';
+    String url_Mon = (serzone_s.toString() == '0')
+        ? '${MyConstant().domain}/GC_bill_pay_BCOrtor_IncomeReport_All.php?isAdd=true&ren=$ren&mont_h=$Mon_Trans_Mon&yea_r=$YE_Trans_Mon&serzone=$serzone_s'
+        : '${MyConstant().domain}/GC_bill_pay_BCOrtor_IncomeReport.php?isAdd=true&ren=$ren&mont_h=$Mon_Trans_Mon&yea_r=$YE_Trans_Mon&serzone=$serzone_s';
 
     // String url_Daily = (zone_ser_Trans_Daily.toString() == '0')
     //     ? '${MyConstant().domain}/GC_bill_pay_BCOrtor_DailyReport_All.php?isAdd=true&ren=$ren&date=$Value_TransDate_Daily&serzone=$zone_ser_Trans_Daily'
@@ -334,44 +341,6 @@ class _Report_Ortor_ScreenAState extends State<Report_Ortor_ScreenA> {
     } catch (e) {}
   }
 
-  Future<Null> red_Trans_billIncomeNopay() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var ren = preferences.getString('renTalSer');
-
-    ///-------->
-    String url_Mon =
-        '${MyConstant().domain}/GC_bill_pay_BCOrtor_IncomeNopayReport_All.php?isAdd=true&ren=$ren&mont_h=$Mon_Trans_Mon&yea_r=$YE_Trans_Mon&serzone=$zone_ser_Trans_Mon';
-
-    // String url_Daily = (zone_ser_Trans_Daily.toString() == '0')
-    //     ? '${MyConstant().domain}/GC_bill_pay_BCOrtor_DailyReport_All.php?isAdd=true&ren=$ren&date=$Value_TransDate_Daily&serzone=$zone_ser_Trans_Daily'
-    //     : '${MyConstant().domain}/GC_bill_pay_BCOrtor_DailyReport.php?isAdd=true&ren=$ren&date=$Value_TransDate_Daily&serzone=$zone_ser_Trans_Daily';
-
-    ///-------->
-    try {
-      var response = await http.get(Uri.parse(url_Mon));
-      var result = json.decode(response.body);
-      // print('result $ciddoc');
-      if (result.toString() != 'null') {
-        for (var map in result) {
-          TransReBillModel _TransReBillModels_Incomes =
-              TransReBillModel.fromJson(map);
-          setState(() {
-            TransReBillModels.add(_TransReBillModels_Incomes);
-          });
-        }
-        // print('result ${TransReBillModels.length}');
-      }
-      Future.delayed(Duration(milliseconds: 700), () async {
-        setState(() {
-          if (Type_search == 'Mon') {
-            Await_Status_Report1 = null;
-          } else {
-            Await_Status_Report2 = null;
-          }
-        });
-      });
-    } catch (e) {}
-  }
 ///////////--------------------------------------------->()
 
   Future<Null> red_Trans_selectIncomeAll() async {
@@ -390,7 +359,8 @@ class _Report_Ortor_ScreenAState extends State<Report_Ortor_ScreenA> {
         : (zone_ser_Trans_Daily == null)
             ? 0
             : zone_ser_Trans_Daily;
-
+    print('serzone_s');
+    print(serzone_s);
     String url =
         // (Value_Report == 'รายงานการเคลื่อนไหวธนาคาร' ||
         //         Value_Report == 'รายงานการเคลื่อนไหวธนาคารประจำวัน')
@@ -423,7 +393,9 @@ class _Report_Ortor_ScreenAState extends State<Report_Ortor_ScreenA> {
     } catch (e) {}
   }
 
-/////////////------------------------------------>
+// 4 +4+4 = 5
+//10+6+4
+/////////////------------------------------------> 50
   Future<Null> _select_Date_Daily(BuildContext context) async {
     final Future<DateTime?> picked = showDatePicker(
       // locale: const Locale('th', 'TH'),
@@ -1464,7 +1436,12 @@ class _Report_Ortor_ScreenAState extends State<Report_Ortor_ScreenA> {
                                                 Expanded(
                                                   flex: 1,
                                                   child: Text(
-                                                    '${TransReBillModels[index1].sum_items}',
+                                                    (double.parse(TransReBillModels[
+                                                                    index1]
+                                                                .sum_items!) >
+                                                            0)
+                                                        ? '${double.parse(TransReBillModels[index1].sum_items!) + 1}'
+                                                        : '${TransReBillModels[index1].sum_items}',
                                                     textAlign: TextAlign.end,
                                                     style: const TextStyle(
                                                       color: ReportScreen_Color

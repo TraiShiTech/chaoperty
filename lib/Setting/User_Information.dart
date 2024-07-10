@@ -14,8 +14,10 @@ import '../Model/GetPerMission_Model.dart';
 import '../Model/GetRenTal_Model.dart';
 import '../Model/GetUser_Model.dart';
 import '../Responsive/responsive.dart';
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 import 'package:http/http.dart' as http;
+import 'package:translator/translator.dart';
 
 class USerInformation extends StatefulWidget {
   const USerInformation({super.key});
@@ -141,6 +143,76 @@ class _USerInformationState extends State<USerInformation> {
     }
     Navigator.pop(context, 'OK');
   }
+
+  // Future<String> _translateText(String text) async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   var Lang = preferences.getString('Language') ?? 'th';
+  //   if (Lang.toString() == 'th') {
+  //     return text;
+  //   } else {
+  //     var translation = await translator.translate(
+  //       text,
+  //       to: '$Lang',
+  //     );
+  //     return (Lang.toString() == 'th') ? text : translation.text ?? text;
+  //   }
+  // }
+
+  // Widget _translateAndSetText(
+  //   String text,
+  //   Color? color,
+  //   TextAlign? textAlign,
+  //   FontWeight? fontWeight,
+  //   String? fontFamily,
+  //   double? fontSize,
+  //   int? maxLines,
+  // ) {
+  //   return FutureBuilder<String>(
+  //     future: _translateText(text),
+  //     builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+  //       if (snapshot.connectionState == ConnectionState.waiting) {
+  //         return Text(
+  //           'Translating...',
+  //           overflow: TextOverflow.ellipsis,
+  //           maxLines: maxLines ?? 14,
+  //           textAlign: textAlign,
+  //           style: TextStyle(
+  //             color: color,
+  //             fontFamily: fontFamily,
+  //             fontWeight: fontWeight ?? FontWeight.w400,
+  //             fontSize: fontSize ?? 14,
+  //           ),
+  //         );
+  //       } else if (snapshot.hasError) {
+  //         return Text(
+  //           'Error: ${snapshot.error}',
+  //           overflow: TextOverflow.ellipsis,
+  //           maxLines: maxLines ?? 14,
+  //           textAlign: textAlign,
+  //           style: TextStyle(
+  //             color: color,
+  //             fontFamily: fontFamily,
+  //             fontWeight: fontWeight ?? FontWeight.w400,
+  //             fontSize: fontSize ?? 14,
+  //           ),
+  //         );
+  //       } else {
+  //         return Text(
+  //           snapshot.data ?? 'Translation error',
+  //           overflow: TextOverflow.ellipsis,
+  //           maxLines: maxLines ?? 14,
+  //           textAlign: textAlign,
+  //           style: TextStyle(
+  //             color: color,
+  //             fontFamily: fontFamily,
+  //             fontWeight: fontWeight ?? FontWeight.w400,
+  //             fontSize: fontSize ?? 14,
+  //           ),
+  //         );
+  //       }
+  //     },
+  //   );
+  // }
 
   Widget build(BuildContext context) {
     return Padding(
@@ -348,8 +420,7 @@ class _USerInformationState extends State<USerInformation> {
                                                   fontFamily:
                                                       FontWeight_.Fonts_T,
                                                 )),
-                                            inputFormatters: <
-                                                TextInputFormatter>[
+                                            inputFormatters: <TextInputFormatter>[
                                               FilteringTextInputFormatter.deny(
                                                   RegExp(r'\s')),
                                             ],
@@ -434,8 +505,7 @@ class _USerInformationState extends State<USerInformation> {
                                                   fontFamily:
                                                       FontWeight_.Fonts_T,
                                                 )),
-                                            inputFormatters: <
-                                                TextInputFormatter>[
+                                            inputFormatters: <TextInputFormatter>[
                                               FilteringTextInputFormatter.deny(
                                                   RegExp(r'\s')),
                                             ],
@@ -645,8 +715,7 @@ class _USerInformationState extends State<USerInformation> {
                                                   fontFamily:
                                                       FontWeight_.Fonts_T,
                                                 )),
-                                            inputFormatters: <
-                                                TextInputFormatter>[
+                                            inputFormatters: <TextInputFormatter>[
                                               // for below version 2 use this
                                               FilteringTextInputFormatter.allow(
                                                   RegExp(r'[0-9]')),
@@ -727,8 +796,7 @@ class _USerInformationState extends State<USerInformation> {
                                                   fontFamily:
                                                       FontWeight_.Fonts_T,
                                                 )),
-                                            inputFormatters: <
-                                                TextInputFormatter>[
+                                            inputFormatters: <TextInputFormatter>[
                                               FilteringTextInputFormatter.deny(
                                                   RegExp(r'\s')),
                                             ],
@@ -845,7 +913,7 @@ class _USerInformationState extends State<USerInformation> {
           ),
           Container(
             height: 50,
-            decoration:  BoxDecoration(
+            decoration: BoxDecoration(
               color: AppbackgroundColor.TiTile_Colors,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10),
@@ -861,80 +929,113 @@ class _USerInformationState extends State<USerInformation> {
                 Expanded(
                   flex: 2,
                   child: Container(
-                    padding: const EdgeInsets.all(8.0),
-                    child: const Text(
-                      'ชื่อผู้ใช้งาน',
-                      maxLines: 1,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: SettingScreen_Color.Colors_Text1_,
-                        fontFamily: FontWeight_.Fonts_T,
-                        fontWeight: FontWeight.bold,
-                        //fontSize: 10.0
+                      padding: const EdgeInsets.all(8.0),
+                      child: Translate.TranslateAndSetText(
+                          'ชื่อผู้ใช้งาน',
+                          SettingScreen_Color.Colors_Text1_,
+                          TextAlign.center,
+                          FontWeight.bold,
+                          FontWeight_.Fonts_T,
+                          14,
+                          1)
+
+                      // Text(
+                      //   '${_translateText('ชื่อผู้ใช้งาน')}',
+                      //   maxLines: 1,
+                      //   textAlign: TextAlign.center,
+                      //   style: TextStyle(
+                      //     color: SettingScreen_Color.Colors_Text1_,
+                      //     fontFamily: FontWeight_.Fonts_T,
+                      //     fontWeight: FontWeight.bold,
+                      //     //fontSize: 10.0
+                      //   ),
+                      // ),
                       ),
-                    ),
-                  ),
                 ),
                 Expanded(
                   flex: 2,
                   child: Container(
-                    padding: const EdgeInsets.all(8.0),
-                    child: const Text(
-                      'ตำแหน่ง',
-                      maxLines: 1,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: SettingScreen_Color.Colors_Text1_,
-                        fontFamily: FontWeight_.Fonts_T,
-                        fontWeight: FontWeight.bold,
-                        //fontSize: 10.0
+                      padding: const EdgeInsets.all(8.0),
+                      child: Translate.TranslateAndSetText(
+                          'ตำแหน่ง',
+                          SettingScreen_Color.Colors_Text1_,
+                          TextAlign.center,
+                          FontWeight.bold,
+                          FontWeight_.Fonts_T,
+                          14,
+                          1)
+                      //  const Text(
+                      //   'ตำแหน่ง',
+                      //   maxLines: 1,
+                      //   textAlign: TextAlign.center,
+                      //   style: TextStyle(
+                      //     color: SettingScreen_Color.Colors_Text1_,
+                      //     fontFamily: FontWeight_.Fonts_T,
+                      //     fontWeight: FontWeight.bold,
+                      //     //fontSize: 10.0
+                      //   ),
+                      // ),
                       ),
-                    ),
-                  ),
                 ),
                 Expanded(
                   flex: 2,
                   child: Container(
-                    padding: const EdgeInsets.all(8.0),
-                    child: const Text(
-                      'อีเมล',
-                      maxLines: 1,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: SettingScreen_Color.Colors_Text1_,
-                        fontFamily: FontWeight_.Fonts_T,
-                        fontWeight: FontWeight.bold,
-                        //fontSize: 10.0
+                      padding: const EdgeInsets.all(8.0),
+                      child: Translate.TranslateAndSetText(
+                          'อีเมล',
+                          SettingScreen_Color.Colors_Text1_,
+                          TextAlign.center,
+                          FontWeight.bold,
+                          FontWeight_.Fonts_T,
+                          14,
+                          1)
+                      //  const Text(
+                      //   'อีเมล',
+                      //   maxLines: 1,
+                      //   textAlign: TextAlign.center,
+                      //   style: TextStyle(
+                      //     color: SettingScreen_Color.Colors_Text1_,
+                      //     fontFamily: FontWeight_.Fonts_T,
+                      //     fontWeight: FontWeight.bold,
+                      //     //fontSize: 10.0
+                      //   ),
+                      // ),
                       ),
-                    ),
-                  ),
                 ),
                 Expanded(
                   flex: 2,
                   child: Container(
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(0),
-                        topRight: Radius.circular(10),
-                        bottomLeft: Radius.circular(0),
-                        bottomRight: Radius.circular(0),
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(0),
+                          topRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(0),
+                          bottomRight: Radius.circular(0),
+                        ),
+                        // border: Border.all(
+                        //     color: Colors.grey, width: 1),
                       ),
-                      // border: Border.all(
-                      //     color: Colors.grey, width: 1),
-                    ),
-                    padding: const EdgeInsets.all(8.0),
-                    child: const Text(
-                      'เบอร์โทร',
-                      maxLines: 1,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: SettingScreen_Color.Colors_Text1_,
-                        fontFamily: FontWeight_.Fonts_T,
-                        fontWeight: FontWeight.bold,
-                        //fontSize: 10.0
+                      padding: const EdgeInsets.all(8.0),
+                      child: Translate.TranslateAndSetText(
+                          'เบอร์โทร',
+                          SettingScreen_Color.Colors_Text1_,
+                          TextAlign.center,
+                          FontWeight.bold,
+                          FontWeight_.Fonts_T,
+                          14,
+                          1)
+                      //  const Text(
+                      //   'เบอร์โทร',
+                      //   maxLines: 1,
+                      //   textAlign: TextAlign.center,
+                      //   style: TextStyle(
+                      //     color: SettingScreen_Color.Colors_Text1_,
+                      //     fontFamily: FontWeight_.Fonts_T,
+                      //     fontWeight: FontWeight.bold,
+                      //     //fontSize: 10.0
+                      //   ),
+                      // ),
                       ),
-                    ),
-                  ),
                 ),
               ],
             ),

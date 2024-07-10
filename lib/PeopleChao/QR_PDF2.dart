@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:printing/printing.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Report/Report_Screen.dart';
 import 'PeopleChao_Screen.dart';
@@ -20,9 +21,16 @@ class Pdfgen_QR_2 {
   /////////////////////////////////////-------------------->(QR)
   static void displayPdf_QR2(context, renTal_name, cid, cname, date, sname, ln,
       zn, indexcardColor) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
     //final font = await rootBundle.load("fonts/Saysettha-OT.ttf");
     // final font = await rootBundle.load("fonts/Sarabun-Medium.ttf");
-    final font = await rootBundle.load("fonts/LINESeedSansTH_Rg.ttf");
+    // final font = await rootBundle.load("fonts/LINESeedSansTH_Rg.ttf");
+    var rt_Language = preferences.getString('renTal_Language');
+    var font = (rt_Language.toString().trim() == 'LA')
+        ? await rootBundle.load('fonts/NotoSansLao.ttf')
+        : await rootBundle.load('fonts/THSarabunNew.ttf');
+    double font_Size = (rt_Language.toString().trim() == 'LA') ? 8.0 : 8.0;
+
     var Colors_pd = PdfColors.black;
     final ttf = pw.Font.ttf(font.buffer.asByteData());
     final doc = pw.Document();
@@ -149,7 +157,7 @@ class Pdfgen_QR_2 {
                                     '$renTal_name',
                                     maxLines: 1,
                                     style: pw.TextStyle(
-                                      fontSize: 8.0,
+                                      fontSize: font_Size,
                                       color: PdfColors.black,
                                       font: ttf,
                                       fontWeight: pw.FontWeight.bold,
@@ -163,7 +171,7 @@ class Pdfgen_QR_2 {
                                     ' ${date}',
                                     maxLines: 1,
                                     style: pw.TextStyle(
-                                      fontSize: 7.0,
+                                      fontSize: font_Size,
                                       color: PdfColors.black,
                                       font: ttf,
                                       // fontWeight: FontWeight.bold,
@@ -224,9 +232,14 @@ class Pdfgen_QR_2 {
                                                   const pw.EdgeInsets.fromLTRB(
                                                       0, 4, 0, 0),
                                               child: pw.Text(
-                                                'ลงชื่อ................................',
+                                                (rt_Language
+                                                            .toString()
+                                                            .trim() ==
+                                                        'LA')
+                                                    ? 'ຊື່..........................'
+                                                    : 'ลงชื่อ................................',
                                                 style: pw.TextStyle(
-                                                  fontSize: 7.0,
+                                                  fontSize: font_Size,
                                                   color: PdfColors.black,
                                                   fontWeight:
                                                       pw.FontWeight.bold,
@@ -270,16 +283,19 @@ class Pdfgen_QR_2 {
                                             pw.Text(
                                               '${cid}',
                                               style: pw.TextStyle(
-                                                fontSize: 10.0,
+                                                fontSize: font_Size,
                                                 color: PdfColors.black,
                                                 fontWeight: pw.FontWeight.bold,
                                                 font: ttf,
                                               ),
                                             ),
                                             pw.Text(
-                                              'ชื่อผู้ติดต่อ',
+                                              (rt_Language.toString().trim() ==
+                                                      'LA')
+                                                  ? 'ຊື່​ຕິດ​ຕໍ່'
+                                                  : 'ชื่อผู้ติดต่อ',
                                               style: pw.TextStyle(
-                                                fontSize: 8.0,
+                                                fontSize: font_Size,
                                                 color: PdfColors.black,
                                                 font: ttf,
                                               ),
@@ -288,16 +304,19 @@ class Pdfgen_QR_2 {
                                               '${cname}',
                                               maxLines: 1,
                                               style: pw.TextStyle(
-                                                fontSize: 9.0,
+                                                fontSize: font_Size,
                                                 color: PdfColors.black,
                                                 fontWeight: pw.FontWeight.bold,
                                                 font: ttf,
                                               ),
                                             ),
                                             pw.Text(
-                                              'ชื่อร้านค้า',
+                                              (rt_Language.toString().trim() ==
+                                                      'LA')
+                                                  ? 'ຊື່ຮ້ານ'
+                                                  : 'ชื่อร้านค้า',
                                               style: pw.TextStyle(
-                                                fontSize: 8.0,
+                                                fontSize: font_Size,
                                                 color: PdfColors.black,
                                                 font: ttf,
                                               ),
@@ -306,30 +325,36 @@ class Pdfgen_QR_2 {
                                               '${sname}',
                                               maxLines: 1,
                                               style: pw.TextStyle(
-                                                fontSize: 9.0,
+                                                fontSize: font_Size,
                                                 color: PdfColors.black,
                                                 fontWeight: pw.FontWeight.bold,
                                                 font: ttf,
                                               ),
                                             ),
                                             pw.Text(
-                                              'พื้นที่ :${ln}',
+                                              (rt_Language.toString().trim() ==
+                                                      'LA')
+                                                  ? 'ພື້ນທີ່ :${ln}'
+                                                  : 'พื้นที่ :${ln}',
 
                                               // 'พื้นที่ : ${teNantModels[startIndex + index].ln} ( ${teNantModels[startIndex + index].zn} )',
                                               maxLines: 1,
                                               style: pw.TextStyle(
-                                                fontSize: 8.0,
+                                                fontSize: font_Size,
                                                 color: PdfColors.black,
                                                 font: ttf,
                                               ),
                                             ),
                                             pw.Text(
-                                              'โซน :${zn}',
+                                              (rt_Language.toString().trim() ==
+                                                      'LA')
+                                                  ? 'ເຂດ :${zn}'
+                                                  : 'โซน :${zn}',
 
                                               // 'พื้นที่ : ${teNantModels[startIndex + index].ln} ( ${teNantModels[startIndex + index].zn} )',
                                               maxLines: 1,
                                               style: pw.TextStyle(
-                                                fontSize: 8.0,
+                                                fontSize: font_Size,
                                                 color: PdfColors.black,
                                                 font: ttf,
                                               ),

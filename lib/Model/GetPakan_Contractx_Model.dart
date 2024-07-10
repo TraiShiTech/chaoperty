@@ -35,6 +35,7 @@ class ContractxPakanModel {
   String? ctype;
   String? stype;
   String? zser;
+  String? zser1;
   String? zn;
   String? ln;
   String? docno;
@@ -43,6 +44,8 @@ class ContractxPakanModel {
   String? room_number;
   String? name;
   String? zn1;
+  String? tax;
+  String? max_date;
 
   ContractxPakanModel({
     this.ser,
@@ -79,6 +82,7 @@ class ContractxPakanModel {
     this.ctype,
     this.stype,
     this.zser,
+    this.zser1,
     this.zn,
     this.ln,
     this.docno,
@@ -87,6 +91,8 @@ class ContractxPakanModel {
     this.room_number,
     this.name,
     this.zn1,
+    this.tax,
+    this.max_date,
   });
 
   ContractxPakanModel.fromJson(Map<String, dynamic> json) {
@@ -126,6 +132,7 @@ class ContractxPakanModel {
     ctype = json['ctype'];
     stype = json['stype'];
     zser = json['zser'];
+    zser1 = json['zser1'];
     zn = json['zn'];
     ln = json['ln'];
     docno = json['docno'];
@@ -134,6 +141,8 @@ class ContractxPakanModel {
     room_number = json['room_number'];
     name = json['name'];
     zn1 = json['zn1'];
+    tax = json['tax'];
+    max_date = json['max_date'];
   }
 
   Map<String, dynamic> toJson() {
@@ -174,6 +183,7 @@ class ContractxPakanModel {
     data['ctype'] = this.ctype;
     data['stype'] = this.stype;
     data['zser'] = this.zser;
+    data['zser1'] = this.zser1;
     data['zn'] = this.zn;
     data['ln'] = this.ln;
     data['docno'] = this.docno;
@@ -182,6 +192,8 @@ class ContractxPakanModel {
     data['room_number'] = this.room_number;
     data['name'] = this.name;
     data['zn1'] = this.zn1;
+    data['tax'] = this.tax;
+    data['max_date'] = this.max_date;
 
     return data;
   }

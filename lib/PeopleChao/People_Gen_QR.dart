@@ -110,7 +110,7 @@ class _People_GenQRState extends State<People_GenQR> {
   int index_listviwe = 0;
   int renTal_lavel = 0;
   int? pkqty, pkuser, countarae;
-  String? serPositioned;
+  String? serPositioned, rt_Language;
   ///////---------------------------------------------------->showMyDialog_SAVE
 
   late List<GlobalKey> qrImageKey;
@@ -182,6 +182,7 @@ class _People_GenQRState extends State<People_GenQR> {
       renTal_user = preferences.getString('renTalSer');
       renTal_name = preferences.getString('renTalName');
       fname_ = preferences.getString('fname');
+      rt_Language = preferences.getString('renTal_Language');
       renTal_lavel = int.parse(preferences.getString('lavel').toString());
       teNantModels_Save = List.generate(300, (_) => []);
     });
@@ -513,7 +514,7 @@ class _People_GenQRState extends State<People_GenQR> {
             padding: const EdgeInsets.fromLTRB(4, 4, 4, 0),
             child: Container(
               padding: EdgeInsets.all(4),
-              decoration:  BoxDecoration(
+              decoration: BoxDecoration(
                 color: AppbackgroundColor.TiTile_Colors,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(10),
@@ -1035,7 +1036,7 @@ class _People_GenQRState extends State<People_GenQR> {
                                             Container(
                                               color: Colors.white,
                                               child: Text(
-                                                '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${teNantModels[index].sdate}'))} ถึง ${DateFormat('dd-MM-yyyy').format(DateTime.parse('${teNantModels[index].ldate}'))}',
+                                                '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${teNantModels[index].sdate}'))} - ${DateFormat('dd-MM-yyyy').format(DateTime.parse('${teNantModels[index].ldate}'))}',
                                                 // ' ${teNantModels[index].sdate} ถึง ${teNantModels[index].ldate}',
                                                 maxLines: 1,
                                                 style: const TextStyle(
@@ -1104,7 +1105,12 @@ class _People_GenQRState extends State<People_GenQR> {
                                                                 .fromLTRB(
                                                                     2, 2, 2, 0),
                                                             child: Text(
-                                                              'ลงชื่อ.....................................',
+                                                              (rt_Language
+                                                                          .toString()
+                                                                          .trim() ==
+                                                                      'LA')
+                                                                  ? 'ຊື່........................................'
+                                                                  : 'ลงชื่อ.....................................',
                                                               maxLines: 1,
                                                               style: TextStyle(
                                                                 fontSize: 7.0,
@@ -1196,8 +1202,13 @@ class _People_GenQRState extends State<People_GenQR> {
                                                                     .Fonts_T,
                                                               ),
                                                             ),
-                                                            const Text(
-                                                              'ชื่อผู้ติดต่อ',
+                                                            Text(
+                                                              (rt_Language
+                                                                          .toString()
+                                                                          .trim() ==
+                                                                      'LA')
+                                                                  ? 'ຊື່​ຕິດ​ຕໍ່'
+                                                                  : 'ชื่อผู้ติดต่อ',
                                                               maxLines: 1,
                                                               style: TextStyle(
                                                                 fontSize: 9.0,
@@ -1223,8 +1234,13 @@ class _People_GenQRState extends State<People_GenQR> {
                                                                     .Fonts_T,
                                                               ),
                                                             ),
-                                                            const Text(
-                                                              'ชื่อร้านค้า',
+                                                            Text(
+                                                              (rt_Language
+                                                                          .toString()
+                                                                          .trim() ==
+                                                                      'LA')
+                                                                  ? 'ຊື່ຮ້ານ'
+                                                                  : 'ชื่อร้านค้า',
                                                               maxLines: 1,
                                                               style: TextStyle(
                                                                 fontSize: 9.0,
@@ -1251,15 +1267,26 @@ class _People_GenQRState extends State<People_GenQR> {
                                                               ),
                                                             ),
                                                             Text(
-                                                              teNantModels[index]
-                                                                          .ln_c ==
-                                                                      null
+                                                              (rt_Language
+                                                                          .toString()
+                                                                          .trim() ==
+                                                                      'LA')
                                                                   ? teNantModels[index]
-                                                                              .ln_q ==
+                                                                              .ln_c ==
                                                                           null
-                                                                      ? ''
-                                                                      : 'พื้นที่ :${teNantModels[index].ln_q}'
-                                                                  : 'พื้นที่ :${teNantModels[index].ln_c}',
+                                                                      ? teNantModels[index].ln_q ==
+                                                                              null
+                                                                          ? ''
+                                                                          : 'ພື້ນທີ່ :${teNantModels[index].ln_q}'
+                                                                      : 'ພື້ນທີ່ :${teNantModels[index].ln_c}'
+                                                                  : teNantModels[index]
+                                                                              .ln_c ==
+                                                                          null
+                                                                      ? teNantModels[index].ln_q ==
+                                                                              null
+                                                                          ? ''
+                                                                          : 'พื้นที่ :${teNantModels[index].ln_q}'
+                                                                      : 'พื้นที่ :${teNantModels[index].ln_c}',
                                                               // 'พื้นที่ : ${teNantModels[index].ln} ( ${teNantModels[index].zn} )',
                                                               maxLines: 1,
                                                               style:
@@ -1273,7 +1300,12 @@ class _People_GenQRState extends State<People_GenQR> {
                                                               ),
                                                             ),
                                                             Text(
-                                                              'โซน :${teNantModels[index].zn}',
+                                                              (rt_Language
+                                                                          .toString()
+                                                                          .trim() ==
+                                                                      'LA')
+                                                                  ? 'ເຂດ :${teNantModels[index].zn}'
+                                                                  : 'โซน :${teNantModels[index].zn}',
                                                               maxLines: 1,
                                                               style:
                                                                   const TextStyle(

@@ -59,12 +59,13 @@ class Pdfgen_his_statusbill_TP7 {
       TitleType_Default_Receipt_Name,
       dis_sum_Pakan,
       sum_fee,
-      com_ment) async {
+      com_ment,
+      fonts_pdf) async {
     ////
     //// ------------>(ใบเสร็จรับเงินชั่วคราว paySrsscreen_)
     ///////
     final pdf = pw.Document();
-    final font = await rootBundle.load("fonts/THSarabunNew.ttf");
+    final font = await rootBundle.load("${fonts_pdf}");
     var Colors_pd = PdfColors.black;
     // final font = await rootBundle.load("fonts/Sarabun-Medium.ttf");
 
@@ -207,19 +208,33 @@ class Pdfgen_his_statusbill_TP7 {
                     ),
                   ),
             pw.Spacer(),
-            pw.Text(
-              (numdoctax.toString() == '')
-                  ? 'ใบเสร็จรับเงิน(Receipt)'
-                  : 'ใบเสร็จรับเงิน/ใบกำกับภาษี(Receipt/Tax invoice)',
-              textAlign: pw.TextAlign.right,
-              maxLines: 1,
-              style: pw.TextStyle(
-                fontSize: font_Size + 1,
-                fontWeight: pw.FontWeight.bold,
-                font: ttf,
-                color: Colors_pd,
-              ),
-            ),
+            (hasNonCashTransaction1)
+                ? pw.Text(
+                    (numdoctax.toString() == '')
+                        ? 'บิลเงินสด(Cash Sell)'
+                        : 'บิลเงินสด/ใบกำกับภาษี(Cash Sell/Tax invoice)',
+                    textAlign: pw.TextAlign.right,
+                    maxLines: 1,
+                    style: pw.TextStyle(
+                      fontSize: font_Size + 1,
+                      fontWeight: pw.FontWeight.bold,
+                      font: ttf,
+                      color: Colors_pd,
+                    ),
+                  )
+                : pw.Text(
+                    (numdoctax.toString() == '')
+                        ? 'ใบเสร็จรับเงิน(Receipt)'
+                        : 'ใบเสร็จรับเงิน/ใบกำกับภาษี(Receipt/Tax invoice)',
+                    textAlign: pw.TextAlign.right,
+                    maxLines: 1,
+                    style: pw.TextStyle(
+                      fontSize: font_Size + 1,
+                      fontWeight: pw.FontWeight.bold,
+                      font: ttf,
+                      color: Colors_pd,
+                    ),
+                  ),
           ],
         ),
         pw.Row(
@@ -532,7 +547,7 @@ class Pdfgen_his_statusbill_TP7 {
                   pw.Text(
                     (ref_invoice.length == 0)
                         ? ''
-                        : 'อ้างอิงเลขที่ : ${ref_invoice.map((model) => model).join(', ')}',
+                        : 'อ้างอิงเลขที่ :  ${ref_invoice.toSet().map((model) => model).join(', ')}',
                     textAlign: pw.TextAlign.right,
                     maxLines: 3,
                     style: pw.TextStyle(
@@ -1283,9 +1298,13 @@ class Pdfgen_his_statusbill_TP7 {
                               child: pw.Align(
                                 alignment: pw.Alignment.centerRight,
                                 child: pw.Text(
-                                  (tableData00[index][7].toString() == '0.00')
-                                      ? '${tableData00[index][5]}'
-                                      : '${tableData00[index][7]}',
+                                  (tableData00[index][14].toString() != '0' &&
+                                          tableData00[index][14] != null)
+                                      ? 'อัตราพิเศษ'
+                                      : (tableData00[index][7].toString() ==
+                                              '0.00')
+                                          ? '${tableData00[index][5]}'
+                                          : '${tableData00[index][7]}',
                                   maxLines: 1,
                                   textAlign: pw.TextAlign.right,
                                   style: pw.TextStyle(

@@ -46,7 +46,8 @@ class Pdfgen_Agreement {
       bill_name,
       newValuePDFimg,
       tableData00,
-      TitleType_Default_Receipt_Name) async {
+      TitleType_Default_Receipt_Name,
+      Datex_text) async {
     ////
     //// ------------>(ใบเสนอราคา)
     ///////
@@ -231,7 +232,8 @@ class Pdfgen_Agreement {
                       ),
 
                       pw.Text(
-                        'วันที่ทำสัญญา :____/________/____',
+                        'วันที่ทำสัญญา :${Datex_text.text}',
+                        // 'วันที่ทำสัญญา :____/________/____',
                         // '${DateFormat('วันที่ทำสัญญา : d เดือน MMM ปี ', 'th').format(DateTime.now())}${DateTime.now().year + 543}',
                         maxLines: 2,
                         style: pw.TextStyle(
@@ -1550,7 +1552,8 @@ class Pdfgen_Agreement {
                     ),
 
                     pw.Text(
-                      'วันที่ทำสัญญา :____/________/____',
+                      'วันที่ทำสัญญา :${Datex_text.text}',
+                      // 'วันที่ทำสัญญา :____/________/____',
                       // '${DateFormat('วันที่ทำสัญญา : d เดือน MMM ปี ', 'th').format(DateTime.now())}${DateTime.now().year + 543}',
                       maxLines: 2,
                       style: pw.TextStyle(

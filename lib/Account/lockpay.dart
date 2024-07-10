@@ -123,7 +123,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
     'สำเนา',
   ];
 
-    List Customer_stype = [];
+  List Customer_stype = [];
   ////////------------------------------------>
   String? teNantcid, teNantsname, teNantnamenew;
   String? rtname,
@@ -243,8 +243,9 @@ class _LockpayScreenState extends State<LockpayScreen> {
     Value_newDateD1 = DateFormat('dd-MM-yyyy').format(newDatetime);
     Value_newDateY = DateFormat('yyyy-MM-dd').format(newDatetime);
     Value_newDateD = DateFormat('dd-MM-yyyy').format(newDatetime);
-      read_Customer_stype();
+    read_Customer_stype();
   }
+
   Future<Null> read_Customer_stype() async {
     if (Customer_stype.length != 0) {
       Customer_stype.clear();
@@ -3068,7 +3069,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                   ),
                                 ),
                               ),
-                                     Center(
+                              Center(
                                 child: PopupMenuButton(
                                   child: CircleAvatar(
                                     backgroundColor: Colors.brown.shade800,
@@ -5020,23 +5021,20 @@ class _LockpayScreenState extends State<LockpayScreen> {
 
                               Row(
                                 children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                      height: 40,
-                                      color: AppbackgroundColor.Sub_Abg_Colors,
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: const Text(
-                                        'ใบเสร็จ',
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                            color: PeopleChaoScreen_Color
-                                                .Colors_Text1_,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T
-                                            //fontSize: 10.0
-                                            ),
-                                      ),
+                                  Container(
+                                    height: 40,
+                                    color: AppbackgroundColor.Sub_Abg_Colors,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: const Text(
+                                      'ใบเสร็จ',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text1_,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: FontWeight_.Fonts_T
+                                          //fontSize: 10.0
+                                          ),
                                     ),
                                   ),
                                   Expanded(
@@ -5147,27 +5145,127 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                       ),
                                     ),
                                   ),
+                                  Container(
+                                    height: 40,
+                                    color: AppbackgroundColor.Sub_Abg_Colors,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'รูปแบบบิล',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text1_,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: FontWeight_.Fonts_T
+                                          //fontSize: 10.0
+                                          ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      height: 40,
+                                      color: AppbackgroundColor.Sub_Abg_Colors,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: DropdownButtonFormField2(
+                                        decoration: InputDecoration(
+                                          isDense: true,
+                                          contentPadding: EdgeInsets.zero,
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                        ),
+                                        isExpanded: true,
+
+                                        hint: Text(
+                                          bills_name_.toString(),
+                                          maxLines: 1,
+                                          style: const TextStyle(
+                                              fontSize: 11,
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text2_,
+                                              //fontWeight: FontWeight.bold,
+                                              fontFamily: Font_.Fonts_T),
+                                        ),
+                                        icon: const Icon(
+                                          Icons.arrow_drop_down,
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                        ),
+                                        style: const TextStyle(
+                                            color: Colors.green,
+                                            fontFamily: Font_.Fonts_T),
+                                        iconSize: 30,
+                                        buttonHeight: 40,
+                                        // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                        dropdownDecoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        items: bill_tser == '1'
+                                            ? Default_.map((item) =>
+                                                DropdownMenuItem<String>(
+                                                  value: item,
+                                                  child: Text(
+                                                    item,
+                                                    style: const TextStyle(
+                                                        fontSize: 11,
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                        //fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T),
+                                                  ),
+                                                )).toList()
+                                            : Default2_.map((item) =>
+                                                DropdownMenuItem<String>(
+                                                  value: item,
+                                                  child: Text(
+                                                    item,
+                                                    style: const TextStyle(
+                                                        fontSize: 11,
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                        //fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T),
+                                                  ),
+                                                )).toList(),
+
+                                        onChanged: (value) async {
+                                          var bill_set =
+                                              value == 'บิลธรรมดา' ? 'P' : 'F';
+                                          setState(() {
+                                            bills_name_ = bill_set;
+                                          });
+                                          print(bills_name_);
+                                        },
+                                        // onSaved: (value) {
+                                        //   // selectedValue = value.toString();
+                                        // },
+                                      ),
+                                    ),
+                                  ),
                                   if (Default_Receipt_[Default_Receipt_type]
                                           .toString() ==
                                       'ออกใบเสร็จ')
-                                    Expanded(
-                                      flex: 1,
-                                      child: Container(
-                                        height: 40,
-                                        color:
-                                            AppbackgroundColor.Sub_Abg_Colors,
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: const Text(
-                                          'หัวบิล',
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                              color: PeopleChaoScreen_Color
-                                                  .Colors_Text1_,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T
-                                              //fontSize: 10.0
-                                              ),
-                                        ),
+                                    Container(
+                                      height: 40,
+                                      color: AppbackgroundColor.Sub_Abg_Colors,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: const Text(
+                                        'หัวบิล',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T
+                                            //fontSize: 10.0
+                                            ),
                                       ),
                                     ),
                                   if (Default_Receipt_[Default_Receipt_type]
@@ -11832,8 +11930,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
     var dateY = Value_newDateY;
     var dateY1 = Value_newDateY1;
     var time = Form_time.text;
-    var bill = 'P';
-    // var bill = bills_name_ == 'บิลธรรมดา' ? 'P' : 'F';
+    // var bill = 'P';
+    var bill = bills_name_ == 'บิลธรรมดา' ? 'P' : 'F';
     //pamentpage == 0
     var payment1 = Form_payment1.text.toString();
     var payment2 = Form_payment2.text.toString();

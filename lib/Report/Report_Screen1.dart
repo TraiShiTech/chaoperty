@@ -299,7 +299,7 @@ class _ReportScreen1State extends State<ReportScreen1> {
 
     ///-------->
     String url_Mon = (zone_ser_Trans_Mon.toString() == '0')
-        ? '${MyConstant().domain}/GC_bill_pay_BC_IncomReeport_All.php?isAdd=true&ren=$ren&mont_h=$Mon_Trans_Mon&yea_r=$YE_Trans_Mon&serzone=$zone_ser_Trans_Mon'
+        ? '${MyConstant().domain}/GC_bill_pay_BC_IncomeReport_All.php?isAdd=true&ren=$ren&mont_h=$Mon_Trans_Mon&yea_r=$YE_Trans_Mon&serzone=$zone_ser_Trans_Mon'
         : '${MyConstant().domain}/GC_bill_pay_BC_IncomeReport.php?isAdd=true&ren=$ren&mont_h=$Mon_Trans_Mon&yea_r=$YE_Trans_Mon&serzone=$zone_ser_Trans_Mon';
 
     String url_Daily = (zone_ser_Trans_Daily.toString() == '0')

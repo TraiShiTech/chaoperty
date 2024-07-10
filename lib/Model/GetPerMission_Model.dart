@@ -1,6 +1,7 @@
 class PerMissionModel {
   String? ser;
   String? perm;
+  String? perm_en;
   String? name_icon;
   String? icon;
   String? st;
@@ -17,6 +18,7 @@ class PerMissionModel {
   PerMissionModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
     perm = json['perm'];
+    perm_en = json['perm_en'];
     name_icon = json['name_icon'];
     icon = json['icon'];
     st = json['st'];
@@ -27,6 +29,7 @@ class PerMissionModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['ser'] = this.ser;
     data['perm'] = this.perm;
+    data['perm_en'] = this.perm_en;
     data['name_icon'] = this.name_icon;
     data['icon'] = this.icon;
     data['st'] = this.st;

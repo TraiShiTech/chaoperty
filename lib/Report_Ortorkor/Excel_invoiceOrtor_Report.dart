@@ -161,22 +161,20 @@ class Excgen_InvoiceOrtorkorReport {
     globalStyle2220D.fontColorRgb = Color(0xFFC52611);
 ////////////-------------------------------------------------------->
     x.Style globalStyle7 = workbook.styles.add('style7');
-    globalStyle7.backColorRgb = Color.fromARGB(255, 230, 199, 163);
-    globalStyle7.fontName = 'Angsana New';
+    globalStyle7.backColorRgb = Color(0xC7F5F7FA);
     globalStyle7.numberFormat = '_(\* #,##0.00_)';
-    globalStyle7.hAlign = x.HAlignType.center;
-    globalStyle7.fontSize = 15;
-    globalStyle7.bold = true;
-    globalStyle7.fontColorRgb = Color(0xFFC52611);
+    globalStyle7.fontSize = 12;
+    globalStyle7.numberFormat;
+    globalStyle7.hAlign = x.HAlignType.left;
+    globalStyle7.fontColorRgb = Color.fromARGB(255, 235, 155, 35);
 
     x.Style globalStyle77 = workbook.styles.add('style77');
-    globalStyle7.backColorRgb = Color.fromARGB(255, 230, 199, 163);
-    globalStyle77.fontName = 'Angsana New';
+    globalStyle77.backColorRgb = Color(0xC7E1E2E6);
     globalStyle77.numberFormat = '_(\* #,##0.00_)';
-    globalStyle77.hAlign = x.HAlignType.center;
-    globalStyle77.fontSize = 15;
-    globalStyle77.bold = true;
-    globalStyle77.fontColorRgb = Color(0xFFC52611);
+    // globalStyle222.numberFormat;
+    globalStyle77.fontSize = 12;
+    globalStyle77.hAlign = x.HAlignType.left;
+    globalStyle77.fontColorRgb = Color.fromARGB(255, 235, 155, 35);
 
     x.Style globalStyle8 = workbook.styles.add('style8');
     globalStyle8.backColorRgb = Color(0xC7F5F7FA);
@@ -188,13 +186,13 @@ class Excgen_InvoiceOrtorkorReport {
     // globalStyle8.fontColorRgb = Color(0xFFC52611);
 
     x.Style globalStyle88 = workbook.styles.add('style88');
-    globalStyle88.backColorRgb = Color(0xC7E1E2E6);
+    globalStyle88.backColorRgb = Color.fromARGB(255, 212, 221, 185);
     globalStyle88.fontName = 'Angsana New';
     globalStyle88.numberFormat = '_(\* #,##0.00_)';
     globalStyle88.hAlign = x.HAlignType.center;
     globalStyle88.fontSize = 15;
     globalStyle88.bold = true;
-    // globalStyle88.fontColorRgb = Color(0xFFC52611);
+    globalStyle88.fontColorRgb = Color(0xFFC52611);
 
     globalStyle.backColorRgb = const Color.fromARGB(255, 90, 192, 59);
     x.Style globalStyle2 = workbook.styles.add('style2');
@@ -245,12 +243,23 @@ class Excgen_InvoiceOrtorkorReport {
         .getRangeByName(
             '${columns[7 + (int.parse('${expModels.length}') * 2 + 8)]}1')
         .cellStyle = globalStyle22;
-
+    sheet
+        .getRangeByName(
+            '${columns[7 + (int.parse('${expModels.length}') * 2 + 9)]}1')
+        .cellStyle = globalStyle22;
+    sheet
+        .getRangeByName(
+            '${columns[7 + (int.parse('${expModels.length}') * 2 + 10)]}1')
+        .cellStyle = globalStyle22;
+    sheet
+        .getRangeByName(
+            '${columns[7 + (int.parse('${expModels.length}') * 2 + 11)]}1')
+        .cellStyle = globalStyle22;
     final x.Range range = sheet.getRangeByName('D1');
     range.setText(
-      (zone_name_Invoice_Mon == null)
-          ? '$Value_Report (กรุณาเลือกโซน)'
-          : '$Value_Report (โซน : ${zone_name_Invoice_Mon})',
+      (zone_name_Invoice_Daily == null)
+          ? '$Value_Report (โซน : ${zone_name_Invoice_Mon})'
+          : '$Value_Report (โซน : ${zone_name_Invoice_Daily})',
     );
 // ExcelSheetProtectionOption
     final x.ExcelSheetProtectionOption options = x.ExcelSheetProtectionOption();
@@ -303,11 +312,22 @@ class Excgen_InvoiceOrtorkorReport {
         .getRangeByName(
             '${columns[7 + (int.parse('${expModels.length}') * 2 + 8)]}2')
         .cellStyle = globalStyle22;
-
+    sheet
+        .getRangeByName(
+            '${columns[7 + (int.parse('${expModels.length}') * 2 + 9)]}2')
+        .cellStyle = globalStyle22;
+    sheet
+        .getRangeByName(
+            '${columns[7 + (int.parse('${expModels.length}') * 2 + 10)]}2')
+        .cellStyle = globalStyle22;
+    sheet
+        .getRangeByName(
+            '${columns[7 + (int.parse('${expModels.length}') * 2 + 11)]}2')
+        .cellStyle = globalStyle22;
     sheet.getRangeByName('A2').setText(
-          (Ser_BodySta1 == 1)
+          (Mon_Invoice_Mon != null)
               ? 'เดือน : ${monthsInThai[int.parse(Mon_Invoice_Mon!) - 1]} ${int.parse(YE_Invoice_Mon!) + 543}'
-              : 'วันที่ : ${DateFormat('dd-MM').format(DateTime.parse('${Value_InvoiceDate_Daily}'))}-${DateTime.parse('${Value_InvoiceDate_Daily}').year + 543}',
+              : 'วันที่ : ${Value_InvoiceDate_Daily}',
         );
     sheet.getRangeByName('A3').setText(
           'ทั้งหมด : ${InvoiceModels.length} รายการ',
@@ -357,6 +377,18 @@ class Excgen_InvoiceOrtorkorReport {
         .getRangeByName(
             '${columns[7 + (int.parse('${expModels.length}') * 2 + 8)]}3')
         .cellStyle = globalStyle22;
+    sheet
+        .getRangeByName(
+            '${columns[7 + (int.parse('${expModels.length}') * 2 + 9)]}3')
+        .cellStyle = globalStyle22;
+    sheet
+        .getRangeByName(
+            '${columns[7 + (int.parse('${expModels.length}') * 2 + 10)]}3')
+        .cellStyle = globalStyle22;
+    sheet
+        .getRangeByName(
+            '${columns[7 + (int.parse('${expModels.length}') * 2 + 11)]}3')
+        .cellStyle = globalStyle22;
     // sheet.getRangeByName('H2').setText(' ข้อมูล ณ วันที่: ${day_}');
     globalStyle2.hAlign = x.HAlignType.center;
     sheet.getRangeByName('A4').cellStyle = globalStyle1;
@@ -403,7 +435,18 @@ class Excgen_InvoiceOrtorkorReport {
         .getRangeByName(
             '${columns[7 + (int.parse('${expModels.length}') * 2 + 8)]}4')
         .cellStyle = globalStyle1;
-
+    sheet
+        .getRangeByName(
+            '${columns[7 + (int.parse('${expModels.length}') * 2 + 9)]}4')
+        .cellStyle = globalStyle1;
+    sheet
+        .getRangeByName(
+            '${columns[7 + (int.parse('${expModels.length}') * 2 + 10)]}4')
+        .cellStyle = globalStyle1;
+    sheet
+        .getRangeByName(
+            '${columns[7 + (int.parse('${expModels.length}') * 2 + 11)]}4')
+        .cellStyle = globalStyle1;
     sheet.getRangeByName('A4').columnWidth = 30;
     sheet.getRangeByName('B4').columnWidth = 25;
     sheet.getRangeByName('C4').columnWidth = 25;
@@ -447,7 +490,18 @@ class Excgen_InvoiceOrtorkorReport {
         .getRangeByName(
             '${columns[7 + (int.parse('${expModels.length}') * 2 + 8)]}4')
         .columnWidth = 25;
-
+    sheet
+        .getRangeByName(
+            '${columns[7 + (int.parse('${expModels.length}') * 2 + 9)]}4')
+        .columnWidth = 18;
+    sheet
+        .getRangeByName(
+            '${columns[7 + (int.parse('${expModels.length}') * 2 + 10)]}4')
+        .columnWidth = 18;
+    sheet
+        .getRangeByName(
+            '${columns[7 + (int.parse('${expModels.length}') * 2 + 11)]}4')
+        .columnWidth = 18;
     sheet.getRangeByName('A4').setText('บริษัท');
     sheet.getRangeByName('B4').setText('เลขที่ใบแจ้งหนี้');
     sheet.getRangeByName('C4').setText('สถานะ');
@@ -518,9 +572,26 @@ class Excgen_InvoiceOrtorkorReport {
         .getRangeByName(
             '${columns[7 + (int.parse('${expModels.length}') * 2 + 8)]}4')
         .setText(
-          'เลขที่รับชำระ',
+          'เลขที่-รับชำระ',
         );
-
+    sheet
+        .getRangeByName(
+            '${columns[7 + (int.parse('${expModels.length}') * 2 + 9)]}4')
+        .setText(
+          'ค่าปรับ-รับชำระ',
+        );
+    sheet
+        .getRangeByName(
+            '${columns[7 + (int.parse('${expModels.length}') * 2 + 10)]}4')
+        .setText(
+          'ส่วนลด-รับชำระ',
+        );
+    sheet
+        .getRangeByName(
+            '${columns[7 + (int.parse('${expModels.length}') * 2 + 11)]}4')
+        .setText(
+          'ยอดสุทธิ-รับชำระ',
+        );
     int index1 = 0;
     int indextotol = 0;
     List cid_number = [];
@@ -529,7 +600,8 @@ class Excgen_InvoiceOrtorkorReport {
 
       dynamic numberColor =
           ((indextotol % 2) == 0) ? globalStyle22 : globalStyle222;
-
+      dynamic numberColor2 =
+          ((indextotol % 2) == 0) ? globalStyle7 : globalStyle77;
       sheet.getRangeByName('A${index + 5}').cellStyle = numberColor;
       sheet.getRangeByName('B${index + 5}').cellStyle = numberColor;
       sheet.getRangeByName('C${index + 5}').cellStyle = numberColor;
@@ -551,7 +623,7 @@ class Excgen_InvoiceOrtorkorReport {
               '${columns[7 + (int.parse('${expModels.length}') * 2 + 2)]}${index + 5}')
           .cellStyle = numberColor;
       sheet
-          .getRangeByName( 
+          .getRangeByName(
               '${columns[7 + (int.parse('${expModels.length}') * 2 + 3)]}${index + 5}')
           .cellStyle = numberColor;
       sheet
@@ -573,6 +645,21 @@ class Excgen_InvoiceOrtorkorReport {
       sheet
           .getRangeByName(
               '${columns[7 + (int.parse('${expModels.length}') * 2 + 8)]}${index + 5}')
+          .cellStyle = (InvoiceModels[index].docno == null ||
+              InvoiceModels[index].docno.toString() == '')
+          ? numberColor2
+          : numberColor;
+      sheet
+          .getRangeByName(
+              '${columns[7 + (int.parse('${expModels.length}') * 2 + 9)]}${index + 5}')
+          .cellStyle = numberColor;
+      sheet
+          .getRangeByName(
+              '${columns[7 + (int.parse('${expModels.length}') * 2 + 10)]}${index + 5}')
+          .cellStyle = numberColor;
+      sheet
+          .getRangeByName(
+              '${columns[7 + (int.parse('${expModels.length}') * 2 + 11)]}${index + 5}')
           .cellStyle = numberColor;
 ///////////-------------------------------------------------->
       sheet.getRangeByName('A${index + 5}').setText(
@@ -702,6 +789,7 @@ class Excgen_InvoiceOrtorkorReport {
           .setText(
             '${InvoiceModels[index].zn}',
           );
+      ///////----------------->
       sheet
           .getRangeByName(
               '${columns[7 + (int.parse('${expModels.length}') * 2 + 8)]}${index + 5}')
@@ -710,6 +798,34 @@ class Excgen_InvoiceOrtorkorReport {
                     InvoiceModels[index].docno.toString() == '')
                 ? 'รอชำระ'
                 : '${InvoiceModels[index].docno}',
+          );
+
+      sheet
+          .getRangeByName(
+              '${columns[7 + (int.parse('${expModels.length}') * 2 + 9)]}${index + 5}')
+          .setNumber(
+            (InvoiceModels[index].docno == null ||
+                    InvoiceModels[index].docno.toString() == '')
+                ? 0.00
+                : double.parse(InvoiceModels[index].pay_fine.toString()),
+          );
+      sheet
+          .getRangeByName(
+              '${columns[7 + (int.parse('${expModels.length}') * 2 + 10)]}${index + 5}')
+          .setNumber(
+            (InvoiceModels[index].docno == null ||
+                    InvoiceModels[index].docno.toString() == '')
+                ? 0.00
+                : double.parse(InvoiceModels[index].pay_dis.toString()),
+          );
+      sheet
+          .getRangeByName(
+              '${columns[7 + (int.parse('${expModels.length}') * 2 + 11)]}${index + 5}')
+          .setNumber(
+            (InvoiceModels[index].docno == null ||
+                    InvoiceModels[index].docno.toString() == '')
+                ? 0.00
+                : double.parse(InvoiceModels[index].paytotal_dis.toString()),
           );
     }
 
@@ -721,7 +837,7 @@ class Excgen_InvoiceOrtorkorReport {
     for (int i = 0; i < expModels.length * 2; i++) {
       sheet
           .getRangeByName('${columns[7 + (i + 1)]}${InvoiceModels.length + 5}')
-          .cellStyle = globalStyle7;
+          .cellStyle = globalStyle88;
       sheet.getRangeByName('${columns[7 + (i + 1)]}${indextotol + 5}').setFormula(
           '=SUM(${columns[7 + (i + 1)]}5:${columns[7 + (i + 1)]}${indextotol + 5 - 1})');
     }
@@ -729,7 +845,7 @@ class Excgen_InvoiceOrtorkorReport {
       sheet
           .getRangeByName(
               '${columns[7 + (int.parse('${expModels.length}') * 2 + (i + 1))]}${InvoiceModels.length + 5}')
-          .cellStyle = globalStyle7;
+          .cellStyle = globalStyle88;
 
       sheet
           .getRangeByName(
@@ -737,7 +853,18 @@ class Excgen_InvoiceOrtorkorReport {
           .setFormula(
               '=SUM(${columns[7 + (int.parse('${expModels.length}') * 2 + i + 1)]}5:${columns[7 + (int.parse('${expModels.length}') * 2 + i + 1)]}${indextotol + 5 - 1})');
     }
+    for (int i = 0; i < 3; i++) {
+      sheet
+          .getRangeByName(
+              '${columns[7 + (int.parse('${expModels.length}') * 2 + 9 + i)]}${InvoiceModels.length + 5}')
+          .cellStyle = globalStyle88;
 
+      sheet
+          .getRangeByName(
+              '${columns[7 + (int.parse('${expModels.length}') * 2 + 9 + i)]}${InvoiceModels.length + 5}')
+          .setFormula(
+              '=SUM(${columns[7 + (int.parse('${expModels.length}') * 2 + 9 + i)]}5:${columns[7 + (int.parse('${expModels.length}') * 2 + 9 + i)]}${indextotol + 5 - 1})');
+    }
     final List<int> bytes = workbook.saveAsStream();
     workbook.dispose();
     Uint8List data = Uint8List.fromList(bytes);
@@ -745,14 +872,14 @@ class Excgen_InvoiceOrtorkorReport {
     //  (Ser_BodySta1 == 1)
     //         ? '$Value_Report (โซน : $zone_name_Invoice_Mon) ${monthsInThai[int.parse(Mon_Invoice_Mon!) - 1]} ${int.parse(YE_Invoice_Mon!) + 543}'
     //         : '$Value_Report (โซน : $zone_name_Invoice_Mon) ${DateFormat('MMM', 'th_TH').format(DateTime.parse('${Value_InvoiceDate_Daily}'))} ${DateTime.parse('${Value_InvoiceDate_Daily}').year + 543}',
-    String path = (Ser_BodySta1 == 1)
+    String path = (zone_name_Invoice_Daily == null)
         ? await FileSaver.instance.saveFile(
             'Exclusive-B-${Value_Report}Ortor(โซน_$zone_name_Invoice_Mon)เดือน_$Mon_Invoice_Mon ${int.parse(YE_Invoice_Mon!) + 543}',
             data,
             "xlsx",
             mimeType: type)
         : await FileSaver.instance.saveFile(
-            'Exclusive-B-${Value_Report}Ortor(โซน_$zone_name_Invoice_Daily)วันที่_${DateFormat('dd-MM').format(DateTime.parse('${Value_InvoiceDate_Daily}'))}_${DateTime.parse('${Value_InvoiceDate_Daily}').year + 543}',
+            'Exclusive-B-${Value_Report}Ortor(โซน_$zone_name_Invoice_Daily)วันที่_${Value_InvoiceDate_Daily}',
             data,
             "xlsx",
             mimeType: type);

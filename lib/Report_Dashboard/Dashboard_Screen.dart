@@ -663,8 +663,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 // height: 270,
-                decoration: const BoxDecoration(
-                  color: AppbackgroundColor.TiTile_Box,
+                decoration: BoxDecoration(
+                  color: AppbackgroundColor.TiTile_Colors,
+                  // color: AppbackgroundColor.TiTile_Box,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(10),
                       topRight: Radius.circular(10),

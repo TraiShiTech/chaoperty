@@ -26,7 +26,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;
 import 'package:syncfusion_flutter_barcodes/barcodes.dart';
-
 import '../AdminScaffold/AdminScaffold.dart';
 import '../Beam/Beam_apiPassw.dart';
 import '../Beam/Beam_api_disabled.dart';
@@ -5597,7 +5596,7 @@ class _PaysState extends State<Pays> {
                                                       child: AutoSizeText(
                                                         minFontSize: 10,
                                                         maxFontSize: 15,
-                                                        'รวม(บาท)',
+                                                        'รวม',
                                                         style: TextStyle(
                                                             color: PeopleChaoScreen_Color
                                                                 .Colors_Text2_,
@@ -6886,7 +6885,8 @@ class _PaysState extends State<Pays> {
                                                   minFontSize: 10,
                                                   maxFontSize: 15,
                                                   maxLines: 1,
-                                                  '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
+                                                  //  '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!) + double.parse(_InvoiceHistoryModels[index].vat!))}',
+                                                  '${nFormat.format(double.parse(_InvoiceHistoryModels[index].total_t!))}',
                                                   textAlign: TextAlign.end,
                                                   style: const TextStyle(
                                                       color:
@@ -7561,7 +7561,7 @@ class _PaysState extends State<Pays> {
                                                             child: AutoSizeText(
                                                               minFontSize: 10,
                                                               maxFontSize: 15,
-                                                              'รวม(บาท)',
+                                                              'รวม',
                                                               style: TextStyle(
                                                                   color: PeopleChaoScreen_Color
                                                                       .Colors_Text2_,
@@ -8767,7 +8767,7 @@ class _PaysState extends State<Pays> {
                                                           child: AutoSizeText(
                                                             minFontSize: 10,
                                                             maxFontSize: 15,
-                                                            'รวม(บาท)',
+                                                            'รวม',
                                                             style: TextStyle(
                                                                 color: PeopleChaoScreen_Color
                                                                     .Colors_Text2_,
@@ -9951,7 +9951,7 @@ class _PaysState extends State<Pays> {
                                                                                 '0'
                                                                             ? ''
                                                                             : item.fine_c.toString() == '0.00'
-                                                                                ? 'ค่าธรรมเนียม ${item.fine_a} บาท'
+                                                                                ? 'ค่าธรรมเนียม ${item.fine_a} '
                                                                                 : 'ค่าธรรมเนียม ${item.fine_c} %',
                                                                         textAlign:
                                                                             TextAlign.end,
@@ -10244,7 +10244,7 @@ class _PaysState extends State<Pays> {
                                                                                   item.fine.toString() == '0'
                                                                                       ? ''
                                                                                       : item.fine_c.toString() == '0.00'
-                                                                                          ? 'ค่าธรรมเนียม ${item.fine_a} บาท'
+                                                                                          ? 'ค่าธรรมเนียม ${item.fine_a} '
                                                                                           : 'ค่าธรรมเนียม ${item.fine_c} %',
                                                                                   textAlign: TextAlign.end,
                                                                                   overflow: TextOverflow.ellipsis,
@@ -10406,7 +10406,7 @@ class _PaysState extends State<Pays> {
                                                                               item.fine.toString() == '0'
                                                                                   ? ''
                                                                                   : item.fine_c.toString() == '0.00'
-                                                                                      ? 'ค่าธรรมเนียม ${item.fine_a} บาท'
+                                                                                      ? 'ค่าธรรมเนียม ${item.fine_a} '
                                                                                       : 'ค่าธรรมเนียม ${item.fine_c} %',
                                                                               textAlign: TextAlign.end,
                                                                               overflow: TextOverflow.ellipsis,
@@ -12282,7 +12282,7 @@ class _PaysState extends State<Pays> {
                                                                               ),
                                                                             ),
                                                                             Text(
-                                                                              'จำนวนเงิน : ${nFormat.format(sum)} บาท',
+                                                                              'จำนวนเงิน : ${nFormat.format(sum)} ',
                                                                               style: TextStyle(
                                                                                 fontSize: 13,
                                                                                 fontWeight: FontWeight.bold,
@@ -12475,7 +12475,7 @@ class _PaysState extends State<Pays> {
                                                               //                   ),
                                                               //                 ),
                                                               //                 Text(
-                                                              //                   'จำนวนเงิน : ${nFormat.format(totalQr_)} บาท',
+                                                              //                   'จำนวนเงิน : ${nFormat.format(totalQr_)} ',
                                                               //                   style:
                                                               //                       TextStyle(
                                                               //                     fontSize:
@@ -13686,7 +13686,7 @@ class _PaysState extends State<Pays> {
                               child: Padding(
                                 padding: const EdgeInsets.all(4.0),
                                 child: Text(
-                                  '# จำนวนเงินชำระทั้งหมด เท่ากับ ${(sum_amt - sum_disamt - sum_tran_dis)} บาท ',
+                                  '# จำนวนเงินชำระทั้งหมด เท่ากับ ${(sum_amt - sum_disamt - sum_tran_dis)}  ',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: Colors.red,
@@ -17234,7 +17234,7 @@ class _PaysState extends State<Pays> {
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                'จำนวนเงิน : ${total_QR} บาท',
+                                'จำนวนเงิน : ${total_QR} ',
                                 style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.grey,
@@ -17466,7 +17466,7 @@ class _PaysState extends State<Pays> {
                                   // Dialog_cancellock(purchaseId_s);
 
                                   Beam_purchase_disabled(
-                                          purchaseId, Pay_Ke, ren, cFinnc_s)
+                                          purchaseId, Pay_Ke, ren, cFinnc_s, '')
                                       .then((value) => {
                                             _timer.cancel(),
                                             Navigator.pop(context),

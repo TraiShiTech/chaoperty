@@ -260,7 +260,7 @@ class _Bill_DocumentTemplateState extends State<Bill_DocumentTemplate> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    for (int index = 0; index < 4; index++)
+                    for (int index = 0; index < 5; index++)
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
@@ -270,7 +270,7 @@ class _Bill_DocumentTemplateState extends State<Bill_DocumentTemplate> {
                               Container(
                                 width: 400,
                                 padding: const EdgeInsets.all(4.0),
-                                decoration:  BoxDecoration(
+                                decoration: BoxDecoration(
                                   color: AppbackgroundColor.TiTile_Colors,
                                   borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(10),
@@ -304,7 +304,9 @@ class _Bill_DocumentTemplateState extends State<Bill_DocumentTemplate> {
                                         Text(
                                           (index + 1 == 1)
                                               ? 'เทมเพลต ${index + 1} ( Standard )'
-                                              : 'เทมเพลต ${index + 1} ',
+                                              : (index + 1 == 5)
+                                                  ? 'เทมเพลต ${index + 1} ( Lao - ລາວ )'
+                                                  : 'เทมเพลต ${index + 1} ',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             color: SettingScreen_Color

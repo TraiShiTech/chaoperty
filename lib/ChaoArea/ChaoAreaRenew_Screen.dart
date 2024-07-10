@@ -7853,8 +7853,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                 .size
                                                                 .width *
                                                             0.826,
-                                                    decoration:
-                                                         BoxDecoration(
+                                                    decoration: BoxDecoration(
                                                       color: AppbackgroundColor
                                                           .TiTile_Colors,
                                                       borderRadius:
@@ -12437,8 +12436,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                   .size
                                                                   .width *
                                                               0.825,
-                                                      decoration:
-                                                           BoxDecoration(
+                                                      decoration: BoxDecoration(
                                                         color:
                                                             AppbackgroundColor
                                                                 .TiTile_Colors,
@@ -15178,7 +15176,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                       .width -
                                                                   200,
                                                           decoration:
-                                                               BoxDecoration(
+                                                              BoxDecoration(
                                                             color: AppbackgroundColor
                                                                 .TiTile_Colors,
                                                             borderRadius: BorderRadius.only(
@@ -15242,7 +15240,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                       .width *
                                                                   0.83,
                                                           decoration:
-                                                               BoxDecoration(
+                                                              BoxDecoration(
                                                             color: AppbackgroundColor
                                                                 .TiTile_Colors,
                                                             borderRadius: BorderRadius.only(
@@ -15882,7 +15880,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                     .size
                                                     .width *
                                                 0.825,
-                                        decoration:  BoxDecoration(
+                                        decoration: BoxDecoration(
                                           color:
                                               AppbackgroundColor.TiTile_Colors,
                                           borderRadius: BorderRadius.only(
@@ -18757,7 +18755,8 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                     newValuePDFimg,
                                     tableData00,
                                     // (ser_user == null) ? '' : ser_user
-                                    '');
+                                    '',
+                                    '${DateFormat('dd-MM-yyyy').format(DateTime.now())}');
                               },
                             ),
                           ),

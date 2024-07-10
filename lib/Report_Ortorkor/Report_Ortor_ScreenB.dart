@@ -470,21 +470,24 @@ class _Report_Ortor_ScreenBState extends State<Report_Ortor_ScreenB> {
   }
 
 //////////---------------------------------------->Value_teNantDate_Daily
-  Future<Null> red_InvoiceDaily_bill() async {
-    String Serdata =
-        (zone_ser_Invoice_Mon.toString() == '0' || zone_ser_Invoice_Mon == null)
-            ? 'All'
-            : 'Allzone';
-
+  Future<Null> red_InvoiceDaily_bills() async {
+    // String? zone_ser_Invoice_Daily, zone_name_Invoice_Daily;
+    // String? zone_ser_Invoice_Mon, zone_name_Invoice_Mon;
+    // String? YE_Invoice_Mon, Mon_Invoice_Mon;
+    // var Value_InvoiceDate_Daily;
+    String Serdata2 = (zone_ser_Invoice_Daily.toString() == '0' ||
+            zone_ser_Invoice_Daily == null)
+        ? 'All'
+        : 'Allzone';
     setState(() {
       InvoiceModels.clear();
     });
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
 
-    String url = (Serdata.toString() == 'All')
-        ? '${MyConstant().domain}/GC_bill_invoiceDaily_historyReport.php?isAdd=true&ren=$ren&Serdata=$Serdata&serzone=$zone_ser_Invoice_Daily&dates=$Value_InvoiceDate_Daily'
-        : '${MyConstant().domain}/GC_bill_invoiceDaily_historyReport.php?isAdd=true&ren=$ren&Serdata=$Serdata&serzone=$zone_ser_Invoice_Daily&dates=$Value_InvoiceDate_Daily';
+    String url = (Serdata2.toString() == 'All')
+        ? '${MyConstant().domain}/GC_bill_invoiceDaily_historyOrtorReport.php?isAdd=true&ren=$ren&Serdata=$Serdata2&serzone=$zone_ser_Invoice_Daily&datex=$Value_InvoiceDate_Daily'
+        : '${MyConstant().domain}/GC_bill_invoiceDaily_historyOrtorReport.php?isAdd=true&ren=$ren&Serdata=$Serdata2&serzone=$zone_ser_Invoice_Daily&datex=$Value_InvoiceDate_Daily';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -508,66 +511,8 @@ class _Report_Ortor_ScreenBState extends State<Report_Ortor_ScreenB> {
           Await_Status_Report2 = null;
         });
       });
-    } catch (e) {}
-  }
-
-  ////////////----------------------->
-  Future<Null> red_Trans_selectIncome(ciddoc, docnoin, index) async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var ren = preferences.getString('renTalSer');
-    var user = preferences.getString('ser');
-    setState(() {
-      TranHisBillModels.clear();
-    });
-    String url =
-        '${MyConstant().domain}/GC_bill_pay_history_DailyReport.php?isAdd=true&ren=$ren&user=$user&ciddoc=$ciddoc&docnoin=$docnoin';
-    try {
-      var response = await http.get(Uri.parse(url));
-
-      var result = json.decode(response.body);
-      if (result.toString() != 'null') {
-        for (var map in result) {
-          TransReBillHistoryModel TranHisBillModels_Mons =
-              TransReBillHistoryModel.fromJson(map);
-          setState(() {
-            TranHisBillModels.add(TranHisBillModels_Mons);
-          });
-        }
-      }
     } catch (e) {
-      // print('Error-Dis(red_Trans_selectIncome) : ${e}');
-    }
-  }
-
-/////////////------------------------------------>
-  Future<Null> red_Trans_selectIncomeAll() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var ren = preferences.getString('renTalSer');
-    var user = preferences.getString('ser');
-    setState(() {
-      TranHisBillModels.clear();
-    });
-    var ser_Zone = (Type_search == 'Mon')
-        ? zone_ser_BillAwatCheck_Mon
-        : zone_ser_BillAwatCheck_Daily;
-
-    String url =
-        '${MyConstant().domain}/GC_bill_pay_historyselect_VerifiAllDisReport.php?isAdd=true&ren=$ren&mont_h=$Mon_BillAwatCheck_Mon&yea_r=$YE_BillAwatCheck_Mon&serzone=$ser_Zone&datex=$Value_BillAwatCheck_Daily&Typesearch=$Type_search';
-    try {
-      var response = await http.get(Uri.parse(url));
-
-      var result = json.decode(response.body);
-      if (result.toString() != 'null') {
-        for (var map in result) {
-          TransReBillHistoryModel TranHisBillModels_Mons =
-              TransReBillHistoryModel.fromJson(map);
-          setState(() {
-            TranHisBillModels.add(TranHisBillModels_Mons);
-          });
-        }
-      }
-    } catch (e) {
-      // print('Error-Dis(red_Trans_selectIncomeAll) : ${e}');
+      print(e);
     }
   }
 
@@ -620,6 +565,7 @@ class _Report_Ortor_ScreenBState extends State<Report_Ortor_ScreenB> {
         setState(() {
           Value_InvoiceDate_Daily = "${formatter.format(result)}";
         });
+        print("${Value_InvoiceDate_Daily}");
         // if (Value_Chang_Zone_Daily != null) {
         //   red_Trans_bill();
         //   red_Trans_billDailyBank();
@@ -629,240 +575,6 @@ class _Report_Ortor_ScreenBState extends State<Report_Ortor_ScreenB> {
       }
     });
   }
-
-///////--------------------------------------------------->
-  ///
-  Future<Null> red_Trans_bill_Mon() async {
-    setState(() {
-      TransReBillModels_.clear();
-    });
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var ren = preferences.getString('renTalSer');
-    String url =
-        '${MyConstant().domain}/GC_bill_pay_BC_Verifi_ReportMon.php?isAdd=true&ren=$ren&mont_h=$Mon_BillAwatCheck_Mon&yea_r=$YE_BillAwatCheck_Mon&serzone=$zone_ser_BillAwatCheck_Mon';
-    try {
-      var response = await http.get(Uri.parse(url));
-
-      var result = json.decode(response.body);
-      // print('result $ciddoc');
-      if (result.toString() != 'null') {
-        for (var map in result) {
-          TransReBillModel transReBillModel = TransReBillModel.fromJson(map);
-          setState(() {
-            TransReBillModels_.add(transReBillModel);
-          });
-        }
-        Future.delayed(Duration(milliseconds: 800), () async {
-          setState(() {
-            Await_Status_Report3 = null;
-          });
-          // print('red_Trans_bill_Mon : ${TransReBillModels_.length}');
-        });
-      }
-    } catch (e) {}
-  }
-
-///////--------------------------------------------------->
-  ///
-  Future<Null> red_Trans_bill_Daily() async {
-    setState(() {
-      TransReBillModels_.clear();
-    });
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var ren = preferences.getString('renTalSer');
-    String url =
-        '${MyConstant().domain}/GC_bill_pay_BC_Verifi_ReportDaily.php?isAdd=true&ren=$ren&date=$Value_BillAwatCheck_Daily&serzone=$zone_ser_BillAwatCheck_Daily';
-    try {
-      var response = await http.get(Uri.parse(url));
-
-      var result = json.decode(response.body);
-      // print('result $ciddoc');
-      if (result.toString() != 'null') {
-        for (var map in result) {
-          TransReBillModel transReBillModel = TransReBillModel.fromJson(map);
-          setState(() {
-            TransReBillModels_.add(transReBillModel);
-          });
-        }
-        Future.delayed(Duration(milliseconds: 800), () async {
-          setState(() {
-            Await_Status_Report4 = null;
-          });
-          // print('red_Trans_bill_Daily : ${TransReBillModels_.length}');
-        });
-      }
-    } catch (e) {}
-  }
-
-  ////////////-----------------------(วันที่รายงานประจำวัน)
-  Future<Null> _select_Date_DailyBillAwatCheck(BuildContext context) async {
-    setState(() {
-      zone_ser_BillAwatCheck_Mon = null;
-      zone_name_BillAwatCheck_Mon = null;
-      YE_BillAwatCheck_Mon = null;
-      Mon_BillAwatCheck_Mon = null;
-      Ser_BodySta3 = 0;
-      Ser_BodySta4 = 0;
-    });
-    final Future<DateTime?> picked = showDatePicker(
-      // locale: const Locale('th', 'TH'),
-      helpText: 'เลือกวันที่', confirmText: 'ตกลง',
-      cancelText: 'ยกเลิก',
-      context: context,
-      initialDate: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day - 1),
-      initialDatePickerMode: DatePickerMode.day,
-      firstDate: DateTime(2023, 1, 1),
-      lastDate: DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day),
-      // selectableDayPredicate: _decideWhichDayToEnable,
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: AppBarColors.ABar_Colors, // header background color
-              onPrimary: Colors.white, // header text color
-              onSurface: Colors.black, // body text color
-            ),
-            textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                primary: Colors.black, // button text color
-              ),
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-    picked.then((result) {
-      if (picked != null) {
-        var formatter = DateFormat('y-MM-d');
-        print("${formatter.format(result!)}");
-        setState(() {
-          Value_BillAwatCheck_Daily = "${formatter.format(result)}";
-        });
-      }
-    });
-  }
-  //////////------------------>
-
-/////////////---------------------------------------->
-  slip_Widget(Url, doc_) {
-    return showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-          title: Center(
-            child: Column(
-              children: [
-                Text(
-                  '${doc_}',
-                  maxLines: 1,
-                  textAlign: TextAlign.start,
-                  style: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: FontWeight_.Fonts_T,
-                      fontSize: 14.0),
-                ),
-              ],
-            ),
-          ),
-          content: SingleChildScrollView(
-              child: ListBody(children: <Widget>[
-            SizedBox(
-              width: 300,
-              child: Image.network('$Url'),
-            )
-          ])),
-          actions: <Widget>[
-            SizedBox(
-              // width: 300,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '*** วิธีตรวจสอบ "สลิป" เบื้องต้น',
-                    style: const TextStyle(
-                        color: Colors.red,
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: Font_.Fonts_T),
-                  ),
-                  Text(
-                    '1. สังเกตความละเอียดของ ตัวเลข หรือ ตัวหนังสือ',
-                    style: const TextStyle(
-                        color: Colors.red,
-                        fontSize: 12,
-                        fontFamily: Font_.Fonts_T),
-                  ),
-                  Text(
-                    '2. เปิดแอปฯ ธนาคารขึ้นมา สแกน QR CODE บนสลิปโอนเงิน',
-                    style: const TextStyle(
-                        color: Colors.red,
-                        fontSize: 12,
-                        fontFamily: Font_.Fonts_T),
-                  ),
-                  Text(
-                    '3. ใช้  Mobile Banking เช็ก ยอดเงิน วัน-เวลาที่โอน ตรงกับในสลิปที่ได้มาหรือไม่',
-                    style: const TextStyle(
-                        color: Colors.red,
-                        fontSize: 12,
-                        fontFamily: Font_.Fonts_T),
-                  ),
-                  Text(
-                    '4. ควรตรวจสอบสลิปทันทีที่ได้รับมา เพราะ QR code บนสลิปของบางธนาคารจะมีอายุจำกัด ตั้งเเต่ 7 วัน ถึง 60 วัน ',
-                    style: const TextStyle(
-                        color: Colors.red,
-                        fontSize: 12,
-                        fontFamily: Font_.Fonts_T),
-                  ),
-                  const SizedBox(
-                    height: 5.0,
-                  ),
-                  const Divider(
-                    color: Colors.grey,
-                    height: 4.0,
-                  ),
-                  const SizedBox(
-                    height: 5.0,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          width: 100,
-                          decoration: const BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10)),
-                          ),
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextButton(
-                            onPressed: () => Navigator.pop(context, 'OK'),
-                            child: const Text(
-                              'ปิด',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ]),
-    );
-  }
-///////////------------------------------------------------------->
 
 ////////////------------------------------------------>
   Widget build(BuildContext context) {
@@ -1455,387 +1167,361 @@ class _Report_Ortor_ScreenBState extends State<Report_Ortor_ScreenB> {
                   ),
                 ),
               ),
-              // const SizedBox(
-              //   height: 5.0,
-              // ),
-              // Row(
-              //   children: [
-              //     Container(
-              //       width: MediaQuery.of(context).size.width / 2,
-              //       height: 4.0,
-              //       child: Divider(
-              //         color: Colors.grey[300],
-              //         height: 4.0,
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              // const SizedBox(   AND c_contract.zser = '$Serzone'
-              //   height: 5.0,
-              // ),
-              // ScrollConfiguration(
-              //   behavior:
-              //       ScrollConfiguration.of(context).copyWith(dragDevices: {
-              //     PointerDeviceKind.touch,
-              //     PointerDeviceKind.mouse,
-              //   }),
-              //   child: SingleChildScrollView(
-              //     scrollDirection: Axis.horizontal,
-              //     child: Row(
-              //       children: [
-              //         const Padding(
-              //           padding: EdgeInsets.all(8.0),
-              //           child: Text(
-              //             'วันที่ที่ครบกำหนดชำระ :',
-              //             style: TextStyle(
-              //               color: ReportScreen_Color.Colors_Text2_,
-              //               // fontWeight: FontWeight.bold,
-              //               fontFamily: Font_.Fonts_T,
-              //             ),
-              //           ),
-              //         ),
-              //         Padding(
-              //           padding: const EdgeInsets.all(8.0),
-              //           child: InkWell(
-              //             onTap: () {
-              //               _select_Date_Daily(context);
-              //             },
-              //             child: Container(
-              //                 decoration: BoxDecoration(
-              //                   color: AppbackgroundColor.Sub_Abg_Colors,
-              //                   borderRadius: const BorderRadius.only(
-              //                       topLeft: Radius.circular(10),
-              //                       topRight: Radius.circular(10),
-              //                       bottomLeft: Radius.circular(10),
-              //                       bottomRight: Radius.circular(10)),
-              //                   border:
-              //                       Border.all(color: Colors.grey, width: 1),
-              //                 ),
-              //                 width: 120,
-              //                 padding: const EdgeInsets.all(8.0),
-              //                 child: Center(
-              //                   child: Text(
-              //                     (Value_InvoiceDate_Daily == null)
-              //                         ? 'เลือก'
-              //                         : '$Value_InvoiceDate_Daily',
-              //                     style: const TextStyle(
-              //                       color: ReportScreen_Color.Colors_Text2_,
-              //                       // fontWeight: FontWeight.bold,
-              //                       fontFamily: Font_.Fonts_T,
-              //                     ),
-              //                   ),
-              //                 )),
-              //           ),
-              //         ),
-              //         const Padding(
-              //           padding: EdgeInsets.all(8.0),
-              //           child: Text(
-              //             'โซน :',
-              //             style: TextStyle(
-              //               color: ReportScreen_Color.Colors_Text2_,
-              //               // fontWeight: FontWeight.bold,
-              //               fontFamily: Font_.Fonts_T,
-              //             ),
-              //           ),
-              //         ),
-              //         Padding(
-              //           padding: const EdgeInsets.all(8.0),
-              //           child: Container(
-              //             decoration: const BoxDecoration(
-              //               color: AppbackgroundColor.Sub_Abg_Colors,
-              //               borderRadius: BorderRadius.only(
-              //                   topLeft: Radius.circular(10),
-              //                   topRight: Radius.circular(10),
-              //                   bottomLeft: Radius.circular(10),
-              //                   bottomRight: Radius.circular(10)),
-              //               // border: Border.all(color: Colors.grey, width: 1),
-              //             ),
-              //             width: 260,
-              //             padding: const EdgeInsets.all(8.0),
-              //             child: DropdownButtonFormField2(
-              //               value: zone_name_Invoice_Daily,
-              //               alignment: Alignment.center,
-              //               focusColor: Colors.white,
-              //               autofocus: false,
-              //               decoration: InputDecoration(
-              //                 enabled: true,
-              //                 hoverColor: Colors.brown,
-              //                 prefixIconColor: Colors.blue,
-              //                 fillColor: Colors.white.withOpacity(0.05),
-              //                 filled: false,
-              //                 isDense: true,
-              //                 contentPadding: EdgeInsets.zero,
-              //                 border: OutlineInputBorder(
-              //                   borderSide: const BorderSide(color: Colors.red),
-              //                   borderRadius: BorderRadius.circular(10),
-              //                 ),
-              //                 focusedBorder: const OutlineInputBorder(
-              //                   borderRadius: BorderRadius.only(
-              //                     topRight: Radius.circular(10),
-              //                     topLeft: Radius.circular(10),
-              //                     bottomRight: Radius.circular(10),
-              //                     bottomLeft: Radius.circular(10),
-              //                   ),
-              //                   borderSide: BorderSide(
-              //                     width: 1,
-              //                     color: Color.fromARGB(255, 231, 227, 227),
-              //                   ),
-              //                 ),
-              //               ),
-              //               isExpanded: false,
+              const SizedBox(
+                height: 5.0,
+              ),
+              Row(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width / 2,
+                    height: 4.0,
+                    child: Divider(
+                      color: Colors.grey[300],
+                      height: 4.0,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 5.0,
+              ),
+              ScrollConfiguration(
+                behavior:
+                    ScrollConfiguration.of(context).copyWith(dragDevices: {
+                  PointerDeviceKind.touch,
+                  PointerDeviceKind.mouse,
+                }),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'วันที่ที่ครบกำหนดชำระ :',
+                          style: TextStyle(
+                            color: ReportScreen_Color.Colors_Text2_,
+                            // fontWeight: FontWeight.bold,
+                            fontFamily: Font_.Fonts_T,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          onTap: () {
+                            _select_Date_Daily(context);
+                          },
+                          child: Container(
+                              decoration: BoxDecoration(
+                                color: AppbackgroundColor.Sub_Abg_Colors,
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                border:
+                                    Border.all(color: Colors.grey, width: 1),
+                              ),
+                              width: 120,
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                child: Text(
+                                  (Value_InvoiceDate_Daily == null)
+                                      ? 'เลือก'
+                                      : '$Value_InvoiceDate_Daily',
+                                  style: const TextStyle(
+                                    color: ReportScreen_Color.Colors_Text2_,
+                                    // fontWeight: FontWeight.bold,
+                                    fontFamily: Font_.Fonts_T,
+                                  ),
+                                ),
+                              )),
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'โซน :',
+                          style: TextStyle(
+                            color: ReportScreen_Color.Colors_Text2_,
+                            // fontWeight: FontWeight.bold,
+                            fontFamily: Font_.Fonts_T,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: AppbackgroundColor.Sub_Abg_Colors,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            // border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                          width: 260,
+                          padding: const EdgeInsets.all(8.0),
+                          child: DropdownButtonFormField2(
+                            value: zone_name_Invoice_Daily,
+                            alignment: Alignment.center,
+                            focusColor: Colors.white,
+                            autofocus: false,
+                            decoration: InputDecoration(
+                              enabled: true,
+                              hoverColor: Colors.brown,
+                              prefixIconColor: Colors.blue,
+                              fillColor: Colors.white.withOpacity(0.05),
+                              filled: false,
+                              isDense: true,
+                              contentPadding: EdgeInsets.zero,
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(color: Colors.red),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  topLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                ),
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(255, 231, 227, 227),
+                                ),
+                              ),
+                            ),
+                            isExpanded: false,
 
-              //               icon: const Icon(
-              //                 Icons.arrow_drop_down,
-              //                 color: Colors.black,
-              //               ),
-              //               style: const TextStyle(
-              //                 color: Colors.grey,
-              //               ),
-              //               iconSize: 20,
-              //               buttonHeight: 40,
-              //               buttonWidth: 250,
-              //               // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-              //               dropdownDecoration: BoxDecoration(
-              //                 // color: Colors
-              //                 //     .amber,
-              //                 borderRadius: BorderRadius.circular(10),
-              //                 border: Border.all(color: Colors.white, width: 1),
-              //               ),
-              //               items: zoneModels_report
-              //                   .map((item) => DropdownMenuItem<String>(
-              //                         value: '${item.zn}',
-              //                         child: Text(
-              //                           '${item.zn}',
-              //                           textAlign: TextAlign.center,
-              //                           style: const TextStyle(
-              //                             overflow: TextOverflow.ellipsis,
-              //                             fontSize: 14,
-              //                             color: Colors.grey,
-              //                           ),
-              //                         ),
-              //                       ))
-              //                   .toList(),
+                            icon: const Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black,
+                            ),
+                            style: const TextStyle(
+                              color: Colors.grey,
+                            ),
+                            iconSize: 20,
+                            buttonHeight: 40,
+                            buttonWidth: 250,
+                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                            dropdownDecoration: BoxDecoration(
+                              // color: Colors
+                              //     .amber,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            items: zoneModels_report
+                                .map((item) => DropdownMenuItem<String>(
+                                      value: '${item.zn}',
+                                      child: Text(
+                                        '${item.zn}',
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          overflow: TextOverflow.ellipsis,
+                                          fontSize: 14,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ))
+                                .toList(),
 
-              //               onChanged: (value) async {
-              //                 int selectedIndex = zoneModels_report
-              //                     .indexWhere((item) => item.zn == value);
+                            onChanged: (value) async {
+                              int selectedIndex = zoneModels_report
+                                  .indexWhere((item) => item.zn == value);
 
-              //                 setState(() {
-              //                   zone_name_Invoice_Daily = value.toString();
-              //                   zone_ser_Invoice_Daily =
-              //                       zoneModels_report[selectedIndex].ser!;
-              //                 });
-              //                 print(
-              //                     'Selected Index: $zone_name_Invoice_Daily  //${zone_ser_Invoice_Daily}');
-              //               },
-              //             ),
-              //           ),
-              //         ),
-              //         Padding(
-              //           padding: const EdgeInsets.all(8.0),
-              //           child: InkWell(
-              //             onTap: () async {
-              //               setState(() {
-              //                 Ser_BodySta2 = 1;
-              //               });
-              //               if (Ser_BodySta2 == 1 &&
-              //                   zone_ser_Invoice_Daily != null &&
-              //                   Value_InvoiceDate_Daily != null) {
-              //                 Dia_log();
-              //                 // red_InvoiceDaily_bill();
-              //               }
-              //             },
-              //             child: Container(
-              //                 width: 100,
-              //                 padding: const EdgeInsets.all(8.0),
-              //                 decoration: BoxDecoration(
-              //                   color: Colors.green[700],
-              //                   borderRadius: const BorderRadius.only(
-              //                       topLeft: Radius.circular(10),
-              //                       topRight: Radius.circular(10),
-              //                       bottomLeft: Radius.circular(10),
-              //                       bottomRight: Radius.circular(10)),
-              //                 ),
-              //                 child: Center(
-              //                   child: Text(
-              //                     'ค้นหา',
-              //                     style: TextStyle(
-              //                       color: Colors.white,
-              //                       fontWeight: FontWeight.bold,
-              //                       fontFamily: FontWeight_.Fonts_T,
-              //                     ),
-              //                   ),
-              //                 )),
-              //           ),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: SingleChildScrollView(
-              //     scrollDirection: Axis.horizontal,
-              //     child: Row(
-              //       children: [
-              //         InkWell(
-              //             child: Container(
-              //               decoration: BoxDecoration(
-              //                 color: Colors.yellow[600],
-              //                 borderRadius: const BorderRadius.only(
-              //                     topLeft: Radius.circular(10),
-              //                     topRight: Radius.circular(10),
-              //                     bottomLeft: Radius.circular(10),
-              //                     bottomRight: Radius.circular(10)),
-              //                 border: Border.all(color: Colors.grey, width: 1),
-              //               ),
-              //               padding: const EdgeInsets.all(8.0),
-              //               child: const Center(
-              //                 child: Row(
-              //                   mainAxisAlignment: MainAxisAlignment.center,
-              //                   children: [
-              //                     Text(
-              //                       'เรียกดู',
-              //                       style: TextStyle(
-              //                         color: ReportScreen_Color.Colors_Text1_,
-              //                         fontWeight: FontWeight.bold,
-              //                         fontFamily: FontWeight_.Fonts_T,
-              //                       ),
-              //                     ),
-              //                     Icon(
-              //                       Icons.navigate_next,
-              //                       color: Colors.grey,
-              //                     )
-              //                   ],
-              //                 ),
-              //               ),
-              //             ),
-              //             onTap: (Ser_BodySta2 == 1)
-              //                 ? () async {
-              //                     Invoice_Widget();
-              //                     // Insert_log.Insert_logs(
-              //                     //     'รายงาน', 'กดดูรายงานการแจ้งซ่อม');
-              //                     // RE_maintenance_Widget();
-              //                   }
-              //                 : null),
-              //         (Ser_BodySta2 != 1)
-              //             ? Padding(
-              //                 padding: EdgeInsets.all(8.0),
-              //                 child: Text(
-              //                   'รายงานข้อมูลใบแจ้งหนี้/วางบิลรายวัน [Exclusive-B-Ortor]',
-              //                   style: TextStyle(
-              //                     color: ReportScreen_Color.Colors_Text2_,
-              //                     // fontWeight: FontWeight.bold,
-              //                     fontFamily: Font_.Fonts_T,
-              //                   ),
-              //                 ),
-              //               )
-              //             : (InvoiceModels.isEmpty)
-              //                 ? Padding(
-              //                     padding: const EdgeInsets.all(8.0),
-              //                     child: Text(
-              //                       (InvoiceModels.isEmpty &&
-              //                               Value_InvoiceDate_Daily != null &&
-              //                               Ser_BodySta2 == 1)
-              //                           ? 'รายงานข้อมูลใบแจ้งหนี้/วางบิลรายวัน [Exclusive-B-Ortor] (ไม่พบข้อมูล ✖️)'
-              //                           : 'รายงานข้อมูลใบแจ้งหนี้/วางบิลรายวัน [Exclusive-B-Ortor]',
-              //                       style: const TextStyle(
-              //                         color: ReportScreen_Color.Colors_Text2_,
-              //                         // fontWeight: FontWeight.bold,
-              //                         fontFamily: Font_.Fonts_T,
-              //                       ),
-              //                     ),
-              //                   )
-              //                 : (Await_Status_Report2 != null &&
-              //                         Ser_BodySta2 == 1)
-              //                     ? SizedBox(
-              //                         // height: 20,
-              //                         child: Row(
-              //                         children: [
-              //                           Container(
-              //                               padding: const EdgeInsets.all(4.0),
-              //                               child:
-              //                                   const CircularProgressIndicator()),
-              //                           const Padding(
-              //                             padding: EdgeInsets.all(8.0),
-              //                             child: Text(
-              //                               'กำลังโหลดรายงานข้อมูลใบแจ้งหนี้/วางบิลรายวัน [Exclusive-B-Ortor]...',
-              //                               style: TextStyle(
-              //                                 color: ReportScreen_Color
-              //                                     .Colors_Text2_,
-              //                                 // fontWeight: FontWeight.bold,
-              //                                 fontFamily: Font_.Fonts_T,
-              //                               ),
-              //                             ),
-              //                           ),
-              //                         ],
-              //                       ))
-              //                     : (InvoiceModels.length != 0 &&
-              //                             Await_Status_Report2 == 1 &&
-              //                             Ser_BodySta2 == 1)
-              //                         ? SizedBox(
-              //                             // height: 20,
-              //                             child: Row(
-              //                             children: [
-              //                               Container(
-              //                                   padding:
-              //                                       const EdgeInsets.all(4.0),
-              //                                   child:
-              //                                       const CircularProgressIndicator()),
-              //                               const Padding(
-              //                                 padding: EdgeInsets.all(8.0),
-              //                                 child: Text(
-              //                                   'รายงานข้อมูลใบแจ้งหนี้/วางบิลรายวัน [Exclusive-B-Ortor]...',
-              //                                   style: TextStyle(
-              //                                     color: ReportScreen_Color
-              //                                         .Colors_Text2_,
-              //                                     // fontWeight: FontWeight.bold,
-              //                                     fontFamily: Font_.Fonts_T,
-              //                                   ),
-              //                                 ),
-              //                               ),
-              //                             ],
-              //                           ))
-              //                         : const Padding(
-              //                             padding: EdgeInsets.all(8.0),
-              //                             child: Text(
-              //                               'รายงานข้อมูลใบแจ้งหนี้/วางบิลรายวัน [Exclusive-B-Ortor] ✔️',
-              //                               style: TextStyle(
-              //                                 color: ReportScreen_Color
-              //                                     .Colors_Text2_,
-              //                                 // fontWeight: FontWeight.bold,
-              //                                 fontFamily: Font_.Fonts_T,
-              //                               ),
-              //                             ),
-              //                           ),
-              //         Padding(
-              //           padding: EdgeInsets.all(4.0),
-              //           child: Container(
-              //             decoration: BoxDecoration(
-              //               color: Colors.lime[200],
+                              setState(() {
+                                zone_name_Invoice_Daily = value.toString();
+                                zone_ser_Invoice_Daily =
+                                    zoneModels_report[selectedIndex].ser!;
+                              });
+                              // print(
+                              //     'Selected Index: $zone_name_Invoice_Daily  //${zone_ser_Invoice_Daily}');
+                            },
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          onTap: () async {
+                            setState(() {
+                              Ser_BodySta2 = 1;
+                            });
+                            if (Ser_BodySta2 == 1 &&
+                                zone_ser_Invoice_Daily != null &&
+                                Value_InvoiceDate_Daily != null) {
+                              Dia_log();
+                              red_InvoiceDaily_bills();
+                            }
+                          },
+                          child: Container(
+                              width: 100,
+                              padding: const EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                color: Colors.green[700],
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'ค้นหา',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T,
+                                  ),
+                                ),
+                              )),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      InkWell(
+                          onTap: (Ser_BodySta2 != 1)
+                              ? null
+                              : () async {
+                                  // Insert_log.Insert_logs(
+                                  //     'รายงาน', 'กดดูรายงานการแจ้งซ่อม');
+                                  Invoice_Widget();
+                                },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.yellow[600],
+                              borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                              border: Border.all(color: Colors.grey, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'เรียกดู',
+                                    style: TextStyle(
+                                      color: ReportScreen_Color.Colors_Text1_,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T,
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.navigate_next,
+                                    color: Colors.grey,
+                                  )
+                                ],
+                              ),
+                            ),
+                          )),
+                      (Ser_BodySta2 != 1)
+                          ? Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                'รายงานข้อมูลใบแจ้งหนี้/วางบิล(รายวัน) [Exclusive-B-Ortor] ',
+                                style: TextStyle(
+                                  color: ReportScreen_Color.Colors_Text2_,
+                                  // fontWeight: FontWeight.bold,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                              ),
+                            )
+                          : (InvoiceModels.isEmpty)
+                              ? Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    (InvoiceModels.isEmpty &&
+                                            zone_name_Invoice_Daily != null &&
+                                            Await_Status_Report2 != null)
+                                        ? 'รายงานข้อมูลใบแจ้งหนี้/วางบิล(รายวัน)  [Exclusive-B-Ortor]  (ไม่พบข้อมูล ✖️)'
+                                        : 'รายงานข้อมูลใบแจ้งหนี้/วางบิล(รายวัน)  [Exclusive-B-Ortor] ',
+                                    style: const TextStyle(
+                                      color: ReportScreen_Color.Colors_Text2_,
+                                      // fontWeight: FontWeight.bold,
+                                      fontFamily: Font_.Fonts_T,
+                                    ),
+                                  ),
+                                )
+                              : (InvoiceModels.length != 0 &&
+                                      Await_Status_Report2 != null &&
+                                      Ser_BodySta2 == 1)
+                                  ? SizedBox(
+                                      // height: 20,
+                                      child: Row(
+                                      children: [
+                                        Container(
+                                            padding: const EdgeInsets.all(4.0),
+                                            child:
+                                                const CircularProgressIndicator()),
+                                        const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text(
+                                            'กำลังโหลดรายงานข้อมูลใบแจ้งหนี้/วางบิล(รายวัน)  [Exclusive-B-Ortor] ...',
+                                            style: TextStyle(
+                                              color: ReportScreen_Color
+                                                  .Colors_Text2_,
+                                              // fontWeight: FontWeight.bold,
+                                              fontFamily: Font_.Fonts_T,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ))
+                                  : const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'รายงานข้อมูลใบแจ้งหนี้/วางบิล(รายวัน)  [Exclusive-B-Ortor] ✔️',
+                                        style: TextStyle(
+                                          color:
+                                              ReportScreen_Color.Colors_Text2_,
+                                          // fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T,
+                                        ),
+                                      ),
+                                    ),
+                      Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.lime[200],
 
-              //               borderRadius: BorderRadius.only(
-              //                   topLeft: Radius.circular(10),
-              //                   topRight: Radius.circular(10),
-              //                   bottomLeft: Radius.circular(10),
-              //                   bottomRight: Radius.circular(10)),
-              //               // border: Border.all(color: Colors.grey, width: 1),
-              //             ),
-              //             padding: EdgeInsets.all(4.0),
-              //             child: Text(
-              //               'พิเศษ',
-              //               style: TextStyle(
-              //                 color: Colors.red,
-              //                 fontWeight: FontWeight.bold,
-              //                 fontFamily: Font_.Fonts_T,
-              //               ),
-              //             ),
-              //           ),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // ),
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            // border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                          padding: EdgeInsets.all(4.0),
+                          child: const Text(
+                            'พิเศษ',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: Font_.Fonts_T,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ])));
   }
 
@@ -2294,14 +1980,61 @@ class _Report_Ortor_ScreenBState extends State<Report_Ortor_ScreenB> {
                                           ),
                                           Expanded(
                                             flex: 2,
-                                            child: Text(
-                                              'ยอดรับชำระ',
-                                              textAlign: TextAlign.end,
-                                              style: TextStyle(
-                                                color: ManageScreen_Color
-                                                    .Colors_Text1_,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: FontWeight_.Fonts_T,
+                                            child: Container(
+                                              color: Colors.green[300]!
+                                                  .withOpacity(0.6),
+                                              padding:
+                                                  const EdgeInsets.all(3.0),
+                                              child: Text(
+                                                'ค่าปรับ-รับชำระ',
+                                                textAlign: TextAlign.end,
+                                                style: TextStyle(
+                                                  color: ManageScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 2,
+                                            child: Container(
+                                              color: Colors.green[300]!
+                                                  .withOpacity(0.6),
+                                              padding:
+                                                  const EdgeInsets.all(3.0),
+                                              child: Text(
+                                                'ส่วนลด-รับชำระ',
+                                                textAlign: TextAlign.end,
+                                                style: TextStyle(
+                                                  color: ManageScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 2,
+                                            child: Container(
+                                              color: Colors.green[300]!
+                                                  .withOpacity(0.6),
+                                              padding:
+                                                  const EdgeInsets.all(3.0),
+                                              child: Text(
+                                                'ยอดสุทธิ-รับชำระ',
+                                                textAlign: TextAlign.end,
+                                                style: TextStyle(
+                                                  color: ManageScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -2876,6 +2609,70 @@ class _Report_Ortor_ScreenBState extends State<Report_Ortor_ScreenB> {
                                                     style: const TextStyle(
                                                       color: ManageScreen_Color
                                                           .Colors_Text2_,
+                                                      // fontWeight:
+                                                      //     FontWeight.bold,
+                                                      fontFamily: Font_.Fonts_T,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  flex: 2,
+                                                  child: Text(
+                                                    (InvoiceModels[index]
+                                                                    .docno ==
+                                                                null ||
+                                                            InvoiceModels[index]
+                                                                    .docno
+                                                                    .toString() ==
+                                                                '')
+                                                        ? 'รอชำระ'
+                                                        : '${nFormat.format(double.parse(InvoiceModels[index].pay_fine.toString()))}',
+                                                    textAlign: TextAlign.end,
+                                                    style: TextStyle(
+                                                      color: (InvoiceModels[
+                                                                          index]
+                                                                      .docno ==
+                                                                  null ||
+                                                              InvoiceModels[
+                                                                          index]
+                                                                      .docno
+                                                                      .toString() ==
+                                                                  '')
+                                                          ? Colors.orange[600]
+                                                          : ManageScreen_Color
+                                                              .Colors_Text2_,
+                                                      // fontWeight:
+                                                      //     FontWeight.bold,
+                                                      fontFamily: Font_.Fonts_T,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  flex: 2,
+                                                  child: Text(
+                                                    (InvoiceModels[index]
+                                                                    .docno ==
+                                                                null ||
+                                                            InvoiceModels[index]
+                                                                    .docno
+                                                                    .toString() ==
+                                                                '')
+                                                        ? 'รอชำระ'
+                                                        : '${nFormat.format(double.parse(InvoiceModels[index].pay_dis.toString()))}',
+                                                    textAlign: TextAlign.end,
+                                                    style: TextStyle(
+                                                      color: (InvoiceModels[
+                                                                          index]
+                                                                      .docno ==
+                                                                  null ||
+                                                              InvoiceModels[
+                                                                          index]
+                                                                      .docno
+                                                                      .toString() ==
+                                                                  '')
+                                                          ? Colors.orange[600]
+                                                          : ManageScreen_Color
+                                                              .Colors_Text2_,
                                                       // fontWeight:
                                                       //     FontWeight.bold,
                                                       fontFamily: Font_.Fonts_T,
@@ -3575,7 +3372,7 @@ class _Report_Ortor_ScreenBState extends State<Report_Ortor_ScreenB> {
 
 ////////////------------------------------------------>
   void InkWell_onTap(context) async {
-    await red_Trans_selectIncomeAll();
+    // await red_Trans_selectIncomeAll();
     await Dia_log();
     setState(() {
       NameFile_ = '';

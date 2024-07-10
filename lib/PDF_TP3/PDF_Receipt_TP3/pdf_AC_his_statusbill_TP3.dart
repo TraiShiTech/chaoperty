@@ -58,12 +58,13 @@ class Pdfgen_his_statusbill_TP3 {
       TitleType_Default_Receipt_Name,
       dis_sum_Pakan,
       sum_fee,
-      com_ment) async {
+      com_ment,
+      fonts_pdf) async {
     ////
     //// ------------>(ใบเสร็จรับเงินชั่วคราว paySrsscreen_)
     ///////
     final pdf = pw.Document();
-    final font = await rootBundle.load("fonts/THSarabunNew.ttf");
+    final font = await rootBundle.load("${fonts_pdf}");
     var Colors_pd = PdfColors.black;
     // final font = await rootBundle.load("fonts/Sarabun-Medium.ttf");
 
@@ -306,23 +307,41 @@ class Pdfgen_his_statusbill_TP3 {
                       pw.SizedBox(
                         height: 6,
                       ),
-                      pw.Text(
-                        (TitleType_Default_Receipt_Name != null)
-                            ? (numdoctax.toString() == '')
-                                ? 'ใบเสร็จรับเงิน [ $TitleType_Default_Receipt_Name ]'
-                                : 'ใบเสร็จรับเงิน/ใบกำกับภาษี [ $TitleType_Default_Receipt_Name ]'
-                            : (numdoctax.toString() == '')
-                                ? 'ใบเสร็จรับเงิน'
-                                : 'ใบเสร็จรับเงิน/ใบกำกับภาษี',
-                        maxLines: 1,
-                        textAlign: pw.TextAlign.right,
-                        style: pw.TextStyle(
-                          fontSize: font_Size,
-                          fontWeight: pw.FontWeight.bold,
-                          font: ttf,
-                          color: Colors_pd,
-                        ),
-                      ),
+                      (hasNonCashTransaction1)
+                          ? pw.Text(
+                              (TitleType_Default_Receipt_Name != null)
+                                  ? (numdoctax.toString() == '')
+                                      ? 'บิลเงินสด [ $TitleType_Default_Receipt_Name ]'
+                                      : 'บิลเงินสด/ใบกำกับภาษี [ $TitleType_Default_Receipt_Name ]'
+                                  : (numdoctax.toString() == '')
+                                      ? 'บิลเงินสด'
+                                      : 'บิลเงินสด/ใบกำกับภาษี',
+                              maxLines: 1,
+                              textAlign: pw.TextAlign.right,
+                              style: pw.TextStyle(
+                                fontSize: font_Size,
+                                fontWeight: pw.FontWeight.bold,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
+                            )
+                          : pw.Text(
+                              (TitleType_Default_Receipt_Name != null)
+                                  ? (numdoctax.toString() == '')
+                                      ? 'ใบเสร็จรับเงิน [ $TitleType_Default_Receipt_Name ]'
+                                      : 'ใบเสร็จรับเงิน/ใบกำกับภาษี [ $TitleType_Default_Receipt_Name ]'
+                                  : (numdoctax.toString() == '')
+                                      ? 'ใบเสร็จรับเงิน'
+                                      : 'ใบเสร็จรับเงิน/ใบกำกับภาษี',
+                              maxLines: 1,
+                              textAlign: pw.TextAlign.right,
+                              style: pw.TextStyle(
+                                fontSize: font_Size,
+                                fontWeight: pw.FontWeight.bold,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
+                            ),
                       pw.Text(
                         (numdoctax.toString() == '')
                             ? 'เลขที่ชำระ : $numinvoice'
@@ -348,7 +367,7 @@ class Pdfgen_his_statusbill_TP3 {
                       pw.Text(
                         (ref_invoice.length == 0)
                             ? ''
-                            : 'อ้างอิงเลขที่ : ${ref_invoice.map((model) => model).join(', ')}',
+                            : 'อ้างอิงเลขที่ : ${ref_invoice.toSet().map((model) => model).join(', ')}',
                         // (ref_invoice == null || ref_invoice.toString() == '')
                         //     ? ''
                         //     : 'อ้างอิงเลขที่ : ${ref_invoice}',

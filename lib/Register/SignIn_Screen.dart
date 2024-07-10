@@ -6,6 +6,7 @@ import 'dart:js_interop';
 import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:chaoperty/Constant/Myconstant.dart';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
@@ -16,13 +17,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:http/http.dart' as http;
+import 'package:marquee/marquee.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import '../Model/GetC_color.dart';
 import '../AdminScaffold/AdminScaffold.dart';
 import '../Home/Home_Screen.dart';
 import '../INSERT_Log/Insert_log.dart';
 import '../Model/GetC_Otp.dart';
 import '../Model/GetUser_Model.dart';
+import '../Model/Get_Image_pro_model.dart';
+import '../Model/Get_Image_pro_set_model.dart';
+import '../Model/Get_Image_text_model.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 import 'SignIn_admin.dart';
@@ -38,16 +43,156 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  Color BG_cl = Color(0xfff3f3ee);
+  Color Fool_cl = Color.fromARGB(255, 141, 185, 90);
+  String? Fool_text, logo_url;
+//--------------------------------------->
   DateTime datex = DateTime.now();
   final Formbecause_ = TextEditingController();
   List<OtpModel> otpModels = [];
   String? ser_id, tem_id, user_id, Value_randomNumber, text_card = 'ID Card';
   // EmailOTP myauth = EmailOTP();
+  //////------------------------------>
+  List<ImageTextModel> imgList = [];
+  List<Widget> imageSliders = [];
+  List<String> textList = [];
+  List<ImageProModel> imageProModels = [];
+  List<ImageProSetModel> imageProSetModels = [];
+//////------------------------------>
   @override
   void initState() {
     super.initState();
     checkPreferance();
     read_GC_otp();
+    read_GC_color().then((value) {
+      for (var i = 0; i < imgList.length; i++) {
+        Widget imageSlider = Container(
+          child: Container(
+            margin: EdgeInsets.all(2.0),
+            child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                child: Stack(
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () async {},
+                      child: Image.network(imgList[i].image.toString(),
+                          fit: BoxFit.cover, width: 1500.0),
+                    ),
+                  ],
+                )),
+          ),
+        );
+        setState(() {
+          imageSliders.add(imageSlider);
+        });
+      }
+    });
+  }
+
+////////------------------------------------>
+  Future<Null> read_GC_color() async {
+    String url = '${MyConstant().domain}/GC_color.php?isAdd=true';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+
+      for (var map in result) {
+        Color_Model colorModels = Color_Model.fromJson(map);
+        if (colorModels.color_bg != null ||
+            colorModels.color_bg.toString() != '') {
+          setState(() {
+            BG_cl = Color(int.parse(colorModels.color_bg.toString()));
+          });
+        }
+
+        if (colorModels.color_fool != null ||
+            colorModels.color_fool.toString() != '') {
+          setState(() {
+            Fool_cl = Color(int.parse(colorModels.color_fool.toString()));
+          });
+        }
+        if (colorModels.text != null || colorModels.text.toString() != '') {
+          setState(() {
+            Fool_text = colorModels.text.toString();
+          });
+        }
+        if (colorModels.img != null || colorModels.img.toString() != '') {
+          setState(() {
+            logo_url = colorModels.img.toString();
+          });
+        }
+
+        setState(() {
+          if (colorModels.img == null || colorModels.img.toString() == '') {
+          } else {
+            var foderx = '${MyConstant().domain}/${colorModels.img.toString()}';
+            var urlx = colorModels.img;
+            Map<String, dynamic> map = Map();
+            map['image'] = foderx;
+            map['url'] = urlx;
+
+            ImageTextModel imageTextModel = ImageTextModel.fromJson(map);
+
+            imgList.add(imageTextModel);
+          }
+          if (colorModels.img2 == null || colorModels.img2.toString() == '') {
+          } else {
+            var foderx =
+                '${MyConstant().domain}/${colorModels.img2.toString()}';
+            var urlx = colorModels.img2;
+            Map<String, dynamic> map = Map();
+            map['image'] = foderx;
+            map['url'] = urlx;
+
+            ImageTextModel imageTextModel = ImageTextModel.fromJson(map);
+
+            imgList.add(imageTextModel);
+          }
+
+          if (colorModels.img3 == null || colorModels.img3.toString() == '') {
+          } else {
+            var foderx =
+                '${MyConstant().domain}/${colorModels.img3.toString()}';
+            var urlx = colorModels.img3;
+            Map<String, dynamic> map = Map();
+            map['image'] = foderx;
+            map['url'] = urlx;
+
+            ImageTextModel imageTextModel = ImageTextModel.fromJson(map);
+
+            imgList.add(imageTextModel);
+          }
+          if (colorModels.img4 == null || colorModels.img4.toString() == '') {
+          } else {
+            var foderx =
+                '${MyConstant().domain}/${colorModels.img4.toString()}';
+            var urlx = colorModels.img4;
+            Map<String, dynamic> map = Map();
+            map['image'] = foderx;
+            map['url'] = urlx;
+
+            ImageTextModel imageTextModel = ImageTextModel.fromJson(map);
+
+            imgList.add(imageTextModel);
+          }
+          if (colorModels.img5 == null || colorModels.img5.toString() == '') {
+          } else {
+            var foderx =
+                '${MyConstant().domain}/${colorModels.img5.toString()}';
+            var urlx = colorModels.img5;
+            Map<String, dynamic> map = Map();
+            map['image'] = foderx;
+            map['url'] = urlx;
+
+            ImageTextModel imageTextModel = ImageTextModel.fromJson(map);
+
+            imgList.add(imageTextModel);
+          }
+        });
+      }
+    } catch (e) {}
   }
 
   Future<Null> read_GC_otp() async {
@@ -137,7 +282,7 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
-            color: const Color(0xfff3f3ee),
+            color: BG_cl,
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             child: Column(
@@ -152,7 +297,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       width: MediaQuery.of(context).size.width,
 
                       decoration: BoxDecoration(
-                        color: const Color(0xfff3f3ee),
+                        color: BG_cl,
                         borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(0),
                             topRight: Radius.circular(0),
@@ -166,23 +311,89 @@ class _SignInScreenState extends State<SignInScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Padding(
-                                padding: (Responsive.isDesktop(context))
-                                    ? const EdgeInsets.all(30)
-                                    : const EdgeInsets.all(8),
-                                child: Container(
-                                  constraints: BoxConstraints(
-                                    minWidth: (Responsive.isDesktop(context))
-                                        ? 200
-                                        : 100,
-                                    maxWidth: (Responsive.isDesktop(context))
-                                        ? 400
-                                        : 200,
-                                  ),
-                                  child: const Image(
+                              padding: (Responsive.isDesktop(context))
+                                  ? const EdgeInsets.all(15)
+                                  : const EdgeInsets.all(8),
+                              child: Container(
+                                constraints: BoxConstraints(
+                                  minWidth: (Responsive.isDesktop(context))
+                                      ? 200
+                                      : 100,
+                                  maxWidth: (Responsive.isDesktop(context))
+                                      ? 600
+                                      : 300,
+                                  maxHeight: (Responsive.isDesktop(context))
+                                      ? 260
+                                      : 200,
+                                  minHeight: (Responsive.isDesktop(context))
+                                      ? 200
+                                      : 100,
+                                ),
+                                child: Center(
+                                  child: Image(
                                     image: AssetImage('images/LOGO.png'),
                                     // width: 200,
                                   ),
-                                )),
+                                ),
+                              ),
+                            ),
+                            // Padding(
+                            //       padding: (Responsive.isDesktop(context))
+                            //           ? const EdgeInsets.all(15)
+                            //           : const EdgeInsets.all(8),
+                            //       child: Container(
+                            //         constraints: BoxConstraints(
+                            //           minWidth: (Responsive.isDesktop(context))
+                            //               ? 200
+                            //               : 100,
+                            //           maxWidth: (Responsive.isDesktop(context))
+                            //               ? 600
+                            //               : 300,
+                            //           maxHeight: (Responsive.isDesktop(context))
+                            //               ? 260
+                            //               : 200,
+                            //           minHeight: (Responsive.isDesktop(context))
+                            //               ? 200
+                            //               : 100,
+                            //         ),
+                            //         child: (imgList.length > 0)
+                            //             ? Padding(
+                            //                 padding: const EdgeInsets.all(0.0),
+                            //                 child: Row(
+                            //                   crossAxisAlignment:
+                            //                       CrossAxisAlignment.start,
+                            //                   children: [
+                            //                     Expanded(
+                            //                       child: Container(
+                            //                         padding: EdgeInsets.all(0),
+                            //                         child: CarouselSlider(
+                            //                           options: CarouselOptions(
+                            //                             autoPlay: true,
+                            //                             aspectRatio: 2.0,
+                            //                             enlargeCenterPage: true,
+                            //                           ),
+                            //                           items: imageSliders,
+                            //                         ),
+                            //                       ),
+                            //                     ),
+                            //                   ],
+                            //                 ),
+                            //               )
+                            //             : (logo_url != null ||
+                            //                     logo_url.toString() != '' ||
+                            //                     logo_url.toString() != 'null')
+                            //                 ? Center(
+                            //                     child: Image.network(
+                            //                       logo_url.toString(),
+                            //                     ),
+                            //                   )
+                            //                 : Image(
+                            //                     image:
+                            //                         AssetImage('images/LOGO.png'),
+                            //                     // width: 200,
+                            //                   ),
+                            //       ),
+                            //     ),
                             Align(
                               alignment: Alignment.center,
                               child: Container(
@@ -414,9 +625,9 @@ class _SignInScreenState extends State<SignInScreen> {
                                                   ? 60
                                                   : 40,
                                           decoration: BoxDecoration(
-                                            color: Colors.lime[800],
+                                            color: Fool_cl,
                                             borderRadius: const BorderRadius
-                                                .only(
+                                                    .only(
                                                 topLeft: Radius.circular(20),
                                                 topRight: Radius.circular(20),
                                                 bottomLeft: Radius.circular(20),
@@ -489,9 +700,9 @@ class _SignInScreenState extends State<SignInScreen> {
                   //   maxWidth: MediaQuery.of(context).size.width / 1.05,
                   // ),
                   width: MediaQuery.of(context).size.width,
-                  height: (Responsive.isDesktop(context)) ? 100 : 50,
+                  height: (Responsive.isDesktop(context)) ? 80 : 50,
                   decoration: BoxDecoration(
-                    color: Colors.lightGreen[600],
+                    color: Fool_cl,
                     borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(0),
                         topRight: Radius.circular(0),
@@ -762,7 +973,11 @@ class _SignInScreenState extends State<SignInScreen> {
                                 (Responsive.isDesktop(context)) ? 20 : 15,
                             maxFontSize: 40,
                             maxLines: 1,
-                            '© 2023  Dzentric Co.,Ltd. All Rights Reserved',
+                            (Fool_text != null ||
+                                    Fool_text.toString() != '' ||
+                                    Fool_text.toString() != 'null')
+                                ? '${Fool_text}'
+                                : '© 2023  Dzentric Co.,Ltd. All Rights Reserved',
                             overflow: TextOverflow.ellipsis,
                             softWrap: false,
                             style: TextStyle(

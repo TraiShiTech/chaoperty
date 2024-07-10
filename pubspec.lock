@@ -25,6 +25,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.13.0"
+  api_guide:
+    dependency: "direct main"
+    description:
+      name: api_guide
+      sha256: "6dd9a1a324e715f2af5a29ebf88228e9d615a561811df7314ccce99c522d6a16"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   appflowy_editor:
     dependency: "direct main"
     description:
@@ -37,10 +45,10 @@ packages:
     dependency: transitive
     description:
       name: archive
-      sha256: ed7cc591a948744994714375caf9a2ce89e1d82e8243997c8a2994d57181c212
+      sha256: "20071638cbe4e5964a427cfa0e86dce55d060bc7d82d56f3554095d7239a8765"
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.5"
+    version: "3.4.2"
   args:
     dependency: transitive
     description:
@@ -642,10 +650,10 @@ packages:
     dependency: "direct dev"
     description:
       name: flutter_lints
-      sha256: aeb0b80a8b3709709c9cc496cdc027c5b3216796bc0af0ce1007eaf24464fd4c
+      sha256: a25a15ebbdfc33ab1cd26c63a6ee519df92338a9c10f122adda92938253bef04
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.3"
   flutter_localization:
     dependency: "direct main"
     description:
@@ -901,6 +909,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.8.0"
+  image_picker_web:
+    dependency: "direct main"
+    description:
+      name: image_picker_web
+      sha256: e1656f1ce48a614aefdf22ab73c0cc7e498fa7b78893ffdcc83171e7289092e0
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.1"
   image_picker_windows:
     dependency: transitive
     description:
@@ -953,10 +969,10 @@ packages:
     dependency: transitive
     description:
       name: lints
-      sha256: "5e4a9cd06d447758280a8ac2405101e0e2094d2a1dbdd3756aec3fe7775ba593"
+      sha256: "0a217c6c989d21039f1498c3ed9f3ed71b354e69873f13a8dfc3c9fe76f1b452"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.1"
+    version: "2.1.1"
   logging:
     dependency: transitive
     description:
@@ -1465,10 +1481,10 @@ packages:
     dependency: "direct main"
     description:
       name: shared_preferences
-      sha256: "396f85b8afc6865182610c0a2fc470853d56499f75f7499e2a73a9f0539d23d0"
+      sha256: "81429e4481e1ccfb51ede496e916348668fd0921627779233bd24cc3ff6abd02"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.2"
+    version: "2.2.2"
   shared_preferences_android:
     dependency: transitive
     description:
@@ -1497,10 +1513,10 @@ packages:
     dependency: transitive
     description:
       name: shared_preferences_platform_interface
-      sha256: fb5cf25c0235df2d0640ac1b1174f6466bd311f621574997ac59018a6664548d
+      sha256: d4ec5fc9ebb2f2e056c617112aa75dcf92fc2e4faaf2ae999caa297473f75d8a
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "2.3.1"
   shared_preferences_web:
     dependency: transitive
     description:
@@ -1602,6 +1618,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "20.4.54"
+  syncfusion_flutter_calendar:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_calendar
+      sha256: a91ba8f2ae2bd891004515fcae98330eb40b8bece639a5660ed27bdbb9917e54
+      url: "https://pub.dev"
+    source: hosted
+    version: "20.4.54"
   syncfusion_flutter_charts:
     dependency: "direct main"
     description:
@@ -1634,6 +1658,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "20.4.43-beta"
+  syncfusion_flutter_datepicker:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_datepicker
+      sha256: e4d4794d54f3a315046031d431a27e0d7350544b1bef0bcd1d2acf58f940dd37
+      url: "https://pub.dev"
+    source: hosted
+    version: "20.4.54"
   syncfusion_flutter_pdf:
     dependency: "direct main"
     description:
@@ -1730,6 +1762,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.1"
+  timezone:
+    dependency: transitive
+    description:
+      name: timezone
+      sha256: "24c8fcdd49a805d95777a39064862133ff816ebfffe0ceff110fb5960e557964"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.1"
+  translator:
+    dependency: "direct main"
+    description:
+      name: translator
+      sha256: "225ee22fc482736c593be5c232c0c5884b16d7cc42945c51ac73d9a0441dddcc"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.7"
   typed_data:
     dependency: transitive
     description:

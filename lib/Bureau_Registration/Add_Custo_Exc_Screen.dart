@@ -308,8 +308,7 @@ class _Add_Custo_EXC_ScreenState extends State<Add_Custo_EXC_Screen> {
 //////////------------------------------------------------------>
 
   Future<void> downloadAndSaveFile() async {
-    final url =
-        'https://www.dzentric.com/chao_perty/chao_api/Awaitdownload/FormMan_ADDCusto.xlsx';
+    final url = '${MyConstant().domain}/Awaitdownload/FormMan_ADDCusto.xlsx';
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
@@ -662,7 +661,7 @@ class _Add_Custo_EXC_ScreenState extends State<Add_Custo_EXC_Screen> {
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
                               padding: const EdgeInsets.all(8),
-                              decoration:  BoxDecoration(
+                              decoration: BoxDecoration(
                                 color: AppbackgroundColor.TiTile_Colors,
                                 borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(10),

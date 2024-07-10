@@ -61,7 +61,8 @@ class Pdfgen_BillingNoteInvlice_TP4 {
       img1,
       Preview_ser,
       End_Bill_Paydate,
-      TitleType_Default_Receipt_Name) async {
+      TitleType_Default_Receipt_Name,
+      fonts_pdf) async {
     int YearQRthai = await int.parse(DateFormat('yyyy')
             .format(DateTime.parse(End_Bill_Paydate))
             .toString()) +
@@ -72,7 +73,7 @@ class Pdfgen_BillingNoteInvlice_TP4 {
     //     .asUint8List(fontData.offsetInBytes, fontData.lengthInBytes);
     // final PdfFont font = PdfFont.of(pdf, data: dataint);
     // final PdfFont font = PdfFont.of(pdf, data: dataint);
-    final font = await rootBundle.load("fonts/THSarabunNew.ttf");
+    final font = await rootBundle.load("${fonts_pdf}");
     var Colors_pd = PdfColors.black;
     var nFormat = NumberFormat("#,##0.00", "en_US");
     var nFormat2 = NumberFormat("###0.00", "en_US");
@@ -893,7 +894,10 @@ class Pdfgen_BillingNoteInvlice_TP4 {
                         child: pw.Align(
                           alignment: pw.Alignment.centerRight,
                           child: pw.Text(
-                            '${tableData003[index][13]}',
+                            (tableData003[index][14].toString() != '0' &&
+                                    tableData003[index][14] != null)
+                                ? 'อัตราพิเศษ'
+                                : '${tableData003[index][13]}',
                             maxLines: 2,
                             textAlign: pw.TextAlign.right,
                             style: pw.TextStyle(

@@ -26,7 +26,7 @@ class Excgen_CMon_income_Report {
       zoneModels_report,
       zoneModels_report_Sub_zone,
       zoneModeels_report_Ser_Sub_zone,
-      _TransReBillModels_GropType,
+      _TransReBillModels_GropType_Mon,
       _TransReBillModels_GropType_Sub_zone,
       expModels) async {
     final x.Workbook workbook = x.Workbook();
@@ -167,7 +167,7 @@ class Excgen_CMon_income_Report {
     // sheet.getRangeByName('G1').cellStyle = globalStyle22;
 
     final x.Range range = sheet.getRangeByName('A1');
-    range.setText('รายงาน แสดงรายได้ประจำเดือน');
+    range.setText('รายงาน แสดงรายได้รายเดือน $renTal_name');
 // ExcelSheetProtectionOption
     final x.ExcelSheetProtectionOption options = x.ExcelSheetProtectionOption();
     options.all = true;
@@ -196,29 +196,29 @@ class Excgen_CMon_income_Report {
     // sheet.getRangeByName('F3').cellStyle = globalStyle22;
     // sheet.getRangeByName('G3').cellStyle = globalStyle22;
 
-    sheet.getRangeByName('A3').columnWidth = 50;
-    sheet.getRangeByName('B3').columnWidth = 25;
+    sheet.getRangeByName('A3').columnWidth = 35;
+    sheet.getRangeByName('B3').columnWidth = 35;
     // sheet.getRangeByName('C3').columnWidth = 18;
     // sheet.getRangeByName('D3').columnWidth = 18;
     // sheet.getRangeByName('E3').columnWidth = 18;
     // sheet.getRangeByName('F3').columnWidth = 18;
     // sheet.getRangeByName('G3').columnWidth = 18;
 
-    sheet.getRangeByName('A4').columnWidth = 50;
-    sheet.getRangeByName('B4').columnWidth = 25;
+    sheet.getRangeByName('A4').columnWidth = 35;
+    sheet.getRangeByName('B4').columnWidth = 35;
     // sheet.getRangeByName('C4').columnWidth = 18;
     // sheet.getRangeByName('D4').columnWidth = 18;
     // sheet.getRangeByName('E4').columnWidth = 18;
     // sheet.getRangeByName('F4').columnWidth = 18;
     // sheet.getRangeByName('G4').columnWidth = 18;
 
-    sheet.getRangeByName('A4').setText('โซน');
-    sheet.getRangeByName('B4').setText('ยอด');
-    // sheet.getRangeByName('C4').setText('เมตร');
-    // sheet.getRangeByName('D4').setText('7คณา');
-    // sheet.getRangeByName('E4').setText('บริหาร');
-    // sheet.getRangeByName('F4').setText('บ.3');
-    // sheet.getRangeByName('G4').setText('บ.4');
+    sheet.getRangeByName('A4').setText('รายการ');
+    sheet.getRangeByName('B4').setText('รวม');
+    // sheet.getRangeByName('C4').setText('2');
+    // sheet.getRangeByName('D4').setText('3');
+    // sheet.getRangeByName('E4').setText('4');
+    // sheet.getRangeByName('F4').setText('5');
+    // sheet.getRangeByName('G4').setText('รวม');
     sheet.getRangeByName('A4').cellStyle = globalStyle1;
     sheet.getRangeByName('B4').cellStyle = globalStyle1;
     // sheet.getRangeByName('C4').cellStyle = globalStyle1;
@@ -226,15 +226,16 @@ class Excgen_CMon_income_Report {
     // sheet.getRangeByName('E4').cellStyle = globalStyle1;
     // sheet.getRangeByName('F4').cellStyle = globalStyle1;
     // sheet.getRangeByName('G4').cellStyle = globalStyle1;
+/////////////////////////////////------------------------------------------------>
 
-    String calculateTotalBills_Zone(int index1) {
+    String calculateTotalBills_Zone(int index_day, int index1) {
       Set<String> uniqueDocnos = {};
       double totalBills = 0.0;
 
-      totalBills = (_TransReBillModels_GropType.length == 0)
+      totalBills = (_TransReBillModels_GropType_Mon[index_day].length == 0)
           ? 0.00
-          : double.parse((_TransReBillModels_GropType.map((e) =>
-              (e.zser == null)
+          : double.parse((_TransReBillModels_GropType_Mon[index_day]
+              .map((e) => (e.zser == null)
                   ? double.parse(e.zser1 == zoneModels_report[index1].ser &&
                           e.expser! == '1' &&
                           e.room_number.toString() != 'ล็อคเสียบ'
@@ -248,19 +249,73 @@ class Excgen_CMon_income_Report {
                       ? e.total_expname == null || e.total_expname! == ''
                           ? 0.toString()
                           : e.total_expname.toString()
-                      : 0.toString())).reduce((a, b) => a + b)).toString());
-
+                      : 0.toString()))
+              .reduce((a, b) => a + b)).toString());
       return totalBills.toString();
     }
 
-    String calculateTotalBills_Zone_Sub(int index1) {
+    String calculateTotalArea_Zone(int index_day, int index1) {
+      Set<String> uniqueDocnos = {};
+      double totalArea = 0.0;
+
+      for (int index = 0;
+          index < _TransReBillModels_GropType_Mon[index_day].length;
+          index++) {
+        if (_TransReBillModels_GropType_Mon[index_day][index]
+                .room_number
+                .toString() !=
+            'ล็อคเสียบ') {
+          if (!uniqueDocnos.contains(
+              _TransReBillModels_GropType_Mon[index_day][index].docno)) {
+            if (_TransReBillModels_GropType_Mon[index_day][index].zser ==
+                null) {
+              totalArea += double.parse(
+                  _TransReBillModels_GropType_Mon[index_day][index].zser1 ==
+                          zoneModels_report[index1].ser
+                      ? _TransReBillModels_GropType_Mon[index_day][index]
+                                      .area ==
+                                  null ||
+                              _TransReBillModels_GropType_Mon[index_day][index]
+                                      .area! ==
+                                  ''
+                          ? 1.toString()
+                          : _TransReBillModels_GropType_Mon[index_day][index]
+                              .area
+                              .toString()
+                      : 0.toString());
+            } else {
+              totalArea += double.parse(
+                  _TransReBillModels_GropType_Mon[index_day][index].zser ==
+                          zoneModels_report[index1].ser
+                      ? _TransReBillModels_GropType_Mon[index_day][index]
+                                      .area ==
+                                  null ||
+                              _TransReBillModels_GropType_Mon[index_day][index]
+                                      .area! ==
+                                  ''
+                          ? 1.toString()
+                          : _TransReBillModels_GropType_Mon[index_day][index]
+                              .area
+                              .toString()
+                      : 0.toString());
+            }
+            uniqueDocnos
+                .add(_TransReBillModels_GropType_Mon[index_day][index].docno!);
+          }
+        }
+      }
+
+      return totalArea.toString();
+    }
+
+    String calculateTotalBills_Zone_Sub(int index_day, int index1) {
       Set<String> uniqueDocnos = {};
       double totalBills = 0.0;
 
-      totalBills = (_TransReBillModels_GropType_Sub_zone.length == 0)
+      totalBills = (_TransReBillModels_GropType_Sub_zone[index_day].length == 0)
           ? 0.00
-          : double.parse((_TransReBillModels_GropType_Sub_zone.map((e) =>
-              (e.zser == null)
+          : double.parse((_TransReBillModels_GropType_Sub_zone[index_day]
+              .map((e) => (e.zser == null)
                   ? double.parse(
                       e.zser1 == zoneModeels_report_Ser_Sub_zone[index1].ser &&
                               e.expser! == '1' &&
@@ -276,90 +331,63 @@ class Excgen_CMon_income_Report {
                           ? e.total_expname == null || e.total_expname! == ''
                               ? 0.toString()
                               : e.total_expname.toString()
-                          : 0.toString())).reduce((a, b) => a + b)).toString());
+                          : 0.toString()))
+              .reduce((a, b) => a + b)).toString());
       return totalBills.toString();
     }
 
-    String calculateTotalArea_Zone(int index1) {
-      Set<String> uniqueDocnos = {};
-      double totalArea = 0.0;
-
-      for (int index = 0; index < _TransReBillModels_GropType.length; index++) {
-        if (_TransReBillModels_GropType[index].room_number.toString() !=
-            'ล็อคเสียบ') {
-          if (!uniqueDocnos
-              .contains(_TransReBillModels_GropType[index].docno)) {
-            if (_TransReBillModels_GropType[index].zser == null) {
-              totalArea += double.parse(
-                  _TransReBillModels_GropType[index].zser1 ==
-                          zoneModels_report[index1].ser
-                      ? _TransReBillModels_GropType[index].area == null ||
-                              _TransReBillModels_GropType[index].area! == ''
-                          ? 1.toString()
-                          : _TransReBillModels_GropType[index].area.toString()
-                      : 0.toString());
-            } else {
-              totalArea += double.parse(
-                  _TransReBillModels_GropType[index].zser ==
-                          zoneModels_report[index1].ser
-                      ? _TransReBillModels_GropType[index].area == null ||
-                              _TransReBillModels_GropType[index].area! == ''
-                          ? 1.toString()
-                          : _TransReBillModels_GropType[index].area.toString()
-                      : 0.toString());
-            }
-            uniqueDocnos.add(_TransReBillModels_GropType[index].docno!);
-          }
-        }
-      }
-
-      return totalArea.toString();
-    }
-
-    String calculateTotalArea_Zone_Sub(int index1) {
+    String calculateTotalArea_Zone_Sub(int index_day, int index1) {
       Set<String> uniqueDocnos = {};
       double totalArea = 0.0;
 
       for (int index = 0;
-          index < _TransReBillModels_GropType_Sub_zone.length;
+          index < _TransReBillModels_GropType_Sub_zone[index_day].length;
           index++) {
-        if (_TransReBillModels_GropType_Sub_zone[index]
+        if (_TransReBillModels_GropType_Sub_zone[index_day][index]
                 .room_number
                 .toString() !=
             'ล็อคเสียบ') {
-          if (!uniqueDocnos
-              .contains(_TransReBillModels_GropType_Sub_zone[index].docno)) {
-            if (_TransReBillModels_GropType_Sub_zone[index].zser == null) {
+          if (!uniqueDocnos.contains(
+              _TransReBillModels_GropType_Sub_zone[index_day][index].docno)) {
+            if (_TransReBillModels_GropType_Sub_zone[index_day][index].zser ==
+                null) {
               totalArea += double.parse(
-                  _TransReBillModels_GropType_Sub_zone[index].zser1 ==
+                  _TransReBillModels_GropType_Sub_zone[index_day][index]
+                              .zser1 ==
                           zoneModeels_report_Ser_Sub_zone[index1].ser
-                      ? _TransReBillModels_GropType_Sub_zone[index].area ==
+                      ? _TransReBillModels_GropType_Sub_zone[index_day][index]
+                                      .area ==
                                   null ||
-                              _TransReBillModels_GropType_Sub_zone[index]
+                              _TransReBillModels_GropType_Sub_zone[index_day]
+                                          [index]
                                       .area! ==
                                   ''
                           ? 1.toString()
-                          : _TransReBillModels_GropType_Sub_zone[index]
+                          : _TransReBillModels_GropType_Sub_zone[index_day]
+                                  [index]
                               .area
                               .toString()
                       : 0.toString());
             } else {
               totalArea += double.parse(
-                  _TransReBillModels_GropType_Sub_zone[index].zser ==
+                  _TransReBillModels_GropType_Sub_zone[index_day][index].zser ==
                           zoneModeels_report_Ser_Sub_zone[index1].ser
-                      ? _TransReBillModels_GropType_Sub_zone[index].area ==
+                      ? _TransReBillModels_GropType_Sub_zone[index_day][index]
+                                      .area ==
                                   null ||
-                              _TransReBillModels_GropType_Sub_zone[index]
+                              _TransReBillModels_GropType_Sub_zone[index_day]
+                                          [index]
                                       .area! ==
                                   ''
                           ? 1.toString()
-                          : _TransReBillModels_GropType_Sub_zone[index]
+                          : _TransReBillModels_GropType_Sub_zone[index_day]
+                                  [index]
                               .area
                               .toString()
                       : 0.toString());
             }
-            uniqueDocnos
-                .add(_TransReBillModels_GropType_Sub_zone[index].docno!);
+            uniqueDocnos.add(
+                _TransReBillModels_GropType_Sub_zone[index_day][index].docno!);
           }
         }
       }
@@ -367,17 +395,78 @@ class Excgen_CMon_income_Report {
       return totalArea.toString();
     }
 
+    String calculateTotal_B1_SubZone(int index_day, Subzone) {
+      double total7Kana = 0.0;
+
+      for (int index3 = 0;
+          index3 < zoneModeels_report_Ser_Sub_zone.length;
+          index3++) {
+        if (zoneModeels_report_Ser_Sub_zone[index3].sub_zone.toString() ==
+            '${Subzone}') {
+          (zoneModeels_report_Ser_Sub_zone[index3].jon! == '1' &&
+                  zoneModeels_report_Ser_Sub_zone[index3].jon_book! == '1')
+              ? total7Kana += double.parse(calculateTotalBills_Zone_Sub(index_day, index3)!) -
+                  ((double.parse(
+                              calculateTotalArea_Zone_Sub(index_day, index3)!) *
+                          double.parse(
+                              '${zoneModeels_report_Ser_Sub_zone[index3].b_1}')) +
+                      (double.parse(calculateTotalArea_Zone_Sub(index_day, index3)!) *
+                          double.parse(
+                              '${zoneModeels_report_Ser_Sub_zone[index3].b_2}')) +
+                      (double.parse(calculateTotalArea_Zone_Sub(index_day, index3)!) *
+                          double.parse(
+                              '${zoneModeels_report_Ser_Sub_zone[index3].b_3}')) +
+                      (double.parse(calculateTotalArea_Zone_Sub(index_day, index3)!) *
+                          double.parse(
+                              '${zoneModeels_report_Ser_Sub_zone[index3].b_4}')))
+              : total7Kana +=
+                  double.parse(calculateTotalArea_Zone_Sub(index_day, index3)!) *
+                      double.parse('${zoneModeels_report_Ser_Sub_zone[index3].b_1}');
+        }
+      }
+
+      return total7Kana.toString();
+    }
+
+    String calculateTotal_B1_AllZone(int index_day) {
+      double total7Kana = 0.0;
+
+      for (int index1 = 0; index1 < zoneModels_report.length; index1++) {
+        (zoneModels_report[index1].jon! == '1' &&
+                zoneModels_report[index1].jon_book! == '1')
+            ? total7Kana += double.parse(calculateTotalBills_Zone(0, index1)!) -
+                ((double.parse(calculateTotalArea_Zone(index_day, index1)!) *
+                        double.parse('${zoneModels_report[index1].b_1}')) +
+                    (double.parse(calculateTotalArea_Zone(index_day, index1)!) *
+                        double.parse('${zoneModels_report[index1].b_2}')) +
+                    (double.parse(calculateTotalArea_Zone(index_day, index1)!) *
+                        double.parse('${zoneModels_report[index1].b_3}')) +
+                    (double.parse(calculateTotalArea_Zone(index_day, index1)!) *
+                        double.parse('${zoneModels_report[index1].b_4}')))
+            : total7Kana +=
+                double.parse(calculateTotalArea_Zone(index_day, index1)!) *
+                    double.parse('${zoneModels_report[index1].b_1}');
+      }
+
+      for (int index2 = 0;
+          index2 < zoneModels_report_Sub_zone.length;
+          index2++) {
+        total7Kana += double.parse(calculateTotal_B1_SubZone(
+            index_day, '${zoneModels_report_Sub_zone[index2].ser}'));
+      }
+
+      return total7Kana.toString();
+    }
+
+/////////////////////////////////------------------------------------------------>
+
     int indextotol = 1;
     int indextotol_ = 0;
-    //  for (int index1 = 0;
-    //                                         index1 < zoneModels_report.length;
-    //                                         index1++)
-    //                                       if (zoneModels_report[index1]
-    //                                               .sub_zone
-    //                                               .toString() ==
-    //                                           '0')
+
     for (var index1 = 0; index1 < zoneModels_report.length; index1++) {
-      if (zoneModels_report[index1].sub_zone.toString() == '0') {
+      if (zoneModels_report[index1].sub_zone.toString() == '0' &&
+          zoneModels_report[index1].ser.toString() != '38' &&
+          zoneModels_report[index1].ser.toString() != '39') {
         var index = indextotol;
         dynamic numberColor = index1 % 2 == 0 ? globalStyle22 : globalStyle222;
 
@@ -386,63 +475,46 @@ class Excgen_CMon_income_Report {
 
         dynamic numberColor_ss =
             index1 % 2 == 0 ? globalStyle220D : globalStyle2220D;
-
-        sheet.getRangeByName('A${indextotol + 5 - 1}').cellStyle = numberColor;
-
-        sheet.getRangeByName('B${indextotol + 5 - 1}').cellStyle = numberColor;
-        // sheet.getRangeByName('C${indextotol + 5 - 1}').cellStyle = numberColor;
+        sheet.getRangeByName('A${indextotol + 5 - 1}').cellStyle =
+            globalStyle22;
+        sheet.getRangeByName('B${indextotol + 5 - 1}').cellStyle =
+            globalStyle22;
 
         sheet.getRangeByName('A${indextotol + 5 - 1}').columnWidth = 25;
         sheet.getRangeByName('B${indextotol + 5 - 1}').columnWidth = 18;
-        // sheet.getRangeByName('C${indextotol + 5 - 1}').columnWidth = 18;
 
         sheet
             .getRangeByName('A${indextotol + 5 - 1}')
             .setText(zoneModels_report[index1].zn);
+
         sheet.getRangeByName('B${indextotol + 5 - 1}').setNumber(
-              (_TransReBillModels_GropType.length == 0)
+              (_TransReBillModels_GropType_Mon[0].length == 0)
                   ? 0.00
-                  :
-                  // double.parse((_TransReBillModels_GropType[0]
-                  //     .map((e) => (e.zser == null)
-                  //         ?
-                  //double.parse(e.zser1 ==
-                  //                     zoneModels_report[index1].ser &&
-                  //                 e.expser! == '1' &&
-                  //                 e.room_number.toString() != 'ล็อคเสียบ'
-                  //             ? e.total_expname == null || e.total_expname! == ''
-                  //                 ? 0.toString()
-                  //                 : e.total_expname.toString()
-                  //             : 0.toString())
-                  //         : double.parse(e.zser ==
-                  //                     zoneModels_report[index1].ser &&
-                  //                 e.expser! == '1' &&
-                  //                 e.room_number.toString() != 'ล็อคเสียบ'
-                  //             ? e.total_expname == null || e.total_expname! == ''
-                  //                 ? 0.toString()
-                  //                 : e.total_expname.toString()
-                  //             : 0.toString()))
-                  //     .reduce((a, b) => a + b)).toString())
-                  double.parse((_TransReBillModels_GropType.map((e) => (e
-                              .zser ==
-                          null)
-                      ? double.parse(e.zser1 == zoneModels_report[index1].ser &&
-                              e.expser! == '1' &&
-                              e.room_number.toString() != 'ล็อคเสียบ'
-                          ? e.total_expname == null || e.total_expname! == ''
-                              ? 0.toString()
-                              : e.total_expname.toString()
-                          : 0.toString())
-                      : double.parse(e.zser == zoneModels_report[index1].ser &&
-                              e.expser! == '1' &&
-                              e.room_number.toString() != 'ล็อคเสียบ'
-                          ? e.total_expname == null || e.total_expname! == ''
-                              ? 0.toString()
-                              : e.total_expname.toString()
-                          : 0.toString())).reduce((a, b) => a + b)).toString()),
+                  : double.parse((_TransReBillModels_GropType_Mon[0]
+                      .map((e) => (e.zser == null)
+                          ? double.parse(
+                              e.zser1 == zoneModels_report[index1].ser &&
+                                      e.expser! == '1' &&
+                                      e.room_number.toString() != 'ล็อคเสียบ'
+                                  ? e.total_expname == null ||
+                                          e.total_expname! == ''
+                                      ? 0.toString()
+                                      : e.total_expname.toString()
+                                  : 0.toString())
+                          : double.parse(
+                              e.zser == zoneModels_report[index1].ser &&
+                                      e.expser! == '1' &&
+                                      e.room_number.toString() != 'ล็อคเสียบ'
+                                  ? e.total_expname == null ||
+                                          e.total_expname! == ''
+                                      ? 0.toString()
+                                      : e.total_expname.toString()
+                                  : 0.toString()))
+                      .reduce((a, b) => a + b)).toString()),
             );
 
         if (index1 == 0) {
+          indextotol = indextotol + 1;
         } else {
           indextotol = indextotol + 1;
         }
@@ -461,34 +533,34 @@ class Excgen_CMon_income_Report {
 
       sheet.getRangeByName('A${indextotol + 5 - 1}').cellStyle = globalStyle22;
       sheet.getRangeByName('B${indextotol + 5 - 1}').cellStyle = globalStyle22;
-      // sheet.getRangeByName('C${indextotol + 5 - 1}').cellStyle = numberColor;
 
       sheet.getRangeByName('A${indextotol + 5 - 1}').setText(
             '${zoneModels_report_Sub_zone[index3].zn} ',
           );
       sheet.getRangeByName('B${indextotol + 5 - 1}').setNumber(
-            (_TransReBillModels_GropType_Sub_zone.length == 0)
+            (_TransReBillModels_GropType_Sub_zone[0].length == 0)
                 ? 0.00
-                : double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e
-                            .zser ==
-                        null)
-                    ? double.parse(e.sub_zone ==
-                                '${zoneModels_report_Sub_zone[index3].ser}' &&
-                            e.expser! == '1' &&
-                            e.room_number.toString() != 'ล็อคเสียบ'
-                        ? e.total_expname == null || e.total_expname! == ''
-                            ? 0.toString()
-                            : e.total_expname.toString()
-                        : 0.toString())
-                    : double.parse(e.sub_zone ==
-                                '${zoneModels_report_Sub_zone[index3].ser}' &&
-                            e.expser! == '1' &&
-                            e.room_number.toString() != 'ล็อคเสียบ'
-                        ? e.total_expname == null || e.total_expname! == ''
-                            ? 0.toString()
-                            : e.total_expname.toString()
-                        : 0.toString())).reduce((a, b) => a + b)).toString()),
+                : double.parse((_TransReBillModels_GropType_Sub_zone[0]
+                    .map((e) => (e.zser == null)
+                        ? double.parse(e.sub_zone ==
+                                    '${zoneModels_report_Sub_zone[index3].ser}' &&
+                                e.expser! == '1' &&
+                                e.room_number.toString() != 'ล็อคเสียบ'
+                            ? e.total_expname == null || e.total_expname! == ''
+                                ? 0.toString()
+                                : e.total_expname.toString()
+                            : 0.toString())
+                        : double.parse(e.sub_zone ==
+                                    '${zoneModels_report_Sub_zone[index3].ser}' &&
+                                e.expser! == '1' &&
+                                e.room_number.toString() != 'ล็อคเสียบ'
+                            ? e.total_expname == null || e.total_expname! == ''
+                                ? 0.toString()
+                                : e.total_expname.toString()
+                            : 0.toString()))
+                    .reduce((a, b) => a + b)).toString()),
           );
+
       indextotol = indextotol + 1;
       if ((index3 + 1) == zoneModels_report_Sub_zone.length) {
         sheet.getRangeByName('A${indextotol + 5 - 1}').cellStyle =
@@ -497,10 +569,11 @@ class Excgen_CMon_income_Report {
             globalStyle22;
       }
     }
-/////////////////////////////////------------------------------------------------>
+
     for (var index4 = 0; index4 < 3; index4++) {
       sheet.getRangeByName('A${indextotol + 5 - 1}').cellStyle = globalStyle8;
       sheet.getRangeByName('B${indextotol + 5 - 1}').cellStyle = globalStyle8;
+
       sheet.getRangeByName('A${indextotol + 5 - 1}').setText(
             (index4 == 0)
                 ? 'ยอดรวมทั้งหมด'
@@ -512,8 +585,18 @@ class Excgen_CMon_income_Report {
         sheet
             .getRangeByName('B${(indextotol + 5 - 1)}')
             .setFormula('=SUM(B5:B${indextotol + 5 - 2})');
-      } else {
-        sheet.getRangeByName('B${indextotol + 5 - 1}').setNumber(0.00);
+      } else if (index4 == 1) {
+        // sheet.getRangeByName('B${indextotol + 5 - 1}').setNumber(0.00);
+
+        sheet.getRangeByName('B${indextotol + 5 - 1}').setNumber(
+            (_TransReBillModels_GropType_Mon.length == 0 &&
+                    _TransReBillModels_GropType_Sub_zone.length == 0)
+                ? 0.00
+                : double.parse('${calculateTotal_B1_AllZone(0).toString()}'));
+      } else if (index4 == 2) {
+        sheet
+            .getRangeByName('B${indextotol + 5 - 1}')
+            .setFormula('=B${indextotol + 5 - 3}-B${indextotol + 5 - 2}');
       }
 
       indextotol = indextotol + 1;
@@ -522,44 +605,89 @@ class Excgen_CMon_income_Report {
         sheet.getRangeByName('B${indextotol + 5 - 1}').cellStyle = globalStyle8;
       }
     }
-    /////////////////////////////////------------------------------------------------>
+    /////////////////////////////////------------------------------------------------>****
+    for (var index1 = 0; index1 < zoneModels_report.length; index1++) {
+      if (zoneModels_report[index1].ser.toString() == '38' ||
+          zoneModels_report[index1].ser.toString() == '39') {
+        var index = indextotol;
+        dynamic numberColor = index1 % 2 == 0 ? globalStyle22 : globalStyle222;
 
-    for (var index5 = 0; index5 < 2; index5++) {
-      sheet.getRangeByName('A${indextotol + 5 - 1}').cellStyle = globalStyle22;
-      sheet.getRangeByName('B${indextotol + 5 - 1}').cellStyle = globalStyle22;
-      sheet.getRangeByName('A${indextotol + 5 - 1}').setText(
-            (index5 == 0) ? 'ค่ารถ' : 'ห้องน้ำ',
-          );
-      sheet.getRangeByName('B${indextotol + 5 - 1}').setNumber(0.00);
-      indextotol = indextotol + 1;
-      if ((index5 + 1) == zoneModels_report_Sub_zone.length) {
+        dynamic numberColor_s =
+            index1 % 2 == 0 ? globalStyle220 : globalStyle2220;
+
+        dynamic numberColor_ss =
+            index1 % 2 == 0 ? globalStyle220D : globalStyle2220D;
         sheet.getRangeByName('A${indextotol + 5 - 1}').cellStyle =
             globalStyle22;
         sheet.getRangeByName('B${indextotol + 5 - 1}').cellStyle =
             globalStyle22;
+
+        sheet.getRangeByName('A${indextotol + 5 - 1}').columnWidth = 25;
+        sheet.getRangeByName('B${indextotol + 5 - 1}').columnWidth = 18;
+
+        sheet
+            .getRangeByName('A${indextotol + 5 - 1}')
+            .setText(zoneModels_report[index1].zn);
+
+        sheet.getRangeByName('B${indextotol + 5 - 1}').setNumber(
+              (_TransReBillModels_GropType_Mon[0].length == 0)
+                  ? 0.00
+                  : double.parse((_TransReBillModels_GropType_Mon[0]
+                      .map((e) => (e.zser == null)
+                          ? double.parse(e.zser1 ==
+                                      zoneModels_report[index1].ser &&
+                                  e.expser! == '4' &&
+                                  e.expname.toString() ==
+                                      'อื่นๆ(ค่า${zoneModels_report[index1].zn})' &&
+                                  e.room_number.toString() != 'ล็อคเสียบ'
+                              ? e.total_expname == null ||
+                                      e.total_expname! == ''
+                                  ? 0.toString()
+                                  : e.total_expname.toString()
+                              : 0.toString())
+                          : double.parse(e.zser ==
+                                      zoneModels_report[index1].ser &&
+                                  e.expser! == '4' &&
+                                  e.expname.toString() ==
+                                      'อื่นๆ(ค่า${zoneModels_report[index1].zn})' &&
+                                  e.room_number.toString() != 'ล็อคเสียบ'
+                              ? e.total_expname == null ||
+                                      e.total_expname! == ''
+                                  ? 0.toString()
+                                  : e.total_expname.toString()
+                              : 0.toString()))
+                      .reduce((a, b) => a + b)).toString()),
+            );
+
+        indextotol = indextotol + 1;
       }
     }
+
     /////////////////////////////////------------------------------------------------>
 
     for (var index6 = 0; index6 < 3; index6++) {
       sheet.getRangeByName('A${indextotol + 5 - 1}').cellStyle = globalStyle8;
       sheet.getRangeByName('B${indextotol + 5 - 1}').cellStyle = globalStyle8;
+
       sheet.getRangeByName('A${indextotol + 5 - 1}').setText(
             (index6 == 0)
                 ? 'ยอดรวมทิพย์'
                 : (index6 == 1)
                     ? 'นำส่งทิพย์'
-                    : 'นำส่งบริหาร',
+                    : 'ส่วนต่างบริหาร',
           );
       if (index6 == 0) {
         sheet
             .getRangeByName('B${(indextotol + 5 - 1)}')
             .setFormula('=SUM(B${indextotol + 5 - 3}:B${indextotol + 5 - 2})');
       } else if (index6 == 1) {
-        sheet.getRangeByName('B${indextotol + 5 - 1}').setNumber(0.00);
+        sheet.getRangeByName('B${indextotol + 5 - 1}').setNumber(1000.00);
       } else if (index6 == 2) {
-        sheet.getRangeByName('B${indextotol + 5 - 1}').setNumber(0.00);
+        sheet
+            .getRangeByName('B${indextotol + 5 - 1}')
+            .setFormula('=B${indextotol + 5 - 3}-B${indextotol + 5 - 2}');
       }
+
       indextotol = indextotol + 1;
       if ((index6 + 1) == zoneModels_report_Sub_zone.length) {
         sheet.getRangeByName('A${indextotol + 5 - 1}').cellStyle = globalStyle8;
@@ -571,14 +699,15 @@ class Excgen_CMon_income_Report {
     // indextotol = indextotol + 1;
     sheet.getRangeByName('A${indextotol + 5 - 1}').cellStyle = globalStyle22;
     sheet.getRangeByName('B${indextotol + 5 - 1}').cellStyle = globalStyle22;
+
     sheet.getRangeByName('A${indextotol + 5 - 1}').setText(
           'ล็อคเสียบ/ขาจร',
         );
     sheet.getRangeByName('B${indextotol + 5 - 1}').setNumber(
-          (_TransReBillModels_GropType_Sub_zone.length == 0)
+          (_TransReBillModels_GropType_Sub_zone[0].length == 0)
               ? 0.00
-              : double.parse((_TransReBillModels_GropType_Sub_zone.map((e) =>
-                  (e.zser == null)
+              : double.parse((_TransReBillModels_GropType_Sub_zone[0]
+                  .map((e) => (e.zser == null)
                       ? double.parse(e.expser! == '1' &&
                               e.room_number.toString() == 'ล็อคเสียบ'
                           ? e.total_expname == null || e.total_expname! == ''
@@ -590,36 +719,43 @@ class Excgen_CMon_income_Report {
                           ? e.total_expname == null || e.total_expname! == ''
                               ? 0.toString()
                               : e.total_expname.toString()
-                          : 0.toString())).reduce((a, b) => a + b)).toString()),
+                          : 0.toString()))
+                  .reduce((a, b) => a + b)).toString()),
         );
+
     /////////////////////////////////------------------------------------------------>
     for (var index_exp = 0; index_exp < expModels.length; index_exp++) {
-      if (expModels[index_exp].ser.toString() != '1') {
+      if (expModels[index_exp].ser.toString() != '1' &&
+          expModels[index_exp].ser.toString() != '14' &&
+          expModels[index_exp].ser.toString() != '15') {
         indextotol = indextotol + 1;
         sheet.getRangeByName('A${indextotol + 5 - 1}').cellStyle =
             globalStyle22;
         sheet.getRangeByName('B${indextotol + 5 - 1}').cellStyle =
             globalStyle22;
+
         sheet.getRangeByName('A${indextotol + 5 - 1}').setText(
               '${expModels[index_exp].expname}',
             );
 
         sheet.getRangeByName('B${indextotol + 5 - 1}').setNumber(
-            // (_TransReBillModels_GropType_Sub_zone.length == 0)
-            //     ? 0.00
-            //     :
-            double.parse((_TransReBillModels_GropType_Sub_zone.map(
-                (e) => (e.zser == null)
-                    ? double.parse(e.expser! == '${expModels[index_exp].ser}'
-                        ? e.total_expname == null || e.total_expname! == ''
-                            ? 0.toString()
-                            : e.total_expname.toString()
-                        : 0.toString())
-                    : double.parse(e.expser! == '${expModels[index_exp].ser}'
-                        ? e.total_expname == null || e.total_expname! == ''
-                            ? 0.toString()
-                            : e.total_expname.toString()
-                        : 0.toString())).reduce((a, b) => a + b)).toString()));
+            (_TransReBillModels_GropType_Sub_zone[0].length == 0)
+                ? 0.00
+                : double.parse((_TransReBillModels_GropType_Sub_zone[0]
+                    .map((e) => (e.zser == null)
+                        ? double.parse(e.expser! ==
+                                '${expModels[index_exp].ser}'
+                            ? e.total_expname == null || e.total_expname! == ''
+                                ? 0.toString()
+                                : e.total_expname.toString()
+                            : 0.toString())
+                        : double.parse(e.expser! ==
+                                '${expModels[index_exp].ser}'
+                            ? e.total_expname == null || e.total_expname! == ''
+                                ? 0.toString()
+                                : e.total_expname.toString()
+                            : 0.toString()))
+                    .reduce((a, b) => a + b)).toString()));
 
         if ((index_exp + 1) == zoneModels_report_Sub_zone.length) {
           sheet.getRangeByName('A${indextotol + 5 - 1}').cellStyle =
@@ -635,6 +771,7 @@ class Excgen_CMon_income_Report {
       indextotol = indextotol + 1;
       sheet.getRangeByName('A${indextotol + 5 - 1}').cellStyle = globalStyle8;
       sheet.getRangeByName('B${indextotol + 5 - 1}').cellStyle = globalStyle8;
+
       sheet.getRangeByName('A${indextotol + 5 - 1}').setText(
             (index7 == 0) ? 'ยอดรวมนำส่งบริหาร' : 'นำส่งบริหารทั้งหมด',
           );
@@ -644,7 +781,6 @@ class Excgen_CMon_income_Report {
       } else {
         sheet.getRangeByName('B${indextotol + 5 - 1}').setFormula(
             '=SUM(B${indextotol + 5 - 14},B${indextotol + 5 - 9},B${indextotol + 5 - 2})');
-        // sheet.getRangeByName('B${indextotol + 5 - 1}').setNumber(0.00);
       }
 
       if ((index7 + 1) == zoneModels_report_Sub_zone.length) {
@@ -660,21 +796,7 @@ class Excgen_CMon_income_Report {
 
     sheet.getRangeByName('A${(indextotol + 5)}').cellStyle = globalStyle7;
     sheet.getRangeByName('B${(indextotol + 5)}').cellStyle = globalStyle7;
-    /////////////////////////////////------------------------------------------------>
 
-    indextotol = indextotol + 1;
-    sheet.getRangeByName('A${indextotol + 5}').cellStyle = globalStyle8;
-    sheet.getRangeByName('B${indextotol + 5}').cellStyle = globalStyle8;
-    // sheet.getRangeByName('A${indextotol + 5}').setText('ผู้ตรวจสอบ : ');
-    sheet
-        .getRangeByName('B${indextotol + 5}')
-        .setText('.................................................');
-    /////////////////////////////////------------------------------------------------>
-    indextotol = indextotol + 1;
-    sheet.getRangeByName('A${indextotol + 5}').cellStyle = globalStyle8;
-    sheet.getRangeByName('B${indextotol + 5}').cellStyle = globalStyle8;
-    // sheet.getRangeByName('A${indextotol + 5}').setText('ผู้ตรวจสอบ : ');
-    sheet.getRangeByName('B${indextotol + 5}').setText('ผู้ตรวจสอบ');
     /////////////////////////////////------------------------------------------------>
     indextotol = indextotol + 1;
     sheet.getRangeByName('A${indextotol + 5}').cellStyle = globalStyle22;
@@ -688,7 +810,7 @@ class Excgen_CMon_income_Report {
 
     if (_verticalGroupValue_NameFile.toString() == 'จากระบบ') {
       String path = await FileSaver.instance.saveFile(
-          'รายงานแสดงรายได้ประจำเดือน(${Value_selectDate})', data, "xlsx",
+          'รายงานแสดงรายได้รายเดือน(${Value_selectDate})', data, "xlsx",
           mimeType: type);
       log(path);
     } else {

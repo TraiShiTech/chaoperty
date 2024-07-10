@@ -51,12 +51,13 @@ class Pdfgen_Temporary_receipt_TP3 {
       type_bills,
       dis_sum_Matjum,
       TitleType_Default_Receipt_Name,
-      dis_sum_Pakan) async {
+      dis_sum_Pakan,
+      fonts_pdf) async {
     ////
     //// ------------>(ใบเสร็จรับเงินชั่วคราว paySrsscreen_)
     ///////
     final pdf = pw.Document();
-    final font = await rootBundle.load("fonts/THSarabunNew.ttf");
+    final font = await rootBundle.load("${fonts_pdf}");
     var Colors_pd = PdfColors.black;
     // final font = await rootBundle.load("fonts/Sarabun-Medium.ttf");
 

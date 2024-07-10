@@ -29,6 +29,7 @@ import '../PDF_TP6/PDF_Receipt_TP6/pdf_AC_his_statusbill_TP6.dart';
 import '../PDF_TP7/PDF_Receipt_TP7/pdf_AC_his_statusbill_TP7.dart';
 import '../PDF_TP8/PDF_Receipt_TP8/pdf_AC_his_statusbill_TP8.dart';
 import '../PDF_TP8_Ortorkor/PDF_Receipt_TP8_Ortorkor/pdf_AC_his_statusbill_TP8.dart';
+import '../PDF_TP9_Lao/PDF_Billing_TP9/pdf_Reduce_debt_TP9.dart';
 
 class Man_Reducedebt_PDF {
   static void man_Reducedebt_PDF(
@@ -47,7 +48,6 @@ class Man_Reducedebt_PDF {
       newValuePDFimg,
       inv_num,
       docno_inv) async {
-    var nFormat = NumberFormat("#,##0.00", "en_US");
     // List<InvoiceHistoryModel> _InvoiceHistoryModels = [];
     List<TransHisDisInvModel> _TransHisDisInvModels = [];
     String? numinvoice;
@@ -117,10 +117,18 @@ class Man_Reducedebt_PDF {
     var fname;
     var rtser = preferences.getString('renTalSer');
     var ren = preferences.getString('renTalSer');
+    var rt_Language = preferences.getString('renTal_Language');
     var renTal_name = preferences.getString('renTalName');
+    var fonts_pdf = (rt_Language.toString().trim() == 'LA')
+        ? await 'fonts/NotoSansLao.ttf'
+        : await 'fonts/THSarabunNew.ttf';
+    var nFormat = (rt_Language.toString().trim() == 'LA')
+        ? NumberFormat("#,##0", "en_US")
+        : NumberFormat("#,##0.00", "en_US");
 
     var ciddoc = Get_Value_cid;
-
+    /////--------------------->
+    ///
     String url_1 =
         '${MyConstant().domain}/GC_bill_invoice_hisdis.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser';
     try {
@@ -327,7 +335,8 @@ class Man_Reducedebt_PDF {
             wht_inv,
             nwht_inv,
             nvat_inv,
-            sum_total);
+            sum_total,
+            fonts_pdf);
       } else if (tem_page_ser.toString() == '1') {
         Pdfgen_Reduce_debt_TP4.exportPDF_Reduce_debt_TP4(
             TitleType_Default_Receipt_Name,
@@ -359,7 +368,8 @@ class Man_Reducedebt_PDF {
             wht_inv,
             nwht_inv,
             nvat_inv,
-            sum_total);
+            sum_total,
+            fonts_pdf);
       } else if (tem_page_ser.toString() == '2') {
         Pdfgen_Reduce_debt_TP7.exportPDF_Reduce_debt_TP7(
             TitleType_Default_Receipt_Name,
@@ -391,7 +401,8 @@ class Man_Reducedebt_PDF {
             wht_inv,
             nwht_inv,
             nvat_inv,
-            sum_total);
+            sum_total,
+            fonts_pdf);
       } else if (tem_page_ser.toString() == '3') {
         if (rtser.toString() == '72' ||
             rtser.toString() == '92' ||
@@ -427,7 +438,8 @@ class Man_Reducedebt_PDF {
               wht_inv,
               nwht_inv,
               nvat_inv,
-              sum_total);
+              sum_total,
+              fonts_pdf);
         } else {
           Pdfgen_Reduce_debt_TP8.exportPDF_Reduce_debt_TP8(
               TitleType_Default_Receipt_Name,
@@ -459,8 +471,42 @@ class Man_Reducedebt_PDF {
               wht_inv,
               nwht_inv,
               nvat_inv,
-              sum_total);
+              sum_total,
+              fonts_pdf);
         }
+      } else if (tem_page_ser.toString() == '4') {
+        Pdfgen_Reduce_debt_TP9_Lao.exportPDF_Reduce_debt_TP9_Lao(
+            TitleType_Default_Receipt_Name,
+            context,
+            foder,
+            renTal_name,
+            bill_addr,
+            bill_email,
+            bill_tel,
+            bill_tax,
+            bill_name,
+            newValuePDFimg,
+            Form_nameshop,
+            Form_bussscontact,
+            Form_address,
+            Form_tax,
+            Form_custno,
+            ciddoc,
+            Form_zn,
+            Form_ln,
+            fname,
+            tableData003,
+            _TransHisDisInvModels,
+            inv_num,
+            docno_inv,
+            Datex_invoice,
+            amt_inv,
+            vat_inv,
+            wht_inv,
+            nwht_inv,
+            nvat_inv,
+            sum_total,
+            fonts_pdf);
       }
     });
   }

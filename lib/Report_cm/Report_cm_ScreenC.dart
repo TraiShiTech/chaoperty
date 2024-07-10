@@ -2034,7 +2034,7 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                       //     ? 'รายงาน แสดงรายได้ (รายวัน)'
                       //     :
                       (Value_selectDate_Daily_Type_ == null)
-                          ? 'รายงาน แสดงรายได้ (รายวัน ) '
+                          ? 'รายงาน แสดงรายได้ (รายสัปดาห์ ) '
                           : (_TransReBillModels_GropType_Mon[0].length != 0 ||
                                   _TransReBillModels_GropType_Mon[1].length !=
                                       0 ||
@@ -2059,8 +2059,8 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                   _TransReBillModels_GropType_Sub_zone[4]
                                           .length !=
                                       0)
-                              ? 'รายงาน แสดงรายได้ (รายวัน) (พบข้อมูล ✔️)'
-                              : 'รายงาน แสดงรายได้ (รายวัน ) ',
+                              ? 'รายงาน แสดงรายได้ (รายสัปดาห์) (พบข้อมูล ✔️)'
+                              : 'รายงาน แสดงรายได้ (รายสัปดาห์ ) ',
                       style: const TextStyle(
                         color: ReportScreen_Color.Colors_Text2_,
                         // fontWeight: FontWeight.bold,
@@ -2509,6 +2509,12 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                                                   0)
                                                               ? '0.00'
                                                               : '${nFormat.format(double.parse((_TransReBillModels_GropType_Mon[0].map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report[index1].ser && e.expser! != '1' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report[index1].ser && e.expser! != '1' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                          // (_TransReBillModels_GropType_Mon[
+                                                          //                 0]
+                                                          //             .length ==
+                                                          //         0)
+                                                          //     ? '0.00'
+                                                          //     : '${nFormat.format(double.parse((_TransReBillModels_GropType_Mon[0].map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report[index1].ser && e.expser! != '1' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report[index1].ser && e.expser! != '1' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
                                                           textAlign:
                                                               TextAlign.right,
                                                           style: TextStyle(
@@ -2809,12 +2815,13 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
                                                         ),
                                                       ),
                                                       child: Text(
-                                                        // (_TransReBillModels_GropType_Sub_zone
-                                                        //             .length ==
-                                                        //         0)
-                                                        //     ? '0.00'
-                                                        //     :
-                                                        '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone[0].map((e) => (e.zser == null) ? double.parse(e.sub_zone! == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! != '1' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone! == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! != '1' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                        // '',
+                                                        (_TransReBillModels_GropType_Sub_zone[
+                                                                        0]
+                                                                    .length ==
+                                                                0)
+                                                            ? '0.00'
+                                                            : '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone[0].map((e) => (e.zser == null) ? double.parse(e.sub_zone! == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! != '1' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone! == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! != '1' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
                                                         textAlign:
                                                             TextAlign.right,
                                                         style: TextStyle(
@@ -3349,7 +3356,7 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
               children: [
                 const Center(
                     child: Text(
-                  'รายงาน รายรับแยกตามประเภท (รายวัน) ',
+                  'รายงาน รายรับแยกตามประเภท (รายสัปดาห์) ',
                   style: TextStyle(
                     color: ReportScreen_Color.Colors_Text1_,
                     fontWeight: FontWeight.bold,
@@ -4882,8 +4889,8 @@ class _Report_cm_ScreenCState extends State<Report_cm_ScreenC> {
               zoneModels_report,
               zoneModels_report_Sub_zone,
               zoneModeels_report_Ser_Sub_zone,
-              _TransReBillModels_GropType_Mon[0],
-              _TransReBillModels_GropType_Sub_zone[0],
+              _TransReBillModels_GropType_Mon,
+              _TransReBillModels_GropType_Sub_zone,
               expModels);
         } else if (Value_Report == 'รายงานรายรับรายวันแยกตามประเภท') {
           // print('รายงานรายรับรายวันแยกตามประเภท');

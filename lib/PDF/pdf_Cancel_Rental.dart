@@ -56,11 +56,12 @@ class PdfgeCancel_Rental {
       quotxSelectModels,
       transKonModels,
       TitleType_Default_Receipt_Name,
-      cc_date) async {
+      cc_date,
+      fonts_pdf) async {
     //////--------------------------------------------->
 
     final pdf = pw.Document();
-    final font = await rootBundle.load("fonts/THSarabunNew.ttf");
+    final font = await rootBundle.load("${fonts_pdf}");
     var Colors_pd = PdfColors.black;
     // final font = await rootBundle.load("fonts/Sarabun-Medium.ttf");
 

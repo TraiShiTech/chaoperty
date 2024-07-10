@@ -298,24 +298,122 @@ class Excgen_Income_OrtorReport {
     int indextotol_ = 0;
     int ser_dis = 0;
     String doc_no = '';
+    String doc_no2 = '';
+    int ser_dis2 = 0;
     for (var index2 = 0; index2 < TranHisBillModels.length; index2++) {
-      if (TranHisBillModels[index2].docno != null) {
-        if (doc_no == TranHisBillModels[index2].docno.toString()) {
-          // ser_dis = ser_dis + 1;
-        } else {
-          doc_no = TranHisBillModels[index2].docno.toString();
-          ser_dis = ser_dis + 1;
-        }
+      // if (TranHisBillModels[index2].docno != null) {
+      //   if (doc_no == TranHisBillModels[index2].docno.toString()) {
+      //     // ser_dis = ser_dis + 1;
+      //   } else {
+      //     doc_no = TranHisBillModels[index2].docno.toString();
+      //     ser_dis = ser_dis + 1;
+      //   }
+      // } else {
+      //   if (doc_no == TranHisBillModels[index2].inv.toString()) {
+      //     // ser_dis = ser_dis + 1;
+      //   } else {
+      //     doc_no = TranHisBillModels[index2].inv.toString();
+      //     ser_dis = ser_dis + 1;
+      //   }
+      // }
+      if (doc_no == TranHisBillModels[index2].inv.toString()) {
+        ser_dis2 = ser_dis2 + 1;
       } else {
-        if (doc_no == TranHisBillModels[index2].inv.toString()) {
-          // ser_dis = ser_dis + 1;
-        } else {
-          doc_no = TranHisBillModels[index2].inv.toString();
-          ser_dis = ser_dis + 1;
+        doc_no = TranHisBillModels[index2].inv.toString();
+        ser_dis = ser_dis + 1;
+        ser_dis2 = 1;
+      }
+      dynamic numberColor = ser_dis % 2 == 0 ? globalStyle22 : globalStyle222;
+
+      if (double.parse(TranHisBillModels[index2].disendbill!) > 0 &&
+          ser_dis2 == 1) {
+        for (int i = 0; i < 20; i++) {
+          sheet.getRangeByName('${columns[i]}${indextotol + 5}').cellStyle =
+              numberColor;
         }
+        sheet
+            .getRangeByName('A${indextotol + 5}')
+            .setText('${TranHisBillModels[index2].inv.substring(0, 3)}');
+        sheet.getRangeByName('B${indextotol + 5}').setText('0');
+        sheet.getRangeByName('C${indextotol + 5}').setText('$renTal_ser');
+        sheet.getRangeByName('D${indextotol + 5}').setText((TranHisBillModels[
+                        index2]
+                    .daterec ==
+                null)
+            ? '-'
+            : '${DateFormat('dd/MM/yyyy').format(DateTime.parse('${TranHisBillModels[index2].daterec}'))}');
+        sheet.getRangeByName('E${indextotol + 5}').setText(''
+            // 'xx/xx/xxxx'
+            );
+        sheet.getRangeByName('F${indextotol + 5}').setText((TranHisBillModels[
+                        index2]
+                    .inv_end_date ==
+                null)
+            ? ''
+            : '${DateFormat('dd/MM/yyyy').format(DateTime.parse('${TranHisBillModels[index2].inv_end_date}'))}');
+        sheet.getRangeByName('G${indextotol + 5}').setText('-');
+        sheet
+            .getRangeByName('H${indextotol + 5}')
+            .setText('${TranHisBillModels[index2].inv}');
+
+        sheet.getRangeByName('J${indextotol + 5}').setNumber(
+              (TranHisBillModels[index2].disendbill == null)
+                  ? 0.00
+                  : double.parse(TranHisBillModels[index2].disendbill!),
+            );
+        sheet
+            .getRangeByName('K${indextotol + 5}')
+            .setText('${TranHisBillModels[index2].cid}');
+        sheet
+            .getRangeByName('L${indextotol + 5}')
+            .setText((TranHisBillModels[index2].sname == null)
+                ? (TranHisBillModels[index2].ln == null)
+                    ? '${TranHisBillModels[index2].remark}'
+                    : '${TranHisBillModels[index2].remark}'
+                : (TranHisBillModels[index2].ln == null)
+                    ? '${TranHisBillModels[index2].sname}'
+                    : '${TranHisBillModels[index2].sname}');
+        // sheet.getRangeByName('L${indextotol + 5}').setText((TranHisBillModels[
+        //                 index2]
+        //             .sname ==
+        //         null)
+        //     ? (TranHisBillModels[index2].ln == null)
+        //         ? '${TranHisBillModels[index2].remark} (รหัสพื้นที่ : ${TranHisBillModels[index2].room_number} โซน : ${TranHisBillModels[index2].zn})'
+        //         : '${TranHisBillModels[index2].remark} (รหัสพื้นที่ : ${TranHisBillModels[index2].ln} โซน : ${TranHisBillModels[index2].zn})'
+        //     : (TranHisBillModels[index2].ln == null)
+        //         ? '${TranHisBillModels[index2].sname} (รหัสพื้นที่ : ${TranHisBillModels[index2].room_number} โซน : ${TranHisBillModels[index2].zn})'
+        //         : '${TranHisBillModels[index2].sname} (รหัสพื้นที่ : ${TranHisBillModels[index2].ln} โซน : ${TranHisBillModels[index2].zn})');
+
+        sheet.getRangeByName('M${indextotol + 5}').setText('0');
+
+        sheet.getRangeByName('N${indextotol + 5}').setText('ส่วนลดจ่าย');
+
+        sheet.getRangeByName('O${indextotol + 5}').setNumber(1.00);
+        sheet.getRangeByName('P${indextotol + 5}').setNumber(
+              (TranHisBillModels[index2].disendbill == null)
+                  ? 0.00
+                  : double.parse(TranHisBillModels[index2].disendbill!),
+            );
+        sheet.getRangeByName('Q${indextotol + 5}').setText('0');
+
+        sheet.getRangeByName('R${indextotol + 5}').setText('-');
+
+        sheet.getRangeByName('S${indextotol + 5}').setText(
+            (TranHisBillModels[index2].namex == null ||
+                    TranHisBillModels[index2].namex.toString().trim() == '')
+                ? '-'
+                : (double.parse(TranHisBillModels[index2].disendbill!) > 0)
+                    ? 'ส่วนลดจ่าย,${TranHisBillModels[index2].namex}'
+                    : '${TranHisBillModels[index2].namex}');
+        sheet.getRangeByName('T${indextotol + 5}').setText((TranHisBillModels[
+                        index2]
+                    .inv_end_date ==
+                null)
+            ? ''
+            : '${DateFormat('เดือน MMM ', 'th').format(DateTime.parse('${TranHisBillModels[index2].inv_end_date}'))}${DateTime.parse('${TranHisBillModels[index2].inv_end_date}').year + 543}');
+        indextotol = indextotol + 1;
       }
 
-      dynamic numberColor = ser_dis % 2 == 0 ? globalStyle22 : globalStyle222;
       ///////------------------------->
       var matchingItems = TransReBillModels.where((item) =>
           item.docno.toString() == TranHisBillModels[index2].docno.toString() &&
@@ -334,18 +432,15 @@ class Excgen_Income_OrtorReport {
         sheet.getRangeByName('${columns[i]}${indextotol + 5}').cellStyle =
             numberColor;
       }
+
       sheet.getRangeByName('A${indextotol + 5}').setText(
-          (TranHisBillModels[index2].docno != null)
-              ? (TranHisBillModels[index2].doctax == null ||
-                      TranHisBillModels[index2].doctax.toString().trim() == '')
-                  ? '${TranHisBillModels[index2].docno.substring(0, 2)}'
-                  : '${TranHisBillModels[index2].doctax.substring(0, 2)}'
-              : '${TranHisBillModels[index2].inv.substring(0, 3)}'
-          // (TranHisBillModels[index2].doctax == null ||
-          //         TranHisBillModels[index2].doctax.toString().trim() == '')
-          //     ? '${TranHisBillModels[index2].docno.substring(0, 2)}'
-          //     : '${TranHisBillModels[index2].doctax.substring(0, 2)}'
-          );
+          // (TranHisBillModels[index2].docno != null)
+          //     ? (TranHisBillModels[index2].doctax == null ||
+          //             TranHisBillModels[index2].doctax.toString().trim() == '')
+          //         ? '${TranHisBillModels[index2].docno.substring(0, 2)}'
+          //         : '${TranHisBillModels[index2].doctax.substring(0, 2)}'
+          //     :
+          '${TranHisBillModels[index2].inv.substring(0, 3)}');
       sheet.getRangeByName('B${indextotol + 5}').setText('0');
       sheet.getRangeByName('C${indextotol + 5}').setText('$renTal_ser');
       sheet.getRangeByName('D${indextotol + 5}').setText((TranHisBillModels[
@@ -365,12 +460,13 @@ class Excgen_Income_OrtorReport {
           : '${DateFormat('dd/MM/yyyy').format(DateTime.parse('${TranHisBillModels[index2].inv_end_date}'))}');
       sheet.getRangeByName('G${indextotol + 5}').setText('-');
       sheet.getRangeByName('H${indextotol + 5}').setText(
-          (TranHisBillModels[index2].docno != null)
-              ? (TranHisBillModels[index2].doctax == null ||
-                      TranHisBillModels[index2].doctax.toString().trim() == '')
-                  ? '${TranHisBillModels[index2].docno}'
-                  : '${TranHisBillModels[index2].doctax}'
-              : '${TranHisBillModels[index2].inv}');
+          // (TranHisBillModels[index2].docno != null)
+          //     ? (TranHisBillModels[index2].doctax == null ||
+          //             TranHisBillModels[index2].doctax.toString().trim() == '')
+          //         ? '${TranHisBillModels[index2].docno}'
+          //         : '${TranHisBillModels[index2].doctax}'
+          //     :
+          '${TranHisBillModels[index2].inv}');
 
       sheet.getRangeByName('J${indextotol + 5}').setNumber(
             (TranHisBillModels[index2].amt == null)
@@ -380,16 +476,25 @@ class Excgen_Income_OrtorReport {
       sheet
           .getRangeByName('K${indextotol + 5}')
           .setText('${TranHisBillModels[index2].cid}');
-      sheet.getRangeByName('L${indextotol + 5}').setText((TranHisBillModels[
-                      index2]
-                  .sname ==
-              null)
-          ? (TranHisBillModels[index2].ln == null)
-              ? '${TranHisBillModels[index2].remark} (รหัสพื้นที่ : ${TranHisBillModels[index2].room_number} โซน : ${TranHisBillModels[index2].zn})'
-              : '${TranHisBillModels[index2].remark} (รหัสพื้นที่ : ${TranHisBillModels[index2].ln} โซน : ${TranHisBillModels[index2].zn})'
-          : (TranHisBillModels[index2].ln == null)
-              ? '${TranHisBillModels[index2].sname} (รหัสพื้นที่ : ${TranHisBillModels[index2].room_number} โซน : ${TranHisBillModels[index2].zn})'
-              : '${TranHisBillModels[index2].sname} (รหัสพื้นที่ : ${TranHisBillModels[index2].ln} โซน : ${TranHisBillModels[index2].zn})');
+      sheet
+          .getRangeByName('L${indextotol + 5}')
+          .setText((TranHisBillModels[index2].sname == null)
+              ? (TranHisBillModels[index2].ln == null)
+                  ? '${TranHisBillModels[index2].remark}'
+                  : '${TranHisBillModels[index2].remark}'
+              : (TranHisBillModels[index2].ln == null)
+                  ? '${TranHisBillModels[index2].sname}'
+                  : '${TranHisBillModels[index2].sname}');
+      // sheet.getRangeByName('L${indextotol + 5}').setText((TranHisBillModels[
+      //                 index2]
+      //             .sname ==
+      //         null)
+      //     ? (TranHisBillModels[index2].ln == null)
+      //         ? '${TranHisBillModels[index2].remark} (รหัสพื้นที่ : ${TranHisBillModels[index2].room_number} โซน : ${TranHisBillModels[index2].zn})'
+      //         : '${TranHisBillModels[index2].remark} (รหัสพื้นที่ : ${TranHisBillModels[index2].ln} โซน : ${TranHisBillModels[index2].zn})'
+      //     : (TranHisBillModels[index2].ln == null)
+      //         ? '${TranHisBillModels[index2].sname} (รหัสพื้นที่ : ${TranHisBillModels[index2].room_number} โซน : ${TranHisBillModels[index2].zn})'
+      //         : '${TranHisBillModels[index2].sname} (รหัสพื้นที่ : ${TranHisBillModels[index2].ln} โซน : ${TranHisBillModels[index2].zn})');
 
       sheet
           .getRangeByName('M${indextotol + 5}')
@@ -425,66 +530,19 @@ class Excgen_Income_OrtorReport {
           (TranHisBillModels[index2].namex == null ||
                   TranHisBillModels[index2].namex.toString().trim() == '')
               ? '-'
-              : '${TranHisBillModels[index2].namex}');
+              : (double.parse(TranHisBillModels[index2].disendbill!) > 0)
+                  ? 'ส่วนลดจ่าย,${TranHisBillModels[index2].namex}'
+                  : '${TranHisBillModels[index2].namex}');
       sheet.getRangeByName('T${indextotol + 5}').setText((TranHisBillModels[
                       index2]
-                  .date ==
+                  .inv_end_date ==
               null)
           ? ''
-          : '${DateFormat('เดือน MMM ', 'th').format(DateTime.parse('${TranHisBillModels[index2].date}'))}${DateTime.parse('${TranHisBillModels[index2].date}').year + 543}');
-      // if (doc_no == TranHisBillModels[index2].docno.toString()) {
-      //   ser_dis = ser_dis + 1;
-      // } else {
-      //   doc_no = TranHisBillModels[index2].docno.toString();
-      //   ser_dis = 1;
-      // }
-      // var matchingItems = TransReBillModels.where((item) =>
-      //     item.docno.toString() == TranHisBillModels[index2].docno.toString() &&
-      //     ser_dis == 1);
-      // if (matchingItems.isNotEmpty) {
-      //   indextotol = indextotol + 1;
-      //   matchingItems.forEach((item) {
-      //     for (int i = 0; i < 20; i++) {
-      //       sheet.getRangeByName('${columns[i]}${indextotol + 5}').cellStyle =
-      //           globalStyle2220;
-      //     }
+          : '${DateFormat('เดือน MMM ', 'th').format(DateTime.parse('${TranHisBillModels[index2].inv_end_date}'))}${DateTime.parse('${TranHisBillModels[index2].inv_end_date}').year + 543}');
 
-      //     sheet
-      //         .getRangeByName('A${indextotol + 5}')
-      //         .setText('${TranHisBillModels[index2].docno.substring(0, 2)}');
-      //     sheet.getRangeByName('B${indextotol + 5}').setText('0');
-      //     sheet.getRangeByName('C${indextotol + 5}').setText('0');
-      //     // sheet.getRangeByName('D${indextotol + 5}').setText((TranHisBillModels[
-      //     //                 index2]
-      //     //             .daterec ==
-      //     //         null)
-      //     //     ? ''
-      //     //     : '${DateFormat('dd/MM/yyyy').format(DateTime.parse('${TranHisBillModels[index2].daterec}'))}');
-      //     sheet.getRangeByName('E${indextotol + 5}').setText('00/00/0000');
-      //     sheet.getRangeByName('F${indextotol + 5}').setText((TranHisBillModels[
-      //                     index2]
-      //                 .inv_end_date ==
-      //             null)
-      //         ? ''
-      //         : '**${DateFormat('dd/MM/yyyy').format(DateTime.parse('${TranHisBillModels[index2].inv_end_date}'))}');
-      //     sheet
-      //         .getRangeByName('H${indextotol + 5}')
-      //         .setText('${TranHisBillModels[index2].docno}');
-      //     sheet
-      //         .getRangeByName('K${indextotol + 5}')
-      //         .setText('${TranHisBillModels[index2].cid}');
-      //     sheet.getRangeByName('L${indextotol + 5}').setText(
-      //         (TranHisBillModels[index2].sname == null)
-      //             ? '${TranHisBillModels[index2].remark}'
-      //             : '${TranHisBillModels[index2].sname}');
-
-      //     sheet
-      //         .getRangeByName('M${indextotol + 5 - 1}')
-      //         .setText('${TranHisBillModels[index2].expser}');
-      //   });
-      // }
       indextotol = indextotol + 1;
     }
+
 ///////------------------------->
 
 /////////////////////////////////------------------------------------------------>

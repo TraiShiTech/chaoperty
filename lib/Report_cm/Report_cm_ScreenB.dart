@@ -195,7 +195,7 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
     var ren = preferences.getString('renTalSer');
 
     String url =
-        '${MyConstant().domain}/GC_exp_Report_Cm.php?isAdd=true&ren=$ren';
+        '${MyConstant().domain}/GC_exp_ReportB_Cm.php?isAdd=true&ren=$ren';
 
     try {
       var response = await http.get(Uri.parse(url));
@@ -826,6 +826,26 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
     }
 
     return totalB4.toString();
+  }
+
+  String calculateTotal_Expstser4() {
+    double Total_zone = 0.00;
+    double Total_Sub_zone = 0.00;
+
+    for (int index1 = 0; index1 < zoneModels_report.length; index1++) {
+      Total_zone += (_TransReBillModels_GropType_Mon.length == 0)
+          ? 0.00
+          : double.parse(
+              '${(_TransReBillModels_GropType_Mon.length == 0) ? 0.00 : double.parse((_TransReBillModels_GropType_Mon.map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report[index1].ser && e.expser! == '4' && e.expname.toString() == 'อื่นๆ(ค่า${zoneModels_report[index1].zn})' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report[index1].ser && e.expser! == '4' && e.expname.toString() == 'อื่นๆ(ค่า${zoneModels_report[index1].zn})' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString())}');
+    }
+    for (int index3 = 0; index3 < zoneModels_report_Sub_zone.length; index3++) {
+      Total_Sub_zone += (_TransReBillModels_GropType_Sub_zone.length == 0)
+          ? 0.00
+          : double.parse(
+              '${(_TransReBillModels_GropType_Sub_zone.length == 0) ? 0.00 : double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report_Sub_zone[index3].ser && e.expser! == '4' && e.expname.toString() == 'อื่นๆ(ค่า${zoneModels_report_Sub_zone[index3].zn})' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report_Sub_zone[index3].ser && e.expser! == '4' && e.expname.toString() == 'อื่นๆ(ค่า${zoneModels_report_Sub_zone[index3].zn})' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString())}');
+    }
+    double sum_all = Total_zone + Total_Sub_zone;
+    return sum_all.toString();
   }
 
   Future<Null> red_Trans_bill_Groptype_daly() async {
@@ -1656,7 +1676,7 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
                     child: Text(
                       (YE_Income_Type_Mon_User != null ||
                               Mon_Income_Type_Mon_User != null)
-                          ? 'รายงาน รายรับแยกตามประเภท (รายวัน)'
+                          ? 'รายงาน รายรับแยกตามประเภท (รายสัปดาห์)'
                           : (_TransReBillModels_GropType_Mon.length != 0 ||
                                   _TransReBillModels_GropType_Sub_zone.length !=
                                       0)
@@ -1668,9 +1688,9 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
                                       _TransReBillModels_GropType_Sub_zone
                                               .length !=
                                           0)
-                                  ? 'รายงาน รายรับแยกตามประเภท (รายวัน) (พบข้อมูล ✔️)'
-                                  : 'รายงาน รายรับแยกตามประเภท (รายวัน) (ไม่พบข้อมูล ✖️)'
-                              : 'รายงาน รายรับแยกตามประเภท (รายวัน)',
+                                  ? 'รายงาน รายรับแยกตามประเภท (รายสัปดาห์) (พบข้อมูล ✔️)'
+                                  : 'รายงาน รายรับแยกตามประเภท (รายสัปดาห์) (ไม่พบข้อมูล ✖️)'
+                              : 'รายงาน รายรับแยกตามประเภท (รายสัปดาห์)',
                       style: const TextStyle(
                         color: ReportScreen_Color.Colors_Text2_,
                         // fontWeight: FontWeight.bold,
@@ -2400,6 +2420,134 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
                                                           ),
                                                         ],
                                                       ),
+                                                  Row(
+                                                    children: [
+                                                      const SizedBox(
+                                                        width: 20,
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '- อื่นๆ ',
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      // const Expanded(
+                                                      //   flex: 1,
+                                                      //   child: Text(
+                                                      //     '',
+                                                      //     textAlign: TextAlign.right,
+                                                      //     style: TextStyle(
+                                                      //       color: ReportScreen_Color.Colors_Text1_,
+                                                      //       // fontWeight: FontWeight.bold,
+                                                      //       fontFamily: Font_.Fonts_T,
+                                                      //     ),
+                                                      //   ),
+                                                      // ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          (_TransReBillModels_GropType_Mon
+                                                                      .length ==
+                                                                  0)
+                                                              ? '0.00'
+                                                              : '${nFormat.format(double.parse('${(_TransReBillModels_GropType_Mon.length == 0) ? 0.00 : double.parse((_TransReBillModels_GropType_Mon.map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report[index1].ser && e.expser! == '4' && e.expname.toString() == 'อื่นๆ(ค่า${zoneModels_report[index1].zn})' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report[index1].ser && e.expser! == '4' && e.expname.toString() == 'อื่นๆ(ค่า${zoneModels_report[index1].zn})' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString())}'))}',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ],
                                               ),
                                             ),
@@ -2959,12 +3107,11 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
                                                       Expanded(
                                                         flex: 1,
                                                         child: Text(
-                                                          // (_TransReBillModels_GropType_Sub_zone
-                                                          //             .length ==
-                                                          //         0)
-                                                          //     ? '0.00'
-                                                          //     :
-                                                          '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone! == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '${expModels[index_exp].ser}' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone! == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '${expModels[index_exp].ser}' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                          (_TransReBillModels_GropType_Sub_zone
+                                                                      .length ==
+                                                                  0)
+                                                              ? '0.00'
+                                                              : '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone! == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '${expModels[index_exp].ser}' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone! == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '${expModels[index_exp].ser}' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
                                                           textAlign:
                                                               TextAlign.right,
                                                           style: TextStyle(
@@ -3008,6 +3155,127 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
                                                       ),
                                                     ],
                                                   ),
+                                              Row(
+                                                children: [
+                                                  const SizedBox(
+                                                    width: 20,
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '- อื่นๆ ',
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  // const Expanded(
+                                                  //   flex: 1,
+                                                  //   child: Text(
+                                                  //     '',
+                                                  //     textAlign: TextAlign.right,
+                                                  //     style: TextStyle(
+                                                  //       color: ReportScreen_Color.Colors_Text1_,
+                                                  //       // fontWeight: FontWeight.bold,
+                                                  //       fontFamily: Font_.Fonts_T,
+                                                  //     ),
+                                                  //   ),
+                                                  // ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      (_TransReBillModels_GropType_Sub_zone
+                                                                  .length ==
+                                                              0)
+                                                          ? '0.00'
+                                                          : '${nFormat.format(double.parse('${(_TransReBillModels_GropType_Sub_zone.length == 0) ? 0.00 : double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report_Sub_zone[index3].ser && e.expser! == '4' && e.expname.toString() == 'อื่นๆ(ค่า${zoneModels_report_Sub_zone[index3].zn})' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report_Sub_zone[index3].ser && e.expser! == '4' && e.expname.toString() == 'อื่นๆ(ค่า${zoneModels_report_Sub_zone[index3].zn})' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString())}'))}',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ],
                                           ),
                                         ),
@@ -3295,8 +3563,8 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
                                                       _TransReBillModels_GropType_Sub_zone
                                                               .length ==
                                                           0)
-                                                  ? '0.00'
-                                                  : '${nFormat.format(double.parse('${calculateTotal_B2_AllZone().toString()}'))}',
+                                                  ? calculateTotal_Expstser4()
+                                                  : '${nFormat.format(double.parse('${calculateTotal_B2_AllZone().toString()}') + double.parse('${calculateTotal_Expstser4()}'))}',
                                               textAlign: TextAlign.right,
                                               style: const TextStyle(
                                                 color: ReportScreen_Color
@@ -3481,7 +3749,7 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
               children: [
                 const Center(
                     child: Text(
-                  'รายงาน รายรับแยกตามประเภท (รายวัน) ',
+                  'รายงาน รายรับแยกตามประเภท (รายสัปดาห์) ',
                   style: TextStyle(
                     color: ReportScreen_Color.Colors_Text1_,
                     fontWeight: FontWeight.bold,
@@ -4188,6 +4456,134 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
                                                           ),
                                                         ],
                                                       ),
+                                                  Row(
+                                                    children: [
+                                                      const SizedBox(
+                                                        width: 20,
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '- อื่นๆ ',
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      // const Expanded(
+                                                      //   flex: 1,
+                                                      //   child: Text(
+                                                      //     '',
+                                                      //     textAlign: TextAlign.right,
+                                                      //     style: TextStyle(
+                                                      //       color: ReportScreen_Color.Colors_Text1_,
+                                                      //       // fontWeight: FontWeight.bold,
+                                                      //       fontFamily: Font_.Fonts_T,
+                                                      //     ),
+                                                      //   ),
+                                                      // ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          (_TransReBillModels_GropType_Mon
+                                                                      .length ==
+                                                                  0)
+                                                              ? '0.00'
+                                                              : '${nFormat.format(double.parse('${(_TransReBillModels_GropType_Mon.length == 0) ? 0.00 : double.parse((_TransReBillModels_GropType_Mon.map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report[index1].ser && e.expser! == '4' && e.expname.toString() == 'อื่นๆ(ค่า${zoneModels_report[index1].zn})' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report[index1].ser && e.expser! == '4' && e.expname.toString() == 'อื่นๆ(ค่า${zoneModels_report[index1].zn})' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString())}'))}',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '',
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey[600],
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ],
                                               ),
                                             ),
@@ -4747,12 +5143,11 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
                                                       Expanded(
                                                         flex: 1,
                                                         child: Text(
-                                                          // (_TransReBillModels_GropType_Sub_zone
-                                                          //             .length ==
-                                                          //         0)
-                                                          //     ? '0.00'
-                                                          //     :
-                                                          '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone! == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '${expModels[index_exp].ser}' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone! == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '${expModels[index_exp].ser}' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
+                                                          (_TransReBillModels_GropType_Sub_zone
+                                                                      .length ==
+                                                                  0)
+                                                              ? '0.00'
+                                                              : '${nFormat.format(double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.sub_zone! == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '${expModels[index_exp].ser}' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.sub_zone! == '${zoneModels_report_Sub_zone[index3].ser}' && e.expser! == '${expModels[index_exp].ser}' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString()))}',
                                                           textAlign:
                                                               TextAlign.right,
                                                           style: TextStyle(
@@ -4796,6 +5191,127 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
                                                       ),
                                                     ],
                                                   ),
+                                              Row(
+                                                children: [
+                                                  const SizedBox(
+                                                    width: 20,
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '- อื่นๆ ',
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  // const Expanded(
+                                                  //   flex: 1,
+                                                  //   child: Text(
+                                                  //     '',
+                                                  //     textAlign: TextAlign.right,
+                                                  //     style: TextStyle(
+                                                  //       color: ReportScreen_Color.Colors_Text1_,
+                                                  //       // fontWeight: FontWeight.bold,
+                                                  //       fontFamily: Font_.Fonts_T,
+                                                  //     ),
+                                                  //   ),
+                                                  // ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      (_TransReBillModels_GropType_Sub_zone
+                                                                  .length ==
+                                                              0)
+                                                          ? '0.00'
+                                                          : '${nFormat.format(double.parse('${(_TransReBillModels_GropType_Sub_zone.length == 0) ? 0.00 : double.parse((_TransReBillModels_GropType_Sub_zone.map((e) => (e.zser == null) ? double.parse(e.zser1 == zoneModels_report_Sub_zone[index3].ser && e.expser! == '4' && e.expname.toString() == 'อื่นๆ(ค่า${zoneModels_report_Sub_zone[index3].zn})' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString()) : double.parse(e.zser == zoneModels_report_Sub_zone[index3].ser && e.expser! == '4' && e.expname.toString() == 'อื่นๆ(ค่า${zoneModels_report_Sub_zone[index3].zn})' && e.room_number.toString() != 'ล็อคเสียบ' ? e.total_expname == null || e.total_expname! == '' ? 0.toString() : e.total_expname.toString() : 0.toString())).reduce((a, b) => a + b)).toString())}'))}',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '',
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ],
                                           ),
                                         ),
@@ -5083,8 +5599,8 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
                                                       _TransReBillModels_GropType_Sub_zone
                                                               .length ==
                                                           0)
-                                                  ? '0.00'
-                                                  : '${nFormat.format(double.parse('${calculateTotal_B2_AllZone().toString()}'))}',
+                                                  ? calculateTotal_Expstser4()
+                                                  : '${nFormat.format(double.parse('${calculateTotal_B2_AllZone().toString()}') + double.parse('${calculateTotal_Expstser4()}'))}',
                                               textAlign: TextAlign.right,
                                               style: const TextStyle(
                                                 color: ReportScreen_Color
@@ -5095,6 +5611,27 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
                                               ),
                                             ),
                                           ),
+                                          // Expanded(
+                                          //   flex: 1,
+                                          //   child: Text(
+                                          //     (_TransReBillModels_GropType_Mon
+                                          //                     .length ==
+                                          //                 0 &&
+                                          //             _TransReBillModels_GropType_Sub_zone
+                                          //                     .length ==
+                                          //                 0)
+                                          //         ? '0.00'
+                                          //         : '${nFormat.format(double.parse('${calculateTotal_B2_AllZone().toString()}'))}',
+                                          //     textAlign: TextAlign.right,
+                                          //     style: const TextStyle(
+                                          //       color: ReportScreen_Color
+                                          //           .Colors_Text1_,
+                                          //       // fontWeight:
+                                          //       //     FontWeight.bold,
+                                          //       fontFamily: Font_.Fonts_T,
+                                          //     ),
+                                          //   ),
+                                          // ),
                                           Expanded(
                                             flex: 1,
                                             child: Text(

@@ -10,6 +10,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../AdminScaffold/AdminScaffold.dart';
@@ -17,6 +18,7 @@ import '../Constant/Myconstant.dart';
 import '../INSERT_Log/Insert_log.dart';
 import '../Model/GC_package_model.dart';
 import '../Model/GetC_Otp.dart';
+import '../Model/GetC_color.dart';
 import '../Model/GetLicensekey_Modely.dart';
 import '../Model/GetLicensekey_Modely_up.dart';
 import '../Model/GetRenTal_Model.dart';
@@ -50,6 +52,7 @@ class _SignUnAdminState extends State<SignUnAdmin> {
       ser_id,
       tem_id,
       user_id;
+  String? img1, img2, img3, img4, img5;
   int? packint, num_date = 0;
   final Form1_text = TextEditingController();
   final Form2_text = TextEditingController();
@@ -61,6 +64,29 @@ class _SignUnAdminState extends State<SignUnAdmin> {
     read_GC_package();
     read_GC_packageGen();
     read_GC_otp();
+    read_GC_color();
+  }
+
+  ////////------------------------------------>
+  Future<Null> read_GC_color() async {
+    String url = '${MyConstant().domain}/GC_color.php?isAdd=true';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+
+      for (var map in result) {
+        Color_Model colorModels = Color_Model.fromJson(map);
+        setState(() {
+          img1 = colorModels.img.toString();
+          img2 = colorModels.img2.toString();
+          img3 = colorModels.img3.toString();
+          img4 = colorModels.img4.toString();
+          img5 = colorModels.img5.toString();
+        });
+      }
+    } catch (e) {}
   }
 
 ///////------------------------->
@@ -220,6 +246,132 @@ class _SignUnAdminState extends State<SignUnAdmin> {
     } catch (e) {}
   }
 
+  String? base64_Slip, fileName_Slip;
+/////----------------------------------->
+  Future<void> uploadFile_Slip(index) async {
+    final imagePicker = ImagePicker();
+    final pickedFile = await imagePicker.getImage(
+        source: ImageSource.gallery, maxHeight: 100, maxWidth: 100);
+
+    if (pickedFile == null) {
+      // print('User canceled image selection');
+      return;
+    } else {
+      // 2. Read the image as bytes
+      final imageBytes = await pickedFile.readAsBytes();
+      // Define the target width and height
+      final int targetWidth = 100;
+      final int targetHeight = 100;
+
+      // Resize the image to the target width and height
+      // final img.Image resizedImage = img.copyResize(
+      //   img.decodeImage(imageBytes)!,
+      //   width: targetWidth,
+      //   height: targetHeight,
+      // );
+      // 3. Encode the resized image as a base64 string
+      //  final base64Image = base64Encode(img.encodePng(resizedImage));
+
+      // 3. Encode the image as a base64 string
+      final base64Image = await base64Encode(imageBytes);
+      setState(() {
+        base64_Slip = base64Image;
+      });
+      OKuploadFile_Slip(index);
+    }
+  }
+
+/////----------------------------------->
+  Future<void> OKuploadFile_Slip(index) async {
+    if (base64_Slip != null) {
+      String Path_foder = 'ProMoImg';
+      String dateTimeNow = DateTime.now().toString();
+      String date = DateFormat('ddMMyyyy')
+          .format(DateTime.parse('${dateTimeNow}'))
+          .toString();
+      final dateTimeNow2 = DateTime.now().toUtc().add(const Duration(hours: 7));
+      final formatter2 = DateFormat('HHmmss');
+      final formattedTime2 = formatter2.format(dateTimeNow2);
+      String Time_ = formattedTime2.toString();
+
+      setState(() {
+        fileName_Slip = 'Login${index}_${date}_$Time_.png';
+      });
+
+      try {
+        // 2. Read the image as bytes
+        // final imageBytes = await pickedFile.readAsBytes();
+
+        // 3. Encode the image as a base64 string
+        // final base64Image = base64Encode(imageBytes);
+
+        // 4. Make an HTTP POST request to your server
+        final url =
+            '${MyConstant().domain}/File_uploadPro.php?name=$fileName_Slip&Foder=$Path_foder&extension=png';
+
+        final response = await http.post(
+          Uri.parse(url),
+          body: {
+            'image': base64_Slip,
+            'Foder': 'ProMoImg',
+            'name': fileName_Slip,
+            'ex': 'png'
+          }, // Send the image as a form field named 'image'
+        );
+
+        if (response.statusCode == 200) {
+          print('File uploaded successfully!*** : $fileName_Slip');
+
+          UpImg(index);
+        } else {
+          print('Image upload failed');
+        }
+      } catch (e) {
+        print('Error during image processing: $e');
+      }
+    } else {
+      print('ยังไม่ได้เลือกรูปภาพ');
+    }
+  }
+
+  Future<void> UpImg(index) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    var ren = preferences.getString('renTalSer');
+    String url =
+        '${MyConstant().domain}/UP_imgLogin.php?isAdd=true&ren=$ren&type=$index&imgname=files/ProMoImg/$fileName_Slip';
+    var response = await http.get(Uri.parse(url));
+
+    var result = json.decode(response.body);
+    print(result.toString());
+    try {
+      if (result.toString() == 'true') {
+        read_GC_color();
+        Navigator.of(context).pop();
+      } else {}
+    } catch (e) {}
+  }
+
+  Future<void> UpImg_De(index) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    var ren = preferences.getString('renTalSer');
+    String name = '';
+    String url =
+        '${MyConstant().domain}/UP_imgLogin.php?isAdd=true&ren=$ren&type=$index&imgname=$name';
+    var response = await http.get(Uri.parse(url));
+
+    var result = json.decode(response.body);
+    print(result.toString());
+    try {
+      if (result.toString() == 'true') {
+        read_GC_color();
+        Navigator.of(context).pop();
+      } else {}
+    } catch (e) {}
+  }
+
+/////----------------------------------->
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -251,113 +403,572 @@ class _SignUnAdminState extends State<SignUnAdmin> {
                   ),
                 ),
               ),
+              IconButton(
+                  onPressed: () {
+                    showDialog<void>(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return StreamBuilder(
+                            stream: Stream.periodic(
+                                const Duration(milliseconds: 500)),
+                            builder: (context, snapshot) {
+                              return AlertDialog(
+                                backgroundColor: Colors.grey[350],
+                                title: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: const Text(
+                                        'Setting Image Login ',
+                                        style: TextStyle(
+                                            fontFamily: Font_.Fonts_T,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: const Text(
+                                        '( Image W:600 x H:300)',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontFamily: Font_.Fonts_T,
+                                          color: Colors.blue,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                content: SingleChildScrollView(
+                                  child: ListBody(
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            ElevatedButton(
+                                              style: ButtonStyle(
+                                                  shape: MaterialStateProperty.all<
+                                                          OutlinedBorder>(
+                                                      const RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius.circular(
+                                                                      5)))),
+                                                  foregroundColor:
+                                                      MaterialStateProperty.all<
+                                                          Color>(Colors.black),
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all<
+                                                          Color>(
+                                                    Colors.grey.shade900,
+                                                  )),
+                                              onPressed: () {
+                                                uploadFile_Slip(1);
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  // "อัพโหลดอีกครั้ง (รูปภาพ1)",
+                                                  (img1 == null ||
+                                                          img1.toString() == '')
+                                                      ? "อัพโหลดรูปภาพ  (รูปภาพ1)"
+                                                      : "อัพโหลดอีกครั้ง  (รูปภาพ1)",
+                                                  style: TextStyle(
+                                                      fontFamily: Font_.Fonts_T,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ),
+                                            (img1 == null ||
+                                                    img1.toString() == '')
+                                                ? SizedBox()
+                                                : IconButton(
+                                                    onPressed: () async {
+                                                      UpImg_De(1);
+                                                    },
+                                                    icon: Icon(Icons.delete))
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            ElevatedButton(
+                                              style: ButtonStyle(
+                                                  shape: MaterialStateProperty.all<
+                                                          OutlinedBorder>(
+                                                      const RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius.circular(
+                                                                      5)))),
+                                                  foregroundColor:
+                                                      MaterialStateProperty.all<
+                                                          Color>(Colors.black),
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all<
+                                                          Color>(
+                                                    Colors.grey.shade900,
+                                                  )),
+                                              onPressed: () {
+                                                uploadFile_Slip(2);
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  // "อัพโหลดอีกครั้ง (รูปภาพ2)",
+                                                  (img2 == null ||
+                                                          img2.toString() == '')
+                                                      ? "อัพโหลดรูปภาพ  (รูปภาพ2)"
+                                                      : "อัพโหลดอีกครั้ง  (รูปภาพ2)",
+                                                  style: TextStyle(
+                                                      fontFamily: Font_.Fonts_T,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ),
+                                            (img2 == null ||
+                                                    img2.toString() == '')
+                                                ? SizedBox()
+                                                : IconButton(
+                                                    onPressed: () async {
+                                                      UpImg_De(2);
+                                                    },
+                                                    icon: Icon(Icons.delete))
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            ElevatedButton(
+                                              style: ButtonStyle(
+                                                  shape: MaterialStateProperty.all<
+                                                          OutlinedBorder>(
+                                                      const RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius.circular(
+                                                                      5)))),
+                                                  foregroundColor:
+                                                      MaterialStateProperty.all<
+                                                          Color>(Colors.black),
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all<
+                                                          Color>(
+                                                    Colors.grey.shade900,
+                                                  )),
+                                              onPressed: () {
+                                                uploadFile_Slip(3);
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  // "อัพโหลดอีกครั้ง (รูปภาพ3)",
+                                                  (img3 == null ||
+                                                          img3.toString() == '')
+                                                      ? "อัพโหลดรูปภาพ  (รูปภาพ3)"
+                                                      : "อัพโหลดอีกครั้ง  (รูปภาพ3)",
+                                                  style: TextStyle(
+                                                      fontFamily: Font_.Fonts_T,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ),
+                                            (img3 == null ||
+                                                    img3.toString() == '')
+                                                ? SizedBox()
+                                                : IconButton(
+                                                    onPressed: () async {
+                                                      UpImg_De(3);
+                                                    },
+                                                    icon: Icon(Icons.delete))
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            ElevatedButton(
+                                              style: ButtonStyle(
+                                                  shape: MaterialStateProperty.all<
+                                                          OutlinedBorder>(
+                                                      const RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius.circular(
+                                                                      5)))),
+                                                  foregroundColor:
+                                                      MaterialStateProperty.all<
+                                                          Color>(Colors.black),
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all<
+                                                          Color>(
+                                                    Colors.grey.shade900,
+                                                  )),
+                                              onPressed: () {
+                                                uploadFile_Slip(4);
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  // "อัพโหลดอีกครั้ง (รูปภาพ4)",
+                                                  (img4 == null ||
+                                                          img4.toString() == '')
+                                                      ? "อัพโหลดรูปภาพ  (รูปภาพ4)"
+                                                      : "อัพโหลดอีกครั้ง  (รูปภาพ4)",
+                                                  style: TextStyle(
+                                                      fontFamily: Font_.Fonts_T,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ),
+                                            (img4 == null ||
+                                                    img4.toString() == '')
+                                                ? SizedBox()
+                                                : IconButton(
+                                                    onPressed: () async {
+                                                      UpImg_De(4);
+                                                    },
+                                                    icon: Icon(Icons.delete))
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            ElevatedButton(
+                                              style: ButtonStyle(
+                                                  shape: MaterialStateProperty.all<
+                                                          OutlinedBorder>(
+                                                      const RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius.circular(
+                                                                      5)))),
+                                                  foregroundColor:
+                                                      MaterialStateProperty.all<
+                                                          Color>(Colors.black),
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all<
+                                                          Color>(
+                                                    Colors.grey.shade900,
+                                                  )),
+                                              onPressed: () {
+                                                uploadFile_Slip(5);
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  // "อัพโหลดอีกครั้ง (รูปภาพ5)",
+                                                  (img5 == null ||
+                                                          img5.toString() == '')
+                                                      ? "อัพโหลดรูปภาพ  (รูปภาพ5)"
+                                                      : "อัพโหลดอีกครั้ง  (รูปภาพ5)",
+                                                  style: TextStyle(
+                                                      fontFamily: Font_.Fonts_T,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ),
+                                            (img5 == null ||
+                                                    img5.toString() == '')
+                                                ? SizedBox()
+                                                : IconButton(
+                                                    onPressed: () async {
+                                                      UpImg_De(5);
+                                                    },
+                                                    icon: Icon(Icons.delete))
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                actions: <Widget>[
+                                  StreamBuilder(
+                                      stream: Stream.periodic(
+                                          const Duration(milliseconds: 500)),
+                                      builder: (context, snapshot) {
+                                        return Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: ElevatedButton(
+                                                child: const Text('ยกเลิก'),
+                                                style: ElevatedButton.styleFrom(
+                                                    backgroundColor: Colors.red,
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 20,
+                                                            vertical: 20),
+                                                    textStyle: TextStyle(
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                                onPressed: () async {
+                                                  read_GC_rental();
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      }),
+                                ],
+                              );
+                            });
+                      },
+                    );
+                  },
+                  icon: Icon(Icons.image)),
               OutlinedButton(
-                onPressed: () {
+                onPressed: () async {
+                  int ser_tab = 0;
                   showDialog<void>(
                     barrierDismissible: false,
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
                         backgroundColor: Colors.grey[350],
-                        title: const Text('ตั้งค่าสี ทุกตลาด'),
+                        title: StreamBuilder(
+                            stream: Stream.periodic(
+                                const Duration(milliseconds: 500)),
+                            builder: (context, snapshot) {
+                              return Column(
+                                children: [
+                                  Text((ser_tab == 0)
+                                      ? 'ตั้งค่าสี #App Bar (ทุกตลาด)'
+                                      : (ser_tab == 1)
+                                          ? 'ตั้งค่าสี #Side Bar (ทุกตลาด)'
+                                          : (ser_tab == 2)
+                                              ? 'ตั้งค่าสี #Light Mode (ทุกตลาด)'
+                                              : (ser_tab == 3)
+                                                  ? 'ตั้งค่าสี #Dark Mode (ทุกตลาด)'
+                                                  : (ser_tab == 4)
+                                                      ? 'ตั้งค่าสี #Fool-Login (ทุกตลาด)'
+                                                      : 'ตั้งค่าสี #background-Login (ทุกตลาด)'),
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      children: [
+                                        for (int index = 0; index < 6; index++)
+                                          Padding(
+                                            padding: const EdgeInsets.all(4.0),
+                                            child: ElevatedButton(
+                                              child: Text((index == 0)
+                                                  ? 'App Bar'
+                                                  : (index == 1)
+                                                      ? ' Side Bar'
+                                                      : (index == 2)
+                                                          ? 'Light Mode'
+                                                          : (index == 3)
+                                                              ? 'Dark Mode'
+                                                              : (index == 4)
+                                                                  ? 'Fool-Login'
+                                                                  : 'background-Login'),
+                                              style: ElevatedButton.styleFrom(
+                                                  backgroundColor: Colors.grey,
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 20,
+                                                      vertical: 20),
+                                                  textStyle: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                              onPressed: () async {
+                                                setState(() {
+                                                  ser_tab = index;
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              );
+                            }),
+                        // title: const Text('ตั้งค่าสี ทุกตลาด'),UP_ColorsLogin
                         content: ColorPicker(
                           pickerColor: pickerColor,
                           onColorChanged: changeColors,
                         ),
                         actions: <Widget>[
-                          ElevatedButton(
-                            child: const Text('คืนค่า Default'),
-                            onPressed: () async {
-                              var hexColor = 0xFF102456;
-                              String url =
-                                  '${MyConstant().domain}/UP_ColorsRen.php?isAdd=true&colors_ren=${hexColor}&colors_type=0';
+                          StreamBuilder(
+                              stream: Stream.periodic(
+                                  const Duration(milliseconds: 500)),
+                              builder: (context, snapshot) {
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: ElevatedButton(
+                                        child: const Text('คืนค่า Default'),
+                                        onPressed: () async {
+                                          var hexColor = (ser_tab == 1)
+                                              ? 0xFF9BC945
+                                              : 0xFF102456;
 
-                              try {
-                                var response = await http.get(Uri.parse(url));
+                                          var Mode_Color = (ser_tab == 2)
+                                              ? 0xFFD9D9B7
+                                              : 0xff9ba2cb;
 
-                                var result = json.decode(response.body);
-                                if (result.toString() == 'true') {
-                                  Future.delayed(Duration(milliseconds: 500),
-                                      () {
-                                    setState(() {
-                                      read_GC_rental();
-                                      read_GC_package();
-                                      read_GC_packageGen();
-                                      read_GC_otp();
-                                    });
-                                  });
+                                          var Mode_ColorsLogin = (ser_tab == 4)
+                                              ? 0xFF102456
+                                              : 0xfff3f3ee;
 
-                                  Navigator.of(context).pop();
-                                }
-                              } catch (e) {
-                                Navigator.of(context).pop();
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 20),
-                                textStyle: TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.bold)),
-                          ),
-                          ElevatedButton(
-                            child: const Text('ยกเลิก'),
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.red,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 20),
-                                textStyle: TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.bold)),
-                            onPressed: () async {
-                              read_GC_rental();
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          ElevatedButton(
-                            child: const Text('บันทึก'),
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 20),
-                                textStyle: TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.bold)),
-                            onPressed: () async {
-                              // setState(() => currentColor = pickerColor);
+                                          String url = (ser_tab == 0 ||
+                                                  ser_tab == 1)
+                                              ? '${MyConstant().domain}/UP_ColorsRen.php?isAdd=true&colors_ren=${hexColor}&colors_type=0&ser_tap=$ser_tab'
+                                              : (ser_tab == 2 || ser_tab == 3)
+                                                  ? '${MyConstant().domain}/UP_ColorsRen.php?isAdd=true&colors_ren=${Mode_Color}&colors_type=0&ser_tap=$ser_tab'
+                                                  : '${MyConstant().domain}/UP_ColorsLogin.php?isAdd=true&colors_ren=${Mode_ColorsLogin}&colors_type=0&ser_tap=$ser_tab';
 
-                              String colorString = pickerColor.toString();
-                              int startIndex = colorString.indexOf('(') + 1;
-                              int endIndex = colorString.indexOf(')');
-                              String hexColor =
-                                  colorString.substring(startIndex, endIndex);
-                              // print(hexColor);
+                                          try {
+                                            var response =
+                                                await http.get(Uri.parse(url));
 
-                              if (hexColor != '' && hexColor != null) {
-                                String url =
-                                    '${MyConstant().domain}/UP_ColorsRen.php?isAdd=true&colors_ren=${hexColor}&colors_type=0';
+                                            var result =
+                                                json.decode(response.body);
+                                            if (result.toString() == 'true') {
+                                              Future.delayed(
+                                                  Duration(milliseconds: 500),
+                                                  () {
+                                                setState(() {
+                                                  read_GC_rental();
+                                                  read_GC_package();
+                                                  read_GC_packageGen();
+                                                  read_GC_otp();
+                                                });
+                                              });
 
-                                try {
-                                  var response = await http.get(Uri.parse(url));
+                                              Navigator.of(context).pop();
+                                            }
+                                          } catch (e) {
+                                            Navigator.of(context).pop();
+                                          }
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.blue,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 20, vertical: 20),
+                                            textStyle: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold)),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: ElevatedButton(
+                                        child: const Text('ยกเลิก'),
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.red,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 20, vertical: 20),
+                                            textStyle: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold)),
+                                        onPressed: () async {
+                                          read_GC_rental();
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: ElevatedButton(
+                                        child: const Text('บันทึก'),
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.green,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 20, vertical: 20),
+                                            textStyle: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold)),
+                                        onPressed: () async {
+                                          // setState(() => currentColor = pickerColor);
 
-                                  var result = json.decode(response.body);
-                                  if (result.toString() == 'true') {
-                                    Future.delayed(Duration(milliseconds: 500),
-                                        () {
-                                      setState(() {
-                                        read_GC_rental();
-                                        read_GC_package();
-                                        read_GC_packageGen();
-                                        read_GC_otp();
-                                      });
-                                    });
+                                          String colorString =
+                                              pickerColor.toString();
+                                          int startIndex =
+                                              colorString.indexOf('(') + 1;
+                                          int endIndex =
+                                              colorString.indexOf(')');
+                                          String hexColor = colorString
+                                              .substring(startIndex, endIndex);
+                                          // print(hexColor);
 
-                                    Navigator.of(context).pop();
-                                  }
-                                } catch (e) {
-                                  Navigator.of(context).pop();
-                                }
-                              } else {}
-                            },
-                          ),
+                                          if (hexColor != '' &&
+                                              hexColor != null) {
+                                            // String url = (ser_tab < 2)
+                                            //     ? '${MyConstant().domain}/UP_ColorsRen.php?isAdd=true&colors_ren=${hexColor}&colors_type=0&ser_tap=$ser_tab'
+                                            //     : '${MyConstant().domain}/UP_ColorsRen_Mode.php?isAdd=true&colors_ren=${hexColor}&colors_type=0&ser_tap=$ser_tab';
+
+                                            String url = (ser_tab == 0 ||
+                                                    ser_tab == 1)
+                                                ? '${MyConstant().domain}/UP_ColorsRen.php?isAdd=true&colors_ren=${hexColor}&colors_type=0&ser_tap=$ser_tab'
+                                                : (ser_tab == 2 || ser_tab == 3)
+                                                    ? '${MyConstant().domain}/UP_ColorsRen.php?isAdd=true&colors_ren=${hexColor}&colors_type=0&ser_tap=$ser_tab'
+                                                    : '${MyConstant().domain}/UP_ColorsLogin.php?isAdd=true&colors_ren=${hexColor}&colors_type=0&ser_tap=$ser_tab';
+
+                                            try {
+                                              var response = await http
+                                                  .get(Uri.parse(url));
+
+                                              var result =
+                                                  json.decode(response.body);
+                                              if (result.toString() == 'true') {
+                                                Future.delayed(
+                                                    Duration(milliseconds: 500),
+                                                    () {
+                                                  setState(() {
+                                                    read_GC_rental();
+                                                    read_GC_package();
+                                                    read_GC_packageGen();
+                                                    read_GC_otp();
+                                                  });
+                                                });
+
+                                                Navigator.of(context).pop();
+                                              }
+                                            } catch (e) {
+                                              Navigator.of(context).pop();
+                                            }
+                                          } else {}
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }),
                         ],
                       );
                     },
@@ -447,6 +1058,7 @@ class _SignUnAdminState extends State<SignUnAdmin> {
                                                 children: [
                                                   OutlinedButton(
                                                     onPressed: () {
+                                                      int ser_tab = 0;
                                                       showDialog<void>(
                                                         barrierDismissible:
                                                             false,
@@ -457,8 +1069,65 @@ class _SignUnAdminState extends State<SignUnAdmin> {
                                                             backgroundColor:
                                                                 Colors
                                                                     .grey[350],
-                                                            title: const Text(
-                                                                'ตั้งค่าสี ทุกตลาด'),
+                                                            title:
+                                                                StreamBuilder(
+                                                                    stream: Stream.periodic(const Duration(
+                                                                        milliseconds:
+                                                                            500)),
+                                                                    builder:
+                                                                        (context,
+                                                                            snapshot) {
+                                                                      return Column(
+                                                                        children: [
+                                                                          Text((ser_tab == 0)
+                                                                              ? 'ตั้งค่าสี #App Bar (${renTalModels[i].pn})'
+                                                                              : (ser_tab == 1)
+                                                                                  ? 'ตั้งค่าสี #Side Bar (${renTalModels[i].pn})'
+                                                                                  : (ser_tab == 2)
+                                                                                      ? 'ตั้งค่าสี #Light Mode (${renTalModels[i].pn})'
+                                                                                      : 'ตั้งค่าสี #Dark Mode (${renTalModels[i].pn})'),
+                                                                          Row(
+                                                                            children: [
+                                                                              for (int index = 0; index < 4; index++)
+                                                                                Padding(
+                                                                                  padding: const EdgeInsets.all(4.0),
+                                                                                  child: ElevatedButton(
+                                                                                    child: Text((index == 0)
+                                                                                        ? 'App Bar'
+                                                                                        : (index == 1)
+                                                                                            ? ' Side Bar'
+                                                                                            : (index == 2)
+                                                                                                ? 'Light Mode'
+                                                                                                : 'Dark Mode'),
+                                                                                    style: ElevatedButton.styleFrom(backgroundColor: Colors.grey, padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20), textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                                                                    onPressed: () async {
+                                                                                      setState(() {
+                                                                                        ser_tab = index;
+                                                                                      });
+
+                                                                                      (index == 0)
+                                                                                          ? (renTalModels[i].colors_ren == null || renTalModels[i].colors_ren.toString() == '')
+                                                                                              ? null
+                                                                                              : setState(() => pickerColor = Color(int.parse(renTalModels[i].colors_ren!)))
+                                                                                          : (index == 1)
+                                                                                              ? (renTalModels[i].colors_subren == null || renTalModels[i].colors_subren.toString() == '')
+                                                                                                  ? null
+                                                                                                  : setState(() => pickerColor = Color(int.parse(renTalModels[i].colors_subren!)))
+                                                                                              : (index == 2)
+                                                                                                  ? (renTalModels[i].colors_light == null || renTalModels[i].colors_light.toString() == '')
+                                                                                                      ? null
+                                                                                                      : setState(() => pickerColor = Color(int.parse(renTalModels[i].colors_light!)))
+                                                                                                  : (renTalModels[i].colors_dark == null || renTalModels[i].colors_dark.toString() == '')
+                                                                                                      ? null
+                                                                                                      : setState(() => pickerColor = Color(int.parse(renTalModels[i].colors_dark!)));
+                                                                                    },
+                                                                                  ),
+                                                                                ),
+                                                                            ],
+                                                                          )
+                                                                        ],
+                                                                      );
+                                                                    }),
                                                             content:
                                                                 ColorPicker(
                                                               pickerColor:
@@ -467,171 +1136,126 @@ class _SignUnAdminState extends State<SignUnAdmin> {
                                                                   changeColors,
                                                             ),
                                                             actions: <Widget>[
-                                                              ElevatedButton(
-                                                                child: const Text(
-                                                                    'คืนค่า Default'),
-                                                                onPressed:
-                                                                    () async {
-                                                                  var hexColor =
-                                                                      0xFF102456;
-                                                                  String url =
-                                                                      '${MyConstant().domain}/UP_ColorsRen.php?isAdd=true&colors_ren=${hexColor}&colors_type=1&ser_ren=${renTalModels[i].ser}';
+                                                              StreamBuilder(
+                                                                  stream: Stream.periodic(
+                                                                      const Duration(
+                                                                          milliseconds:
+                                                                              500)),
+                                                                  builder: (context,
+                                                                      snapshot) {
+                                                                    return Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .end,
+                                                                      children: [
+                                                                        Padding(
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
+                                                                          child:
+                                                                              ElevatedButton(
+                                                                            child:
+                                                                                const Text('คืนค่า Default'),
+                                                                            onPressed:
+                                                                                () async {
+                                                                              var hexColor = (ser_tab == 1) ? 0xFF9BC945 : 0xFF102456;
+                                                                              var Mode_Color = (ser_tab == 2) ? 0xFFD9D9B7 : 0xff9ba2cb;
 
-                                                                  try {
-                                                                    var response =
-                                                                        await http
-                                                                            .get(Uri.parse(url));
+                                                                              String url = (ser_tab < 2) ? '${MyConstant().domain}/UP_ColorsRen.php?isAdd=true&colors_ren=${hexColor}&colors_type=1&ser_ren=${renTalModels[i].ser}&ser_tap=$ser_tab' : '${MyConstant().domain}/UP_ColorsRen.php?isAdd=true&colors_ren=${Mode_Color}&colors_type=1&ser_ren=${renTalModels[i].ser}&ser_tap=$ser_tab';
 
-                                                                    var result =
-                                                                        json.decode(
-                                                                            response.body);
-                                                                    if (result
-                                                                            .toString() ==
-                                                                        'true') {
-                                                                      Future.delayed(
-                                                                          Duration(
-                                                                              milliseconds: 500),
-                                                                          () {
-                                                                        setState(
-                                                                            () {
-                                                                          read_GC_rental();
-                                                                          read_GC_package();
-                                                                          read_GC_packageGen();
-                                                                          read_GC_otp();
-                                                                        });
-                                                                      });
+                                                                              try {
+                                                                                var response = await http.get(Uri.parse(url));
 
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop();
-                                                                    }
-                                                                  } catch (e) {
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop();
-                                                                  }
-                                                                },
-                                                                style: ElevatedButton.styleFrom(
-                                                                    backgroundColor:
-                                                                        Colors
-                                                                            .blue,
-                                                                    padding: EdgeInsets.symmetric(
-                                                                        horizontal:
-                                                                            20,
-                                                                        vertical:
-                                                                            20),
-                                                                    textStyle: TextStyle(
-                                                                        fontSize:
-                                                                            14,
-                                                                        fontWeight:
-                                                                            FontWeight.bold)),
-                                                              ),
-                                                              ElevatedButton(
-                                                                child: const Text(
-                                                                    'ยกเลิก'),
-                                                                style: ElevatedButton.styleFrom(
-                                                                    backgroundColor:
-                                                                        Colors
-                                                                            .red,
-                                                                    padding: EdgeInsets.symmetric(
-                                                                        horizontal:
-                                                                            20,
-                                                                        vertical:
-                                                                            20),
-                                                                    textStyle: TextStyle(
-                                                                        fontSize:
-                                                                            14,
-                                                                        fontWeight:
-                                                                            FontWeight.bold)),
-                                                                onPressed:
-                                                                    () async {
-                                                                  read_GC_rental();
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-                                                                },
-                                                              ),
-                                                              ElevatedButton(
-                                                                child: const Text(
-                                                                    'บันทึก'),
-                                                                style: ElevatedButton.styleFrom(
-                                                                    backgroundColor:
-                                                                        Colors
-                                                                            .green,
-                                                                    padding: EdgeInsets.symmetric(
-                                                                        horizontal:
-                                                                            20,
-                                                                        vertical:
-                                                                            20),
-                                                                    textStyle: TextStyle(
-                                                                        fontSize:
-                                                                            14,
-                                                                        fontWeight:
-                                                                            FontWeight.bold)),
-                                                                onPressed:
-                                                                    () async {
-                                                                  // setState(() => currentColor = pickerColor);
+                                                                                var result = json.decode(response.body);
+                                                                                if (result.toString() == 'true') {
+                                                                                  Future.delayed(Duration(milliseconds: 500), () {
+                                                                                    setState(() {
+                                                                                      read_GC_rental();
+                                                                                      read_GC_package();
+                                                                                      read_GC_packageGen();
+                                                                                      read_GC_otp();
+                                                                                    });
+                                                                                  });
 
-                                                                  String
-                                                                      colorString =
-                                                                      pickerColor
-                                                                          .toString();
-                                                                  int startIndex =
-                                                                      colorString
-                                                                              .indexOf('(') +
-                                                                          1;
-                                                                  int endIndex =
-                                                                      colorString
-                                                                          .indexOf(
-                                                                              ')');
-                                                                  String
-                                                                      hexColor =
-                                                                      colorString.substring(
-                                                                          startIndex,
-                                                                          endIndex);
-                                                                  // print(hexColor);
+                                                                                  Navigator.of(context).pop();
+                                                                                }
+                                                                              } catch (e) {
+                                                                                Navigator.of(context).pop();
+                                                                              }
+                                                                            },
+                                                                            style: ElevatedButton.styleFrom(
+                                                                                backgroundColor: Colors.blue,
+                                                                                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                                                                                textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                                                          ),
+                                                                        ),
+                                                                        Padding(
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
+                                                                          child:
+                                                                              ElevatedButton(
+                                                                            child:
+                                                                                const Text('ยกเลิก'),
+                                                                            style: ElevatedButton.styleFrom(
+                                                                                backgroundColor: Colors.red,
+                                                                                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                                                                                textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                                                            onPressed:
+                                                                                () async {
+                                                                              read_GC_rental();
+                                                                              Navigator.of(context).pop();
+                                                                            },
+                                                                          ),
+                                                                        ),
+                                                                        Padding(
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
+                                                                          child:
+                                                                              ElevatedButton(
+                                                                            child:
+                                                                                const Text('บันทึก'),
+                                                                            style: ElevatedButton.styleFrom(
+                                                                                backgroundColor: Colors.green,
+                                                                                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                                                                                textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                                                            onPressed:
+                                                                                () async {
+                                                                              // setState(() => currentColor = pickerColor);
 
-                                                                  if (hexColor !=
-                                                                          '' &&
-                                                                      hexColor !=
-                                                                          null) {
-                                                                    String url =
-                                                                        '${MyConstant().domain}/UP_ColorsRen.php?isAdd=true&colors_ren=${hexColor}&colors_type=1&ser_ren=${renTalModels[i].ser}';
+                                                                              String colorString = pickerColor.toString();
+                                                                              int startIndex = colorString.indexOf('(') + 1;
+                                                                              int endIndex = colorString.indexOf(')');
+                                                                              String hexColor = colorString.substring(startIndex, endIndex);
+                                                                              // print(hexColor);
 
-                                                                    try {
-                                                                      var response =
-                                                                          await http
-                                                                              .get(Uri.parse(url));
+                                                                              if (hexColor != '' && hexColor != null) {
+                                                                                String url = (ser_tab < 2) ? '${MyConstant().domain}/UP_ColorsRen.php?isAdd=true&colors_ren=${hexColor}&colors_type=1&ser_ren=${renTalModels[i].ser}&ser_tap=$ser_tab' : '${MyConstant().domain}/UP_ColorsRen.php?isAdd=true&colors_ren=${hexColor}&colors_type=1&ser_ren=${renTalModels[i].ser}&ser_tap=$ser_tab';
 
-                                                                      var result =
-                                                                          json.decode(
-                                                                              response.body);
-                                                                      if (result
-                                                                              .toString() ==
-                                                                          'true') {
-                                                                        Future.delayed(
-                                                                            Duration(milliseconds: 500),
-                                                                            () {
-                                                                          setState(
-                                                                              () {
-                                                                            read_GC_rental();
-                                                                            read_GC_package();
-                                                                            read_GC_packageGen();
-                                                                            read_GC_otp();
-                                                                          });
-                                                                        });
+                                                                                try {
+                                                                                  var response = await http.get(Uri.parse(url));
 
-                                                                        Navigator.of(context)
-                                                                            .pop();
-                                                                      }
-                                                                    } catch (e) {
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop();
-                                                                    }
-                                                                  } else {}
-                                                                },
-                                                              ),
+                                                                                  var result = json.decode(response.body);
+                                                                                  if (result.toString() == 'true') {
+                                                                                    Future.delayed(Duration(milliseconds: 500), () {
+                                                                                      setState(() {
+                                                                                        read_GC_rental();
+                                                                                        read_GC_package();
+                                                                                        read_GC_packageGen();
+                                                                                        read_GC_otp();
+                                                                                      });
+                                                                                    });
+
+                                                                                    Navigator.of(context).pop();
+                                                                                  }
+                                                                                } catch (e) {
+                                                                                  Navigator.of(context).pop();
+                                                                                }
+                                                                              } else {}
+                                                                            },
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    );
+                                                                  }),
                                                             ],
                                                           );
                                                         },
@@ -2680,7 +3304,7 @@ class _SignUnAdminState extends State<SignUnAdmin> {
                             ),
                             Container(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.6,
+                                    MediaQuery.of(context).size.height * 0.55,
                                 width: (Responsive.isDesktop(context))
                                     ? MediaQuery.of(context).size.width * 0.7
                                     : 800,

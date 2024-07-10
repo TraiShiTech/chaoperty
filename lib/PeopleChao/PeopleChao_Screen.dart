@@ -1016,7 +1016,6 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
 //     }
 //   }
 
-
   Future<Null> infomation() async {
     showDialog<String>(
         // barrierDismissible: false,
@@ -1207,7 +1206,7 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
         // text = text.toLowerCase();
         setState(() {
           teNantModels = teNantModels.where((teNantModel) {
-               var notTitle = teNantModel.lncode.toString();
+            var notTitle = teNantModel.lncode.toString();
             var notTitle2 = teNantModel.cid.toString();
             var notTitle3 = teNantModel.docno.toString();
             var notTitle4 = teNantModel.sname.toString();
@@ -2905,7 +2904,7 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                                           child: Container(
                                                             decoration:
                                                                 BoxDecoration(
-                                                               color: (i + 1 ==
+                                                              color: (i + 1 ==
                                                                       1)
                                                                   ? (Status_ ==
                                                                           i + 1)
@@ -3117,123 +3116,139 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                 : (Status_ == 7)
                     ? BodyHome_TenantCancel()
                     : ScrollConfiguration(
-                    behavior:
-                        ScrollConfiguration.of(context).copyWith(dragDevices: {
-                      PointerDeviceKind.touch,
-                      PointerDeviceKind.mouse,
-                    }),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      dragStartBehavior: DragStartBehavior.start,
-                      child: SizedBox(
-                        width: (Responsive.isDesktop(context))
-                            ? MediaQuery.of(context).size.width * 0.85
-                            : 1200,
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                              child: Container(
-                                  width: (Responsive.isDesktop(context))
-                                      ? MediaQuery.of(context).size.width * 0.85
-                                      : 1200,
-                                  decoration: BoxDecoration(
-                                    color: AppbackgroundColor.TiTile_Colors,
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(10),
-                                        topRight: Radius.circular(10),
-                                        bottomLeft: Radius.circular(0),
-                                        bottomRight: Radius.circular(0)),
-                                  ),
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        // mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.all(2.0),
-                                            child: Text(
-                                              'ค้นหา :',
-                                              style: TextStyle(
-                                                color: ReportScreen_Color
-                                                    .Colors_Text2_,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T,
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            // flex: 1,
-                                            child: Container(
-                                              height: 35, //Date_ser
-                                              // width: 150,
-                                              decoration: BoxDecoration(
-                                                color: AppbackgroundColor
-                                                    .Sub_Abg_Colors,
-                                                borderRadius:
-                                                    const BorderRadius.only(
-                                                        topLeft:
-                                                            Radius.circular(8),
-                                                        topRight:
-                                                            Radius.circular(8),
-                                                        bottomLeft:
-                                                            Radius.circular(8),
-                                                        bottomRight:
-                                                            Radius.circular(8)),
-                                                border: Border.all(
-                                                    color: Colors.grey,
-                                                    width: 1),
-                                              ),
-                                              child: _searchBar(),
-                                            ),
-                                          ),
-                                          Container(
-                                              width: 150,
-                                              child: Next_page_Web())
-                                        ],
+                        behavior: ScrollConfiguration.of(context)
+                            .copyWith(dragDevices: {
+                          PointerDeviceKind.touch,
+                          PointerDeviceKind.mouse,
+                        }),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          dragStartBehavior: DragStartBehavior.start,
+                          child: SizedBox(
+                            width: (Responsive.isDesktop(context))
+                                ? MediaQuery.of(context).size.width * 0.85
+                                : 1200,
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                  child: Container(
+                                      width: (Responsive.isDesktop(context))
+                                          ? MediaQuery.of(context).size.width *
+                                              0.85
+                                          : 1200,
+                                      decoration: BoxDecoration(
+                                        color: AppbackgroundColor.TiTile_Colors,
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(10),
+                                            topRight: Radius.circular(10),
+                                            bottomLeft: Radius.circular(0),
+                                            bottomRight: Radius.circular(0)),
                                       ),
-                                      const Divider(),
-                                      Row(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
                                         children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              color: AppbackgroundColor
-                                                      .Sub_Abg_Colors
-                                                  .withOpacity(0.5),
-                                              borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(10),
-                                                  topRight: Radius.circular(10),
-                                                  bottomLeft:
-                                                      Radius.circular(10),
-                                                  bottomRight:
-                                                      Radius.circular(10)),
-                                              // border: Border.all(color: Colors.white, width: 1),
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.all(2.0),
-                                                  child: Text(
-                                                    'ประเภทวันที่ :',
-                                                    style: TextStyle(
-                                                      color: ReportScreen_Color
-                                                          .Colors_Text2_,
-                                                      // fontWeight: FontWeight.bold,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
+                                          Row(
+                                            // mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.all(2.0),
+                                                child: Text(
+                                                  'ค้นหา :',
+                                                  style: TextStyle(
+                                                    color: ReportScreen_Color
+                                                        .Colors_Text2_,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T,
                                                   ),
                                                 ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(2.0),
-                                                  child: Container(
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                      color: AppbackgroundColor
-                                                          .Sub_Abg_Colors,
-                                                      borderRadius:
-                                                          BorderRadius.only(
+                                              ),
+                                              Expanded(
+                                                // flex: 1,
+                                                child: Container(
+                                                  height: 35, //Date_ser
+                                                  // width: 150,
+                                                  decoration: BoxDecoration(
+                                                    color: AppbackgroundColor
+                                                        .Sub_Abg_Colors,
+                                                    borderRadius:
+                                                        const BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    8),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    8),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    8),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    8)),
+                                                    border: Border.all(
+                                                        color: Colors.grey,
+                                                        width: 1),
+                                                  ),
+                                                  child: _searchBar(),
+                                                ),
+                                              ),
+                                              Container(
+                                                  width: 150,
+                                                  child: Next_page_Web())
+                                            ],
+                                          ),
+                                          const Divider(),
+                                          Row(
+                                            children: [
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  color: AppbackgroundColor
+                                                          .Sub_Abg_Colors
+                                                      .withOpacity(0.5),
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          topLeft: Radius
+                                                              .circular(10),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  10),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  10),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  10)),
+                                                  // border: Border.all(color: Colors.white, width: 1),
+                                                ),
+                                                child: Row(
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsets.all(2.0),
+                                                      child: Text(
+                                                        'ประเภทวันที่ :',
+                                                        style: TextStyle(
+                                                          color:
+                                                              ReportScreen_Color
+                                                                  .Colors_Text2_,
+                                                          // fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              2.0),
+                                                      child: Container(
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                          color:
+                                                              AppbackgroundColor
+                                                                  .Sub_Abg_Colors,
+                                                          borderRadius: BorderRadius.only(
                                                               topLeft: Radius
                                                                   .circular(10),
                                                               topRight: Radius
@@ -3244,204 +3259,228 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                                                   Radius
                                                                       .circular(
                                                                           10)),
-                                                      // border: Border.all(color: Colors.grey, width: 1),
-                                                    ),
-                                                    width: 150,
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            2.0),
-                                                    child:
-                                                        DropdownButtonFormField2(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      focusColor: Colors.white,
-                                                      autofocus: false,
-                                                      decoration:
-                                                          InputDecoration(
-                                                        floatingLabelAlignment:
-                                                            FloatingLabelAlignment
-                                                                .center,
-                                                        enabled: true,
-                                                        hoverColor:
-                                                            Colors.brown,
-                                                        prefixIconColor:
-                                                            Colors.blue,
-                                                        fillColor: Colors.white
-                                                            .withOpacity(0.05),
-                                                        filled: false,
-                                                        isDense: true,
-                                                        contentPadding:
-                                                            EdgeInsets.zero,
-                                                        border:
-                                                            OutlineInputBorder(
-                                                          borderSide:
-                                                              const BorderSide(
-                                                                  color: Colors
-                                                                      .red),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
+                                                          // border: Border.all(color: Colors.grey, width: 1),
                                                         ),
-                                                        focusedBorder:
-                                                            const OutlineInputBorder(
-                                                          borderRadius:
-                                                              BorderRadius.only(
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    10),
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    10),
+                                                        width: 150,
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(2.0),
+                                                        child:
+                                                            DropdownButtonFormField2(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          focusColor:
+                                                              Colors.white,
+                                                          autofocus: false,
+                                                          decoration:
+                                                              InputDecoration(
+                                                            floatingLabelAlignment:
+                                                                FloatingLabelAlignment
+                                                                    .center,
+                                                            enabled: true,
+                                                            hoverColor:
+                                                                Colors.brown,
+                                                            prefixIconColor:
+                                                                Colors.blue,
+                                                            fillColor: Colors
+                                                                .white
+                                                                .withOpacity(
+                                                                    0.05),
+                                                            filled: false,
+                                                            isDense: true,
+                                                            contentPadding:
+                                                                EdgeInsets.zero,
+                                                            border:
+                                                                OutlineInputBorder(
+                                                              borderSide:
+                                                                  const BorderSide(
+                                                                      color: Colors
+                                                                          .red),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10),
+                                                            ),
+                                                            focusedBorder:
+                                                                const OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .only(
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight:
+                                                                    Radius
+                                                                        .circular(
+                                                                            10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                              ),
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                width: 1,
+                                                                color: Color
+                                                                    .fromARGB(
+                                                                        255,
+                                                                        231,
+                                                                        227,
+                                                                        227),
+                                                              ),
+                                                            ),
                                                           ),
-                                                          borderSide:
-                                                              BorderSide(
-                                                            width: 1,
-                                                            color:
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    231,
-                                                                    227,
-                                                                    227),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      isExpanded: false,
-                                                      // value: YEAR_Now,
-                                                      hint: Text(
-                                                        'ทั้งหมด',
-                                                        maxLines: 2,
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: const TextStyle(
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          fontSize: 12,
-                                                          color: Colors.grey,
-                                                        ),
-                                                      ),
-                                                      icon: const Icon(
-                                                        Icons.arrow_drop_down,
-                                                        color: Colors.black,
-                                                      ),
-                                                      style: const TextStyle(
-                                                        color: Colors.grey,
-                                                      ),
-                                                      iconSize: 20,
-                                                      buttonHeight: 30,
-                                                      buttonWidth: 150,
-                                                      // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-                                                      dropdownDecoration:
-                                                          BoxDecoration(
-                                                        // color: Colors
-                                                        //     .amber,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                        border: Border.all(
-                                                            color: Colors.white,
-                                                            width: 1),
-                                                      ),
-                                                      items: const [
-                                                        DropdownMenuItem<
-                                                            String>(
-                                                          value: '0',
-                                                          child: Text(
+                                                          isExpanded: false,
+                                                          // value: YEAR_Now,
+                                                          hint: Text(
                                                             'ทั้งหมด',
+                                                            maxLines: 2,
                                                             textAlign: TextAlign
                                                                 .center,
-                                                            style: TextStyle(
+                                                            style:
+                                                                const TextStyle(
                                                               overflow:
                                                                   TextOverflow
                                                                       .ellipsis,
-                                                              fontSize: 14,
+                                                              fontSize: 12,
                                                               color:
                                                                   Colors.grey,
                                                             ),
                                                           ),
-                                                        ),
-                                                        DropdownMenuItem<
-                                                            String>(
-                                                          value: '1',
-                                                          child: Text(
-                                                            'วันที่เริ่มสัญญา',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              fontSize: 14,
-                                                              color:
-                                                                  Colors.grey,
-                                                            ),
+                                                          icon: const Icon(
+                                                            Icons
+                                                                .arrow_drop_down,
+                                                            color: Colors.black,
                                                           ),
-                                                        ),
-                                                        DropdownMenuItem<
-                                                            String>(
-                                                          value: '2',
-                                                          child: Text(
-                                                            'วันที่สิ้นสุดสัญญา',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              fontSize: 14,
-                                                              color:
-                                                                  Colors.grey,
-                                                            ),
+                                                          style:
+                                                              const TextStyle(
+                                                            color: Colors.grey,
                                                           ),
-                                                        ),
-                                                      ],
+                                                          iconSize: 20,
+                                                          buttonHeight: 30,
+                                                          buttonWidth: 150,
+                                                          // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                                          dropdownDecoration:
+                                                              BoxDecoration(
+                                                            // color: Colors
+                                                            //     .amber,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
+                                                            border: Border.all(
+                                                                color: Colors
+                                                                    .white,
+                                                                width: 1),
+                                                          ),
+                                                          items: const [
+                                                            DropdownMenuItem<
+                                                                String>(
+                                                              value: '0',
+                                                              child: Text(
+                                                                'ทั้งหมด',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style:
+                                                                    TextStyle(
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  fontSize: 14,
+                                                                  color: Colors
+                                                                      .grey,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            DropdownMenuItem<
+                                                                String>(
+                                                              value: '1',
+                                                              child: Text(
+                                                                'วันที่เริ่มสัญญา',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style:
+                                                                    TextStyle(
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  fontSize: 14,
+                                                                  color: Colors
+                                                                      .grey,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            DropdownMenuItem<
+                                                                String>(
+                                                              value: '2',
+                                                              child: Text(
+                                                                'วันที่สิ้นสุดสัญญา',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style:
+                                                                    TextStyle(
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  fontSize: 14,
+                                                                  color: Colors
+                                                                      .grey,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
 
-                                                      onChanged: (value) async {
-                                                        setState(() {
-                                                          Text_searchBar_Sub_TeNant
-                                                              .clear();
-                                                          // _TransReBillModels =
-                                                          //     TransReBillModels_;
-                                                          Date_ser =
-                                                              int.parse(value!);
-                                                        });
-                                                      },
+                                                          onChanged:
+                                                              (value) async {
+                                                            setState(() {
+                                                              Text_searchBar_Sub_TeNant
+                                                                  .clear();
+                                                              // _TransReBillModels =
+                                                              //     TransReBillModels_;
+                                                              Date_ser =
+                                                                  int.parse(
+                                                                      value!);
+                                                            });
+                                                          },
+                                                        ),
+                                                      ),
                                                     ),
-                                                  ),
-                                                ),
-                                                const Padding(
-                                                  padding: EdgeInsets.all(2.0),
-                                                  child: Text(
-                                                    'ค้นหาวันที่ :',
-                                                    style: TextStyle(
-                                                      color: ReportScreen_Color
-                                                          .Colors_Text2_,
-                                                      // fontWeight: FontWeight.bold,
-                                                      fontFamily: Font_.Fonts_T,
+                                                    const Padding(
+                                                      padding:
+                                                          EdgeInsets.all(2.0),
+                                                      child: Text(
+                                                        'ค้นหาวันที่ :',
+                                                        style: TextStyle(
+                                                          color:
+                                                              ReportScreen_Color
+                                                                  .Colors_Text2_,
+                                                          // fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T,
+                                                        ),
+                                                      ),
                                                     ),
-                                                  ),
-                                                ),
-                                                // SizedBox(
-                                                //   height: 30, //Date_ser
-                                                //   width: 120,
-                                                //   child: _searchBar2(),
-                                                // )
-                                                Container(
-                                                  height: 25, //Date_ser
-                                                  width: 120,
-                                                  decoration: BoxDecoration(
-                                                    color: AppbackgroundColor
-                                                        .Sub_Abg_Colors,
-                                                    borderRadius:
-                                                        const BorderRadius.only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    10),
+                                                    // SizedBox(
+                                                    //   height: 30, //Date_ser
+                                                    //   width: 120,
+                                                    //   child: _searchBar2(),
+                                                    // )
+                                                    Container(
+                                                      height: 25, //Date_ser
+                                                      width: 120,
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            AppbackgroundColor
+                                                                .Sub_Abg_Colors,
+                                                        borderRadius: const BorderRadius
+                                                                .only(
+                                                            topLeft: Radius
+                                                                .circular(10),
                                                             topRight:
                                                                 Radius.circular(
                                                                     10),
@@ -3451,499 +3490,465 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                                             bottomRight:
                                                                 Radius.circular(
                                                                     10)),
-                                                    border: Border.all(
-                                                        color: Colors.grey,
-                                                        width: 1),
-                                                  ),
-                                                  child:
-                                                      _searchBar_Sub_TeNant(),
-                                                  //  _searchBar_Sub_TeNant(),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const Divider(),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                            width: 60,
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 2,
-                                              'เลขที่สัญญา/เสนอราคา',
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 2,
-                                              'ชื่อผู้ติดต่อ',
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 2,
-                                              'ชื่อร้านค้า',
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 2,
-                                              'โซนพื้นที่',
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 2,
-                                              'รหัสพื้นที่',
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 2,
-                                              'ขนาดพื้นที่(ต.ร.ม.)',
-                                              textAlign: TextAlign.right,
-                                              style: TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 2,
-                                              'ระยะเวลาการเช่า',
-                                              textAlign: TextAlign.right,
-                                              style: TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 2,
-                                              'วันเริ่มสัญญา',
-                                              textAlign: TextAlign.right,
-                                              style: TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 2,
-                                              'วันสิ้นสุดสัญญา',
-                                              textAlign: TextAlign.right,
-                                              style: TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 2,
-                                              'สถานะ',
-                                              textAlign: TextAlign.right,
-                                              style: TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 2,
-                                              'เลขอ้างอิง',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 40,
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  )),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.65,
-                                    width: (Responsive.isDesktop(context))
-                                        ? MediaQuery.of(context).size.width *
-                                            0.85
-                                        : 1200,
-                                    decoration: const BoxDecoration(
-                                      color: AppbackgroundColor.Sub_Abg_Colors,
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(0),
-                                          topRight: Radius.circular(0),
-                                          bottomLeft: Radius.circular(0),
-                                          bottomRight: Radius.circular(0)),
-                                      // border: Border.all(color: Colors.grey, width: 1),
-                                    ),
-                                    child: teNantModels.isEmpty
-                                        ? SizedBox(
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                const CircularProgressIndicator(),
-                                                StreamBuilder(
-                                                  stream: Stream.periodic(
-                                                      const Duration(
-                                                          milliseconds: 25),
-                                                      (i) => i),
-                                                  builder: (context, snapshot) {
-                                                    if (!snapshot.hasData)
-                                                      return const Text('');
-                                                    double elapsed =
-                                                        double.parse(snapshot
-                                                                .data
-                                                                .toString()) *
-                                                            0.05;
-                                                    return Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: (elapsed > 8.00)
-                                                          ? const Text(
-                                                              'ไม่พบข้อมูล',
-                                                              style: TextStyle(
-                                                                  color: PeopleChaoScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  fontFamily:
-                                                                      Font_
-                                                                          .Fonts_T
-                                                                  //fontSize: 10.0
-                                                                  ),
-                                                            )
-                                                          : Text(
-                                                              'ดาวน์โหลด : ${elapsed.toStringAsFixed(2)} s.',
-                                                              // 'Time : ${elapsed.toStringAsFixed(2)} seconds',
-                                                              style: const TextStyle(
-                                                                  color: PeopleChaoScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  fontFamily:
-                                                                      Font_
-                                                                          .Fonts_T
-                                                                  //fontSize: 10.0
-                                                                  ),
-                                                            ),
-                                                    );
-                                                  },
+                                                        border: Border.all(
+                                                            color: Colors.grey,
+                                                            width: 1),
+                                                      ),
+                                                      child:
+                                                          _searchBar_Sub_TeNant(),
+                                                      //  _searchBar_Sub_TeNant(),
+                                                    )
+                                                  ],
                                                 ),
-                                              ],
-                                            ),
-                                          )
-                                        : ListView.builder(
-                                            controller: _scrollController1,
-                                            // itemExtent: 50,
-                                            physics:
-                                                const AlwaysScrollableScrollPhysics(),
-                                            shrinkWrap: true,
-                                            itemCount: teNantModels.length,
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              return Column(
-                                                children: [
-                                                  Material(
-                                                    color: tappedIndex_ ==
-                                                            index.toString()
-                                                        ? tappedIndex_Color
-                                                            .tappedIndex_Colors
-                                                            .withOpacity(0.5)
-                                                        : AppbackgroundColor
-                                                            .Sub_Abg_Colors,
-                                                    child: Container(
-                                                      // color: Colors.white,
-                                                      // color: tappedIndex_ == index.toString()
-                                                      //     ? tappedIndex_Color.tappedIndex_Colors
-                                                      //         .withOpacity(0.5)
-                                                      //     : null,
-                                                      child: ListTile(
-                                                        // onTap: () {
-                                                        //   setState(() {
-                                                        //     tappedIndex_ =
-                                                        //         index.toString();
-                                                        //   });
-                                                        // },
-                                                        title: Container(
-                                                          decoration:
-                                                              const BoxDecoration(
-                                                            // color: Colors.green[100]!
-                                                            //     .withOpacity(0.5),
-                                                            border: Border(
-                                                              bottom:
-                                                                  BorderSide(
-                                                                color: Colors
-                                                                    .black12,
-                                                                width: 1,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Container(
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  color: Colors
-                                                                      .grey
-                                                                      .shade300,
-                                                                  borderRadius: const BorderRadius
-                                                                          .only(
-                                                                      topLeft:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              10)),
-                                                                  // border: Border.all(color: Colors.grey, width: 1),
-                                                                ),
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        4.0),
-                                                                child:
-                                                                    PopupMenuButton(
-                                                                  onOpened: () {
-                                                                    setState(
-                                                                        () {
-                                                                      quotxSelectModels_Select
-                                                                          .clear();
-                                                                      ser_indexShow =
-                                                                          null;
-                                                                      tappedIndex_ =
-                                                                          index
-                                                                              .toString();
-                                                                    });
-                                                                  },
-                                                                  child:
-                                                                      const Center(
-                                                                    child:
-                                                                        InkWell(
-                                                                      // onTap: () {
-                                                                      //   setState(() {
-                                                                      //     tappedIndex_ =
-                                                                      //         index.toString();
-                                                                      //   });
-                                                                      // },
-                                                                      child:
-                                                                          AutoSizeText(
-                                                                        minFontSize:
-                                                                            10,
-                                                                        maxFontSize:
-                                                                            25,
-                                                                        maxLines:
-                                                                            1,
-                                                                        'เรียกดู >',
-                                                                        textAlign:
-                                                                            TextAlign.center,
-                                                                        style: TextStyle(
-                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                            //fontWeight: FontWeight.bold,
-                                                                            fontFamily: Font_.Fonts_T),
-                                                                      ),
+                                              ),
+                                            ],
+                                          ),
+                                          const Divider(),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              SizedBox(
+                                                width: 60,
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 25,
+                                                  maxLines: 2,
+                                                  'เลขที่สัญญา/เสนอราคา',
+                                                  textAlign: TextAlign.left,
+                                                  style: TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text1_,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T
+                                                      //fontSize: 10.0
+                                                      ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 25,
+                                                  maxLines: 2,
+                                                  'ชื่อผู้ติดต่อ',
+                                                  textAlign: TextAlign.left,
+                                                  style: TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text1_,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T
+                                                      //fontSize: 10.0
+                                                      ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 25,
+                                                  maxLines: 2,
+                                                  'ชื่อร้านค้า',
+                                                  textAlign: TextAlign.left,
+                                                  style: TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text1_,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T
+                                                      //fontSize: 10.0
+                                                      ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 25,
+                                                  maxLines: 2,
+                                                  'โซนพื้นที่',
+                                                  textAlign: TextAlign.left,
+                                                  style: TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text1_,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T
+                                                      //fontSize: 10.0
+                                                      ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 25,
+                                                  maxLines: 2,
+                                                  'รหัสพื้นที่',
+                                                  textAlign: TextAlign.left,
+                                                  style: TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text1_,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T
+                                                      //fontSize: 10.0
+                                                      ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 25,
+                                                  maxLines: 2,
+                                                  'ขนาดพื้นที่(ต.ร.ม.)',
+                                                  textAlign: TextAlign.right,
+                                                  style: TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text1_,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T
+                                                      //fontSize: 10.0
+                                                      ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 25,
+                                                  maxLines: 2,
+                                                  'ระยะเวลาการเช่า',
+                                                  textAlign: TextAlign.right,
+                                                  style: TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text1_,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T
+                                                      //fontSize: 10.0
+                                                      ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 25,
+                                                  maxLines: 2,
+                                                  'วันเริ่มสัญญา',
+                                                  textAlign: TextAlign.right,
+                                                  style: TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text1_,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T
+                                                      //fontSize: 10.0
+                                                      ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 25,
+                                                  maxLines: 2,
+                                                  'วันสิ้นสุดสัญญา',
+                                                  textAlign: TextAlign.right,
+                                                  style: TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text1_,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T
+                                                      //fontSize: 10.0
+                                                      ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 25,
+                                                  maxLines: 2,
+                                                  'สถานะ',
+                                                  textAlign: TextAlign.right,
+                                                  style: TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text1_,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T
+                                                      //fontSize: 10.0
+                                                      ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 25,
+                                                  maxLines: 2,
+                                                  'เลขอ้างอิง',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text1_,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T
+                                                      //fontSize: 10.0
+                                                      ),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 40,
+                                              )
+                                            ],
+                                          ),
+                                        ],
+                                      )),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.65,
+                                        width: (Responsive.isDesktop(context))
+                                            ? MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.85
+                                            : 1200,
+                                        decoration: const BoxDecoration(
+                                          color:
+                                              AppbackgroundColor.Sub_Abg_Colors,
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(0),
+                                              topRight: Radius.circular(0),
+                                              bottomLeft: Radius.circular(0),
+                                              bottomRight: Radius.circular(0)),
+                                          // border: Border.all(color: Colors.grey, width: 1),
+                                        ),
+                                        child: teNantModels.isEmpty
+                                            ? SizedBox(
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    const CircularProgressIndicator(),
+                                                    StreamBuilder(
+                                                      stream: Stream.periodic(
+                                                          const Duration(
+                                                              milliseconds: 25),
+                                                          (i) => i),
+                                                      builder:
+                                                          (context, snapshot) {
+                                                        if (!snapshot.hasData)
+                                                          return const Text('');
+                                                        double elapsed = double
+                                                                .parse(snapshot
+                                                                    .data
+                                                                    .toString()) *
+                                                            0.05;
+                                                        return Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child:
+                                                              (elapsed > 8.00)
+                                                                  ? const Text(
+                                                                      'ไม่พบข้อมูล',
+                                                                      style: TextStyle(
+                                                                          color: PeopleChaoScreen_Color
+                                                                              .Colors_Text2_,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T
+                                                                          //fontSize: 10.0
+                                                                          ),
+                                                                    )
+                                                                  : Text(
+                                                                      'ดาวน์โหลด : ${elapsed.toStringAsFixed(2)} s.',
+                                                                      // 'Time : ${elapsed.toStringAsFixed(2)} seconds',
+                                                                      style: const TextStyle(
+                                                                          color: PeopleChaoScreen_Color
+                                                                              .Colors_Text2_,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T
+                                                                          //fontSize: 10.0
+                                                                          ),
                                                                     ),
+                                                        );
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            : ListView.builder(
+                                                controller: _scrollController1,
+                                                // itemExtent: 50,
+                                                physics:
+                                                    const AlwaysScrollableScrollPhysics(),
+                                                shrinkWrap: true,
+                                                itemCount: teNantModels.length,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  return Column(
+                                                    children: [
+                                                      Material(
+                                                        color: tappedIndex_ ==
+                                                                index.toString()
+                                                            ? tappedIndex_Color
+                                                                .tappedIndex_Colors
+                                                                .withOpacity(
+                                                                    0.5)
+                                                            : AppbackgroundColor
+                                                                .Sub_Abg_Colors,
+                                                        child: Container(
+                                                          // color: Colors.white,
+                                                          // color: tappedIndex_ == index.toString()
+                                                          //     ? tappedIndex_Color.tappedIndex_Colors
+                                                          //         .withOpacity(0.5)
+                                                          //     : null,
+                                                          child: ListTile(
+                                                            // onTap: () {
+                                                            //   setState(() {
+                                                            //     tappedIndex_ =
+                                                            //         index.toString();
+                                                            //   });
+                                                            // },
+                                                            title: Container(
+                                                              decoration:
+                                                                  const BoxDecoration(
+                                                                // color: Colors.green[100]!
+                                                                //     .withOpacity(0.5),
+                                                                border: Border(
+                                                                  bottom:
+                                                                      BorderSide(
+                                                                    color: Colors
+                                                                        .black12,
+                                                                    width: 1,
                                                                   ),
-                                                                  itemBuilder:
-                                                                      (BuildContext
-                                                                              context) =>
-                                                                          [
-                                                                    PopupMenuItem(
+                                                                ),
+                                                              ),
+                                                              child: Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  Container(
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      color: Colors
+                                                                          .grey
+                                                                          .shade300,
+                                                                      borderRadius: const BorderRadius
+                                                                              .only(
+                                                                          topLeft: Radius.circular(
+                                                                              10),
+                                                                          topRight: Radius.circular(
+                                                                              10),
+                                                                          bottomLeft: Radius.circular(
+                                                                              10),
+                                                                          bottomRight:
+                                                                              Radius.circular(10)),
+                                                                      // border: Border.all(color: Colors.grey, width: 1),
+                                                                    ),
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            4.0),
+                                                                    child:
+                                                                        PopupMenuButton(
+                                                                      onOpened:
+                                                                          () {
+                                                                        setState(
+                                                                            () {
+                                                                          quotxSelectModels_Select
+                                                                              .clear();
+                                                                          ser_indexShow =
+                                                                              null;
+                                                                          tappedIndex_ =
+                                                                              index.toString();
+                                                                        });
+                                                                      },
                                                                       child:
-                                                                          Column(
-                                                                        children: [
-                                                                          InkWell(
-                                                                              onTap: () {
-                                                                                if (renTal_lavel <= 2) {
-                                                                                  Navigator.pop(context);
-                                                                                  infomation();
-                                                                                } else {
-                                                                                  var ser_teNant = teNantModels[index].quantity;
-                                                                                  var ser_ciddoc = teNantModels[index].docno == null ? teNantModels[index].cid : teNantModels[index].docno;
-                                                                                  setState(() {
-                                                                                    Value_NameShop_index = '$ser_teNant';
-                                                                                    Value_cid = '$ser_ciddoc';
-                                                                                    Value_stasus = teNantModels[index].quantity == '1'
-                                                                                        ? datex.isAfter(DateTime.parse('${teNantModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 0))) == true
-                                                                                            ? 'หมดสัญญา'
-                                                                                            : datex.isAfter(DateTime.parse('${teNantModels[index].ldate} 00:00:00.000').subtract(Duration(days: open_set_date))) == true
-                                                                                                ? 'ใกล้หมดสัญญา'
-                                                                                                : 'เช่าอยู่'
-                                                                                        : teNantModels[index].quantity == '2'
-                                                                                            ? 'เสนอราคา'
-                                                                                            : teNantModels[index].quantity == '3'
-                                                                                                ? 'เสนอราคา(มัดจำ)'
-                                                                                                : 'ว่าง';
-                                                                                  });
-
-                                                                                  setState(() {
-                                                                                    ReturnBodyPeople = 'PeopleChaoScreen2';
-                                                                                  });
-                                                                                  Navigator.pop(context);
-                                                                                }
-                                                                                // Navigator.push(
-                                                                                //     context,
-                                                                                //     MaterialPageRoute(
-                                                                                //         builder: (context) =>
-                                                                                //             const PeopleChaoScreen2()));
-                                                                              },
-                                                                              child: Container(
-                                                                                  padding: const EdgeInsets.all(10),
-                                                                                  width: MediaQuery.of(context).size.width,
-                                                                                  child: Row(
-                                                                                    children: [
-                                                                                      Expanded(
-                                                                                          child: Text(
-                                                                                        teNantModels[index].docno == null
-                                                                                            ? teNantModels[index].cid == null
-                                                                                                ? ''
-                                                                                                : '${teNantModels[index].cid}'
-                                                                                            : '${teNantModels[index].docno}',
-                                                                                        overflow: TextOverflow.ellipsis,
-                                                                                        style: const TextStyle(
-                                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                            //fontWeight: FontWeight.bold,
-                                                                                            fontFamily: Font_.Fonts_T),
-                                                                                      ))
-                                                                                    ],
-                                                                                  ))),
-                                                                          teNantModels[index].cid == teNantModels[index].fid
-                                                                              ? SizedBox()
-                                                                              : InkWell(
+                                                                          const Center(
+                                                                        child:
+                                                                            InkWell(
+                                                                          // onTap: () {
+                                                                          //   setState(() {
+                                                                          //     tappedIndex_ =
+                                                                          //         index.toString();
+                                                                          //   });
+                                                                          // },
+                                                                          child:
+                                                                              AutoSizeText(
+                                                                            minFontSize:
+                                                                                10,
+                                                                            maxFontSize:
+                                                                                25,
+                                                                            maxLines:
+                                                                                1,
+                                                                            'เรียกดู >',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style: TextStyle(
+                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                //fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      itemBuilder:
+                                                                          (BuildContext context) =>
+                                                                              [
+                                                                        PopupMenuItem(
+                                                                          child:
+                                                                              Column(
+                                                                            children: [
+                                                                              InkWell(
                                                                                   onTap: () {
                                                                                     if (renTal_lavel <= 2) {
                                                                                       Navigator.pop(context);
                                                                                       infomation();
                                                                                     } else {
                                                                                       var ser_teNant = teNantModels[index].quantity;
-                                                                                      var ser_ciddoc = teNantModels[index].docno == null ? teNantModels[index].fid : teNantModels[index].docno;
+                                                                                      var ser_ciddoc = teNantModels[index].docno == null ? teNantModels[index].cid : teNantModels[index].docno;
                                                                                       setState(() {
                                                                                         Value_NameShop_index = '$ser_teNant';
                                                                                         Value_cid = '$ser_ciddoc';
@@ -3981,7 +3986,7 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                                                                             teNantModels[index].docno == null
                                                                                                 ? teNantModels[index].cid == null
                                                                                                     ? ''
-                                                                                                    : 'สัญญาเดิม ${teNantModels[index].fid}'
+                                                                                                    : '${teNantModels[index].cid}'
                                                                                                 : '${teNantModels[index].docno}',
                                                                                             overflow: TextOverflow.ellipsis,
                                                                                             style: const TextStyle(
@@ -3991,728 +3996,726 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                                                                           ))
                                                                                         ],
                                                                                       ))),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          2.0),
-                                                                  child:
-                                                                      Tooltip(
-                                                                    richMessage:
-                                                                        TextSpan(
-                                                                      text: teNantModels[index].docno ==
-                                                                              null
-                                                                          ? teNantModels[index].cid == null
-                                                                              ? ''
-                                                                              : teNantModels[index].cid == teNantModels[index].fid
-                                                                                  ? '${teNantModels[index].cid}'
-                                                                                  : 'สัญญาเดิม ${teNantModels[index].fid}'
-                                                                          : '${teNantModels[index].docno}',
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        color: HomeScreen_Color
-                                                                            .Colors_Text1_,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T,
-                                                                        //fontSize: 10.0
-                                                                      ),
-                                                                    ),
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              5),
-                                                                      color: Colors
-                                                                              .grey[
-                                                                          200],
-                                                                    ),
-                                                                    child:
-                                                                        AutoSizeText(
-                                                                      minFontSize:
-                                                                          10,
-                                                                      maxFontSize:
-                                                                          25,
-                                                                      maxLines:
-                                                                          1,
-                                                                      teNantModels[index].docno ==
-                                                                              null
-                                                                          ? teNantModels[index].cid == null
-                                                                              ? ''
-                                                                              : '${teNantModels[index].cid}'
-                                                                          : '${teNantModels[index].docno}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .left,
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
-                                                                      style: const TextStyle(
-                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                          //fontWeight: FontWeight.bold,
-                                                                          fontFamily: Font_.Fonts_T),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          2.0),
-                                                                  child:
-                                                                      AutoSizeText(
-                                                                    minFontSize:
-                                                                        10,
-                                                                    maxFontSize:
-                                                                        25,
-                                                                    maxLines: 1,
-                                                                    teNantModels[index].cname ==
-                                                                            null
-                                                                        ? teNantModels[index].cname_q ==
-                                                                                null
-                                                                            ? ''
-                                                                            : '${teNantModels[index].cname_q}'
-                                                                        : '${teNantModels[index].cname}',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .left,
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    style: const TextStyle(
-                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                        //fontWeight: FontWeight.bold,
-                                                                        fontFamily: Font_.Fonts_T),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          2.0),
-                                                                  child:
-                                                                      Tooltip(
-                                                                    richMessage:
-                                                                        TextSpan(
-                                                                      text: teNantModels[index].sname ==
-                                                                              null
-                                                                          ? teNantModels[index].sname_q == null
-                                                                              ? ''
-                                                                              : '${teNantModels[index].sname_q}'
-                                                                          : '${teNantModels[index].sname}',
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        color: HomeScreen_Color
-                                                                            .Colors_Text1_,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T,
-                                                                        //fontSize: 10.0
-                                                                      ),
-                                                                    ),
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              5),
-                                                                      color: Colors
-                                                                              .grey[
-                                                                          200],
-                                                                    ),
-                                                                    child:
-                                                                        AutoSizeText(
-                                                                      minFontSize:
-                                                                          10,
-                                                                      maxFontSize:
-                                                                          25,
-                                                                      maxLines:
-                                                                          1,
-                                                                      teNantModels[index].sname ==
-                                                                              null
-                                                                          ? teNantModels[index].sname_q == null
-                                                                              ? ''
-                                                                              : '${teNantModels[index].sname_q}'
-                                                                          : '${teNantModels[index].sname}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .left,
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
-                                                                      style: const TextStyle(
-                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                          //fontWeight: FontWeight.bold,
-                                                                          fontFamily: Font_.Fonts_T),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          2.0),
-                                                                  child:
-                                                                      AutoSizeText(
-                                                                    minFontSize:
-                                                                        10,
-                                                                    maxFontSize:
-                                                                        25,
-                                                                    maxLines: 1,
-                                                                    '${teNantModels[index].zn}',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .left,
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    style: const TextStyle(
-                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                        //fontWeight: FontWeight.bold,
-                                                                        fontFamily: Font_.Fonts_T),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Tooltip(
-                                                                  richMessage:
-                                                                      TextSpan(
-                                                                    text: teNantModels[index].ln_c ==
-                                                                            null
-                                                                        ? teNantModels[index].ln_q ==
-                                                                                null
-                                                                            ? ''
-                                                                            : '${teNantModels[index].ln_q}'
-                                                                        : '${teNantModels[index].ln_c}',
-                                                                    style:
-                                                                        const TextStyle(
-                                                                      color: HomeScreen_Color
-                                                                          .Colors_Text1_,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontFamily:
-                                                                          FontWeight_
-                                                                              .Fonts_T,
-                                                                      //fontSize: 10.0
-                                                                    ),
-                                                                  ),
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .circular(5),
-                                                                    color: Colors
-                                                                            .grey[
-                                                                        200],
-                                                                  ),
-                                                                  child:
-                                                                      Padding(
-                                                                    padding:
-                                                                        const EdgeInsets.all(
-                                                                            2.0),
-                                                                    child:
-                                                                        AutoSizeText(
-                                                                      minFontSize:
-                                                                          10,
-                                                                      maxFontSize:
-                                                                          25,
-                                                                      maxLines:
-                                                                          1,
-                                                                      teNantModels[index].ln_c ==
-                                                                              null
-                                                                          ? teNantModels[index].ln_q == null
-                                                                              ? ''
-                                                                              : '${teNantModels[index].ln_q}'
-                                                                          : '${teNantModels[index].ln_c}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .left,
-                                                                      style: const TextStyle(
-                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                          //fontWeight: FontWeight.bold,
-                                                                          fontFamily: Font_.Fonts_T),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          2.0),
-                                                                  child:
-                                                                      AutoSizeText(
-                                                                    minFontSize:
-                                                                        10,
-                                                                    maxFontSize:
-                                                                        25,
-                                                                    maxLines: 1,
-                                                                    teNantModels[index].area_c ==
-                                                                            null
-                                                                        ? teNantModels[index].area_q ==
-                                                                                null
-                                                                            ? ''
-                                                                            : '${teNantModels[index].area_q}'
-                                                                        : '${teNantModels[index].area_c}',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .right,
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    style: const TextStyle(
-                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                        //fontWeight: FontWeight.bold,
-                                                                        fontFamily: Font_.Fonts_T),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          2.0),
-                                                                  child:
-                                                                      AutoSizeText(
-                                                                    minFontSize:
-                                                                        10,
-                                                                    maxFontSize:
-                                                                        25,
-                                                                    maxLines: 1,
-                                                                    teNantModels[index].period ==
-                                                                            null
-                                                                        ? teNantModels[index].period_q ==
-                                                                                null
-                                                                            ? ''
-                                                                            : '${teNantModels[index].period_q}  ${teNantModels[index].rtname_q!.substring(3)}'
-                                                                        : '${teNantModels[index].period}  ${teNantModels[index].rtname!.substring(3)}',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .end,
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    style: const TextStyle(
-                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                        //fontWeight: FontWeight.bold,
-                                                                        fontFamily: Font_.Fonts_T),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          2.0),
-                                                                  child:
-                                                                      AutoSizeText(
-                                                                    minFontSize:
-                                                                        10,
-                                                                    maxFontSize:
-                                                                        25,
-                                                                    maxLines: 1,
-                                                                    teNantModels[index].sdate_q ==
-                                                                            null
-                                                                        ? teNantModels[index].sdate ==
-                                                                                null
-                                                                            ? ''
-                                                                            : DateFormat('dd-MM-yyyy')
-                                                                                .format(DateTime.parse(
-                                                                                    '${teNantModels[index].sdate} 00:00:00'))
-                                                                                .toString()
-                                                                        : DateFormat('dd-MM-yyyy')
-                                                                            .format(DateTime.parse('${teNantModels[index].sdate_q} 00:00:00'))
-                                                                            .toString(),
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .end,
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    style: const TextStyle(
-                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                        //fontWeight: FontWeight.bold,
-                                                                        fontFamily: Font_.Fonts_T),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          2.0),
-                                                                  child:
-                                                                      AutoSizeText(
-                                                                    minFontSize:
-                                                                        10,
-                                                                    maxFontSize:
-                                                                        25,
-                                                                    maxLines: 1,
-                                                                    teNantModels[index].ldate_q ==
-                                                                            null
-                                                                        ? teNantModels[index].ldate ==
-                                                                                null
-                                                                            ? ''
-                                                                            : DateFormat('dd-MM-yyyy')
-                                                                                .format(DateTime.parse(
-                                                                                    '${teNantModels[index].ldate} 00:00:00'))
-                                                                                .toString()
-                                                                        : DateFormat('dd-MM-yyyy')
-                                                                            .format(DateTime.parse('${teNantModels[index].ldate_q} 00:00:00'))
-                                                                            .toString(),
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .end,
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    style: const TextStyle(
-                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                        //fontWeight: FontWeight.bold,
-                                                                        fontFamily: Font_.Fonts_T),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          2.0),
-                                                                  child:
-                                                                      AutoSizeText(
-                                                                    minFontSize:
-                                                                        10,
-                                                                    maxFontSize:
-                                                                        25,
-                                                                    maxLines: 1,
-                                                                    teNantModels[index].quantity ==
-                                                                            '1'
-                                                                        ? datex.isAfter(DateTime.parse('${teNantModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 0))) ==
-                                                                                true
-                                                                            ? 'หมดสัญญา'
-                                                                            : datex.isAfter(DateTime.parse('${teNantModels[index].ldate} 00:00:00.000').subtract(Duration(days: open_set_date))) == true
-                                                                                ? 'ใกล้หมดสัญญา'
-                                                                                : 'เช่าอยู่'
-                                                                        : teNantModels[index].quantity == '2'
-                                                                            ? 'เสนอราคา'
-                                                                            : teNantModels[index].quantity == '3'
-                                                                                ? 'เสนอราคา(มัดจำ)'
-                                                                                : 'ว่าง',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .end,
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    style: TextStyle(
-                                                                        color: teNantModels[index].quantity == '1'
-                                                                            ? datex.isAfter(DateTime.parse('${teNantModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 0))) == true
-                                                                                ? Colors.red
-                                                                                : datex.isAfter(DateTime.parse('${teNantModels[index].ldate} 00:00:00.000').subtract(Duration(days: open_set_date))) == true
-                                                                                    ? Colors.orange.shade900
-                                                                                    : Colors.black
-                                                                            : teNantModels[index].quantity == '2'
-                                                                                ? Colors.blue
-                                                                                : teNantModels[index].quantity == '3'
-                                                                                    ? Colors.blue
-                                                                                    : Colors.green,
-                                                                        fontFamily: Font_.Fonts_T
-                                                                        //fontSize: 10.0
+                                                                              teNantModels[index].cid == teNantModels[index].fid
+                                                                                  ? SizedBox()
+                                                                                  : InkWell(
+                                                                                      onTap: () {
+                                                                                        if (renTal_lavel <= 2) {
+                                                                                          Navigator.pop(context);
+                                                                                          infomation();
+                                                                                        } else {
+                                                                                          var ser_teNant = teNantModels[index].quantity;
+                                                                                          var ser_ciddoc = teNantModels[index].docno == null ? teNantModels[index].fid : teNantModels[index].docno;
+                                                                                          setState(() {
+                                                                                            Value_NameShop_index = '$ser_teNant';
+                                                                                            Value_cid = '$ser_ciddoc';
+                                                                                            Value_stasus = teNantModels[index].quantity == '1'
+                                                                                                ? datex.isAfter(DateTime.parse('${teNantModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 0))) == true
+                                                                                                    ? 'หมดสัญญา'
+                                                                                                    : datex.isAfter(DateTime.parse('${teNantModels[index].ldate} 00:00:00.000').subtract(Duration(days: open_set_date))) == true
+                                                                                                        ? 'ใกล้หมดสัญญา'
+                                                                                                        : 'เช่าอยู่'
+                                                                                                : teNantModels[index].quantity == '2'
+                                                                                                    ? 'เสนอราคา'
+                                                                                                    : teNantModels[index].quantity == '3'
+                                                                                                        ? 'เสนอราคา(มัดจำ)'
+                                                                                                        : 'ว่าง';
+                                                                                          });
+
+                                                                                          setState(() {
+                                                                                            ReturnBodyPeople = 'PeopleChaoScreen2';
+                                                                                          });
+                                                                                          Navigator.pop(context);
+                                                                                        }
+                                                                                        // Navigator.push(
+                                                                                        //     context,
+                                                                                        //     MaterialPageRoute(
+                                                                                        //         builder: (context) =>
+                                                                                        //             const PeopleChaoScreen2()));
+                                                                                      },
+                                                                                      child: Container(
+                                                                                          padding: const EdgeInsets.all(10),
+                                                                                          width: MediaQuery.of(context).size.width,
+                                                                                          child: Row(
+                                                                                            children: [
+                                                                                              Expanded(
+                                                                                                  child: Text(
+                                                                                                teNantModels[index].docno == null
+                                                                                                    ? teNantModels[index].cid == null
+                                                                                                        ? ''
+                                                                                                        : 'สัญญาเดิม ${teNantModels[index].fid}'
+                                                                                                    : '${teNantModels[index].docno}',
+                                                                                                overflow: TextOverflow.ellipsis,
+                                                                                                style: const TextStyle(
+                                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                    //fontWeight: FontWeight.bold,
+                                                                                                    fontFamily: Font_.Fonts_T),
+                                                                                              ))
+                                                                                            ],
+                                                                                          ))),
+                                                                            ],
+                                                                          ),
                                                                         ),
+                                                                      ],
+                                                                    ),
                                                                   ),
-                                                                ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Padding(
-                                                                  padding:
-                                                                      EdgeInsets
-                                                                          .all(
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child:
+                                                                        Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
                                                                               2.0),
-                                                                  child:
-                                                                      AutoSizeText(
-                                                                    minFontSize:
-                                                                        10,
-                                                                    maxFontSize:
-                                                                        25,
-                                                                    maxLines: 1,
-                                                                    teNantModels[index].wnote ==
-                                                                            null
-                                                                        ? ''
-                                                                        : '${teNantModels[index].wnote}',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    style: const TextStyle(
-                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                        //fontWeight: FontWeight.bold,
-                                                                        fontFamily: Font_.Fonts_T),
+                                                                      child:
+                                                                          Tooltip(
+                                                                        richMessage:
+                                                                            TextSpan(
+                                                                          text: teNantModels[index].docno == null
+                                                                              ? teNantModels[index].cid == null
+                                                                                  ? ''
+                                                                                  : teNantModels[index].cid == teNantModels[index].fid
+                                                                                      ? '${teNantModels[index].cid}'
+                                                                                      : 'สัญญาเดิม ${teNantModels[index].fid}'
+                                                                              : '${teNantModels[index].docno}',
+                                                                          style:
+                                                                              const TextStyle(
+                                                                            color:
+                                                                                HomeScreen_Color.Colors_Text1_,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                            fontFamily:
+                                                                                FontWeight_.Fonts_T,
+                                                                            //fontSize: 10.0
+                                                                          ),
+                                                                        ),
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(5),
+                                                                          color:
+                                                                              Colors.grey[200],
+                                                                        ),
+                                                                        child:
+                                                                            AutoSizeText(
+                                                                          minFontSize:
+                                                                              10,
+                                                                          maxFontSize:
+                                                                              25,
+                                                                          maxLines:
+                                                                              1,
+                                                                          teNantModels[index].docno == null
+                                                                              ? teNantModels[index].cid == null
+                                                                                  ? ''
+                                                                                  : '${teNantModels[index].cid}'
+                                                                              : '${teNantModels[index].docno}',
+                                                                          textAlign:
+                                                                              TextAlign.left,
+                                                                          overflow:
+                                                                              TextOverflow.ellipsis,
+                                                                          style: const TextStyle(
+                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                              //fontWeight: FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T),
+                                                                        ),
+                                                                      ),
+                                                                    ),
                                                                   ),
-                                                                ),
-                                                              ),
-                                                              Padding(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child:
+                                                                        Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              2.0),
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        minFontSize:
+                                                                            10,
+                                                                        maxFontSize:
+                                                                            25,
+                                                                        maxLines:
+                                                                            1,
+                                                                        teNantModels[index].cname ==
+                                                                                null
+                                                                            ? teNantModels[index].cname_q == null
+                                                                                ? ''
+                                                                                : '${teNantModels[index].cname_q}'
+                                                                            : '${teNantModels[index].cname}',
+                                                                        textAlign:
+                                                                            TextAlign.left,
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        style: const TextStyle(
+                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            //fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child:
+                                                                        Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              2.0),
+                                                                      child:
+                                                                          Tooltip(
+                                                                        richMessage:
+                                                                            TextSpan(
+                                                                          text: teNantModels[index].sname == null
+                                                                              ? teNantModels[index].sname_q == null
+                                                                                  ? ''
+                                                                                  : '${teNantModels[index].sname_q}'
+                                                                              : '${teNantModels[index].sname}',
+                                                                          style:
+                                                                              const TextStyle(
+                                                                            color:
+                                                                                HomeScreen_Color.Colors_Text1_,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                            fontFamily:
+                                                                                FontWeight_.Fonts_T,
+                                                                            //fontSize: 10.0
+                                                                          ),
+                                                                        ),
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(5),
+                                                                          color:
+                                                                              Colors.grey[200],
+                                                                        ),
+                                                                        child:
+                                                                            AutoSizeText(
+                                                                          minFontSize:
+                                                                              10,
+                                                                          maxFontSize:
+                                                                              25,
+                                                                          maxLines:
+                                                                              1,
+                                                                          teNantModels[index].sname == null
+                                                                              ? teNantModels[index].sname_q == null
+                                                                                  ? ''
+                                                                                  : '${teNantModels[index].sname_q}'
+                                                                              : '${teNantModels[index].sname}',
+                                                                          textAlign:
+                                                                              TextAlign.left,
+                                                                          overflow:
+                                                                              TextOverflow.ellipsis,
+                                                                          style: const TextStyle(
+                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                              //fontWeight: FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child:
+                                                                        Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              2.0),
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        minFontSize:
+                                                                            10,
+                                                                        maxFontSize:
+                                                                            25,
+                                                                        maxLines:
+                                                                            1,
+                                                                        '${teNantModels[index].zn}',
+                                                                        textAlign:
+                                                                            TextAlign.left,
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        style: const TextStyle(
+                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            //fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child:
+                                                                        Tooltip(
+                                                                      richMessage:
+                                                                          TextSpan(
+                                                                        text: teNantModels[index].ln_c ==
+                                                                                null
+                                                                            ? teNantModels[index].ln_q == null
+                                                                                ? ''
+                                                                                : '${teNantModels[index].ln_q}'
+                                                                            : '${teNantModels[index].ln_c}',
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          color:
+                                                                              HomeScreen_Color.Colors_Text1_,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                          fontFamily:
+                                                                              FontWeight_.Fonts_T,
+                                                                          //fontSize: 10.0
+                                                                        ),
+                                                                      ),
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(5),
+                                                                        color: Colors
+                                                                            .grey[200],
+                                                                      ),
+                                                                      child:
+                                                                          Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.all(2.0),
+                                                                        child:
+                                                                            AutoSizeText(
+                                                                          minFontSize:
+                                                                              10,
+                                                                          maxFontSize:
+                                                                              25,
+                                                                          maxLines:
+                                                                              1,
+                                                                          teNantModels[index].ln_c == null
+                                                                              ? teNantModels[index].ln_q == null
+                                                                                  ? ''
+                                                                                  : '${teNantModels[index].ln_q}'
+                                                                              : '${teNantModels[index].ln_c}',
+                                                                          textAlign:
+                                                                              TextAlign.left,
+                                                                          style: const TextStyle(
+                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                              //fontWeight: FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child:
+                                                                        Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              2.0),
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        minFontSize:
+                                                                            10,
+                                                                        maxFontSize:
+                                                                            25,
+                                                                        maxLines:
+                                                                            1,
+                                                                        teNantModels[index].area_c ==
+                                                                                null
+                                                                            ? teNantModels[index].area_q == null
+                                                                                ? ''
+                                                                                : '${teNantModels[index].area_q}'
+                                                                            : '${teNantModels[index].area_c}',
+                                                                        textAlign:
+                                                                            TextAlign.right,
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        style: const TextStyle(
+                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            //fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child:
+                                                                        Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              2.0),
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        minFontSize:
+                                                                            10,
+                                                                        maxFontSize:
+                                                                            25,
+                                                                        maxLines:
+                                                                            1,
+                                                                        teNantModels[index].period ==
+                                                                                null
+                                                                            ? teNantModels[index].period_q == null
+                                                                                ? ''
+                                                                                : '${teNantModels[index].period_q}  ${teNantModels[index].rtname_q!.substring(3)}'
+                                                                            : '${teNantModels[index].period}  ${teNantModels[index].rtname!.substring(3)}',
+                                                                        textAlign:
+                                                                            TextAlign.end,
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        style: const TextStyle(
+                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            //fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child:
+                                                                        Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              2.0),
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        minFontSize:
+                                                                            10,
+                                                                        maxFontSize:
+                                                                            25,
+                                                                        maxLines:
+                                                                            1,
+                                                                        teNantModels[index].sdate_q ==
+                                                                                null
+                                                                            ? teNantModels[index].sdate == null
+                                                                                ? ''
+                                                                                : DateFormat('dd-MM-yyyy').format(DateTime.parse('${teNantModels[index].sdate} 00:00:00')).toString()
+                                                                            : DateFormat('dd-MM-yyyy').format(DateTime.parse('${teNantModels[index].sdate_q} 00:00:00')).toString(),
+                                                                        textAlign:
+                                                                            TextAlign.end,
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        style: const TextStyle(
+                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            //fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child:
+                                                                        Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              2.0),
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        minFontSize:
+                                                                            10,
+                                                                        maxFontSize:
+                                                                            25,
+                                                                        maxLines:
+                                                                            1,
+                                                                        teNantModels[index].ldate_q ==
+                                                                                null
+                                                                            ? teNantModels[index].ldate == null
+                                                                                ? ''
+                                                                                : DateFormat('dd-MM-yyyy').format(DateTime.parse('${teNantModels[index].ldate} 00:00:00')).toString()
+                                                                            : DateFormat('dd-MM-yyyy').format(DateTime.parse('${teNantModels[index].ldate_q} 00:00:00')).toString(),
+                                                                        textAlign:
+                                                                            TextAlign.end,
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        style: const TextStyle(
+                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            //fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child:
+                                                                        Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              2.0),
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        minFontSize:
+                                                                            10,
+                                                                        maxFontSize:
+                                                                            25,
+                                                                        maxLines:
+                                                                            1,
+                                                                        teNantModels[index].quantity ==
+                                                                                '1'
+                                                                            ? datex.isAfter(DateTime.parse('${teNantModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 0))) == true
+                                                                                ? 'หมดสัญญา'
+                                                                                : datex.isAfter(DateTime.parse('${teNantModels[index].ldate} 00:00:00.000').subtract(Duration(days: open_set_date))) == true
+                                                                                    ? 'ใกล้หมดสัญญา'
+                                                                                    : 'เช่าอยู่'
+                                                                            : teNantModels[index].quantity == '2'
+                                                                                ? 'เสนอราคา'
+                                                                                : teNantModels[index].quantity == '3'
+                                                                                    ? 'เสนอราคา(มัดจำ)'
+                                                                                    : 'ว่าง',
+                                                                        textAlign:
+                                                                            TextAlign.end,
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        style: TextStyle(
+                                                                            color: teNantModels[index].quantity == '1'
+                                                                                ? datex.isAfter(DateTime.parse('${teNantModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 0))) == true
+                                                                                    ? Colors.red
+                                                                                    : datex.isAfter(DateTime.parse('${teNantModels[index].ldate} 00:00:00.000').subtract(Duration(days: open_set_date))) == true
+                                                                                        ? Colors.orange.shade900
+                                                                                        : Colors.black
+                                                                                : teNantModels[index].quantity == '2'
+                                                                                    ? Colors.blue
+                                                                                    : teNantModels[index].quantity == '3'
+                                                                                        ? Colors.blue
+                                                                                        : Colors.green,
+                                                                            fontFamily: Font_.Fonts_T
+                                                                            //fontSize: 10.0
+                                                                            ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child:
+                                                                        Padding(
+                                                                      padding:
+                                                                          EdgeInsets.all(
+                                                                              2.0),
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        minFontSize:
+                                                                            10,
+                                                                        maxFontSize:
+                                                                            25,
+                                                                        maxLines:
+                                                                            1,
+                                                                        teNantModels[index].wnote ==
+                                                                                null
+                                                                            ? ''
+                                                                            : '${teNantModels[index].wnote}',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        style: const TextStyle(
+                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            //fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Padding(
+                                                                    padding:
+                                                                        EdgeInsets.all(
                                                                             2.0),
-                                                                child: SizedBox(
-                                                                  width: 40,
-                                                                  height: 30,
-                                                                  child: Align(
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .centerRight,
                                                                     child:
-                                                                        InkWell(
-                                                                      onTap:
-                                                                          () {
-                                                                        if (renTal_lavel <=
-                                                                            2) {
-                                                                          infomation();
-                                                                        } else {
-                                                                          setState(
+                                                                        SizedBox(
+                                                                      width: 40,
+                                                                      height:
+                                                                          30,
+                                                                      child:
+                                                                          Align(
+                                                                        alignment:
+                                                                            Alignment.centerRight,
+                                                                        child:
+                                                                            InkWell(
+                                                                          onTap:
                                                                               () {
-                                                                            tappedIndex_ =
-                                                                                index.toString();
-                                                                            if (ser_indexShow ==
-                                                                                index) {
-                                                                              quotxSelectModels_Select.clear();
-                                                                              ser_indexShow = null;
+                                                                            if (renTal_lavel <=
+                                                                                2) {
+                                                                              infomation();
                                                                             } else {
-                                                                              red_quotx_Select(index);
-                                                                              ser_indexShow = index;
+                                                                              setState(() {
+                                                                                tappedIndex_ = index.toString();
+                                                                                if (ser_indexShow == index) {
+                                                                                  quotxSelectModels_Select.clear();
+                                                                                  ser_indexShow = null;
+                                                                                } else {
+                                                                                  red_quotx_Select(index);
+                                                                                  ser_indexShow = index;
+                                                                                }
+                                                                              });
                                                                             }
-                                                                          });
-                                                                        }
-                                                                      },
-                                                                      child: CircleAvatar(
-                                                                          backgroundColor: (ser_indexShow == index) ? Colors.red[700]!.withOpacity(0.5) : Colors.grey[600]!.withOpacity(0.5),
-                                                                          child: Icon(
-                                                                            (ser_indexShow == index)
-                                                                                ? Icons.keyboard_arrow_up
-                                                                                : Icons.keyboard_arrow_down_outlined,
-                                                                            color:
-                                                                                Colors.white,
-                                                                            size:
-                                                                                20,
-                                                                          )),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  if (ser_indexShow == index)
-                                                    SizedBox(
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: Column(
-                                                          children: [
-                                                            Container(
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: Colors
-                                                                    .green[100],
-                                                                borderRadius: BorderRadius.only(
-                                                                    topLeft: Radius
-                                                                        .circular(
-                                                                            8),
-                                                                    topRight: Radius
-                                                                        .circular(
-                                                                            8),
-                                                                    bottomLeft:
-                                                                        Radius.circular(
-                                                                            0),
-                                                                    bottomRight:
-                                                                        Radius.circular(
-                                                                            0)),
-                                                              ),
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(2.0),
-                                                              child: const Row(
-                                                                children: [
-                                                                  Expanded(
-                                                                    flex: 1,
-                                                                    child:
-                                                                        Padding(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              2.0),
-                                                                      child:
-                                                                          Text(
-                                                                        'งวด',
-                                                                        textAlign:
-                                                                            TextAlign.start,
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                PeopleChaoScreen_Color.Colors_Text1_,
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontFamily: FontWeight_.Fonts_T
-                                                                            //fontSize: 10.0
-                                                                            //fontSize: 10.0
-                                                                            ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Expanded(
-                                                                    flex: 1,
-                                                                    child:
-                                                                        Padding(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              2.0),
-                                                                      child:
-                                                                          Text(
-                                                                        'วันที่',
-                                                                        textAlign:
-                                                                            TextAlign.start,
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                PeopleChaoScreen_Color.Colors_Text1_,
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontFamily: FontWeight_.Fonts_T
-                                                                            //fontSize: 10.0
-                                                                            //fontSize: 10.0
-                                                                            ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Expanded(
-                                                                    flex: 1,
-                                                                    child:
-                                                                        Padding(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              2.0),
-                                                                      child:
-                                                                          Text(
-                                                                        'รายการ',
-                                                                        textAlign:
-                                                                            TextAlign.start,
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                PeopleChaoScreen_Color.Colors_Text1_,
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontFamily: FontWeight_.Fonts_T
-                                                                            //fontSize: 10.0
-                                                                            //fontSize: 10.0
-                                                                            ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Expanded(
-                                                                    flex: 1,
-                                                                    child:
-                                                                        Padding(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              2.0),
-                                                                      child:
-                                                                          Text(
-                                                                        'ยอด/งวด',
-                                                                        textAlign:
-                                                                            TextAlign.end,
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                PeopleChaoScreen_Color.Colors_Text1_,
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontFamily: FontWeight_.Fonts_T
-                                                                            //fontSize: 10.0
-                                                                            //fontSize: 10.0
-                                                                            ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Expanded(
-                                                                    flex: 1,
-                                                                    child:
-                                                                        Padding(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              2.0),
-                                                                      child:
-                                                                          Text(
-                                                                        'ยอด',
-                                                                        textAlign:
-                                                                            TextAlign.end,
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                PeopleChaoScreen_Color.Colors_Text1_,
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontFamily: FontWeight_.Fonts_T
-                                                                            //fontSize: 10.0
-                                                                            //fontSize: 10.0
-                                                                            ),
+                                                                          },
+                                                                          child: CircleAvatar(
+                                                                              backgroundColor: (ser_indexShow == index) ? Colors.red[700]!.withOpacity(0.5) : Colors.grey[600]!.withOpacity(0.5),
+                                                                              child: Icon(
+                                                                                (ser_indexShow == index) ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down_outlined,
+                                                                                color: Colors.white,
+                                                                                size: 20,
+                                                                              )),
+                                                                        ),
                                                                       ),
                                                                     ),
                                                                   ),
                                                                 ],
                                                               ),
                                                             ),
-                                                            if (quotxSelectModels_Select
-                                                                    .length ==
-                                                                0)
-                                                              Container(
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      if (ser_indexShow ==
+                                                          index)
+                                                        SizedBox(
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: Column(
+                                                              children: [
+                                                                Container(
                                                                   decoration:
                                                                       BoxDecoration(
                                                                     color: Colors
-                                                                        .green[50],
-                                                                    border:
-                                                                        const Border(
-                                                                      bottom:
-                                                                          BorderSide(
-                                                                        color: Colors
-                                                                            .black12,
-                                                                        width:
-                                                                            1,
-                                                                      ),
-                                                                    ),
+                                                                            .green[
+                                                                        100],
+                                                                    borderRadius: BorderRadius.only(
+                                                                        topLeft:
+                                                                            Radius.circular(
+                                                                                8),
+                                                                        topRight:
+                                                                            Radius.circular(
+                                                                                8),
+                                                                        bottomLeft:
+                                                                            Radius.circular(
+                                                                                0),
+                                                                        bottomRight:
+                                                                            Radius.circular(0)),
                                                                   ),
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          2.0),
                                                                   child:
-                                                                      ListTile(
-                                                                          title: Row(
-                                                                              mainAxisAlignment: MainAxisAlignment.center,
-                                                                              children: [
+                                                                      const Row(
+                                                                    children: [
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
+                                                                            Padding(
+                                                                          padding:
+                                                                              EdgeInsets.all(2.0),
+                                                                          child:
+                                                                              Text(
+                                                                            'งวด',
+                                                                            textAlign:
+                                                                                TextAlign.start,
+                                                                            style: TextStyle(
+                                                                                color: PeopleChaoScreen_Color.Colors_Text1_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: FontWeight_.Fonts_T
+                                                                                //fontSize: 10.0
+                                                                                //fontSize: 10.0
+                                                                                ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
+                                                                            Padding(
+                                                                          padding:
+                                                                              EdgeInsets.all(2.0),
+                                                                          child:
+                                                                              Text(
+                                                                            'วันที่',
+                                                                            textAlign:
+                                                                                TextAlign.start,
+                                                                            style: TextStyle(
+                                                                                color: PeopleChaoScreen_Color.Colors_Text1_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: FontWeight_.Fonts_T
+                                                                                //fontSize: 10.0
+                                                                                //fontSize: 10.0
+                                                                                ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
+                                                                            Padding(
+                                                                          padding:
+                                                                              EdgeInsets.all(2.0),
+                                                                          child:
+                                                                              Text(
+                                                                            'รายการ',
+                                                                            textAlign:
+                                                                                TextAlign.start,
+                                                                            style: TextStyle(
+                                                                                color: PeopleChaoScreen_Color.Colors_Text1_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: FontWeight_.Fonts_T
+                                                                                //fontSize: 10.0
+                                                                                //fontSize: 10.0
+                                                                                ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
+                                                                            Padding(
+                                                                          padding:
+                                                                              EdgeInsets.all(2.0),
+                                                                          child:
+                                                                              Text(
+                                                                            'ยอด/งวด',
+                                                                            textAlign:
+                                                                                TextAlign.end,
+                                                                            style: TextStyle(
+                                                                                color: PeopleChaoScreen_Color.Colors_Text1_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: FontWeight_.Fonts_T
+                                                                                //fontSize: 10.0
+                                                                                //fontSize: 10.0
+                                                                                ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
+                                                                            Padding(
+                                                                          padding:
+                                                                              EdgeInsets.all(2.0),
+                                                                          child:
+                                                                              Text(
+                                                                            'ยอด',
+                                                                            textAlign:
+                                                                                TextAlign.end,
+                                                                            style: TextStyle(
+                                                                                color: PeopleChaoScreen_Color.Colors_Text1_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: FontWeight_.Fonts_T
+                                                                                //fontSize: 10.0
+                                                                                //fontSize: 10.0
+                                                                                ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                if (quotxSelectModels_Select
+                                                                        .length ==
+                                                                    0)
+                                                                  Container(
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        color: Colors
+                                                                            .green[50],
+                                                                        border:
+                                                                            const Border(
+                                                                          bottom:
+                                                                              BorderSide(
+                                                                            color:
+                                                                                Colors.black12,
+                                                                            width:
+                                                                                1,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      child: ListTile(
+                                                                          title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                                                                         Expanded(
                                                                           flex:
                                                                               1,
@@ -4734,651 +4737,765 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                                                           ),
                                                                         ),
                                                                       ]))),
-                                                            for (int index2 = 0;
-                                                                index2 <
-                                                                    quotxSelectModels_Select
-                                                                        .length;
-                                                                index2++)
-                                                              Container(
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  color: Colors
-                                                                      .green[50],
-                                                                  border:
-                                                                      const Border(
-                                                                    bottom:
-                                                                        BorderSide(
+                                                                for (int index2 =
+                                                                        0;
+                                                                    index2 <
+                                                                        quotxSelectModels_Select
+                                                                            .length;
+                                                                    index2++)
+                                                                  Container(
+                                                                    decoration:
+                                                                        BoxDecoration(
                                                                       color: Colors
-                                                                          .black12,
-                                                                      width: 1,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                child: ListTile(
-                                                                    title: Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .center,
-                                                                  children: [
-                                                                    Expanded(
-                                                                      flex: 1,
-                                                                      child:
-                                                                          AutoSizeText(
-                                                                        maxLines:
-                                                                            2,
-                                                                        minFontSize:
-                                                                            8,
-                                                                        // maxFontSize: 15,
-                                                                        '${quotxSelectModels_Select[index2].unit} / ${quotxSelectModels_Select[index2].term} (งวด)',
-                                                                        textAlign:
-                                                                            TextAlign.start,
-                                                                        style: const TextStyle(
-                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                            //fontWeight: FontWeight.bold,
-                                                                            fontFamily: Font_.Fonts_T),
-                                                                      ),
-                                                                    ),
-                                                                    Expanded(
-                                                                      flex: 1,
-                                                                      child:
-                                                                          AutoSizeText(
-                                                                        maxLines:
-                                                                            2,
-                                                                        minFontSize:
-                                                                            8,
-                                                                        // maxFontSize: 15,
-                                                                        '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels_Select[index2].sdate!} 00:00:00'))} - ${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels_Select[index2].ldate!} 00:00:00'))}',
-                                                                        textAlign:
-                                                                            TextAlign.start,
-                                                                        style: const TextStyle(
-                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                            //fontWeight: FontWeight.bold,
-                                                                            fontFamily: Font_.Fonts_T),
-                                                                      ),
-                                                                    ),
-                                                                    Expanded(
-                                                                      flex: 1,
-                                                                      child:
-                                                                          Tooltip(
-                                                                        richMessage:
-                                                                            TextSpan(
-                                                                          text:
-                                                                              '${quotxSelectModels_Select[index2].expname}',
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            color:
-                                                                                HomeScreen_Color.Colors_Text1_,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                            fontFamily:
-                                                                                FontWeight_.Fonts_T,
-                                                                            //fontSize: 10.0
-                                                                          ),
-                                                                        ),
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(5),
+                                                                          .green[50],
+                                                                      border:
+                                                                          const Border(
+                                                                        bottom:
+                                                                            BorderSide(
                                                                           color:
-                                                                              Colors.grey[200],
-                                                                        ),
-                                                                        child:
-                                                                            AutoSizeText(
-                                                                          maxLines:
-                                                                              2,
-                                                                          minFontSize:
-                                                                              8,
-                                                                          // maxFontSize: 15,
-                                                                          '${quotxSelectModels_Select[index2].expname}',
-                                                                          textAlign:
-                                                                              TextAlign.start,
-                                                                          style: const TextStyle(
-                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                              //fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T),
+                                                                              Colors.black12,
+                                                                          width:
+                                                                              1,
                                                                         ),
                                                                       ),
                                                                     ),
-                                                                    quotxSelectModels_Select[index2].ele_ty ==
-                                                                            '0'
-                                                                        ? Expanded(
-                                                                            flex:
-                                                                                1,
-                                                                            child:
-                                                                                AutoSizeText(
-                                                                              maxLines: 2,
-                                                                              minFontSize: 8,
-                                                                              // maxFontSize: 15,
-                                                                              quotxSelectModels_Select[index2].qty == '0.00' ? '${nFormat.format(double.parse(quotxSelectModels_Select[index2].total!))} / งวด' : '${nFormat.format(double.parse(quotxSelectModels_Select[index2].qty!))} / หน่วย',
-                                                                              // '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
-                                                                              textAlign: TextAlign.end,
-                                                                              style: const TextStyle(
-                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                  //fontWeight: FontWeight.bold,
-                                                                                  fontFamily: Font_.Fonts_T),
-                                                                            ),
-                                                                          )
-                                                                        : Expanded(
-                                                                            flex:
-                                                                                1,
-                                                                            child:
-                                                                                AutoSizeText(
-                                                                              maxLines: 2,
-                                                                              minFontSize: 8,
-                                                                              // maxFontSize: 15,
-                                                                              'อัตราพิเศษ',
-                                                                              // '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
-                                                                              textAlign: TextAlign.end,
-                                                                              style: const TextStyle(
-                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                  //fontWeight: FontWeight.bold,
-                                                                                  fontFamily: Font_.Fonts_T),
-                                                                            ),
+                                                                    child: ListTile(
+                                                                        title: Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .center,
+                                                                      children: [
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              AutoSizeText(
+                                                                            maxLines:
+                                                                                2,
+                                                                            minFontSize:
+                                                                                8,
+                                                                            // maxFontSize: 15,
+                                                                            '${quotxSelectModels_Select[index2].unit} / ${quotxSelectModels_Select[index2].term} (งวด)',
+                                                                            textAlign:
+                                                                                TextAlign.start,
+                                                                            style: const TextStyle(
+                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                //fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T),
                                                                           ),
-                                                                    quotxSelectModels_Select[index2].ele_ty ==
-                                                                            '0'
-                                                                        ? Expanded(
-                                                                            flex:
-                                                                                1,
-                                                                            child:
-                                                                                AutoSizeText(
-                                                                              maxLines: 2,
-                                                                              minFontSize: 8,
-                                                                              // maxFontSize: 15,
-                                                                              '${nFormat.format(int.parse(quotxSelectModels_Select[index2].term!) * double.parse(quotxSelectModels_Select[index2].total!))}',
-                                                                              textAlign: TextAlign.end,
+                                                                        ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              AutoSizeText(
+                                                                            maxLines:
+                                                                                2,
+                                                                            minFontSize:
+                                                                                8,
+                                                                            // maxFontSize: 15,
+                                                                            '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels_Select[index2].sdate!} 00:00:00'))} - ${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels_Select[index2].ldate!} 00:00:00'))}',
+                                                                            textAlign:
+                                                                                TextAlign.start,
+                                                                            style: const TextStyle(
+                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                //fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T),
+                                                                          ),
+                                                                        ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              Tooltip(
+                                                                            richMessage:
+                                                                                TextSpan(
+                                                                              text: '${quotxSelectModels_Select[index2].expname}',
                                                                               style: const TextStyle(
-                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                  //fontWeight: FontWeight.bold,
-                                                                                  fontFamily: Font_.Fonts_T),
-                                                                            ),
-                                                                          )
-                                                                        : Expanded(
-                                                                            flex:
-                                                                                1,
-                                                                            child:
-                                                                                GestureDetector(
-                                                                              onTap: () {
-                                                                                showcountmiter(index2).then((value) => showDialog(
-                                                                                    context: context,
-                                                                                    builder: (_) {
-                                                                                      return Dialog(
-                                                                                        child: Container(
-                                                                                          width: MediaQuery.of(context).size.width * 0.5,
-                                                                                          height: MediaQuery.of(context).size.width * 0.2,
-                                                                                          child: SingleChildScrollView(
-                                                                                            child: Column(
-                                                                                              children: [
-                                                                                                Row(
-                                                                                                  children: [
-                                                                                                    Expanded(
-                                                                                                      child: Padding(
-                                                                                                        padding: const EdgeInsets.all(15.0),
-                                                                                                        child: Text(
-                                                                                                          // ignore: unnecessary_string_interpolations
-                                                                                                          'อัตราการคำนวณปัจจุบัน',
-                                                                                                          textAlign: TextAlign.center,
-                                                                                                          style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontWeight: FontWeight.bold, fontSize: 25, fontFamily: Font_.Fonts_T),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                    ),
-                                                                                                  ],
-                                                                                                ),
-                                                                                                Divider(),
-                                                                                                (double.parse(electricityModels[0].eleMitOne!) + double.parse(electricityModels[0].eleGobOne!)) == 0.00
-                                                                                                    ? SizedBox()
-                                                                                                    : Row(
-                                                                                                        children: [
-                                                                                                          Expanded(flex: 1, child: Text('')),
-                                                                                                          Expanded(
-                                                                                                            flex: 2,
-                                                                                                            child: Text(
-                                                                                                              'หน่วยที่ 0 - ${electricityModels[0].eleOne}',
-                                                                                                              textAlign: TextAlign.start,
-                                                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          Expanded(
-                                                                                                            flex: 2,
-                                                                                                            child: Text(
-                                                                                                              double.parse(electricityModels[0].eleMitOne!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
-                                                                                                              textAlign: TextAlign.start,
-                                                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          Expanded(
-                                                                                                            flex: 2,
-                                                                                                            child: Text(
-                                                                                                              double.parse(electricityModels[0].eleMitOne!) == 0.00 ? '${electricityModels[0].eleGobOne}' : '${electricityModels[0].eleMitOne}',
-                                                                                                              textAlign: TextAlign.end,
-                                                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          Expanded(
-                                                                                                            flex: 1,
-                                                                                                            child: Text(
-                                                                                                              'บาท',
-                                                                                                              textAlign: TextAlign.center,
-                                                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                        ],
-                                                                                                      ),
-                                                                                                SizedBox(
-                                                                                                  height: 10,
-                                                                                                ),
-                                                                                                (double.parse(electricityModels[0].eleMitTwo!) + double.parse(electricityModels[0].eleGobTwo!)) == 0.00
-                                                                                                    ? SizedBox()
-                                                                                                    : Row(
-                                                                                                        children: [
-                                                                                                          Expanded(flex: 1, child: Text('')),
-                                                                                                          Expanded(
-                                                                                                            flex: 2,
-                                                                                                            child: Text(
-                                                                                                              'หน่วยที่ ${int.parse(electricityModels[0].eleOne!) + 1} - ${electricityModels[0].eleTwo}',
-                                                                                                              textAlign: TextAlign.start,
-                                                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          Expanded(
-                                                                                                            flex: 2,
-                                                                                                            child: Text(
-                                                                                                              double.parse(electricityModels[0].eleMitTwo!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
-                                                                                                              textAlign: TextAlign.start,
-                                                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          Expanded(
-                                                                                                            flex: 2,
-                                                                                                            child: Text(
-                                                                                                              double.parse(electricityModels[0].eleMitTwo!) == 0.00 ? '${electricityModels[0].eleGobTwo}' : '${electricityModels[0].eleMitTwo}',
-                                                                                                              textAlign: TextAlign.end,
-                                                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          Expanded(
-                                                                                                            flex: 1,
-                                                                                                            child: Text(
-                                                                                                              'บาท',
-                                                                                                              textAlign: TextAlign.center,
-                                                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                        ],
-                                                                                                      ),
-                                                                                                SizedBox(
-                                                                                                  height: 10,
-                                                                                                ),
-                                                                                                (double.parse(electricityModels[0].eleMitThree!) + double.parse(electricityModels[0].eleGobThree!)) == 0.00
-                                                                                                    ? SizedBox()
-                                                                                                    : Row(
-                                                                                                        children: [
-                                                                                                          Expanded(flex: 1, child: Text('')),
-                                                                                                          Expanded(
-                                                                                                            flex: 2,
-                                                                                                            child: Text(
-                                                                                                              'หน่วยที่ ${int.parse(electricityModels[0].eleTwo!) + 1} - ${electricityModels[0].eleThree}',
-                                                                                                              textAlign: TextAlign.start,
-                                                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          Expanded(
-                                                                                                            flex: 2,
-                                                                                                            child: Text(
-                                                                                                              double.parse(electricityModels[0].eleMitThree!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
-                                                                                                              textAlign: TextAlign.start,
-                                                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          Expanded(
-                                                                                                            flex: 2,
-                                                                                                            child: Text(
-                                                                                                              double.parse(electricityModels[0].eleMitThree!) == 0.00 ? '${electricityModels[0].eleGobThree}' : '${electricityModels[0].eleMitThree}',
-                                                                                                              textAlign: TextAlign.end,
-                                                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          Expanded(
-                                                                                                            flex: 1,
-                                                                                                            child: Text(
-                                                                                                              'บาท',
-                                                                                                              textAlign: TextAlign.center,
-                                                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                        ],
-                                                                                                      ),
-                                                                                                SizedBox(
-                                                                                                  height: 10,
-                                                                                                ),
-                                                                                                (double.parse(electricityModels[0].eleMitTour!) + double.parse(electricityModels[0].eleGobTour!)) == 0.00
-                                                                                                    ? SizedBox()
-                                                                                                    : Row(
-                                                                                                        children: [
-                                                                                                          Expanded(flex: 1, child: Text('')),
-                                                                                                          Expanded(
-                                                                                                            flex: 2,
-                                                                                                            child: Text(
-                                                                                                              'หน่วยที่ ${int.parse(electricityModels[0].eleThree!) + 1} - ${electricityModels[0].eleTour}',
-                                                                                                              textAlign: TextAlign.start,
-                                                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          Expanded(
-                                                                                                            flex: 2,
-                                                                                                            child: Text(
-                                                                                                              double.parse(electricityModels[0].eleMitTour!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
-                                                                                                              textAlign: TextAlign.start,
-                                                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          Expanded(
-                                                                                                            flex: 2,
-                                                                                                            child: Text(
-                                                                                                              double.parse(electricityModels[0].eleMitTour!) == 0.00 ? '${electricityModels[0].eleGobTour}' : '${electricityModels[0].eleMitTour}',
-                                                                                                              textAlign: TextAlign.end,
-                                                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          Expanded(
-                                                                                                            flex: 1,
-                                                                                                            child: Text(
-                                                                                                              'บาท',
-                                                                                                              textAlign: TextAlign.center,
-                                                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                        ],
-                                                                                                      ),
-                                                                                                SizedBox(
-                                                                                                  height: 10,
-                                                                                                ),
-                                                                                                (double.parse(electricityModels[0].eleMitFive!) + double.parse(electricityModels[0].eleGobFive!)) == 0.00
-                                                                                                    ? SizedBox()
-                                                                                                    : Row(
-                                                                                                        children: [
-                                                                                                          Expanded(flex: 1, child: Text('')),
-                                                                                                          Expanded(
-                                                                                                            flex: 2,
-                                                                                                            child: Text(
-                                                                                                              'หน่วยที่ ${int.parse(electricityModels[0].eleTour!) + 1} - ${electricityModels[0].eleFive}',
-                                                                                                              textAlign: TextAlign.start,
-                                                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          Expanded(
-                                                                                                            flex: 2,
-                                                                                                            child: Text(
-                                                                                                              double.parse(electricityModels[0].eleMitFive!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
-                                                                                                              textAlign: TextAlign.start,
-                                                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          Expanded(
-                                                                                                            flex: 2,
-                                                                                                            child: Text(
-                                                                                                              double.parse(electricityModels[0].eleMitFive!) == 0.00 ? '${electricityModels[0].eleGobFive}' : '${electricityModels[0].eleMitFive}',
-                                                                                                              textAlign: TextAlign.end,
-                                                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          Expanded(
-                                                                                                            flex: 1,
-                                                                                                            child: Text(
-                                                                                                              'บาท',
-                                                                                                              textAlign: TextAlign.center,
-                                                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                        ],
-                                                                                                      ),
-                                                                                                SizedBox(
-                                                                                                  height: 10,
-                                                                                                ),
-                                                                                                (double.parse(electricityModels[0].eleMitSix!) + double.parse(electricityModels[0].eleGobSix!)) == 0.00
-                                                                                                    ? SizedBox()
-                                                                                                    : Row(
-                                                                                                        children: [
-                                                                                                          Expanded(flex: 1, child: Text('')),
-                                                                                                          Expanded(
-                                                                                                            flex: 2,
-                                                                                                            child: Text(
-                                                                                                              'หน่วยที่ ${electricityModels[0].eleSix} ขึ้นไป',
-                                                                                                              textAlign: TextAlign.start,
-                                                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          Expanded(
-                                                                                                            flex: 2,
-                                                                                                            child: Text(
-                                                                                                              double.parse(electricityModels[0].eleMitSix!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
-                                                                                                              textAlign: TextAlign.start,
-                                                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          Expanded(
-                                                                                                            flex: 2,
-                                                                                                            child: Text(
-                                                                                                              double.parse(electricityModels[0].eleMitSix!) == 0.00 ? '${electricityModels[0].eleGobSix}' : '${electricityModels[0].eleMitSix}',
-                                                                                                              textAlign: TextAlign.end,
-                                                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          Expanded(
-                                                                                                            flex: 1,
-                                                                                                            child: Text(
-                                                                                                              'บาท',
-                                                                                                              textAlign: TextAlign.center,
-                                                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                        ],
-                                                                                                      ),
-                                                                                                Divider(),
-                                                                                                Row(
-                                                                                                  mainAxisAlignment: MainAxisAlignment.end,
-                                                                                                  children: [
-                                                                                                    Expanded(
-                                                                                                      child: Padding(
-                                                                                                        padding: const EdgeInsets.all(15.0),
-                                                                                                        child: Text(
-                                                                                                          // ignore: unnecessary_string_interpolations
-                                                                                                          '* อัตราคำนวณปัจจุบันอาจไม่ตรงกับยอดชำระ ณ วันที่บันทึก',
-                                                                                                          textAlign: TextAlign.end,
-                                                                                                          style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 12, fontFamily: Font_.Fonts_T),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                    ),
-                                                                                                  ],
-                                                                                                ),
-                                                                                                SizedBox(
-                                                                                                  height: 50,
-                                                                                                )
-                                                                                              ],
-                                                                                            ),
-                                                                                          ),
-                                                                                        ),
-                                                                                      );
-                                                                                    }));
-                                                                              },
-                                                                              child: AutoSizeText(
-                                                                                maxLines: 2,
-                                                                                minFontSize: 8,
-                                                                                // maxFontSize: 15,
-                                                                                'ดูอัตราคำนวณ',
-                                                                                // '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
-                                                                                textAlign: TextAlign.end,
-                                                                                style: const TextStyle(
-                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                    //fontWeight: FontWeight.bold,
-                                                                                    fontFamily: Font_.Fonts_T),
+                                                                                color: HomeScreen_Color.Colors_Text1_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                //fontSize: 10.0
                                                                               ),
                                                                             ),
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              borderRadius: BorderRadius.circular(5),
+                                                                              color: Colors.grey[200],
+                                                                            ),
+                                                                            child:
+                                                                                AutoSizeText(
+                                                                              maxLines: 2,
+                                                                              minFontSize: 8,
+                                                                              // maxFontSize: 15,
+                                                                              '${quotxSelectModels_Select[index2].expname}',
+                                                                              textAlign: TextAlign.start,
+                                                                              style: const TextStyle(
+                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                  //fontWeight: FontWeight.bold,
+                                                                                  fontFamily: Font_.Fonts_T),
+                                                                            ),
                                                                           ),
-                                                                    // Expanded(
-                                                                    //   flex: 1,
-                                                                    //   child:
-                                                                    //       AutoSizeText(
-                                                                    //     maxLines:
-                                                                    //         2,
-                                                                    //     minFontSize:
-                                                                    //         8,
-                                                                    //     // maxFontSize: 15,
-                                                                    //     '${quotxSelectModels_Select[index2].unit} / ${quotxSelectModels_Select[index2].term} (งวด)',
-                                                                    //     textAlign:
-                                                                    //         TextAlign.start,
-                                                                    //     style: const TextStyle(
-                                                                    //         color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                    //         //fontWeight: FontWeight.bold,
-                                                                    //         fontFamily: Font_.Fonts_T),
-                                                                    //   ),
-                                                                    // ),
-                                                                    // Expanded(
-                                                                    //   flex: 1,
-                                                                    //   child:
-                                                                    //       AutoSizeText(
-                                                                    //     maxLines:
-                                                                    //         2,
-                                                                    //     minFontSize:
-                                                                    //         8,
-                                                                    //     // maxFontSize: 15,
-                                                                    //     '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels_Select[index2].sdate!} 00:00:00'))} - ${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels_Select[index2].ldate!} 00:00:00'))}',
-                                                                    //     textAlign:
-                                                                    //         TextAlign.start,
-                                                                    //     style: const TextStyle(
-                                                                    //         color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                    //         //fontWeight: FontWeight.bold,
-                                                                    //         fontFamily: Font_.Fonts_T),
-                                                                    //   ),
-                                                                    // ),
-                                                                    // Expanded(
-                                                                    //   flex: 1,
-                                                                    //   child:
-                                                                    //       Tooltip(
-                                                                    //     richMessage:
-                                                                    //         TextSpan(
-                                                                    //       text:
-                                                                    //           '${quotxSelectModels_Select[index2].expname}',
-                                                                    //       style:
-                                                                    //           const TextStyle(
-                                                                    //         color:
-                                                                    //             HomeScreen_Color.Colors_Text1_,
-                                                                    //         fontWeight:
-                                                                    //             FontWeight.bold,
-                                                                    //         fontFamily:
-                                                                    //             FontWeight_.Fonts_T,
-                                                                    //         //fontSize: 10.0
-                                                                    //       ),
-                                                                    //     ),
-                                                                    //     decoration:
-                                                                    //         BoxDecoration(
-                                                                    //       borderRadius:
-                                                                    //           BorderRadius.circular(5),
-                                                                    //       color:
-                                                                    //           Colors.grey[200],
-                                                                    //     ),
-                                                                    //     child:
-                                                                    //         AutoSizeText(
-                                                                    //       maxLines:
-                                                                    //           2,
-                                                                    //       minFontSize:
-                                                                    //           8,
-                                                                    //       // maxFontSize: 15,
-                                                                    //       '${quotxSelectModels_Select[index2].expname}',
-                                                                    //       textAlign:
-                                                                    //           TextAlign.start,
-                                                                    //       style: const TextStyle(
-                                                                    //           color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                    //           //fontWeight: FontWeight.bold,
-                                                                    //           fontFamily: Font_.Fonts_T),
-                                                                    //     ),
-                                                                    //   ),
-                                                                    // ),
-                                                                    // Expanded(
-                                                                    //   flex: 1,
-                                                                    //   child:
-                                                                    //       AutoSizeText(
-                                                                    //     maxLines:
-                                                                    //         2,
-                                                                    //     minFontSize:
-                                                                    //         8,
-                                                                    //     // maxFontSize: 15,
-                                                                    //     '${nFormat.format(double.parse(quotxSelectModels_Select[index2].total!))}',
-                                                                    //     textAlign:
-                                                                    //         TextAlign.end,
-                                                                    //     style: const TextStyle(
-                                                                    //         color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                    //         //fontWeight: FontWeight.bold,
-                                                                    //         fontFamily: Font_.Fonts_T),
-                                                                    //   ),
-                                                                    // ),
-                                                                    // Expanded(
-                                                                    //   flex: 1,
-                                                                    //   child:
-                                                                    //       AutoSizeText(
-                                                                    //     maxLines:
-                                                                    //         2,
-                                                                    //     minFontSize:
-                                                                    //         8,
-                                                                    //     // maxFontSize: 15,
-                                                                    //     '${nFormat.format(int.parse(quotxSelectModels_Select[index2].term!) * double.parse(quotxSelectModels_Select[index2].total!))}',
-                                                                    //     textAlign:
-                                                                    //         TextAlign.end,
-                                                                    //     style: const TextStyle(
-                                                                    //         color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                    //         //fontWeight: FontWeight.bold,
-                                                                    //         fontFamily: Font_.Fonts_T),
-                                                                    //   ),
-                                                                    // ),
-                                                                  ],
-                                                                )),
-                                                              ),
-                                                            SizedBox(
-                                                              height: 30,
-                                                            )
-                                                          ],
+                                                                        ),
+                                                                        quotxSelectModels_Select[index2].ele_ty ==
+                                                                                '0'
+                                                                            ? Expanded(
+                                                                                flex: 1,
+                                                                                child: AutoSizeText(
+                                                                                  maxLines: 2,
+                                                                                  minFontSize: 8,
+                                                                                  // maxFontSize: 15,
+                                                                                  quotxSelectModels_Select[index2].qty == '0.00' ? '${nFormat.format(double.parse(quotxSelectModels_Select[index2].total!))} / งวด' : '${nFormat.format(double.parse(quotxSelectModels_Select[index2].qty!))} / หน่วย',
+                                                                                  // '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
+                                                                                  textAlign: TextAlign.end,
+                                                                                  style: const TextStyle(
+                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                      //fontWeight: FontWeight.bold,
+                                                                                      fontFamily: Font_.Fonts_T),
+                                                                                ),
+                                                                              )
+                                                                            : Expanded(
+                                                                                flex: 1,
+                                                                                child: AutoSizeText(
+                                                                                  maxLines: 2,
+                                                                                  minFontSize: 8,
+                                                                                  // maxFontSize: 15,
+                                                                                  'อัตราพิเศษ',
+                                                                                  // '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
+                                                                                  textAlign: TextAlign.end,
+                                                                                  style: const TextStyle(
+                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                      //fontWeight: FontWeight.bold,
+                                                                                      fontFamily: Font_.Fonts_T),
+                                                                                ),
+                                                                              ),
+                                                                        quotxSelectModels_Select[index2].ele_ty ==
+                                                                                '0'
+                                                                            ? Expanded(
+                                                                                flex: 1,
+                                                                                child: AutoSizeText(
+                                                                                  maxLines: 2,
+                                                                                  minFontSize: 8,
+                                                                                  // maxFontSize: 15,
+                                                                                  '${nFormat.format(int.parse(quotxSelectModels_Select[index2].term!) * double.parse(quotxSelectModels_Select[index2].total!))}',
+                                                                                  textAlign: TextAlign.end,
+                                                                                  style: const TextStyle(
+                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                      //fontWeight: FontWeight.bold,
+                                                                                      fontFamily: Font_.Fonts_T),
+                                                                                ),
+                                                                              )
+                                                                            : Expanded(
+                                                                                flex: 1,
+                                                                                child: GestureDetector(
+                                                                                  onTap: () {
+                                                                                    showcountmiter(index2).then((value) => showDialog(
+                                                                                        context: context,
+                                                                                        builder: (_) {
+                                                                                          return Dialog(
+                                                                                            child: Container(
+                                                                                              width: MediaQuery.of(context).size.width * 0.5,
+                                                                                              height: MediaQuery.of(context).size.width * 0.2,
+                                                                                              child: SingleChildScrollView(
+                                                                                                child: Column(
+                                                                                                  children: [
+                                                                                                    Row(
+                                                                                                      children: [
+                                                                                                        Expanded(
+                                                                                                          child: Padding(
+                                                                                                            padding: const EdgeInsets.all(15.0),
+                                                                                                            child: Text(
+                                                                                                              // ignore: unnecessary_string_interpolations
+                                                                                                              'อัตราการคำนวณปัจจุบัน',
+                                                                                                              textAlign: TextAlign.center,
+                                                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontWeight: FontWeight.bold, fontSize: 25, fontFamily: Font_.Fonts_T),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                      ],
+                                                                                                    ),
+                                                                                                    Divider(),
+                                                                                                    (double.parse(electricityModels[0].eleMitOne!) + double.parse(electricityModels[0].eleGobOne!)) == 0.00
+                                                                                                        ? SizedBox()
+                                                                                                        : Row(
+                                                                                                            children: [
+                                                                                                              Expanded(flex: 1, child: Text('')),
+                                                                                                              Expanded(
+                                                                                                                flex: 2,
+                                                                                                                child: Text(
+                                                                                                                  'หน่วยที่ 0 - ${electricityModels[0].eleOne}',
+                                                                                                                  textAlign: TextAlign.start,
+                                                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                              Expanded(
+                                                                                                                flex: 2,
+                                                                                                                child: Text(
+                                                                                                                  double.parse(electricityModels[0].eleMitOne!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
+                                                                                                                  textAlign: TextAlign.start,
+                                                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                              Expanded(
+                                                                                                                flex: 2,
+                                                                                                                child: Text(
+                                                                                                                  double.parse(electricityModels[0].eleMitOne!) == 0.00 ? '${electricityModels[0].eleGobOne}' : '${electricityModels[0].eleMitOne}',
+                                                                                                                  textAlign: TextAlign.end,
+                                                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                              Expanded(
+                                                                                                                flex: 1,
+                                                                                                                child: Text(
+                                                                                                                  'บาท',
+                                                                                                                  textAlign: TextAlign.center,
+                                                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                            ],
+                                                                                                          ),
+                                                                                                    SizedBox(
+                                                                                                      height: 10,
+                                                                                                    ),
+                                                                                                    (double.parse(electricityModels[0].eleMitTwo!) + double.parse(electricityModels[0].eleGobTwo!)) == 0.00
+                                                                                                        ? SizedBox()
+                                                                                                        : Row(
+                                                                                                            children: [
+                                                                                                              Expanded(flex: 1, child: Text('')),
+                                                                                                              Expanded(
+                                                                                                                flex: 2,
+                                                                                                                child: Text(
+                                                                                                                  'หน่วยที่ ${int.parse(electricityModels[0].eleOne!) + 1} - ${electricityModels[0].eleTwo}',
+                                                                                                                  textAlign: TextAlign.start,
+                                                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                              Expanded(
+                                                                                                                flex: 2,
+                                                                                                                child: Text(
+                                                                                                                  double.parse(electricityModels[0].eleMitTwo!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
+                                                                                                                  textAlign: TextAlign.start,
+                                                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                              Expanded(
+                                                                                                                flex: 2,
+                                                                                                                child: Text(
+                                                                                                                  double.parse(electricityModels[0].eleMitTwo!) == 0.00 ? '${electricityModels[0].eleGobTwo}' : '${electricityModels[0].eleMitTwo}',
+                                                                                                                  textAlign: TextAlign.end,
+                                                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                              Expanded(
+                                                                                                                flex: 1,
+                                                                                                                child: Text(
+                                                                                                                  'บาท',
+                                                                                                                  textAlign: TextAlign.center,
+                                                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                            ],
+                                                                                                          ),
+                                                                                                    SizedBox(
+                                                                                                      height: 10,
+                                                                                                    ),
+                                                                                                    (double.parse(electricityModels[0].eleMitThree!) + double.parse(electricityModels[0].eleGobThree!)) == 0.00
+                                                                                                        ? SizedBox()
+                                                                                                        : Row(
+                                                                                                            children: [
+                                                                                                              Expanded(flex: 1, child: Text('')),
+                                                                                                              Expanded(
+                                                                                                                flex: 2,
+                                                                                                                child: Text(
+                                                                                                                  'หน่วยที่ ${int.parse(electricityModels[0].eleTwo!) + 1} - ${electricityModels[0].eleThree}',
+                                                                                                                  textAlign: TextAlign.start,
+                                                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                              Expanded(
+                                                                                                                flex: 2,
+                                                                                                                child: Text(
+                                                                                                                  double.parse(electricityModels[0].eleMitThree!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
+                                                                                                                  textAlign: TextAlign.start,
+                                                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                              Expanded(
+                                                                                                                flex: 2,
+                                                                                                                child: Text(
+                                                                                                                  double.parse(electricityModels[0].eleMitThree!) == 0.00 ? '${electricityModels[0].eleGobThree}' : '${electricityModels[0].eleMitThree}',
+                                                                                                                  textAlign: TextAlign.end,
+                                                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                              Expanded(
+                                                                                                                flex: 1,
+                                                                                                                child: Text(
+                                                                                                                  'บาท',
+                                                                                                                  textAlign: TextAlign.center,
+                                                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                            ],
+                                                                                                          ),
+                                                                                                    SizedBox(
+                                                                                                      height: 10,
+                                                                                                    ),
+                                                                                                    (double.parse(electricityModels[0].eleMitTour!) + double.parse(electricityModels[0].eleGobTour!)) == 0.00
+                                                                                                        ? SizedBox()
+                                                                                                        : Row(
+                                                                                                            children: [
+                                                                                                              Expanded(flex: 1, child: Text('')),
+                                                                                                              Expanded(
+                                                                                                                flex: 2,
+                                                                                                                child: Text(
+                                                                                                                  'หน่วยที่ ${int.parse(electricityModels[0].eleThree!) + 1} - ${electricityModels[0].eleTour}',
+                                                                                                                  textAlign: TextAlign.start,
+                                                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                              Expanded(
+                                                                                                                flex: 2,
+                                                                                                                child: Text(
+                                                                                                                  double.parse(electricityModels[0].eleMitTour!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
+                                                                                                                  textAlign: TextAlign.start,
+                                                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                              Expanded(
+                                                                                                                flex: 2,
+                                                                                                                child: Text(
+                                                                                                                  double.parse(electricityModels[0].eleMitTour!) == 0.00 ? '${electricityModels[0].eleGobTour}' : '${electricityModels[0].eleMitTour}',
+                                                                                                                  textAlign: TextAlign.end,
+                                                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                              Expanded(
+                                                                                                                flex: 1,
+                                                                                                                child: Text(
+                                                                                                                  'บาท',
+                                                                                                                  textAlign: TextAlign.center,
+                                                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                            ],
+                                                                                                          ),
+                                                                                                    SizedBox(
+                                                                                                      height: 10,
+                                                                                                    ),
+                                                                                                    (double.parse(electricityModels[0].eleMitFive!) + double.parse(electricityModels[0].eleGobFive!)) == 0.00
+                                                                                                        ? SizedBox()
+                                                                                                        : Row(
+                                                                                                            children: [
+                                                                                                              Expanded(flex: 1, child: Text('')),
+                                                                                                              Expanded(
+                                                                                                                flex: 2,
+                                                                                                                child: Text(
+                                                                                                                  'หน่วยที่ ${int.parse(electricityModels[0].eleTour!) + 1} - ${electricityModels[0].eleFive}',
+                                                                                                                  textAlign: TextAlign.start,
+                                                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                              Expanded(
+                                                                                                                flex: 2,
+                                                                                                                child: Text(
+                                                                                                                  double.parse(electricityModels[0].eleMitFive!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
+                                                                                                                  textAlign: TextAlign.start,
+                                                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                              Expanded(
+                                                                                                                flex: 2,
+                                                                                                                child: Text(
+                                                                                                                  double.parse(electricityModels[0].eleMitFive!) == 0.00 ? '${electricityModels[0].eleGobFive}' : '${electricityModels[0].eleMitFive}',
+                                                                                                                  textAlign: TextAlign.end,
+                                                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                              Expanded(
+                                                                                                                flex: 1,
+                                                                                                                child: Text(
+                                                                                                                  'บาท',
+                                                                                                                  textAlign: TextAlign.center,
+                                                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                            ],
+                                                                                                          ),
+                                                                                                    SizedBox(
+                                                                                                      height: 10,
+                                                                                                    ),
+                                                                                                    (double.parse(electricityModels[0].eleMitSix!) + double.parse(electricityModels[0].eleGobSix!)) == 0.00
+                                                                                                        ? SizedBox()
+                                                                                                        : Row(
+                                                                                                            children: [
+                                                                                                              Expanded(flex: 1, child: Text('')),
+                                                                                                              Expanded(
+                                                                                                                flex: 2,
+                                                                                                                child: Text(
+                                                                                                                  'หน่วยที่ ${electricityModels[0].eleSix} ขึ้นไป',
+                                                                                                                  textAlign: TextAlign.start,
+                                                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                              Expanded(
+                                                                                                                flex: 2,
+                                                                                                                child: Text(
+                                                                                                                  double.parse(electricityModels[0].eleMitSix!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
+                                                                                                                  textAlign: TextAlign.start,
+                                                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                              Expanded(
+                                                                                                                flex: 2,
+                                                                                                                child: Text(
+                                                                                                                  double.parse(electricityModels[0].eleMitSix!) == 0.00 ? '${electricityModels[0].eleGobSix}' : '${electricityModels[0].eleMitSix}',
+                                                                                                                  textAlign: TextAlign.end,
+                                                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                              Expanded(
+                                                                                                                flex: 1,
+                                                                                                                child: Text(
+                                                                                                                  'บาท',
+                                                                                                                  textAlign: TextAlign.center,
+                                                                                                                  style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                            ],
+                                                                                                          ),
+                                                                                                    Divider(),
+                                                                                                    Row(
+                                                                                                      mainAxisAlignment: MainAxisAlignment.end,
+                                                                                                      children: [
+                                                                                                        Expanded(
+                                                                                                          child: Padding(
+                                                                                                            padding: const EdgeInsets.all(15.0),
+                                                                                                            child: Text(
+                                                                                                              // ignore: unnecessary_string_interpolations
+                                                                                                              '* อัตราคำนวณปัจจุบันอาจไม่ตรงกับยอดชำระ ณ วันที่บันทึก',
+                                                                                                              textAlign: TextAlign.end,
+                                                                                                              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 12, fontFamily: Font_.Fonts_T),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                      ],
+                                                                                                    ),
+                                                                                                    SizedBox(
+                                                                                                      height: 50,
+                                                                                                    )
+                                                                                                  ],
+                                                                                                ),
+                                                                                              ),
+                                                                                            ),
+                                                                                          );
+                                                                                        }));
+                                                                                  },
+                                                                                  child: AutoSizeText(
+                                                                                    maxLines: 2,
+                                                                                    minFontSize: 8,
+                                                                                    // maxFontSize: 15,
+                                                                                    'ดูอัตราคำนวณ',
+                                                                                    // '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
+                                                                                    textAlign: TextAlign.end,
+                                                                                    style: const TextStyle(
+                                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                        //fontWeight: FontWeight.bold,
+                                                                                        fontFamily: Font_.Fonts_T),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                        // Expanded(
+                                                                        //   flex: 1,
+                                                                        //   child:
+                                                                        //       AutoSizeText(
+                                                                        //     maxLines:
+                                                                        //         2,
+                                                                        //     minFontSize:
+                                                                        //         8,
+                                                                        //     // maxFontSize: 15,
+                                                                        //     '${quotxSelectModels_Select[index2].unit} / ${quotxSelectModels_Select[index2].term} (งวด)',
+                                                                        //     textAlign:
+                                                                        //         TextAlign.start,
+                                                                        //     style: const TextStyle(
+                                                                        //         color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        //         //fontWeight: FontWeight.bold,
+                                                                        //         fontFamily: Font_.Fonts_T),
+                                                                        //   ),
+                                                                        // ),
+                                                                        // Expanded(
+                                                                        //   flex: 1,
+                                                                        //   child:
+                                                                        //       AutoSizeText(
+                                                                        //     maxLines:
+                                                                        //         2,
+                                                                        //     minFontSize:
+                                                                        //         8,
+                                                                        //     // maxFontSize: 15,
+                                                                        //     '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels_Select[index2].sdate!} 00:00:00'))} - ${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels_Select[index2].ldate!} 00:00:00'))}',
+                                                                        //     textAlign:
+                                                                        //         TextAlign.start,
+                                                                        //     style: const TextStyle(
+                                                                        //         color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        //         //fontWeight: FontWeight.bold,
+                                                                        //         fontFamily: Font_.Fonts_T),
+                                                                        //   ),
+                                                                        // ),
+                                                                        // Expanded(
+                                                                        //   flex: 1,
+                                                                        //   child:
+                                                                        //       Tooltip(
+                                                                        //     richMessage:
+                                                                        //         TextSpan(
+                                                                        //       text:
+                                                                        //           '${quotxSelectModels_Select[index2].expname}',
+                                                                        //       style:
+                                                                        //           const TextStyle(
+                                                                        //         color:
+                                                                        //             HomeScreen_Color.Colors_Text1_,
+                                                                        //         fontWeight:
+                                                                        //             FontWeight.bold,
+                                                                        //         fontFamily:
+                                                                        //             FontWeight_.Fonts_T,
+                                                                        //         //fontSize: 10.0
+                                                                        //       ),
+                                                                        //     ),
+                                                                        //     decoration:
+                                                                        //         BoxDecoration(
+                                                                        //       borderRadius:
+                                                                        //           BorderRadius.circular(5),
+                                                                        //       color:
+                                                                        //           Colors.grey[200],
+                                                                        //     ),
+                                                                        //     child:
+                                                                        //         AutoSizeText(
+                                                                        //       maxLines:
+                                                                        //           2,
+                                                                        //       minFontSize:
+                                                                        //           8,
+                                                                        //       // maxFontSize: 15,
+                                                                        //       '${quotxSelectModels_Select[index2].expname}',
+                                                                        //       textAlign:
+                                                                        //           TextAlign.start,
+                                                                        //       style: const TextStyle(
+                                                                        //           color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        //           //fontWeight: FontWeight.bold,
+                                                                        //           fontFamily: Font_.Fonts_T),
+                                                                        //     ),
+                                                                        //   ),
+                                                                        // ),
+                                                                        // Expanded(
+                                                                        //   flex: 1,
+                                                                        //   child:
+                                                                        //       AutoSizeText(
+                                                                        //     maxLines:
+                                                                        //         2,
+                                                                        //     minFontSize:
+                                                                        //         8,
+                                                                        //     // maxFontSize: 15,
+                                                                        //     '${nFormat.format(double.parse(quotxSelectModels_Select[index2].total!))}',
+                                                                        //     textAlign:
+                                                                        //         TextAlign.end,
+                                                                        //     style: const TextStyle(
+                                                                        //         color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        //         //fontWeight: FontWeight.bold,
+                                                                        //         fontFamily: Font_.Fonts_T),
+                                                                        //   ),
+                                                                        // ),
+                                                                        // Expanded(
+                                                                        //   flex: 1,
+                                                                        //   child:
+                                                                        //       AutoSizeText(
+                                                                        //     maxLines:
+                                                                        //         2,
+                                                                        //     minFontSize:
+                                                                        //         8,
+                                                                        //     // maxFontSize: 15,
+                                                                        //     '${nFormat.format(int.parse(quotxSelectModels_Select[index2].term!) * double.parse(quotxSelectModels_Select[index2].total!))}',
+                                                                        //     textAlign:
+                                                                        //         TextAlign.end,
+                                                                        //     style: const TextStyle(
+                                                                        //         color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        //         //fontWeight: FontWeight.bold,
+                                                                        //         fontFamily: Font_.Fonts_T),
+                                                                        //   ),
+                                                                        // ),
+                                                                      ],
+                                                                    )),
+                                                                  ),
+                                                                SizedBox(
+                                                                  height: 30,
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
                                                         ),
+                                                    ],
+                                                  );
+                                                },
+                                              ),
+                                      ),
+                                      Container(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          decoration: const BoxDecoration(
+                                            color: AppbackgroundColor
+                                                .Sub_Abg_Colors,
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(0),
+                                                topRight: Radius.circular(0),
+                                                bottomLeft: Radius.circular(10),
+                                                bottomRight:
+                                                    Radius.circular(10)),
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Row(
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: InkWell(
+                                                        onTap: () {
+                                                          _scrollController1
+                                                              .animateTo(
+                                                            0,
+                                                            duration:
+                                                                const Duration(
+                                                                    seconds: 1),
+                                                            curve:
+                                                                Curves.easeOut,
+                                                          );
+                                                        },
+                                                        child: Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              // color: AppbackgroundColor
+                                                              //     .TiTile_Colors,
+                                                              borderRadius: const BorderRadius
+                                                                      .only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          6),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          6),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          6),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          8)),
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  width: 1),
+                                                            ),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(3.0),
+                                                            child: const Text(
+                                                              'Top',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  fontSize:
+                                                                      10.0,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T),
+                                                            )),
                                                       ),
                                                     ),
-                                                ],
-                                              );
-                                            },
-                                          ),
-                                  ),
-                                  Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      decoration: const BoxDecoration(
-                                        color:
-                                            AppbackgroundColor.Sub_Abg_Colors,
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(0),
-                                            topRight: Radius.circular(0),
-                                            bottomLeft: Radius.circular(10),
-                                            bottomRight: Radius.circular(10)),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Row(
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: InkWell(
-                                                    onTap: () {
-                                                      _scrollController1
-                                                          .animateTo(
-                                                        0,
-                                                        duration:
-                                                            const Duration(
-                                                                seconds: 1),
-                                                        curve: Curves.easeOut,
-                                                      );
-                                                    },
-                                                    child: Container(
+                                                    InkWell(
+                                                      onTap: () {
+                                                        if (_scrollController1
+                                                            .hasClients) {
+                                                          final position =
+                                                              _scrollController1
+                                                                  .position
+                                                                  .maxScrollExtent;
+                                                          _scrollController1
+                                                              .animateTo(
+                                                            position,
+                                                            duration:
+                                                                const Duration(
+                                                                    seconds: 1),
+                                                            curve:
+                                                                Curves.easeOut,
+                                                          );
+                                                        }
+                                                      },
+                                                      child: Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            // color: AppbackgroundColor
+                                                            //     .TiTile_Colors,
+                                                            borderRadius: const BorderRadius
+                                                                    .only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        6),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        6),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        6),
+                                                                bottomRight:
+                                                                    Radius
+                                                                        .circular(
+                                                                            6)),
+                                                            border: Border.all(
+                                                                color:
+                                                                    Colors.grey,
+                                                                width: 1),
+                                                          ),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(3.0),
+                                                          child: const Text(
+                                                            'Down',
+                                                            style: TextStyle(
+                                                                color:
+                                                                    Colors.grey,
+                                                                fontSize: 10.0,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T),
+                                                          )),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Align(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: Row(
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: _moveUp1,
+                                                      child: const Padding(
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  8.0),
+                                                          child: Align(
+                                                            alignment: Alignment
+                                                                .centerLeft,
+                                                            child: Icon(
+                                                              Icons
+                                                                  .arrow_upward,
+                                                              color:
+                                                                  Colors.grey,
+                                                            ),
+                                                          )),
+                                                    ),
+                                                    Container(
                                                         decoration:
                                                             BoxDecoration(
                                                           // color: AppbackgroundColor
@@ -5394,7 +5511,7 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                                               bottomRight:
                                                                   Radius
                                                                       .circular(
-                                                                          8)),
+                                                                          6)),
                                                           border: Border.all(
                                                               color:
                                                                   Colors.grey,
@@ -5404,7 +5521,7 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                                             const EdgeInsets
                                                                 .all(3.0),
                                                         child: const Text(
-                                                          'Top',
+                                                          'Scroll',
                                                           style: TextStyle(
                                                               color:
                                                                   Colors.grey,
@@ -5413,141 +5530,36 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                                                   FontWeight_
                                                                       .Fonts_T),
                                                         )),
-                                                  ),
-                                                ),
-                                                InkWell(
-                                                  onTap: () {
-                                                    if (_scrollController1
-                                                        .hasClients) {
-                                                      final position =
-                                                          _scrollController1
-                                                              .position
-                                                              .maxScrollExtent;
-                                                      _scrollController1
-                                                          .animateTo(
-                                                        position,
-                                                        duration:
-                                                            const Duration(
-                                                                seconds: 1),
-                                                        curve: Curves.easeOut,
-                                                      );
-                                                    }
-                                                  },
-                                                  child: Container(
-                                                      decoration: BoxDecoration(
-                                                        // color: AppbackgroundColor
-                                                        //     .TiTile_Colors,
-                                                        borderRadius: const BorderRadius
-                                                                .only(
-                                                            topLeft: Radius
-                                                                .circular(6),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    6),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    6),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    6)),
-                                                        border: Border.all(
-                                                            color: Colors.grey,
-                                                            width: 1),
-                                                      ),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              3.0),
-                                                      child: const Text(
-                                                        'Down',
-                                                        style: TextStyle(
-                                                            color: Colors.grey,
-                                                            fontSize: 10.0,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T),
-                                                      )),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Align(
-                                            alignment: Alignment.centerRight,
-                                            child: Row(
-                                              children: [
-                                                InkWell(
-                                                  onTap: _moveUp1,
-                                                  child: const Padding(
-                                                      padding:
-                                                          EdgeInsets.all(8.0),
-                                                      child: Align(
-                                                        alignment: Alignment
-                                                            .centerLeft,
-                                                        child: Icon(
-                                                          Icons.arrow_upward,
-                                                          color: Colors.grey,
-                                                        ),
-                                                      )),
-                                                ),
-                                                Container(
-                                                    decoration: BoxDecoration(
-                                                      // color: AppbackgroundColor
-                                                      //     .TiTile_Colors,
-                                                      borderRadius:
-                                                          const BorderRadius
-                                                                  .only(
-                                                              topLeft: Radius
-                                                                  .circular(6),
-                                                              topRight: Radius
-                                                                  .circular(6),
-                                                              bottomLeft: Radius
-                                                                  .circular(6),
-                                                              bottomRight:
-                                                                  Radius
-                                                                      .circular(
-                                                                          6)),
-                                                      border: Border.all(
-                                                          color: Colors.grey,
-                                                          width: 1),
+                                                    InkWell(
+                                                      onTap: _moveDown1,
+                                                      child: const Padding(
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  8.0),
+                                                          child: Align(
+                                                            alignment: Alignment
+                                                                .centerRight,
+                                                            child: Icon(
+                                                              Icons
+                                                                  .arrow_downward,
+                                                              color:
+                                                                  Colors.grey,
+                                                            ),
+                                                          )),
                                                     ),
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            3.0),
-                                                    child: const Text(
-                                                      'Scroll',
-                                                      style: TextStyle(
-                                                          color: Colors.grey,
-                                                          fontSize: 10.0,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T),
-                                                    )),
-                                                InkWell(
-                                                  onTap: _moveDown1,
-                                                  child: const Padding(
-                                                      padding:
-                                                          EdgeInsets.all(8.0),
-                                                      child: Align(
-                                                        alignment: Alignment
-                                                            .centerRight,
-                                                        child: Icon(
-                                                          Icons.arrow_downward,
-                                                          color: Colors.grey,
-                                                        ),
-                                                      )),
+                                                  ],
                                                 ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      )),
-                                ],
-                              ),
+                                              )
+                                            ],
+                                          )),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  );
+                      );
   }
 
   Widget BodyHome_TenantCancel() {
@@ -6744,7 +6756,7 @@ class PreviewChaoAreaScreen extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          // backgroundColor: Color.fromARGB(255, 141, 185, 90),
+          backgroundColor: AppBarColors.hexColor,
           leading: IconButton(
             onPressed: () async {
               SharedPreferences preferences =

@@ -25,6 +25,7 @@ import '../PDF_TP7/PDF_Temporary_Receipt_TP7/pdf_Temporar_TP7.dart';
 import '../PDF_TP8/PDF_Receipt_TP8/pdf_AC_his_statusbill_TP8.dart';
 import '../PDF_TP8/PDF_Temporary_Receipt_TP8/pdf_Temporar_TP8.dart';
 import '../PDF_TP8_Ortorkor/PDF_Temporary_Receipt_TP8_Ortorkor/pdf_Temporar_TP8.dart';
+import '../PDF_TP9_Lao/PDF_Temporary_Receipt_TP9/pdf_Temporar_TP9.dart';
 
 class ManTemporary_Receipt_PDF {
   // --------------------------------> PDF หลังรับชำระ และ ประวัติบิล
@@ -49,12 +50,12 @@ class ManTemporary_Receipt_PDF {
 
       ///----->ser เทมเพลต
       bills_name) async {
-    var nFormat = NumberFormat("#,##0.00", "en_US");
     List<FinnancetransModel> finnancetransModels = [];
     List<TransReBillHistoryModel> _TransReBillHistoryModels = [];
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
     var rtser = preferences.getString('renTalSer');
+    var rt_Language = preferences.getString('renTal_Language');
     var user = preferences.getString('ser');
     var fname;
     var email = preferences.getString('email');
@@ -62,6 +63,15 @@ class ManTemporary_Receipt_PDF {
     var qutser = '';
     var docnoin = docno;
     var pdate;
+
+    var fonts_pdf = (rt_Language.toString().trim() == 'LA')
+        ? await 'fonts/NotoSansLao-Regular.ttf'
+        : await 'fonts/THSarabunNew.ttf';
+
+    var nFormat = (rt_Language.toString().trim() == 'LA')
+        ? NumberFormat("#,##0", "en_US")
+        : NumberFormat("#,##0.00", "en_US");
+
     String? Cust_no, Ln_s, Zone_s;
     double sum_pvat = 0.00,
         sum_vat = 0.00,
@@ -329,7 +339,7 @@ class ManTemporary_Receipt_PDF {
           '${_TransReBillHistoryModels.where((model) => model.fine == '1' || model.fine == '1.00').map((model) => model.date.toString()).first}',
 
           ///---1
-          'ค่าปรับ',
+          (rt_Language.toString().trim() == 'LA') ? 'ປັບໄຫມ' : 'ค่าปรับ',
 
           ///---2
           '${nFormat.format(_TransReBillHistoryModels.where((model) => model.fine == '1' || model.fine == '1.00').map((model) => double.parse(model.vat ?? '0.00')).fold(0.0, (previousValue, element) => previousValue + element))}',
@@ -405,7 +415,8 @@ class ManTemporary_Receipt_PDF {
             Howto_LockJonPay,
             dis_sum_Matjum,
             TitleType_Default_Receipt_Name,
-            dis_sum_Pakan);
+            dis_sum_Pakan,
+            fonts_pdf);
       } else if (tem_page_ser.toString() == '1') {
         Pdfgen_Temporary_receipt_TP4.exportPDF_Temporary_receipt_TP4(
             foder,
@@ -441,7 +452,8 @@ class ManTemporary_Receipt_PDF {
             Howto_LockJonPay,
             dis_sum_Matjum,
             TitleType_Default_Receipt_Name,
-            dis_sum_Pakan);
+            dis_sum_Pakan,
+            fonts_pdf);
       } else if (tem_page_ser.toString() == '2') {
         Pdfgen_Temporary_receipt_TP7.exportPDF_Temporary_receipt_TP7(
             foder,
@@ -477,7 +489,8 @@ class ManTemporary_Receipt_PDF {
             Howto_LockJonPay,
             dis_sum_Matjum,
             TitleType_Default_Receipt_Name,
-            dis_sum_Pakan);
+            dis_sum_Pakan,
+            fonts_pdf);
       } else if (tem_page_ser.toString() == '3') {
         if (rtser.toString() == '72' ||
             rtser.toString() == '92' ||
@@ -523,7 +536,8 @@ class ManTemporary_Receipt_PDF {
                   Howto_LockJonPay,
                   dis_sum_Matjum,
                   TitleType_Default_Receipt_Name,
-                  dis_sum_Pakan);
+                  dis_sum_Pakan,
+                  fonts_pdf);
         } else {
           Pdfgen_Temporary_receipt_TP8.exportPDF_Temporary_receipt_TP8(
               Cust_no,
@@ -564,8 +578,51 @@ class ManTemporary_Receipt_PDF {
               Howto_LockJonPay,
               dis_sum_Matjum,
               TitleType_Default_Receipt_Name,
-              dis_sum_Pakan);
+              dis_sum_Pakan,
+              fonts_pdf);
         }
+      } else if (tem_page_ser.toString() == '4') {
+        Pdfgen_Temporary_receipt_TP9_Lao.exportPDF_Temporary_receipt_TP9_Lao(
+            Cust_no,
+            cid_,
+            Zone_s,
+            Ln_s,
+            fname,
+            foder,
+            tableData00,
+            tableData01,
+            context,
+            _TransReBillHistoryModels,
+            'Num_cid',
+            'Namenew',
+            '${sum_pvat}',
+            sum_vat,
+            sum_wht,
+            sum_amt,
+            sum_disp,
+            sum_disamt,
+            '${(sum_amt - sum_disamt)}',
+            renTal_name,
+            scname_,
+            cname_,
+            addr_,
+            tax_,
+            bill_addr,
+            bill_email,
+            bill_tel,
+            bill_tax,
+            bill_name,
+            newValuePDFimg,
+            numinvoice,
+            numdoctax,
+            finnancetransModels,
+            date_Transaction,
+            date_pay,
+            Howto_LockJonPay,
+            dis_sum_Matjum,
+            TitleType_Default_Receipt_Name,
+            dis_sum_Pakan,
+            fonts_pdf);
       }
     });
     // Future.delayed(Duration(milliseconds: 500), () async {

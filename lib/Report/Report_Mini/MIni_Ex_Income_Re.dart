@@ -172,6 +172,7 @@ class Mini_Ex_IncomeReport {
     sheet.getRangeByName('P1').cellStyle = globalStyle22;
     sheet.getRangeByName('Q1').cellStyle = globalStyle22;
     sheet.getRangeByName('R1').cellStyle = globalStyle22;
+    sheet.getRangeByName('S1').cellStyle = globalStyle22;
 
     final x.Range range = sheet.getRangeByName('E1');
     range.setText((ser_type_repro == '1')
@@ -206,6 +207,7 @@ class Mini_Ex_IncomeReport {
     sheet.getRangeByName('P2').cellStyle = globalStyle22;
     sheet.getRangeByName('Q2').cellStyle = globalStyle22;
     sheet.getRangeByName('R2').cellStyle = globalStyle22;
+    sheet.getRangeByName('S2').cellStyle = globalStyle22;
     sheet.getRangeByName('A2').setText('${renTal_name}');
     sheet
         .getRangeByName('I2')
@@ -232,6 +234,7 @@ class Mini_Ex_IncomeReport {
     sheet.getRangeByName('P3').cellStyle = globalStyle22;
     sheet.getRangeByName('Q3').cellStyle = globalStyle22;
     sheet.getRangeByName('R3').cellStyle = globalStyle22;
+    sheet.getRangeByName('S3').cellStyle = globalStyle22;
     sheet.getRangeByName('A3').setText('ใบเสร็จ : ${TransReBillModels.length}');
 
     sheet.getRangeByName('A3').columnWidth = 18;
@@ -252,6 +255,7 @@ class Mini_Ex_IncomeReport {
     sheet.getRangeByName('P3').columnWidth = 18;
     sheet.getRangeByName('Q3').columnWidth = 18;
     sheet.getRangeByName('R3').columnWidth = 18;
+    sheet.getRangeByName('S3').columnWidth = 18;
 
     sheet.getRangeByName('A4').cellStyle = globalStyle1;
     sheet.getRangeByName('B4').cellStyle = globalStyle1;
@@ -271,6 +275,7 @@ class Mini_Ex_IncomeReport {
     sheet.getRangeByName('P4').cellStyle = globalStyle1;
     sheet.getRangeByName('Q4').cellStyle = globalStyle1;
     sheet.getRangeByName('R4').cellStyle = globalStyle1;
+    sheet.getRangeByName('S4').cellStyle = globalStyle1;
 
     sheet.getRangeByName('J4').columnWidth = 18;
     sheet.getRangeByName('K4').columnWidth = 18;
@@ -314,6 +319,7 @@ class Mini_Ex_IncomeReport {
     sheet.getRangeByName('P4').setText('สถานะ');
     sheet.getRangeByName('Q4').setText('อ้างถึง');
     sheet.getRangeByName('R4').setText('เลขที่สัญญา');
+    sheet.getRangeByName('S4').setText('เวลา');
 
     int indextotol = 0;
     int indextotol_ = 0;
@@ -346,6 +352,7 @@ class Mini_Ex_IncomeReport {
       sheet.getRangeByName('P${indextotol + 5 - 1}').cellStyle = numberColor;
       sheet.getRangeByName('Q${indextotol + 5 - 1}').cellStyle = numberColor;
       sheet.getRangeByName('R${indextotol + 5 - 1}').cellStyle = numberColor;
+      sheet.getRangeByName('S${indextotol + 5 - 1}').cellStyle = numberColor;
 
       sheet.getRangeByName('A${indextotol + 5 - 1}').setText('${index1 + 1}');
       sheet.getRangeByName('B${indextotol + 5 - 1}').setText(
@@ -449,6 +456,13 @@ class Mini_Ex_IncomeReport {
                     TransReBillModels[index1].cid == null)
                 ? ''
                 : '${TransReBillModels[index1].cid}',
+          );
+
+      sheet.getRangeByName('S${indextotol + 5 - 1}').setText(
+            (TransReBillModels[index1].timex == '' ||
+                    TransReBillModels[index1].timex == null)
+                ? ''
+                : '${TransReBillModels[index1].timex}',
           );
 
       print('-------------------------');

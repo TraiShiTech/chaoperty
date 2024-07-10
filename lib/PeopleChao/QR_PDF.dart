@@ -22,9 +22,15 @@ class Pdfgen_QR_ {
   /////////////////////////////////////-------------------->(QR)
   static void displayPdf_QR(context, renTal_name, zone_name, teNantModels, name,
       indexcardColor) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
     //final font = await rootBundle.load("fonts/Saysettha-OT.ttf");
     // final font = await rootBundle.load("fonts/Sarabun-Medium.ttf");
-    final font = await rootBundle.load("fonts/LINESeedSansTH_Rg.ttf");
+    // final font = await rootBundle.load("fonts/LINESeedSansTH_Rg.ttf");
+    var rt_Language = preferences.getString('renTal_Language');
+    var font = (rt_Language.toString().trim() == 'LA')
+        ? await rootBundle.load('fonts/NotoSansLao.ttf')
+        : await rootBundle.load('fonts/THSarabunNew.ttf');
+    double font_Size = (rt_Language.toString().trim() == 'LA') ? 8.0 : 8.0;
     var Colors_pd = PdfColors.black;
     final ttf = pw.Font.ttf(font.buffer.asByteData());
     final doc = pw.Document();
@@ -63,12 +69,16 @@ class Pdfgen_QR_ {
               pw.Padding(
                 padding: const pw.EdgeInsets.all(4.0),
                 child: pw.Text(
-                  zone_name == null
-                      ? 'โซนพื้นที่เช่า : ทั้งหมด'
-                      : 'โซนพื้นที่เช่า : $name',
+                  (rt_Language.toString().trim() == 'LA')
+                      ? zone_name == null
+                          ? 'ເຂດພື້ນທີ່ໃຫ້ເຊົ່າ : ທັງໝົດ'
+                          : 'ເຂດພື້ນທີ່ໃຫ້ເຊົ່າ : $name'
+                      : zone_name == null
+                          ? 'โซนพื้นที่เช่า : ทั้งหมด'
+                          : 'โซนพื้นที่เช่า : $name',
                   maxLines: 1,
                   style: pw.TextStyle(
-                    fontSize: 14.0,
+                    fontSize: font_Size,
                     font: ttf,
                     color: Colors_pd,
                   ),
@@ -77,10 +87,12 @@ class Pdfgen_QR_ {
               pw.Padding(
                 padding: const pw.EdgeInsets.all(4.0),
                 child: pw.Text(
-                  ' ทั้งหมด : ${teNantModels.length}',
+                  (rt_Language.toString().trim() == 'LA')
+                      ? ' ທັງໝົດ : ${teNantModels.length}'
+                      : ' ทั้งหมด : ${teNantModels.length}',
                   maxLines: 1,
                   style: pw.TextStyle(
-                    fontSize: 14.0,
+                    fontSize: font_Size,
                     font: ttf,
                     color: Colors_pd,
                   ),
@@ -167,7 +179,7 @@ class Pdfgen_QR_ {
                                             '$renTal_name',
                                             maxLines: 1,
                                             style: pw.TextStyle(
-                                              fontSize: 8.0,
+                                              fontSize: font_Size,
                                               color: PdfColors.black,
                                               font: ttf,
                                               fontWeight: pw.FontWeight.bold,
@@ -178,10 +190,10 @@ class Pdfgen_QR_ {
                                           color: PdfColors.white,
                                           // width: 60,
                                           child: pw.Text(
-                                            ' ${teNantModels[startIndex + index].sdate} ถึง ${teNantModels[startIndex + index].ldate}',
+                                            ' ${teNantModels[startIndex + index].sdate} - ${teNantModels[startIndex + index].ldate}',
                                             maxLines: 1,
                                             style: pw.TextStyle(
-                                              fontSize: 7.0,
+                                              fontSize: font_Size,
                                               color: PdfColors.black,
                                               font: ttf,
                                               // fontWeight: FontWeight.bold,
@@ -247,9 +259,14 @@ class Pdfgen_QR_ {
                                                               .EdgeInsets.fromLTRB(
                                                           0, 4, 0, 0),
                                                       child: pw.Text(
-                                                        'ลงชื่อ................................',
+                                                        (rt_Language
+                                                                    .toString()
+                                                                    .trim() ==
+                                                                'LA')
+                                                            ? 'ຊື່..........................'
+                                                            : 'ลงชื่อ.......................',
                                                         style: pw.TextStyle(
-                                                          fontSize: 7.0,
+                                                          fontSize: font_Size,
                                                           color:
                                                               PdfColors.black,
                                                           fontWeight: pw
@@ -295,7 +312,7 @@ class Pdfgen_QR_ {
                                                     pw.Text(
                                                       '${teNantModels[startIndex + index].cid}',
                                                       style: pw.TextStyle(
-                                                        fontSize: 10.0,
+                                                        fontSize: font_Size,
                                                         color: PdfColors.black,
                                                         fontWeight:
                                                             pw.FontWeight.bold,
@@ -303,9 +320,14 @@ class Pdfgen_QR_ {
                                                       ),
                                                     ),
                                                     pw.Text(
-                                                      'ชื่อผู้ติดต่อ',
+                                                      (rt_Language
+                                                                  .toString()
+                                                                  .trim() ==
+                                                              'LA')
+                                                          ? 'ຊື່​ຕິດ​ຕໍ່'
+                                                          : 'ชื่อผู้ติดต่อ',
                                                       style: pw.TextStyle(
-                                                        fontSize: 8.0,
+                                                        fontSize: font_Size,
                                                         color: PdfColors.black,
                                                         font: ttf,
                                                       ),
@@ -314,7 +336,7 @@ class Pdfgen_QR_ {
                                                       '${teNantModels[startIndex + index].cname}',
                                                       maxLines: 1,
                                                       style: pw.TextStyle(
-                                                        fontSize: 9.0,
+                                                        fontSize: font_Size,
                                                         color: PdfColors.black,
                                                         fontWeight:
                                                             pw.FontWeight.bold,
@@ -322,9 +344,14 @@ class Pdfgen_QR_ {
                                                       ),
                                                     ),
                                                     pw.Text(
-                                                      'ชื่อร้านค้า',
+                                                      (rt_Language
+                                                                  .toString()
+                                                                  .trim() ==
+                                                              'LA')
+                                                          ? 'ຊື່ຮ້ານ'
+                                                          : 'ชื่อร้านค้า',
                                                       style: pw.TextStyle(
-                                                        fontSize: 8.0,
+                                                        fontSize: font_Size,
                                                         color: PdfColors.black,
                                                         font: ttf,
                                                       ),
@@ -333,7 +360,7 @@ class Pdfgen_QR_ {
                                                       '${teNantModels[startIndex + index].sname}',
                                                       maxLines: 1,
                                                       style: pw.TextStyle(
-                                                        fontSize: 9.0,
+                                                        fontSize: font_Size,
                                                         color: PdfColors.black,
                                                         fontWeight:
                                                             pw.FontWeight.bold,
@@ -341,33 +368,53 @@ class Pdfgen_QR_ {
                                                       ),
                                                     ),
                                                     pw.Text(
-                                                      teNantModels[startIndex +
-                                                                      index]
-                                                                  .ln_c ==
-                                                              null
+                                                      (rt_Language
+                                                                  .toString()
+                                                                  .trim() ==
+                                                              'LA')
                                                           ? teNantModels[startIndex +
                                                                           index]
-                                                                      .ln_q ==
+                                                                      .ln_c ==
                                                                   null
-                                                              ? ''
-                                                              : 'พื้นที่ :${teNantModels[startIndex + index].ln_q}'
-                                                          : 'พื้นที่ :${teNantModels[startIndex + index].ln_c}',
+                                                              ? teNantModels[startIndex +
+                                                                              index]
+                                                                          .ln_q ==
+                                                                      null
+                                                                  ? ''
+                                                                  : 'ພື້ນທີ່ :${teNantModels[startIndex + index].ln_q}'
+                                                              : 'ພື້ນທີ່ :${teNantModels[startIndex + index].ln_c}'
+                                                          : teNantModels[startIndex +
+                                                                          index]
+                                                                      .ln_c ==
+                                                                  null
+                                                              ? teNantModels[startIndex +
+                                                                              index]
+                                                                          .ln_q ==
+                                                                      null
+                                                                  ? ''
+                                                                  : 'พื้นที่ :${teNantModels[startIndex + index].ln_q}'
+                                                              : 'พื้นที่ :${teNantModels[startIndex + index].ln_c}',
 
                                                       // 'พื้นที่ : ${teNantModels[startIndex + index].ln} ( ${teNantModels[startIndex + index].zn} )',
                                                       maxLines: 1,
                                                       style: pw.TextStyle(
-                                                        fontSize: 8.0,
+                                                        fontSize: font_Size,
                                                         color: PdfColors.black,
                                                         font: ttf,
                                                       ),
                                                     ),
                                                     pw.Text(
-                                                      'โซน :${teNantModels[startIndex + index].zn}',
+                                                      (rt_Language
+                                                                  .toString()
+                                                                  .trim() ==
+                                                              'LA')
+                                                          ? 'ເຂດ :${teNantModels[startIndex + index].zn}'
+                                                          : 'โซน :${teNantModels[startIndex + index].zn}',
 
                                                       // 'พื้นที่ : ${teNantModels[startIndex + index].ln} ( ${teNantModels[startIndex + index].zn} )',
                                                       maxLines: 1,
                                                       style: pw.TextStyle(
-                                                        fontSize: 8.0,
+                                                        fontSize: font_Size,
                                                         color: PdfColors.black,
                                                         font: ttf,
                                                       ),
@@ -458,10 +505,12 @@ class Pdfgen_QR_ {
             mainAxisAlignment: pw.MainAxisAlignment.end,
             children: [
               pw.Text(
-                'หน้า ${context.pageNumber} / ${context.pagesCount} ',
+                (rt_Language.toString().trim() == 'LA')
+                    ? '# ${context.pageNumber} / ${context.pagesCount} '
+                    : 'หน้า ${context.pageNumber} / ${context.pagesCount} ',
                 textAlign: pw.TextAlign.left,
                 style: pw.TextStyle(
-                  fontSize: 10,
+                  fontSize: font_Size,
                   font: ttf,
                   color: Colors_pd,
                   // fontWeight: pw.FontWeight.bold
@@ -480,7 +529,7 @@ class Pdfgen_QR_ {
     final dir = await FileSaver.instance
         .saveFile("Generator QR $name", data, "pdf", mimeType: type);
     ////////////---------------------------------------------->
-    SharedPreferences preferences = await SharedPreferences.getInstance();
+    // SharedPreferences preferences = await SharedPreferences.getInstance();
 
     String? _route = preferences.getString('route');
     MaterialPageRoute materialPageRoute = await MaterialPageRoute(

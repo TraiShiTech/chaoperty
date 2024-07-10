@@ -17,6 +17,7 @@ import '../PDF_TP6/PDF_Billing_TP6/pdf_BillingNote_IV_TP6.dart';
 import '../PDF_TP7/PDF_Billing_TP7/pdf_BillingNote_IV_TP7.dart';
 import '../PDF_TP8/PDF_Billing_TP8/pdf_BillingNote_IV_TP8.dart';
 import '../PDF_TP8_Ortorkor/PDF_Billing_TP8_Ortorkor/pdf_BillingNote_IV_TP8.dart';
+import '../PDF_TP9_Lao/PDF_Billing_TP9/pdf_BillingNote_IV_TP9.dart';
 
 class Man_BillingNoteInvlice_PDF {
   static void ManBillingNoteInvlice_PDF(
@@ -51,7 +52,6 @@ class Man_BillingNoteInvlice_PDF {
       // paymentName2,
       // selectedValue_bank_bno
       ) async {
-    var nFormat = NumberFormat("#,##0.00", "en_US");
     List<InvoiceHistoryModel> _InvoiceHistoryModels = [];
 
     String? numinvoice;
@@ -115,9 +115,16 @@ class Man_BillingNoteInvlice_PDF {
     var fname;
     var rtser = preferences.getString('renTalSer');
     var ren = preferences.getString('renTalSer');
+    var rt_Language = preferences.getString('renTal_Language');
     var renTal_name = preferences.getString('renTalName');
     var docnoin = cFinn;
     var ciddoc = Get_Value_cid;
+    var fonts_pdf = (rt_Language.toString().trim() == 'LA')
+        ? await 'fonts/NotoSansLao-Regular.ttf'
+        : await 'fonts/THSarabunNew.ttf';
+    var nFormat = (rt_Language.toString().trim() == 'LA')
+        ? NumberFormat("#,##0", "en_US")
+        : NumberFormat("#,##0.00", "en_US");
 ////////////--------------------------->
 
     String url_1 =
@@ -286,6 +293,10 @@ class Man_BillingNoteInvlice_PDF {
               : '${nFormat.format(double.parse((_InvoiceHistoryModels[index].nvat == null) ? '0.00' : _InvoiceHistoryModels[index].nvat!))}',
 
           ///---13
+
+          '${_InvoiceHistoryModels[index].ele_ty}',
+
+          ///---14
         ],
     ];
 
@@ -333,7 +344,8 @@ class Man_BillingNoteInvlice_PDF {
             img1,
             Preview_ser,
             End_Bill_Paydate,
-            TitleType_Default_Receipt_Name);
+            TitleType_Default_Receipt_Name,
+            fonts_pdf);
       } else if (tem_page_ser.toString() == '1') {
         Pdfgen_BillingNoteInvlice_TP4.exportPDF_BillingNoteInvlice_TP4(
             foder,
@@ -376,7 +388,8 @@ class Man_BillingNoteInvlice_PDF {
             img1,
             Preview_ser,
             End_Bill_Paydate,
-            TitleType_Default_Receipt_Name);
+            TitleType_Default_Receipt_Name,
+            fonts_pdf);
       } else if (tem_page_ser.toString() == '2') {
         Pdfgen_BillingNoteInvlice_TP7.exportPDF_BillingNoteInvlice_TP7(
             foder,
@@ -421,7 +434,8 @@ class Man_BillingNoteInvlice_PDF {
             ptser1,
             ptname1,
             Preview_ser,
-            End_Bill_Paydate);
+            End_Bill_Paydate,
+            fonts_pdf);
       } else if (tem_page_ser.toString() == '3') {
         if (rtser.toString() == '72' ||
             rtser.toString() == '92' ||
@@ -471,7 +485,8 @@ class Man_BillingNoteInvlice_PDF {
                   ptname1,
                   img1,
                   Preview_ser,
-                  End_Bill_Paydate);
+                  End_Bill_Paydate,
+                  fonts_pdf);
         } else {
           Pdfgen_BillingNoteInvlice_TP8.exportPDF_BillingNoteInvlice_TP8(
               foder,
@@ -516,8 +531,55 @@ class Man_BillingNoteInvlice_PDF {
               ptname1,
               img1,
               Preview_ser,
-              End_Bill_Paydate);
+              End_Bill_Paydate,
+              fonts_pdf);
         }
+      } else if (tem_page_ser.toString() == '4') {
+        Pdfgen_BillingNoteInvlice_TP9_Lao.exportPDF_BillingNoteInvlice_TP9_Lao(
+            foder,
+            Cust_no,
+            cid_,
+            Zone_s,
+            Ln_s,
+            fname,
+            // ser,
+            tableData003,
+            context,
+            Get_Value_cid,
+            namenew,
+            sum_pvat,
+            sum_vat,
+            sum_wht,
+            sum_amt,
+            sum_disamt,
+            sum_total,
+            renTal_name,
+            Form_bussshop,
+            Form_address,
+            Form_tel,
+            Form_email,
+            Form_tax,
+            Form_nameshop,
+            bill_addr,
+            bill_email,
+            bill_tel,
+            bill_tax,
+            bill_name,
+            newValuePDFimg,
+            numinvoice,
+            Datex_invoice,
+            payment_Ptname1,
+            payment_Ptname2,
+            payment_Bno1,
+            TitleType_Default_Receipt_Name,
+            payment_Ptser1,
+            bank1,
+            ptser1,
+            ptname1,
+            img1,
+            Preview_ser,
+            End_Bill_Paydate,
+            fonts_pdf);
       }
     });
     // if (tem_page_ser.toString() == '0' || tem_page_ser == null) {

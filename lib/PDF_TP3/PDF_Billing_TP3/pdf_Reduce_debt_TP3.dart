@@ -42,11 +42,12 @@ class Pdfgen_Reduce_debt_TP3 {
       wht_inv,
       nwht_inv,
       nvat_inv,
-      sum_total) async {
+      sum_total,
+      fonts_pdf) async {
     //////--------------------------------------------->
 
     final pdf = pw.Document();
-    final font = await rootBundle.load("fonts/THSarabunNew.ttf");
+    final font = await rootBundle.load("${fonts_pdf}");
     var Colors_pd = PdfColors.black;
     // final font = await rootBundle.load("fonts/Sarabun-Medium.ttf");
 

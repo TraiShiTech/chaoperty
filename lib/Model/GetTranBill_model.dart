@@ -17,7 +17,8 @@ class TransBillModel {
   String? vtype;
   String? vser;
   String? meter;
-  String? refno; String? ser_con;
+  String? refno; 
+  String? ser_con;
 
   TransBillModel({
     this.ser,

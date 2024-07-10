@@ -1062,7 +1062,7 @@ class _Report_cm_ScreenAState extends State<Report_cm_ScreenA> {
                                                                                   mainAxisAlignment: MainAxisAlignment.start,
                                                                                   children: [
                                                                                     Container(
-                                                                                      decoration:  BoxDecoration(
+                                                                                      decoration: BoxDecoration(
                                                                                         color: AppbackgroundColor.TiTile_Colors,
                                                                                         borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
                                                                                       ),
@@ -1218,7 +1218,18 @@ class _Report_cm_ScreenAState extends State<Report_cm_ScreenA> {
                                                                                                   ),
                                                                                                 ),
                                                                                               ),
-
+                                                                                            Expanded(
+                                                                                              flex: 1,
+                                                                                              child: Text(
+                                                                                                'อื่นๆ',
+                                                                                                textAlign: TextAlign.right,
+                                                                                                style: const TextStyle(
+                                                                                                  color: ReportScreen_Color.Colors_Text1_,
+                                                                                                  fontWeight: FontWeight.bold,
+                                                                                                  fontFamily: FontWeight_.Fonts_T,
+                                                                                                ),
+                                                                                              ),
+                                                                                            ),
                                                                                             const Expanded(
                                                                                               flex: 1,
                                                                                               child: Text(
@@ -1359,6 +1370,27 @@ class _Report_cm_ScreenAState extends State<Report_cm_ScreenA> {
                                                                                                   ),
                                                                                                 ),
                                                                                               ),
+                                                                                            Expanded(
+                                                                                              flex: 1,
+                                                                                              child: Text(
+                                                                                            '${nFormat.format(double.parse('${TransReBillModels[index1].fold(
+                                                                                                        0.0,
+                                                                                                        (previousValue, element) => previousValue + (element.expser.toString() == '4' && element.total.toString() != '' && element.total != null && element.docno! == _TransReBillModels[index1].docno! ? double.parse(element.total!) : 0),
+                                                                                                      ).toString()}'))}',
+                                                                                                textAlign: TextAlign.right,
+                                                                                             style: TextStyle(
+                                                                                                    color: (double.parse('${TransReBillModels[index1].fold(
+                                                                                                        0.0,
+                                                                                                        (previousValue, element) => previousValue + (element.expser.toString() == '4' && element.total.toString() != '' && element.total != null && element.docno! == _TransReBillModels[index1].docno! ? double.parse(element.total!) : 0),
+                                                                                                      ).toString()}') ==
+                                                                                                            0.00)
+                                                                                                        ? Colors.red
+                                                                                                        : ReportScreen_Color.Colors_Text1_,
+                                                                                                    // fontWeight: FontWeight.bold,
+                                                                                                    fontFamily: Font_.Fonts_T,
+                                                                                                  ),
+                                                                                              ),
+                                                                                            ),
                                                                                             Expanded(
                                                                                               flex: 1,
                                                                                               child: Text(

@@ -534,7 +534,9 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
       print('******************** > $e');
     }
   }
+
   @override
+
   ///----------------->
   Widget build(BuildContext context) {
     return Padding(
@@ -3708,7 +3710,7 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                             child: Padding(
                               padding: const EdgeInsets.all(15.0),
                               child: Text(
-                                'หน่วยที่ใช้ไป : ',
+                                '${_TransModels[indextran].ser} หน่วยที่ใช้ไป : ',
                                 textAlign: TextAlign.end,
                                 style: const TextStyle(
                                     color: PeopleChaoScreen_Color.Colors_Text2_,

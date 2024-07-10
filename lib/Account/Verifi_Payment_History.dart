@@ -19,16 +19,23 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:panara_dialogs/panara_dialogs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:simple_barcode_scanner/screens/io_device.dart';
 import 'package:syncfusion_flutter_barcodes/barcodes.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../AdminScaffold/AdminScaffold.dart';
+import '../Beam/Beam_apiPassw.dart';
+import '../Beam/Beam_api_disabled.dart';
+import '../Beam/webviewPay_beamcheckout.dart';
 import '../Constant/Myconstant.dart';
 import '../INSERT_Log/Insert_log.dart';
 import '../Man_PDF/Man_Pay_Receipt_PDF.dart';
 import '../Man_PDF/Man_Receipt_Market_PDF.dart';
 import '../Model/GetFinnancetrans_Model.dart';
 import '../Model/GetInvoice_history_Model.dart';
+import '../Model/GetPayMent_Model.dart';
 import '../Model/GetRenTal_Model.dart';
 import '../Model/GetTeNant_Model.dart';
 import '../Model/GetTrans_Model.dart';
@@ -77,6 +84,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
   String? ser_payby;
   String? cid_Name, name_Name;
   String? base64_Slip, fileName_Slip, Slip_history;
+  String? ref_1, ref_2, ref_3;
   final Formbecause_ = TextEditingController();
   String? renTal_user,
       renTal_name,
@@ -143,7 +151,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
   ///------------------------>
   List<String> YE_Th = [];
   late Timer _timer;
-  String? MONTH_Now, YEAR_Now;
+  String? MONTH_Now, YEAR_Now, Pay_Ke;
   String? indexTest;
   int? index_Test;
 
@@ -151,9 +159,10 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
   @override
   void initState() {
     super.initState();
+    red_payMent();
     // _startTimer();
     checkPreferance();
-    red_Trans_bill();
+    // red_Trans_bill();
     read_GC_rental();
   }
 
@@ -193,6 +202,115 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
       email_login = preferences.getString('email');
       seremail_login = preferences.getString('ser');
     });
+  }
+
+  //////////////----------------------------------------->
+  Future<Null> red_payMent() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    String url = '${MyConstant().domain}/GC_payMent.php?isAdd=true&ren=$ren';
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      if (result.toString() != 'null') {
+        for (var map in result) {
+          PayMentModel _PayMentModel = PayMentModel.fromJson(map);
+
+          var paykey = _PayMentModel.key_b;
+          setState(() {
+            Pay_Ke = paykey.toString();
+          });
+        }
+        // Future.delayed(Duration(seconds: 100), () async {});
+        if (Pay_Ke.toString() == '' ||
+            Pay_Ke == null ||
+            Pay_Ke.toString() == 'null') {
+          red_Trans_bill();
+          read_GC_rental();
+        } else {
+          read_CheckBeamAll_true(ren, Pay_Ke, context);
+        }
+
+        // RecheckAuto(ren, Pay_Ke);
+      }
+    } catch (e) {}
+  }
+
+  Future<void> read_CheckBeamAll_true(Ser_, Pay_Ke, context) async {
+    var ren = Ser_;
+
+    try {
+      /////////------------------------------------------------>
+      String decodedPassword = retrieveDecodedPassword(Pay_Ke.toString());
+      String basicAuth = generateBasicAuth(decodedPassword);
+      // print(basicAuth);
+      /////////------------------------------------------------>
+
+      String url =
+          '${MyConstant().domain}/UP_Beam_CompleteAll.php?isAdd=true&serren=$ren';
+      var response = await http.post(
+        Uri.parse(url),
+        body: {'Basic_pass': basicAuth.toString()},
+      );
+
+      if (response.statusCode == 200) {
+        // Request was successful
+        print('Response: successful');
+        return PanaraInfoDialog.showAnimatedGrow(
+          context,
+          title: "Oops",
+          message: "ตรวจเช็คการรับชำระ เสร็จสิ้น ...!!",
+          buttonText: "รับทราบ",
+          onTapDismiss: () async {
+            SharedPreferences preferences =
+                await SharedPreferences.getInstance();
+            red_Trans_bill();
+            read_GC_rental();
+            Navigator.pop(context);
+          },
+          panaraDialogType: PanaraDialogType.success,
+          barrierDismissible: false, // optional parameter (default is true)
+        );
+        // print('Response: ${response.body}');
+      } else {
+        print('Response: failed');
+        PanaraInfoDialog.showAnimatedGrow(
+          context,
+          title: "Oops",
+          message: "ตรวจเช็คการรับชำระ ล้มเหลว ...!!",
+          buttonText: "ลองอีกครั้งภายหลัง",
+          onTapDismiss: () async {
+            SharedPreferences preferences =
+                await SharedPreferences.getInstance();
+            red_Trans_bill();
+            read_GC_rental();
+            Navigator.pop(context);
+          },
+          panaraDialogType: PanaraDialogType.error,
+          barrierDismissible: false, // optional parameter (default is true)
+        );
+        // Request failed
+        // print('Failed with status code: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Response: error');
+      PanaraInfoDialog.showAnimatedGrow(
+        context,
+        title: "Oops",
+        message: "ตรวจเช็คการรับชำระ ล้มเหลว ...!!",
+        buttonText: "ลองอีกครั้งภายหลัง",
+        onTapDismiss: () async {
+          SharedPreferences preferences = await SharedPreferences.getInstance();
+          Navigator.pop(context);
+        },
+        panaraDialogType: PanaraDialogType.error,
+        barrierDismissible: false, // optional parameter (default is true)
+      );
+      // Error occurred during the request
+      // print('Error: $error');
+    }
   }
 
   Future<Null> read_GC_rental() async {
@@ -264,6 +382,7 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
   Future<Null> red_Trans_bill() async {
     if (limitedList_TransReBillModels_.length != 0) {
       setState(() {
+        _TransReBillModels.clear();
         limitedList_TransReBillModels_.clear();
       });
     }
@@ -525,6 +644,10 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
 
           setState(() {
             Slip_history = finnancetransModel.slip.toString();
+            ref_1 = finnancetransModel.ref1.toString();
+            ref_2 = finnancetransModel.ref2.toString();
+            ref_3 = finnancetransModel.ref3.toString();
+
             if (int.parse(finnancetransModel.receiptSer!) != 0) {
               finnancetransModels.add(finnancetransModel);
               pdate = pdatex;
@@ -5590,407 +5713,439 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                               scrollDirection: Axis.horizontal,
                               child: Row(
                                 children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(4.0),
-                                    width: 180,
-                                    child: InkWell(
-                                      onTap: () {
-                                        showDialog<String>(
-                                            context: context,
-                                            builder:
-                                                (BuildContext context) =>
-                                                    StreamBuilder(
-                                                        stream: Stream.periodic(
-                                                            const Duration(
-                                                                seconds: 0)),
-                                                        builder: (context,
-                                                            snapshot) {
-                                                          return AlertDialog(
-                                                            shape: const RoundedRectangleBorder(
-                                                                borderRadius: BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            20.0))),
-                                                            title: const Center(
-                                                                child: Text(
-                                                              'ถูกต้อง/อนุมัติ การรับชำระ',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .orange,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T),
-                                                            )),
-                                                            content:
-                                                                SingleChildScrollView(
-                                                                    child: ListBody(
-                                                                        children: <Widget>[
-                                                                  const SizedBox(
-                                                                    height: 2.0,
-                                                                  ),
-                                                                  Text(
-                                                                    'บิลเลขที่ ${_TransReBillModels[index].docno}',
-                                                                    style: const TextStyle(
-                                                                        color: AccountScreen_Color.Colors_Text2_,
-                                                                        // fontWeight:
-                                                                        //     FontWeight.bold,
-                                                                        fontFamily: Font_.Fonts_T),
-                                                                  ),
-                                                                  Padding(
+                                  if (finnancetransModels.any((transaction) {
+                                        return transaction.ptser
+                                                .toString()
+                                                .trim() ==
+                                            '7';
+                                      }) ==
+                                      false)
+                                    Container(
+                                      padding: const EdgeInsets.all(4.0),
+                                      width: 180,
+                                      child: InkWell(
+                                        onTap: () {
+                                          showDialog<String>(
+                                              context: context,
+                                              builder: (BuildContext context) =>
+                                                  StreamBuilder(
+                                                      stream: Stream.periodic(
+                                                          const Duration(
+                                                              seconds: 0)),
+                                                      builder:
+                                                          (context, snapshot) {
+                                                        return AlertDialog(
+                                                          shape: const RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
+                                                                          20.0))),
+                                                          title: const Center(
+                                                              child: Text(
+                                                            'ถูกต้อง/อนุมัติ การรับชำระ',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .orange,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T),
+                                                          )),
+                                                          content:
+                                                              SingleChildScrollView(
+                                                                  child: ListBody(
+                                                                      children: <Widget>[
+                                                                const SizedBox(
+                                                                  height: 2.0,
+                                                                ),
+                                                                Text(
+                                                                  'บิลเลขที่ ${_TransReBillModels[index].docno}',
+                                                                  style: const TextStyle(
+                                                                      color: AccountScreen_Color.Colors_Text2_,
+                                                                      // fontWeight:
+                                                                      //     FontWeight.bold,
+                                                                      fontFamily: Font_.Fonts_T),
+                                                                ),
+                                                                Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          8.0),
+                                                                  child:
+                                                                      Container(
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      // color: Colors.grey,
+                                                                      borderRadius: const BorderRadius
+                                                                              .only(
+                                                                          topLeft: Radius.circular(
+                                                                              6),
+                                                                          topRight: Radius.circular(
+                                                                              6),
+                                                                          bottomLeft: Radius.circular(
+                                                                              6),
+                                                                          bottomRight:
+                                                                              Radius.circular(6)),
+                                                                      border: Border.all(
+                                                                          color: Colors
+                                                                              .grey,
+                                                                          width:
+                                                                              1),
+                                                                    ),
                                                                     padding:
                                                                         const EdgeInsets.all(
                                                                             8.0),
                                                                     child:
-                                                                        Container(
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        // color: Colors.grey,
-                                                                        borderRadius: const BorderRadius.only(
-                                                                            topLeft:
-                                                                                Radius.circular(6),
-                                                                            topRight: Radius.circular(6),
-                                                                            bottomLeft: Radius.circular(6),
-                                                                            bottomRight: Radius.circular(6)),
-                                                                        border: Border.all(
-                                                                            color:
-                                                                                Colors.grey,
-                                                                            width: 1),
-                                                                      ),
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
-                                                                      child:
-                                                                          Column(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.start,
-                                                                        children: [
-                                                                          const Text(
-                                                                            'ยอดชำระ ',
+                                                                        Column(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .start,
+                                                                      children: [
+                                                                        const Text(
+                                                                          'ยอดชำระ ',
+                                                                          style: TextStyle(
+                                                                              color: AccountScreen_Color.Colors_Text2_,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T),
+                                                                        ),
+                                                                        Text(
+                                                                          '- ${nFormat.format(sum_amt - sum_disamt)}',
+                                                                          style: const TextStyle(
+                                                                              fontSize: 14,
+                                                                              color: AccountScreen_Color.Colors_Text2_,
+                                                                              // fontWeight:
+                                                                              //     FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T),
+                                                                        ),
+                                                                        const Padding(
+                                                                          padding: EdgeInsets.fromLTRB(
+                                                                              0,
+                                                                              4,
+                                                                              0,
+                                                                              0),
+                                                                          child:
+                                                                              Text(
+                                                                            'หลักฐานการชำระ ',
                                                                             style: TextStyle(
                                                                                 color: AccountScreen_Color.Colors_Text2_,
                                                                                 fontWeight: FontWeight.bold,
                                                                                 fontFamily: Font_.Fonts_T),
                                                                           ),
-                                                                          Text(
-                                                                            '- ${nFormat.format(sum_amt - sum_disamt)}',
-                                                                            style: const TextStyle(
-                                                                                fontSize: 14,
+                                                                        ),
+                                                                        Text(
+                                                                          (Slip_history.toString() == null || Slip_history == null || Slip_history.toString() == 'null')
+                                                                              ? '- ไม่พบหลักฐาน ✖️'
+                                                                              : '- พบหลักฐาน ✔️',
+                                                                          style: const TextStyle(
+                                                                              fontSize: 14,
+                                                                              color: AccountScreen_Color.Colors_Text2_,
+                                                                              //(Slip_history.toString() == null || Slip_history == null || Slip_history.toString() == 'null') ? Colors.red : Colors.green,
+                                                                              // fontWeight:
+                                                                              //     FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T),
+                                                                        ),
+                                                                        Text(
+                                                                          (Slip_history.toString() == null || Slip_history == null || Slip_history.toString() == 'null')
+                                                                              ? ''
+                                                                              : '($Slip_history)',
+                                                                          style: const TextStyle(
+                                                                              fontSize: 10,
+                                                                              color: Colors.grey,
+                                                                              fontFamily: Font_.Fonts_T),
+                                                                        ),
+                                                                        const Padding(
+                                                                          padding: EdgeInsets.fromLTRB(
+                                                                              0,
+                                                                              4,
+                                                                              0,
+                                                                              0),
+                                                                          child:
+                                                                              Text(
+                                                                            'ผู้ตวจสอบ/อนุมัติ ',
+                                                                            style: TextStyle(
                                                                                 color: AccountScreen_Color.Colors_Text2_,
-                                                                                // fontWeight:
-                                                                                //     FontWeight.bold,
+                                                                                fontWeight: FontWeight.bold,
                                                                                 fontFamily: Font_.Fonts_T),
                                                                           ),
-                                                                          const Padding(
-                                                                            padding: EdgeInsets.fromLTRB(
-                                                                                0,
-                                                                                4,
-                                                                                0,
-                                                                                0),
+                                                                        ),
+                                                                        Text(
+                                                                          '- ${email_login}($seremail_login)',
+                                                                          style: const TextStyle(
+                                                                              fontSize: 14,
+                                                                              color: AccountScreen_Color.Colors_Text2_,
+                                                                              // fontWeight:
+                                                                              //     FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T),
+                                                                        ),
+                                                                        Padding(
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
+                                                                          child:
+                                                                              Container(
                                                                             child:
-                                                                                Text(
-                                                                              'หลักฐานการชำระ ',
-                                                                              style: TextStyle(color: AccountScreen_Color.Colors_Text2_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
-                                                                            ),
-                                                                          ),
-                                                                          Text(
-                                                                            (Slip_history.toString() == null || Slip_history == null || Slip_history.toString() == 'null')
-                                                                                ? '- ไม่พบหลักฐาน ✖️'
-                                                                                : '- พบหลักฐาน ✔️',
-                                                                            style: const TextStyle(
-                                                                                fontSize: 14,
-                                                                                color: AccountScreen_Color.Colors_Text2_,
-                                                                                //(Slip_history.toString() == null || Slip_history == null || Slip_history.toString() == 'null') ? Colors.red : Colors.green,
-                                                                                // fontWeight:
-                                                                                //     FontWeight.bold,
-                                                                                fontFamily: Font_.Fonts_T),
-                                                                          ),
-                                                                          Text(
-                                                                            (Slip_history.toString() == null || Slip_history == null || Slip_history.toString() == 'null')
-                                                                                ? ''
-                                                                                : '($Slip_history)',
-                                                                            style: const TextStyle(
-                                                                                fontSize: 10,
-                                                                                color: Colors.grey,
-                                                                                fontFamily: Font_.Fonts_T),
-                                                                          ),
-                                                                          const Padding(
-                                                                            padding: EdgeInsets.fromLTRB(
-                                                                                0,
-                                                                                4,
-                                                                                0,
-                                                                                0),
-                                                                            child:
-                                                                                Text(
-                                                                              'ผู้ตวจสอบ/อนุมัติ ',
-                                                                              style: TextStyle(color: AccountScreen_Color.Colors_Text2_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
-                                                                            ),
-                                                                          ),
-                                                                          Text(
-                                                                            '- ${email_login}($seremail_login)',
-                                                                            style: const TextStyle(
-                                                                                fontSize: 14,
-                                                                                color: AccountScreen_Color.Colors_Text2_,
-                                                                                // fontWeight:
-                                                                                //     FontWeight.bold,
-                                                                                fontFamily: Font_.Fonts_T),
-                                                                          ),
-                                                                          Padding(
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                Container(
-                                                                              child: Row(
-                                                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                                                children: [
-                                                                                  const Text(
-                                                                                    'CODE : ',
-                                                                                    style: TextStyle(fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
-                                                                                  ),
-                                                                                  Padding(
-                                                                                    padding: const EdgeInsets.all(2),
-                                                                                    child: Container(
-                                                                                      decoration: const BoxDecoration(
-                                                                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                        color: Color.fromARGB(255, 179, 177, 170),
-                                                                                        // image:
-                                                                                        //     const DecorationImage(
-                                                                                        //   image: AssetImage(
-                                                                                        //       "assets/pngegg2.png"),
-                                                                                        //   fit: BoxFit
-                                                                                        //       .cover,
-                                                                                        // ),
-                                                                                      ),
-                                                                                      width: 65,
-                                                                                      // color: Colors.black,
-                                                                                      padding: const EdgeInsets.all(2.0),
-                                                                                      child: Center(
-                                                                                        child: Text(
-                                                                                          '${randomString}',
-                                                                                          style: TextStyle(color: Colors.red[800], fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
-                                                                                        ),
+                                                                                Row(
+                                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                                              children: [
+                                                                                const Text(
+                                                                                  'CODE : ',
+                                                                                  style: TextStyle(fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
+                                                                                ),
+                                                                                Padding(
+                                                                                  padding: const EdgeInsets.all(2),
+                                                                                  child: Container(
+                                                                                    decoration: const BoxDecoration(
+                                                                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                      color: Color.fromARGB(255, 179, 177, 170),
+                                                                                      // image:
+                                                                                      //     const DecorationImage(
+                                                                                      //   image: AssetImage(
+                                                                                      //       "assets/pngegg2.png"),
+                                                                                      //   fit: BoxFit
+                                                                                      //       .cover,
+                                                                                      // ),
+                                                                                    ),
+                                                                                    width: 65,
+                                                                                    // color: Colors.black,
+                                                                                    padding: const EdgeInsets.all(2.0),
+                                                                                    child: Center(
+                                                                                      child: Text(
+                                                                                        '${randomString}',
+                                                                                        style: TextStyle(color: Colors.red[800], fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
                                                                                       ),
                                                                                     ),
                                                                                   ),
-                                                                                ],
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          Padding(
-                                                                            padding:
-                                                                                const EdgeInsets.all(4.0),
-                                                                            child:
-                                                                                Center(
-                                                                              child: Container(
-                                                                                height: 40,
-                                                                                width: 90,
-                                                                                child: PinCode(
-                                                                                  keyboardType: TextInputType.number,
-                                                                                  numberOfFields: 2,
-                                                                                  fieldWidth: 40.0,
-                                                                                  style: const TextStyle(
-                                                                                    fontFamily: Font_.Fonts_T,
-                                                                                    color: Colors.black,
-                                                                                  ),
-                                                                                  fieldStyle: PinCodeStyle.box,
-                                                                                  onChanged: (value) {
-                                                                                    setState(() {
-                                                                                      Pincontroller.text = value.trim();
-                                                                                    });
-                                                                                  },
-                                                                                  onCompleted: (text) {
-                                                                                    setState(() {
-                                                                                      Pincontroller.text = text.trim();
-                                                                                    });
-                                                                                  },
                                                                                 ),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Padding(
+                                                                          padding:
+                                                                              const EdgeInsets.all(4.0),
+                                                                          child:
+                                                                              Center(
+                                                                            child:
+                                                                                Container(
+                                                                              height: 40,
+                                                                              width: 90,
+                                                                              child: PinCode(
+                                                                                keyboardType: TextInputType.number,
+                                                                                numberOfFields: 2,
+                                                                                fieldWidth: 40.0,
+                                                                                style: const TextStyle(
+                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                  color: Colors.black,
+                                                                                ),
+                                                                                fieldStyle: PinCodeStyle.box,
+                                                                                onChanged: (value) {
+                                                                                  setState(() {
+                                                                                    Pincontroller.text = value.trim();
+                                                                                  });
+                                                                                },
+                                                                                onCompleted: (text) {
+                                                                                  setState(() {
+                                                                                    Pincontroller.text = text.trim();
+                                                                                  });
+                                                                                },
                                                                               ),
                                                                             ),
                                                                           ),
-                                                                        ],
-                                                                      ),
+                                                                        ),
+                                                                      ],
                                                                     ),
                                                                   ),
-                                                                ])),
-                                                            actions: <Widget>[
-                                                              Column(
-                                                                children: [
-                                                                  Text(
-                                                                    '** โปรดตรวจสอบความถูกต้องทุกครั้งก่อนอนุมัติ',
-                                                                    style: TextStyle(
-                                                                        color: Colors.red[
-                                                                            800],
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T),
-                                                                  ),
-                                                                  const SizedBox(
-                                                                    height: 5.0,
-                                                                  ),
-                                                                  const Divider(
-                                                                    color: Colors
-                                                                        .grey,
-                                                                    height: 1.0,
-                                                                  ),
-                                                                  const SizedBox(
-                                                                    height: 5.0,
-                                                                  ),
-                                                                  Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .end,
-                                                                    children: [
-                                                                      Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                ),
+                                                              ])),
+                                                          actions: <Widget>[
+                                                            Column(
+                                                              children: [
+                                                                Text(
+                                                                  '** โปรดตรวจสอบความถูกต้องทุกครั้งก่อนอนุมัติ',
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                              .red[
+                                                                          800],
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T),
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 5.0,
+                                                                ),
+                                                                const Divider(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  height: 1.0,
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 5.0,
+                                                                ),
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .end,
+                                                                  children: [
+                                                                    Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
+                                                                      child:
+                                                                          Container(
+                                                                        width:
+                                                                            150,
+                                                                        height:
+                                                                            40,
+                                                                        // ignore: deprecated_member_use
                                                                         child:
-                                                                            Container(
-                                                                          width:
-                                                                              150,
-                                                                          height:
-                                                                              40,
-                                                                          // ignore: deprecated_member_use
-                                                                          child:
-                                                                              ElevatedButton(
-                                                                            style:
-                                                                                ElevatedButton.styleFrom(
-                                                                              backgroundColor: (Pincontroller.text != "$randomString") ? Colors.grey : Colors.green,
-                                                                            ),
-                                                                            onPressed: (Pincontroller.text != "$randomString")
-                                                                                ? null
-                                                                                : () async {
-                                                                                    SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                            ElevatedButton(
+                                                                          style:
+                                                                              ElevatedButton.styleFrom(
+                                                                            backgroundColor: (Pincontroller.text != "$randomString")
+                                                                                ? Colors.grey
+                                                                                : Colors.green,
+                                                                          ),
+                                                                          onPressed: (Pincontroller.text != "$randomString")
+                                                                              ? null
+                                                                              : () async {
+                                                                                  SharedPreferences preferences = await SharedPreferences.getInstance();
 
-                                                                                    var ren = preferences.getString('renTalSer');
-                                                                                    var Remark = _TransReBillModels[index].sname == null ? '${_TransReBillModels[index].remark}' : '${_TransReBillModels[index].sname}';
-                                                                                    var ser_userVerifi = '$seremail_login';
-                                                                                    // '${email_login}($seremail_login)';
-                                                                                    var docno = _TransReBillModels[index].doctax == '' ? '${_TransReBillModels[index].docno}' : '${_TransReBillModels[index].doctax}';
+                                                                                  var ren = preferences.getString('renTalSer');
+                                                                                  var Remark = _TransReBillModels[index].sname == null ? '${_TransReBillModels[index].remark}' : '${_TransReBillModels[index].sname}';
+                                                                                  var ser_userVerifi = '$seremail_login';
+                                                                                  // '${email_login}($seremail_login)';
+                                                                                  var docno = _TransReBillModels[index].doctax == '' ? '${_TransReBillModels[index].docno}' : '${_TransReBillModels[index].doctax}';
 
-                                                                                    // '${_TransReBillModels[index].docno}';
+                                                                                  // '${_TransReBillModels[index].docno}';
 
-                                                                                    String url = '${MyConstant().domain}/OK_Verifi_Payment.php?isAdd=true&ren=$ren&ciddoc=$docno&Re_mark=$Remark&ser_user=$ser_userVerifi';
+                                                                                  String url = '${MyConstant().domain}/OK_Verifi_Payment.php?isAdd=true&ren=$ren&ciddoc=$docno&Re_mark=$Remark&ser_user=$ser_userVerifi';
 
-                                                                                    try {
-                                                                                      var response = await http.get(Uri.parse(url));
+                                                                                  try {
+                                                                                    var response = await http.get(Uri.parse(url));
 
-                                                                                      var result = json.decode(response.body);
-                                                                                      if (result.toString() == 'true') {
-                                                                                        Insert_log.Insert_logs('บัญชี', 'ประวัติบิลรอตรวจสอบ>>อนุมัติ($docno,ผู้อนุมัตื:${Remark})');
-                                                                                        ScaffoldMessenger.of(context).showSnackBar(
-                                                                                          SnackBar(backgroundColor: Colors.green, content: Text('$docno อนุมัติเสร็จสิ้น!', style: const TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
-                                                                                        );
-                                                                                        Navigator.pop(context, 'OK');
-                                                                                        Navigator.pop(context, 'OK');
-                                                                                        setState(() {
-                                                                                          Pincontroller.clear;
-                                                                                          checkPreferance();
-                                                                                          red_Trans_bill();
-                                                                                          read_GC_rental();
-                                                                                        });
-                                                                                      }
-                                                                                    } catch (e) {
-                                                                                      Pincontroller.clear;
+                                                                                    var result = json.decode(response.body);
+                                                                                    if (result.toString() == 'true') {
+                                                                                      Insert_log.Insert_logs('บัญชี', 'ประวัติบิลรอตรวจสอบ>>อนุมัติ($docno,ผู้อนุมัตื:${Remark})');
+                                                                                      ScaffoldMessenger.of(context).showSnackBar(
+                                                                                        SnackBar(backgroundColor: Colors.green, content: Text('$docno อนุมัติเสร็จสิ้น!', style: const TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                                      );
+                                                                                      Navigator.pop(context, 'OK');
+                                                                                      Navigator.pop(context, 'OK');
+                                                                                      setState(() {
+                                                                                        Pincontroller.clear;
+                                                                                        checkPreferance();
+                                                                                        red_Trans_bill();
+                                                                                        read_GC_rental();
+                                                                                      });
                                                                                     }
-                                                                                  },
-                                                                            child:
-                                                                                const Text(
-                                                                              'ยืนยัน',
-                                                                              style: TextStyle(
-                                                                                // fontSize: 20.0,
-                                                                                // fontWeight: FontWeight.bold,
-                                                                                color: Colors.white,
-                                                                              ),
-                                                                            ),
-                                                                            // color: Colors.black,
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
-                                                                        child:
-                                                                            Container(
-                                                                          width:
-                                                                              150,
-                                                                          height:
-                                                                              40,
-                                                                          // ignore: deprecated_member_use
+                                                                                  } catch (e) {
+                                                                                    Pincontroller.clear;
+                                                                                  }
+                                                                                },
                                                                           child:
-                                                                              ElevatedButton(
+                                                                              const Text(
+                                                                            'ยืนยัน',
                                                                             style:
-                                                                                ElevatedButton.styleFrom(
-                                                                              backgroundColor: Colors.black,
+                                                                                TextStyle(
+                                                                              // fontSize: 20.0,
+                                                                              // fontWeight: FontWeight.bold,
+                                                                              color: Colors.white,
                                                                             ),
-                                                                            onPressed:
-                                                                                () {
-                                                                              setState(() {
-                                                                                Formbecause_.clear();
-                                                                              });
-                                                                              Navigator.pop(context, 'OK');
-                                                                            },
-                                                                            child:
-                                                                                const Text(
-                                                                              'ปิด',
-                                                                              style: TextStyle(
-                                                                                // fontSize: 20.0,
-                                                                                // fontWeight: FontWeight.bold,
-                                                                                color: Colors.white,
-                                                                              ),
-                                                                            ),
-                                                                            // color: Colors.black,
                                                                           ),
+                                                                          // color: Colors.black,
                                                                         ),
                                                                       ),
-                                                                    ],
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ],
-                                                          );
-                                                        }));
-                                      },
-                                      child: Container(
-                                          decoration: BoxDecoration(
-                                            color: Colors.green[400],
-                                            borderRadius:
-                                                const BorderRadius.only(
-                                                    topLeft: Radius.circular(6),
-                                                    topRight:
-                                                        Radius.circular(6),
-                                                    bottomLeft:
-                                                        Radius.circular(6),
-                                                    bottomRight:
-                                                        Radius.circular(6)),
-                                            border: Border.all(
-                                                color: Colors.grey, width: 1),
-                                          ),
-                                          child: const Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsets.all(4.0),
-                                                child: Icon(Icons.check,
-                                                    color: Colors.black),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.all(4.0),
-                                                child: Text(
-                                                  'ถูกต้อง/อนุมัติ',
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                    // fontWeight:
-                                                    //     FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T,
+                                                                    ),
+                                                                    Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
+                                                                      child:
+                                                                          Container(
+                                                                        width:
+                                                                            150,
+                                                                        height:
+                                                                            40,
+                                                                        // ignore: deprecated_member_use
+                                                                        child:
+                                                                            ElevatedButton(
+                                                                          style:
+                                                                              ElevatedButton.styleFrom(
+                                                                            backgroundColor:
+                                                                                Colors.black,
+                                                                          ),
+                                                                          onPressed:
+                                                                              () {
+                                                                            setState(() {
+                                                                              Formbecause_.clear();
+                                                                            });
+                                                                            Navigator.pop(context,
+                                                                                'OK');
+                                                                          },
+                                                                          child:
+                                                                              const Text(
+                                                                            'ปิด',
+                                                                            style:
+                                                                                TextStyle(
+                                                                              // fontSize: 20.0,
+                                                                              // fontWeight: FontWeight.bold,
+                                                                              color: Colors.white,
+                                                                            ),
+                                                                          ),
+                                                                          // color: Colors.black,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        );
+                                                      }));
+                                        },
+                                        child: Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.green[400],
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(6),
+                                                      topRight:
+                                                          Radius.circular(6),
+                                                      bottomLeft:
+                                                          Radius.circular(6),
+                                                      bottomRight:
+                                                          Radius.circular(6)),
+                                              border: Border.all(
+                                                  color: Colors.grey, width: 1),
+                                            ),
+                                            child: const Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.all(4.0),
+                                                  child: Icon(Icons.check,
+                                                      color: Colors.black),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.all(4.0),
+                                                  child: Text(
+                                                    'ถูกต้อง/อนุมัติ',
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      // fontWeight:
+                                                      //     FontWeight.bold,
+                                                      fontFamily: Font_.Fonts_T,
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
-                                          )),
+                                              ],
+                                            )),
+                                      ),
                                     ),
-                                  ),
                                   Container(
                                     padding: const EdgeInsets.all(4.0),
                                     // width: MediaQuery.of(context).size.width,
@@ -6008,6 +6163,15 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                 width: 180,
                                                 child: InkWell(
                                                   onTap: () {
+                                                    bool hasNonCashTransaction =
+                                                        finnancetransModels
+                                                            .any((transaction) {
+                                                      return transaction.ptser
+                                                              .toString()
+                                                              .trim() ==
+                                                          '7';
+                                                    });
+
                                                     showDialog(
                                                       context: context,
                                                       builder: (context) =>
@@ -6015,8 +6179,29 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                               title: Center(
                                                                 child: Column(
                                                                   children: [
+                                                                    Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .end,
+                                                                      children: [
+                                                                        InkWell(
+                                                                          onTap:
+                                                                              () {
+                                                                            Navigator.pop(context);
+                                                                          },
+                                                                          child:
+                                                                              Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.all(4.0),
+                                                                            child: Icon(Icons.highlight_off,
+                                                                                size: 30,
+                                                                                color: Colors.red[700]),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
                                                                     Text(
-                                                                      'เลขที่บิล ${_TransReBillModels[index].docno}',
+                                                                      'บิลเลขที่  ${_TransReBillModels[index].docno} ',
                                                                       maxLines:
                                                                           1,
                                                                       textAlign:
@@ -6030,151 +6215,172 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                           fontFamily: FontWeight_
                                                                               .Fonts_T,
                                                                           fontSize:
-                                                                              14.0),
+                                                                              12.0),
                                                                     ),
-                                                                    Text(
-                                                                      '(${Slip_history})',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      style: const TextStyle(
-                                                                          color: Colors
-                                                                              .grey,
-                                                                          fontWeight: FontWeight
-                                                                              .bold,
-                                                                          fontFamily: FontWeight_
-                                                                              .Fonts_T,
-                                                                          fontSize:
-                                                                              10.0),
-                                                                    ),
+                                                                    (hasNonCashTransaction ==
+                                                                            true)
+                                                                        ? Row(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.center,
+                                                                            children: [
+                                                                                Padding(
+                                                                                  padding: const EdgeInsets.all(2.0),
+                                                                                  child: Text(
+                                                                                    '${Slip_history}',
+                                                                                    textAlign: TextAlign.center,
+                                                                                    style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T, fontSize: 12.0),
+                                                                                  ),
+                                                                                ),
+                                                                                InkWell(
+                                                                                  onTap: () async {
+                                                                                    final String url = '${ref_2}';
+                                                                                    if (await canLaunch(url)) {
+                                                                                      await launch(url);
+                                                                                    } else {
+                                                                                      throw 'Could not launch $url';
+                                                                                    }
+                                                                                  },
+                                                                                  child: Icon(
+                                                                                    Icons.open_in_browser,
+                                                                                    color: Colors.blue,
+                                                                                    size: 20,
+                                                                                  ),
+                                                                                ),
+                                                                              ])
+                                                                        : Text(
+                                                                            '${Slip_history}',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style: const TextStyle(
+                                                                                color: Colors.grey,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                fontSize: 12.0),
+                                                                          ),
                                                                   ],
                                                                 ),
                                                               ),
-                                                              content:
-                                                                  SingleChildScrollView(
+                                                              content: (hasNonCashTransaction ==
+                                                                      true)
+                                                                  ? StreamBuilder(
+                                                                      stream: Stream.periodic(const Duration(
+                                                                          seconds:
+                                                                              0)),
+                                                                      builder:
+                                                                          (context,
+                                                                              snapshot) {
+                                                                        return SingleChildScrollView(
+                                                                          child:
+                                                                              ListBody(
+                                                                            children: <Widget>[
+                                                                              Container(
+                                                                                // height: 600,
+                                                                                width: MediaQuery.of(context).size.width,
+                                                                                child: WebViewX2Pagebeamcheck(id_ser: (Slip_history == '' || Slip_history == null) ? ref_2 : Slip_history),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        );
+                                                                      })
+                                                                  : SingleChildScrollView(
                                                                       child: ListBody(
                                                                           children: <Widget>[
-                                                                    SizedBox(
-                                                                      width:
-                                                                          300,
-                                                                      child: Image
-                                                                          .network(
-                                                                              '${MyConstant().domain}/files/$foder/slip/${Slip_history}'),
-                                                                    )
-                                                                  ])),
-                                                              actions: <Widget>[
-                                                            SizedBox(
-                                                              // width: 300,
-                                                              child: Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                children: [
-                                                                  const Text(
-                                                                    '*** วิธีตรวจสอบ "สลิป" เบื้องต้น',
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .red,
-                                                                        fontSize:
-                                                                            13,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T),
-                                                                  ),
-                                                                  const Text(
-                                                                    '1. สังเกตความละเอียดของ ตัวเลข หรือ ตัวหนังสือ',
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .red,
-                                                                        fontSize:
-                                                                            12,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T),
-                                                                  ),
-                                                                  const Text(
-                                                                    '2. เปิดแอปฯ ธนาคารขึ้นมา สแกน QR CODE บนสลิปโอนเงิน',
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .red,
-                                                                        fontSize:
-                                                                            12,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T),
-                                                                  ),
-                                                                  const Text(
-                                                                    '3. ใช้  Mobile Banking เช็ก ยอดเงิน วัน-เวลาที่โอน ตรงกับในสลิปที่ได้มาหรือไม่',
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .red,
-                                                                        fontSize:
-                                                                            12,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T),
-                                                                  ),
-                                                                  const Text(
-                                                                    '4. ควรตรวจสอบสลิปทันทีที่ได้รับมา เพราะ QR code บนสลิปของบางธนาคารจะมีอายุจำกัด ตั้งเเต่ 7 วัน ถึง 60 วัน ',
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .red,
-                                                                        fontSize:
-                                                                            12,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T),
-                                                                  ),
-                                                                  const SizedBox(
-                                                                    height: 5.0,
-                                                                  ),
-                                                                  const Divider(
-                                                                    color: Colors
-                                                                        .grey,
-                                                                    height: 4.0,
-                                                                  ),
-                                                                  const SizedBox(
-                                                                    height: 5.0,
-                                                                  ),
-                                                                  Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .end,
-                                                                    children: [
-                                                                      Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
-                                                                        child:
-                                                                            Container(
-                                                                          width:
-                                                                              100,
-                                                                          decoration:
-                                                                              const BoxDecoration(
-                                                                            color:
-                                                                                Colors.black,
-                                                                            borderRadius: BorderRadius.only(
-                                                                                topLeft: Radius.circular(10),
-                                                                                topRight: Radius.circular(10),
-                                                                                bottomLeft: Radius.circular(10),
-                                                                                bottomRight: Radius.circular(10)),
-                                                                          ),
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
-                                                                          child:
-                                                                              TextButton(
-                                                                            onPressed: () =>
-                                                                                Navigator.pop(context, 'OK'),
+                                                                          SizedBox(
+                                                                            width:
+                                                                                300,
                                                                             child:
-                                                                                const Text(
-                                                                              'ปิด',
-                                                                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
-                                                                            ),
-                                                                          ),
+                                                                                Image.network('${MyConstant().domain}/files/$foder/slip/${Slip_history}'),
+                                                                          )
+                                                                        ])),
+                                                              actions: <Widget>[
+                                                            (hasNonCashTransaction ==
+                                                                    true)
+                                                                ? SizedBox()
+                                                                : SizedBox(
+                                                                    // width: 300,
+                                                                    child:
+                                                                        Column(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .start,
+                                                                      children: [
+                                                                        const Text(
+                                                                          '*** วิธีตรวจสอบ "สลิป" เบื้องต้น',
+                                                                          style: TextStyle(
+                                                                              color: Colors.red,
+                                                                              fontSize: 13,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T),
                                                                         ),
-                                                                      ),
-                                                                    ],
+                                                                        const Text(
+                                                                          '1. สังเกตความละเอียดของ ตัวเลข หรือ ตัวหนังสือ',
+                                                                          style: TextStyle(
+                                                                              color: Colors.red,
+                                                                              fontSize: 12,
+                                                                              fontFamily: Font_.Fonts_T),
+                                                                        ),
+                                                                        const Text(
+                                                                          '2. เปิดแอปฯ ธนาคารขึ้นมา สแกน QR CODE บนสลิปโอนเงิน',
+                                                                          style: TextStyle(
+                                                                              color: Colors.red,
+                                                                              fontSize: 12,
+                                                                              fontFamily: Font_.Fonts_T),
+                                                                        ),
+                                                                        const Text(
+                                                                          '3. ใช้  Mobile Banking เช็ก ยอดเงิน วัน-เวลาที่โอน ตรงกับในสลิปที่ได้มาหรือไม่',
+                                                                          style: TextStyle(
+                                                                              color: Colors.red,
+                                                                              fontSize: 12,
+                                                                              fontFamily: Font_.Fonts_T),
+                                                                        ),
+                                                                        const Text(
+                                                                          '4. ควรตรวจสอบสลิปทันทีที่ได้รับมา เพราะ QR code บนสลิปของบางธนาคารจะมีอายุจำกัด ตั้งเเต่ 7 วัน ถึง 60 วัน ',
+                                                                          style: TextStyle(
+                                                                              color: Colors.red,
+                                                                              fontSize: 12,
+                                                                              fontFamily: Font_.Fonts_T),
+                                                                        ),
+                                                                        const SizedBox(
+                                                                          height:
+                                                                              5.0,
+                                                                        ),
+                                                                        const Divider(
+                                                                          color:
+                                                                              Colors.grey,
+                                                                          height:
+                                                                              4.0,
+                                                                        ),
+                                                                        const SizedBox(
+                                                                          height:
+                                                                              5.0,
+                                                                        ),
+                                                                        // Row(
+                                                                        //   mainAxisAlignment:
+                                                                        //       MainAxisAlignment.end,
+                                                                        //   children: [
+                                                                        //     Padding(
+                                                                        //       padding: const EdgeInsets.all(8.0),
+                                                                        //       child: Container(
+                                                                        //         width: 100,
+                                                                        //         decoration: const BoxDecoration(
+                                                                        //           color: Colors.black,
+                                                                        //           borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                        //         ),
+                                                                        //         padding: const EdgeInsets.all(8.0),
+                                                                        //         child: TextButton(
+                                                                        //           onPressed: () => Navigator.pop(context, 'OK'),
+                                                                        //           child: const Text(
+                                                                        //             'ปิด',
+                                                                        //             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                        //           ),
+                                                                        //         ),
+                                                                        //       ),
+                                                                        //     ),
+                                                                        //   ],
+                                                                        // ),
+                                                                      ],
+                                                                    ),
                                                                   ),
-                                                                ],
-                                                              ),
-                                                            ),
                                                           ]),
                                                     );
                                                   },
@@ -6198,45 +6404,106 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                             color: Colors.grey,
                                                             width: 1),
                                                       ),
-                                                      child: const Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    4.0),
-                                                            child: Icon(
-                                                                Icons.image,
-                                                                color: Colors
-                                                                    .black),
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    4.0),
-                                                            child: Text(
-                                                              'หลักฐานการโอน',
-                                                              style: TextStyle(
-                                                                color: AccountScreen_Color
-                                                                    .Colors_Text2_,
-                                                                // fontWeight:
-                                                                //     FontWeight.bold,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      )),
+                                                      child: (finnancetransModels
+                                                                  .any(
+                                                                      (transaction) {
+                                                                return transaction
+                                                                        .ptser
+                                                                        .toString()
+                                                                        .trim() ==
+                                                                    '7';
+                                                              }) ==
+                                                              false)
+                                                          ? Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Padding(
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              4.0),
+                                                                  child: Icon(
+                                                                      Icons
+                                                                          .image,
+                                                                      color: Colors
+                                                                          .black),
+                                                                ),
+                                                                Padding(
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              4.0),
+                                                                  child: Text(
+                                                                    'หลักฐานการโอน',
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: AccountScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      // fontWeight:
+                                                                      //     FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            )
+                                                          : Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .fromLTRB(
+                                                                          4,
+                                                                          0,
+                                                                          4,
+                                                                          0),
+                                                                  child:
+                                                                      CircleAvatar(
+                                                                    radius:
+                                                                        12.0,
+                                                                    backgroundImage:
+                                                                        AssetImage(
+                                                                            'images/LogoBank/BEAM.png'),
+                                                                    backgroundColor:
+                                                                        Colors
+                                                                            .transparent,
+                                                                  ),
+                                                                ),
+                                                                Padding(
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              4.0),
+                                                                  child: Text(
+                                                                    'ชำระ/ตรวจสอบ',
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: AccountScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      // fontWeight:
+                                                                      //     FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            )),
                                                 ),
                                               ),
                                         Container(
                                           padding: const EdgeInsets.all(4.0),
                                           width: 180,
                                           child: InkWell(
-                                            onTap: () {
+                                            onTap: () async {
                                               showDialog<String>(
                                                 context: context,
                                                 builder:
@@ -6466,15 +6733,53 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                                 ),
                                                               );
                                                             } else {
-                                                              pPC_finantIbill(
-                                                                  Formbecause);
-                                                              setState(() {
-                                                                Formbecause_
-                                                                    .clear();
-                                                              });
-                                                              Navigator.pop(
-                                                                  context,
-                                                                  'OK');
+                                                              if (finnancetransModels
+                                                                      .any(
+                                                                          (transaction) {
+                                                                    return transaction
+                                                                            .ptser
+                                                                            .toString()
+                                                                            .trim() ==
+                                                                        '7';
+                                                                  }) ==
+                                                                  false) {
+                                                                pPC_finantIbill(
+                                                                        Formbecause)
+                                                                    .then(
+                                                                        (value) =>
+                                                                            {
+                                                                              Navigator.pop(context),
+                                                                              Future.delayed(const Duration(milliseconds: 600), () async {
+                                                                                Dialog_cancellock();
+                                                                              }),
+                                                                            });
+
+                                                                // setState(() {
+                                                                //   Formbecause_
+                                                                //       .clear();
+                                                                // });
+                                                                // Navigator.pop(
+                                                                //     context,
+                                                                //     'OK');
+                                                              } else {
+                                                                Beam_purchase_disabled(
+                                                                        ref_1,
+                                                                        Pay_Ke,
+                                                                        renTal_user,
+                                                                        _TransReBillModels[index]
+                                                                            .docno,
+                                                                        Formbecause)
+                                                                    .then(
+                                                                        (value) =>
+                                                                            {
+                                                                              // _timer.cancel(),
+                                                                              Navigator.pop(context),
+                                                                              Navigator.pop(context),
+                                                                              Future.delayed(Duration(milliseconds: 600), () async {
+                                                                                Dialog_cancellock();
+                                                                              }),
+                                                                            });
+                                                              }
                                                             }
                                                           },
                                                           child: const Text(
@@ -6607,7 +6912,8 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
                                                     .ManPayReceiptMarket_PDF(
                                                   context,
                                                   ren,
-                                                  cFinn_now,
+                                                  foder,
+                                                  cFinn,
                                                   bill_addr,
                                                   bill_email,
                                                   bill_tel,
@@ -7064,5 +7370,30 @@ class _Verifi_Payment_HistoryState extends State<Verifi_Payment_History> {
             content: Text('ทำรายการเสร็จสิ้น !!!!')),
       );
     });
+  }
+
+  /////////////---------------------------------------------------->
+  Dialog_cancellock() async {
+    PanaraInfoDialog.showAnimatedGrow(
+      context,
+      title: "Oops",
+      message: "ยกเลิกการรับชำระ เสร็จสิ้น ...!!",
+      buttonText: "รับทราบ",
+      onTapDismiss: () async {
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+
+        Navigator.pop(context);
+
+        red_Trans_bill();
+
+        // String? _route = preferences.getString('route');
+        // MaterialPageRoute materialPageRoute = MaterialPageRoute(
+        //     builder: (BuildContext context) => AdminScafScreen(route: _route));
+        // Navigator.pushAndRemoveUntil(
+        //     context, materialPageRoute, (route) => false);
+      },
+      panaraDialogType: PanaraDialogType.warning,
+      barrierDismissible: false, // optional parameter (default is true)
+    );
   }
 }

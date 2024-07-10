@@ -6356,7 +6356,7 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
           print(cser_);
           SharedPreferences preferences = await SharedPreferences.getInstance();
 
-//////////////-------------------------------------------------->
+          //////////////-------------------------------------------------->
           // setState(() {
           //   newValuePDF = [];
           // });

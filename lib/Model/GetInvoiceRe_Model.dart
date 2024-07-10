@@ -57,6 +57,8 @@ class InvoiceReModel {
   String? amt_dis;
   String? payment_ser;
   String? qty_exp;
+  String? pay_fine;
+  String? pay_dis;
   String? paytotal_dis;
   String? inv;
 
@@ -119,6 +121,8 @@ class InvoiceReModel {
     this.amt_dis,
     this.payment_ser,
     this.qty_exp,
+    this.pay_fine,
+    this.pay_dis,
     this.paytotal_dis,
     this.inv,
   });
@@ -182,6 +186,8 @@ class InvoiceReModel {
     amt_dis = json['amt_dis'];
     payment_ser = json['payment_ser'];
     qty_exp = json['qty_exp'];
+    pay_fine = json['pay_fine'];
+    pay_dis = json['pay_dis'];
     paytotal_dis = json['paytotal_dis'];
     inv = json['inv'];
   }
@@ -247,6 +253,8 @@ class InvoiceReModel {
     data['amt_dis'] = this.amt_dis;
     data['payment_ser'] = this.payment_ser;
     data['qty_exp'] = this.qty_exp;
+    data['pay_fine'] = this.pay_fine;
+    data['pay_dis'] = this.pay_dis;
     data['paytotal_dis'] = this.paytotal_dis;
     data['inv'] = this.inv;
     return data;

@@ -45,10 +45,15 @@ import '../Model/GetRenTal_Model.dart';
 import '../Model/GetTeNant_Model.dart';
 import '../Model/GetTrans_Model.dart';
 import '../Model/electricity_model.dart';
+import '../PDF/Choice/pdf_Agreement_Choice.dart';
+import '../PDF/Choice/pdf_Agreement_Choice2.dart';
+import '../PDF/Choice/pdf_Agreement_Choice3.dart';
+import '../PDF/PDF_Agreement/Ama1000/pdf_Agreement_ama1000.dart';
 import '../PDF/PDF_Agreement/pdf_Agreement.dart';
 import '../PDF/PDF_Agreement/pdf_Agreement2.dart';
 import '../PDF/PDF_Agreement/pdf_Agreement_JSpace.dart';
 import '../PDF/PDF_Agreement/pdf_Agreement_JSpace2.dart';
+import '../PDF/PDF_Agreement/Ortor/BangKla/pdf_Agreement_Ortor.dart';
 import '../PDF/PDF_Agreement/pdf_RentalInforma.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
@@ -144,6 +149,13 @@ class _RentalInformationState extends State<RentalInformation> {
   List<ContractfModel> Other_file = [];
   String? pic_tenant, pic_shop, pic_plan, fiew;
   String _ReportValue_type = "ไม่ระบุ";
+  List Type_Ortor = [
+    'อาคารพาณิชย์',
+    'แผงค้าจำหน่ายสัตว์น้ำ (แพปลา)',
+    'แผงค้าดองสัตว์น้ำ (ดองปลา)',
+    'แผงค้าแปรรูปสัตว์น้ำ (แปรรูปปลา)',
+  ];
+  ///////------------------------------->
   @override
   void initState() {
     super.initState();
@@ -2333,6 +2345,10 @@ class _RentalInformationState extends State<RentalInformation> {
   Future<void> _showMyDialog_SAVE(
       context, tableData00, newValuePDFimg, ren, type) async {
     String _ReportValue_type_doc = "ปกติ";
+    String _ReportValue_type_JSpace = "JSpace";
+    String _ReportValue_type_docOttor = "อาคารพาณิชย์";
+    String _ReportValue_type_Choice = "สัญญาเช่าที่ดิน";
+    String _ReportValue_type_Ama = "สัญญาเช่าพื้นที่";
     String _verticalGroupValue_NameFile = "จากระบบ";
     String Value_Report = ' ';
     String NameFile_ = '';
@@ -2367,24 +2383,111 @@ class _RentalInformationState extends State<RentalInformation> {
                 content: SingleChildScrollView(
                   child: ListBody(
                     children: <Widget>[
-                      if (type == 1)
-                        if (ren.toString() == '90' || ren.toString() == '50')
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(15),
-                                topRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
+                      SizedBox(height: 2),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: const Text(
+                          'วันที่ทำสัญญา :',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            color: ReportScreen_Color.Colors_Text2_,
+                            // fontWeight: FontWeight.bold,
+                            fontFamily: Font_.Fonts_T,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          onTap: () {
+                            Future<DateTime?> picked = showDatePicker(
+                              // locale: const Locale('th', 'TH'),
+                              helpText: 'เลือกวันที่',
+                              confirmText: 'ตกลง',
+                              cancelText: 'ยกเลิก',
+                              context: context,
+                              initialDate: DateTime(DateTime.now().year,
+                                  DateTime.now().month, DateTime.now().day - 1),
+                              initialDatePickerMode: DatePickerMode.day,
+                              firstDate: DateTime(2023, 1, 1),
+                              lastDate: DateTime(
+                                  DateTime.now().year,
+                                  DateTime.now().month,
+                                  DateTime.now().day + 100),
+                              // selectableDayPredicate: _decideWhichDayToEnable,
+                              builder: (context, child) {
+                                return Theme(
+                                  data: Theme.of(context).copyWith(
+                                    colorScheme: const ColorScheme.light(
+                                      primary: AppBarColors
+                                          .ABar_Colors, // header background color
+                                      onPrimary:
+                                          Colors.white, // header text color
+                                      onSurface:
+                                          Colors.black, // body text color
+                                    ),
+                                    textButtonTheme: TextButtonThemeData(
+                                      style: TextButton.styleFrom(
+                                        primary:
+                                            Colors.black, // button text color
+                                      ),
+                                    ),
+                                  ),
+                                  child: child!,
+                                );
+                              },
+                            );
+                            picked.then((result) {
+                              if (picked != null) {
+                                // TransReBillModels = [];
+
+                                var formatter = DateFormat('dd-MM-yyyy');
+                                print("${formatter.format(result!)}");
+                                setState(() {
+                                  Datex_text.text =
+                                      "${formatter.format(result)}";
+                                });
+                              }
+                            });
+                          },
+                          child: Container(
+                              decoration: BoxDecoration(
+                                color: AppbackgroundColor.Sub_Abg_Colors,
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                border:
+                                    Border.all(color: Colors.grey, width: 1),
                               ),
-                              border: Border.all(color: Colors.grey, width: 1),
-                            ),
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                              width: 200,
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                child: Text(
+                                  (Datex_text.text == null)
+                                      ? 'เลือก'
+                                      : '${Datex_text.text}',
+                                  style: const TextStyle(
+                                    color: ReportScreen_Color.Colors_Text2_,
+                                    // fontWeight: FontWeight.bold,
+                                    fontFamily: Font_.Fonts_T,
+                                  ),
+                                ),
+                              )),
+                        ),
+                      ),
+                      (ren.toString() == '106' ||
+                              ren.toString() == '72' ||
+                              ren.toString() == '92' ||
+                              ren.toString() == '93' ||
+                              ren.toString() == '94' ||
+                              ren.toString() == '90')
+                          ? SizedBox()
+                          : Column(
                               children: [
                                 const Text(
-                                  'รูปแบบ :',
+                                  'รูปแบบปกติ:',
                                   style: TextStyle(
                                     color: ReportScreen_Color.Colors_Text2_,
                                     // fontWeight: FontWeight.bold,
@@ -2429,7 +2532,6 @@ class _RentalInformationState extends State<RentalInformation> {
                                     },
                                     items: const <String>[
                                       'ปกติ',
-                                      'J Space',
                                     ],
                                     textStyle: const TextStyle(
                                       fontSize: 15,
@@ -2442,307 +2544,538 @@ class _RentalInformationState extends State<RentalInformation> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: 2),
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: const Text(
-                                    'วันที่ทำสัญญา :',
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                      color: ReportScreen_Color.Colors_Text2_,
-                                      // fontWeight: FontWeight.bold,
-                                      fontFamily: Font_.Fonts_T,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: InkWell(
-                                    onTap: () {
-                                      Future<DateTime?> picked = showDatePicker(
-                                        // locale: const Locale('th', 'TH'),
-                                        helpText: 'เลือกวันที่',
-                                        confirmText: 'ตกลง',
-                                        cancelText: 'ยกเลิก',
-                                        context: context,
-                                        initialDate: DateTime(
-                                            DateTime.now().year,
-                                            DateTime.now().month,
-                                            DateTime.now().day - 1),
-                                        initialDatePickerMode:
-                                            DatePickerMode.day,
-                                        firstDate: DateTime(2023, 1, 1),
-                                        lastDate: DateTime(
-                                            DateTime.now().year,
-                                            DateTime.now().month,
-                                            DateTime.now().day),
-                                        // selectableDayPredicate: _decideWhichDayToEnable,
-                                        builder: (context, child) {
-                                          return Theme(
-                                            data: Theme.of(context).copyWith(
-                                              colorScheme:
-                                                  const ColorScheme.light(
-                                                primary: AppBarColors
-                                                    .ABar_Colors, // header background color
-                                                onPrimary: Colors
-                                                    .white, // header text color
-                                                onSurface: Colors
-                                                    .black, // body text color
-                                              ),
-                                              textButtonTheme:
-                                                  TextButtonThemeData(
-                                                style: TextButton.styleFrom(
-                                                  primary: Colors
-                                                      .black, // button text color
-                                                ),
-                                              ),
-                                            ),
-                                            child: child!,
-                                          );
-                                        },
-                                      );
-                                      picked.then((result) {
-                                        if (picked != null) {
-                                          // TransReBillModels = [];
-
-                                          var formatter =
-                                              DateFormat('dd-MM-yyyy');
-                                          print("${formatter.format(result!)}");
-                                          setState(() {
-                                            Datex_text.text =
-                                                "${formatter.format(result)}";
-                                          });
-                                        }
-                                      });
-                                    },
-                                    child: Container(
-                                        decoration: BoxDecoration(
-                                          color:
-                                              AppbackgroundColor.Sub_Abg_Colors,
-                                          borderRadius: const BorderRadius.only(
-                                              topLeft: Radius.circular(10),
-                                              topRight: Radius.circular(10),
-                                              bottomLeft: Radius.circular(10),
-                                              bottomRight: Radius.circular(10)),
-                                          border: Border.all(
-                                              color: Colors.grey, width: 1),
-                                        ),
-                                        width: 200,
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Center(
-                                          child: Text(
-                                            (Datex_text.text == null)
-                                                ? 'เลือก'
-                                                : '${Datex_text.text}',
-                                            style: const TextStyle(
-                                              color: ReportScreen_Color
-                                                  .Colors_Text2_,
-                                              // fontWeight: FontWeight.bold,
-                                              fontFamily: Font_.Fonts_T,
-                                            ),
-                                          ),
-                                        )),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: const Text(
-                                    'อัตราค่าเช่าเดือนละ :',
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                      color: ReportScreen_Color.Colors_Text2_,
-                                      // fontWeight: FontWeight.bold,
-                                      fontFamily: Font_.Fonts_T,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: TextFormField(
-                                    keyboardType: TextInputType.number,
-                                    controller: Pri1_text,
-
-                                    // maxLength: 13,
-                                    cursorColor: Colors.green,
-                                    decoration: InputDecoration(
-                                      fillColor: Colors.white.withOpacity(0.3),
-                                      filled: true,
-                                      focusedBorder: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(15),
-                                          topLeft: Radius.circular(15),
-                                          bottomRight: Radius.circular(15),
-                                          bottomLeft: Radius.circular(15),
-                                        ),
-                                        borderSide: BorderSide(
-                                          width: 1,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      errorStyle:
-                                          TextStyle(fontFamily: Font_.Fonts_T),
-                                      enabledBorder: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(15),
-                                          topLeft: Radius.circular(15),
-                                          bottomRight: Radius.circular(15),
-                                          bottomLeft: Radius.circular(15),
-                                        ),
-                                        borderSide: BorderSide(
-                                          width: 1,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      // labelText: 'อัตราค่าเช่าเดือนละ : ',
-                                      labelStyle: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black54,
-                                          fontFamily: Font_.Fonts_T),
-                                    ),
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.deny(
-                                          RegExp(r'\s')),
-                                      // FilteringTextInputFormatter.deny(
-                                      //     RegExp(r'^0')),
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp(r'[0-9 .]')),
-                                    ],
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: const Text(
-                                    'วางเงินประกันตลอดอายุสัญญาเช่า :',
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                      color: ReportScreen_Color.Colors_Text2_,
-                                      // fontWeight: FontWeight.bold,
-                                      fontFamily: Font_.Fonts_T,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: TextFormField(
-                                    keyboardType: TextInputType.number,
-                                    controller: Pri2_text,
-
-                                    // maxLength: 13,
-                                    cursorColor: Colors.green,
-                                    decoration: InputDecoration(
-                                        fillColor:
-                                            Colors.white.withOpacity(0.3),
-                                        filled: true,
-                                        focusedBorder: const OutlineInputBorder(
-                                          borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(15),
-                                            topLeft: Radius.circular(15),
-                                            bottomRight: Radius.circular(15),
-                                            bottomLeft: Radius.circular(15),
-                                          ),
-                                          borderSide: BorderSide(
-                                            width: 1,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        errorStyle: TextStyle(
-                                            fontFamily: Font_.Fonts_T),
-                                        enabledBorder: const OutlineInputBorder(
-                                          borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(15),
-                                            topLeft: Radius.circular(15),
-                                            bottomRight: Radius.circular(15),
-                                            bottomLeft: Radius.circular(15),
-                                          ),
-                                          borderSide: BorderSide(
-                                            width: 1,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        // labelText:
-                                        //     'วางเงินประกันตลอดอายุสัญญาเช่า : ',
-                                        labelStyle: const TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.black54,
-                                            fontFamily: Font_.Fonts_T)),
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.deny(
-                                          RegExp(r'\s')),
-                                      // FilteringTextInputFormatter.deny(
-                                      //     RegExp(r'^0')),
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp(r'[0-9 .]')),
-                                    ],
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: const Text(
-                                    'ผู้เช่าต้องชำระค่าส่วนกลางต่อเดือน :',
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                      color: ReportScreen_Color.Colors_Text2_,
-                                      // fontWeight: FontWeight.bold,
-                                      fontFamily: Font_.Fonts_T,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: TextFormField(
-                                    keyboardType: TextInputType.number,
-                                    controller: Pri3_text,
-
-                                    // maxLength: 13,
-                                    cursorColor: Colors.green,
-                                    decoration: InputDecoration(
-                                        fillColor:
-                                            Colors.white.withOpacity(0.3),
-                                        filled: true,
-                                        focusedBorder: const OutlineInputBorder(
-                                          borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(15),
-                                            topLeft: Radius.circular(15),
-                                            bottomRight: Radius.circular(15),
-                                            bottomLeft: Radius.circular(15),
-                                          ),
-                                          borderSide: BorderSide(
-                                            width: 1,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        errorStyle: TextStyle(
-                                            fontFamily: Font_.Fonts_T),
-                                        enabledBorder: const OutlineInputBorder(
-                                          borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(15),
-                                            topLeft: Radius.circular(15),
-                                            bottomRight: Radius.circular(15),
-                                            bottomLeft: Radius.circular(15),
-                                          ),
-                                          borderSide: BorderSide(
-                                            width: 1,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        // labelText:
-                                        //     'ผู้เช่าต้องชำระค่าส่วนกลางต่อเดือน : ',
-                                        labelStyle: const TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.black54,
-                                            fontFamily: Font_.Fonts_T)),
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.deny(
-                                          RegExp(r'\s')),
-                                      // FilteringTextInputFormatter.deny(
-                                      //     RegExp(r'^0')),
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp(r'[0-9 .]')),
-                                    ],
-                                  ),
-                                ),
                               ],
                             ),
+                      SizedBox(height: 2),
+
+                      if (ren.toString() == '72' ||
+                          ren.toString() == '92' ||
+                          ren.toString() == '93' ||
+                          ren.toString() == '94')
+                        Container(
+                            child: Column(
+                          children: [
+                            SizedBox(height: 2),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: const Text(
+                                'รูปแบบสัญญา อต. :',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  color: ReportScreen_Color.Colors_Text2_,
+                                  // fontWeight: FontWeight.bold,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.3),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(15),
+                                  topRight: Radius.circular(15),
+                                  bottomLeft: Radius.circular(15),
+                                  bottomRight: Radius.circular(15),
+                                ),
+                                border:
+                                    Border.all(color: Colors.grey, width: 1),
+                              ),
+                              padding: const EdgeInsets.all(8.0),
+                              child: RadioGroup<String>.builder(
+                                direction: Axis.horizontal,
+                                groupValue: _ReportValue_type_docOttor,
+                                horizontalAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                onChanged: (value) {
+                                  // setState(() {
+                                  //   FormNameFile_text.clear();
+                                  // });
+                                  setState(() {
+                                    _ReportValue_type_docOttor = value ?? '';
+                                  });
+
+                                  // if (value == 'ไม่ระบุ') {
+                                  //   setState(() {
+                                  //     TitleType_Default_Receipt_Name = null;
+                                  //   });
+                                  // } else {
+                                  //   setState(() {
+                                  //     TitleType_Default_Receipt_Name = value;
+                                  //   });
+                                  // }
+                                },
+                                items: <String>[
+                                  'อาคารพาณิชย์',
+                                  'แผงค้าจำหน่ายสัตว์น้ำ (แพปลา)',
+                                  'แผงค้าดองสัตว์น้ำ (ดองปลา)',
+                                  'แผงค้าแปรรูปสัตว์น้ำ (แปรรูปปลา)',
+                                  // for (int index = 0;
+                                  //     index < Type_Ortor.length;
+                                  //     index)
+                                  //   '${Type_Ortor[index]}',
+                                ],
+                                textStyle: const TextStyle(
+                                  fontSize: 15,
+                                  color: ReportScreen_Color.Colors_Text2_,
+                                  // fontWeight: FontWeight.bold,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                                itemBuilder: (item) => RadioButtonBuilder(
+                                  item,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 2),
+                          ],
+                        )),
+
+                      ///Type_Choice
+                      if (ren.toString() == '106')
+                        Container(
+                            child: Column(
+                          children: [
+                            SizedBox(height: 2),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: const Text(
+                                'รูปแบบสัญญา ชอยส์ มินิสโตร์. :',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  color: ReportScreen_Color.Colors_Text2_,
+                                  // fontWeight: FontWeight.bold,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.3),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(15),
+                                  topRight: Radius.circular(15),
+                                  bottomLeft: Radius.circular(15),
+                                  bottomRight: Radius.circular(15),
+                                ),
+                                border:
+                                    Border.all(color: Colors.grey, width: 1),
+                              ),
+                              padding: const EdgeInsets.all(8.0),
+                              child: RadioGroup<String>.builder(
+                                direction: Axis.horizontal,
+                                groupValue: _ReportValue_type_Choice,
+                                horizontalAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                onChanged: (value) {
+                                  // setState(() {
+                                  //   FormNameFile_text.clear();
+                                  // });
+                                  setState(() {
+                                    _ReportValue_type_Choice = value ?? '';
+                                  });
+
+                                  // if (value == 'ไม่ระบุ') {
+                                  //   setState(() {
+                                  //     TitleType_Default_Receipt_Name = null;
+                                  //   });
+                                  // } else {
+                                  //   setState(() {
+                                  //     TitleType_Default_Receipt_Name = value;
+                                  //   });
+                                  // }
+                                },
+                                items: <String>[
+                                  'สัญญาเช่าที่ดิน',
+                                  'สัญญาห้องเช่า',
+                                  'สัญญาบริการ',
+                                ],
+                                textStyle: const TextStyle(
+                                  fontSize: 15,
+                                  color: ReportScreen_Color.Colors_Text2_,
+                                  // fontWeight: FontWeight.bold,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                                itemBuilder: (item) => RadioButtonBuilder(
+                                  item,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 2),
+                          ],
+                        )),
+
+                      ///Type_Choice
+                      if (ren.toString() == '102')
+                        Container(
+                            child: Column(
+                          children: [
+                            SizedBox(height: 2),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: const Text(
+                                'รูปแบบสัญญา อาม่า1000สุข. :',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  color: ReportScreen_Color.Colors_Text2_,
+                                  // fontWeight: FontWeight.bold,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.3),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(15),
+                                  topRight: Radius.circular(15),
+                                  bottomLeft: Radius.circular(15),
+                                  bottomRight: Radius.circular(15),
+                                ),
+                                border:
+                                    Border.all(color: Colors.grey, width: 1),
+                              ),
+                              padding: const EdgeInsets.all(8.0),
+                              child: RadioGroup<String>.builder(
+                                direction: Axis.horizontal,
+                                groupValue: _ReportValue_type_Ama,
+                                horizontalAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                onChanged: (value) {
+                                  // setState(() {
+                                  //   FormNameFile_text.clear();
+                                  // });
+                                  setState(() {
+                                    _ReportValue_type_Ama = value ?? '';
+                                  });
+
+                                  // if (value == 'ไม่ระบุ') {
+                                  //   setState(() {
+                                  //     TitleType_Default_Receipt_Name = null;
+                                  //   });
+                                  // } else {
+                                  //   setState(() {
+                                  //     TitleType_Default_Receipt_Name = value;
+                                  //   });
+                                  // }
+                                },
+                                items: <String>[
+                                  'สัญญาเช่าพื้นที่',
+                                ],
+                                textStyle: const TextStyle(
+                                  fontSize: 15,
+                                  color: ReportScreen_Color.Colors_Text2_,
+                                  // fontWeight: FontWeight.bold,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                                itemBuilder: (item) => RadioButtonBuilder(
+                                  item,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 2),
+                          ],
+                        )),
+                      if (ren.toString() == '90')
+                        if (type == 1)
+                          Column(
+                            children: [
+                              SizedBox(height: 2),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: const Text(
+                                  'รูปแบบสัญญา JSpace. :',
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    color: ReportScreen_Color.Colors_Text2_,
+                                    // fontWeight: FontWeight.bold,
+                                    fontFamily: Font_.Fonts_T,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(15),
+                                    topRight: Radius.circular(15),
+                                    bottomLeft: Radius.circular(15),
+                                    bottomRight: Radius.circular(15),
+                                  ),
+                                  border:
+                                      Border.all(color: Colors.grey, width: 1),
+                                ),
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white.withOpacity(0.3),
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(15),
+                                          topRight: Radius.circular(15),
+                                          bottomLeft: Radius.circular(15),
+                                          bottomRight: Radius.circular(15),
+                                        ),
+                                        border: Border.all(
+                                            color: Colors.grey, width: 1),
+                                      ),
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: RadioGroup<String>.builder(
+                                        direction: Axis.horizontal,
+                                        groupValue: _ReportValue_type_JSpace,
+                                        horizontalAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        onChanged: (value) {
+                                          // setState(() {
+                                          //   FormNameFile_text.clear();
+                                          // });
+                                          setState(() {
+                                            _ReportValue_type_JSpace =
+                                                value ?? '';
+                                          });
+
+                                          // if (value == 'ไม่ระบุ') {
+                                          //   setState(() {
+                                          //     TitleType_Default_Receipt_Name = null;
+                                          //   });
+                                          // } else {
+                                          //   setState(() {
+                                          //     TitleType_Default_Receipt_Name = value;
+                                          //   });
+                                          // }
+                                        },
+                                        items: const <String>[
+                                          'JSpace',
+                                          // 'แนบท้าย',
+                                        ],
+                                        textStyle: const TextStyle(
+                                          fontSize: 15,
+                                          color:
+                                              ReportScreen_Color.Colors_Text2_,
+                                          // fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T,
+                                        ),
+                                        itemBuilder: (item) =>
+                                            RadioButtonBuilder(
+                                          item,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 2),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: const Text(
+                                        'อัตราค่าเช่าเดือนละ :',
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                          color:
+                                              ReportScreen_Color.Colors_Text2_,
+                                          // fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.number,
+                                        controller: Pri1_text,
+
+                                        // maxLength: 13,
+                                        cursorColor: Colors.green,
+                                        decoration: InputDecoration(
+                                          fillColor:
+                                              Colors.white.withOpacity(0.3),
+                                          filled: true,
+                                          focusedBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(15),
+                                              topLeft: Radius.circular(15),
+                                              bottomRight: Radius.circular(15),
+                                              bottomLeft: Radius.circular(15),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          errorStyle: TextStyle(
+                                              fontFamily: Font_.Fonts_T),
+                                          enabledBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(15),
+                                              topLeft: Radius.circular(15),
+                                              bottomRight: Radius.circular(15),
+                                              bottomLeft: Radius.circular(15),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          // labelText: 'อัตราค่าเช่าเดือนละ : ',
+                                          labelStyle: const TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.black54,
+                                              fontFamily: Font_.Fonts_T),
+                                        ),
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.deny(
+                                              RegExp(r'\s')),
+                                          // FilteringTextInputFormatter.deny(
+                                          //     RegExp(r'^0')),
+                                          FilteringTextInputFormatter.allow(
+                                              RegExp(r'[0-9 .]')),
+                                        ],
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: const Text(
+                                        'วางเงินประกันตลอดอายุสัญญาเช่า :',
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                          color:
+                                              ReportScreen_Color.Colors_Text2_,
+                                          // fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.number,
+                                        controller: Pri2_text,
+
+                                        // maxLength: 13,
+                                        cursorColor: Colors.green,
+                                        decoration: InputDecoration(
+                                            fillColor:
+                                                Colors.white.withOpacity(0.3),
+                                            filled: true,
+                                            focusedBorder:
+                                                const OutlineInputBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(15),
+                                                topLeft: Radius.circular(15),
+                                                bottomRight:
+                                                    Radius.circular(15),
+                                                bottomLeft: Radius.circular(15),
+                                              ),
+                                              borderSide: BorderSide(
+                                                width: 1,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            errorStyle: TextStyle(
+                                                fontFamily: Font_.Fonts_T),
+                                            enabledBorder:
+                                                const OutlineInputBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(15),
+                                                topLeft: Radius.circular(15),
+                                                bottomRight:
+                                                    Radius.circular(15),
+                                                bottomLeft: Radius.circular(15),
+                                              ),
+                                              borderSide: BorderSide(
+                                                width: 1,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            // labelText:
+                                            //     'วางเงินประกันตลอดอายุสัญญาเช่า : ',
+                                            labelStyle: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black54,
+                                                fontFamily: Font_.Fonts_T)),
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.deny(
+                                              RegExp(r'\s')),
+                                          // FilteringTextInputFormatter.deny(
+                                          //     RegExp(r'^0')),
+                                          FilteringTextInputFormatter.allow(
+                                              RegExp(r'[0-9 .]')),
+                                        ],
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: const Text(
+                                        'ผู้เช่าต้องชำระค่าส่วนกลางต่อเดือน :',
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                          color:
+                                              ReportScreen_Color.Colors_Text2_,
+                                          // fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.number,
+                                        controller: Pri3_text,
+
+                                        // maxLength: 13,
+                                        cursorColor: Colors.green,
+                                        decoration: InputDecoration(
+                                            fillColor:
+                                                Colors.white.withOpacity(0.3),
+                                            filled: true,
+                                            focusedBorder:
+                                                const OutlineInputBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(15),
+                                                topLeft: Radius.circular(15),
+                                                bottomRight:
+                                                    Radius.circular(15),
+                                                bottomLeft: Radius.circular(15),
+                                              ),
+                                              borderSide: BorderSide(
+                                                width: 1,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            errorStyle: TextStyle(
+                                                fontFamily: Font_.Fonts_T),
+                                            enabledBorder:
+                                                const OutlineInputBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(15),
+                                                topLeft: Radius.circular(15),
+                                                bottomRight:
+                                                    Radius.circular(15),
+                                                bottomLeft: Radius.circular(15),
+                                              ),
+                                              borderSide: BorderSide(
+                                                width: 1,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            // labelText:
+                                            //     'ผู้เช่าต้องชำระค่าส่วนกลางต่อเดือน : ',
+                                            labelStyle: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black54,
+                                                fontFamily: Font_.Fonts_T)),
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.deny(
+                                              RegExp(r'\s')),
+                                          // FilteringTextInputFormatter.deny(
+                                          //     RegExp(r'^0')),
+                                          FilteringTextInputFormatter.allow(
+                                              RegExp(r'[0-9 .]')),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                       const Text(
                         'หัวบิล :',
@@ -2856,8 +3189,22 @@ class _RentalInformationState extends State<RentalInformation> {
                                           );
                                 }
                               : () {
-                                  if (_ReportValue_type_doc == 'ปกติ') {
-                                    Pdfgen_Agreement.exportPDF_Agreement(
+                                  String _ReportValue_type =
+                                      (ren.toString() == '90')
+                                          ? _ReportValue_type_JSpace
+                                          : (ren.toString() == '72' ||
+                                                  ren.toString() == '92' ||
+                                                  ren.toString() == '93' ||
+                                                  ren.toString() == '94')
+                                              ? _ReportValue_type_docOttor
+                                              : (ren.toString() == '102')
+                                                  ? _ReportValue_type_Ama
+                                                  : (ren.toString() == '106')
+                                                      ? _ReportValue_type_Choice
+                                                      : _ReportValue_type_doc;
+
+                                  if (_ReportValue_type == 'ปกติ') { 
+                                    Pdfgen_Agreement.exportPDF_Agreement( 
                                         context,
                                         '${widget.Get_Value_NameShop_index}',
                                         '${widget.Get_Value_cid}',
@@ -2888,12 +3235,9 @@ class _RentalInformationState extends State<RentalInformation> {
                                         '${renTalModels[0].bill_name}',
                                         newValuePDFimg,
                                         tableData00,
-                                        TitleType_Default_Receipt_Name
-
-                                        // (ser_user == null) ? '' : ser_user
-                                        );
-                                  } else if (_ReportValue_type_doc ==
-                                      'J Space') {
+                                        TitleType_Default_Receipt_Name,
+                                        Datex_text);
+                                  } else if (_ReportValue_type == 'JSpace') {
                                     Pdfgen_Agreement_JSpace
                                         .exportPDF_Agreement_JSpace(
                                             context,
@@ -2934,7 +3278,193 @@ class _RentalInformationState extends State<RentalInformation> {
 
                                             // (ser_user == null) ? '' : ser_user
                                             );
+                                  } else if (_ReportValue_type ==
+                                      'สัญญาเช่าที่ดิน') {
+                                    Pdfgen_Agreement_Choice
+                                        .exportPDF_Agreement_Choice(
+                                            context,
+                                            '${widget.Get_Value_NameShop_index}',
+                                            '${widget.Get_Value_cid}',
+                                            _verticalGroupValue,
+                                            Form_nameshop.text,
+                                            Form_typeshop.text,
+                                            Form_bussshop.text,
+                                            Form_bussscontact.text,
+                                            Form_address.text,
+                                            Form_tel.text,
+                                            Form_email.text,
+                                            Form_tax.text,
+                                            Form_ln.text,
+                                            Form_zn.text,
+                                            Form_area.text,
+                                            Form_qty.text,
+                                            Form_sdate.text,
+                                            Form_ldate.text,
+                                            Form_period.text,
+                                            Form_rtname.text,
+                                            quotxSelectModels,
+                                            _TransModels,
+                                            '$renTal_name',
+                                            '${renTalModels[0].bill_addr}',
+                                            '${renTalModels[0].bill_email}',
+                                            '${renTalModels[0].bill_tel}',
+                                            '${renTalModels[0].bill_tax}',
+                                            '${renTalModels[0].bill_name}',
+                                            newValuePDFimg,
+                                            tableData00,
+                                            TitleType_Default_Receipt_Name,
+                                            Datex_text,
+                                            _ReportValue_type_docOttor);
+                                  } else if (_ReportValue_type ==
+                                      'สัญญาห้องเช่า') {
+                                    Pdfgen_Agreement_Choice2
+                                        .exportPDF_Agreement_Choice2(
+                                            context,
+                                            '${widget.Get_Value_NameShop_index}',
+                                            '${widget.Get_Value_cid}',
+                                            _verticalGroupValue,
+                                            Form_nameshop.text,
+                                            Form_typeshop.text,
+                                            Form_bussshop.text,
+                                            Form_bussscontact.text,
+                                            Form_address.text,
+                                            Form_tel.text,
+                                            Form_email.text,
+                                            Form_tax.text,
+                                            Form_ln.text,
+                                            Form_zn.text,
+                                            Form_area.text,
+                                            Form_qty.text,
+                                            Form_sdate.text,
+                                            Form_ldate.text,
+                                            Form_period.text,
+                                            Form_rtname.text,
+                                            quotxSelectModels,
+                                            _TransModels,
+                                            '$renTal_name',
+                                            '${renTalModels[0].bill_addr}',
+                                            '${renTalModels[0].bill_email}',
+                                            '${renTalModels[0].bill_tel}',
+                                            '${renTalModels[0].bill_tax}',
+                                            '${renTalModels[0].bill_name}',
+                                            newValuePDFimg,
+                                            tableData00,
+                                            TitleType_Default_Receipt_Name,
+                                            Datex_text,
+                                            _ReportValue_type_docOttor);
+                                  } else if (_ReportValue_type ==
+                                      'สัญญาบริการ') {
+                                    Pdfgen_Agreement_Choice3
+                                        .exportPDF_Agreement_Choice3(
+                                            context,
+                                            '${widget.Get_Value_NameShop_index}',
+                                            '${widget.Get_Value_cid}',
+                                            _verticalGroupValue,
+                                            Form_nameshop.text,
+                                            Form_typeshop.text,
+                                            Form_bussshop.text,
+                                            Form_bussscontact.text,
+                                            Form_address.text,
+                                            Form_tel.text,
+                                            Form_email.text,
+                                            Form_tax.text,
+                                            Form_ln.text,
+                                            Form_zn.text,
+                                            Form_area.text,
+                                            Form_qty.text,
+                                            Form_sdate.text,
+                                            Form_ldate.text,
+                                            Form_period.text,
+                                            Form_rtname.text,
+                                            quotxSelectModels,
+                                            _TransModels,
+                                            '$renTal_name',
+                                            '${renTalModels[0].bill_addr}',
+                                            '${renTalModels[0].bill_email}',
+                                            '${renTalModels[0].bill_tel}',
+                                            '${renTalModels[0].bill_tax}',
+                                            '${renTalModels[0].bill_name}',
+                                            newValuePDFimg,
+                                            tableData00,
+                                            TitleType_Default_Receipt_Name,
+                                            Datex_text,
+                                            _ReportValue_type_docOttor);
+                                  } else if (_ReportValue_type ==
+                                      'สัญญาเช่าพื้นที่') {
+                                    Pdfgen_Agreement_Ama1000
+                                        .exportPDF_Agreement_Ama1000(
+                                      context,
+                                      '${widget.Get_Value_NameShop_index}',
+                                      '${widget.Get_Value_cid}',
+                                      _verticalGroupValue,
+                                      Form_nameshop.text,
+                                      Form_typeshop.text,
+                                      Form_bussshop.text,
+                                      Form_bussscontact.text,
+                                      Form_address.text,
+                                      Form_tel.text,
+                                      Form_email.text,
+                                      Form_tax.text,
+                                      Form_ln.text,
+                                      Form_zn.text,
+                                      Form_area.text,
+                                      Form_qty.text,
+                                      Form_sdate.text,
+                                      Form_ldate.text,
+                                      Form_period.text,
+                                      Form_rtname.text,
+                                      quotxSelectModels,
+                                      _TransModels,
+                                      '$renTal_name',
+                                      '${renTalModels[0].bill_addr}',
+                                      '${renTalModels[0].bill_email}',
+                                      '${renTalModels[0].bill_tel}',
+                                      '${renTalModels[0].bill_tax}',
+                                      '${renTalModels[0].bill_name}',
+                                      newValuePDFimg,
+                                      tableData00,
+                                      TitleType_Default_Receipt_Name,
+                                      Datex_text,
+                                    );
+                                  } else if (_ReportValue_type ==
+                                      'อาคารพาณิชย์') {
+                                    Pdfgen_Agreement_Ortor
+                                        .exportPDF_Agreement_Ortor(
+                                            context,
+                                            '${widget.Get_Value_NameShop_index}',
+                                            '${widget.Get_Value_cid}',
+                                            _verticalGroupValue,
+                                            Form_nameshop.text,
+                                            Form_typeshop.text,
+                                            Form_bussshop.text,
+                                            Form_bussscontact.text,
+                                            Form_address.text,
+                                            Form_tel.text,
+                                            Form_email.text,
+                                            Form_tax.text,
+                                            Form_ln.text,
+                                            Form_zn.text,
+                                            Form_area.text,
+                                            Form_qty.text,
+                                            Form_sdate.text,
+                                            Form_ldate.text,
+                                            Form_period.text,
+                                            Form_rtname.text,
+                                            quotxSelectModels,
+                                            _TransModels,
+                                            '$renTal_name',
+                                            '${renTalModels[0].bill_addr}',
+                                            '${renTalModels[0].bill_email}',
+                                            '${renTalModels[0].bill_tel}',
+                                            '${renTalModels[0].bill_tax}',
+                                            '${renTalModels[0].bill_name}',
+                                            newValuePDFimg,
+                                            tableData00,
+                                            TitleType_Default_Receipt_Name,
+                                            Datex_text,
+                                            _ReportValue_type_docOttor);
                                   } else {}
+
                                   // (ren.toString() == '82')
                                   //     ?
                                   // Pdfgen_Agreement_Ekkamai
@@ -4178,7 +4708,7 @@ class _RentalInformationState extends State<RentalInformation> {
                                                                 widget
                                                                     .Get_Value_cid,
                                                                 '${Form_bussscontact.text}',
-                                                                '${Form_sdate.text} ถึง ${Form_ldate.text}',
+                                                                '${Form_sdate.text} - ${Form_ldate.text}',
                                                                 '${Form_nameshop.text}',
                                                                 '${Form_ln.text}',
                                                                 '${Form_zn.text}',
@@ -7172,10 +7702,20 @@ class _RentalInformationState extends State<RentalInformation> {
                                                 // newValuePDFimg.add(
                                                 //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
                                               } else {
-                                                newValuePDFimg.add(
-                                                    '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
-                                                newValuePDFimg.add(
-                                                    '${MyConstant().domain}/files/$foder/contract/${renTalModels[0].img}');
+                                                if (renTalModels[0].img ==
+                                                        null ||
+                                                    renTalModels[0]
+                                                            .img
+                                                            .toString() ==
+                                                        '') {
+                                                  newValuePDFimg.add(
+                                                      '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
+                                                } else {
+                                                  newValuePDFimg.add(
+                                                      '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
+                                                  newValuePDFimg.add(
+                                                      '${MyConstant().domain}/files/$foder/contract/${renTalModels[0].img}');
+                                                }
                                               }
                                             }
                                             SharedPreferences preferences =

@@ -130,8 +130,12 @@ class TransReBillModel {
   String? sum_items;
   String? pay_by;
   String? pri_book;
-    String? inv_end_date;
-    
+  String? inv_end_date;
+  String? ref1;
+  String? ref2;
+  String? ref3;
+  String? ref4;
+
   TransReBillModel({
     this.ser,
     this.datex,
@@ -260,7 +264,11 @@ class TransReBillModel {
     this.sum_items,
     this.pay_by,
     this.pri_book,
-        this.inv_end_date,
+    this.inv_end_date,
+    this.ref1,
+    this.ref2,
+    this.ref3,
+    this.ref4,
   });
 
   TransReBillModel.fromJson(Map<String, dynamic> json) {
@@ -392,7 +400,12 @@ class TransReBillModel {
     sum_items = json['sum_items'];
     pay_by = json['pay_by'];
     pri_book = json['pri_book'];
-        inv_end_date = json['inv_end_date'];
+    inv_end_date = json['inv_end_date'];
+
+    ref1 = json['ref1'];
+    ref2 = json['ref2'];
+    ref3 = json['ref3'];
+    ref4 = json['ref4'];
   }
 
   Map<String, dynamic> toJson() {
@@ -525,8 +538,13 @@ class TransReBillModel {
     data['sum_items'] = this.sum_items;
     data['pay_by'] = this.pay_by;
     data['pri_book'] = this.pri_book;
-        data['inv_end_date'] = this.inv_end_date;
-        
+    data['inv_end_date'] = this.inv_end_date;
+
+    data['ref1'] = this.ref1;
+    data['ref2'] = this.ref2;
+    data['ref3'] = this.ref3;
+    data['ref4'] = this.ref4;
+
     return data;
   }
 }

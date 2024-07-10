@@ -6,7 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Constant/Myconstant.dart';
 import 'Beam_apiPassw.dart';
 
-Future<void> Beam_purchase_disabled(purchaseId, Pay_Ke, Ser_, cFinnc_s) async {
+Future<void> Beam_purchase_disabled(
+    purchaseId, Pay_Ke, Ser_, cFinnc_s, Form_because) async {
   /////////------------------------------------------------>
   String decodedPassword = retrieveDecodedPassword(Pay_Ke.toString());
   String basicAuth = generateBasicAuth(decodedPassword);
@@ -22,14 +23,14 @@ Future<void> Beam_purchase_disabled(purchaseId, Pay_Ke, Ser_, cFinnc_s) async {
   http.StreamedResponse response = await request.send();
 
   if (response.statusCode == 200) {
-    pPC_finantIbill(Ser_, cFinnc_s, purchaseId);
+    pPC_finantIbill(Ser_, cFinnc_s, purchaseId, Form_because);
     // print(await response.stream.bytesToString());
   } else {
     // print(response.reasonPhrase);
   }
 }
 
-Future<Null> pPC_finantIbill(Ser_, cFinnc_s, purchaseId) async {
+Future<Null> pPC_finantIbill(Ser_, cFinnc_s, purchaseId, Form_because) async {
   var ren = Ser_;
 
   SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -39,7 +40,9 @@ Future<Null> pPC_finantIbill(Ser_, cFinnc_s, purchaseId) async {
   // var qutser = widget.Get_Value_NameShop_index;
 
   var numin = cFinnc_s;
-  var Formbecause = 'ยกเลิกรับชำระ :$cFinnc_s';
+  var Formbecause = (Form_because == null || Form_because.toString() == '')
+      ? 'ยกเลิกรับชำระ :$cFinnc_s'
+      : '$cFinnc_s';
 
   String url_1 =
       '${MyConstant().domain}/UPC_finant_bill.php?isAdd=true&ren=$ren&user=$user&numin=$numin&because=$Formbecause';

@@ -179,6 +179,7 @@ class Excgen_BankmovemenReport {
     sheet.getRangeByName('T1').cellStyle = globalStyle22;
     sheet.getRangeByName('U1').cellStyle = globalStyle22;
     sheet.getRangeByName('V1').cellStyle = globalStyle22;
+    sheet.getRangeByName('W1').cellStyle = globalStyle22;
     final x.Range range = sheet.getRangeByName('E1');
     range.setText(
       (ser_type_repro == '1')
@@ -220,6 +221,7 @@ class Excgen_BankmovemenReport {
     sheet.getRangeByName('T2').cellStyle = globalStyle22;
     sheet.getRangeByName('U2').cellStyle = globalStyle22;
     sheet.getRangeByName('V2').cellStyle = globalStyle22;
+    sheet.getRangeByName('W2').cellStyle = globalStyle22;
     sheet.getRangeByName('A2').setText('${renTal_name}');
     sheet.getRangeByName('I2').setText('เดือน : ${Mon_Income} (${YE_Income}) ');
 
@@ -248,6 +250,7 @@ class Excgen_BankmovemenReport {
     sheet.getRangeByName('T3').cellStyle = globalStyle22;
     sheet.getRangeByName('U3').cellStyle = globalStyle22;
     sheet.getRangeByName('V3').cellStyle = globalStyle22;
+    sheet.getRangeByName('W3').cellStyle = globalStyle22;
 
     sheet.getRangeByName('A3').setText('ใบเสร็จ : ${TransReBillBank.length}');
     sheet.getRangeByName('B3').setText('รายการ : ${TransHisBillBank.length}');
@@ -273,6 +276,7 @@ class Excgen_BankmovemenReport {
     sheet.getRangeByName('T3').columnWidth = 18;
     sheet.getRangeByName('U3').columnWidth = 18;
     sheet.getRangeByName('V3').columnWidth = 18;
+    sheet.getRangeByName('W3').columnWidth = 18;
 
     sheet.getRangeByName('A4').cellStyle = globalStyle1;
     sheet.getRangeByName('B4').cellStyle = globalStyle1;
@@ -296,6 +300,7 @@ class Excgen_BankmovemenReport {
     sheet.getRangeByName('T4').cellStyle = globalStyle1;
     sheet.getRangeByName('U4').cellStyle = globalStyle1;
     sheet.getRangeByName('V4').cellStyle = globalStyle1;
+    sheet.getRangeByName('W4').cellStyle = globalStyle1;
 
     sheet.getRangeByName('A4').columnWidth = 18;
     sheet.getRangeByName('B4').columnWidth = 18;
@@ -328,6 +333,7 @@ class Excgen_BankmovemenReport {
     sheet.getRangeByName('T4').columnWidth = 18;
     sheet.getRangeByName('U4').columnWidth = 18;
     sheet.getRangeByName('V4').columnWidth = 18;
+    sheet.getRangeByName('W4').columnWidth = 18;
 
     sheet.getRangeByName('A4').setText('เลขที่');
     sheet.getRangeByName('B4').setText('ลำดับ');
@@ -354,6 +360,7 @@ class Excgen_BankmovemenReport {
     sheet.getRangeByName('T4').setText('วันที่ทำรายการ');
     sheet.getRangeByName('U4').setText('อ้างถึง');
     sheet.getRangeByName('V4').setText('เลขที่สัญญา');
+    sheet.getRangeByName('W4').setText('เวลา');
 
     ///---------------------------------------------------------->
 
@@ -420,6 +427,8 @@ class Excgen_BankmovemenReport {
           sheet.getRangeByName('U${indextotol + 5 - 1}').cellStyle =
               globalStyle2220;
           sheet.getRangeByName('V${indextotol + 5 - 1}').cellStyle =
+              globalStyle2220;
+          sheet.getRangeByName('W${indextotol + 5 - 1}').cellStyle =
               globalStyle2220;
 
           sheet
@@ -498,6 +507,10 @@ class Excgen_BankmovemenReport {
               (TransHisBillBank[index2].cid == null)
                   ? ''
                   : '${TransHisBillBank[index2].cid}');
+          sheet.getRangeByName('W${indextotol + 5 - 1}').setText(
+              (TransHisBillBank[index2].timex == null)
+                  ? ''
+                  : '${TransHisBillBank[index2].timex}');
         });
       }
 
@@ -529,6 +542,7 @@ class Excgen_BankmovemenReport {
       sheet.getRangeByName('T${indextotol + 5 - 1}').cellStyle = globalStyle22;
       sheet.getRangeByName('U${indextotol + 5 - 1}').cellStyle = globalStyle22;
       sheet.getRangeByName('V${indextotol + 5 - 1}').cellStyle = globalStyle22;
+      sheet.getRangeByName('W${indextotol + 5 - 1}').cellStyle = globalStyle22;
 
       sheet
           .getRangeByName('A${indextotol + 5 - 1}')
@@ -628,6 +642,11 @@ class Excgen_BankmovemenReport {
                   TransHisBillBank[index2].cid.toString() == '')
               ? ''
               : '${TransHisBillBank[index2].cid}');
+      sheet.getRangeByName('W${indextotol + 5 - 1}').setText(
+          (TransHisBillBank[index2].timex == null ||
+                  TransHisBillBank[index2].timex.toString() == '')
+              ? ''
+              : '${TransHisBillBank[index2].timex}');
     }
 
     /////////////////////////////////------------------------------------------------>

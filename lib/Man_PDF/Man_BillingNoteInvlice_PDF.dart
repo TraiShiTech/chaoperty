@@ -16,6 +16,7 @@ import '../PDF_TP5/PDF_Billing_TP5/pdf_BillingNote_IV_TP5.dart';
 import '../PDF_TP6/PDF_Billing_TP6/pdf_BillingNote_IV_TP6.dart';
 import '../PDF_TP7/PDF_Billing_TP7/pdf_BillingNote_IV_TP7.dart';
 import '../PDF_TP8/PDF_Billing_TP8/pdf_BillingNote_IV_TP8.dart';
+import '../PDF_TP8_Choice/PDF_Billing_TP8_Choice/pdf_BillingNote_IV_TP8_Choice.dart';
 import '../PDF_TP8_Ortorkor/PDF_Billing_TP8_Ortorkor/pdf_BillingNote_IV_TP8.dart';
 import '../PDF_TP9_Lao/PDF_Billing_TP9/pdf_BillingNote_IV_TP9.dart';
 
@@ -443,6 +444,53 @@ class Man_BillingNoteInvlice_PDF {
             rtser.toString() == '94') {
           Pdfgen_BillingNoteInvlice_TP8_Ortorkor
               .exportPDF_BillingNoteInvlice_TP8_Ortorkor(
+                  foder,
+                  Cust_no,
+                  cid_,
+                  Zone_s,
+                  Ln_s,
+                  fname,
+                  // ser,
+                  tableData003,
+                  context,
+                  Get_Value_cid,
+                  namenew,
+                  sum_pvat,
+                  sum_vat,
+                  sum_wht,
+                  sum_amt,
+                  sum_disamt,
+                  sum_total,
+                  renTal_name,
+                  Form_bussshop,
+                  Form_address,
+                  Form_tel,
+                  Form_email,
+                  Form_tax,
+                  Form_nameshop,
+                  bill_addr,
+                  bill_email,
+                  bill_tel,
+                  bill_tax,
+                  bill_name,
+                  newValuePDFimg,
+                  numinvoice,
+                  Datex_invoice,
+                  payment_Ptname1,
+                  payment_Ptname2,
+                  payment_Bno1,
+                  TitleType_Default_Receipt_Name,
+                  payment_Ptser1,
+                  bank1,
+                  ptser1,
+                  ptname1,
+                  img1,
+                  Preview_ser,
+                  End_Bill_Paydate,
+                  fonts_pdf);
+        } else if (rtser.toString() == '106') {
+          Pdfgen_BillingNoteInvlice_TP8_Choice
+              .exportPDF_BillingNoteInvlice_TP8_Choice(
                   foder,
                   Cust_no,
                   cid_,

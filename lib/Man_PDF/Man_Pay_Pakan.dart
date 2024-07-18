@@ -22,6 +22,7 @@ import '../PDF_TP7/PDF_Pakan_TP7/pdf_Receipt_PayPakan_TP7.dart';
 import '../PDF_TP7/PDF_Receipt_TP7/pdf_AC_his_statusbill_TP7.dart';
 import '../PDF_TP8/PDF_Pakan_TP8/pdf_Receipt_PayPakan_TP8.dart';
 import '../PDF_TP8/PDF_Receipt_TP8/pdf_AC_his_statusbill_TP8.dart';
+import '../PDF_TP8_Choice/PDF_Pakan_TP8_Choice/pdf_Receipt_PayPakan_TP8.dart';
 import '../PDF_TP8_Ortorkor/PDF_Pakan_TP8_Ortorkor/pdf_Receipt_PayPakan_TP8.dart';
 import '../PDF_TP8_Ortorkor/PDF_Receipt_TP8_Ortorkor/pdf_AC_his_statusbill_TP8.dart';
 import '../PDF_TP9_Lao/PDF_Pakan_TP9/pdf_Receipt_PayPakan_TP9.dart';
@@ -403,6 +404,50 @@ class ManPay_Receipt_PakanPDF {
             rtser.toString() == '94') {
           PdfgenReceipt_PayPakan_TP8_Ortorkor
               .exportPDF_Receipt_PayPakan_TP8_Ortorkor(
+                  foder,
+                  tableData00,
+                  tableData01,
+                  context,
+                  _TransReBillHistoryModels,
+                  'Num_cid',
+                  'Namenew',
+                  '${sum_pvat}',
+                  sum_vat,
+                  sum_wht,
+                  sum_amt,
+                  sum_disp,
+                  sum_disamt,
+                  '${(sum_amt - sum_disamt)}',
+                  renTal_name,
+                  scname_,
+                  cname_,
+                  addr_,
+                  tax_,
+                  bill_addr,
+                  bill_email,
+                  bill_tel,
+                  bill_tax,
+                  bill_name,
+                  newValuePDFimg,
+                  numinvoice,
+                  numdoctax,
+                  finnancetransModels,
+                  date_Transaction,
+                  date_pay,
+                  Howto_LockJonPay,
+                  dis_sum_Matjum,
+                  TitleType_Default_Receipt_Name,
+                  dis_sum_Pakan,
+                  sum_fee,
+                  Cust_no,
+                  Zone_s,
+                  Ln_s,
+                  cid_,
+                  fname,
+                  fonts_pdf);
+        } else if (rtser.toString() == '106') {
+          PdfgenReceipt_PayPakan_TP8_Choice
+              .exportPDF_Receipt_PayPakan_TP8_Choice(
                   foder,
                   tableData00,
                   tableData01,

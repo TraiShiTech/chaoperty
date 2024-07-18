@@ -1373,22 +1373,22 @@ class _Report_cm_ScreenAState extends State<Report_cm_ScreenA> {
                                                                                             Expanded(
                                                                                               flex: 1,
                                                                                               child: Text(
-                                                                                            '${nFormat.format(double.parse('${TransReBillModels[index1].fold(
-                                                                                                        0.0,
-                                                                                                        (previousValue, element) => previousValue + (element.expser.toString() == '4' && element.total.toString() != '' && element.total != null && element.docno! == _TransReBillModels[index1].docno! ? double.parse(element.total!) : 0),
-                                                                                                      ).toString()}'))}',
+                                                                                                '${nFormat.format(double.parse('${TransReBillModels[index1].fold(
+                                                                                                      0.0,
+                                                                                                      (previousValue, element) => previousValue + (element.expser.toString() == '4' && element.total.toString() != '' && element.total != null && element.docno! == _TransReBillModels[index1].docno! ? double.parse(element.total!) : 0),
+                                                                                                    ).toString()}'))}',
                                                                                                 textAlign: TextAlign.right,
-                                                                                             style: TextStyle(
-                                                                                                    color: (double.parse('${TransReBillModels[index1].fold(
-                                                                                                        0.0,
-                                                                                                        (previousValue, element) => previousValue + (element.expser.toString() == '4' && element.total.toString() != '' && element.total != null && element.docno! == _TransReBillModels[index1].docno! ? double.parse(element.total!) : 0),
-                                                                                                      ).toString()}') ==
-                                                                                                            0.00)
-                                                                                                        ? Colors.red
-                                                                                                        : ReportScreen_Color.Colors_Text1_,
-                                                                                                    // fontWeight: FontWeight.bold,
-                                                                                                    fontFamily: Font_.Fonts_T,
-                                                                                                  ),
+                                                                                                style: TextStyle(
+                                                                                                  color: (double.parse('${TransReBillModels[index1].fold(
+                                                                                                                0.0,
+                                                                                                                (previousValue, element) => previousValue + (element.expser.toString() == '4' && element.total.toString() != '' && element.total != null && element.docno! == _TransReBillModels[index1].docno! ? double.parse(element.total!) : 0),
+                                                                                                              ).toString()}') ==
+                                                                                                          0.00)
+                                                                                                      ? Colors.red
+                                                                                                      : ReportScreen_Color.Colors_Text1_,
+                                                                                                  // fontWeight: FontWeight.bold,
+                                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                                ),
                                                                                               ),
                                                                                             ),
                                                                                             Expanded(

@@ -28,6 +28,7 @@ import '../PDF_TP5/PDF_Receipt_TP5/pdf_AC_his_statusbill_TP5.dart';
 import '../PDF_TP6/PDF_Receipt_TP6/pdf_AC_his_statusbill_TP6.dart';
 import '../PDF_TP7/PDF_Receipt_TP7/pdf_AC_his_statusbill_TP7.dart';
 import '../PDF_TP8/PDF_Receipt_TP8/pdf_AC_his_statusbill_TP8.dart';
+import '../PDF_TP8_Choice/PDF_Billing_TP8_Choice/pdf_Reduce_debt_TP8_Choice.dart';
 import '../PDF_TP8_Ortorkor/PDF_Receipt_TP8_Ortorkor/pdf_AC_his_statusbill_TP8.dart';
 import '../PDF_TP9_Lao/PDF_Billing_TP9/pdf_Reduce_debt_TP9.dart';
 
@@ -409,6 +410,39 @@ class Man_Reducedebt_PDF {
             rtser.toString() == '93' ||
             rtser.toString() == '94') {
           Pdfgen_Reduce_debt_TP8.exportPDF_Reduce_debt_TP8(
+              TitleType_Default_Receipt_Name,
+              context,
+              foder,
+              renTal_name,
+              bill_addr,
+              bill_email,
+              bill_tel,
+              bill_tax,
+              bill_name,
+              newValuePDFimg,
+              Form_nameshop,
+              Form_bussscontact,
+              Form_address,
+              Form_tax,
+              Form_custno,
+              ciddoc,
+              Form_zn,
+              Form_ln,
+              fname,
+              tableData003,
+              _TransHisDisInvModels,
+              inv_num,
+              docno_inv,
+              Datex_invoice,
+              amt_inv,
+              vat_inv,
+              wht_inv,
+              nwht_inv,
+              nvat_inv,
+              sum_total,
+              fonts_pdf);
+        } else if (rtser.toString() == '106') {
+          Pdfgen_Reduce_debt_TP8_Choice.exportPDF_Reduce_debt_TP8_Choice(
               TitleType_Default_Receipt_Name,
               context,
               foder,

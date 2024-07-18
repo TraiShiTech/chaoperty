@@ -21,6 +21,7 @@ class UserModel {
   String? showst_update;
   String? system_datex;
   String? dev_text;
+  String? type;
 
   UserModel(
       {this.ser,
@@ -44,7 +45,8 @@ class UserModel {
       this.showst_update,
       this.system_datex,
       this.dev_text,
-      this.onoff});
+      this.onoff,
+      this.type});
 
   UserModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -69,6 +71,7 @@ class UserModel {
     showst_update = json['showst_update'];
     system_datex = json['system_datex'];
     dev_text = json['dev_text'];
+    type = json['type'];
   }
 
   Map<String, dynamic> toJson() {
@@ -95,6 +98,7 @@ class UserModel {
     data['showst_update'] = this.showst_update;
     data['system_datex'] = this.system_datex;
     data['dev_text'] = this.dev_text;
+    data['type'] = this.type;
     return data;
   }
 }

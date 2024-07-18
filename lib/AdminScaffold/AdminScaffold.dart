@@ -47,7 +47,9 @@ import '../Setting/SettingScreen.dart';
 import '../Setting/SettingScreen_user.dart';
 import '../Setting/ttt.dart';
 import '../Setting_NainaService/Web_view_NainaSetting.dart';
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
+
 import 'Chat_Screen.dart';
 
 class AdminScafScreen extends StatefulWidget {
@@ -3254,15 +3256,23 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                           bottomLeft: Radius.circular(20),
                           bottomRight: Radius.circular(20)),
                     ),
-                    child: const Center(
-                      child: Text(
-                        'เมนูหลัก',
-                        style: TextStyle(
-                            color: AdminScafScreen_Color.Colors_Text1_,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: FontWeight_.Fonts_T),
-                      ),
-                    ),
+                    child: Center(
+                        child: Translate.TranslateAndSetText(
+                            'เมนูหลัก',
+                            SettingScreen_Color.Colors_Text1_,
+                            TextAlign.center,
+                            FontWeight.bold,
+                            FontWeight_.Fonts_T,
+                            14,
+                            1)
+                        //  Text(
+                        //   'เมนูหลัก',
+                        //   style: TextStyle(
+                        //       color: AdminScafScreen_Color.Colors_Text1_,
+                        //       fontWeight: FontWeight.bold,
+                        //       fontFamily: FontWeight_.Fonts_T),
+                        // ),
+                        ),
                   ),
                 ),
               ),
@@ -3402,7 +3412,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                               : (Value_Route == 'ทะเบียน')
                                   ? const BureauScreen()
                                   : (Value_Route == 'ตั้งค่า')
-                                      ? const SettingScreen()
+                                      ? const SettingScreen() //GeneratedNodes()
                                       : (Value_Route == 'จัดการข้อมูลส่วนตัว')
                                           ? const SettingUserScreen()
                                           : const SettingUserScreen(),

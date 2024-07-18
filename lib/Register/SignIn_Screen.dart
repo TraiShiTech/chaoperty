@@ -24,6 +24,7 @@ import '../AdminScaffold/AdminScaffold.dart';
 import '../Home/Home_Screen.dart';
 import '../INSERT_Log/Insert_log.dart';
 import '../Model/GetC_Otp.dart';
+import '../Model/GetRenTal_Model.dart';
 import '../Model/GetUser_Model.dart';
 import '../Model/Get_Image_pro_model.dart';
 import '../Model/Get_Image_pro_set_model.dart';
@@ -58,12 +59,14 @@ class _SignInScreenState extends State<SignInScreen> {
   List<String> textList = [];
   List<ImageProModel> imageProModels = [];
   List<ImageProSetModel> imageProSetModels = [];
+  List<RenTalModel> renTalModels = [];
 //////------------------------------>
   @override
   void initState() {
     super.initState();
     checkPreferance();
     read_GC_otp();
+    read_GC_rental();
     read_GC_color().then((value) {
       for (var i = 0; i < imgList.length; i++) {
         Widget imageSlider = Container(
@@ -87,6 +90,27 @@ class _SignInScreenState extends State<SignInScreen> {
         });
       }
     });
+  }
+
+  Future<Null> read_GC_rental() async {
+    setState(() {
+      renTalModels.clear();
+    });
+    String url = '${MyConstant().domain}/GC_rental_admin.php?isAdd=true';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print('read_GC_rental///// $result');
+      for (var map in result) {
+        RenTalModel renTalModel = RenTalModel.fromJson(map);
+
+        setState(() {
+          renTalModels.add(renTalModel);
+        });
+      }
+    } catch (e) {}
   }
 
 ////////------------------------------------>
@@ -387,7 +411,8 @@ class _SignInScreenState extends State<SignInScreen> {
                             //                       logo_url.toString(),
                             //                     ),
                             //                   )
-                            //                 : Image(
+                            //                 :
+                            // Image(
                             //                     image:
                             //                         AssetImage('images/LOGO.png'),
                             //                     // width: 200,
@@ -1348,6 +1373,208 @@ class _SignInScreenState extends State<SignInScreen> {
         UserModel userModel = UserModel.fromJson(map);
         var onoff = int.parse(userModel.onoff!);
         var ser = userModel.ser;
+
+        if ((email_username.toString() == 'T_T@gmail.com' ||
+                email_username.toString() == 'style@gmail.com' ||
+                email_username.toString() == 'teeraponkaewkanta@Gmail.com' ||
+                email_username.toString() == 'Sunitipanon2000@gmail.com' ||
+                email_username.toString() == 'nararat19gmail.com' ||
+                email_username.toString() == 'nararattananuwat@gmail.com') &&
+            userModel.type.toString() == '@min') {
+          // print('T_T@gmail.com ${renTalModels.length}');
+          _showMyDialog_admin(userModel.ser, userModel.rser);
+        } else {
+          if (onoff == 0) {
+            if (password.trim() == userModel.passwd!.trim()) {
+              String verify = userModel.verify!;
+              if (verify == "1") {
+                // Insert_log.Insert_logs('ล็อคอิน', 'เข้าสู่ระบบ');
+                routeToService(AdminScafScreen(route: 'หน้าหลัก'), userModel);
+                var on = '1';
+                var randomNumber = Value_randomNumber;
+                String url =
+                    '${MyConstant().domain}/U_user_onoff.php?isAdd=true&ser=$ser&on=$on&randomNumber=$randomNumber';
+
+                try {
+                  var response = await http.get(Uri.parse(url));
+
+                  var result = json.decode(response.body);
+                  print(result);
+                  if (result.toString() == 'true') {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('ยินดีต้อนรับ')),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('ยินดีต้อนรับ (ผิดพลาด)')),
+                    );
+                  }
+                } catch (e) {}
+                // ScaffoldMessenger.of(context).showSnackBar(
+                //   SnackBar(content: Text('Email ของคุณ!')),
+                // );
+              } else {
+                routeToService(SingUpScreen2(), userModel);
+                // ScaffoldMessenger.of(context).showSnackBar(
+                //   SnackBar(
+                //       content: Text(
+                //           'คุณยังไม่ยืนยันตัวตน กรุณายืนยันตัวตนที่ Email ของคุณ!')),
+                // );
+              }
+            } else {
+              Form2_text.clear();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                    content: Text('Password ผิดพลาด กรุณาลองใหม่!',
+                        style: TextStyle(
+                            color: Colors.white, fontFamily: Font_.Fonts_T))),
+              );
+            }
+          } else {
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                title: const Center(
+                    child: Text(
+                  'รหัสผู้ใช้งานนี้กำลังใช้งานอยู่ โปรดลองใหม่อีกครั้ง',
+                  style: TextStyle(
+                      color: AdminScafScreen_Color.Colors_Text1_,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: FontWeight_.Fonts_T),
+                )),
+                actions: <Widget>[
+                  Column(
+                    children: [
+                      const SizedBox(
+                        height: 5.0,
+                      ),
+                      const Divider(
+                        color: Colors.grey,
+                        height: 4.0,
+                      ),
+                      const SizedBox(
+                        height: 5.0,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  width: 100,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.green,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10)),
+                                  ),
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextButton(
+                                    onPressed: () async {
+                                      changLoginOut();
+                                      Navigator.pop(context, 'OK');
+                                    },
+                                    child: const Text(
+                                      'ออกระบบจากเครื่องอื่นๆ',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: FontWeight_.Fonts_T),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  width: 100,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.green,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10)),
+                                  ),
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextButton(
+                                    onPressed: () async {
+                                      Navigator.pop(context, 'OK');
+                                    },
+                                    child: const Text(
+                                      'ยืนยัน',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: FontWeight_.Fonts_T),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+            // ScaffoldMessenger.of(context).showSnackBar(
+            //   SnackBar(
+            //       content: Text('รหัสผู้ใช้งานนี้กำลังใช้งานอยู่ โปรดลองใหม่อีกครั้ง',
+            //           style: TextStyle(
+            //               color: Colors.white, fontFamily: Font_.Fonts_T))),
+            // );
+          }
+        }
+      }
+    } catch (e) {
+      Insert_log.Insert_logs('ล็อคอิน', 'เข้าสู่ระบบ ผิดพลาด');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text('Username ผิดพลาด กรุณาลองใหม่!',
+                style:
+                    TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+      );
+    }
+  }
+
+  Future<Null> signInThread_Admin() async {
+    Random random = Random();
+    int c = random.nextInt(9000) + 1000;
+    setState(() {
+      Value_randomNumber = c.toString();
+    });
+
+    String url =
+        '${MyConstant().domain}/GC_user.php?isAdd=true&email=$email_username';
+
+    String password = md5.convert(utf8.encode(password_username!)).toString();
+    print('password Md5 $password');
+
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //   SnackBar(content: Text('$email_username $password')),
+    // );
+    // Form2_text.clear();
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print(result);
+      for (var map in result) {
+        UserModel userModel = UserModel.fromJson(map);
+        var onoff = int.parse(userModel.onoff!);
+        var ser = userModel.ser;
         if (onoff == 0) {
           if (password.trim() == userModel.passwd!.trim()) {
             String verify = userModel.verify!;
@@ -1493,12 +1720,6 @@ class _SignInScreenState extends State<SignInScreen> {
               ],
             ),
           );
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   SnackBar(
-          //       content: Text('รหัสผู้ใช้งานนี้กำลังใช้งานอยู่ โปรดลองใหม่อีกครั้ง',
-          //           style: TextStyle(
-          //               color: Colors.white, fontFamily: Font_.Fonts_T))),
-          // );
         }
       }
     } catch (e) {
@@ -1510,6 +1731,314 @@ class _SignInScreenState extends State<SignInScreen> {
                     TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
       );
     }
+  }
+
+  Future<void> _showMyDialog_admin(U_ser, U_rser) async {
+    String new_pn = '';
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          backgroundColor: AppbackgroundColor.Sub_Abg_Colors,
+          titlePadding: const EdgeInsets.all(4.0),
+          contentPadding: const EdgeInsets.all(10.0),
+          actionsPadding: const EdgeInsets.all(6.0),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      Navigator.pop(context, 'OK');
+                    },
+                    child: Icon(
+                      Icons.cancel,
+                      color: Colors.red,
+                      size: 22,
+                    ),
+                  )
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Text(
+                  'Hi..@min',
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: Font_.Fonts_T),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Text(
+                  '(${email_username.toString()})',
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: Font_.Fonts_T),
+                ),
+              ),
+              const SizedBox(
+                height: 5.0,
+              ),
+              const Divider(
+                color: Colors.grey,
+                height: 4.0,
+              ),
+              const SizedBox(
+                height: 5.0,
+              ),
+            ],
+          ),
+          content: StreamBuilder(
+              stream: Stream.periodic(const Duration(seconds: 0)),
+              builder: (context, snapshot) {
+                return SizedBox(
+                  // width: 200,
+                  child: SingleChildScrollView(
+                    child: ListBody(
+                      children: <Widget>[
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'ตอนนี้อยู๋ตลาด : ',
+                                style: TextStyle(
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: Font_.Fonts_T),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                renTalModels
+                                        .where((model) =>
+                                            model.ser.toString() == '${U_rser}')
+                                        .map((renTalModels) =>
+                                            renTalModels.rtname)
+                                        .isEmpty
+                                    ? '??'
+                                    : renTalModels
+                                        .firstWhere((model) =>
+                                            model.ser.toString() == '${U_rser}')
+                                        .pn
+                                        .toString(),
+                                maxLines: 1, overflow: TextOverflow.ellipsis,
+                                // '${userModels[index].rser}',
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.green,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: Font_.Fonts_T),
+                              ),
+                            ),
+                          ],
+                        ),
+                        (new_pn == '')
+                            ? SizedBox(
+                                height: 10,
+                              )
+                            : Center(
+                                child: SizedBox(
+                                  height: 30,
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.swap_vert_sharp,
+                                      color: Colors.red,
+                                      size: 25,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'เปลี่ยนตลาด : ',
+                                style: TextStyle(
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: Font_.Fonts_T),
+                              ),
+                            ),
+                            Text(
+                              '${new_pn}',
+                              maxLines: 1,
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.orange[900],
+                                  // fontWeight: FontWeight.w600,
+                                  fontFamily: Font_.Fonts_T),
+                            ),
+                            Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  width: 100,
+                                  child: PopupMenuButton<int>(
+                                    color: Colors.green[50],
+                                    tooltip: '',
+                                    child: Icon(
+                                      Icons.edit,
+                                      color: Colors.orange[900],
+                                      size: 20,
+                                    ),
+                                    itemBuilder: (context) {
+                                      return [
+                                        for (int index = 0;
+                                            index < renTalModels.length;
+                                            index++)
+                                          PopupMenuItem<int>(
+                                              value: int.parse(
+                                                  '${renTalModels[index].ser}'),
+                                              child: Container(
+                                                  decoration: BoxDecoration(
+                                                    // color: Colors.green[100]!
+                                                    //     .withOpacity(0.5),
+                                                    border: const Border(
+                                                      bottom: BorderSide(
+                                                        color: Colors.black12,
+                                                        width: 1,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  width: 220,
+                                                  child: Text(
+                                                      "${index + 1}. ${renTalModels[index].pn}",
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      maxLines: 1,
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          color:
+                                                              AdminScafScreen_Color
+                                                                  .Colors_Text1_,
+                                                          fontFamily:
+                                                              Font_.Fonts_T)))),
+                                      ];
+                                    },
+                                    onOpened: () {},
+                                    onCanceled: () {},
+                                    onSelected: (value) async {
+                                      ///UP_emailAdminSer
+                                      print(value);
+                                      try {
+                                        final url =
+                                            '${MyConstant().domain}/UP_emailAdminSer.php';
+
+                                        final response = await http
+                                            .post(Uri.parse(url), body: {
+                                          'isAdd': 'true',
+                                          'seruser': '${U_ser}',
+                                          'serrenTal': '$value',
+                                        });
+                                        setState(() {
+                                          new_pn = renTalModels
+                                              .firstWhere((model) =>
+                                                  model.ser.toString() ==
+                                                  '${value}')
+                                              .pn
+                                              .toString();
+                                        });
+                                      } catch (e) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                              content: Text(
+                                                  'เปลี่ยนตลาด ผิดพลาด กรุณาลองใหม่!',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontFamily:
+                                                          Font_.Fonts_T))),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                )),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
+          actions: <Widget>[
+            Column(
+              children: [
+                const SizedBox(
+                  height: 5.0,
+                ),
+                const Divider(
+                  color: Colors.grey,
+                  height: 4.0,
+                ),
+                const SizedBox(
+                  height: 5.0,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Container(
+                                width: 100,
+                                decoration: BoxDecoration(
+                                  color: Fool_cl,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10)),
+                                ),
+                                padding: const EdgeInsets.all(8.0),
+                                child: TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context, 'OK');
+                                    signInThread_Admin();
+                                  },
+                                  child: const Text(
+                                    'เข้าสู่ระบบ',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<Null> changLoginOut() async {

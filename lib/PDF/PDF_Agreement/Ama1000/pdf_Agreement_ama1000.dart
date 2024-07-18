@@ -5,13 +5,17 @@ import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'dart:math' as math;
-
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:image/image.dart' as img;
+import '../../../Constant/Myconstant.dart';
 import '../../../PeopleChao/Rental_Information.dart';
 import '../../../Style/ThaiBaht.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+
+import '../../../Style/loadAndCacheImage.dart';
 
 class Pdfgen_Agreement_Ama1000 {
 //////////---------------------------------------------------->( **** เอกสารสัญญาเช่า ปกติ  Ama1000)
@@ -45,6 +49,8 @@ class Pdfgen_Agreement_Ama1000 {
     bill_tel,
     bill_tax,
     bill_name,
+    map,
+    logo,
     newValuePDFimg,
     tableData00,
     TitleType_Default_Receipt_Name,
@@ -88,9 +94,14 @@ class Pdfgen_Agreement_Ama1000 {
     // Uint8List data2 = base64Decode(base64Image_new2);
     // Uint8List data3 = base64Decode(base64Image_new3);
     // Uint8List data4 = base64Decode(base64Image_new4);
-    for (int i = 0; i < newValuePDFimg.length; i++) {
-      netImage.add(await networkImage('${newValuePDFimg[i]}'));
-    }
+    // netImage = newValuePDFimg;
+    // for (int i = 0; i < newValuePDFimg.length; i++) {
+    //   netImage.add(await networkImage('${newValuePDFimg[i]}'));
+    // }
+    final imageBytes_map = await loadAndCacheImage(
+        'https://race.nstru.ac.th/home_ex/blog/pic/cover/s9662.jpg');
+    final imageBytes_logo = await loadAndCacheImage2(
+        'https://race.nstru.ac.th/home_ex/blog/pic/cover/s9662.jpg');
     // final tableData = [
     //   for (int index = 0; index < quotxSelectModels.length; index++)
     //     [
@@ -123,7 +134,7 @@ class Pdfgen_Agreement_Ama1000 {
             children: [
               pw.Row(
                 children: [
-                  (netImage.isEmpty)
+                  (imageBytes_logo.isEmpty)
                       ? pw.Container(
                           height: 72,
                           width: 70,
@@ -146,7 +157,7 @@ class Pdfgen_Agreement_Ama1000 {
                       //     width: 70,
                       //   )
                       : pw.Image(
-                          (netImage[0]),
+                          pw.MemoryImage(imageBytes_logo),
                           height: 72,
                           width: 70,
                         ),
@@ -1125,7 +1136,224 @@ class Pdfgen_Agreement_Ama1000 {
                         ),
                       ),
                     ])),
-
+            pw.SizedBox(height: 2 * PdfPageFormat.mm),
+            pw.Text(
+              '2.6 ตาราง อัตราค่าเช่า ค่าบริการผู้เช่า ตลอดอายุสัญญา',
+              textAlign: pw.TextAlign.justify,
+              style: pw.TextStyle(
+                fontSize: font_Size,
+                font: ttf,
+                color: Colors_pd,
+                fontWeight: pw.FontWeight.bold,
+              ),
+            ),
+            pw.SizedBox(height: 2 * PdfPageFormat.mm),
+            pw.Container(
+              decoration: const pw.BoxDecoration(
+                color: PdfColors.green100,
+                border: pw.Border(
+                  bottom: pw.BorderSide(color: PdfColors.green900),
+                ),
+              ),
+              child: pw.Row(
+                children: [
+                  pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      height: 25,
+                      child: pw.Center(
+                        child: pw.Text(
+                          'งวด',
+                          maxLines: 1,
+                          textAlign: pw.TextAlign.left,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              fontWeight: pw.FontWeight.bold,
+                              font: ttf,
+                              color: PdfColors.green900),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 2,
+                    child: pw.Container(
+                      height: 25,
+                      child: pw.Center(
+                        child: pw.Text(
+                          'วันที่',
+                          textAlign: pw.TextAlign.left,
+                          maxLines: 1,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              fontWeight: pw.FontWeight.bold,
+                              font: ttf,
+                              color: PdfColors.green900),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      height: 25,
+                      child: pw.Center(
+                        child: pw.Text(
+                          'รายการ',
+                          textAlign: pw.TextAlign.left,
+                          maxLines: 1,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              fontWeight: pw.FontWeight.bold,
+                              font: ttf,
+                              color: PdfColors.green900),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      height: 25,
+                      child: pw.Center(
+                        child: pw.Text(
+                          'ยอด/งวด',
+                          textAlign: pw.TextAlign.right,
+                          maxLines: 1,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              fontWeight: pw.FontWeight.bold,
+                              font: ttf,
+                              color: PdfColors.green900),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      height: 25,
+                      child: pw.Center(
+                        child: pw.Text(
+                          'ยอด',
+                          textAlign: pw.TextAlign.right,
+                          maxLines: 1,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              fontWeight: pw.FontWeight.bold,
+                              font: ttf,
+                              color: PdfColors.green900),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            for (int index = 0; index < tableData00.length; index++)
+              pw.Row(
+                children: [
+                  pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      height: 25,
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerLeft,
+                        child: pw.Text(
+                          '${tableData00[index][0]}',
+                          maxLines: 2,
+                          textAlign: pw.TextAlign.left,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              font: ttf,
+                              color: PdfColors.grey800),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 2,
+                    child: pw.Container(
+                      height: 25,
+                      child: pw.Align(
+                        alignment: pw.Alignment.center,
+                        child: pw.Text(
+                          '${tableData00[index][1]}',
+                          maxLines: 2,
+                          textAlign: pw.TextAlign.center,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              font: ttf,
+                              color: PdfColors.grey800),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      height: 25,
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerLeft,
+                        child: pw.Text(
+                          '${tableData00[index][2]}',
+                          maxLines: 2,
+                          textAlign: pw.TextAlign.left,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              font: ttf,
+                              color: PdfColors.grey800),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      height: 25,
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerRight,
+                        child: pw.Text(
+                          '${tableData00[index][3]}',
+                          maxLines: 2,
+                          textAlign: pw.TextAlign.right,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              font: ttf,
+                              color: PdfColors.grey800),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      height: 25,
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerRight,
+                        child: pw.Text(
+                          '${tableData00[index][4]}',
+                          maxLines: 2,
+                          textAlign: pw.TextAlign.right,
+                          style: pw.TextStyle(
+                              fontSize: font_Size,
+                              font: ttf,
+                              color: PdfColors.grey800),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            pw.Container(
+              height: 5,
+              decoration: const pw.BoxDecoration(
+                // color: PdfColors.green100,
+                border: pw.Border(
+                  bottom: pw.BorderSide(color: PdfColors.green900),
+                ),
+              ),
+            ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
               '3.	การชำระค่าเช่า ค่าบริการ ค่าสาธารณูปโภค และภาษีต่างๆ',
@@ -1330,82 +1558,82 @@ class Pdfgen_Agreement_Ama1000 {
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     mainAxisAlignment: pw.MainAxisAlignment.start,
                     children: [
-                      pw.Row(
-                        children: [
-                          pw.Text(
-                            '4.1	ผู้เช่าตกลงวางเงินประกันการเช่า เป็นเงิน ',
-                            textAlign: pw.TextAlign.left,
-                            style: pw.TextStyle(
-                              fontSize: font_Size,
-                              font: ttf,
-                              color: Colors_pd,
-                            ),
-                          ),
-                          pw.Container(
-                            width: 120,
-                            height: 18,
-                            decoration: pw.BoxDecoration(
-                                border: pw.Border(
-                                    bottom: pw.BorderSide(
-                              color: Colors_pd,
-                              width: 0.3, // Underline thickness
-                            ))),
-                            child: pw.Text(
-                              " ",
-                              textAlign: pw.TextAlign.center,
-                              style: pw.TextStyle(
-                                color: Colors_pd,
-                                fontSize: font_Size,
-                                fontWeight: pw.FontWeight.bold,
-                                font: ttf,
-                              ),
-                            ),
-                          ),
-                          pw.Text(
-                            'บาท (',
-                            textAlign: pw.TextAlign.left,
-                            style: pw.TextStyle(
-                              fontSize: font_Size,
-                              font: ttf,
-                              color: Colors_pd,
-                            ),
-                          ),
-                          pw.Expanded(
-                            flex: 1,
-                            child: pw.Container(
-                              height: 18,
-                              decoration: pw.BoxDecoration(
-                                  border: pw.Border(
-                                      bottom: pw.BorderSide(
-                                color: Colors_pd,
-                                width: 0.3, // Underline thickness
-                              ))),
-                              child: pw.Text(
-                                " ",
-                                textAlign: pw.TextAlign.center,
-                                style: pw.TextStyle(
-                                  color: Colors_pd,
-                                  fontSize: font_Size,
-                                  fontWeight: pw.FontWeight.bold,
-                                  font: ttf,
-                                ),
-                              ),
-                            ),
-                          ),
-                          pw.Text(
-                            ')',
-                            textAlign: pw.TextAlign.left,
-                            style: pw.TextStyle(
-                              fontSize: font_Size,
-                              font: ttf,
-                              color: Colors_pd,
-                            ),
-                          ),
-                        ],
-                      ),
-                      pw.SizedBox(height: 2 * PdfPageFormat.mm),
+                      // pw.Row(
+                      //   children: [
+                      //     pw.Text(
+                      //       '4.1	ผู้เช่าตกลงวางเงินประกันการเช่า 1 เดือน ',
+                      //       textAlign: pw.TextAlign.left,
+                      //       style: pw.TextStyle(
+                      //         fontSize: font_Size,
+                      //         font: ttf,
+                      //         color: Colors_pd,
+                      //       ),
+                      //     ),
+                      //     pw.Container(
+                      //       width: 120,
+                      //       height: 18,
+                      //       decoration: pw.BoxDecoration(
+                      //           border: pw.Border(
+                      //               bottom: pw.BorderSide(
+                      //         color: Colors_pd,
+                      //         width: 0.3, // Underline thickness
+                      //       ))),
+                      //       child: pw.Text(
+                      //         " ",
+                      //         textAlign: pw.TextAlign.center,
+                      //         style: pw.TextStyle(
+                      //           color: Colors_pd,
+                      //           fontSize: font_Size,
+                      //           fontWeight: pw.FontWeight.bold,
+                      //           font: ttf,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     pw.Text(
+                      //       'บาท (',
+                      //       textAlign: pw.TextAlign.left,
+                      //       style: pw.TextStyle(
+                      //         fontSize: font_Size,
+                      //         font: ttf,
+                      //         color: Colors_pd,
+                      //       ),
+                      //     ),
+                      //     pw.Expanded(
+                      //       flex: 1,
+                      //       child: pw.Container(
+                      //         height: 18,
+                      //         decoration: pw.BoxDecoration(
+                      //             border: pw.Border(
+                      //                 bottom: pw.BorderSide(
+                      //           color: Colors_pd,
+                      //           width: 0.3, // Underline thickness
+                      //         ))),
+                      //         child: pw.Text(
+                      //           " ",
+                      //           textAlign: pw.TextAlign.center,
+                      //           style: pw.TextStyle(
+                      //             color: Colors_pd,
+                      //             fontSize: font_Size,
+                      //             fontWeight: pw.FontWeight.bold,
+                      //             font: ttf,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     pw.Text(
+                      //       ')',
+                      //       textAlign: pw.TextAlign.left,
+                      //       style: pw.TextStyle(
+                      //         fontSize: font_Size,
+                      //         font: ttf,
+                      //         color: Colors_pd,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      // pw.SizedBox(height: 2 * PdfPageFormat.mm),
                       pw.Text(
-                        'ให้แก่ผู้ให้เช่าภายใน 7 วันนับจากวันทำสัญญาฉบับนี้ โดยสัญญานี้จะมีผลผูกพันผู้ให้เช่าก็ต่อเมื่อผู้ให้เช่าได้รับชำระเงินประกันข้างต้นครบถ้วน',
+                        '4.1	ผู้เช่าตกลงวางเงินประกันการเช่า 1 เดือนให้แก่ผู้ให้เช่าภายใน 7 วันนับจากวันทำสัญญาฉบับนี้ โดยสัญญานี้จะมีผลผูกพันผู้ให้เช่าก็ต่อเมื่อ\nผู้ให้เช่าได้รับชำระเงินประกันข้างต้นครบถ้วน',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
                           fontSize: font_Size,
@@ -1414,83 +1642,83 @@ class Pdfgen_Agreement_Ama1000 {
                           fontWeight: pw.FontWeight.bold,
                         ),
                       ),
-                      pw.SizedBox(height: 2 * PdfPageFormat.mm),
-                      pw.Row(
-                        children: [
-                          pw.Text(
-                            '4.2	ผู้เช่าตกลงวางเงินประกันค่าบริการ เป็นเงิน ',
-                            textAlign: pw.TextAlign.left,
-                            style: pw.TextStyle(
-                              fontSize: font_Size,
-                              font: ttf,
-                              color: Colors_pd,
-                            ),
-                          ),
-                          pw.Container(
-                            width: 120,
-                            height: 18,
-                            decoration: pw.BoxDecoration(
-                                border: pw.Border(
-                                    bottom: pw.BorderSide(
-                              color: Colors_pd,
-                              width: 0.3, // Underline thickness
-                            ))),
-                            child: pw.Text(
-                              " ",
-                              textAlign: pw.TextAlign.center,
-                              style: pw.TextStyle(
-                                color: Colors_pd,
-                                fontSize: font_Size,
-                                fontWeight: pw.FontWeight.bold,
-                                font: ttf,
-                              ),
-                            ),
-                          ),
-                          pw.Text(
-                            'บาท (',
-                            textAlign: pw.TextAlign.left,
-                            style: pw.TextStyle(
-                              fontSize: font_Size,
-                              font: ttf,
-                              color: Colors_pd,
-                            ),
-                          ),
-                          pw.Expanded(
-                            flex: 1,
-                            child: pw.Container(
-                              height: 18,
-                              decoration: pw.BoxDecoration(
-                                  border: pw.Border(
-                                      bottom: pw.BorderSide(
-                                color: Colors_pd,
-                                width: 0.3, // Underline thickness
-                              ))),
-                              child: pw.Text(
-                                " ",
-                                textAlign: pw.TextAlign.center,
-                                style: pw.TextStyle(
-                                  color: Colors_pd,
-                                  fontSize: font_Size,
-                                  fontWeight: pw.FontWeight.bold,
-                                  font: ttf,
-                                ),
-                              ),
-                            ),
-                          ),
-                          pw.Text(
-                            ')',
-                            textAlign: pw.TextAlign.left,
-                            style: pw.TextStyle(
-                              fontSize: font_Size,
-                              font: ttf,
-                              color: Colors_pd,
-                            ),
-                          ),
-                        ],
-                      ),
+                      // pw.SizedBox(height: 2 * PdfPageFormat.mm),
+                      // pw.Row(
+                      //   children: [
+                      //     pw.Text(
+                      //       '4.2	ผู้เช่าตกลงวางเงินประกันค่าบริการ เป็นเงิน ',
+                      //       textAlign: pw.TextAlign.left,
+                      //       style: pw.TextStyle(
+                      //         fontSize: font_Size,
+                      //         font: ttf,
+                      //         color: Colors_pd,
+                      //       ),
+                      //     ),
+                      //     pw.Container(
+                      //       width: 120,
+                      //       height: 18,
+                      //       decoration: pw.BoxDecoration(
+                      //           border: pw.Border(
+                      //               bottom: pw.BorderSide(
+                      //         color: Colors_pd,
+                      //         width: 0.3, // Underline thickness
+                      //       ))),
+                      //       child: pw.Text(
+                      //         " ",
+                      //         textAlign: pw.TextAlign.center,
+                      //         style: pw.TextStyle(
+                      //           color: Colors_pd,
+                      //           fontSize: font_Size,
+                      //           fontWeight: pw.FontWeight.bold,
+                      //           font: ttf,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     pw.Text(
+                      //       'บาท (',
+                      //       textAlign: pw.TextAlign.left,
+                      //       style: pw.TextStyle(
+                      //         fontSize: font_Size,
+                      //         font: ttf,
+                      //         color: Colors_pd,
+                      //       ),
+                      //     ),
+                      //     pw.Expanded(
+                      //       flex: 1,
+                      //       child: pw.Container(
+                      //         height: 18,
+                      //         decoration: pw.BoxDecoration(
+                      //             border: pw.Border(
+                      //                 bottom: pw.BorderSide(
+                      //           color: Colors_pd,
+                      //           width: 0.3, // Underline thickness
+                      //         ))),
+                      //         child: pw.Text(
+                      //           " ",
+                      //           textAlign: pw.TextAlign.center,
+                      //           style: pw.TextStyle(
+                      //             color: Colors_pd,
+                      //             fontSize: font_Size,
+                      //             fontWeight: pw.FontWeight.bold,
+                      //             font: ttf,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     pw.Text(
+                      //       ')',
+                      //       textAlign: pw.TextAlign.left,
+                      //       style: pw.TextStyle(
+                      //         fontSize: font_Size,
+                      //         font: ttf,
+                      //         color: Colors_pd,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                       pw.SizedBox(height: 2 * PdfPageFormat.mm),
                       pw.Text(
-                        'ให้แก่ผู้ให้เช่าภายใน 7 วันนับจากวันทำสัญญาฉบับนี้ โดยสัญญานี้จะมีผลผูกพันผู้ให้เช่าก็ต่อเมื่อผู้ให้เช่าได้รับชำระเงินประกันข้างต้นครบถ้วน',
+                        '4.2	ผู้เช่าตกลงวางเงินประกัน  1 เดือน รวม  Vat ให้แก่ผู้ให้เช่าภายใน 7 วันนับจากวันทำสัญญาฉบับนี้ โดยสัญญานี้จะมีผลผูกพันผู้ให้เช่าก็ต่อเมื่อ\nผู้ให้เช่าได้รับชำระเงินประกันข้างต้นครบถ้วน',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
                           fontSize: font_Size,
@@ -1540,25 +1768,22 @@ class Pdfgen_Agreement_Ama1000 {
                               color: Colors_pd,
                             ),
                           ),
-                          pw.Expanded(
-                            flex: 1,
-                            child: pw.Container(
-                              height: 18,
-                              decoration: pw.BoxDecoration(
-                                  border: pw.Border(
-                                      bottom: pw.BorderSide(
+                          pw.Container(
+                            height: 18,
+                            decoration: pw.BoxDecoration(
+                                border: pw.Border(
+                                    bottom: pw.BorderSide(
+                              color: Colors_pd,
+                              width: 0.3, // Underline thickness
+                            ))),
+                            child: pw.Text(
+                              " ห้าร้อยบาทถ้วน ",
+                              textAlign: pw.TextAlign.center,
+                              style: pw.TextStyle(
                                 color: Colors_pd,
-                                width: 0.3, // Underline thickness
-                              ))),
-                              child: pw.Text(
-                                " ห้าร้อยบาทถ้วน ",
-                                textAlign: pw.TextAlign.center,
-                                style: pw.TextStyle(
-                                  color: Colors_pd,
-                                  fontSize: font_Size,
-                                  fontWeight: pw.FontWeight.bold,
-                                  font: ttf,
-                                ),
+                                fontSize: font_Size,
+                                fontWeight: pw.FontWeight.bold,
+                                font: ttf,
                               ),
                             ),
                           ),
@@ -1614,25 +1839,22 @@ class Pdfgen_Agreement_Ama1000 {
                               color: Colors_pd,
                             ),
                           ),
-                          pw.Expanded(
-                            flex: 1,
-                            child: pw.Container(
-                              height: 18,
-                              decoration: pw.BoxDecoration(
-                                  border: pw.Border(
-                                      bottom: pw.BorderSide(
+                          pw.Container(
+                            height: 18,
+                            decoration: pw.BoxDecoration(
+                                border: pw.Border(
+                                    bottom: pw.BorderSide(
+                              color: Colors_pd,
+                              width: 0.3, // Underline thickness
+                            ))),
+                            child: pw.Text(
+                              " ห้าร้อยบาทถ้วน ",
+                              textAlign: pw.TextAlign.center,
+                              style: pw.TextStyle(
                                 color: Colors_pd,
-                                width: 0.3, // Underline thickness
-                              ))),
-                              child: pw.Text(
-                                " ห้าร้อยบาทถ้วน ",
-                                textAlign: pw.TextAlign.center,
-                                style: pw.TextStyle(
-                                  color: Colors_pd,
-                                  fontSize: font_Size,
-                                  fontWeight: pw.FontWeight.bold,
-                                  font: ttf,
-                                ),
+                                fontSize: font_Size,
+                                fontWeight: pw.FontWeight.bold,
+                                font: ttf,
                               ),
                             ),
                           ),
@@ -2551,7 +2773,18 @@ class Pdfgen_Agreement_Ama1000 {
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
               ' ' * space_ +
-                  '20.1	ลดค่าส่วนกลางรายปี 50% (สำหรับปีแรก) เหลือ 5,000 บาท (รวมภาษีมูลค่าเพิ่มแล้ว)',
+                  '20.1	ฟรีค่าเช่า 3 เดือนแรก  (ค่าเช่ามีหลายระดับราคา 3,000-4,000)',
+              textAlign: pw.TextAlign.left,
+              style: pw.TextStyle(
+                fontSize: font_Size,
+                font: ttf,
+                color: Colors_pd,
+                fontWeight: pw.FontWeight.bold,
+              ),
+            ),
+            pw.SizedBox(height: 2 * PdfPageFormat.mm),
+            pw.Text(
+              ' ' * space_ + '20.2	ค่าบริการคิด vat ไม่ได้ฟรี',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
                 fontSize: font_Size,
@@ -2563,7 +2796,7 @@ class Pdfgen_Agreement_Ama1000 {
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
               ' ' * space_ +
-                  '20.2	ฟรีค่าเช่า 3 เดือน เริ่ม__________ถึง__________',
+                  '20.3	-	ค่าส่วนกลางรายปี 10,000 บาท / ล๊อค โปรเปิดตลาด คิด 50 %',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
                 fontSize: font_Size,
@@ -2818,7 +3051,7 @@ class Pdfgen_Agreement_Ama1000 {
           children: [
             pw.Row(
               children: [
-                (netImage.isEmpty)
+                (imageBytes_logo.isEmpty)
                     ? pw.Container(
                         height: 72,
                         width: 70,
@@ -2841,7 +3074,7 @@ class Pdfgen_Agreement_Ama1000 {
                     //     width: 70,
                     //   )
                     : pw.Image(
-                        (netImage[0]),
+                        pw.MemoryImage(imageBytes_logo),
                         height: 72,
                         width: 70,
                       ),
@@ -3139,14 +3372,14 @@ class Pdfgen_Agreement_Ama1000 {
                 pw.SizedBox(height: 10 * PdfPageFormat.mm),
                 pw.Align(
                   alignment: pw.Alignment.center,
-                  child: (netImage.isEmpty)
+                  child: (imageBytes_map.isEmpty)
                       ? pw.Container(
                           height: 400,
                           width: 400,
                           color: PdfColors.grey200,
                           child: pw.Center(
                             child: pw.Text(
-                              'Image 400 x 400',
+                              'Image max 400 x max 400',
                               maxLines: 1,
                               style: pw.TextStyle(
                                 fontSize: 10,
@@ -3162,7 +3395,7 @@ class Pdfgen_Agreement_Ama1000 {
                       //     width: 70,
                       //   )
                       : pw.Image(
-                          (netImage[1]),
+                          pw.MemoryImage(imageBytes_map),
                           height: 400,
                           width: 400,
                         ),

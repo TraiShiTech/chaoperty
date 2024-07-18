@@ -18,9 +18,8 @@ Future<String> translateText(String text) async {
   }
 }
 
-class Translate {
 
-  
+class Translate {
   static Widget TranslateAndSetText(
     String text,
     Color? color,

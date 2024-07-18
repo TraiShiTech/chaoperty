@@ -136,6 +136,7 @@ class TransReBillHistoryModel {
   String? ref3;
   String? ref4;
   String? ele_ty;
+  String? date_book;
 
   TransReBillHistoryModel({
     this.ser,
@@ -270,6 +271,7 @@ class TransReBillHistoryModel {
     this.ref3,
     this.ref4,
     this.ele_ty,
+    this.date_book,
   });
 
   TransReBillHistoryModel.fromJson(Map<String, dynamic> json) {
@@ -408,6 +410,7 @@ class TransReBillHistoryModel {
     ref3 = json['ref3'];
     ref4 = json['ref4'];
     ele_ty = json['ele_ty'];
+    date_book = json['date_book'];
   }
 
   Map<String, dynamic> toJson() {
@@ -546,6 +549,7 @@ class TransReBillHistoryModel {
     data['ref3'] = this.ref3;
     data['ref4'] = this.ref4;
     data['ele_ty'] = this.ele_ty;
+    data['date_book'] = this.date_book;
     return data;
   }
 }

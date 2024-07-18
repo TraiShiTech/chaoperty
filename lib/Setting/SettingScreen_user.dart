@@ -26,9 +26,9 @@ import '../Model/GetRenTal_Model.dart';
 import '../Model/GetUser_Model.dart';
 import '../Model/GetZone_Model.dart';
 import '../PeopleChao/PeopleChao_Screen.dart';
-import '../Report/Report_Screen.dart';
 import '../Responsive/responsive.dart';
 // ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, duplicate_import, must_be_immutable, body_might_complete_normally_nullable
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 import 'Access_Rights.dart';
 import 'Bill_Document.dart';
@@ -740,19 +740,27 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
                         padding: const EdgeInsets.all(5.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            AutoSizeText(
-                              'ตั้งค่า/จัดการข้อมูลส่วนตัว',
-                              overflow: TextOverflow.ellipsis,
-                              minFontSize: 8,
-                              maxFontSize: 18,
-                              style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                color: ReportScreen_Color.Colors_Text1_,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: FontWeight_.Fonts_T,
-                              ),
-                            ),
+                          children: [
+                            Translate.TranslateAndSetText(
+                                'ตั้งค่า/จัดการข้อมูลส่วนตัว',
+                                SettingScreen_Color.Colors_Text1_,
+                                TextAlign.center,
+                                FontWeight.bold,
+                                FontWeight_.Fonts_T,
+                                14,
+                                1),
+                            // AutoSizeText(
+                            //   'ตั้งค่า/จัดการข้อมูลส่วนตัว',
+                            //   overflow: TextOverflow.ellipsis,
+                            //   minFontSize: 8,
+                            //   maxFontSize: 18,
+                            //   style: TextStyle(
+                            //     decoration: TextDecoration.underline,
+                            //     color: ReportScreen_Color.Colors_Text1_,
+                            //     fontWeight: FontWeight.bold,
+                            //     fontFamily: FontWeight_.Fonts_T,
+                            //   ),
+                            // ),
                             AutoSizeText(
                               ' > >',
                               overflow: TextOverflow.ellipsis,
@@ -847,16 +855,27 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
                                         ),
                                         padding: const EdgeInsets.all(8.0),
                                         child: Center(
-                                          child: Text(
-                                            '${Status[i]}',
-                                            style: TextStyle(
-                                                color: (Status_ == i + 1)
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                                fontFamily:
-                                                    FontWeight_.Fonts_T),
-                                          ),
-                                        ),
+                                            child:
+                                                Translate.TranslateAndSetText(
+                                                    '${Status[i]}',
+                                                    (Status_ == i + 1)
+                                                        ? Colors.white
+                                                        : Colors.black,
+                                                    TextAlign.center,
+                                                    FontWeight.bold,
+                                                    FontWeight_.Fonts_T,
+                                                    14,
+                                                    1)
+                                            // Text(
+                                            //   '${Status[i]}',
+                                            //   style: TextStyle(
+                                            //       color: (Status_ == i + 1)
+                                            //           ? Colors.white
+                                            //           : Colors.black,
+                                            //       fontFamily:
+                                            //           FontWeight_.Fonts_T),
+                                            // ),
+                                            ),
                                       ),
                                     )),
                             ])),

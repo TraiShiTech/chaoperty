@@ -3203,8 +3203,8 @@ class _RentalInformationState extends State<RentalInformation> {
                                                       ? _ReportValue_type_Choice
                                                       : _ReportValue_type_doc;
 
-                                  if (_ReportValue_type == 'ปกติ') { 
-                                    Pdfgen_Agreement.exportPDF_Agreement( 
+                                  if (_ReportValue_type == 'ปกติ') {
+                                    Pdfgen_Agreement.exportPDF_Agreement(
                                         context,
                                         '${widget.Get_Value_NameShop_index}',
                                         '${widget.Get_Value_cid}',
@@ -3391,41 +3391,41 @@ class _RentalInformationState extends State<RentalInformation> {
                                             _ReportValue_type_docOttor);
                                   } else if (_ReportValue_type ==
                                       'สัญญาเช่าพื้นที่') {
-                                    Pdfgen_Agreement_Ama1000
-                                        .exportPDF_Agreement_Ama1000(
-                                      context,
-                                      '${widget.Get_Value_NameShop_index}',
-                                      '${widget.Get_Value_cid}',
-                                      _verticalGroupValue,
-                                      Form_nameshop.text,
-                                      Form_typeshop.text,
-                                      Form_bussshop.text,
-                                      Form_bussscontact.text,
-                                      Form_address.text,
-                                      Form_tel.text,
-                                      Form_email.text,
-                                      Form_tax.text,
-                                      Form_ln.text,
-                                      Form_zn.text,
-                                      Form_area.text,
-                                      Form_qty.text,
-                                      Form_sdate.text,
-                                      Form_ldate.text,
-                                      Form_period.text,
-                                      Form_rtname.text,
-                                      quotxSelectModels,
-                                      _TransModels,
-                                      '$renTal_name',
-                                      '${renTalModels[0].bill_addr}',
-                                      '${renTalModels[0].bill_email}',
-                                      '${renTalModels[0].bill_tel}',
-                                      '${renTalModels[0].bill_tax}',
-                                      '${renTalModels[0].bill_name}',
-                                      newValuePDFimg,
-                                      tableData00,
-                                      TitleType_Default_Receipt_Name,
-                                      Datex_text,
-                                    );
+                                    Pdfgen_Agreement_Ama1000.exportPDF_Agreement_Ama1000(
+                                        context,
+                                        '${widget.Get_Value_NameShop_index}',
+                                        '${widget.Get_Value_cid}',
+                                        _verticalGroupValue,
+                                        Form_nameshop.text,
+                                        Form_typeshop.text,
+                                        Form_bussshop.text,
+                                        Form_bussscontact.text,
+                                        Form_address.text,
+                                        Form_tel.text,
+                                        Form_email.text,
+                                        Form_tax.text,
+                                        Form_ln.text,
+                                        Form_zn.text,
+                                        Form_area.text,
+                                        Form_qty.text,
+                                        Form_sdate.text,
+                                        Form_ldate.text,
+                                        Form_period.text,
+                                        Form_rtname.text,
+                                        quotxSelectModels,
+                                        _TransModels,
+                                        '$renTal_name',
+                                        '${renTalModels[0].bill_addr}',
+                                        '${renTalModels[0].bill_email}',
+                                        '${renTalModels[0].bill_tel}',
+                                        '${renTalModels[0].bill_tax}',
+                                        '${renTalModels[0].bill_name}',
+                                        'files/$foder/contract/${renTalModels[0].img}',
+                                        'files/$foder/contract/${renTalModels[0].imglogo}',
+                                        newValuePDFimg,
+                                        tableData00,
+                                        TitleType_Default_Receipt_Name,
+                                        Datex_text);
                                   } else if (_ReportValue_type ==
                                       'อาคารพาณิชย์') {
                                     Pdfgen_Agreement_Ortor

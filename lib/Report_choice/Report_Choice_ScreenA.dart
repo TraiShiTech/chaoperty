@@ -5379,7 +5379,13 @@ class _Report_Choice_ScreenAState extends State<Report_Choice_ScreenA> {
                                               minFontSize: 10,
                                               maxFontSize: 25,
                                               maxLines: 1,
-                                              '${nFormat.format(double.parse(teNantModels_Renew[index].deposit.toString()))}',
+                                              (teNantModels_Renew[index]
+                                                          .deposit ==
+                                                      null)
+                                                  ? teNantModels_Renew[index]
+                                                      .deposit
+                                                      .toString()
+                                                  : '${nFormat.format(double.parse(teNantModels_Renew[index].deposit.toString()))}',
                                               textAlign: TextAlign.right,
                                               overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(

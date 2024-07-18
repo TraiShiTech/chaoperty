@@ -3014,12 +3014,12 @@ class _AccountScreenState extends State<AccountScreen> {
                                                   ? Colors.blue[900]
                                                   : Colors.black,
                                             ),
-                                            Icon(
-                                              Icons.map_outlined,
-                                              color: (viewTab == 'map')
-                                                  ? Colors.blue[900]
-                                                  : Colors.black,
-                                            )
+                                            // Icon(
+                                            //   Icons.map_outlined,
+                                            //   color: (viewTab == 'map')
+                                            //       ? Colors.blue[900]
+                                            //       : Colors.black,
+                                            // )
                                           ],
                                         ),
                                       ),

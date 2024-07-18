@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Constant/Myconstant.dart';
 import '../Model/GetUser_Model.dart';
 import '../Responsive/responsive.dart';
+import 'Translate.dart';
 import 'colors.dart';
 
 dynamic Now_viewpage(context, Ser_page) async {
@@ -145,19 +146,27 @@ dynamic Now_viewpageAlldata(context, Ser_page) async {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            AutoSizeText(
-                              minFontSize: 10,
-                              maxFontSize: 20,
-                              ' ผู้ใช้งานขณะนี้ ( ${menu[int.parse(Ser_page.toString())]} )',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text1_,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T
-                                  //fontSize: 10.0
-                                  //fontSize: 10.0
-                                  ),
-                            ),
+                            Translate.TranslateAndSetText(
+                                ' ผู้ใช้งานขณะนี้ ( ${menu[int.parse(Ser_page.toString())]} )',
+                                SettingScreen_Color.Colors_Text1_,
+                                TextAlign.center,
+                                FontWeight.bold,
+                                FontWeight_.Fonts_T,
+                                16,
+                                1)
+                            // AutoSizeText(
+                            //   minFontSize: 10,
+                            //   maxFontSize: 20,
+                            //   ' ผู้ใช้งานขณะนี้ ( ${menu[int.parse(Ser_page.toString())]} )',
+                            //   textAlign: TextAlign.center,
+                            //   style: const TextStyle(
+                            //       color: PeopleChaoScreen_Color.Colors_Text1_,
+                            //       fontWeight: FontWeight.bold,
+                            //       fontFamily: FontWeight_.Fonts_T
+                            //       //fontSize: 10.0
+                            //       //fontSize: 10.0
+                            //       ),
+                            // ),
                           ],
                         ),
                       ),
@@ -189,38 +198,62 @@ dynamic Now_viewpageAlldata(context, Ser_page) async {
                               ),
                             ),
                             Expanded(
-                              flex: 1,
-                              child: Text(
-                                'Email',
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    color: AdminScafScreen_Color.Colors_Text1_,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T),
-                              ),
-                            ),
+                                flex: 1,
+                                child: Translate.TranslateAndSetText(
+                                    'Email',
+                                    SettingScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    14,
+                                    1)
+                                // Text(
+                                //   'Email',
+                                //   textAlign: TextAlign.left,
+                                //   style: TextStyle(
+                                //       color: AdminScafScreen_Color.Colors_Text1_,
+                                //       fontWeight: FontWeight.bold,
+                                //       fontFamily: FontWeight_.Fonts_T),
+                                // ),
+                                ),
                             Expanded(
-                              flex: 1,
-                              child: Text(
-                                'ชื่อ',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: AdminScafScreen_Color.Colors_Text1_,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T),
-                              ),
-                            ),
+                                flex: 1,
+                                child: Translate.TranslateAndSetText(
+                                    'ชื่อ',
+                                    SettingScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    14,
+                                    1)
+                                // Text(
+                                //   'ชื่อ',
+                                //   textAlign: TextAlign.center,
+                                //   style: TextStyle(
+                                //       color: AdminScafScreen_Color.Colors_Text1_,
+                                //       fontWeight: FontWeight.bold,
+                                //       fontFamily: FontWeight_.Fonts_T),
+                                // ),
+                                ),
                             Expanded(
-                              flex: 1,
-                              child: Text(
-                                'ตำแหน่ง',
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    color: AdminScafScreen_Color.Colors_Text1_,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T),
-                              ),
-                            ),
+                                flex: 1,
+                                child: Translate.TranslateAndSetText(
+                                    'ตำแหน่ง',
+                                    SettingScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    14,
+                                    1)
+                                //  Text(
+                                //   'ตำแหน่ง',
+                                //   textAlign: TextAlign.left,
+                                //   style: TextStyle(
+                                //       color: AdminScafScreen_Color.Colors_Text1_,
+                                //       fontWeight: FontWeight.bold,
+                                //       fontFamily: FontWeight_.Fonts_T),
+                                // ),
+                                ),
                             // Expanded(
                             //   flex: 1,
                             //   child: Text(
@@ -477,19 +510,27 @@ Widget viewpage(context, Ser_page) {
                                           ))
                                     ],
                                   ),
-                                  const AutoSizeText(
-                                    'ผู้ใช้งาน',
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.end,
-                                    minFontSize: 10,
-                                    maxFontSize: 20,
-                                    style: TextStyle(
-                                      // decoration: TextDecoration.underline,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: FontWeight_.Fonts_T,
-                                    ),
-                                  ),
+                                  Translate.TranslateAndSetText(
+                                      'ผู้ใช้งาน',
+                                      SettingScreen_Color.Colors_Text1_,
+                                      TextAlign.center,
+                                      FontWeight.bold,
+                                      FontWeight_.Fonts_T,
+                                      14,
+                                      1)
+                                  // const AutoSizeText(
+                                  //   'ผู้ใช้งาน',
+                                  //   overflow: TextOverflow.ellipsis,
+                                  //   textAlign: TextAlign.end,
+                                  //   minFontSize: 10,
+                                  //   maxFontSize: 20,
+                                  //   style: TextStyle(
+                                  //     // decoration: TextDecoration.underline,
+                                  //     color: Colors.black,
+                                  //     fontWeight: FontWeight.bold,
+                                  //     fontFamily: FontWeight_.Fonts_T,
+                                  //   ),
+                                  // ),
                                 ],
                               );
                             }

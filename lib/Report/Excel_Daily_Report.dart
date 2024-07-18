@@ -831,6 +831,10 @@ class Excgen_DailyReport {
     sheet.getRangeByName('U1').cellStyle = globalStyle22;
     sheet.getRangeByName('V1').cellStyle = globalStyle22;
 
+    sheet.getRangeByName('W1').cellStyle = globalStyle22;
+    sheet.getRangeByName('X1').cellStyle = globalStyle22;
+    sheet.getRangeByName('Y1').cellStyle = globalStyle22;
+
     // sheet.getRangeByName('O1').cellStyle = globalStyle22;
     final x.Range range = sheet.getRangeByName('E1');
     range.setText(
@@ -872,6 +876,10 @@ class Excgen_DailyReport {
     sheet.getRangeByName('U2').cellStyle = globalStyle22;
     sheet.getRangeByName('V2').cellStyle = globalStyle22;
 
+    sheet.getRangeByName('W2').cellStyle = globalStyle22;
+    sheet.getRangeByName('X2').cellStyle = globalStyle22;
+    sheet.getRangeByName('Y2').cellStyle = globalStyle22;
+
     // sheet.getRangeByName('O2').cellStyle = globalStyle22;
     sheet.getRangeByName('A2').setText('${renTal_name}');
     sheet
@@ -903,6 +911,10 @@ class Excgen_DailyReport {
     sheet.getRangeByName('T3').cellStyle = globalStyle22;
     sheet.getRangeByName('U3').cellStyle = globalStyle22;
     sheet.getRangeByName('V3').cellStyle = globalStyle22;
+    sheet.getRangeByName('W3').cellStyle = globalStyle22;
+    sheet.getRangeByName('X3').cellStyle = globalStyle22;
+    sheet.getRangeByName('Y3').cellStyle = globalStyle22;
+
     // sheet.getRangeByName('O3').cellStyle = globalStyle22;
     sheet.getRangeByName('A3').setText('ใบเสร็จ : ${TransReBillModels.length}');
     sheet.getRangeByName('B3').setText('รายการ : ${TranHisBillModels.length}');
@@ -929,6 +941,10 @@ class Excgen_DailyReport {
     sheet.getRangeByName('U3').columnWidth = 18;
     sheet.getRangeByName('V3').columnWidth = 18;
 
+    sheet.getRangeByName('W3').columnWidth = 18;
+    sheet.getRangeByName('X3').columnWidth = 18;
+    sheet.getRangeByName('Y3').columnWidth = 18;
+
     sheet.getRangeByName('A4').cellStyle = globalStyle1;
     sheet.getRangeByName('B4').cellStyle = globalStyle1;
     sheet.getRangeByName('C4').cellStyle = globalStyle1;
@@ -951,6 +967,9 @@ class Excgen_DailyReport {
     sheet.getRangeByName('T4').cellStyle = globalStyle1;
     sheet.getRangeByName('U4').cellStyle = globalStyle1;
     sheet.getRangeByName('V4').cellStyle = globalStyle1;
+    sheet.getRangeByName('W4').cellStyle = globalStyle1;
+    sheet.getRangeByName('X4').cellStyle = globalStyle1;
+    sheet.getRangeByName('Y4').cellStyle = globalStyle1;
 
     sheet.getRangeByName('A4').columnWidth = 18;
     sheet.getRangeByName('B4').columnWidth = 18;
@@ -975,6 +994,9 @@ class Excgen_DailyReport {
     sheet.getRangeByName('T4').columnWidth = 18;
     sheet.getRangeByName('U4').columnWidth = 18;
     sheet.getRangeByName('V4').columnWidth = 18;
+    sheet.getRangeByName('W4').columnWidth = 18;
+    sheet.getRangeByName('X4').columnWidth = 18;
+    sheet.getRangeByName('Y4').columnWidth = 18;
     // sheet.getRangeByName('O4').columnWidth = 18;
 
     sheet.getRangeByName('A4').setText('เลขที่');
@@ -1001,7 +1023,11 @@ class Excgen_DailyReport {
     sheet.getRangeByName('S4').setText('สถานะ');
     sheet.getRangeByName('T4').setText('อ้างถึง');
     sheet.getRangeByName('U4').setText('เลขที่สัญญา');
-    sheet.getRangeByName('V4').setText('เวลา');
+    sheet.getRangeByName('V4').setText('วันที่เริ่มต้น');
+
+    sheet.getRangeByName('W4').setText('วันที่เริ่มสิ้นสุด');
+    sheet.getRangeByName('X4').setText('ล็อกเสียบ');
+    sheet.getRangeByName('Y4').setText('เวลา');
 
     int indextotol = 0;
     int indextotol_ = 0;
@@ -1066,6 +1092,13 @@ class Excgen_DailyReport {
           sheet.getRangeByName('U${indextotol + 5 - 1}').cellStyle =
               globalStyle2220;
           sheet.getRangeByName('V${indextotol + 5 - 1}').cellStyle =
+              globalStyle2220;
+
+          sheet.getRangeByName('W${indextotol + 5 - 1}').cellStyle =
+              globalStyle2220;
+          sheet.getRangeByName('X${indextotol + 5 - 1}').cellStyle =
+              globalStyle2220;
+          sheet.getRangeByName('Y${indextotol + 5 - 1}').cellStyle =
               globalStyle2220;
 
           sheet
@@ -1144,6 +1177,25 @@ class Excgen_DailyReport {
                     : '${TranHisBillModels[index2].cid}',
               );
           sheet.getRangeByName('V${indextotol + 5 - 1}').setText(
+                (TranHisBillModels[index2].sdate == '' ||
+                        TranHisBillModels[index2].sdate == null)
+                    ? ''
+                    : '${TranHisBillModels[index2].sdate}',
+              );
+
+          sheet.getRangeByName('W${indextotol + 5 - 1}').setText(
+                (TranHisBillModels[index2].ldate == '' ||
+                        TranHisBillModels[index2].ldate == null)
+                    ? ''
+                    : '${TranHisBillModels[index2].ldate}',
+              );
+          sheet.getRangeByName('X${indextotol + 5 - 1}').setText(
+                (TranHisBillModels[index2].date_book == '' ||
+                        TranHisBillModels[index2].date_book == null)
+                    ? ''
+                    : '${TranHisBillModels[index2].date_book}',
+              );
+          sheet.getRangeByName('Y${indextotol + 5 - 1}').setText(
                 (TranHisBillModels[index2].timex == '' ||
                         TranHisBillModels[index2].timex == null)
                     ? ''
@@ -1179,6 +1231,9 @@ class Excgen_DailyReport {
       sheet.getRangeByName('T${indextotol + 5 - 1}').cellStyle = globalStyle22;
       sheet.getRangeByName('U${indextotol + 5 - 1}').cellStyle = globalStyle22;
       sheet.getRangeByName('V${indextotol + 5 - 1}').cellStyle = globalStyle22;
+      sheet.getRangeByName('W${indextotol + 5 - 1}').cellStyle = globalStyle22;
+      sheet.getRangeByName('X${indextotol + 5 - 1}').cellStyle = globalStyle22;
+      sheet.getRangeByName('Y${indextotol + 5 - 1}').cellStyle = globalStyle22;
 
       sheet
           .getRangeByName('A${indextotol + 5 - 1}')
@@ -1277,6 +1332,22 @@ class Excgen_DailyReport {
               ? ''
               : '${TranHisBillModels[index2].cid}');
       sheet.getRangeByName('V${indextotol + 5 - 1}').setText(
+          (TranHisBillModels[index2].sdate == null ||
+                  TranHisBillModels[index2].sdate == '')
+              ? ''
+              : '${TranHisBillModels[index2].sdate}');
+
+      sheet.getRangeByName('W${indextotol + 5 - 1}').setText(
+          (TranHisBillModels[index2].ldate == null ||
+                  TranHisBillModels[index2].ldate == '')
+              ? ''
+              : '${TranHisBillModels[index2].ldate}');
+      sheet.getRangeByName('X${indextotol + 5 - 1}').setText(
+          (TranHisBillModels[index2].date_book == null ||
+                  TranHisBillModels[index2].date_book == '')
+              ? ''
+              : '${TranHisBillModels[index2].date_book}');
+      sheet.getRangeByName('Y${indextotol + 5 - 1}').setText(
           (TranHisBillModels[index2].timex == null ||
                   TranHisBillModels[index2].timex == '')
               ? ''

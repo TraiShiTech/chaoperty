@@ -137,6 +137,10 @@ dependencies:
   api_guide: ^1.0.1
   syncfusion_flutter_calendar: ^20.4.54
   translator: ^0.1.7
+  infinite_canvas: ^0.0.9
+  random_color: ^1.0.6-nullsafety
+
+ 
 
 
 

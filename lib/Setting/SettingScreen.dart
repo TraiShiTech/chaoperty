@@ -17,6 +17,7 @@ import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Account/Account_Screen.dart';
+import '../Canvas/generated_nodes.dart';
 import '../ChaoArea/ChaoArea_Screen.dart';
 import '../Constant/Myconstant.dart';
 import '../Home/Home_Screen.dart';
@@ -35,6 +36,7 @@ import '../Setting_NainaService/Web_view_NainaSetting.dart';
 import '../Style/colors.dart';
 import '../Style/downloadImage.dart';
 import '../Style/view_pagenow.dart';
+
 import 'Access_Rights.dart';
 import 'Advance_Setting.dart';
 import 'Bill_Document.dart';
@@ -68,6 +70,7 @@ class _SettingScreenState extends State<SettingScreen> {
   List<DragAndDropList> _contents = <DragAndDropList>[];
   DateTime datex = DateTime.now();
   int Status_ = 1;
+  int Status_area_ = 1;
   int renTal_lavel = 0;
   final qrImageKey = GlobalKey();
   //------------------------------------------------------>
@@ -138,7 +141,10 @@ class _SettingScreenState extends State<SettingScreen> {
     'รับชำระ',
     'ประวัติบิล',
   ];
-
+  List Status_area = [
+    'ข้อมูลทั่วไป',
+    'แผนผัง',
+  ];
   String? renTal_user, renTal_name, renTal_ser, zone_ser, zone_name;
   String? rtname, type, typex, renname, pkname, ser_Zonex;
   int? pkqty, pkuser, countarae, mass_on;
@@ -1170,342 +1176,348 @@ class _SettingScreenState extends State<SettingScreen> {
                 //     ),
                 //   ],
                 // ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    decoration: const BoxDecoration(
-                      color: AppbackgroundColor.TiTile_Box,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10)),
-                      // border: Border.all(color: Colors.grey, width: 1),
-                    ),
-                    padding: const EdgeInsets.all(4.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: ScrollConfiguration(
-                              behavior: ScrollConfiguration.of(context)
-                                  .copyWith(dragDevices: {
-                                PointerDeviceKind.touch,
-                                PointerDeviceKind.mouse,
-                              }),
-                              child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: (acc_2! == '1')
-                                      ? Row(children: [
-                                          for (int i = 0;
-                                              i < Status_2.length;
-                                              i++)
-                                            Padding(
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        8, 4, 4, 2),
-                                                child: InkWell(
-                                                  onTap: () {
-                                                    print(i);
-                                                    setState(() {
-                                                      Status_ = i + 1;
-                                                    });
-                                                    // if (i == 6) {
-                                                    //   setState(() {
-                                                    //     Status_ = 9;
-                                                    //   });
-                                                    // } else {
-                                                    //   setState(() {
-                                                    //     Status_ = i + 1;
-                                                    //   });
-                                                    // }
-                                                  },
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      color: (i + 1 == 1)
-                                                          ? (Status_ == i + 1)
-                                                              ? Colors.grey[700]
-                                                              : Colors.grey[300]
-                                                          : (i + 1 == 2)
-                                                              ? (Status_ ==
+                if (Status_area_ == 1)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      decoration: const BoxDecoration(
+                        color: AppbackgroundColor.TiTile_Box,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10)),
+                        // border: Border.all(color: Colors.grey, width: 1),
+                      ),
+                      padding: const EdgeInsets.all(4.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: ScrollConfiguration(
+                                behavior: ScrollConfiguration.of(context)
+                                    .copyWith(dragDevices: {
+                                  PointerDeviceKind.touch,
+                                  PointerDeviceKind.mouse,
+                                }),
+                                child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: (acc_2! == '1')
+                                        ? Row(children: [
+                                            for (int i = 0;
+                                                i < Status_2.length;
+                                                i++)
+                                              Padding(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          8, 4, 4, 2),
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      print(i);
+                                                      setState(() {
+                                                        Status_ = i + 1;
+                                                      });
+                                                      // if (i == 6) {
+                                                      //   setState(() {
+                                                      //     Status_ = 9;
+                                                      //   });
+                                                      // } else {
+                                                      //   setState(() {
+                                                      //     Status_ = i + 1;
+                                                      //   });
+                                                      // }
+                                                    },
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        color: (i + 1 == 1)
+                                                            ? (Status_ == i + 1)
+                                                                ? Colors
+                                                                    .grey[700]
+                                                                : Colors
+                                                                    .grey[300]
+                                                            : (i + 1 == 2)
+                                                                ? (Status_ ==
+                                                                        i + 1)
+                                                                    ? Colors.red[
+                                                                        700]
+                                                                    : Colors.red[
+                                                                        200]
+                                                                : (i + 1 == 3)
+                                                                    ? (Status_ ==
+                                                                            i +
+                                                                                1)
+                                                                        ? Colors.green[
+                                                                            700]
+                                                                        : Colors.green[
+                                                                            200]
+                                                                    : (i + 1 ==
+                                                                            4)
+                                                                        ? (Status_ ==
+                                                                                i + 1)
+                                                                            ? Colors.blue[700]
+                                                                            : Colors.blue[200]
+                                                                        : (i + 1 == 5)
+                                                                            ? (Status_ == i + 1)
+                                                                                ? Colors.orange[700]
+                                                                                : Colors.orange[200]
+                                                                            : (i + 1 == 6)
+                                                                                ? (Status_ == i + 1)
+                                                                                    ? Colors.blueGrey
+                                                                                    : Colors.blueGrey[200]
+                                                                                : (i + 1 == 7)
+                                                                                    ? (Status_ == i + 1)
+                                                                                        ? Colors.deepPurple
+                                                                                        : Colors.deepPurple[200]
+                                                                                    : (i + 1 == 8)
+                                                                                        ? (Status_ == i + 1)
+                                                                                            ? Colors.brown
+                                                                                            : Colors.brown[200]
+                                                                                        : (i + 1 == 9)
+                                                                                            ? (Status_ == i + 1)
+                                                                                                ? Colors.pink
+                                                                                                : Colors.pink[200]
+                                                                                            : (Status_ == i + 1)
+                                                                                                ? Colors.yellow[600]
+                                                                                                : Colors.yellow[200],
+                                                        //     ? Colors.green
+                                                        //     : (i + 1 == 2)
+                                                        //         ? Colors.blue
+                                                        //         : (i + 1 == 3)
+                                                        //             ? Colors
+                                                        //                 .deepPurple[300]
+                                                        //             : (i + 1 == 4)
+                                                        //                 ? Colors.red
+                                                        //                 : (i + 1 == 5)
+                                                        //                     ? Colors
+                                                        //                         .orange
+                                                        //                     : (i + 1 ==
+                                                        //                             7)
+                                                        //                         ? Colors
+                                                        //                             .pink
+                                                        //                         : (i + 1 ==
+                                                        //                                 8)
+                                                        //                             ? Colors.green
+                                                        //                             : Colors.teal,
+                                                        borderRadius: const BorderRadius
+                                                                .only(
+                                                            topLeft: Radius
+                                                                .circular(10),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10)),
+                                                        border: (Status_ ==
+                                                                i + 1)
+                                                            ? Border.all(
+                                                                color: Colors
+                                                                    .white,
+                                                                width: 1)
+                                                            : null,
+                                                      ),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              6.0),
+                                                      child: Center(
+                                                        child: Text(
+                                                          '${Status_2[i]}',
+                                                          style: TextStyle(
+                                                              color: (Status_ ==
                                                                       i + 1)
-                                                                  ? Colors
-                                                                      .red[700]
+                                                                  ? Colors.white
                                                                   : Colors
-                                                                      .red[200]
-                                                              : (i + 1 == 3)
-                                                                  ? (Status_ ==
-                                                                          i + 1)
-                                                                      ? Colors.green[
-                                                                          700]
-                                                                      : Colors.green[
-                                                                          200]
-                                                                  : (i + 1 == 4)
-                                                                      ? (Status_ ==
-                                                                              i +
-                                                                                  1)
-                                                                          ? Colors.blue[
-                                                                              700]
-                                                                          : Colors.blue[
-                                                                              200]
-                                                                      : (i + 1 ==
-                                                                              5)
-                                                                          ? (Status_ == i + 1)
-                                                                              ? Colors.orange[700]
-                                                                              : Colors.orange[200]
-                                                                          : (i + 1 == 6)
-                                                                              ? (Status_ == i + 1)
-                                                                                  ? Colors.blueGrey
-                                                                                  : Colors.blueGrey[200]
-                                                                              : (i + 1 == 7)
-                                                                                  ? (Status_ == i + 1)
-                                                                                      ? Colors.deepPurple
-                                                                                      : Colors.deepPurple[200]
-                                                                                  : (i + 1 == 8)
-                                                                                      ? (Status_ == i + 1)
-                                                                                          ? Colors.brown
-                                                                                          : Colors.brown[200]
-                                                                                      : (i + 1 == 9)
-                                                                                          ? (Status_ == i + 1)
-                                                                                              ? Colors.pink
-                                                                                              : Colors.pink[200]
-                                                                                          : (Status_ == i + 1)
-                                                                                              ? Colors.yellow[600]
-                                                                                              : Colors.yellow[200],
-                                                      //     ? Colors.green
-                                                      //     : (i + 1 == 2)
-                                                      //         ? Colors.blue
-                                                      //         : (i + 1 == 3)
-                                                      //             ? Colors
-                                                      //                 .deepPurple[300]
-                                                      //             : (i + 1 == 4)
-                                                      //                 ? Colors.red
-                                                      //                 : (i + 1 == 5)
-                                                      //                     ? Colors
-                                                      //                         .orange
-                                                      //                     : (i + 1 ==
-                                                      //                             7)
-                                                      //                         ? Colors
-                                                      //                             .pink
-                                                      //                         : (i + 1 ==
-                                                      //                                 8)
-                                                      //                             ? Colors.green
-                                                      //                             : Colors.teal,
-                                                      borderRadius:
-                                                          const BorderRadius
-                                                                  .only(
-                                                              topLeft: Radius
-                                                                  .circular(10),
-                                                              topRight: Radius
-                                                                  .circular(10),
-                                                              bottomLeft: Radius
-                                                                  .circular(10),
-                                                              bottomRight:
-                                                                  Radius
-                                                                      .circular(
-                                                                          10)),
-                                                      border: (Status_ == i + 1)
-                                                          ? Border.all(
-                                                              color:
-                                                                  Colors.white,
-                                                              width: 1)
-                                                          : null,
-                                                    ),
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            6.0),
-                                                    child: Center(
-                                                      child: Text(
-                                                        '${Status_2[i]}',
-                                                        style: TextStyle(
-                                                            color: (Status_ ==
-                                                                    i + 1)
-                                                                ? Colors.white
-                                                                : Colors.black,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T),
+                                                                      .black,
+                                                              fontFamily:
+                                                                  FontWeight_
+                                                                      .Fonts_T),
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                )),
-                                        ])
-                                      : Row(children: [
-                                          for (int i = 0;
-                                              i < Status.length;
-                                              i++)
-                                            Padding(
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        8, 4, 4, 2),
-                                                child: InkWell(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      Status_ = i + 1;
-                                                    });
-                                                    // setState(() {
-                                                    //   if (i + 1 > 5) {
-                                                    //     Status_ = i + 2;
-                                                    //   } else {
-                                                    //     Status_ = i + 1;
-                                                    //   }
-                                                    // });
-                                                  },
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      color: (i + 1 == 1)
-                                                          ? (Status_ == i + 1)
-                                                              ? Colors.grey[700]
-                                                              : Colors.grey[300]
-                                                          : (i + 1 == 2)
-                                                              ? (Status_ ==
+                                                  )),
+                                          ])
+                                        : Row(children: [
+                                            for (int i = 0;
+                                                i < Status.length;
+                                                i++)
+                                              Padding(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          8, 4, 4, 2),
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        Status_ = i + 1;
+                                                      });
+                                                      // setState(() {
+                                                      //   if (i + 1 > 5) {
+                                                      //     Status_ = i + 2;
+                                                      //   } else {
+                                                      //     Status_ = i + 1;
+                                                      //   }
+                                                      // });
+                                                    },
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        color: (i + 1 == 1)
+                                                            ? (Status_ == i + 1)
+                                                                ? Colors
+                                                                    .grey[700]
+                                                                : Colors
+                                                                    .grey[300]
+                                                            : (i + 1 == 2)
+                                                                ? (Status_ ==
+                                                                        i + 1)
+                                                                    ? Colors.red[
+                                                                        700]
+                                                                    : Colors.red[
+                                                                        200]
+                                                                : (i + 1 == 3)
+                                                                    ? (Status_ ==
+                                                                            i +
+                                                                                1)
+                                                                        ? Colors.green[
+                                                                            700]
+                                                                        : Colors.green[
+                                                                            200]
+                                                                    : (i + 1 ==
+                                                                            4)
+                                                                        ? (Status_ ==
+                                                                                i + 1)
+                                                                            ? Colors.blue[700]
+                                                                            : Colors.blue[200]
+                                                                        : (i + 1 == 5)
+                                                                            ? (Status_ == i + 1)
+                                                                                ? Colors.orange[700]
+                                                                                : Colors.orange[200]
+                                                                            : (i + 1 == 6)
+                                                                                ? (Status_ == i + 1)
+                                                                                    ? Colors.blueGrey
+                                                                                    : Colors.blueGrey[200]
+                                                                                : (i + 1 == 7)
+                                                                                    ? (Status_ == i + 1)
+                                                                                        ? Colors.deepPurple
+                                                                                        : Colors.deepPurple[200]
+                                                                                    : (i + 1 == 8)
+                                                                                        ? (Status_ == i + 1)
+                                                                                            ? Colors.brown
+                                                                                            : Colors.brown[200]
+                                                                                        : (i + 1 == 9)
+                                                                                            ? (Status_ == i + 1)
+                                                                                                ? Colors.pink
+                                                                                                : Colors.pink[200]
+                                                                                            : (Status_ == i + 1)
+                                                                                                ? Colors.yellow[600]
+                                                                                                : Colors.yellow[200],
+                                                        // ? Colors.green
+                                                        // : (i + 1 == 2)
+                                                        //     ? Colors.blue
+                                                        //     : (i + 1 == 3)
+                                                        //         ? Colors
+                                                        //             .deepPurple[300]
+                                                        //         : (i + 1 == 4)
+                                                        //             ? Colors.red
+                                                        //             : (i + 1 == 5)
+                                                        //                 ? Colors
+                                                        //                     .orange
+                                                        //                 : (i + 1 ==
+                                                        //                         7)
+                                                        //                     ? Colors
+                                                        //                         .green
+                                                        //                     : (i + 1 ==
+                                                        //                             8)
+                                                        //                         ? Colors.lime.shade800
+                                                        //                         : Colors.teal,
+                                                        borderRadius: const BorderRadius
+                                                                .only(
+                                                            topLeft: Radius
+                                                                .circular(10),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10)),
+                                                        border: (Status_ ==
+                                                                i + 1)
+                                                            ? Border.all(
+                                                                color: Colors
+                                                                    .white,
+                                                                width: 1)
+                                                            : null,
+                                                      ),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              6.0),
+                                                      child: Center(
+                                                        child: Text(
+                                                          '${Status[i]}',
+                                                          style: TextStyle(
+                                                              color: (Status_ ==
                                                                       i + 1)
-                                                                  ? Colors
-                                                                      .red[700]
+                                                                  ? Colors.white
                                                                   : Colors
-                                                                      .red[200]
-                                                              : (i + 1 == 3)
-                                                                  ? (Status_ ==
-                                                                          i + 1)
-                                                                      ? Colors.green[
-                                                                          700]
-                                                                      : Colors.green[
-                                                                          200]
-                                                                  : (i + 1 == 4)
-                                                                      ? (Status_ ==
-                                                                              i +
-                                                                                  1)
-                                                                          ? Colors.blue[
-                                                                              700]
-                                                                          : Colors.blue[
-                                                                              200]
-                                                                      : (i + 1 ==
-                                                                              5)
-                                                                          ? (Status_ == i + 1)
-                                                                              ? Colors.orange[700]
-                                                                              : Colors.orange[200]
-                                                                          : (i + 1 == 6)
-                                                                              ? (Status_ == i + 1)
-                                                                                  ? Colors.blueGrey
-                                                                                  : Colors.blueGrey[200]
-                                                                              : (i + 1 == 7)
-                                                                                  ? (Status_ == i + 1)
-                                                                                      ? Colors.deepPurple
-                                                                                      : Colors.deepPurple[200]
-                                                                                  : (i + 1 == 8)
-                                                                                      ? (Status_ == i + 1)
-                                                                                          ? Colors.brown
-                                                                                          : Colors.brown[200]
-                                                                                      : (i + 1 == 9)
-                                                                                          ? (Status_ == i + 1)
-                                                                                              ? Colors.pink
-                                                                                              : Colors.pink[200]
-                                                                                          : (Status_ == i + 1)
-                                                                                              ? Colors.yellow[600]
-                                                                                              : Colors.yellow[200],
-                                                      // ? Colors.green
-                                                      // : (i + 1 == 2)
-                                                      //     ? Colors.blue
-                                                      //     : (i + 1 == 3)
-                                                      //         ? Colors
-                                                      //             .deepPurple[300]
-                                                      //         : (i + 1 == 4)
-                                                      //             ? Colors.red
-                                                      //             : (i + 1 == 5)
-                                                      //                 ? Colors
-                                                      //                     .orange
-                                                      //                 : (i + 1 ==
-                                                      //                         7)
-                                                      //                     ? Colors
-                                                      //                         .green
-                                                      //                     : (i + 1 ==
-                                                      //                             8)
-                                                      //                         ? Colors.lime.shade800
-                                                      //                         : Colors.teal,
-                                                      borderRadius:
-                                                          const BorderRadius
-                                                                  .only(
-                                                              topLeft: Radius
-                                                                  .circular(10),
-                                                              topRight: Radius
-                                                                  .circular(10),
-                                                              bottomLeft: Radius
-                                                                  .circular(10),
-                                                              bottomRight:
-                                                                  Radius
-                                                                      .circular(
-                                                                          10)),
-                                                      border: (Status_ == i + 1)
-                                                          ? Border.all(
-                                                              color:
-                                                                  Colors.white,
-                                                              width: 1)
-                                                          : null,
-                                                    ),
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            6.0),
-                                                    child: Center(
-                                                      child: Text(
-                                                        '${Status[i]}',
-                                                        style: TextStyle(
-                                                            color: (Status_ ==
-                                                                    i + 1)
-                                                                ? Colors.white
-                                                                : Colors.black,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T),
+                                                                      .black,
+                                                              fontFamily:
+                                                                  FontWeight_
+                                                                      .Fonts_T),
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                )),
-                                        ])),
+                                                  )),
+                                          ])),
+                              ),
                             ),
                           ),
-                        ),
-                        // Padding(
-                        //   padding: const EdgeInsets.all(8.0),
-                        //   child: InkWell(
-                        //     onTap: () {
-                        //       setState(() {
-                        //         Status_ = 7;
-                        //       });
-                        //     },
-                        //     child: Container(
-                        //       decoration: BoxDecoration(
-                        //         color: Colors.purpleAccent,
-                        //         borderRadius: const BorderRadius.only(
-                        //             topLeft: Radius.circular(10),
-                        //             topRight: Radius.circular(10),
-                        //             bottomLeft: Radius.circular(10),
-                        //             bottomRight: Radius.circular(10)),
-                        //         border: (Status_ == 6)
-                        //             ? Border.all(color: Colors.white, width: 1)
-                        //             : null,
-                        //       ),
-                        //       padding: const EdgeInsets.all(8.0),
-                        //       width: 120,
-                        //       // height: 30,
-                        //       child: Center(
-                        //         child: Text(
-                        //           'ข้อมูลผู้ใช้งาน',
-                        //           style: TextStyle(
-                        //               color: (Status_ == 7)
-                        //                   ? Colors.white
-                        //                   : Colors.black,
-                        //               fontFamily: FontWeight_.Fonts_T),
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // )
-                      ],
+                          // Padding(
+                          //   padding: const EdgeInsets.all(8.0),
+                          //   child: InkWell(
+                          //     onTap: () {
+                          //       setState(() {
+                          //         Status_ = 7;
+                          //       });
+                          //     },
+                          //     child: Container(
+                          //       decoration: BoxDecoration(
+                          //         color: Colors.purpleAccent,
+                          //         borderRadius: const BorderRadius.only(
+                          //             topLeft: Radius.circular(10),
+                          //             topRight: Radius.circular(10),
+                          //             bottomLeft: Radius.circular(10),
+                          //             bottomRight: Radius.circular(10)),
+                          //         border: (Status_ == 6)
+                          //             ? Border.all(color: Colors.white, width: 1)
+                          //             : null,
+                          //       ),
+                          //       padding: const EdgeInsets.all(8.0),
+                          //       width: 120,
+                          //       // height: 30,
+                          //       child: Center(
+                          //         child: Text(
+                          //           'ข้อมูลผู้ใช้งาน',
+                          //           style: TextStyle(
+                          //               color: (Status_ == 7)
+                          //                   ? Colors.white
+                          //                   : Colors.black,
+                          //               fontFamily: FontWeight_.Fonts_T),
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ),
+                          // )
+                        ],
+                      ),
                     ),
                   ),
-                ),
+
                 (!Responsive.isDesktop(context))
                     ? BodyHome_mobile()
                     : BodyHome_Web()
@@ -1518,7 +1530,52 @@ class _SettingScreenState extends State<SettingScreen> {
     return Column(
       children: [
         (Status_ == 1)
-            ? Status1_Web()
+            ? Column(
+                children: [
+                  Row(
+                    children: [
+                      for (int i = 0; i < Status_area.length; i++)
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(8, 4, 4, 2),
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                Status_area_ = i + 1;
+                              });
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: (Status_area_ == i + 1)
+                                    ? Colors.grey[700]
+                                    : Colors.grey[300],
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                border: (Status_area_ == i + 1)
+                                    ? Border.all(color: Colors.white, width: 1)
+                                    : null,
+                              ),
+                              padding: const EdgeInsets.all(6.0),
+                              child: Center(
+                                child: Text(
+                                  '${Status_area[i]}',
+                                  style: TextStyle(
+                                      color: (Status_area_ == i + 1)
+                                          ? Colors.white
+                                          : Colors.black,
+                                      fontFamily: FontWeight_.Fonts_T),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                  (Status_area_ == 1) ? Status1_Web() : GeneratedNodes(),
+                ],
+              )
             : (Status_ == 2)
                 ? Status2_Web()
                 : (Status_ == 3)

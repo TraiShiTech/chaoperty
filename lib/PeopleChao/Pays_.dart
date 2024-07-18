@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
 import 'dart:io' as dio;
+import 'dart:math';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:chaoperty/PeopleChao/webviewPay.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -537,7 +538,7 @@ class _PaysState extends State<Pays> {
       if (result.toString() != 'true') {
         for (var map in result) {
           TransPakanModel transPakanModel = TransPakanModel.fromJson(map);
-          var sum_P = double.parse(transPakanModel.total!);
+          var sum_P = double.parse(transPakanModel.pvat!);
           setState(() {
             sum_Pakan = sum_Pakan + sum_P;
             transPakanModels.add(transPakanModel);
@@ -863,6 +864,7 @@ class _PaysState extends State<Pays> {
               paymentSer1 = serx.toString();
               paymentName1 = ptnamex.toString();
               selectedValue = _PayMentModel.bno.toString();
+              newValuePDFimg_QR = _PayMentModel.img.toString();
               bname1 = _PayMentModel.bname.toString();
               fine_total = fine_amt;
               Form_payment1.text =
@@ -1481,6 +1483,29 @@ class _PaysState extends State<Pays> {
     });
   }
 
+  Future<Null> check_payment_status(cFinn, sumall) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    var ciddoc = widget.Get_Value_cid;
+    var cFinnref = cFinn;
+    var total_QRsend = sumall;
+    print('check_payment_status');
+    String url =
+        '${MyConstant().domain}/check_status_qr_img.php?ren=$ren&ref_id=$Refpay_1&incid=$ciddoc&sum=$total_QRsend&cFinnref=$cFinnref';
+    print(url);
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print(result);
+      // if (result.toString() != 'null') {
+
+      // } else{
+
+      // }
+    } catch (e) {}
+  }
+
   Future<Null> red_Trans_select2_fin() async {
     if (transFineModels.isNotEmpty) {
       setState(() {
@@ -1684,7 +1709,8 @@ class _PaysState extends State<Pays> {
             sum_pvat = sum_pvat + sum_pvatx;
             sum_vat = sum_vat + sum_vatx;
             sum_wht = sum_wht + sum_whtx;
-            sum_amt = sum_amt + sum_amtx;
+            // sum_amt = sum_amt + sum_amtx;
+            sum_amt = double.parse((sum_amt + sum_amtx).toStringAsFixed(2));
             sum_disamt = sum_disamtx;
             sum_disp = sum_dispx;
             numinvoice = _InvoiceHistoryModel.docno;
@@ -1706,7 +1732,8 @@ class _PaysState extends State<Pays> {
             sum_pvat = sum_pvat + sum_pvatx;
             sum_vat = sum_vat + sum_vatx;
             sum_wht = sum_wht + sum_whtx;
-            sum_amt = sum_amt + sum_amtx;
+            // sum_amt = sum_amt + sum_amtx;
+            sum_amt = double.parse((sum_amt + sum_amtx).toStringAsFixed(2));
             sum_disamt = sum_disamtx;
             sum_disp = sum_dispx;
             numinvoice = _InvoiceHistoryModel.docno;
@@ -11032,7 +11059,10 @@ class _PaysState extends State<Pays> {
                             paymentName2.toString().trim() == 'เงินโอน' ||
                             paymentName1.toString().trim() ==
                                 'Online Payment' ||
-                            paymentName2.toString().trim() == 'Online Payment')
+                            paymentName2.toString().trim() ==
+                                'Online Payment' ||
+                            payment_ptSer1 == '8' ||
+                            payment_ptSer2 == '8')
                           Row(
                             children: [
                               Expanded(
@@ -11331,7 +11361,10 @@ class _PaysState extends State<Pays> {
                             paymentName2.toString().trim() == 'เงินโอน' ||
                             paymentName1.toString().trim() ==
                                 'Online Payment' ||
-                            paymentName2.toString().trim() == 'Online Payment')
+                            paymentName2.toString().trim() ==
+                                'Online Payment' ||
+                            payment_ptSer1 == '8' ||
+                            payment_ptSer2 == '8')
                           Container(
                             decoration: const BoxDecoration(
                               color: AppbackgroundColor.Sub_Abg_Colors,
@@ -12264,8 +12297,8 @@ class _PaysState extends State<Pays> {
                                                                               padding: const EdgeInsets.all(8.0),
                                                                               child: Container(
                                                                                   color: Colors.grey,
-                                                                                  width: 200,
-                                                                                  height: 200,
+                                                                                  // width: 200,
+                                                                                  // height: 200,
                                                                                   child: (newValuePDFimg_QR == null || newValuePDFimg_QR.toString() == '')
                                                                                       ? Icon(
                                                                                           Icons.image_not_supported,
@@ -12722,6 +12755,206 @@ class _PaysState extends State<Pays> {
                         SizedBox(
                           height: 10,
                         ),
+                        (payment_ptSer1.toString().trim() == '8' ||
+                                payment_ptSer2.toString().trim() == '8')
+                            ? InkWell(
+                                child: Container(
+                                    width: 800,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      color: Colors.deepPurple[400],
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: const Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
+                                      // border: Border.all(color: Colors.white, width: 1),
+                                    ),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.qr_code,
+                                          color: Colors.white,
+                                        ),
+                                        Center(
+                                            child: Text(
+                                          'QR SCAN',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T),
+                                        )),
+                                      ],
+                                    )),
+                                onTap: () async {
+                                  // Gen_QRAPI();
+                                  print('Refpay_1>$Refpay_1');
+                                  if ((double.parse(
+                                              '${(Form_payment1.text == null || Form_payment1.text == '') ? 0.00 : Form_payment1.text}') +
+                                          double.parse(
+                                              '${(Form_payment2.text == null || Form_payment2.text == '') ? 0.00 : Form_payment2.text}')) ==
+                                      0.0) {
+                                    _showMyDialogPay_Error(
+                                        'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ! ');
+                                  } else {
+                                    if (Refpay_1 == null) {
+                                      Gen_QRAPI();
+                                    } else {
+                                      Gen_QRAPINEW();
+                                    }
+                                  }
+
+                                  // showDialog<String>(
+                                  //   context: context,
+                                  //   builder: (BuildContext context) =>
+                                  //       AlertDialog(
+                                  //     shape: const RoundedRectangleBorder(
+                                  //         borderRadius: BorderRadius.all(
+                                  //             Radius.circular(20.0))),
+                                  //     title: const Center(
+                                  //         child: Text(
+                                  //       'ยืนยัน Generator QR อีกใหม่อีกครั้ง ?',
+                                  //       style: TextStyle(
+                                  //           color: AdminScafScreen_Color
+                                  //               .Colors_Text1_,
+                                  //           fontWeight: FontWeight.bold,
+                                  //           fontFamily: FontWeight_.Fonts_T),
+                                  //     )),
+                                  //     actions: <Widget>[
+                                  //       Column(
+                                  //         children: [
+                                  //           const SizedBox(
+                                  //             height: 5.0,
+                                  //           ),
+                                  //           const Divider(
+                                  //             color: Colors.grey,
+                                  //             height: 4.0,
+                                  //           ),
+                                  //           const SizedBox(
+                                  //             height: 5.0,
+                                  //           ),
+                                  //           Padding(
+                                  //             padding:
+                                  //                 const EdgeInsets.all(8.0),
+                                  //             child: Row(
+                                  //               mainAxisAlignment:
+                                  //                   MainAxisAlignment.center,
+                                  //               children: [
+                                  //                 Padding(
+                                  //                   padding:
+                                  //                       const EdgeInsets.all(
+                                  //                           8.0),
+                                  //                   child: Container(
+                                  //                     width: 100,
+                                  //                     decoration:
+                                  //                         const BoxDecoration(
+                                  //                       color: Colors.green,
+                                  //                       borderRadius:
+                                  //                           BorderRadius.only(
+                                  //                               topLeft: Radius
+                                  //                                   .circular(
+                                  //                                       10),
+                                  //                               topRight: Radius
+                                  //                                   .circular(
+                                  //                                       10),
+                                  //                               bottomLeft: Radius
+                                  //                                   .circular(
+                                  //                                       10),
+                                  //                               bottomRight: Radius
+                                  //                                   .circular(
+                                  //                                       10)),
+                                  //                     ),
+                                  //                     padding:
+                                  //                         const EdgeInsets.all(
+                                  //                             8.0),
+                                  //                     child: TextButton(
+                                  //                       onPressed: () async {
+                                  //                         Navigator.pop(
+                                  //                             context, 'OK');
+                                  //                        Gen_QRAPI();
+                                  //                       },
+                                  //                       child: const Text(
+                                  //                         'ยืนยัน',
+                                  //                         style: TextStyle(
+                                  //                             color:
+                                  //                                 Colors.white,
+                                  //                             fontWeight:
+                                  //                                 FontWeight
+                                  //                                     .bold,
+                                  //                             fontFamily:
+                                  //                                 FontWeight_
+                                  //                                     .Fonts_T),
+                                  //                       ),
+                                  //                     ),
+                                  //                   ),
+                                  //                 ),
+                                  //                 Padding(
+                                  //                   padding:
+                                  //                       const EdgeInsets.all(
+                                  //                           8.0),
+                                  //                   child: Row(
+                                  //                     mainAxisAlignment:
+                                  //                         MainAxisAlignment
+                                  //                             .center,
+                                  //                     children: [
+                                  //                       Container(
+                                  //                         width: 100,
+                                  //                         decoration:
+                                  //                             const BoxDecoration(
+                                  //                           color: Colors
+                                  //                               .redAccent,
+                                  //                           borderRadius: BorderRadius.only(
+                                  //                               topLeft: Radius
+                                  //                                   .circular(
+                                  //                                       10),
+                                  //                               topRight: Radius
+                                  //                                   .circular(
+                                  //                                       10),
+                                  //                               bottomLeft: Radius
+                                  //                                   .circular(
+                                  //                                       10),
+                                  //                               bottomRight: Radius
+                                  //                                   .circular(
+                                  //                                       10)),
+                                  //                         ),
+                                  //                         padding:
+                                  //                             const EdgeInsets
+                                  //                                 .all(8.0),
+                                  //                         child: TextButton(
+                                  //                           onPressed: () =>
+                                  //                               Navigator.pop(
+                                  //                                   context,
+                                  //                                   'OK'),
+                                  //                           child: const Text(
+                                  //                             'ยกเลิก',
+                                  //                             style: TextStyle(
+                                  //                                 color: Colors
+                                  //                                     .white,
+                                  //                                 fontWeight:
+                                  //                                     FontWeight
+                                  //                                         .bold,
+                                  //                                 fontFamily:
+                                  //                                     FontWeight_
+                                  //                                         .Fonts_T),
+                                  //                           ),
+                                  //                         ),
+                                  //                       ),
+                                  //                     ],
+                                  //                   ),
+                                  //                 ),
+                                  //               ],
+                                  //             ),
+                                  //           ),
+                                  //         ],
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // );
+                                })
+                            : SizedBox(),
                         (paymentName1.toString().trim() == 'Beam Checkout' ||
                                 paymentName2.toString().trim() ==
                                     'Beam Checkout' ||
@@ -13924,7 +14157,9 @@ class _PaysState extends State<Pays> {
           if (paymentName1.toString().trim() == 'เงินโอน' ||
               paymentName2.toString().trim() == 'เงินโอน' ||
               paymentName1.toString().trim() == 'Online Payment' ||
-              paymentName2.toString().trim() == 'Online Payment') {
+              paymentName2.toString().trim() == 'Online Payment' ||
+              payment_ptSer1.toString().trim() == '8' ||
+              payment_ptSer2.toString().trim() == '8') {
             // if (base64_Slip != null) {
             try {
               OKuploadFile_Slip();
@@ -14014,7 +14249,9 @@ class _PaysState extends State<Pays> {
           if (paymentName1.toString().trim() == 'เงินโอน' ||
               paymentName2.toString().trim() == 'เงินโอน' ||
               paymentName1.toString().trim() == 'Online Payment' ||
-              paymentName2.toString().trim() == 'Online Payment') {
+              paymentName2.toString().trim() == 'Online Payment' ||
+              payment_ptSer1.toString().trim() == '8' ||
+              payment_ptSer2.toString().trim() == '8') {
             // if (base64_Slip != null) {
             try {
               final tableData00 = [
@@ -14130,7 +14367,9 @@ class _PaysState extends State<Pays> {
           if (paymentName1.toString().trim() == 'เงินโอน' ||
               paymentName2.toString().trim() == 'เงินโอน' ||
               paymentName1.toString().trim() == 'Online Payment' ||
-              paymentName2.toString().trim() == 'Online Payment') {
+              paymentName2.toString().trim() == 'Online Payment' ||
+              payment_ptSer1.toString().trim() == '8' ||
+              payment_ptSer2.toString().trim() == '8') {
             // if (base64_Slip != null) {
             try {
               OKuploadFile_Slip();
@@ -14210,7 +14449,9 @@ class _PaysState extends State<Pays> {
           if (paymentName1.toString().trim() == 'เงินโอน' ||
               paymentName2.toString().trim() == 'เงินโอน' ||
               paymentName1.toString().trim() == 'Online Payment' ||
-              paymentName2.toString().trim() == 'Online Payment') {
+              paymentName2.toString().trim() == 'Online Payment' ||
+              payment_ptSer1.toString().trim() == '8' ||
+              payment_ptSer2.toString().trim() == '8') {
             // if (base64_Slip != null) {
             try {
               OKuploadFile_Slip();
@@ -14300,7 +14541,9 @@ class _PaysState extends State<Pays> {
           if (paymentName1.toString().trim() == 'เงินโอน' ||
               paymentName2.toString().trim() == 'เงินโอน' ||
               paymentName1.toString().trim() == 'Online Payment' ||
-              paymentName2.toString().trim() == 'Online Payment') {
+              paymentName2.toString().trim() == 'Online Payment' ||
+              payment_ptSer1.toString().trim() == '8' ||
+              payment_ptSer2.toString().trim() == '8') {
             // if (base64_Slip != null) {
             try {
               final tableData00 = [
@@ -14416,7 +14659,9 @@ class _PaysState extends State<Pays> {
           if (paymentName1.toString().trim() == 'เงินโอน' ||
               paymentName2.toString().trim() == 'เงินโอน' ||
               paymentName1.toString().trim() == 'Online Payment' ||
-              paymentName2.toString().trim() == 'Online Payment') {
+              paymentName2.toString().trim() == 'Online Payment' ||
+              payment_ptSer1.toString().trim() == '8' ||
+              payment_ptSer2.toString().trim() == '8') {
             // if (base64_Slip != null) {
             try {
               OKuploadFile_Slip();
@@ -14499,7 +14744,9 @@ class _PaysState extends State<Pays> {
           if (paymentName1.toString().trim() == 'เงินโอน' ||
               paymentName2.toString().trim() == 'เงินโอน' ||
               paymentName1.toString().trim() == 'Online Payment' ||
-              paymentName2.toString().trim() == 'Online Payment') {
+              paymentName2.toString().trim() == 'Online Payment' ||
+              payment_ptSer1.toString().trim() == '8' ||
+              payment_ptSer2.toString().trim() == '8') {
             // if (base64_Slip != null) {
             try {
               OKuploadFile_Slip();
@@ -14593,7 +14840,9 @@ class _PaysState extends State<Pays> {
           if (paymentName1.toString().trim() == 'เงินโอน' ||
               paymentName2.toString().trim() == 'เงินโอน' ||
               paymentName1.toString().trim() == 'Online Payment' ||
-              paymentName2.toString().trim() == 'Online Payment') {
+              paymentName2.toString().trim() == 'Online Payment' ||
+              payment_ptSer1.toString().trim() == '8' ||
+              payment_ptSer2.toString().trim() == '8') {
             // if (base64_Slip != null) {
             try {
               final tableData00 = [
@@ -14713,7 +14962,9 @@ class _PaysState extends State<Pays> {
           if (paymentName1.toString().trim() == 'เงินโอน' ||
               paymentName2.toString().trim() == 'เงินโอน' ||
               paymentName1.toString().trim() == 'Online Payment' ||
-              paymentName2.toString().trim() == 'Online Payment') {
+              paymentName2.toString().trim() == 'Online Payment' ||
+              payment_ptSer1.toString().trim() == '8' ||
+              payment_ptSer2.toString().trim() == '8') {
             // if (base64_Slip != null) {
             try {
               OKuploadFile_Slip();
@@ -16302,14 +16553,18 @@ class _PaysState extends State<Pays> {
     var comment = Form_note.text.toString();
     var fine_total_amt = nFormat.format(fine_total + fine_total2);
 
-    var bill = bills_name_ == 'บิลธรรมดา' ? 'P' : 'F';
+    // var bill = bills_name_ == 'บิลธรรมดา' ? 'P' : 'F';
+    var bill =
+        (bills_name_.toString() == 'บิลธรรมดา' || bills_name_.toString() == 'P')
+            ? 'P'
+            : 'F';
     print('in_Trans_invoice_P()///$fileName_Slip_');
-
+    var Refpay1 = (Refpay_1 == null) ? '' : Refpay_1;
     print('$sumdis  $pSer1  $pSer2 $time');
 
     String url = pamentpage == 0
-        ? '${MyConstant().domain}/In_tran_financet_P1.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&fine_total_amt=$fine_total_amt'
-        : '${MyConstant().domain}/In_tran_financet_P2.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&fine_total_amt=$fine_total_amt';
+        ? '${MyConstant().domain}/In_tran_financet_P1.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&fine_total_amt=$fine_total_amt&refpay=$Refpay1'
+        : '${MyConstant().domain}/In_tran_financet_P2.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&fine_total_amt=$fine_total_amt&refpay=$Refpay1';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -16328,6 +16583,13 @@ class _PaysState extends State<Pays> {
           print(
               ' in_Trans_invoice_P///bnobnobnobno123454>>>>  ${cFinnancetransModel.bno}');
         }
+
+        if (paymentSer1 == '8' || paymentSer2 == '8') {
+          var sumall = (double.parse(Form_payment1.text.toString()) +
+              double.parse(Form_payment2.text.toString()));
+          check_payment_status(cFinn, sumall);
+        }
+
         Insert_log.Insert_logs(
             'บัญชี',
             (select_page.toString() == '2')
@@ -16355,6 +16617,7 @@ class _PaysState extends State<Pays> {
             // Value_newDateD = '';
             discount_ = null;
             base64_Slip = null;
+            Refpay_1 = null;
             tableData00 = [];
           });
         });
@@ -16498,7 +16761,11 @@ class _PaysState extends State<Pays> {
     var dateY = Value_newDateY;
     var dateY1 = Value_newDateY1;
     var time = Form_time.text;
-    var bill = bills_name_ == 'บิลธรรมดา' ? 'P' : 'F';
+    // var bill = bills_name_ == 'บิลธรรมดา' ? 'P' : 'F';
+    var bill =
+        (bills_name_.toString() == 'บิลธรรมดา' || bills_name_.toString() == 'P')
+            ? 'P'
+            : 'F';
     var dis_akan = dis_sum_Pakan.toString();
     var dis_Matjum = dis_sum_Matjum.toString();
     //pamentpage == 0
@@ -16534,6 +16801,11 @@ class _PaysState extends State<Pays> {
           print('in_Trans_invoice///zzzzasaaa123454>>>>  $cFinn');
           print(
               'in_Trans_invoice///bnobnobnobno123454>>>>  ${cFinnancetransModel.docno} ///${cFinnancetransModel.doctax} ');
+        }
+        if (paymentSer1 == '8' || paymentSer2 == '8') {
+          var sumall = (double.parse(Form_payment1.text.toString()) +
+              double.parse(Form_payment2.text.toString()));
+          check_payment_status(cFinn, sumall);
         }
         if (paymentName1.toString().trim() == 'Beam Checkout' ||
             paymentName2.toString().trim() == 'Beam Checkout' ||
@@ -16637,16 +16909,21 @@ class _PaysState extends State<Pays> {
     var pSer2 = paymentSer2;
     var ref = numinvoice;
     var sum_whta = sum_wht.toString();
-    var bill = bills_name_ == 'บิลธรรมดา' ? 'P' : 'F';
+    // var bill = bills_name_ == 'บิลธรรมดา' ? 'P' : 'F';
+    var bill =
+        (bills_name_.toString() == 'บิลธรรมดา' || bills_name_.toString() == 'P')
+            ? 'P'
+            : 'F';
     var sum_fine = sum_tran_fine;
     var comment = Form_note.text.toString();
     var fine_total_amt = nFormat.format(fine_total + fine_total2);
     print('in_Trans_invoice_refno_p()///$fileName_Slip_');
     print('$sumdis  $pSer1  $pSer2 $time');
+    var Refpay1 = (Refpay_1 == null) ? '' : Refpay_1;
 
     String url = pamentpage == 0
-        ? '${MyConstant().domain}/In_tran_finanref_P1.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&ref=$ref&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&sum_fine=$sum_fine&fine_total_amt=$fine_total_amt'
-        : '${MyConstant().domain}/In_tran_finanref_P2.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&ref=$ref&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&sum_fine=$sum_fine&fine_total_amt=$fine_total_amt';
+        ? '${MyConstant().domain}/In_tran_finanref_P1.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&ref=$ref&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&sum_fine=$sum_fine&fine_total_amt=$fine_total_amt&refpay=$Refpay1'
+        : '${MyConstant().domain}/In_tran_finanref_P2.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&ref=$ref&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&sum_fine=$sum_fine&fine_total_amt=$fine_total_amt&refpay=$Refpay1';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -16665,7 +16942,11 @@ class _PaysState extends State<Pays> {
           print(
               ' in_Trans_invoice_P///bnobnobnobno123454>>>>  ${cFinnancetransModel.bno}');
         }
-
+        if (paymentSer1 == '8' || paymentSer2 == '8') {
+          var sumall = (double.parse(Form_payment1.text.toString()) +
+              double.parse(Form_payment2.text.toString()));
+          check_payment_status(cFinn, sumall);
+        }
         Insert_log.Insert_logs(
             'บัญชี',
             (select_page.toString() == '2')
@@ -16704,6 +16985,7 @@ class _PaysState extends State<Pays> {
             _InvoiceModels.clear();
             _InvoiceHistoryModels.clear();
             numinvoice = null;
+            Refpay_1 = null;
           });
         });
 
@@ -16743,16 +17025,21 @@ class _PaysState extends State<Pays> {
     var pSer2 = paymentSer2;
     var ref = numinvoice;
     var sum_whta = sum_wht.toString();
-    var bill = bills_name_ == 'บิลธรรมดา' ? 'P' : 'F';
+    // var bill = bills_name_ == 'บิลธรรมดา' ? 'P' : 'F';
+    var bill =
+        (bills_name_.toString() == 'บิลธรรมดา' || bills_name_.toString() == 'P')
+            ? 'P'
+            : 'F';
     var comment = Form_note.text.toString();
     var sum_fine = sum_tran_fine;
     var fine_total_amt = nFormat.format(fine_total + fine_total2);
+    var Refpay1 = (Refpay_1 == null) ? '' : Refpay_1;
     // print('in_Trans_invoice_refno()///$fileName_Slip_');
     // print('in_Trans_invoice_refno >>> $payment1  $payment2  $bill ');
 
     String url = pamentpage == 0
-        ? '${MyConstant().domain}/In_tran_finanref1.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&ref=$ref&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&dis_Pakan=$dis_akan&dis_Matjum=$dis_Matjum&sum_fine=$sum_fine&fine_total_amt=$fine_total_amt'
-        : '${MyConstant().domain}/In_tran_finanref2.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&ref=$ref&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&dis_Pakan=$dis_akan&dis_Matjum=$dis_Matjum&sum_fine=$sum_fine&fine_total_amt=$fine_total_amt';
+        ? '${MyConstant().domain}/In_tran_finanref1.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&ref=$ref&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&dis_Pakan=$dis_akan&dis_Matjum=$dis_Matjum&sum_fine=$sum_fine&fine_total_amt=$fine_total_amt&refpay=$Refpay1'
+        : '${MyConstant().domain}/In_tran_finanref2.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&ref=$ref&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&dis_Pakan=$dis_akan&dis_Matjum=$dis_Matjum&sum_fine=$sum_fine&fine_total_amt=$fine_total_amt&refpay=$Refpay1';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -16771,6 +17058,11 @@ class _PaysState extends State<Pays> {
           print('zzzzasaaa123454>>>>  $cFinn');
           print(
               'in_Trans_invoice_refno bno123454>>>>  ${cFinnancetransModel.bno}//// ${cFinnancetransModel.doctax}');
+        }
+        if (paymentSer1 == '8' || paymentSer2 == '8') {
+          var sumall = (double.parse(Form_payment1.text.toString()) +
+              double.parse(Form_payment2.text.toString()));
+          check_payment_status(cFinn, sumall);
         }
         if (paymentName1.toString().trim() == 'Beam Checkout' ||
             paymentName2.toString().trim() == 'Beam Checkout' ||
@@ -16837,6 +17129,7 @@ class _PaysState extends State<Pays> {
             _InvoiceModels.clear();
             _InvoiceHistoryModels.clear();
             numinvoice = null;
+            Refpay_1 = null;
           });
           print('rrrrrrrrrrrrrr');
           //////-------------------------------->
@@ -16881,15 +17174,20 @@ class _PaysState extends State<Pays> {
     var pSer2 = paymentSer2;
     var ref = numinvoice;
     var sum_whta = sum_wht.toString();
-    var bill = bills_name_ == 'บิลธรรมดา' ? 'P' : 'F';
+    // var bill = bills_name_ == 'บิลธรรมดา' ? 'P' : 'F';
+    var bill =
+        (bills_name_.toString() == 'บิลธรรมดา' || bills_name_.toString() == 'P')
+            ? 'P'
+            : 'F';
     var comment = Form_note.text.toString();
     var fine_total_amt = nFormat.format(fine_total + fine_total2);
     print('in_Trans_re_invoice_refno()///$fileName_Slip_');
     print('in_Trans_invoice>>> $payment1  $payment2 $bill');
+    var Refpay1 = (Refpay_1 == null) ? '' : Refpay_1;
 
     String url = pamentpage == 0
-        ? '${MyConstant().domain}/In_tran_re_finanref1.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&ref=$ref&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&dis_Pakan=$dis_akan&dis_Matjum=$dis_Matjum&fine_total_amt=$fine_total_amt'
-        : '${MyConstant().domain}/In_tran_re_finanref2.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&ref=$ref&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&dis_Pakan=$dis_akan&dis_Matjum=$dis_Matjum&fine_total_amt=$fine_total_amt';
+        ? '${MyConstant().domain}/In_tran_re_finanref1.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&ref=$ref&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&dis_Pakan=$dis_akan&dis_Matjum=$dis_Matjum&fine_total_amt=$fine_total_amt&refpay=$Refpay1'
+        : '${MyConstant().domain}/In_tran_re_finanref2.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user&sumdis=$sumdis&sumdisp=$sumdisp&dateY=$dateY&dateY1=$dateY1&time=$time&payment1=$payment1&payment2=$payment2&pSer1=$pSer1&pSer2=$pSer2&ref=$ref&sum_whta=$sum_whta&bill=$bill&fileNameSlip=$fileName_Slip_&comment=$comment&dis_Pakan=$dis_akan&dis_Matjum=$dis_Matjum&fine_total_amt=$fine_total_amt&refpay=$Refpay1';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -16907,6 +17205,11 @@ class _PaysState extends State<Pays> {
           print('zzzzasaaa123454>>>>  $cFinn');
           print(
               'in_Trans_re_invoice_refno bno123454>>>>  ${cFinnancetransModel.bno} // ${cFinnancetransModel.doctax}');
+        }
+        if (paymentSer1 == '8' || paymentSer2 == '8') {
+          var sumall = (double.parse(Form_payment1.text.toString()) +
+              double.parse(Form_payment2.text.toString()));
+          check_payment_status(cFinn, sumall);
         }
         if (paymentName1.toString().trim() == 'Beam Checkout' ||
             paymentName2.toString().trim() == 'Beam Checkout' ||
@@ -16975,6 +17278,7 @@ class _PaysState extends State<Pays> {
             _InvoiceHistoryModels.clear();
             numinvoice = null;
             cFinn = null;
+            Refpay_1 = null;
           });
           print('rrrrrrrrrrrrrr');
           //////-------------------------------->
@@ -17325,6 +17629,560 @@ class _PaysState extends State<Pays> {
                             fontSize: 12,
                             color: Colors.red,
                             fontFamily: Font_.Fonts_T),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ));
+      },
+    );
+  }
+
+  var _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  Random _rnd = Random();
+
+  String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
+      length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+
+  Future<Null> Gen_QRAPI() async {
+    var day = DateTime.now().toUtc().millisecondsSinceEpoch;
+    var refpay = getRandomString(10);
+    var refpay2 =
+        '${DateFormat('ddMM').format(DateFormat('dd-MM-yyyy').parse(Value_newDateD.toString()))}${int.parse('${DateFormat('yyyy').format(DateFormat('dd-MM-yyyy').parse(Value_newDateD.toString()))}') + 543}';
+    var Bno = (payment_ptSer1.toString().trim() == '8')
+        ? selectedValue
+        : (payment_ptSer2.toString().trim() == '8')
+            ? selectedValue2
+            : '';
+    var text1 = (payment_ptSer1.toString().trim() == '8')
+        ? (Form_payment1.text == null || Form_payment1.text == '')
+            ? 0.00
+            : Form_payment1.text
+        : 0.00;
+    var text2 = (payment_ptSer2.toString().trim() == '8')
+        ? (Form_payment2.text == null || Form_payment2.text == '')
+            ? 0.00
+            : Form_payment2.text
+        : 0.00;
+    var cid = widget.Get_Value_cid;
+    String total_QR =
+        '${nFormat.format(double.parse('${text1}') + double.parse('${text2}'))}';
+    String newTotal_QR = total_QR.replaceAll(RegExp(r'[^0-9]'), '');
+
+    var total_QRsend = (double.parse('${text1}') + double.parse('${text2}'));
+    setState(() {
+      Refpay_1 = refpay;
+      Refpay_2 = refpay2;
+    });
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+            insetPadding: EdgeInsets.all(5),
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            // title: Row(
+            //   mainAxisAlignment:
+            //       MainAxisAlignment.end,
+            //   children: [
+            //     Icon(
+            //       Icons.cancel,
+            //       color: Colors.red,
+            //       size: 30,
+            //     )
+            //   ],
+            // ),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  SizedBox(
+                    height: 20,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context, 'OK');
+                          },
+                          child: Icon(
+                            Icons.cancel,
+                            color: Colors.red,
+                            size: 22,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 1),
+                  Divider(),
+                  SizedBox(height: 1),
+                  StreamBuilder(
+                      stream: Stream.periodic(const Duration(seconds: 0)),
+                      builder: (context, snapshot) {
+                        return Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                child: Text(
+                                  'Online Standard QR',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T),
+                                ),
+                              ),
+                            ),
+                            Divider(),
+                            // Align(
+                            //   alignment: Alignment.centerLeft,
+                            //   child: Text(
+                            //     'บช. : $Bno',
+                            //     style: TextStyle(
+                            //         fontSize: 14,
+                            //         color: Colors.grey,
+                            //         fontFamily: Font_.Fonts_T),
+                            //   ),
+                            // ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'ref1 : $Refpay_1',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                    fontFamily: Font_.Fonts_T),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'ref2 : ${Refpay_2}',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                    fontFamily: Font_.Fonts_T),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'จำนวนเงิน : ${total_QR} ',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                    fontFamily: Font_.Fonts_T),
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
+                  SizedBox(height: 1),
+                  Divider(),
+                  SizedBox(height: 1),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Center(
+                      child: Text(
+                        'SCAN ME',
+                        style: TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: FontWeight_.Fonts_T),
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: TimerCountdown(
+                      format: CountDownTimerFormat.minutesSeconds,
+                      minutesDescription: 'นาที',
+                      secondsDescription: 'วินาที',
+                      timeTextStyle: TextStyle(
+                          color: Colors.orange,
+                          // fontWeight:
+                          //     FontWeight.bold,
+                          fontFamily: Font_.Fonts_T),
+                      endTime: DateTime.now().add(
+                        Duration(
+                          minutes: 15,
+                          seconds: 1,
+                        ),
+                      ),
+                      onEnd: () {
+                        Navigator.pop(context, 'OK');
+                      },
+                    ),
+                  ),
+                  StreamBuilder(
+                      stream: Stream.periodic(const Duration(seconds: 0)),
+                      builder: (context, snapshot) {
+                        return Column(
+                          children: [
+                            Container(
+                              width: 500,
+                              height: 500,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                      '${MyConstant().domain}/gen_qr_img.php?ren=$ren&ref_id=$Refpay_1&incid=$cid&sum=$total_QRsend&extension=.png'),
+                                ),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(0),
+                                    bottomRight: Radius.circular(0)),
+                              ),
+                            )
+                          ],
+                        );
+                      }),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Center(
+                      child: Text(
+                        '(หากปิดหรือรีเฟรช QR Code จะถูกสร้างใหม่)',
+                        style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.red,
+                            fontFamily: Font_.Fonts_T),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ));
+      },
+    );
+  }
+
+  Future<Null> Gen_QRAPINEW() async {
+    var day = DateTime.now().toUtc().millisecondsSinceEpoch;
+    // var refpay = getRandomString(10);
+    // var refpay2 =
+    //     '${DateFormat('ddMM').format(DateFormat('dd-MM-yyyy').parse(Value_newDateD.toString()))}${int.parse('${DateFormat('yyyy').format(DateFormat('dd-MM-yyyy').parse(Value_newDateD.toString()))}') + 543}';
+    var Bno = (payment_ptSer1.toString().trim() == '8')
+        ? selectedValue
+        : (payment_ptSer2.toString().trim() == '8')
+            ? selectedValue2
+            : '';
+    var text1 = (payment_ptSer1.toString().trim() == '8')
+        ? (Form_payment1.text == null || Form_payment1.text == '')
+            ? 0.00
+            : Form_payment1.text
+        : 0.00;
+    var text2 = (payment_ptSer2.toString().trim() == '8')
+        ? (Form_payment2.text == null || Form_payment2.text == '')
+            ? 0.00
+            : Form_payment2.text
+        : 0.00;
+    var cid = widget.Get_Value_cid;
+    String total_QR =
+        '${nFormat.format(double.parse('${text1}') + double.parse('${text2}'))}';
+    String newTotal_QR = total_QR.replaceAll(RegExp(r'[^0-9]'), '');
+
+    var total_QRsend = (double.parse('${text1}') + double.parse('${text2}'));
+    // setState(() {
+    //   Refpay_1 = refpay;
+    //   Refpay_2 = refpay2;
+    // });
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+            insetPadding: EdgeInsets.all(5),
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            // title: Row(
+            //   mainAxisAlignment:
+            //       MainAxisAlignment.end,
+            //   children: [
+            //     Icon(
+            //       Icons.cancel,
+            //       color: Colors.red,
+            //       size: 30,
+            //     )
+            //   ],
+            // ),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  SizedBox(
+                    height: 20,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context, 'OK');
+                          },
+                          child: Icon(
+                            Icons.cancel,
+                            color: Colors.red,
+                            size: 22,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 1),
+                  Divider(),
+                  SizedBox(height: 1),
+                  StreamBuilder(
+                      stream: Stream.periodic(const Duration(seconds: 0)),
+                      builder: (context, snapshot) {
+                        return Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                child: Text(
+                                  'Online Standard QR',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T),
+                                ),
+                              ),
+                            ),
+                            Divider(),
+                            // Align(
+                            //   alignment: Alignment.centerLeft,
+                            //   child: Text(
+                            //     'บช. : $Bno',
+                            //     style: TextStyle(
+                            //         fontSize: 14,
+                            //         color: Colors.grey,
+                            //         fontFamily: Font_.Fonts_T),
+                            //   ),
+                            // ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'ref1 : $Refpay_1',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                    fontFamily: Font_.Fonts_T),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'ref2 : ${Refpay_2}',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                    fontFamily: Font_.Fonts_T),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'จำนวนเงิน : ${total_QR} ',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                    fontFamily: Font_.Fonts_T),
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
+                  SizedBox(height: 1),
+                  Divider(),
+                  SizedBox(height: 1),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Center(
+                      child: Text(
+                        'SCAN ME',
+                        style: TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: FontWeight_.Fonts_T),
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: TimerCountdown(
+                      format: CountDownTimerFormat.minutesSeconds,
+                      minutesDescription: 'นาที',
+                      secondsDescription: 'วินาที',
+                      timeTextStyle: TextStyle(
+                          color: Colors.orange,
+                          // fontWeight:
+                          //     FontWeight.bold,
+                          fontFamily: Font_.Fonts_T),
+                      endTime: DateTime.now().add(
+                        Duration(
+                          minutes: 15,
+                          seconds: 1,
+                        ),
+                      ),
+                      onEnd: () {
+                        Navigator.pop(context, 'OK');
+                      },
+                    ),
+                  ),
+                  StreamBuilder(
+                      stream: Stream.periodic(const Duration(seconds: 0)),
+                      builder: (context, snapshot) {
+                        return Column(
+                          children: [
+                            Container(
+                              width: 500,
+                              height: 500,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                      '${MyConstant().domain}/gen_qr_img.php?ren=$ren&ref_id=$Refpay_1&incid=$cid&sum=$total_QRsend&extension=.png'),
+                                ),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(0),
+                                    bottomRight: Radius.circular(0)),
+                              ),
+                            )
+                          ],
+                        );
+                      }),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0))),
+                            title: const Center(
+                                child: Text(
+                              'ยืนยัน Generator QR อีกใหม่อีกครั้ง ?',
+                              style: TextStyle(
+                                  color: AdminScafScreen_Color.Colors_Text1_,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: FontWeight_.Fonts_T),
+                            )),
+                            actions: <Widget>[
+                              Column(
+                                children: [
+                                  const SizedBox(
+                                    height: 5.0,
+                                  ),
+                                  const Divider(
+                                    color: Colors.grey,
+                                    height: 4.0,
+                                  ),
+                                  const SizedBox(
+                                    height: 5.0,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Container(
+                                            width: 100,
+                                            decoration: const BoxDecoration(
+                                              color: Colors.green,
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(10),
+                                                  topRight: Radius.circular(10),
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                  bottomRight:
+                                                      Radius.circular(10)),
+                                            ),
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: TextButton(
+                                              onPressed: () async {
+                                                Navigator.pop(context, 'OK');
+                                                Gen_QRAPI();
+                                              },
+                                              child: const Text(
+                                                'ยืนยัน',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                width: 100,
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.redAccent,
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          topLeft: Radius
+                                                              .circular(10),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  10),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  10),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  10)),
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          context, 'OK'),
+                                                  child: const Text(
+                                                    'ยกเลิก',
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontFamily: FontWeight_
+                                                            .Fonts_T),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      child: Center(
+                        child: Text(
+                          '(หากปิดหรือรีเฟรช QR Code จะถูกสร้างใหม่)',
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.red,
+                              fontFamily: Font_.Fonts_T),
+                        ),
                       ),
                     ),
                   ),

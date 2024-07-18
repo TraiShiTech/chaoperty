@@ -16,6 +16,7 @@ import '../PDF_TP5/PDF_Receipt_TP5/pdf_AC_his_statusbill_TP5.dart';
 import '../PDF_TP6/PDF_Receipt_TP6/pdf_AC_his_statusbill_TP6.dart';
 import '../PDF_TP7/PDF_Receipt_TP7/pdf_AC_his_statusbill_TP7.dart';
 import '../PDF_TP8/PDF_Receipt_TP8/pdf_AC_his_statusbill_TP8.dart';
+import '../PDF_TP8_Choice/PDF_Receipt_TP8_Choice/pdf_AC_his_statusbill_TP8_Choice.dart';
 import '../PDF_TP9_Lao/PDF_Receipt_TP9/pdf_AC_his_statusbill_TP9.dart';
 import '../PDF_TP8_Ortorkor/PDF_Receipt_TP8_Ortorkor/pdf_AC_his_statusbill_TP8.dart';
 
@@ -55,8 +56,7 @@ class ManPay_Receipt_PDF {
     var qutser = '';
     var docnoin = docno;
     var pdate;
-    var fonts_pdf = 
-    (rt_Language.toString().trim() == 'LA')
+    var fonts_pdf = (rt_Language.toString().trim() == 'LA')
         ? await 'fonts/NotoSansLao.ttf'
         : await 'fonts/THSarabunNew.ttf';
     var nFormat = (rt_Language.toString().trim() == 'LA')
@@ -607,6 +607,51 @@ class ManPay_Receipt_PDF {
             rtser.toString() == '93' ||
             rtser.toString() == '94') {
           Pdfgen_his_statusbill_TP8_Ortorkor.exportPDF_statusbill_TP8_Ortorkor(
+              Cust_no,
+              cid_,
+              Zone_s,
+              Ln_s,
+              fname,
+              foder,
+              tableData00,
+              tableData01,
+              context,
+              _TransReBillHistoryModels,
+              'Num_cid',
+              'Namenew',
+              '${sum_pvat}',
+              sum_vat,
+              sum_wht,
+              sum_amt,
+              sum_disp,
+              sum_disamt,
+              '${(sum_amt - sum_disamt)}',
+              renTal_name,
+              scname_,
+              cname_,
+              addr_,
+              tax_,
+              bill_addr,
+              bill_email,
+              bill_tel,
+              bill_tax,
+              bill_name,
+              newValuePDFimg,
+              numinvoice,
+              numdoctax,
+              ref_invoice,
+              finnancetransModels,
+              date_Transaction,
+              date_pay,
+              Howto_LockJonPay,
+              dis_sum_Matjum,
+              TitleType_Default_Receipt_Name,
+              dis_sum_Pakan,
+              sum_fee,
+              com_ment,
+              fonts_pdf);
+        } else if (rtser.toString() == '106') {
+          Pdfgen_his_statusbill_TP8_Choice.exportPDF_statusbill_TP8_Choice(
               Cust_no,
               cid_,
               Zone_s,

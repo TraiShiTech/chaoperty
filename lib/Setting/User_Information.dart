@@ -17,7 +17,6 @@ import '../Responsive/responsive.dart';
 import '../Style/Translate.dart';
 import '../Style/colors.dart';
 import 'package:http/http.dart' as http;
-import 'package:translator/translator.dart';
 
 class USerInformation extends StatefulWidget {
   const USerInformation({super.key});
@@ -144,76 +143,6 @@ class _USerInformationState extends State<USerInformation> {
     Navigator.pop(context, 'OK');
   }
 
-  // Future<String> _translateText(String text) async {
-  //   SharedPreferences preferences = await SharedPreferences.getInstance();
-  //   var Lang = preferences.getString('Language') ?? 'th';
-  //   if (Lang.toString() == 'th') {
-  //     return text;
-  //   } else {
-  //     var translation = await translator.translate(
-  //       text,
-  //       to: '$Lang',
-  //     );
-  //     return (Lang.toString() == 'th') ? text : translation.text ?? text;
-  //   }
-  // }
-
-  // Widget _translateAndSetText(
-  //   String text,
-  //   Color? color,
-  //   TextAlign? textAlign,
-  //   FontWeight? fontWeight,
-  //   String? fontFamily,
-  //   double? fontSize,
-  //   int? maxLines,
-  // ) {
-  //   return FutureBuilder<String>(
-  //     future: _translateText(text),
-  //     builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-  //       if (snapshot.connectionState == ConnectionState.waiting) {
-  //         return Text(
-  //           'Translating...',
-  //           overflow: TextOverflow.ellipsis,
-  //           maxLines: maxLines ?? 14,
-  //           textAlign: textAlign,
-  //           style: TextStyle(
-  //             color: color,
-  //             fontFamily: fontFamily,
-  //             fontWeight: fontWeight ?? FontWeight.w400,
-  //             fontSize: fontSize ?? 14,
-  //           ),
-  //         );
-  //       } else if (snapshot.hasError) {
-  //         return Text(
-  //           'Error: ${snapshot.error}',
-  //           overflow: TextOverflow.ellipsis,
-  //           maxLines: maxLines ?? 14,
-  //           textAlign: textAlign,
-  //           style: TextStyle(
-  //             color: color,
-  //             fontFamily: fontFamily,
-  //             fontWeight: fontWeight ?? FontWeight.w400,
-  //             fontSize: fontSize ?? 14,
-  //           ),
-  //         );
-  //       } else {
-  //         return Text(
-  //           snapshot.data ?? 'Translation error',
-  //           overflow: TextOverflow.ellipsis,
-  //           maxLines: maxLines ?? 14,
-  //           textAlign: textAlign,
-  //           style: TextStyle(
-  //             color: color,
-  //             fontFamily: fontFamily,
-  //             fontWeight: fontWeight ?? FontWeight.w400,
-  //             fontSize: fontSize ?? 14,
-  //           ),
-  //         );
-  //       }
-  //     },
-  //   );
-  // }
-
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
@@ -237,17 +166,25 @@ class _USerInformationState extends State<USerInformation> {
           Row(
             children: [
               Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'ข้อมูลผู้ใช้',
-                  style: TextStyle(
-                    color: SettingScreen_Color.Colors_Text1_,
-                    fontFamily: FontWeight_.Fonts_T,
-                    fontWeight: FontWeight.bold,
-                    //fontSize: 10.0
+                  padding: EdgeInsets.all(8.0),
+                  child: Translate.TranslateAndSetText(
+                      'ข้อมูลผู้ใช้',
+                      SettingScreen_Color.Colors_Text1_,
+                      TextAlign.center,
+                      FontWeight.bold,
+                      FontWeight_.Fonts_T,
+                      14,
+                      1)
+                  // Text(r
+                  //   'ข้อมูลผู้ใช้',
+                  //   style: TextStyle(
+                  //     color: SettingScreen_Color.Colors_Text1_,
+                  //     fontFamily: FontWeight_.Fonts_T,
+                  //     fontWeight: FontWeight.bold,
+                  //     //fontSize: 10.0
+                  //   ),
+                  // ),
                   ),
-                ),
-              ),
               InkWell(
                 child: Container(
                   decoration: const BoxDecoration(
@@ -263,16 +200,24 @@ class _USerInformationState extends State<USerInformation> {
                   ),
                   padding: const EdgeInsets.all(3.0),
                   child: Row(
-                    children: const [
-                      Text(
-                        'แก้ไข',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: FontWeight_.Fonts_T,
-                          fontWeight: FontWeight.bold,
-                          //fontSize: 10.0
-                        ),
-                      ),
+                    children: [
+                      Translate.TranslateAndSetText(
+                          'แก้ไข',
+                          Colors.white,
+                          TextAlign.center,
+                          FontWeight.bold,
+                          FontWeight_.Fonts_T,
+                          14,
+                          1),
+                      // Text(
+                      //   'แก้ไข',
+                      //   style: TextStyle(
+                      //     color: Colors.white,
+                      //     fontFamily: FontWeight_.Fonts_T,
+                      //     fontWeight: FontWeight.bold,
+                      //     //fontSize: 10.0
+                      //   ),
+                      // ),
                       Icon(
                         Icons.edit,
                         color: Colors.white,
@@ -290,15 +235,24 @@ class _USerInformationState extends State<USerInformation> {
                         shape: const RoundedRectangleBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20.0))),
-                        title: const Center(
-                            child: Text(
-                          'แก้ไขข้อมูลผู้ใช้',
-                          style: TextStyle(
-                            color: SettingScreen_Color.Colors_Text1_,
-                            fontFamily: FontWeight_.Fonts_T,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )),
+                        title: Center(
+                          child: Translate.TranslateAndSetText(
+                              'แก้ไขข้อมูลผู้ใช้',
+                              SettingScreen_Color.Colors_Text1_,
+                              TextAlign.center,
+                              FontWeight.bold,
+                              FontWeight_.Fonts_T,
+                              16,
+                              1),
+                          //  Text(
+                          //   'แก้ไขข้อมูลผู้ใช้',
+                          //   style: TextStyle(
+                          //     color: SettingScreen_Color.Colors_Text1_,
+                          //     fontFamily: FontWeight_.Fonts_T,
+                          //     fontWeight: FontWeight.bold,
+                          //   ),
+                          // ),
+                        ),
                         content: Container(
                           // height: MediaQuery.of(context).size.height / 1.5,
                           width: (!Responsive.isDesktop(context))
@@ -319,19 +273,27 @@ class _USerInformationState extends State<USerInformation> {
                               children: [
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
-                                  children: const [
+                                  children: [
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text(
-                                        'ชื่อ-นามสกุล',
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                          color:
-                                              SettingScreen_Color.Colors_Text1_,
-                                          fontFamily: FontWeight_.Fonts_T,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
+                                      child: Translate.TranslateAndSetText(
+                                          'ชื่อ-นามสกุล',
+                                          SettingScreen_Color.Colors_Text1_,
+                                          TextAlign.center,
+                                          FontWeight.bold,
+                                          FontWeight_.Fonts_T,
+                                          14,
+                                          1),
+                                      // Text(
+                                      //   'ชื่อ-นามสกุล',
+                                      //   textAlign: TextAlign.left,
+                                      //   style: TextStyle(
+                                      //     color:
+                                      //         SettingScreen_Color.Colors_Text1_,
+                                      //     fontFamily: FontWeight_.Fonts_T,
+                                      //     fontWeight: FontWeight.bold,
+                                      //   ),
+                                      // ),
                                     ),
                                     // Padding(
                                     //   padding: EdgeInsets.all(8.0),
@@ -414,7 +376,7 @@ class _USerInformationState extends State<USerInformation> {
                                                     color: Colors.grey,
                                                   ),
                                                 ),
-                                                labelText: 'ชื่อ',
+                                                // labelText: 'ชื่อ',
                                                 labelStyle: const TextStyle(
                                                   color: Colors.black54,
                                                   fontFamily:
@@ -499,7 +461,7 @@ class _USerInformationState extends State<USerInformation> {
                                                     color: Colors.grey,
                                                   ),
                                                 ),
-                                                labelText: 'นามสกุล',
+                                                // labelText: 'นามสกุล',
                                                 labelStyle: const TextStyle(
                                                   color: Colors.black54,
                                                   fontFamily:
@@ -540,19 +502,27 @@ class _USerInformationState extends State<USerInformation> {
                                 //   ],
                                 // ),
                                 Row(
-                                  children: const [
+                                  children: [
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text(
-                                        'อีเมล',
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                          color:
-                                              SettingScreen_Color.Colors_Text1_,
-                                          fontFamily: FontWeight_.Fonts_T,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
+                                      child: Translate.TranslateAndSetText(
+                                          'อีเมล',
+                                          SettingScreen_Color.Colors_Text1_,
+                                          TextAlign.center,
+                                          FontWeight.bold,
+                                          FontWeight_.Fonts_T,
+                                          14,
+                                          1),
+                                      // Text(
+                                      //   'อีเมล',
+                                      //   textAlign: TextAlign.left,
+                                      //   style: TextStyle(
+                                      //     color:
+                                      //         SettingScreen_Color.Colors_Text1_,
+                                      //     fontFamily: FontWeight_.Fonts_T,
+                                      //     fontWeight: FontWeight.bold,
+                                      //   ),
+                                      // ),
                                     ),
                                   ],
                                 ),
@@ -607,7 +577,7 @@ class _USerInformationState extends State<USerInformation> {
                                               color: Colors.grey,
                                             ),
                                           ),
-                                          labelText: 'อีเมล',
+                                          // labelText: 'อีเมล',
                                           labelStyle: const TextStyle(
                                             color: Colors.black54,
                                             fontFamily: FontWeight_.Fonts_T,
@@ -627,19 +597,27 @@ class _USerInformationState extends State<USerInformation> {
                                   ),
                                 ),
                                 Row(
-                                  children: const [
+                                  children: [
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text(
-                                        'เบอร์โทร-ตำแหน่ง',
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                          color:
-                                              SettingScreen_Color.Colors_Text1_,
-                                          fontFamily: FontWeight_.Fonts_T,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
+                                      child: Translate.TranslateAndSetText(
+                                          'เบอร์โทร-ตำแหน่ง',
+                                          SettingScreen_Color.Colors_Text1_,
+                                          TextAlign.center,
+                                          FontWeight.bold,
+                                          FontWeight_.Fonts_T,
+                                          14,
+                                          1),
+                                      //  Text(
+                                      //   'เบอร์โทร-ตำแหน่ง',
+                                      //   textAlign: TextAlign.left,
+                                      //   style: TextStyle(
+                                      //     color:
+                                      //         SettingScreen_Color.Colors_Text1_,
+                                      //     fontFamily: FontWeight_.Fonts_T,
+                                      //     fontWeight: FontWeight.bold,
+                                      //   ),
+                                      // ),
                                     ),
                                   ],
                                 ),
@@ -709,7 +687,7 @@ class _USerInformationState extends State<USerInformation> {
                                                     color: Colors.grey,
                                                   ),
                                                 ),
-                                                labelText: 'เบอร์โทร',
+                                                // labelText: 'เบอร์โทร',
                                                 labelStyle: const TextStyle(
                                                   color: Colors.black54,
                                                   fontFamily:
@@ -790,7 +768,7 @@ class _USerInformationState extends State<USerInformation> {
                                                     color: Colors.grey,
                                                   ),
                                                 ),
-                                                labelText: 'ตำแหน่ง',
+                                                // labelText: 'ตำแหน่ง',
                                                 labelStyle: const TextStyle(
                                                   color: Colors.black54,
                                                   fontFamily:
@@ -860,14 +838,22 @@ class _USerInformationState extends State<USerInformation> {
                                               Resetdata2(context);
                                             }
                                           },
-                                          child: const Text(
-                                            'บันทึก',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: FontWeight_.Fonts_T,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
+                                          child: Translate.TranslateAndSetText(
+                                              'บันทึก',
+                                              Colors.white,
+                                              TextAlign.center,
+                                              FontWeight.bold,
+                                              FontWeight_.Fonts_T,
+                                              14,
+                                              1),
+                                          // const Text(
+                                          //   'บันทึก',
+                                          //   style: TextStyle(
+                                          //     color: Colors.white,
+                                          //     fontFamily: FontWeight_.Fonts_T,
+                                          //     fontWeight: FontWeight.bold,
+                                          //   ),
+                                          // ),
                                         ),
                                       ),
                                     ),
@@ -887,14 +873,22 @@ class _USerInformationState extends State<USerInformation> {
                                         child: TextButton(
                                           onPressed: () =>
                                               Navigator.pop(context, 'OK'),
-                                          child: const Text(
-                                            'ยกเลิก',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: FontWeight_.Fonts_T,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
+                                          child: Translate.TranslateAndSetText(
+                                              'ยกเลิก',
+                                              Colors.white,
+                                              TextAlign.center,
+                                              FontWeight.bold,
+                                              FontWeight_.Fonts_T,
+                                              14,
+                                              1),
+                                          // const Text(
+                                          //   'ยกเลิก',
+                                          //   style: TextStyle(
+                                          //     color: Colors.white,
+                                          //     fontFamily: FontWeight_.Fonts_T,
+                                          //     fontWeight: FontWeight.bold,
+                                          //   ),
+                                          // ),
                                         ),
                                       ),
                                     ),
@@ -1119,17 +1113,26 @@ class _USerInformationState extends State<USerInformation> {
           ),
           Row(
             children: [
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'รหัสผ่าน : ',
-                  style: TextStyle(
-                    color: SettingScreen_Color.Colors_Text1_,
-                    fontFamily: FontWeight_.Fonts_T,
-                    fontWeight: FontWeight.bold,
-                    //fontSize: 10.0
-                  ),
-                ),
+                child: Translate.TranslateAndSetText(
+                    'แก้ไข',
+                    SettingScreen_Color.Colors_Text1_,
+                    TextAlign.left,
+                    FontWeight.bold,
+                    FontWeight_.Fonts_T,
+                    14,
+                    1),
+
+                // Text(
+                //   'รหัสผ่าน : ',
+                //   style: TextStyle(
+                //     color: SettingScreen_Color.Colors_Text1_,
+                //     fontFamily: FontWeight_.Fonts_T,
+                //     fontWeight: FontWeight.bold,
+                //     //fontSize: 10.0
+                //   ),
+                // ),
               ),
               InkWell(
                 child: Container(
@@ -1146,16 +1149,24 @@ class _USerInformationState extends State<USerInformation> {
                   ),
                   padding: const EdgeInsets.all(3.0),
                   child: Row(
-                    children: const [
-                      Text(
-                        'แก้ไข',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: FontWeight_.Fonts_T,
-                          fontWeight: FontWeight.bold,
-                          //fontSize: 10.0
-                        ),
-                      ),
+                    children: [
+                      Translate.TranslateAndSetText(
+                          'แก้ไข',
+                          Colors.white,
+                          TextAlign.left,
+                          FontWeight.bold,
+                          FontWeight_.Fonts_T,
+                          14,
+                          1),
+                      // Text(
+                      //   'แก้ไข',
+                      //   style: TextStyle(
+                      //     color: Colors.white,
+                      //     fontFamily: FontWeight_.Fonts_T,
+                      //     fontWeight: FontWeight.bold,
+                      //     //fontSize: 10.0
+                      //   ),
+                      // ),
                       Icon(
                         Icons.edit,
                         color: Colors.white,
@@ -1173,15 +1184,24 @@ class _USerInformationState extends State<USerInformation> {
                         shape: const RoundedRectangleBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20.0))),
-                        title: const Center(
-                            child: Text(
-                          'แก้ไขรหัสผ่าน',
-                          style: TextStyle(
-                            color: SettingScreen_Color.Colors_Text1_,
-                            fontFamily: FontWeight_.Fonts_T,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )),
+                        title: Center(
+                          child: Translate.TranslateAndSetText(
+                              'แก้ไขรหัสผ่าน',
+                              SettingScreen_Color.Colors_Text1_,
+                              TextAlign.center,
+                              FontWeight.bold,
+                              FontWeight_.Fonts_T,
+                              16,
+                              1),
+                          // Text(
+                          //   'แก้ไขรหัสผ่าน',
+                          //   style: TextStyle(
+                          //     color: SettingScreen_Color.Colors_Text1_,
+                          //     fontFamily: FontWeight_.Fonts_T,
+                          //     fontWeight: FontWeight.bold,
+                          //   ),
+                          // ),
+                        ),
                         content: Container(
                           // height: MediaQuery.of(context).size.height / 1.5,
                           width: (!Responsive.isDesktop(context))
@@ -1201,19 +1221,27 @@ class _USerInformationState extends State<USerInformation> {
                               // mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Row(
-                                  children: const [
+                                  children: [
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text(
-                                        'รหัสผ่านใหม่',
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                          color:
-                                              SettingScreen_Color.Colors_Text1_,
-                                          fontFamily: FontWeight_.Fonts_T,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
+                                      child: Translate.TranslateAndSetText(
+                                          'รหัสผ่านใหม่',
+                                          SettingScreen_Color.Colors_Text1_,
+                                          TextAlign.center,
+                                          FontWeight.bold,
+                                          FontWeight_.Fonts_T,
+                                          14,
+                                          1),
+                                      //  Text(
+                                      //   'รหัสผ่านใหม่',
+                                      //   textAlign: TextAlign.left,
+                                      //   style: TextStyle(
+                                      //     color:
+                                      //         SettingScreen_Color.Colors_Text1_,
+                                      //     fontFamily: FontWeight_.Fonts_T,
+                                      //     fontWeight: FontWeight.bold,
+                                      //   ),
+                                      // ),
                                     ),
                                   ],
                                 ),
@@ -1268,7 +1296,7 @@ class _USerInformationState extends State<USerInformation> {
                                               color: Colors.grey,
                                             ),
                                           ),
-                                          labelText: 'รหัสผ่านใหม่',
+                                          // labelText: 'รหัสผ่านใหม่',
                                           labelStyle: const TextStyle(
                                             color: Colors.black54,
                                             fontFamily: FontWeight_.Fonts_T,
@@ -1281,19 +1309,27 @@ class _USerInformationState extends State<USerInformation> {
                                   ),
                                 ),
                                 Row(
-                                  children: const [
+                                  children: [
                                     Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text(
-                                        'ยืนยันรหัสผ่าน',
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                          color:
-                                              SettingScreen_Color.Colors_Text1_,
-                                          fontFamily: FontWeight_.Fonts_T,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
+                                      child: Translate.TranslateAndSetText(
+                                          'ยืนยันรหัสผ่าน',
+                                          SettingScreen_Color.Colors_Text1_,
+                                          TextAlign.center,
+                                          FontWeight.bold,
+                                          FontWeight_.Fonts_T,
+                                          14,
+                                          1),
+                                      // Text(
+                                      //   'ยืนยันรหัสผ่าน',
+                                      //   textAlign: TextAlign.left,
+                                      //   style: TextStyle(
+                                      //     color:
+                                      //         SettingScreen_Color.Colors_Text1_,
+                                      //     fontFamily: FontWeight_.Fonts_T,
+                                      //     fontWeight: FontWeight.bold,
+                                      //   ),
+                                      // ),
                                     ),
                                   ],
                                 ),
@@ -1348,7 +1384,7 @@ class _USerInformationState extends State<USerInformation> {
                                               color: Colors.grey,
                                             ),
                                           ),
-                                          labelText: 'ยืนยันรหัสผ่าน',
+                                          // labelText: 'ยืนยันรหัสผ่าน',
                                           labelStyle: const TextStyle(
                                             color: Colors.black54,
                                             fontFamily: FontWeight_.Fonts_T,
@@ -1403,14 +1439,24 @@ class _USerInformationState extends State<USerInformation> {
                                                   Pasw2_text.text) {
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(
-                                                  const SnackBar(
-                                                      content: Text(
-                                                          'รหัสผ่านไม่ตรงกัน กรุณาลองใหม่ !',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontFamily: Font_
-                                                                  .Fonts_T))),
+                                                  SnackBar(
+                                                    content: Translate
+                                                        .TranslateAndSetText(
+                                                            'รหัสผ่านไม่ตรงกัน กรุณาลองใหม่ !',
+                                                            Colors.white,
+                                                            TextAlign.left,
+                                                            FontWeight.bold,
+                                                            FontWeight_.Fonts_T,
+                                                            14,
+                                                            1),
+                                                    //  Text(
+                                                    //     'รหัสผ่านไม่ตรงกัน กรุณาลองใหม่ !',
+                                                    //     style: TextStyle(
+                                                    //         color:
+                                                    //             Colors.white,
+                                                    //         fontFamily: Font_
+                                                    //             .Fonts_T))
+                                                  ),
                                                 );
                                               } else {
                                                 setState(() {
@@ -1434,14 +1480,22 @@ class _USerInformationState extends State<USerInformation> {
                                               }
                                             }
                                           },
-                                          child: const Text(
-                                            'บันทึก',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: FontWeight_.Fonts_T,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
+                                          child: Translate.TranslateAndSetText(
+                                              'บันทึก',
+                                              Colors.white,
+                                              TextAlign.left,
+                                              FontWeight.bold,
+                                              FontWeight_.Fonts_T,
+                                              14,
+                                              1),
+                                          //  const Text(
+                                          //   'บันทึก',
+                                          //   style: TextStyle(
+                                          //     color: Colors.white,
+                                          //     fontFamily: FontWeight_.Fonts_T,
+                                          //     fontWeight: FontWeight.bold,
+                                          //   ),
+                                          // ),
                                         ),
                                       ),
                                     ),
@@ -1461,14 +1515,22 @@ class _USerInformationState extends State<USerInformation> {
                                         child: TextButton(
                                           onPressed: () =>
                                               Navigator.pop(context, 'OK'),
-                                          child: const Text(
-                                            'ยกเลิก',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: FontWeight_.Fonts_T,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
+                                          child: Translate.TranslateAndSetText(
+                                              'ยกเลิก',
+                                              Colors.white,
+                                              TextAlign.left,
+                                              FontWeight.bold,
+                                              FontWeight_.Fonts_T,
+                                              14,
+                                              1),
+                                          //  Text(
+                                          //   'ยกเลิก',
+                                          //   style: TextStyle(
+                                          //     color: Colors.white,
+                                          //     fontFamily: FontWeight_.Fonts_T,
+                                          //     fontWeight: FontWeight.bold,
+                                          //   ),
+                                          // ),
                                         ),
                                       ),
                                     ),

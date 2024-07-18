@@ -596,7 +596,7 @@ class _MainCancelBilsScreenState extends State<MainCancelBilsScreen> {
         setState(() {
           Text_searchBar1.clear();
           _TransReBillModels = TransReBillModels_.where((TransReBillModels) {
-                        var notTitle1 = TransReBillModels.cid.toString();
+            var notTitle1 = TransReBillModels.cid.toString();
             var notTitle2 = TransReBillModels.docno.toString();
             var notTitle3 = TransReBillModels.cname.toString();
             var notTitle4 = TransReBillModels.sname.toString();
@@ -651,7 +651,7 @@ class _MainCancelBilsScreenState extends State<MainCancelBilsScreen> {
         setState(() {
           Text_searchBar2.clear();
           InvoiceModels = _InvoiceModels.where((InvoiceModels) {
-               var notTitle1 = InvoiceModels.cid.toString();
+            var notTitle1 = InvoiceModels.cid.toString();
             var notTitle2 = InvoiceModels.docno.toString();
             var notTitle3 = InvoiceModels.cname.toString();
             var notTitle4 = InvoiceModels.ln.toString();
@@ -1045,7 +1045,7 @@ class _MainCancelBilsScreenState extends State<MainCancelBilsScreen> {
                                                     .width *
                                                 0.85
                                             : 1200,
-                                        decoration:  BoxDecoration(
+                                        decoration: BoxDecoration(
                                           color:
                                               AppbackgroundColor.TiTile_Colors,
                                           borderRadius: BorderRadius.only(
@@ -3656,7 +3656,7 @@ class _MainCancelBilsScreenState extends State<MainCancelBilsScreen> {
                                                     .width *
                                                 0.85
                                             : 1200,
-                                        decoration:  BoxDecoration(
+                                        decoration: BoxDecoration(
                                           color:
                                               AppbackgroundColor.TiTile_Colors,
                                           borderRadius: BorderRadius.only(

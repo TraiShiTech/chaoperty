@@ -29,6 +29,7 @@ import '../Model/GetZone_Model.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 import 'Excel_Area_serviceFeeShort_Report.dart';
+import 'Excel_BillPayFutureMonRent_Report_Choice.dart';
 import 'Excel_SalesTaxFull_Report_Choice.dart';
 import 'Excel_SalesTaxShortReport_Choice.dart';
 
@@ -811,7 +812,7 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                             ? null
                             : () async {
                                 Insert_log.Insert_logs('รายงาน',
-                                    'กดดูรายงานค่าบริการรับล่วงหน้าประจำเดือน ');
+                                    'กดดูรายงานค่าบริการ-รับล่วงหน้าประจำเดือน ');
                                 RE_billpay_future_Widget();
                               }),
                     (billpay_Mon.isEmpty || Await_Status_Report1 == null)
@@ -821,8 +822,8 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                               (billpay_Mon.isEmpty &&
                                       Value_Chang_Zone_billpayMon != null &&
                                       Await_Status_Report1 != null)
-                                  ? 'รายงานค่าบริการรับล่วงหน้าประจำเดือน  (ไม่พบข้อมูล ✖️)'
-                                  : 'รายงานค่าบริการรับล่วงหน้าประจำเดือน ',
+                                  ? 'รายงานค่าบริการ-รับล่วงหน้าประจำเดือน  (ไม่พบข้อมูล ✖️)'
+                                  : 'รายงานค่าบริการ-รับล่วงหน้าประจำเดือน ',
                               style: const TextStyle(
                                 color: ReportScreen_Color.Colors_Text2_,
                                 // fontWeight: FontWeight.bold,
@@ -841,7 +842,7 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                                   const Padding(
                                     padding: EdgeInsets.all(8.0),
                                     child: Text(
-                                      'กำลังโหลดรายงานค่าบริการรับล่วงหน้าประจำเดือน...',
+                                      'กำลังโหลดรายงานค่าบริการ-รับล่วงหน้าประจำเดือน...',
                                       style: TextStyle(
                                         color: ReportScreen_Color.Colors_Text2_,
                                         // fontWeight: FontWeight.bold,
@@ -854,7 +855,7 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                             : const Padding(
                                 padding: EdgeInsets.all(8.0),
                                 child: Text(
-                                  'กำลังโหลดรายงานค่าบริการรับล่วงหน้าประจำเดือน  ✔️',
+                                  'กำลังโหลดรายงานค่าบริการ-รับล่วงหน้าประจำเดือน  ✔️',
                                   style: TextStyle(
                                     color: ReportScreen_Color.Colors_Text2_,
                                     // fontWeight: FontWeight.bold,
@@ -871,7 +872,7 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
   ///////////////////////////----------------------------------------------->(รายงานค่าบริการรับล่วงหน้า )
   RE_billpay_future_Widget() {
     int? ser_index;
-    return showDialog<void>( 
+    return showDialog<void>(
       context: context,
       barrierDismissible: false, //
       builder: (BuildContext context) {
@@ -1761,7 +1762,18 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
       if (_verticalGroupValue_PassW == 'PDF') {
         Navigator.of(context).pop();
       } else {
-        if (Value_Report == 'รายงานค่าบริการรับล่วงหน้า') {}
+        if (Value_Report == 'รายงานค่าบริการรับล่วงหน้า') {
+          Excgen_SalesTax_FutureReport_Choice
+              .exportExcel_SalesTax_FutureReport_Choice(
+                  context,
+                  NameFile_,
+                  _verticalGroupValue_NameFile,
+                  renTal_name,
+                  Value_Chang_Zone_billpayMon,
+                  billpay_Mon,
+                  monthsInThai[int.parse(Mon_billpay_Mon.toString()) - 1],
+                  YE_billpay_Mon);
+        }
       }
       Navigator.of(context).pop();
     }

@@ -337,6 +337,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.3.3"
+  directed_graph:
+    dependency: transitive
+    description:
+      name: directed_graph
+      sha256: "82061c9ce3ac74d9c4c173fb03daac515d503a0f9f77c0010a872f8c344a4f03"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.9"
   drag_and_drop_lists:
     dependency: "direct main"
     description:
@@ -393,6 +401,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  exception_templates:
+    dependency: transitive
+    description:
+      name: exception_templates
+      sha256: e9303fd16ecdb845a14b397cb93476f807dd2b4706f5ee44f708dbc95c256c33
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.4"
   fading_edge_scrollview:
     dependency: transitive
     description:
@@ -749,6 +765,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
+  graphs:
+    dependency: transitive
+    description:
+      name: graphs
+      sha256: aedc5a15e78fc65a6e23bcd927f24c64dd995062bcd1ca6eda65a3cff92a4d19
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.1"
   group_radio_button:
     dependency: "direct main"
     description:
@@ -925,6 +949,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.1"
+  infinite_canvas:
+    dependency: "direct main"
+    description:
+      name: infinite_canvas
+      sha256: "61fdb96a0992920ddcd50ab9f44d68e18e572146e5749877d50f3638af8f8763"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.9"
   infinite_listview:
     dependency: transitive
     description:
@@ -965,6 +997,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.7"
+  lazy_memo:
+    dependency: transitive
+    description:
+      name: lazy_memo
+      sha256: ca4be412d65726f79a30ba6e40b7056f1dbefbb35ec42913365b3f3e86d49279
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.9"
   lints:
     dependency: transitive
     description:
@@ -1365,6 +1405,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.2.1"
+  quote_buffer:
+    dependency: transitive
+    description:
+      name: quote_buffer
+      sha256: c4cd07e55ed1b1645a1cc74278a03b2a642c9f6ea3c0528d51827fdd320acf87
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.6"
   radio_grouped_buttons:
     dependency: "direct main"
     description:
@@ -1373,6 +1421,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.1"
+  random_color:
+    dependency: "direct main"
+    description:
+      name: random_color
+      sha256: ec6fffad26e3e1d19e64389e031e9fd324ce1a6cf79bb9a5b050302d6dba37bb
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.6-nullsafety"
   random_string:
     dependency: "direct main"
     description:

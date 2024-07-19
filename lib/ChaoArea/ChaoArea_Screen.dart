@@ -899,7 +899,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
   Widget build(BuildContext context) {
     double hi_ = MediaQuery.of(context).size.height / 1.7;
     return (Visit_ == 'map')
-        ? NodeDataScreen2(maxColumn: maxColumn)
+        ? NodeDataScreen2()
         : SingleChildScrollView(
             child: Column(
               children: [

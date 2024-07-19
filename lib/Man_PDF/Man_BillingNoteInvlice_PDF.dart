@@ -4,10 +4,12 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../Constant/Myconstant.dart';
+import '../Model/GetC_Quot_Select_Model.dart';
 import '../Model/GetInvoice_Model.dart';
 import '../Model/GetInvoice_history_Model.dart';
 import '../Model/GetTeNant_Model.dart';
 import '../Model/GetUser_Model.dart';
+import '../Model/electricity_model.dart';
 import '../PDF/PDF_Billing/pdf_BillingNote_IV.dart';
 import '../PDF_TP2/PDF_Billing_TP2/pdf_BillingNote_IV_TP2.dart';
 import '../PDF_TP3/PDF_Billing_TP3/pdf_BillingNote_IV_TP3.dart';
@@ -18,6 +20,7 @@ import '../PDF_TP7/PDF_Billing_TP7/pdf_BillingNote_IV_TP7.dart';
 import '../PDF_TP8/PDF_Billing_TP8/pdf_BillingNote_IV_TP8.dart';
 import '../PDF_TP8_Choice/PDF_Billing_TP8_Choice/pdf_BillingNote_IV_TP8_Choice.dart';
 import '../PDF_TP8_Ortorkor/PDF_Billing_TP8_Ortorkor/pdf_BillingNote_IV_TP8.dart';
+import '../PDF_TP9/PDF_Billing_TP9/pdf_BillingNote_IV_TP9.dart';
 import '../PDF_TP9_Lao/PDF_Billing_TP9/pdf_BillingNote_IV_TP9.dart';
 
 class Man_BillingNoteInvlice_PDF {
@@ -54,7 +57,9 @@ class Man_BillingNoteInvlice_PDF {
       // selectedValue_bank_bno
       ) async {
     List<InvoiceHistoryModel> _InvoiceHistoryModels = [];
-
+    List<ElectricityModel> Water_electricity = [];
+    List<ElectricityModel> electricityModels = [];
+    List<String> Water_elec = [];
     String? numinvoice;
     String? Form_nameshop;
     String? Form_typeshop;
@@ -105,6 +110,7 @@ class Man_BillingNoteInvlice_PDF {
 //--------------------->
     if (_InvoiceHistoryModels.length != 0) {
       _InvoiceHistoryModels.clear();
+      Water_electricity.clear();
       sum_pvat = 0;
       sum_vat = 0;
       sum_wht = 0;
@@ -244,6 +250,25 @@ class Man_BillingNoteInvlice_PDF {
         }
       }
     } catch (e) {}
+
+///////////////////----------------------------------------->
+    String url_4 =
+        '${MyConstant().domain}/GC_countmiter_PDF.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&docnoin=$docnoin';
+    try {
+      var response = await http.get(Uri.parse(url_4));
+
+      var result = json.decode(response.body);
+      print(result);
+      if (result.toString() != 'null') {
+        for (var map in result) {
+          ElectricityModel quotxSelectModel = ElectricityModel.fromJson(map);
+          Water_electricity.add(quotxSelectModel);
+        }
+      }
+      print('Water_electricity.length');
+      print(Water_electricity.length);
+    } catch (e) {}
+///////////////////----------------------------------------->
     double sum_total = (sum_amt - sum_disamt);
     final tableData003 = [
       for (int index = 0; index < _InvoiceHistoryModels.length; index++)
@@ -536,7 +561,7 @@ class Man_BillingNoteInvlice_PDF {
                   End_Bill_Paydate,
                   fonts_pdf);
         } else {
-          Pdfgen_BillingNoteInvlice_TP8.exportPDF_BillingNoteInvlice_TP8(
+          Pdfgen_BillingNoteInvlice_TP9.exportPDF_BillingNoteInvlice_TP9(
               foder,
               Cust_no,
               cid_,
@@ -580,54 +605,150 @@ class Man_BillingNoteInvlice_PDF {
               img1,
               Preview_ser,
               End_Bill_Paydate,
-              fonts_pdf);
+              fonts_pdf,
+              Water_electricity);
+          // Pdfgen_BillingNoteInvlice_TP8.exportPDF_BillingNoteInvlice_TP8(
+          //     foder,
+          //     Cust_no,
+          //     cid_,
+          //     Zone_s,
+          //     Ln_s,
+          //     fname,
+          //     // ser,
+          //     tableData003,
+          //     context,
+          //     Get_Value_cid,
+          //     namenew,
+          //     sum_pvat,
+          //     sum_vat,
+          //     sum_wht,
+          //     sum_amt,
+          //     sum_disamt,
+          //     sum_total,
+          //     renTal_name,
+          //     Form_bussshop,
+          //     Form_address,
+          //     Form_tel,
+          //     Form_email,
+          //     Form_tax,
+          //     Form_nameshop,
+          //     bill_addr,
+          //     bill_email,
+          //     bill_tel,
+          //     bill_tax,
+          //     bill_name,
+          //     newValuePDFimg,
+          //     numinvoice,
+          //     Datex_invoice,
+          //     payment_Ptname1,
+          //     payment_Ptname2,
+          //     payment_Bno1,
+          //     TitleType_Default_Receipt_Name,
+          //     payment_Ptser1,
+          //     bank1,
+          //     ptser1,
+          //     ptname1,
+          //     img1,
+          //     Preview_ser,
+          //     End_Bill_Paydate,
+          //     fonts_pdf);
         }
       } else if (tem_page_ser.toString() == '4') {
-        Pdfgen_BillingNoteInvlice_TP9_Lao.exportPDF_BillingNoteInvlice_TP9_Lao(
-            foder,
-            Cust_no,
-            cid_,
-            Zone_s,
-            Ln_s,
-            fname,
-            // ser,
-            tableData003,
-            context,
-            Get_Value_cid,
-            namenew,
-            sum_pvat,
-            sum_vat,
-            sum_wht,
-            sum_amt,
-            sum_disamt,
-            sum_total,
-            renTal_name,
-            Form_bussshop,
-            Form_address,
-            Form_tel,
-            Form_email,
-            Form_tax,
-            Form_nameshop,
-            bill_addr,
-            bill_email,
-            bill_tel,
-            bill_tax,
-            bill_name,
-            newValuePDFimg,
-            numinvoice,
-            Datex_invoice,
-            payment_Ptname1,
-            payment_Ptname2,
-            payment_Bno1,
-            TitleType_Default_Receipt_Name,
-            payment_Ptser1,
-            bank1,
-            ptser1,
-            ptname1,
-            img1,
-            Preview_ser,
-            End_Bill_Paydate,
-            fonts_pdf);
+        if (rtser.toString() == '118') {
+          Pdfgen_BillingNoteInvlice_TP9_Lao
+              .exportPDF_BillingNoteInvlice_TP9_Lao(
+                  foder,
+                  Cust_no,
+                  cid_,
+                  Zone_s,
+                  Ln_s,
+                  fname,
+                  // ser,
+                  tableData003,
+                  context,
+                  Get_Value_cid,
+                  namenew,
+                  sum_pvat,
+                  sum_vat,
+                  sum_wht,
+                  sum_amt,
+                  sum_disamt,
+                  sum_total,
+                  renTal_name,
+                  Form_bussshop,
+                  Form_address,
+                  Form_tel,
+                  Form_email,
+                  Form_tax,
+                  Form_nameshop,
+                  bill_addr,
+                  bill_email,
+                  bill_tel,
+                  bill_tax,
+                  bill_name,
+                  newValuePDFimg,
+                  numinvoice,
+                  Datex_invoice,
+                  payment_Ptname1,
+                  payment_Ptname2,
+                  payment_Bno1,
+                  TitleType_Default_Receipt_Name,
+                  payment_Ptser1,
+                  bank1,
+                  ptser1,
+                  ptname1,
+                  img1,
+                  Preview_ser,
+                  End_Bill_Paydate,
+                  fonts_pdf);
+        } else {
+          Pdfgen_BillingNoteInvlice_TP9.exportPDF_BillingNoteInvlice_TP9(
+              foder,
+              Cust_no,
+              cid_,
+              Zone_s,
+              Ln_s,
+              fname,
+              // ser,
+              tableData003,
+              context,
+              Get_Value_cid,
+              namenew,
+              sum_pvat,
+              sum_vat,
+              sum_wht,
+              sum_amt,
+              sum_disamt,
+              sum_total,
+              renTal_name,
+              Form_bussshop,
+              Form_address,
+              Form_tel,
+              Form_email,
+              Form_tax,
+              Form_nameshop,
+              bill_addr,
+              bill_email,
+              bill_tel,
+              bill_tax,
+              bill_name,
+              newValuePDFimg,
+              numinvoice,
+              Datex_invoice,
+              payment_Ptname1,
+              payment_Ptname2,
+              payment_Bno1,
+              TitleType_Default_Receipt_Name,
+              payment_Ptser1,
+              bank1,
+              ptser1,
+              ptname1,
+              img1,
+              Preview_ser,
+              End_Bill_Paydate,
+              fonts_pdf,
+              Water_electricity);
+        }
       }
     });
     // if (tem_page_ser.toString() == '0' || tem_page_ser == null) {

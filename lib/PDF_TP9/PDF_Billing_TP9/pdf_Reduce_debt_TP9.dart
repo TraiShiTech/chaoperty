@@ -11,8 +11,8 @@ import 'package:printing/printing.dart';
 import '../../PeopleChao/Pays_.dart';
 import '../../Style/ThaiBaht.dart';
 
-class Pdfgen_Reduce_debt_TP8 {
-  static void exportPDF_Reduce_debt_TP8(
+class Pdfgen_Reduce_debt_TP9 {
+  static void exportPDF_Reduce_debt_TP9(
       TitleType_Default_Receipt_Name,
       context,
       foder,

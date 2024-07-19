@@ -3,12 +3,12 @@ class MyConstant {
   // String domain =
   //     '${Uri.base.toString().substring(0, Uri.base.toString().length - 3)}/chao_api';
   // String domain = 'https://dzentric.com/chao_perty/chao_api';
-  // String domain = 'https://chaoperties.com/chao_api';
+  String domain = 'https://chaoperties.com/chao_api';
   // String domain = 'http://tananuwat.dynns.com:8080/APIQ';
   // String domain = 'http://goodviewcmu.cnxsolution.net:94/APIQ';
   // http://tananuwat.dynns.com:7080/webQR/#?1658194561/18,T01
   // String domain = 'http://192.168.1.23/chao_api';
-  String domain = 'http://192.168.1.152/chao_api';
+  // String domain = 'http://192.168.1.152/chao_api';
 }
 
 // class MyImage {
@@ -24,7 +24,8 @@ class MyConstant {
   /////////////////////////////////-------------------------------------------->
   //  List<AreaModel> tenants = [];
   // List<AreaModel> _tenants = <AreaModel>[];
- 
+ 		
+
  
   // Future<Null> read_GC_area(ser) async {
   //   if (areaModels.isNotEmpty) {

@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:chaoperty/Style/view_pagenow.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -15,9 +16,9 @@ import '../../Constant/Myconstant.dart';
 import '../../PeopleChao/Bills_.dart';
 import '../../Style/ThaiBaht.dart';
 
-class Pdfgen_BillingNoteInvlice_TP8 {
+class Pdfgen_BillingNoteInvlice_TP9 {
   //////////---------------------------------------------------->(ใบวางบิล แจ้งหนี้)  ใช้  ++
-  static void exportPDF_BillingNoteInvlice_TP8(
+  static void exportPDF_BillingNoteInvlice_TP9(
       foder,
       Cust_no,
       cid_,
@@ -63,7 +64,8 @@ class Pdfgen_BillingNoteInvlice_TP8 {
       img1,
       Preview_ser,
       End_Bill_Paydate,
-      fonts_pdf) async {
+      fonts_pdf,
+      electricityModels) async {
     int YearQRthai = await int.parse(DateFormat('yyyy')
             .format(DateTime.parse(End_Bill_Paydate))
             .toString()) +
@@ -337,7 +339,7 @@ class Pdfgen_BillingNoteInvlice_TP8 {
                                         pw.CrossAxisAlignment.start,
                                     children: [
                                       pw.Text(
-                                        'นามลูกค้า /Name : ${(sname_.toString() == '' || sname_ == null || sname_.toString() == 'null') ? '-' : sname_} (${(cname_.toString() == '' || cname_ == null || cname_.toString() == 'null') ? '-' : cname_})',
+                                        'นามลูกค้า /Name : ${(sname_.toString() == '' || sname_ == null || sname_.toString() == 'null') ? '-' : sname_}',
                                         // (sname_.toString() == null ||
                                         //         sname_.toString() == '' ||
                                         //         sname_.toString() == 'null')
@@ -1231,12 +1233,12 @@ class Pdfgen_BillingNoteInvlice_TP8 {
                             child: pw.Align(
                               alignment: pw.Alignment.topLeft,
                               child: pw.Text(
-                                (tableData003[index][0].toString() == '6')
-                                    ? '${tableData003[index][2]}'
-                                    : '${tableData003[index][2]} ${DateFormat('dd/MM').format(DateTime.parse(tableData003[index][1]))}/${DateTime.parse('${tableData003[index][1]}').year + 543}',
                                 // (tableData003[index][0].toString() == '6')
-                                //     ? '${tableData003[index][2]}[ หน่วยที่ใช้ไป ${tableData003[index][8]}-${tableData003[index][9]} ]'
+                                //     ? '${tableData003[index][2]}'
                                 //     : '${tableData003[index][2]} ${DateFormat('dd/MM').format(DateTime.parse(tableData003[index][1]))}/${DateTime.parse('${tableData003[index][1]}').year + 543}',
+                                (tableData003[index][0].toString() == '6')
+                                    ? '${tableData003[index][2]}[ หน่วยที่ใช้ไป ${tableData003[index][8]}-${tableData003[index][9]} ]'
+                                    : '${tableData003[index][2]} ${DateFormat('dd/MM').format(DateTime.parse(tableData003[index][1]))}/${DateTime.parse('${tableData003[index][1]}').year + 543}',
                                 maxLines: 2,
                                 textAlign: pw.TextAlign.left,
                                 style: pw.TextStyle(
@@ -1799,6 +1801,7 @@ class Pdfgen_BillingNoteInvlice_TP8 {
                     ],
                   ),
                 )),
+
             pw.SizedBox(height: 5 * PdfPageFormat.mm),
           ];
         },
@@ -1820,7 +1823,7 @@ class Pdfgen_BillingNoteInvlice_TP8 {
                               crossAxisAlignment: pw.CrossAxisAlignment.start,
                               children: [
                                 pw.Text(
-                                  'หมายเหตุ : ',
+                                  'หมายเหตุ :',
                                   textAlign: pw.TextAlign.left,
                                   style: pw.TextStyle(
                                     fontSize: font_Size,
@@ -2053,6 +2056,470 @@ class Pdfgen_BillingNoteInvlice_TP8 {
                               ])),
                     ],
                   )),
+              pw.SizedBox(height: 5 * PdfPageFormat.mm),
+              if (electricityModels.length != 0)
+                if (int.parse('${context.pageNumber}') ==
+                    int.parse('${context.pagesCount}'))
+                  pw.Row(
+                    children: [
+                      pw.Text(
+                        // ignore: unnecessary_string_interpolations
+                        '# หมายเหตุ อัตราการคำนวณปัจจุบัน',
+                        textAlign: pw.TextAlign.left,
+                        style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold,
+                            font: ttf,
+                            fontSize: font_Size,
+                            color: PdfColors.grey800),
+                      ),
+                    ],
+                  ),
+              if (electricityModels.length != 0)
+                if (int.parse('${context.pageNumber}') ==
+                    int.parse('${context.pagesCount}'))
+                  pw.Align(
+                    alignment: pw.Alignment.bottomCenter,
+                    child: pw.Container(
+                        decoration: pw.BoxDecoration(
+                          color: PdfColors.grey100,
+                          borderRadius: pw.BorderRadius.only(
+                              topLeft: pw.Radius.circular(8),
+                              topRight: pw.Radius.circular(8),
+                              bottomLeft: pw.Radius.circular(8),
+                              bottomRight: pw.Radius.circular(8)),
+                          border:
+                              pw.Border.all(color: PdfColors.grey400, width: 1),
+                        ),
+                        padding: const pw.EdgeInsets.all(3.0),
+                        child: pw.Container(
+                          child: pw.Column(
+                            children: [
+                              for (int index = 0;
+                                  index < electricityModels.length;
+                                  index++)
+                                pw.Container(
+                                  decoration: const pw.BoxDecoration(
+                                    // color: PdfColors.green100,
+                                    border: pw.Border(
+                                      bottom: pw.BorderSide(
+                                          color: PdfColors.grey300, width: 0.5),
+                                    ),
+                                  ),
+                                  child: pw.Row(
+                                    crossAxisAlignment:
+                                        pw.CrossAxisAlignment.start,
+                                    children: [
+                                      pw.Container(
+                                        width: 100,
+                                        child: pw.Text(
+                                          '${electricityModels[index].nameEle}',
+                                          style: pw.TextStyle(
+                                              fontWeight: pw.FontWeight.bold,
+                                              font: ttf,
+                                              fontSize: font_Size,
+                                              color: PdfColors.grey800),
+                                        ),
+                                      ),
+                                      // for (int index2 = 0; index2 < 7; index2++)
+                                      (double.parse(electricityModels[index]
+                                                      .eleMitOne!) +
+                                                  double.parse(
+                                                      electricityModels[index]
+                                                          .eleGobOne!)) ==
+                                              0.00
+                                          ? pw.SizedBox()
+                                          : pw.Expanded(
+                                              flex: 1,
+                                              child: pw.Container(
+                                                child: pw.Column(
+                                                  crossAxisAlignment: pw
+                                                      .CrossAxisAlignment.start,
+                                                  children: [
+                                                    pw.Text(
+                                                      'หน่วยที่ 0 - ${electricityModels[index].eleOne}',
+                                                      style: pw.TextStyle(
+                                                          fontWeight: pw
+                                                              .FontWeight.bold,
+                                                          font: ttf,
+                                                          fontSize:
+                                                              font_Size - 1,
+                                                          color: PdfColors
+                                                              .grey800),
+                                                    ),
+                                                    pw.SizedBox(
+                                                      child: pw.Row(children: [
+                                                        pw.Text(
+                                                          double.parse(electricityModels[
+                                                                          index]
+                                                                      .eleMitOne!) ==
+                                                                  0.00
+                                                              ? 'เหมาจ่าย '
+                                                              : 'หน่วยละ ',
+                                                          style: pw.TextStyle(
+                                                              fontWeight: pw
+                                                                  .FontWeight
+                                                                  .bold,
+                                                              font: ttf,
+                                                              fontSize:
+                                                                  font_Size - 1,
+                                                              color: PdfColors
+                                                                  .grey800),
+                                                        ),
+                                                        pw.Text(
+                                                          double.parse(electricityModels[
+                                                                          index]
+                                                                      .eleMitOne!) ==
+                                                                  0.00
+                                                              ? '${electricityModels[index].eleGobOne}บาท'
+                                                              : '${electricityModels[index].eleMitOne}บาท',
+                                                          style: pw.TextStyle(
+                                                              fontWeight: pw
+                                                                  .FontWeight
+                                                                  .bold,
+                                                              font: ttf,
+                                                              fontSize:
+                                                                  font_Size - 1,
+                                                              color: PdfColors
+                                                                  .grey800),
+                                                        ),
+                                                      ]),
+                                                    )
+                                                  ],
+                                                ),
+                                              )),
+                                      (double.parse(electricityModels[index]
+                                                      .eleMitTwo!) +
+                                                  double.parse(
+                                                      electricityModels[index]
+                                                          .eleGobTwo!)) ==
+                                              0.00
+                                          ? pw.SizedBox()
+                                          : pw.Expanded(
+                                              flex: 1,
+                                              child: pw.Container(
+                                                child: pw.Column(
+                                                  crossAxisAlignment: pw
+                                                      .CrossAxisAlignment.start,
+                                                  children: [
+                                                    pw.Text(
+                                                      'หน่วยที่ ${int.parse(electricityModels[index].eleOne!) + 1} - ${electricityModels[index].eleTwo}}',
+                                                      style: pw.TextStyle(
+                                                          fontWeight: pw
+                                                              .FontWeight.bold,
+                                                          font: ttf,
+                                                          fontSize:
+                                                              font_Size - 1,
+                                                          color: PdfColors
+                                                              .grey800),
+                                                    ),
+                                                    pw.SizedBox(
+                                                      child: pw.Row(children: [
+                                                        pw.Text(
+                                                          double.parse(electricityModels[
+                                                                          index]
+                                                                      .eleMitTwo!) ==
+                                                                  0.00
+                                                              ? 'เหมาจ่าย '
+                                                              : 'หน่วยละ ',
+                                                          style: pw.TextStyle(
+                                                              fontWeight: pw
+                                                                  .FontWeight
+                                                                  .bold,
+                                                              font: ttf,
+                                                              fontSize:
+                                                                  font_Size - 1,
+                                                              color: PdfColors
+                                                                  .grey800),
+                                                        ),
+                                                        pw.Text(
+                                                          double.parse(electricityModels[
+                                                                          index]
+                                                                      .eleMitTwo!) ==
+                                                                  0.00
+                                                              ? '${electricityModels[index].eleGobTwo}บาท'
+                                                              : '${electricityModels[index].eleMitTwo}บาท',
+                                                          style: pw.TextStyle(
+                                                              fontWeight: pw
+                                                                  .FontWeight
+                                                                  .bold,
+                                                              font: ttf,
+                                                              fontSize:
+                                                                  font_Size - 1,
+                                                              color: PdfColors
+                                                                  .grey800),
+                                                        ),
+                                                      ]),
+                                                    )
+                                                  ],
+                                                ),
+                                              )),
+                                      (double.parse(electricityModels[index]
+                                                      .eleMitThree!) +
+                                                  double.parse(
+                                                      electricityModels[index]
+                                                          .eleGobThree!)) ==
+                                              0.00
+                                          ? pw.SizedBox()
+                                          : pw.Expanded(
+                                              flex: 1,
+                                              child: pw.Container(
+                                                child: pw.Column(
+                                                  crossAxisAlignment: pw
+                                                      .CrossAxisAlignment.start,
+                                                  children: [
+                                                    pw.Text(
+                                                      'หน่วยที่ ${int.parse(electricityModels[index].eleTwo!) + 1} - ${electricityModels[index].eleThree}',
+                                                      style: pw.TextStyle(
+                                                          fontWeight: pw
+                                                              .FontWeight.bold,
+                                                          font: ttf,
+                                                          fontSize: font_Size,
+                                                          color: PdfColors
+                                                              .grey800),
+                                                    ),
+                                                    pw.SizedBox(
+                                                      child: pw.Row(children: [
+                                                        pw.Text(
+                                                          double.parse(electricityModels[
+                                                                          index]
+                                                                      .eleMitThree!) ==
+                                                                  0.00
+                                                              ? 'เหมาจ่าย '
+                                                              : 'หน่วยละ ',
+                                                          style: pw.TextStyle(
+                                                              fontWeight: pw
+                                                                  .FontWeight
+                                                                  .bold,
+                                                              font: ttf,
+                                                              fontSize:
+                                                                  font_Size,
+                                                              color: PdfColors
+                                                                  .grey800),
+                                                        ),
+                                                        pw.Text(
+                                                          double.parse(electricityModels[
+                                                                          index]
+                                                                      .eleMitThree!) ==
+                                                                  0.00
+                                                              ? '${electricityModels[index].eleGobThree}บาท'
+                                                              : '${electricityModels[index].eleMitThree}บาท',
+                                                          style: pw.TextStyle(
+                                                              fontWeight: pw
+                                                                  .FontWeight
+                                                                  .bold,
+                                                              font: ttf,
+                                                              fontSize:
+                                                                  font_Size,
+                                                              color: PdfColors
+                                                                  .grey800),
+                                                        ),
+                                                      ]),
+                                                    )
+                                                  ],
+                                                ),
+                                              )),
+                                      (double.parse(electricityModels[index]
+                                                      .eleMitTour!) +
+                                                  double.parse(
+                                                      electricityModels[index]
+                                                          .eleGobTour!)) ==
+                                              0.00
+                                          ? pw.SizedBox()
+                                          : pw.Expanded(
+                                              flex: 1,
+                                              child: pw.Container(
+                                                child: pw.Column(
+                                                  crossAxisAlignment: pw
+                                                      .CrossAxisAlignment.start,
+                                                  children: [
+                                                    pw.Text(
+                                                      'หน่วยที่ ${int.parse(electricityModels[index].eleThree!) + 1} - ${electricityModels[index].eleTour}',
+                                                      style: pw.TextStyle(
+                                                          fontWeight: pw
+                                                              .FontWeight.bold,
+                                                          font: ttf,
+                                                          fontSize: font_Size,
+                                                          color: PdfColors
+                                                              .grey800),
+                                                    ),
+                                                    pw.SizedBox(
+                                                      child: pw.Row(children: [
+                                                        pw.Text(
+                                                          double.parse(electricityModels[
+                                                                          index]
+                                                                      .eleMitTour!) ==
+                                                                  0.00
+                                                              ? 'เหมาจ่าย '
+                                                              : 'หน่วยละ ',
+                                                          style: pw.TextStyle(
+                                                              fontWeight: pw
+                                                                  .FontWeight
+                                                                  .bold,
+                                                              font: ttf,
+                                                              fontSize:
+                                                                  font_Size,
+                                                              color: PdfColors
+                                                                  .grey800),
+                                                        ),
+                                                        pw.Text(
+                                                          double.parse(electricityModels[
+                                                                          index]
+                                                                      .eleMitTour!) ==
+                                                                  0.00
+                                                              ? '${electricityModels[index].eleGobTour}บาท'
+                                                              : '${electricityModels[index].eleMitTour}บาท',
+                                                          style: pw.TextStyle(
+                                                              fontWeight: pw
+                                                                  .FontWeight
+                                                                  .bold,
+                                                              font: ttf,
+                                                              fontSize:
+                                                                  font_Size,
+                                                              color: PdfColors
+                                                                  .grey800),
+                                                        ),
+                                                      ]),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )),
+                                      (double.parse(electricityModels[index]
+                                                      .eleMitFive!) +
+                                                  double.parse(
+                                                      electricityModels[index]
+                                                          .eleGobFive!)) ==
+                                              0.00
+                                          ? pw.SizedBox()
+                                          : pw.Expanded(
+                                              flex: 1,
+                                              child: pw.Container(
+                                                child: pw.Column(
+                                                  crossAxisAlignment: pw
+                                                      .CrossAxisAlignment.start,
+                                                  children: [
+                                                    pw.Text(
+                                                      'หน่วยที่ ${int.parse(electricityModels[index].eleTour!) + 1} - ${electricityModels[index].eleFive}',
+                                                      style: pw.TextStyle(
+                                                          fontWeight: pw
+                                                              .FontWeight.bold,
+                                                          font: ttf,
+                                                          fontSize: font_Size,
+                                                          color: PdfColors
+                                                              .grey800),
+                                                    ),
+                                                    pw.SizedBox(
+                                                      child: pw.Row(children: [
+                                                        pw.Text(
+                                                          double.parse(electricityModels[
+                                                                          index]
+                                                                      .eleMitFive!) ==
+                                                                  0.00
+                                                              ? 'เหมาจ่าย '
+                                                              : 'หน่วยละ ',
+                                                          style: pw.TextStyle(
+                                                              fontWeight: pw
+                                                                  .FontWeight
+                                                                  .bold,
+                                                              font: ttf,
+                                                              fontSize:
+                                                                  font_Size,
+                                                              color: PdfColors
+                                                                  .grey800),
+                                                        ),
+                                                        pw.Text(
+                                                          double.parse(electricityModels[
+                                                                          index]
+                                                                      .eleMitFive!) ==
+                                                                  0.00
+                                                              ? '${electricityModels[index].eleGobFive}บาท'
+                                                              : '${electricityModels[index].eleMitFive}บาท',
+                                                          style: pw.TextStyle(
+                                                              fontWeight: pw
+                                                                  .FontWeight
+                                                                  .bold,
+                                                              font: ttf,
+                                                              fontSize:
+                                                                  font_Size,
+                                                              color: PdfColors
+                                                                  .grey800),
+                                                        ),
+                                                      ]),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )),
+                                      (double.parse(electricityModels[index]
+                                                      .eleMitSix!) +
+                                                  double.parse(
+                                                      electricityModels[index]
+                                                          .eleGobSix!)) ==
+                                              0.00
+                                          ? pw.SizedBox()
+                                          : pw.Expanded(
+                                              flex: 1,
+                                              child: pw.Container(
+                                                child: pw.Column(
+                                                  crossAxisAlignment: pw
+                                                      .CrossAxisAlignment.start,
+                                                  children: [
+                                                    pw.Text(
+                                                      'หน่วยที่ ${electricityModels[index].eleSix} ขึ้นไป',
+                                                      style: pw.TextStyle(
+                                                          fontWeight: pw
+                                                              .FontWeight.bold,
+                                                          font: ttf,
+                                                          fontSize: font_Size,
+                                                          color: PdfColors
+                                                              .grey800),
+                                                    ),
+                                                    pw.SizedBox(
+                                                      child: pw.Row(children: [
+                                                        pw.Text(
+                                                          double.parse(electricityModels[
+                                                                          index]
+                                                                      .eleMitSix!) ==
+                                                                  0.00
+                                                              ? 'เหมาจ่าย '
+                                                              : 'หน่วยละ ',
+                                                          style: pw.TextStyle(
+                                                              fontWeight: pw
+                                                                  .FontWeight
+                                                                  .bold,
+                                                              font: ttf,
+                                                              fontSize:
+                                                                  font_Size,
+                                                              color: PdfColors
+                                                                  .grey800),
+                                                        ),
+                                                        pw.Text(
+                                                          double.parse(electricityModels[
+                                                                          index]
+                                                                      .eleMitSix!) ==
+                                                                  0.00
+                                                              ? '${electricityModels[index].eleGobSix}บาท'
+                                                              : '${electricityModels[index].eleMitSix}บาท',
+                                                          style: pw.TextStyle(
+                                                              fontWeight: pw
+                                                                  .FontWeight
+                                                                  .bold,
+                                                              font: ttf,
+                                                              fontSize:
+                                                                  font_Size,
+                                                              color: PdfColors
+                                                                  .grey800),
+                                                        ),
+                                                      ]),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )),
+                                    ],
+                                  ),
+                                ),
+                            ],
+                          ),
+                        )),
+                  ),
               pw.Row(
                 mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                 children: [

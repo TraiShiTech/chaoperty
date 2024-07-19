@@ -37,10 +37,8 @@ import 'Custom_Painter/CustomPainter_Triangle.dart';
 import 'Type_Node.dart';
 
 class NodeDataScreen2 extends StatefulWidget {
-  final maxColumn;
   const NodeDataScreen2({
     super.key,
-    this.maxColumn,
   });
 
   @override
@@ -1304,39 +1302,92 @@ class _NodeDataScreen2State extends State<NodeDataScreen2> {
                                     padding: const EdgeInsets.all(8.0),
                                     child: InkWell(
                                       onTap: () {},
-                                      child: SizedBox(
-                                        height: 30,
-                                        child: SlideSwitcher(
-                                          containerBorderRadius: 10,
-                                          initialIndex: 2,
-                                          onSelect: (index) async {
-                                            // if (index + 1 == 1 ||
-                                            //     index + 1 == 2) {
-                                            //   widget.updateMessage(
-                                            //       '1', '', 'PeopleChaoScreen');
-                                            // } else {}
-                                          },
-                                          containerHeight: 40,
-                                          containerWight: 100,
-                                          containerColor: Colors.grey,
-                                          children: [
-                                            const Icon(
-                                              Icons.list,
-                                              color: Colors.black,
-                                            ),
-                                            const Icon(
-                                              Icons.grid_view_rounded,
-                                              color: Colors.black,
-                                            ),
-                                            Icon(
-                                              Icons.map_outlined,
-                                              color: Colors.blue[900],
-                                            )
-                                          ],
-                                        ),
+                                      child: SlideSwitcher(
+                                        containerBorderRadius: 10,
+                                        initialIndex: 3,
+                                        onSelect: (index) async {
+                                          if (index == 3) {
+                                          } else {
+                                            SharedPreferences preferences =
+                                                await SharedPreferences
+                                                    .getInstance();
+
+                                            String? _route =
+                                                preferences.getString('route');
+
+                                            MaterialPageRoute route =
+                                                MaterialPageRoute(
+                                              builder: (context) =>
+                                                  AdminScafScreen(
+                                                      route: _route),
+                                            );
+                                            Navigator.pushAndRemoveUntil(
+                                                context,
+                                                route,
+                                                (route) => false);
+                                          }
+                                        },
+                                        containerHeight: 40,
+                                        containerWight: 130,
+                                        containerColor: Colors.grey,
+                                        children: [
+                                          Icon(
+                                            Icons.grid_view_rounded,
+                                            color: Colors.black,
+                                          ),
+                                          Icon(
+                                            Icons.calendar_month_rounded,
+                                            color: Colors.black,
+                                          ),
+                                          Icon(
+                                            Icons.list,
+                                            color: Colors.black,
+                                          ),
+                                          Icon(
+                                            Icons.map_outlined,
+                                            color: Colors.blue[900],
+                                          )
+                                        ],
                                       ),
                                     ),
                                   ),
+                                  // Padding(
+                                  //   padding: const EdgeInsets.all(8.0),
+                                  //   child: InkWell(
+                                  //     onTap: () {},
+                                  //     child: SizedBox(
+                                  //       height: 30,
+                                  //       child: SlideSwitcher(
+                                  //         containerBorderRadius: 10,
+                                  //         initialIndex: 2,
+                                  //         onSelect: (index) async {
+                                  //           // if (index + 1 == 1 ||
+                                  //           //     index + 1 == 2) {
+                                  //           //   widget.updateMessage(
+                                  //           //       '1', '', 'PeopleChaoScreen');
+                                  //           // } else {}
+                                  //         },
+                                  //         containerHeight: 40,
+                                  //         containerWight: 100,
+                                  //         containerColor: Colors.grey,
+                                  //         children: [
+                                  //           const Icon(
+                                  //             Icons.list,
+                                  //             color: Colors.black,
+                                  //           ),
+                                  //           const Icon(
+                                  //             Icons.grid_view_rounded,
+                                  //             color: Colors.black,
+                                  //           ),
+                                  //           Icon(
+                                  //             Icons.map_outlined,
+                                  //             color: Colors.blue[900],
+                                  //           )
+                                  //         ],
+                                  //       ),
+                                  //     ),
+                                  //   ),
+                                  // ),
                                 ),
                                 Padding(
                                   padding:

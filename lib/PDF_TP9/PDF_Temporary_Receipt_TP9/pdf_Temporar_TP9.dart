@@ -14,10 +14,10 @@ import '../../Constant/Myconstant.dart';
 import '../../PeopleChao/Pays_.dart';
 import '../../Style/ThaiBaht.dart';
 
-class Pdfgen_Temporary_receipt_TP8 {
+class Pdfgen_Temporary_receipt_TP9 {
 //////////---------------------------------------------------->(ใบเสร็จรับเงิน/ใบกำกับภาษี)   ใช้  //
 
-  static void exportPDF_Temporary_receipt_TP8(
+  static void exportPDF_Temporary_receipt_TP9(
       Cust_no,
       cid_s,
       Zone_s,

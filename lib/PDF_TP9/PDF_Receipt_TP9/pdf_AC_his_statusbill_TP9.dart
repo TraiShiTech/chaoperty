@@ -14,10 +14,10 @@ import '../../Constant/Myconstant.dart';
 import '../../PeopleChao/Pays_.dart';
 import '../../Style/ThaiBaht.dart';
 
-class Pdfgen_his_statusbill_TP8 {
+class Pdfgen_his_statusbill_TP9 {
 //////////---------------------------------------------------->(ใบเสร็จรับเงิน/ใบกำกับภาษี)   ใช้  //
 
-  static void exportPDF_statusbill_TP8(
+  static void exportPDF_statusbill_TP9(
       Cust_no,
       cid_s,
       Zone_s,
@@ -1694,36 +1694,36 @@ class Pdfgen_his_statusbill_TP8 {
               child: pw.Row(
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
                 children: [
-                  pw.Container(
-                      padding: const pw.EdgeInsets.all(4.0),
-                      child: pw.Column(
-                        children: [
-                          pw.Text(
-                            '# หมายเหตุ : ',
-                            style: pw.TextStyle(
-                                fontSize: font_Size,
-                                fontWeight: pw.FontWeight.bold,
-                                font: ttf,
-                                color: PdfColors.grey800),
-                          ),
-                          pw.Text(
-                            'ค่าไฟฟ้าอัตตราพิเศษ หน่วยละ ( ) , ค่าไฟฟ้าอัตตราพิเศษ หน่วยละ ( )',
-                            style: pw.TextStyle(
-                                fontSize: font_Size,
-                                fontWeight: pw.FontWeight.bold,
-                                font: ttf,
-                                color: PdfColors.grey800),
-                          ),
-                          pw.Text(
-                            'ค่าน้ำอัตตราพิเศษ หน่วยละ ( ) , ค่าไฟฟ้าอัตตราพิเศษ หน่วยละ ( )',
-                            style: pw.TextStyle(
-                                fontSize: font_Size,
-                                fontWeight: pw.FontWeight.bold,
-                                font: ttf,
-                                color: PdfColors.grey800),
-                          ),
-                        ],
-                      )),
+                  // pw.Container(
+                  //     padding: const pw.EdgeInsets.all(4.0),
+                  //     child: pw.Column(
+                  //       children: [
+                  //         pw.Text(
+                  //           '# หมายเหตุ : ',
+                  //           style: pw.TextStyle(
+                  //               fontSize: font_Size,
+                  //               fontWeight: pw.FontWeight.bold,
+                  //               font: ttf,
+                  //               color: PdfColors.grey800),
+                  //         ),
+                  //         pw.Text(
+                  //           'ค่าไฟฟ้าอัตตราพิเศษ หน่วยละ ( ) , ค่าไฟฟ้าอัตตราพิเศษ หน่วยละ ( )',
+                  //           style: pw.TextStyle(
+                  //               fontSize: font_Size,
+                  //               fontWeight: pw.FontWeight.bold,
+                  //               font: ttf,
+                  //               color: PdfColors.grey800),
+                  //         ),
+                  //         pw.Text(
+                  //           'ค่าน้ำอัตตราพิเศษ หน่วยละ ( ) , ค่าไฟฟ้าอัตตราพิเศษ หน่วยละ ( )',
+                  //           style: pw.TextStyle(
+                  //               fontSize: font_Size,
+                  //               fontWeight: pw.FontWeight.bold,
+                  //               font: ttf,
+                  //               color: PdfColors.grey800),
+                  //         ),
+                  //       ],
+                  //     )),
                   pw.Spacer(flex: 6),
                   pw.Expanded(
                     flex: 4,

@@ -77,7 +77,7 @@ void main() {
 //1.----> git add .
 //2.------> git remote set-url origin https://gitlab.com/traishitech.com/chaoperty.git
 
-//3.-------->git commit -m "รายงาน ชอยส์"
+//3.-------->git commit -m "รายงาน ชอยส์3"
 //4.-----------> git push origin main
 //----------------------------------------------------->
 //----(Git Hub)

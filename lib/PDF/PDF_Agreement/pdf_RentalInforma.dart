@@ -11,6 +11,7 @@ import 'package:printing/printing.dart';
 import '../../ChaoArea/ChaoAreaRenew_Screen.dart';
 import '../../PeopleChao/Rental_Information.dart';
 import '../../Style/ThaiBaht.dart';
+import '../../Style/loadAndCacheImage.dart';
 
 ///////-------------------------------------------> ( ใบเสนอราคา/สัญญาเช่าพื้นที่ )
 class Pdfgen_RentalInforma {
@@ -63,10 +64,10 @@ class Pdfgen_RentalInforma {
     final iconImage =
         (await rootBundle.load('images/LOGO.png')).buffer.asUint8List();
     List netImage = [];
-
-    for (int i = 0; i < newValuePDFimg.length; i++) {
-      netImage.add(await networkImage('${newValuePDFimg[i]}'));
-    }
+    Uint8List? resizedLogo = await getResizedLogo();
+    // for (int i = 0; i < newValuePDFimg.length; i++) {
+    //   netImage.add(await networkImage('${newValuePDFimg[i]}'));
+    // }
     ///////////////////////------------------------------------------------->
     // // Your date string
 
@@ -119,12 +120,20 @@ class Pdfgen_RentalInforma {
           return pw.Column(children: [
             pw.Row(
               children: [
-                (netImage.isEmpty)
-                    ? pw.Container(
-                        height: 72,
-                        width: 70,
-                        color: PdfColors.grey200,
-                        child: pw.Center(
+                pw.Container(
+                  height: 60,
+                  width: 60,
+                  decoration: pw.BoxDecoration(
+                    color: PdfColors.grey200,
+                    border: pw.Border.all(color: PdfColors.grey300),
+                  ),
+                  child: resizedLogo != null
+                      ? pw.Image(
+                          pw.MemoryImage(resizedLogo),
+                          height: 60,
+                          width: 60,
+                        )
+                      : pw.Center(
                           child: pw.Text(
                             '$bill_name ',
                             maxLines: 1,
@@ -134,18 +143,35 @@ class Pdfgen_RentalInforma {
                               color: Colors_pd,
                             ),
                           ),
-                        ))
+                        ),
+                ),
+                // (netImage.isEmpty)
+                //     ? pw.Container(
+                //         height: 72,
+                //         width: 70,
+                //         color: PdfColors.grey200,
+                //         child: pw.Center(
+                //           child: pw.Text(
+                //             '$bill_name ',
+                //             maxLines: 1,
+                //             style: pw.TextStyle(
+                //               fontSize: 10,
+                //               font: ttf,
+                //               color: Colors_pd,
+                //             ),
+                //           ),
+                //         ))
 
-                    // pw.Image(
-                    //     pw.MemoryImage(iconImage),
-                    //     height: 72,
-                    //     width: 70,
-                    //   )
-                    : pw.Image(
-                        (netImage[0]),
-                        height: 72,
-                        width: 70,
-                      ),
+                //     // pw.Image(
+                //     //     pw.MemoryImage(iconImage),
+                //     //     height: 72,
+                //     //     width: 70,
+                //     //   )
+                //     : pw.Image(
+                //         (netImage[0]),
+                //         height: 72,
+                //         width: 70,
+                //       ),
                 pw.SizedBox(width: 1 * PdfPageFormat.mm),
                 pw.Container(
                   width: 200,
@@ -1312,12 +1338,20 @@ class Pdfgen_RentalInforma {
         return pw.Column(children: [
           pw.Row(
             children: [
-              (netImage.isEmpty)
-                  ? pw.Container(
-                      height: 72,
-                      width: 70,
-                      color: PdfColors.grey200,
-                      child: pw.Center(
+              pw.Container(
+                height: 60,
+                width: 60,
+                decoration: pw.BoxDecoration(
+                  color: PdfColors.grey200,
+                  border: pw.Border.all(color: PdfColors.grey300),
+                ),
+                child: resizedLogo != null
+                    ? pw.Image(
+                        pw.MemoryImage(resizedLogo),
+                        height: 60,
+                        width: 60,
+                      )
+                    : pw.Center(
                         child: pw.Text(
                           '$bill_name ',
                           maxLines: 1,
@@ -1327,18 +1361,35 @@ class Pdfgen_RentalInforma {
                             color: Colors_pd,
                           ),
                         ),
-                      ))
+                      ),
+              ),
+              // (netImage.isEmpty)
+              //     ? pw.Container(
+              //         height: 72,
+              //         width: 70,
+              //         color: PdfColors.grey200,
+              //         child: pw.Center(
+              //           child: pw.Text(
+              //             '$bill_name ',
+              //             maxLines: 1,
+              //             style: pw.TextStyle(
+              //               fontSize: 10,
+              //               font: ttf,
+              //               color: Colors_pd,
+              //             ),
+              //           ),
+              //         ))
 
-                  // pw.Image(
-                  //     pw.MemoryImage(iconImage),
-                  //     height: 72,
-                  //     width: 70,
-                  //   )
-                  : pw.Image(
-                      (netImage[0]),
-                      height: 72,
-                      width: 70,
-                    ),
+              //     // pw.Image(
+              //     //     pw.MemoryImage(iconImage),
+              //     //     height: 72,
+              //     //     width: 70,
+              //     //   )
+              //     : pw.Image(
+              //         (netImage[0]),
+              //         height: 72,
+              //         width: 70,
+              //       ),
               pw.SizedBox(width: 1 * PdfPageFormat.mm),
               pw.Container(
                 width: 200,

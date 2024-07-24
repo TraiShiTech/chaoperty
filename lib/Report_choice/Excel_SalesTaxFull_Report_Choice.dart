@@ -150,8 +150,8 @@ class Excgen_SalesTaxFullReport_Choice {
 
     sheet.getRangeByName('A1').setText(
           (Value_Chang_Zone_SalesTax_Full == null)
-              ? 'รายงานภาษีขาย  (กรุณาเลือกโซน)'
-              : 'รายงานภาษีขาย  (โซน : $Value_Chang_Zone_SalesTax_Full)',
+              ? 'รายงานภาษีขาย-1  (กรุณาเลือกโซน)'
+              : 'รายงานภาษีขาย-1  (โซน : $Value_Chang_Zone_SalesTax_Full)',
         );
     sheet
         .getRangeByName('A2')
@@ -280,9 +280,8 @@ class Excgen_SalesTaxFullReport_Choice {
       sheet.getRangeByName('R${index + 7}').cellStyle = numberColor;
 
       sheet.getRangeByName('A${index + 7}').setText('${index + 1}');
-      sheet
-          .getRangeByName('B${index + 7}')
-          .setText('${salesTax_full[index].daterec}');
+      sheet.getRangeByName('B${index + 7}').setText(
+          '${DateFormat('dd/MM/yyyy').format(DateTime.parse('${salesTax_full[index].daterec}'))}');
       sheet.getRangeByName('C${index + 7}').setText(
           (salesTax_full[index].doctax == null ||
                   salesTax_full[index].doctax.toString() == '')
@@ -358,10 +357,11 @@ class Excgen_SalesTaxFullReport_Choice {
           (salesTax_full[index].total_bill == null)
               ? 0.00
               : double.parse('${salesTax_full[index].total_bill}'));
-      sheet.getRangeByName('R${index + 7}').setText(
-          (salesTax_full[index].sdate != null)
-              ? '${salesTax_full[index].sdate}'
-              : 'ล็อกเสียบ');
+      sheet.getRangeByName('R${index + 7}').setText((salesTax_full[index]
+                  .sdate !=
+              null)
+          ? '${DateFormat('dd/MM/yyyy').format(DateTime.parse('${salesTax_full[index].sdate}'))}'
+          : 'ล็อกเสียบ');
       indextotol = indextotol + 1;
     }
 /////////---------------------------->
@@ -421,8 +421,8 @@ class Excgen_SalesTaxFullReport_Choice {
     MimeType type = MimeType.MICROSOFTEXCEL;
     String path = await FileSaver.instance.saveFile(
         (Value_Chang_Zone_SalesTax_Full == null)
-            ? 'รายงานภาษีขาย ประจำเดือน ${Mon_SalesTax_Full_Mon} ${YE_SalesTax_Full_Mon} (กรุณาเลือกโซน)'
-            : 'รายงานภาษีขาย ประจำเดือน ${Mon_SalesTax_Full_Mon} ${YE_SalesTax_Full_Mon} (โซน : $Value_Chang_Zone_SalesTax_Full)',
+            ? 'รายงานภาษีขาย-1 ประจำเดือน ${Mon_SalesTax_Full_Mon} ${YE_SalesTax_Full_Mon} (กรุณาเลือกโซน)'
+            : 'รายงานภาษีขาย-1 ประจำเดือน ${Mon_SalesTax_Full_Mon} ${YE_SalesTax_Full_Mon} (โซน : $Value_Chang_Zone_SalesTax_Full)',
         data,
         "xlsx",
         mimeType: type);

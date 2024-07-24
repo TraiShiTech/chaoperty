@@ -49,11 +49,11 @@ import '../PDF/Choice/pdf_Agreement_Choice.dart';
 import '../PDF/Choice/pdf_Agreement_Choice2.dart';
 import '../PDF/Choice/pdf_Agreement_Choice3.dart';
 import '../PDF/PDF_Agreement/Ama1000/pdf_Agreement_ama1000.dart';
+import '../PDF/PDF_Agreement/Ortor/BangKla/pdf_Agreement_Ortor.dart';
 import '../PDF/PDF_Agreement/pdf_Agreement.dart';
 import '../PDF/PDF_Agreement/pdf_Agreement2.dart';
 import '../PDF/PDF_Agreement/pdf_Agreement_JSpace.dart';
 import '../PDF/PDF_Agreement/pdf_Agreement_JSpace2.dart';
-import '../PDF/PDF_Agreement/Ortor/BangKla/pdf_Agreement_Ortor.dart';
 import '../PDF/PDF_Agreement/pdf_RentalInforma.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
@@ -149,13 +149,6 @@ class _RentalInformationState extends State<RentalInformation> {
   List<ContractfModel> Other_file = [];
   String? pic_tenant, pic_shop, pic_plan, fiew;
   String _ReportValue_type = "ไม่ระบุ";
-  List Type_Ortor = [
-    'อาคารพาณิชย์',
-    'แผงค้าจำหน่ายสัตว์น้ำ (แพปลา)',
-    'แผงค้าดองสัตว์น้ำ (ดองปลา)',
-    'แผงค้าแปรรูปสัตว์น้ำ (แปรรูปปลา)',
-  ];
-  ///////------------------------------->
   @override
   void initState() {
     super.initState();
@@ -784,6 +777,10 @@ class _RentalInformationState extends State<RentalInformation> {
 
     print(File_Names);
     if (request.status == 200) {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      var name = preferences.getString('fname');
+      Insert_log.Insert_logs('สัญญาเช่า',
+          '$name>สัญญา${widget.Get_Value_cid}>อัพโหลดสำเนาบัตรประชาชน');
       print('File uploaded successfully!');
     } else {
       print('File upload failed with status code: ${request.status}');
@@ -2340,7 +2337,6 @@ class _RentalInformationState extends State<RentalInformation> {
   //     }
   //   });
   // }
-
   ////////////------------------------------------------------------>(Export file)
   Future<void> _showMyDialog_SAVE(
       context, tableData00, newValuePDFimg, ren, type) async {
@@ -2769,6 +2765,71 @@ class _RentalInformationState extends State<RentalInformation> {
                                 itemBuilder: (item) => RadioButtonBuilder(
                                   item,
                                 ),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: const Text(
+                                '20.อื่นๆ :',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  color: ReportScreen_Color.Colors_Text2_,
+                                  // fontWeight: FontWeight.bold,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                keyboardType: TextInputType.text,
+                                controller: FormNameFile_text,
+
+                                // maxLength: 13,
+                                cursorColor: Colors.green,
+                                decoration: InputDecoration(
+                                    fillColor: Colors.white.withOpacity(0.3),
+                                    filled: true,
+                                    focusedBorder: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(15),
+                                        topLeft: Radius.circular(15),
+                                        bottomRight: Radius.circular(15),
+                                        bottomLeft: Radius.circular(15),
+                                      ),
+                                      borderSide: BorderSide(
+                                        width: 1,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    errorStyle:
+                                        TextStyle(fontFamily: Font_.Fonts_T),
+                                    enabledBorder: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(15),
+                                        topLeft: Radius.circular(15),
+                                        bottomRight: Radius.circular(15),
+                                        bottomLeft: Radius.circular(15),
+                                      ),
+                                      borderSide: BorderSide(
+                                        width: 1,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    // labelText:
+                                    //     'วางเงินประกันตลอดอายุสัญญาเช่า : ',
+                                    labelStyle: const TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black54,
+                                        fontFamily: Font_.Fonts_T)),
+                                // inputFormatters: [
+                                //   FilteringTextInputFormatter.deny(
+                                //       RegExp(r'\s')),
+                                //   // FilteringTextInputFormatter.deny(
+                                //   //     RegExp(r'^0')),
+                                //   FilteringTextInputFormatter.allow(
+                                //       RegExp(r'[0-9 .]')),
+                                // ],
                               ),
                             ),
                             SizedBox(height: 2),
@@ -3425,7 +3486,8 @@ class _RentalInformationState extends State<RentalInformation> {
                                         newValuePDFimg,
                                         tableData00,
                                         TitleType_Default_Receipt_Name,
-                                        Datex_text);
+                                        Datex_text,
+                                        FormNameFile_text);
                                   } else if (_ReportValue_type ==
                                       'อาคารพาณิชย์') {
                                     Pdfgen_Agreement_Ortor
@@ -7702,20 +7764,10 @@ class _RentalInformationState extends State<RentalInformation> {
                                                 // newValuePDFimg.add(
                                                 //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
                                               } else {
-                                                if (renTalModels[0].img ==
-                                                        null ||
-                                                    renTalModels[0]
-                                                            .img
-                                                            .toString() ==
-                                                        '') {
-                                                  newValuePDFimg.add(
-                                                      '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
-                                                } else {
-                                                  newValuePDFimg.add(
-                                                      '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
-                                                  newValuePDFimg.add(
-                                                      '${MyConstant().domain}/files/$foder/contract/${renTalModels[0].img}');
-                                                }
+                                                newValuePDFimg.add(
+                                                    '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
+                                                newValuePDFimg.add(
+                                                    '${MyConstant().domain}/files/$foder/contract/${renTalModels[0].img}');
                                               }
                                             }
                                             SharedPreferences preferences =
@@ -8754,6 +8806,13 @@ class _RentalInformationState extends State<RentalInformation> {
                                               '${cxname_other}',
                                               ' $cxname_other_ser',
                                             );
+                                            SharedPreferences preferences =
+                                                await SharedPreferences
+                                                    .getInstance();
+                                            var name =
+                                                preferences.getString('fname');
+                                            Insert_log.Insert_logs('สัญญาเช่า',
+                                                '$name>สัญญา${widget.Get_Value_cid}>อัพโหลดเอกสารอื่นๆ');
                                           },
                                         ),
                                       ),
@@ -8809,6 +8868,9 @@ class _RentalInformationState extends State<RentalInformation> {
                                 String? ren =
                                     preferences.getString('renTalSer');
                                 String? ser_user = preferences.getString('ser');
+                                var name = preferences.getString('fname');
+                                Insert_log.Insert_logs('สัญญาเช่า',
+                                    '$name>สัญญา${widget.Get_Value_cid}>เพิ่มค่าบริการ');
                                 String url2 =
                                     '${MyConstant().domain}/D_quotx.php?isAdd=true&ren=$ren&ser_user=$ser_user';
 
@@ -8852,7 +8914,7 @@ class _RentalInformationState extends State<RentalInformation> {
                               width: 10,
                             ),
                             InkWell(
-                              onTap: () {
+                              onTap: () async {
                                 setState(() {
                                   if (ser_tabbarview_2 == 1) {
                                     ser_tabbarview_2 = 0;
@@ -8860,6 +8922,12 @@ class _RentalInformationState extends State<RentalInformation> {
                                     ser_tabbarview_2 = 1;
                                   }
                                 });
+
+                                SharedPreferences preferences =
+                                    await SharedPreferences.getInstance();
+                                var name = preferences.getString('fname');
+                                Insert_log.Insert_logs('สัญญาเช่า',
+                                    '$name>สัญญา${widget.Get_Value_cid}>ปรับตั้งหนี้');
                               },
                               child: Container(
                                 width: 200,
@@ -9117,489 +9185,107 @@ class _RentalInformationState extends State<RentalInformation> {
                                                 //             .tappedIndex_Colors
                                                 //             .withOpacity(0.5)
                                                 //         : null,
-                                                child: ListTile(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        tappedIndex_1 =
-                                                            index.toString();
-                                                      });
-                                                    },
-                                                    title: Container(
-                                                      decoration: BoxDecoration(
-                                                        // color: Colors.green[100]!
-                                                        //     .withOpacity(0.5),
-                                                        border: Border(
-                                                          bottom: BorderSide(
-                                                            color:
-                                                                Colors.black12,
-                                                            width: 1,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: AutoSizeText(
-                                                              maxLines: 2,
-                                                              minFontSize: 8,
-                                                              // maxFontSize: 15,
-                                                              '${quotxSelectModels[index].unit} / ${quotxSelectModels[index].term} (งวด)',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .start,
-                                                              style:
-                                                                  const TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      //fontWeight: FontWeight.bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: AutoSizeText(
-                                                              maxLines: 2,
-                                                              minFontSize: 8,
-                                                              // maxFontSize: 15,
-                                                              '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].sdate!} 00:00:00'))} - ${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].ldate!} 00:00:00'))}',
-                                                              textAlign:
-                                                                  TextAlign
+                                                child:
+                                                    quotxSelectModels[index]
+                                                                .etype ==
+                                                            'F'
+                                                        ? ListTile(
+                                                            onTap: () {
+                                                              setState(() {
+                                                                tappedIndex_1 =
+                                                                    index
+                                                                        .toString();
+                                                              });
+                                                            },
+                                                            title: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
                                                                       .center,
-                                                              style:
-                                                                  const TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      //fontWeight: FontWeight.bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: Tooltip(
-                                                              richMessage:
-                                                                  TextSpan(
-                                                                text:
-                                                                    '${quotxSelectModels[index].expname}',
-                                                                style:
-                                                                    const TextStyle(
-                                                                  color: HomeScreen_Color
-                                                                      .Colors_Text1_,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T,
-                                                                  //fontSize: 10.0
-                                                                ),
-                                                              ),
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            5),
-                                                                color: Colors
-                                                                    .grey[200],
-                                                              ),
-                                                              child:
-                                                                  AutoSizeText(
-                                                                maxLines: 2,
-                                                                minFontSize: 8,
-                                                                // maxFontSize: 15,
-                                                                '${quotxSelectModels[index].expname}',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style: const TextStyle(
-                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                    //fontWeight: FontWeight.bold,
-                                                                    fontFamily: Font_.Fonts_T),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          quotxSelectModels[
-                                                                          index]
-                                                                      .ele_ty ==
-                                                                  '0'
-                                                              ? Expanded(
+                                                              children: [
+                                                                Expanded(
                                                                   flex: 1,
-                                                                  child:
-                                                                      AutoSizeText(
-                                                                    maxLines: 2,
-                                                                    minFontSize:
-                                                                        8,
-                                                                    // maxFontSize: 15,
-                                                                    quotxSelectModels[index].qty ==
-                                                                            '0.00'
-                                                                        ? '${nFormat.format(double.parse(quotxSelectModels[index].total!))} / งวด'
-                                                                        : '${nFormat.format(double.parse(quotxSelectModels[index].qty!))} / หน่วย',
-                                                                    // '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .end,
-                                                                    style: const TextStyle(
-                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                        //fontWeight: FontWeight.bold,
-                                                                        fontFamily: Font_.Fonts_T),
-                                                                  ),
-                                                                )
-                                                              : Expanded(
-                                                                  flex: 1,
-                                                                  child:
-                                                                      AutoSizeText(
-                                                                    maxLines: 2,
-                                                                    minFontSize:
-                                                                        8,
-                                                                    // maxFontSize: 15,
-                                                                    'อัตราพิเศษ',
-                                                                    // '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .end,
-                                                                    style: const TextStyle(
-                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                        //fontWeight: FontWeight.bold,
-                                                                        fontFamily: Font_.Fonts_T),
+                                                                  child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      Container(
+                                                                        // decoration: BoxDecoration(
+                                                                        //   color: Colors.grey.shade300,
+                                                                        //   borderRadius:
+                                                                        //       const BorderRadius.only(
+                                                                        //           topLeft:
+                                                                        //               Radius.circular(10),
+                                                                        //           topRight:
+                                                                        //               Radius.circular(10),
+                                                                        //           bottomLeft:
+                                                                        //               Radius.circular(10),
+                                                                        //           bottomRight:
+                                                                        //               Radius.circular(10)),
+                                                                        //   // border: Border.all(color: Colors.grey, width: 1),
+                                                                        // ),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            AutoSizeText(
+                                                                          maxLines:
+                                                                              2,
+                                                                          minFontSize:
+                                                                              8,
+                                                                          // maxFontSize: 15,
+                                                                          '${quotxSelectModels[index].expname}',
+                                                                          textAlign:
+                                                                              TextAlign.start,
+                                                                          style:
+                                                                              const TextStyle(
+                                                                            color:
+                                                                                PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            // fontWeight:
+                                                                            //     FontWeight
+                                                                            //         .bold,
+                                                                            fontFamily:
+                                                                                Font_.Fonts_T,
+
+                                                                            //fontSize: 10.0
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
                                                                   ),
                                                                 ),
-                                                          quotxSelectModels[
-                                                                          index]
-                                                                      .ele_ty ==
-                                                                  '0'
-                                                              ? Expanded(
+                                                                // Expanded(
+                                                                //   flex: 1,
+                                                                //   child: Padding(
+                                                                //     padding:
+                                                                //         const EdgeInsets
+                                                                //             .all(8.0),
+                                                                //     child: AutoSizeText(
+                                                                //       maxLines: 2,
+                                                                //       minFontSize: 8,
+                                                                //       // maxFontSize: 15,
+                                                                //       '', //'${double.parse(quotxSelectModels[index].qty!).toStringAsFixed(0)} วัน',
+                                                                //       textAlign: TextAlign
+                                                                //           .center,
+                                                                //       style:
+                                                                //           const TextStyle(
+                                                                //         color: PeopleChaoScreen_Color
+                                                                //             .Colors_Text2_,
+                                                                //         // fontWeight: FontWeight.bold,
+                                                                //         fontFamily:
+                                                                //             Font_.Fonts_T,
+
+                                                                //         //fontSize: 10.0
+                                                                //       ),
+                                                                //     ),
+                                                                //   ),
+                                                                // ),
+                                                                Expanded(
                                                                   flex: 1,
                                                                   child:
-                                                                      AutoSizeText(
-                                                                    maxLines: 2,
-                                                                    minFontSize:
-                                                                        8,
-                                                                    // maxFontSize: 15,
-                                                                    '${nFormat.format(int.parse(quotxSelectModels[index].term!) * double.parse(quotxSelectModels[index].total!))}',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .end,
-                                                                    style: const TextStyle(
-                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                        //fontWeight: FontWeight.bold,
-                                                                        fontFamily: Font_.Fonts_T),
-                                                                  ),
-                                                                )
-                                                              : Expanded(
-                                                                  flex: 1,
-                                                                  child:
-                                                                      GestureDetector(
-                                                                    onTap: () {
-                                                                      showcountmiter(index).then((value) => showDialog(
-                                                                          context: context,
-                                                                          builder: (_) {
-                                                                            return Dialog(
-                                                                              child: Container(
-                                                                                width: MediaQuery.of(context).size.width * 0.5,
-                                                                                height: MediaQuery.of(context).size.width * 0.2,
-                                                                                child: SingleChildScrollView(
-                                                                                  child: Column(
-                                                                                    children: [
-                                                                                      Row(
-                                                                                        children: [
-                                                                                          Expanded(
-                                                                                            child: Padding(
-                                                                                              padding: const EdgeInsets.all(15.0),
-                                                                                              child: Text(
-                                                                                                // ignore: unnecessary_string_interpolations
-                                                                                                'อัตราการคำนวณปัจจุบัน',
-                                                                                                textAlign: TextAlign.center,
-                                                                                                style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontWeight: FontWeight.bold, fontSize: 25, fontFamily: Font_.Fonts_T),
-                                                                                              ),
-                                                                                            ),
-                                                                                          ),
-                                                                                        ],
-                                                                                      ),
-                                                                                      Divider(),
-                                                                                      (double.parse(electricityModels[0].eleMitOne!) + double.parse(electricityModels[0].eleGobOne!)) == 0.00
-                                                                                          ? SizedBox()
-                                                                                          : Row(
-                                                                                              children: [
-                                                                                                Expanded(flex: 1, child: Text('')),
-                                                                                                Expanded(
-                                                                                                  flex: 2,
-                                                                                                  child: Text(
-                                                                                                    'หน่วยที่ 0 - ${electricityModels[0].eleOne}',
-                                                                                                    textAlign: TextAlign.start,
-                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                Expanded(
-                                                                                                  flex: 2,
-                                                                                                  child: Text(
-                                                                                                    double.parse(electricityModels[0].eleMitOne!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
-                                                                                                    textAlign: TextAlign.start,
-                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                Expanded(
-                                                                                                  flex: 2,
-                                                                                                  child: Text(
-                                                                                                    double.parse(electricityModels[0].eleMitOne!) == 0.00 ? '${electricityModels[0].eleGobOne}' : '${electricityModels[0].eleMitOne}',
-                                                                                                    textAlign: TextAlign.end,
-                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                Expanded(
-                                                                                                  flex: 1,
-                                                                                                  child: Text(
-                                                                                                    'บาท',
-                                                                                                    textAlign: TextAlign.center,
-                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                  ),
-                                                                                                ),
-                                                                                              ],
-                                                                                            ),
-                                                                                      SizedBox(
-                                                                                        height: 10,
-                                                                                      ),
-                                                                                      (double.parse(electricityModels[0].eleMitTwo!) + double.parse(electricityModels[0].eleGobTwo!)) == 0.00
-                                                                                          ? SizedBox()
-                                                                                          : Row(
-                                                                                              children: [
-                                                                                                Expanded(flex: 1, child: Text('')),
-                                                                                                Expanded(
-                                                                                                  flex: 2,
-                                                                                                  child: Text(
-                                                                                                    'หน่วยที่ ${int.parse(electricityModels[0].eleOne!) + 1} - ${electricityModels[0].eleTwo}',
-                                                                                                    textAlign: TextAlign.start,
-                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                Expanded(
-                                                                                                  flex: 2,
-                                                                                                  child: Text(
-                                                                                                    double.parse(electricityModels[0].eleMitTwo!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
-                                                                                                    textAlign: TextAlign.start,
-                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                Expanded(
-                                                                                                  flex: 2,
-                                                                                                  child: Text(
-                                                                                                    double.parse(electricityModels[0].eleMitTwo!) == 0.00 ? '${electricityModels[0].eleGobTwo}' : '${electricityModels[0].eleMitTwo}',
-                                                                                                    textAlign: TextAlign.end,
-                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                Expanded(
-                                                                                                  flex: 1,
-                                                                                                  child: Text(
-                                                                                                    'บาท',
-                                                                                                    textAlign: TextAlign.center,
-                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                  ),
-                                                                                                ),
-                                                                                              ],
-                                                                                            ),
-                                                                                      SizedBox(
-                                                                                        height: 10,
-                                                                                      ),
-                                                                                      (double.parse(electricityModels[0].eleMitThree!) + double.parse(electricityModels[0].eleGobThree!)) == 0.00
-                                                                                          ? SizedBox()
-                                                                                          : Row(
-                                                                                              children: [
-                                                                                                Expanded(flex: 1, child: Text('')),
-                                                                                                Expanded(
-                                                                                                  flex: 2,
-                                                                                                  child: Text(
-                                                                                                    'หน่วยที่ ${int.parse(electricityModels[0].eleTwo!) + 1} - ${electricityModels[0].eleThree}',
-                                                                                                    textAlign: TextAlign.start,
-                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                Expanded(
-                                                                                                  flex: 2,
-                                                                                                  child: Text(
-                                                                                                    double.parse(electricityModels[0].eleMitThree!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
-                                                                                                    textAlign: TextAlign.start,
-                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                Expanded(
-                                                                                                  flex: 2,
-                                                                                                  child: Text(
-                                                                                                    double.parse(electricityModels[0].eleMitThree!) == 0.00 ? '${electricityModels[0].eleGobThree}' : '${electricityModels[0].eleMitThree}',
-                                                                                                    textAlign: TextAlign.end,
-                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                Expanded(
-                                                                                                  flex: 1,
-                                                                                                  child: Text(
-                                                                                                    'บาท',
-                                                                                                    textAlign: TextAlign.center,
-                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                  ),
-                                                                                                ),
-                                                                                              ],
-                                                                                            ),
-                                                                                      SizedBox(
-                                                                                        height: 10,
-                                                                                      ),
-                                                                                      (double.parse(electricityModels[0].eleMitTour!) + double.parse(electricityModels[0].eleGobTour!)) == 0.00
-                                                                                          ? SizedBox()
-                                                                                          : Row(
-                                                                                              children: [
-                                                                                                Expanded(flex: 1, child: Text('')),
-                                                                                                Expanded(
-                                                                                                  flex: 2,
-                                                                                                  child: Text(
-                                                                                                    'หน่วยที่ ${int.parse(electricityModels[0].eleThree!) + 1} - ${electricityModels[0].eleTour}',
-                                                                                                    textAlign: TextAlign.start,
-                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                Expanded(
-                                                                                                  flex: 2,
-                                                                                                  child: Text(
-                                                                                                    double.parse(electricityModels[0].eleMitTour!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
-                                                                                                    textAlign: TextAlign.start,
-                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                Expanded(
-                                                                                                  flex: 2,
-                                                                                                  child: Text(
-                                                                                                    double.parse(electricityModels[0].eleMitTour!) == 0.00 ? '${electricityModels[0].eleGobTour}' : '${electricityModels[0].eleMitTour}',
-                                                                                                    textAlign: TextAlign.end,
-                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                Expanded(
-                                                                                                  flex: 1,
-                                                                                                  child: Text(
-                                                                                                    'บาท',
-                                                                                                    textAlign: TextAlign.center,
-                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                  ),
-                                                                                                ),
-                                                                                              ],
-                                                                                            ),
-                                                                                      SizedBox(
-                                                                                        height: 10,
-                                                                                      ),
-                                                                                      (double.parse(electricityModels[0].eleMitFive!) + double.parse(electricityModels[0].eleGobFive!)) == 0.00
-                                                                                          ? SizedBox()
-                                                                                          : Row(
-                                                                                              children: [
-                                                                                                Expanded(flex: 1, child: Text('')),
-                                                                                                Expanded(
-                                                                                                  flex: 2,
-                                                                                                  child: Text(
-                                                                                                    'หน่วยที่ ${int.parse(electricityModels[0].eleTour!) + 1} - ${electricityModels[0].eleFive}',
-                                                                                                    textAlign: TextAlign.start,
-                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                Expanded(
-                                                                                                  flex: 2,
-                                                                                                  child: Text(
-                                                                                                    double.parse(electricityModels[0].eleMitFive!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
-                                                                                                    textAlign: TextAlign.start,
-                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                Expanded(
-                                                                                                  flex: 2,
-                                                                                                  child: Text(
-                                                                                                    double.parse(electricityModels[0].eleMitFive!) == 0.00 ? '${electricityModels[0].eleGobFive}' : '${electricityModels[0].eleMitFive}',
-                                                                                                    textAlign: TextAlign.end,
-                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                Expanded(
-                                                                                                  flex: 1,
-                                                                                                  child: Text(
-                                                                                                    'บาท',
-                                                                                                    textAlign: TextAlign.center,
-                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                  ),
-                                                                                                ),
-                                                                                              ],
-                                                                                            ),
-                                                                                      SizedBox(
-                                                                                        height: 10,
-                                                                                      ),
-                                                                                      (double.parse(electricityModels[0].eleMitSix!) + double.parse(electricityModels[0].eleGobSix!)) == 0.00
-                                                                                          ? SizedBox()
-                                                                                          : Row(
-                                                                                              children: [
-                                                                                                Expanded(flex: 1, child: Text('')),
-                                                                                                Expanded(
-                                                                                                  flex: 2,
-                                                                                                  child: Text(
-                                                                                                    'หน่วยที่ ${electricityModels[0].eleSix} ขึ้นไป',
-                                                                                                    textAlign: TextAlign.start,
-                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                Expanded(
-                                                                                                  flex: 2,
-                                                                                                  child: Text(
-                                                                                                    double.parse(electricityModels[0].eleMitSix!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
-                                                                                                    textAlign: TextAlign.start,
-                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                Expanded(
-                                                                                                  flex: 2,
-                                                                                                  child: Text(
-                                                                                                    double.parse(electricityModels[0].eleMitSix!) == 0.00 ? '${electricityModels[0].eleGobSix}' : '${electricityModels[0].eleMitSix}',
-                                                                                                    textAlign: TextAlign.end,
-                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                Expanded(
-                                                                                                  flex: 1,
-                                                                                                  child: Text(
-                                                                                                    'บาท',
-                                                                                                    textAlign: TextAlign.center,
-                                                                                                    style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                                  ),
-                                                                                                ),
-                                                                                              ],
-                                                                                            ),
-                                                                                      Divider(),
-                                                                                      Row(
-                                                                                        mainAxisAlignment: MainAxisAlignment.end,
-                                                                                        children: [
-                                                                                          Expanded(
-                                                                                            child: Padding(
-                                                                                              padding: const EdgeInsets.all(15.0),
-                                                                                              child: Text(
-                                                                                                // ignore: unnecessary_string_interpolations
-                                                                                                '* อัตราคำนวณปัจจุบันอาจไม่ตรงกับยอดชำระ ณ วันที่บันทึก',
-                                                                                                textAlign: TextAlign.end,
-                                                                                                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 12, fontFamily: Font_.Fonts_T),
-                                                                                              ),
-                                                                                            ),
-                                                                                          ),
-                                                                                        ],
-                                                                                      ),
-                                                                                      SizedBox(
-                                                                                        height: 50,
-                                                                                      )
-                                                                                    ],
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                            );
-                                                                          }));
-                                                                    },
+                                                                      Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
                                                                     child:
                                                                         AutoSizeText(
                                                                       maxLines:
@@ -9607,21 +9293,665 @@ class _RentalInformationState extends State<RentalInformation> {
                                                                       minFontSize:
                                                                           8,
                                                                       // maxFontSize: 15,
-                                                                      'ดูอัตราคำนวณ',
-                                                                      // '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
+                                                                      widget.Get_Value_NameShop_index ==
+                                                                              '1'
+                                                                          ? quotxSelectModels[index].nvat == '0.00'
+                                                                              ? '${double.parse(quotxSelectModels[index].qty!).toStringAsFixed(0)} วัน / ${nFormat.format(double.parse(quotxSelectModels[index].amt!))} บาท'
+                                                                              : '${double.parse(quotxSelectModels[index].qty!).toStringAsFixed(0)} วัน / ${nFormat.format(double.parse(quotxSelectModels[index].nvat!))} %'
+                                                                          : quotxSelectModels[index].fineCal == '0.00'
+                                                                              ? '${double.parse(quotxSelectModels[index].qty!).toStringAsFixed(0)} วัน / ${nFormat.format(double.parse(quotxSelectModels[index].finePri!))} บาท'
+                                                                              : '${double.parse(quotxSelectModels[index].qty!).toStringAsFixed(0)} วัน / ${nFormat.format(double.parse(quotxSelectModels[index].fineCal!))} %',
                                                                       textAlign:
                                                                           TextAlign
-                                                                              .end,
+                                                                              .center,
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        color: PeopleChaoScreen_Color
+                                                                            .Colors_Text2_,
+                                                                        // fontWeight: FontWeight.bold,
+                                                                        fontFamily:
+                                                                            Font_.Fonts_T,
+
+                                                                        //fontSize: 10.0
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                // Expanded(
+                                                                //   flex: 1,
+                                                                //   child: AutoSizeText(
+                                                                //     maxLines: 2,
+                                                                //     minFontSize: 8,
+                                                                //     // maxFontSize: 15,
+                                                                //     double.parse(quotxSelectModels[
+                                                                //                         index]
+                                                                //                     .fine!)
+                                                                //                 .toStringAsFixed(
+                                                                //                     0) ==
+                                                                //             '0'
+                                                                //         ? ''
+                                                                //         : 'เกิน ${double.parse(quotxSelectModels[index].fine!).toStringAsFixed(0)} วัน',
+                                                                //     textAlign:
+                                                                //         TextAlign.right,
+                                                                //     style:
+                                                                //         const TextStyle(
+                                                                //       color: PeopleChaoScreen_Color
+                                                                //           .Colors_Text2_,
+                                                                //       // fontWeight: FontWeight.bold,
+                                                                //       fontFamily:
+                                                                //           Font_.Fonts_T,
+
+                                                                //       //fontSize: 10.0
+                                                                //     ),
+                                                                //   ),
+                                                                // ),
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      AutoSizeText(
+                                                                    maxLines: 2,
+                                                                    minFontSize:
+                                                                        8,
+                                                                    // maxFontSize: 15,
+                                                                    widget.Get_Value_NameShop_index ==
+                                                                            '1'
+                                                                        ? double.parse(quotxSelectModels[index].vat!).toStringAsFixed(0) ==
+                                                                                '0'
+                                                                            ? ''
+                                                                            : double.parse(quotxSelectModels[index].pvat!).toStringAsFixed(0) == '0'
+                                                                                ? 'เกิน ${double.parse(quotxSelectModels[index].vat!).toStringAsFixed(0)} วัน / ${nFormat.format(double.parse(quotxSelectModels[index].total!))} บาท'
+                                                                                : 'เกิน ${double.parse(quotxSelectModels[index].vat!).toStringAsFixed(0)} วัน / ${nFormat.format(double.parse(quotxSelectModels[index].pvat!))} %'
+                                                                        : double.parse(quotxSelectModels[index].fine!).toStringAsFixed(0) == '0'
+                                                                            ? ''
+                                                                            : double.parse(quotxSelectModels[index].fineUnit!).toStringAsFixed(0) == '0'
+                                                                                ? 'เกิน ${double.parse(quotxSelectModels[index].fine!).toStringAsFixed(0)} วัน / ${nFormat.format(double.parse(quotxSelectModels[index].fineLate!))} บาท'
+                                                                                : 'เกิน ${double.parse(quotxSelectModels[index].fine!).toStringAsFixed(0)} วัน / ${nFormat.format(double.parse(quotxSelectModels[index].fineUnit!))} %',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .right,
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      // fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T,
+
+                                                                      //fontSize: 10.0
+                                                                    ),
+                                                                  ),
+                                                                ),
+
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      AutoSizeText(
+                                                                    maxLines: 2,
+                                                                    minFontSize:
+                                                                        8,
+                                                                    // maxFontSize: 15,
+                                                                    widget.Get_Value_NameShop_index ==
+                                                                            '1'
+                                                                        ? double.parse(quotxSelectModels[index].fine_three!).toStringAsFixed(0) ==
+                                                                                '0'
+                                                                            ? ''
+                                                                            : double.parse(quotxSelectModels[index].fine_cal_three!).toStringAsFixed(0) != '0'
+                                                                                ? 'เกิน ${double.parse(quotxSelectModels[index].fine_three!).toStringAsFixed(0)} วัน / ${nFormat.format(double.parse(quotxSelectModels[index].fine_cal_three!))} บาท'
+                                                                                : 'เกิน ${double.parse(quotxSelectModels[index].fine_three!).toStringAsFixed(0)} วัน / ${nFormat.format(double.parse(quotxSelectModels[index].fine_late_three!))} %'
+                                                                        : double.parse(quotxSelectModels[index].fine_three!).toStringAsFixed(0) == '0'
+                                                                            ? ''
+                                                                            : double.parse(quotxSelectModels[index].fine_cal_three!).toStringAsFixed(0) != '0'
+                                                                                ? 'เกิน ${double.parse(quotxSelectModels[index].fine_three!).toStringAsFixed(0)} วัน / ${nFormat.format(double.parse(quotxSelectModels[index].fine_cal_three!))} บาท'
+                                                                                : 'เกิน ${double.parse(quotxSelectModels[index].fine_three!).toStringAsFixed(0)} วัน / ${nFormat.format(double.parse(quotxSelectModels[index].fine_late_three!))} %',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .right,
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      // fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T,
+
+                                                                      //fontSize: 10.0
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      AutoSizeText(
+                                                                    maxLines: 2,
+                                                                    minFontSize:
+                                                                        8,
+                                                                    // maxFontSize: 15,
+                                                                    double.parse(quotxSelectModels[index].fine_max!).toStringAsFixed(0) ==
+                                                                            '0'
+                                                                        ? ''
+                                                                        : 'ไม่เกิน ${nFormat.format(double.parse(quotxSelectModels[index].fine_max!))} บาท',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .right,
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      // fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T,
+
+                                                                      //fontSize: 10.0
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ))
+                                                        : ListTile(
+                                                            onTap: () {
+                                                              setState(() {
+                                                                tappedIndex_1 =
+                                                                    index
+                                                                        .toString();
+                                                              });
+                                                            },
+                                                            title: Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                // color: Colors.green[100]!
+                                                                //     .withOpacity(0.5),
+                                                                border: Border(
+                                                                  bottom:
+                                                                      BorderSide(
+                                                                    color: Colors
+                                                                        .black12,
+                                                                    width: 1,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              child: Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child:
+                                                                        AutoSizeText(
+                                                                      maxLines:
+                                                                          2,
+                                                                      minFontSize:
+                                                                          8,
+                                                                      // maxFontSize: 15,
+                                                                      '${quotxSelectModels[index].unit} / ${quotxSelectModels[index].term} (งวด)',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .start,
                                                                       style: const TextStyle(
                                                                           color: PeopleChaoScreen_Color.Colors_Text2_,
                                                                           //fontWeight: FontWeight.bold,
                                                                           fontFamily: Font_.Fonts_T),
                                                                     ),
                                                                   ),
-                                                                ),
-                                                        ],
-                                                      ),
-                                                    )),
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child:
+                                                                        AutoSizeText(
+                                                                      maxLines:
+                                                                          2,
+                                                                      minFontSize:
+                                                                          8,
+                                                                      // maxFontSize: 15,
+                                                                      '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].sdate!} 00:00:00'))} - ${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].ldate!} 00:00:00'))}',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style: const TextStyle(
+                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                          //fontWeight: FontWeight.bold,
+                                                                          fontFamily: Font_.Fonts_T),
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child:
+                                                                        Tooltip(
+                                                                      richMessage:
+                                                                          TextSpan(
+                                                                        text:
+                                                                            '${quotxSelectModels[index].expname}',
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          color:
+                                                                              HomeScreen_Color.Colors_Text1_,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                          fontFamily:
+                                                                              FontWeight_.Fonts_T,
+                                                                          //fontSize: 10.0
+                                                                        ),
+                                                                      ),
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(5),
+                                                                        color: Colors
+                                                                            .grey[200],
+                                                                      ),
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        maxLines:
+                                                                            2,
+                                                                        minFontSize:
+                                                                            8,
+                                                                        // maxFontSize: 15,
+                                                                        '${quotxSelectModels[index].expname}',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style: const TextStyle(
+                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            //fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  quotxSelectModels[index]
+                                                                              .ele_ty ==
+                                                                          '0'
+                                                                      ? Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              AutoSizeText(
+                                                                            maxLines:
+                                                                                2,
+                                                                            minFontSize:
+                                                                                8,
+                                                                            // maxFontSize: 15,
+                                                                            quotxSelectModels[index].qty == '0.00'
+                                                                                ? '${nFormat.format(double.parse(quotxSelectModels[index].total!))} / งวด'
+                                                                                : '${nFormat.format(double.parse(quotxSelectModels[index].qty!))} / หน่วย',
+                                                                            // '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
+                                                                            textAlign:
+                                                                                TextAlign.end,
+                                                                            style: const TextStyle(
+                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                //fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T),
+                                                                          ),
+                                                                        )
+                                                                      : Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              AutoSizeText(
+                                                                            maxLines:
+                                                                                2,
+                                                                            minFontSize:
+                                                                                8,
+                                                                            // maxFontSize: 15,
+                                                                            'อัตราพิเศษ',
+                                                                            // '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
+                                                                            textAlign:
+                                                                                TextAlign.end,
+                                                                            style: const TextStyle(
+                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                //fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T),
+                                                                          ),
+                                                                        ),
+                                                                  quotxSelectModels[index]
+                                                                              .ele_ty ==
+                                                                          '0'
+                                                                      ? Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              AutoSizeText(
+                                                                            maxLines:
+                                                                                2,
+                                                                            minFontSize:
+                                                                                8,
+                                                                            // maxFontSize: 15,
+                                                                            '${nFormat.format(int.parse(quotxSelectModels[index].term!) * double.parse(quotxSelectModels[index].total!))}',
+                                                                            textAlign:
+                                                                                TextAlign.end,
+                                                                            style: const TextStyle(
+                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                //fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T),
+                                                                          ),
+                                                                        )
+                                                                      : Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              GestureDetector(
+                                                                            onTap:
+                                                                                () {
+                                                                              showcountmiter(index).then((value) => showDialog(
+                                                                                  context: context,
+                                                                                  builder: (_) {
+                                                                                    return Dialog(
+                                                                                      child: Container(
+                                                                                        width: MediaQuery.of(context).size.width * 0.5,
+                                                                                        height: MediaQuery.of(context).size.width * 0.2,
+                                                                                        child: SingleChildScrollView(
+                                                                                          child: Column(
+                                                                                            children: [
+                                                                                              Row(
+                                                                                                children: [
+                                                                                                  Expanded(
+                                                                                                    child: Padding(
+                                                                                                      padding: const EdgeInsets.all(15.0),
+                                                                                                      child: Text(
+                                                                                                        // ignore: unnecessary_string_interpolations
+                                                                                                        'อัตราการคำนวณปัจจุบัน',
+                                                                                                        textAlign: TextAlign.center,
+                                                                                                        style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontWeight: FontWeight.bold, fontSize: 25, fontFamily: Font_.Fonts_T),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                              Divider(),
+                                                                                              (double.parse(electricityModels[0].eleMitOne!) + double.parse(electricityModels[0].eleGobOne!)) == 0.00
+                                                                                                  ? SizedBox()
+                                                                                                  : Row(
+                                                                                                      children: [
+                                                                                                        Expanded(flex: 1, child: Text('')),
+                                                                                                        Expanded(
+                                                                                                          flex: 2,
+                                                                                                          child: Text(
+                                                                                                            'หน่วยที่ 0 - ${electricityModels[0].eleOne}',
+                                                                                                            textAlign: TextAlign.start,
+                                                                                                            style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                        Expanded(
+                                                                                                          flex: 2,
+                                                                                                          child: Text(
+                                                                                                            double.parse(electricityModels[0].eleMitOne!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
+                                                                                                            textAlign: TextAlign.start,
+                                                                                                            style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                        Expanded(
+                                                                                                          flex: 2,
+                                                                                                          child: Text(
+                                                                                                            double.parse(electricityModels[0].eleMitOne!) == 0.00 ? '${electricityModels[0].eleGobOne}' : '${electricityModels[0].eleMitOne}',
+                                                                                                            textAlign: TextAlign.end,
+                                                                                                            style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                        Expanded(
+                                                                                                          flex: 1,
+                                                                                                          child: Text(
+                                                                                                            'บาท',
+                                                                                                            textAlign: TextAlign.center,
+                                                                                                            style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                      ],
+                                                                                                    ),
+                                                                                              SizedBox(
+                                                                                                height: 10,
+                                                                                              ),
+                                                                                              (double.parse(electricityModels[0].eleMitTwo!) + double.parse(electricityModels[0].eleGobTwo!)) == 0.00
+                                                                                                  ? SizedBox()
+                                                                                                  : Row(
+                                                                                                      children: [
+                                                                                                        Expanded(flex: 1, child: Text('')),
+                                                                                                        Expanded(
+                                                                                                          flex: 2,
+                                                                                                          child: Text(
+                                                                                                            'หน่วยที่ ${int.parse(electricityModels[0].eleOne!) + 1} - ${electricityModels[0].eleTwo}',
+                                                                                                            textAlign: TextAlign.start,
+                                                                                                            style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                        Expanded(
+                                                                                                          flex: 2,
+                                                                                                          child: Text(
+                                                                                                            double.parse(electricityModels[0].eleMitTwo!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
+                                                                                                            textAlign: TextAlign.start,
+                                                                                                            style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                        Expanded(
+                                                                                                          flex: 2,
+                                                                                                          child: Text(
+                                                                                                            double.parse(electricityModels[0].eleMitTwo!) == 0.00 ? '${electricityModels[0].eleGobTwo}' : '${electricityModels[0].eleMitTwo}',
+                                                                                                            textAlign: TextAlign.end,
+                                                                                                            style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                        Expanded(
+                                                                                                          flex: 1,
+                                                                                                          child: Text(
+                                                                                                            'บาท',
+                                                                                                            textAlign: TextAlign.center,
+                                                                                                            style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                      ],
+                                                                                                    ),
+                                                                                              SizedBox(
+                                                                                                height: 10,
+                                                                                              ),
+                                                                                              (double.parse(electricityModels[0].eleMitThree!) + double.parse(electricityModels[0].eleGobThree!)) == 0.00
+                                                                                                  ? SizedBox()
+                                                                                                  : Row(
+                                                                                                      children: [
+                                                                                                        Expanded(flex: 1, child: Text('')),
+                                                                                                        Expanded(
+                                                                                                          flex: 2,
+                                                                                                          child: Text(
+                                                                                                            'หน่วยที่ ${int.parse(electricityModels[0].eleTwo!) + 1} - ${electricityModels[0].eleThree}',
+                                                                                                            textAlign: TextAlign.start,
+                                                                                                            style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                        Expanded(
+                                                                                                          flex: 2,
+                                                                                                          child: Text(
+                                                                                                            double.parse(electricityModels[0].eleMitThree!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
+                                                                                                            textAlign: TextAlign.start,
+                                                                                                            style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                        Expanded(
+                                                                                                          flex: 2,
+                                                                                                          child: Text(
+                                                                                                            double.parse(electricityModels[0].eleMitThree!) == 0.00 ? '${electricityModels[0].eleGobThree}' : '${electricityModels[0].eleMitThree}',
+                                                                                                            textAlign: TextAlign.end,
+                                                                                                            style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                        Expanded(
+                                                                                                          flex: 1,
+                                                                                                          child: Text(
+                                                                                                            'บาท',
+                                                                                                            textAlign: TextAlign.center,
+                                                                                                            style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                      ],
+                                                                                                    ),
+                                                                                              SizedBox(
+                                                                                                height: 10,
+                                                                                              ),
+                                                                                              (double.parse(electricityModels[0].eleMitTour!) + double.parse(electricityModels[0].eleGobTour!)) == 0.00
+                                                                                                  ? SizedBox()
+                                                                                                  : Row(
+                                                                                                      children: [
+                                                                                                        Expanded(flex: 1, child: Text('')),
+                                                                                                        Expanded(
+                                                                                                          flex: 2,
+                                                                                                          child: Text(
+                                                                                                            'หน่วยที่ ${int.parse(electricityModels[0].eleThree!) + 1} - ${electricityModels[0].eleTour}',
+                                                                                                            textAlign: TextAlign.start,
+                                                                                                            style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                        Expanded(
+                                                                                                          flex: 2,
+                                                                                                          child: Text(
+                                                                                                            double.parse(electricityModels[0].eleMitTour!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
+                                                                                                            textAlign: TextAlign.start,
+                                                                                                            style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                        Expanded(
+                                                                                                          flex: 2,
+                                                                                                          child: Text(
+                                                                                                            double.parse(electricityModels[0].eleMitTour!) == 0.00 ? '${electricityModels[0].eleGobTour}' : '${electricityModels[0].eleMitTour}',
+                                                                                                            textAlign: TextAlign.end,
+                                                                                                            style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                        Expanded(
+                                                                                                          flex: 1,
+                                                                                                          child: Text(
+                                                                                                            'บาท',
+                                                                                                            textAlign: TextAlign.center,
+                                                                                                            style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                      ],
+                                                                                                    ),
+                                                                                              SizedBox(
+                                                                                                height: 10,
+                                                                                              ),
+                                                                                              (double.parse(electricityModels[0].eleMitFive!) + double.parse(electricityModels[0].eleGobFive!)) == 0.00
+                                                                                                  ? SizedBox()
+                                                                                                  : Row(
+                                                                                                      children: [
+                                                                                                        Expanded(flex: 1, child: Text('')),
+                                                                                                        Expanded(
+                                                                                                          flex: 2,
+                                                                                                          child: Text(
+                                                                                                            'หน่วยที่ ${int.parse(electricityModels[0].eleTour!) + 1} - ${electricityModels[0].eleFive}',
+                                                                                                            textAlign: TextAlign.start,
+                                                                                                            style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                        Expanded(
+                                                                                                          flex: 2,
+                                                                                                          child: Text(
+                                                                                                            double.parse(electricityModels[0].eleMitFive!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
+                                                                                                            textAlign: TextAlign.start,
+                                                                                                            style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                        Expanded(
+                                                                                                          flex: 2,
+                                                                                                          child: Text(
+                                                                                                            double.parse(electricityModels[0].eleMitFive!) == 0.00 ? '${electricityModels[0].eleGobFive}' : '${electricityModels[0].eleMitFive}',
+                                                                                                            textAlign: TextAlign.end,
+                                                                                                            style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                        Expanded(
+                                                                                                          flex: 1,
+                                                                                                          child: Text(
+                                                                                                            'บาท',
+                                                                                                            textAlign: TextAlign.center,
+                                                                                                            style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                      ],
+                                                                                                    ),
+                                                                                              SizedBox(
+                                                                                                height: 10,
+                                                                                              ),
+                                                                                              (double.parse(electricityModels[0].eleMitSix!) + double.parse(electricityModels[0].eleGobSix!)) == 0.00
+                                                                                                  ? SizedBox()
+                                                                                                  : Row(
+                                                                                                      children: [
+                                                                                                        Expanded(flex: 1, child: Text('')),
+                                                                                                        Expanded(
+                                                                                                          flex: 2,
+                                                                                                          child: Text(
+                                                                                                            'หน่วยที่ ${electricityModels[0].eleSix} ขึ้นไป',
+                                                                                                            textAlign: TextAlign.start,
+                                                                                                            style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                        Expanded(
+                                                                                                          flex: 2,
+                                                                                                          child: Text(
+                                                                                                            double.parse(electricityModels[0].eleMitSix!) == 0.00 ? 'เหมาจ่าย' : 'หน่วยละ',
+                                                                                                            textAlign: TextAlign.start,
+                                                                                                            style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                        Expanded(
+                                                                                                          flex: 2,
+                                                                                                          child: Text(
+                                                                                                            double.parse(electricityModels[0].eleMitSix!) == 0.00 ? '${electricityModels[0].eleGobSix}' : '${electricityModels[0].eleMitSix}',
+                                                                                                            textAlign: TextAlign.end,
+                                                                                                            style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                        Expanded(
+                                                                                                          flex: 1,
+                                                                                                          child: Text(
+                                                                                                            'บาท',
+                                                                                                            textAlign: TextAlign.center,
+                                                                                                            style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                      ],
+                                                                                                    ),
+                                                                                              Divider(),
+                                                                                              Row(
+                                                                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                                                                children: [
+                                                                                                  Expanded(
+                                                                                                    child: Padding(
+                                                                                                      padding: const EdgeInsets.all(15.0),
+                                                                                                      child: Text(
+                                                                                                        // ignore: unnecessary_string_interpolations
+                                                                                                        '* อัตราคำนวณปัจจุบันอาจไม่ตรงกับยอดชำระ ณ วันที่บันทึก',
+                                                                                                        textAlign: TextAlign.end,
+                                                                                                        style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 12, fontFamily: Font_.Fonts_T),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                              SizedBox(
+                                                                                                height: 50,
+                                                                                              )
+                                                                                            ],
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    );
+                                                                                  }));
+                                                                            },
+                                                                            child:
+                                                                                AutoSizeText(
+                                                                              maxLines: 2,
+                                                                              minFontSize: 8,
+                                                                              // maxFontSize: 15,
+                                                                              'ดูอัตราคำนวณ',
+                                                                              // '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
+                                                                              textAlign: TextAlign.end,
+                                                                              style: const TextStyle(
+                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                  //fontWeight: FontWeight.bold,
+                                                                                  fontFamily: Font_.Fonts_T),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                ],
+                                                              ),
+                                                            )),
                                               ),
                                             );
                                           },

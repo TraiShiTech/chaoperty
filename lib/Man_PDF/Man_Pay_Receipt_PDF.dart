@@ -1,12 +1,15 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../Constant/Myconstant.dart';
 import '../Model/GetFinnancetrans_Model.dart';
+import '../Model/GetRenTal_Model.dart';
 import '../Model/GetUser_Model.dart';
 import '../Model/Read_DataONBill_PDF_Model.dart';
+import '../Model/electricity_model.dart';
 import '../Model/trans_re_bill_history_model.dart';
 import '../PDF/PDF_Receipt/pdf_AC_his_statusbill.dart';
 import '../PDF_TP2/PDF_Receipt_TP2/pdf_AC_his_statusbill_TP2.dart';
@@ -20,6 +23,7 @@ import '../PDF_TP8_Choice/PDF_Receipt_TP8_Choice/pdf_AC_his_statusbill_TP8_Choic
 import '../PDF_TP9/PDF_Receipt_TP9/pdf_AC_his_statusbill_TP9.dart';
 import '../PDF_TP9_Lao/PDF_Receipt_TP9/pdf_AC_his_statusbill_TP9.dart';
 import '../PDF_TP8_Ortorkor/PDF_Receipt_TP8_Ortorkor/pdf_AC_his_statusbill_TP8.dart';
+import '../Style/loadAndCacheImage.dart';
 
 class ManPay_Receipt_PDF {
   // --------------------------------> PDF หลังรับชำระ และ ประวัติบิล
@@ -46,6 +50,7 @@ class ManPay_Receipt_PDF {
       bills_name) async {
     List<FinnancetransModel> finnancetransModels = [];
     List<TransReBillHistoryModel> _TransReBillHistoryModels = [];
+    List<ElectricityModel> Water_electricity = [];
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
     var rtser = preferences.getString('renTalSer');
@@ -78,7 +83,16 @@ class ManPay_Receipt_PDF {
     String numdoctax = '';
     List<String> ref_invoice = [];
     String com_ment = '';
-    var scname_, cname_, addr_, tax_, tel_, email_, stype_, type_, ser_user;
+    var scname_,
+        cname_,
+        addr_,
+        tax_,
+        tel_,
+        email_,
+        stype_,
+        type_,
+        ser_user,
+        img_logo;
     var docno_,
         doctax_,
         cid_,
@@ -92,7 +106,7 @@ class ManPay_Receipt_PDF {
         date_pay,
         Howto_LockJonPay;
     print('$docno ///  $docnoin docnoindocnoin');
-
+    //  String url = '${MyConstant().domain}/files/$foder/logo/$img_logo';
 /////////////////////------------------------->
     String url_1 =
         '${MyConstant().domain}/GC_Data_OnBill_PDF.php?isAdd=true&ren=$ren&ciddoc=$docnoin';
@@ -213,6 +227,7 @@ class ManPay_Receipt_PDF {
 
     if (_TransReBillHistoryModels.length != 0) {
       _TransReBillHistoryModels.clear();
+      Water_electricity.clear();
       sum_pvat = 0;
       sum_vat = 0;
       sum_wht = 0;
@@ -276,14 +291,31 @@ class ManPay_Receipt_PDF {
       }
     } catch (e) {}
 
-    /////////////////------------------------------------------>
+///////////////////----------------------------------------->
+    String url_4 =
+        '${MyConstant().domain}/GC_countmiter_PDF.php?isAdd=true&ren=$ren&ciddoc=$cid_&docnoin=$docnoin&type_doc=Receipt';
+    try {
+      var response = await http.get(Uri.parse(url_4));
+
+      var result = json.decode(response.body);
+      print(result);
+      if (result.toString() != 'null') {
+        for (var map in result) {
+          ElectricityModel quotxSelectModel = ElectricityModel.fromJson(map);
+          Water_electricity.add(quotxSelectModel);
+        }
+      }
+      print('Water_electricity.length $ren $cid_ $docnoin');
+      print(Water_electricity.length);
+    } catch (e) {}
+///////////////////----------------------------------------->
 
     int count_inv = _TransReBillHistoryModels.where((element) =>
         element.count_inv != '0' || element.count_inv == '0.00').length;
 
     int sum_fine = _TransReBillHistoryModels.where(
         (element) => element.fine == '1' || element.fine == '1.00').length;
-    /////////////////------------------------------------------>
+/////////////////------------------------------------------>
 
     final tableData00 = (count_inv != 0)
         ? [
@@ -466,6 +498,8 @@ class ManPay_Receipt_PDF {
     //     '${_TransReBillHistoryModels.where((model) => model.fine == '1' || model.fine == '1.00').map((model) => double.parse(model.total ?? '0.00')).fold(0.0, (previousValue, element) => previousValue + element)}');
     print(
         '${finnancetransModels.length}///${dis_sum_Matjum}  // ${sum_amt} //${_TransReBillHistoryModels.length}////$docnoin  ****date_pay : $date_pay ');
+
+
 
     Future.delayed(Duration(milliseconds: 500), () async {
       if (tem_page_ser.toString() == '0' || tem_page_ser == null) {
@@ -743,97 +777,96 @@ class ManPay_Receipt_PDF {
               fonts_pdf);
         }
       } else if (tem_page_ser.toString() == '4') {
-        if (rtser.toString() == '118') {
-          Pdfgen_his_statusbill_TP9_Lao.exportPDF_statusbill_TP9_Lao(
-              Cust_no,
-              cid_,
-              Zone_s,
-              Ln_s,
-              fname,
-              foder,
-              tableData00,
-              tableData01,
-              context,
-              _TransReBillHistoryModels,
-              'Num_cid',
-              'Namenew',
-              '${sum_pvat}',
-              sum_vat,
-              sum_wht,
-              sum_amt,
-              sum_disp,
-              sum_disamt,
-              '${(sum_amt - sum_disamt)}',
-              renTal_name,
-              scname_,
-              cname_,
-              addr_,
-              tax_,
-              bill_addr,
-              bill_email,
-              bill_tel,
-              bill_tax,
-              bill_name,
-              newValuePDFimg,
-              numinvoice,
-              numdoctax,
-              ref_invoice,
-              finnancetransModels,
-              date_Transaction,
-              date_pay,
-              Howto_LockJonPay,
-              dis_sum_Matjum,
-              TitleType_Default_Receipt_Name,
-              dis_sum_Pakan,
-              sum_fee,
-              com_ment,
-              fonts_pdf);
-        } else {
-          Pdfgen_his_statusbill_TP9.exportPDF_statusbill_TP9(
-              Cust_no,
-              cid_,
-              Zone_s,
-              Ln_s,
-              fname,
-              foder,
-              tableData00,
-              tableData01,
-              context,
-              _TransReBillHistoryModels,
-              'Num_cid',
-              'Namenew',
-              '${sum_pvat}',
-              sum_vat,
-              sum_wht,
-              sum_amt,
-              sum_disp,
-              sum_disamt,
-              '${(sum_amt - sum_disamt)}',
-              renTal_name,
-              scname_,
-              cname_,
-              addr_,
-              tax_,
-              bill_addr,
-              bill_email,
-              bill_tel,
-              bill_tax,
-              bill_name,
-              newValuePDFimg,
-              numinvoice,
-              numdoctax,
-              ref_invoice,
-              finnancetransModels,
-              date_Transaction,
-              date_pay,
-              Howto_LockJonPay,
-              dis_sum_Matjum,
-              TitleType_Default_Receipt_Name,
-              dis_sum_Pakan,
-              sum_fee,
-              com_ment,
-              fonts_pdf);
-        }
+        Pdfgen_his_statusbill_TP9_Lao.exportPDF_statusbill_TP9_Lao(
+            Cust_no,
+            cid_,
+            Zone_s,
+            Ln_s,
+            fname,
+            foder,
+            tableData00,
+            tableData01,
+            context,
+            _TransReBillHistoryModels,
+            'Num_cid',
+            'Namenew',
+            '${sum_pvat}',
+            sum_vat,
+            sum_wht,
+            sum_amt,
+            sum_disp,
+            sum_disamt,
+            '${(sum_amt - sum_disamt)}',
+            renTal_name,
+            scname_,
+            cname_,
+            addr_,
+            tax_,
+            bill_addr,
+            bill_email,
+            bill_tel,
+            bill_tax,
+            bill_name,
+            newValuePDFimg,
+            numinvoice,
+            numdoctax,
+            ref_invoice,
+            finnancetransModels,
+            date_Transaction,
+            date_pay,
+            Howto_LockJonPay,
+            dis_sum_Matjum,
+            TitleType_Default_Receipt_Name,
+            dis_sum_Pakan,
+            sum_fee,
+            com_ment,
+            fonts_pdf);
+      } else if (tem_page_ser.toString() == '5') {
+        Pdfgen_his_statusbill_TP9.exportPDF_statusbill_TP9(
+            Cust_no,
+            cid_,
+            Zone_s,
+            Ln_s,
+            fname,
+            foder,
+            tableData00,
+            tableData01,
+            context,
+            _TransReBillHistoryModels,
+            'Num_cid',
+            'Namenew',
+            '${sum_pvat}',
+            sum_vat,
+            sum_wht,
+            sum_amt,
+            sum_disp,
+            sum_disamt,
+            '${(sum_amt - sum_disamt)}',
+            renTal_name,
+            scname_,
+            cname_,
+            addr_,
+            tax_,
+            bill_addr,
+            bill_email,
+            bill_tel,
+            bill_tax,
+            bill_name,
+            newValuePDFimg,
+            numinvoice,
+            numdoctax,
+            ref_invoice,
+            finnancetransModels,
+            date_Transaction,
+            date_pay,
+            Howto_LockJonPay,
+            dis_sum_Matjum,
+            TitleType_Default_Receipt_Name,
+            dis_sum_Pakan,
+            sum_fee,
+            com_ment,
+            fonts_pdf,
+            Water_electricity);
       }
     });
 

@@ -13,6 +13,7 @@ import '../../CRC_16_Prompay/generate_qrcode.dart';
 import '../../Constant/Myconstant.dart';
 import '../../PeopleChao/Pays_.dart';
 import '../../Style/ThaiBaht.dart';
+import '../../Style/loadAndCacheImage.dart';
 
 class Pdfgen_his_statusbill_TP3 {
 //////////---------------------------------------------------->(ใบเสร็จรับเงิน/ใบกำกับภาษี)   ใช้  //
@@ -88,6 +89,7 @@ class Pdfgen_his_statusbill_TP3 {
         (await rootBundle.load('images/LOGO.png')).buffer.asUint8List();
     List netImage = [];
     List netImage_QR = [];
+    Uint8List? resizedLogo = await getResizedLogo();
 
     ///
     ///
@@ -105,9 +107,9 @@ class Pdfgen_his_statusbill_TP3 {
     String total_QR =
         '${nFormat.format(double.parse('${Total}') - Total_CASH)}';
     String newTotal_QR = total_QR.replaceAll(RegExp(r'[^0-9]'), '');
-    for (int i = 0; i < newValuePDFimg.length; i++) {
-      netImage.add(await networkImage('${newValuePDFimg[i]}'));
-    }
+    // for (int i = 0; i < newValuePDFimg.length; i++) {
+    //   netImage.add(await networkImage('${newValuePDFimg[i]}'));
+    // }
     for (int i = 0; i < finnancetransModels.length; i++) {
       if (finnancetransModels[i].img == null ||
           finnancetransModels[i].img.toString() == '') {
@@ -173,20 +175,20 @@ class Pdfgen_his_statusbill_TP3 {
           return pw.Column(children: [
             pw.Row(
               children: [
-                (netImage.isEmpty)
-                    ? pw.Container(
-                        height: 72,
-                        width: 70,
-                        decoration: const pw.BoxDecoration(
-                          color: PdfColors.grey200,
-                          border: pw.Border(
-                            right: pw.BorderSide(color: PdfColors.grey300),
-                            left: pw.BorderSide(color: PdfColors.grey300),
-                            top: pw.BorderSide(color: PdfColors.grey300),
-                            bottom: pw.BorderSide(color: PdfColors.grey300),
-                          ),
-                        ),
-                        child: pw.Center(
+                pw.Container(
+                  height: 60,
+                  width: 60,
+                  decoration: pw.BoxDecoration(
+                    color: PdfColors.grey200,
+                    border: pw.Border.all(color: PdfColors.grey300),
+                  ),
+                  child: resizedLogo != null
+                      ? pw.Image(
+                          pw.MemoryImage(resizedLogo),
+                          height: 60,
+                          width: 60,
+                        )
+                      : pw.Center(
                           child: pw.Text(
                             '$bill_name ',
                             maxLines: 1,
@@ -196,31 +198,56 @@ class Pdfgen_his_statusbill_TP3 {
                               color: Colors_pd,
                             ),
                           ),
-                        ))
+                        ),
+                ),
+                // (netImage.isEmpty)
+                //     ? pw.Container(
+                //         height: 72,
+                //         width: 70,
+                //         decoration: const pw.BoxDecoration(
+                //           color: PdfColors.grey200,
+                //           border: pw.Border(
+                //             right: pw.BorderSide(color: PdfColors.grey300),
+                //             left: pw.BorderSide(color: PdfColors.grey300),
+                //             top: pw.BorderSide(color: PdfColors.grey300),
+                //             bottom: pw.BorderSide(color: PdfColors.grey300),
+                //           ),
+                //         ),
+                //         child: pw.Center(
+                //           child: pw.Text(
+                //             '$bill_name ',
+                //             maxLines: 1,
+                //             style: pw.TextStyle(
+                //               fontSize: 10,
+                //               font: ttf,
+                //               color: Colors_pd,
+                //             ),
+                //           ),
+                //         ))
 
-                    // pw.Image(
-                    //     pw.MemoryImage(iconImage),
-                    //     height: 72,
-                    //     width: 70,
-                    //   )
-                    : pw.Container(
-                        height: 72,
-                        width: 70,
-                        decoration: const pw.BoxDecoration(
-                          color: PdfColors.grey200,
-                          border: pw.Border(
-                            right: pw.BorderSide(color: PdfColors.grey300),
-                            left: pw.BorderSide(color: PdfColors.grey300),
-                            top: pw.BorderSide(color: PdfColors.grey300),
-                            bottom: pw.BorderSide(color: PdfColors.grey300),
-                          ),
-                        ),
-                        child: pw.Image(
-                          (netImage[0]),
-                          height: 72,
-                          width: 70,
-                        ),
-                      ),
+                //     // pw.Image(
+                //     //     pw.MemoryImage(iconImage),
+                //     //     height: 72,
+                //     //     width: 70,
+                //     //   )
+                //     : pw.Container(
+                //         height: 72,
+                //         width: 70,
+                //         decoration: const pw.BoxDecoration(
+                //           color: PdfColors.grey200,
+                //           border: pw.Border(
+                //             right: pw.BorderSide(color: PdfColors.grey300),
+                //             left: pw.BorderSide(color: PdfColors.grey300),
+                //             top: pw.BorderSide(color: PdfColors.grey300),
+                //             bottom: pw.BorderSide(color: PdfColors.grey300),
+                //           ),
+                //         ),
+                //         child: pw.Image(
+                //           (netImage[0]),
+                //           height: 72,
+                //           width: 70,
+                //         ),
+                //       ),
                 pw.SizedBox(width: 1 * PdfPageFormat.mm),
                 pw.Container(
                   width: 200,

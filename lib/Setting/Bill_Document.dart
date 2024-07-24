@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Constant/Myconstant.dart';
@@ -19,6 +20,7 @@ import '../Model/GetZone_Model.dart';
 import '../Model/Get_bill_one.dart';
 import '../Model/Get_bill_two.dart';
 import '../Responsive/responsive.dart';
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 import 'package:http/http.dart' as http;
 
@@ -233,8 +235,16 @@ class _BillDocumentState extends State<BillDocument> {
     } catch (e) {}
   }
 
-  Future<Null> DialogEdit(int index, String typeDocu, String titleDocu,
-      String numDocu, String serDocu) async {
+  String? set_dd;
+  Future<Null> DialogEdit(
+      int index,
+      String typeDocu,
+      String titleDocu,
+      String numDocu,
+      String serDocu,
+      String dtype,
+      String yy,
+      String mm) async {
     final _formKey = GlobalKey<FormState>();
     final Formtitledoc_text = TextEditingController();
     final FormtitleDocu_text = TextEditingController();
@@ -244,7 +254,7 @@ class _BillDocumentState extends State<BillDocument> {
 
     FormtitleDocu_text.text = titleDocu;
     FormnumDocu_text.text = numDocu;
-
+    set_dd = null;
     showDialog<String>(
       barrierDismissible: false,
       context: context,
@@ -277,255 +287,512 @@ class _BillDocumentState extends State<BillDocument> {
               // border: Border.all(color: Colors.white, width: 1),
             ),
             child: SingleChildScrollView(
-              child: Column(
-                // mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'ประเภทเอกสาร ( $typeDocu )',
-                          textAlign: TextAlign.left,
-                          style: const TextStyle(
-                            color: SettingScreen_Color.Colors_Text1_,
-                            fontFamily: FontWeight_.Fonts_T,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      // width: 200,
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        controller: Formtitledoc_text,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'ใส่ข้อมูลให้ครบถ้วน ';
-                          }
-                          // if (int.parse(value.toString()) < 13) {
-                          //   return '< 13';
-                          // }
-                          return null;
-                        },
-                        // maxLength: 13,
-                        cursorColor: Colors.green,
-                        decoration: InputDecoration(
-                            fillColor: Colors.white.withOpacity(0.3),
-                            filled: true,
-                            // prefixIcon:
-                            //     const Icon(Icons.person_pin, color: Colors.black),
-                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                            focusedBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.black,
-                              ),
+              child: StreamBuilder(
+                  stream: Stream.periodic(const Duration(seconds: 0)),
+                  builder: (context, snapshot) {
+                    return Column(
+                      // mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Translate.TranslateAndSetText(
+                                  'ประเภทเอกสาร',
+                                  SettingScreen_Color.Colors_Text1_,
+                                  TextAlign.center,
+                                  FontWeight.bold,
+                                  FontWeight_.Fonts_T,
+                                  14,
+                                  1),
                             ),
-                            enabledBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            labelText: 'ประเภทเอกสาร',
-                            labelStyle: const TextStyle(
-                              color: Colors.black54,
-                              fontFamily: FontWeight_.Fonts_T,
-                            )),
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.deny(RegExp("[' ']")),
-                          // for below version 2 use this
-                          // FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                          // for version 2 and greater youcan also use this
-                          // FilteringTextInputFormatter.digitsOnly
-                        ],
-                      ),
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'หัวบิล ( $titleDocu )',
-                          textAlign: TextAlign.left,
-                          style: const TextStyle(
-                            color: SettingScreen_Color.Colors_Text1_,
-                            fontFamily: FontWeight_.Fonts_T,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      // width: 200,
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        controller: FormtitleDocu_text,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'ใส่ข้อมูลให้ครบถ้วน ';
-                          }
-                          // if (int.parse(value.toString()) < 13) {
-                          //   return '< 13';
-                          // }
-                          return null;
-                        },
-                        // maxLength: 13,
-                        cursorColor: Colors.green,
-                        decoration: InputDecoration(
-                            fillColor: Colors.white.withOpacity(0.3),
-                            filled: true,
-                            // prefixIcon:
-                            //     const Icon(Icons.person_pin, color: Colors.black),
-                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                            focusedBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.black,
-                              ),
-                            ),
-                            enabledBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            labelText: 'แก้ไขหัวบิล',
-                            labelStyle: const TextStyle(
-                              color: Colors.black54,
-                              fontFamily: FontWeight_.Fonts_T,
-                            )),
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.deny(RegExp("[' ']")),
-                          // for below version 2 use this
-                          // FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                          // for version 2 and greater youcan also use this
-                          // FilteringTextInputFormatter.digitsOnly
-                        ],
-                      ),
-                    ),
-                  ),
-                  if (numDocu != '')
-                    SizedBox(
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  'เลขเอกสาร ( $numDocu )',
-                                  textAlign: TextAlign.left,
-                                  style: const TextStyle(
-                                    color: SettingScreen_Color.Colors_Text1_,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                '( $typeDocu )',
+                                textAlign: TextAlign.left,
+                                style: const TextStyle(
+                                  color: SettingScreen_Color.Colors_Text1_,
+                                  fontFamily: FontWeight_.Fonts_T,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SizedBox(
-                              // width: 200,
-                              child: TextFormField(
-                                keyboardType: TextInputType.number,
-                                controller: FormnumDocu_text,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                  }
-                                  // if (int.parse(value.toString()) < 13) {
-                                  //   return '< 13';
-                                  // }
-                                  return null;
-                                },
-                                // maxLength: 13,
-                                cursorColor: Colors.green,
-                                decoration: InputDecoration(
-                                    fillColor: Colors.white.withOpacity(0.3),
-                                    filled: true,
-                                    // prefixIcon:
-                                    //     const Icon(Icons.person_pin, color: Colors.black),
-                                    // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                    focusedBorder: const OutlineInputBorder(
-                                      borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(15),
-                                        topLeft: Radius.circular(15),
-                                        bottomRight: Radius.circular(15),
-                                        bottomLeft: Radius.circular(15),
-                                      ),
-                                      borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.black,
-                                      ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SizedBox(
+                            // width: 200,
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              controller: Formtitledoc_text,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                }
+                                // if (int.parse(value.toString()) < 13) {
+                                //   return '< 13';
+                                // }
+                                return null;
+                              },
+                              // maxLength: 13,
+                              cursorColor: Colors.green,
+                              decoration: InputDecoration(
+                                  fillColor: Colors.white.withOpacity(0.3),
+                                  filled: true,
+                                  // prefixIcon:
+                                  //     const Icon(Icons.person_pin, color: Colors.black),
+                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
                                     ),
-                                    enabledBorder: const OutlineInputBorder(
-                                      borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(15),
-                                        topLeft: Radius.circular(15),
-                                        bottomRight: Radius.circular(15),
-                                        bottomLeft: Radius.circular(15),
-                                      ),
-                                      borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey,
-                                      ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.black,
                                     ),
-                                    labelText: 'แก้ไขเลขเอกสาร',
-                                    labelStyle: const TextStyle(
-                                      color: Colors.black54,
-                                      fontFamily: FontWeight_.Fonts_T,
-                                    )),
-                                inputFormatters: <TextInputFormatter>[
-                                  // for below version 2 use this
-                                  FilteringTextInputFormatter.allow(
-                                      RegExp(r'[0-9]')),
-                                  // for version 2 and greater youcan also use this
-                                  FilteringTextInputFormatter.digitsOnly
-                                ],
-                              ),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  labelText: 'ประเภทเอกสาร',
+                                  labelStyle: const TextStyle(
+                                    color: Colors.black54,
+                                    fontFamily: FontWeight_.Fonts_T,
+                                  )),
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.deny(
+                                    RegExp("[' ']")),
+                                // for below version 2 use this
+                                // FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                // for version 2 and greater youcan also use this
+                                // FilteringTextInputFormatter.digitsOnly
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                ],
-              ),
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Translate.TranslateAndSetText(
+                                    'หัวบิล ( $titleDocu )',
+                                    SettingScreen_Color.Colors_Text1_,
+                                    TextAlign.left,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    14,
+                                    1),
+                                // Text(
+                                //   'หัวบิล ( $titleDocu )',
+                                //   textAlign: TextAlign.left,
+                                //   style: const TextStyle(
+                                //     color: SettingScreen_Color.Colors_Text1_,
+                                //     fontFamily: FontWeight_.Fonts_T,
+                                //     fontWeight: FontWeight.bold,
+                                //   ),
+                                // ),
+                              ),
+                            ),
+                            dtype == 'WT' || dtype == 'Q'
+                                ? Expanded(
+                                    flex: 4,
+                                    child: Row(
+                                      children: [
+                                        IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              set_dd = yy == 'Y' ? '' : 'Y';
+                                            });
+                                          },
+                                          icon: (set_dd == '' || set_dd == null)
+                                              ? yy == 'Y'
+                                                  ? Icon(
+                                                      Icons.toggle_on,
+                                                      color: Colors.green,
+                                                      size: 25,
+                                                    )
+                                                  : Icon(
+                                                      Icons.toggle_off,
+                                                      color: Colors.grey,
+                                                      size: 25,
+                                                    )
+                                              : set_dd == 'Y'
+                                                  ? Icon(
+                                                      Icons.toggle_on,
+                                                      color: Colors.green,
+                                                      size: 25,
+                                                    )
+                                                  : Icon(
+                                                      Icons.toggle_off,
+                                                      color: Colors.grey,
+                                                      size: 25,
+                                                    ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Translate.TranslateAndSetText(
+                                              'เริ่ม 1 ทุกปี',
+                                              SettingScreen_Color.Colors_Text1_,
+                                              TextAlign.left,
+                                              FontWeight.bold,
+                                              FontWeight_.Fonts_T,
+                                              14,
+                                              1),
+                                          // Text(
+                                          //   'เริ่ม 1 ทุกปี',
+                                          //   textAlign: TextAlign.left,
+                                          //   style: const TextStyle(
+                                          //     color: SettingScreen_Color
+                                          //         .Colors_Text1_,
+                                          //     fontFamily: FontWeight_.Fonts_T,
+                                          //     fontWeight: FontWeight.bold,
+                                          //   ),
+                                          // ),
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              set_dd = yy == 'M' ? '' : 'M';
+                                            });
+                                          },
+                                          icon: (set_dd == '' || set_dd == null)
+                                              ? mm == 'M'
+                                                  ? Icon(
+                                                      Icons.toggle_on,
+                                                      color: Colors.green,
+                                                      size: 25,
+                                                    )
+                                                  : Icon(
+                                                      Icons.toggle_off,
+                                                      color: Colors.grey,
+                                                      size: 25,
+                                                    )
+                                              : set_dd == 'M'
+                                                  ? Icon(
+                                                      Icons.toggle_on,
+                                                      color: Colors.green,
+                                                      size: 25,
+                                                    )
+                                                  : Icon(
+                                                      Icons.toggle_off,
+                                                      color: Colors.grey,
+                                                      size: 25,
+                                                    ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Translate.TranslateAndSetText(
+                                              'เริ่ม 1 ทุกปี',
+                                              SettingScreen_Color.Colors_Text1_,
+                                              TextAlign.left,
+                                              FontWeight.bold,
+                                              FontWeight_.Fonts_T,
+                                              14,
+                                              1),
+                                          //  Text(
+                                          //   'เริ่ม 1 ทุกเดือน',
+                                          //   textAlign: TextAlign.left,
+                                          //   style: const TextStyle(
+                                          //     color: SettingScreen_Color
+                                          //         .Colors_Text1_,
+                                          //     fontFamily: FontWeight_.Fonts_T,
+                                          //     fontWeight: FontWeight.bold,
+                                          //   ),
+                                          // ),
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              set_dd = 'N';
+                                            });
+                                          },
+                                          icon: set_dd == 'N' ||
+                                                  set_dd == '' ||
+                                                  set_dd == null &&
+                                                      mm != 'M' &&
+                                                      yy != 'Y'
+                                              ? Icon(
+                                                  Icons.toggle_on,
+                                                  color: Colors.green,
+                                                  size: 25,
+                                                )
+                                              : Icon(
+                                                  Icons.toggle_off,
+                                                  color: Colors.grey,
+                                                  size: 25,
+                                                ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Translate.TranslateAndSetText(
+                                              'ปิด $mm $yy',
+                                              SettingScreen_Color.Colors_Text1_,
+                                              TextAlign.left,
+                                              FontWeight.bold,
+                                              FontWeight_.Fonts_T,
+                                              14,
+                                              1),
+                                          // Text(
+                                          //   'ปิด $mm $yy',
+                                          //   textAlign: TextAlign.left,
+                                          //   style: const TextStyle(
+                                          //     color: SettingScreen_Color
+                                          //         .Colors_Text1_,
+                                          //     fontFamily: FontWeight_.Fonts_T,
+                                          //     fontWeight: FontWeight.bold,
+                                          //   ),
+                                          // ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        '',
+                                        textAlign: TextAlign.left,
+                                        style: const TextStyle(
+                                          color:
+                                              SettingScreen_Color.Colors_Text1_,
+                                          fontFamily: FontWeight_.Fonts_T,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                            dtype == 'WT' || dtype == 'Q'
+                                ? Expanded(
+                                    flex: 3,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Translate.TranslateAndSetText(
+                                          'ตัวอย่าง ( ${FormtitleDocu_text.text.toString()}${(int.parse(DateFormat('yyyy').format(DateTime.now())) + 543).toString().substring(2)}-${DateFormat('MM').format(DateTime.now())}-${FormnumDocu_text.text.toString().padLeft(5, '0')} )',
+                                          SettingScreen_Color.Colors_Text1_,
+                                          TextAlign.left,
+                                          FontWeight.bold,
+                                          FontWeight_.Fonts_T,
+                                          14,
+                                          1),
+                                      // Text(
+                                      //   // (set_dd == '' || set_dd == null)
+                                      //   //     ? (yy == 'Y' || mm == 'M')
+                                      //   //         ? set_dd == 'N'
+                                      //   //             ? 'ตัวอย่าง ( ${FormtitleDocu_text.text.toString()}${FormnumDocu_text.text.toString().padLeft(6, '0')})'
+                                      //   //             : 'ตัวอย่าง ( ${FormtitleDocu_text.text.toString()}${FormnumDocu_text.text.toString().padLeft(4, '0')}-${DateFormat('MM').format(DateTime.now())}-${DateFormat('yyyy').format(DateTime.now())} )'
+                                      //   //         : 'ตัวอย่าง (${FormtitleDocu_text.text.toString()}${FormnumDocu_text.text.toString().padLeft(6, '0')})'
+                                      //   //     : set_dd == 'N'
+                                      //   //         ? 'ตัวอย่าง ( ${FormtitleDocu_text.text.toString()}${FormnumDocu_text.text.toString().padLeft(6, '0')})'
+                                      //   //         :
+                                      //   'ตัวอย่าง ( ${FormtitleDocu_text.text.toString()}${(int.parse(DateFormat('yyyy').format(DateTime.now())) + 543).toString().substring(2)}-${DateFormat('MM').format(DateTime.now())}-${FormnumDocu_text.text.toString().padLeft(5, '0')} )',
+                                      //   textAlign: TextAlign.left,
+                                      //   style: const TextStyle(
+                                      //     color:
+                                      //         SettingScreen_Color.Colors_Text1_,
+                                      //     fontFamily: FontWeight_.Fonts_T,
+                                      //     fontWeight: FontWeight.bold,
+                                      //   ),
+                                      // ),
+                                    ),
+                                  )
+                                : Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        '',
+                                        textAlign: TextAlign.left,
+                                        style: const TextStyle(
+                                          color:
+                                              SettingScreen_Color.Colors_Text1_,
+                                          fontFamily: FontWeight_.Fonts_T,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SizedBox(
+                            // width: 200,
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              controller: FormtitleDocu_text,
+                              // validator: (value) {
+                              //   if (value == null || value.isEmpty) {
+                              //     return 'ใส่ข้อมูลให้ครบถ้วน ';
+                              //   }
+                              //   // if (int.parse(value.toString()) < 13) {
+                              //   //   return '< 13';
+                              //   // }
+                              //   return null;
+                              // },
+                              // maxLength: 13,
+                              cursorColor: Colors.green,
+                              decoration: InputDecoration(
+                                  fillColor: Colors.white.withOpacity(0.3),
+                                  filled: true,
+                                  // prefixIcon:
+                                  //     const Icon(Icons.person_pin, color: Colors.black),
+                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  labelText: 'แก้ไขหัวบิล',
+                                  labelStyle: const TextStyle(
+                                    color: Colors.black54,
+                                    fontFamily: FontWeight_.Fonts_T,
+                                  )),
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.deny(
+                                    RegExp("[' ']")),
+                                // for below version 2 use this
+                                // FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                // for version 2 and greater youcan also use this
+                                // FilteringTextInputFormatter.digitsOnly
+                              ],
+                            ),
+                          ),
+                        ),
+                        if (numDocu != '')
+                          SizedBox(
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Translate.TranslateAndSetText(
+                                          'เลขเอกสาร ( $numDocu )',
+                                          SettingScreen_Color.Colors_Text1_,
+                                          TextAlign.left,
+                                          FontWeight.bold,
+                                          FontWeight_.Fonts_T,
+                                          14,
+                                          1),
+                                      // Text(
+                                      //   'เลขเอกสาร ( $numDocu )',
+                                      //   textAlign: TextAlign.left,
+                                      //   style: const TextStyle(
+                                      //     color:
+                                      //         SettingScreen_Color.Colors_Text1_,
+                                      //     fontFamily: FontWeight_.Fonts_T,
+                                      //     fontWeight: FontWeight.bold,
+                                      //   ),
+                                      // ),
+                                    ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SizedBox(
+                                    // width: 200,
+                                    child: TextFormField(
+                                      keyboardType: TextInputType.number,
+                                      controller: FormnumDocu_text,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                        }
+                                        // if (int.parse(value.toString()) < 13) {
+                                        //   return '< 13';
+                                        // }
+                                        return null;
+                                      },
+                                      // maxLength: 13,
+                                      cursorColor: Colors.green,
+                                      decoration: InputDecoration(
+                                          fillColor:
+                                              Colors.white.withOpacity(0.3),
+                                          filled: true,
+                                          // prefixIcon:
+                                          //     const Icon(Icons.person_pin, color: Colors.black),
+                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                          focusedBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(15),
+                                              topLeft: Radius.circular(15),
+                                              bottomRight: Radius.circular(15),
+                                              bottomLeft: Radius.circular(15),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          enabledBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(15),
+                                              topLeft: Radius.circular(15),
+                                              bottomRight: Radius.circular(15),
+                                              bottomLeft: Radius.circular(15),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          labelText: 'แก้ไขเลขเอกสาร',
+                                          labelStyle: const TextStyle(
+                                            color: Colors.black54,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                          )),
+                                      inputFormatters: <TextInputFormatter>[
+                                        // for below version 2 use this
+                                        FilteringTextInputFormatter.allow(
+                                            RegExp(r'[0-9]')),
+                                        // for version 2 and greater youcan also use this
+                                        FilteringTextInputFormatter.digitsOnly
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                      ],
+                    );
+                  }),
             ),
           ),
           actions: <Widget>[
@@ -579,7 +846,7 @@ class _BillDocumentState extends State<BillDocument> {
                                 String? ser_user = preferences.getString('ser');
                                 var vser = serDocu;
                                 String url =
-                                    '${MyConstant().domain}/UpC_Bill.php?isAdd=true&ren=$ren&ser_user=$ser_user&vser=$vser&name_bull=$name_bull&name_abc=$name_abc&name_num=$name_num';
+                                    '${MyConstant().domain}/UpC_Bill.php?isAdd=true&ren=$ren&ser_user=$ser_user&vser=$vser&name_bull=$name_bull&name_abc=$name_abc&name_num=$name_num&set_dd=$set_dd';
 
                                 try {
                                   var response = await http.get(Uri.parse(url));
@@ -601,14 +868,22 @@ class _BillDocumentState extends State<BillDocument> {
                                 } catch (e) {}
                               }
                             },
-                            child: const Text(
-                              'บันทึก',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: FontWeight_.Fonts_T,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                'บันทึก',
+                                Colors.white,
+                                TextAlign.left,
+                                FontWeight.bold,
+                                FontWeight_.Fonts_T,
+                                14,
+                                1),
+                            // const Text(
+                            //   'บันทึก',
+                            //   style: TextStyle(
+                            //     color: Colors.white,
+                            //     fontFamily: FontWeight_.Fonts_T,
+                            //     fontWeight: FontWeight.bold,
+                            //   ),
+                            // ),
                           ),
                         ),
                       ),
@@ -627,14 +902,22 @@ class _BillDocumentState extends State<BillDocument> {
                           padding: const EdgeInsets.all(8.0),
                           child: TextButton(
                             onPressed: () => Navigator.pop(context, 'OK'),
-                            child: const Text(
-                              'ยกเลิก',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: FontWeight_.Fonts_T,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                'ยกเลิก',
+                                Colors.white,
+                                TextAlign.left,
+                                FontWeight.bold,
+                                FontWeight_.Fonts_T,
+                                14,
+                                1),
+                            // const Text(
+                            //   'ยกเลิก',
+                            //   style: TextStyle(
+                            //     color: Colors.white,
+                            //     fontFamily: FontWeight_.Fonts_T,
+                            //     fontWeight: FontWeight.bold,
+                            //   ),
+                            // ),
                           ),
                         ),
                       ),
@@ -698,17 +981,25 @@ class _BillDocumentState extends State<BillDocument> {
                             ),
                             padding: const EdgeInsets.all(5.0),
                             child: Center(
-                              child: AutoSizeText(
-                                minFontSize: 10,
-                                maxFontSize: 20,
-                                '${Tap_[index]}',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  // fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                              child: Translate.TranslateAndSetText(
+                                  '${Tap_[index]}',
+                                  Colors.white,
+                                  TextAlign.left,
+                                  FontWeight.bold,
+                                  FontWeight_.Fonts_T,
+                                  14,
+                                  1),
+                              // AutoSizeText(
+                              //   minFontSize: 10,
+                              //   maxFontSize: 20,
+                              //   '${Tap_[index]}',
+                              //   style: const TextStyle(
+                              //     color: Colors.white,
+                              //     // fontWeight: FontWeight.bold,
+                              //     fontFamily: FontWeight_.Fonts_T,
+                              //     fontWeight: FontWeight.bold,
+                              //   ),
+                              // ),
                             ),
                           ),
                         ),
@@ -747,20 +1038,29 @@ class _BillDocumentState extends State<BillDocument> {
                                   bottomRight: Radius.circular(0)),
                               // border: Border.all(color: Colors.white, width: 1),
                             ),
-                            child: const Row(
+                            child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Padding(
                                   padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'ข้อมูลการออกบิล',
-                                    style: TextStyle(
-                                      color: SettingScreen_Color.Colors_Text1_,
-                                      fontFamily: FontWeight_.Fonts_T,
-                                      fontWeight: FontWeight.bold,
-                                      //fontSize: 10.0
-                                    ),
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      'ข้อมูลการออกบิล',
+                                      SettingScreen_Color.Colors_Text1_,
+                                      TextAlign.left,
+                                      FontWeight.bold,
+                                      FontWeight_.Fonts_T,
+                                      14,
+                                      1),
+
+                                  //  Text(
+                                  //   'ข้อมูลการออกบิล',
+                                  //   style: TextStyle(
+                                  //     color: SettingScreen_Color.Colors_Text1_,
+                                  //     fontFamily: FontWeight_.Fonts_T,
+                                  //     fontWeight: FontWeight.bold,
+                                  //     //fontSize: 10.0
+                                  //   ),
+                                  // ),
                                 ),
                               ],
                             ),
@@ -769,19 +1069,27 @@ class _BillDocumentState extends State<BillDocument> {
                             padding: const EdgeInsets.all(8.0),
                             child: Row(
                               children: [
-                                const Expanded(
+                                Expanded(
                                   flex: 1,
-                                  child: Text(
-                                    'ชื่อผู้เช่า/บริบัท',
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                        color:
-                                            SettingScreen_Color.Colors_Text2_,
-                                        fontFamily: Font_.Fonts_T
-                                        //fontWeight: FontWeight.bold,
-                                        //fontSize: 10.0
-                                        ),
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      'ชื่อผู้เช่า/บริบัท',
+                                      SettingScreen_Color.Colors_Text2_,
+                                      TextAlign.left,
+                                      null,
+                                      Font_.Fonts_T,
+                                      14,
+                                      1),
+                                  // Text(
+                                  //   'ชื่อผู้เช่า/บริบัท',
+                                  //   textAlign: TextAlign.start,
+                                  //   style: TextStyle(
+                                  //       color:
+                                  //           SettingScreen_Color.Colors_Text2_,
+                                  //       fontFamily: Font_.Fonts_T
+                                  //       //fontWeight: FontWeight.bold,
+                                  //       //fontSize: 10.0
+                                  //       ),
+                                  // ),
                                 ),
                                 Expanded(
                                   flex: 5,
@@ -936,16 +1244,24 @@ class _BillDocumentState extends State<BillDocument> {
                                             ),
                                           ),
                                           padding: const EdgeInsets.all(8.0),
-                                          child: const Text(
-                                            'บันทึก',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontFamily: Font_.Fonts_T
-                                                //fontWeight: FontWeight.bold,
-                                                //fontSize: 10.0
-                                                ),
-                                          ),
+                                          child: Translate.TranslateAndSetText(
+                                              'บันทึก',
+                                              Colors.white,
+                                              TextAlign.left,
+                                              null,
+                                              Font_.Fonts_T,
+                                              14,
+                                              1),
+                                          // const Text(
+                                          //   'บันทึก',
+                                          //   textAlign: TextAlign.center,
+                                          //   style: TextStyle(
+                                          //       color: Colors.white,
+                                          //       fontFamily: Font_.Fonts_T
+                                          //       //fontWeight: FontWeight.bold,
+                                          //       //fontSize: 10.0
+                                          //       ),
+                                          // ),
                                         ),
                                       ),
                                     ),
@@ -967,17 +1283,25 @@ class _BillDocumentState extends State<BillDocument> {
                                           ),
                                         ),
                                         padding: const EdgeInsets.all(8.0),
-                                        child: const Text(
-                                          'นิติบุคคล',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color: SettingScreen_Color
-                                                  .Colors_Text2_,
-                                              fontFamily: Font_.Fonts_T
-                                              //fontWeight: FontWeight.bold,
-                                              //fontSize: 10.0
-                                              ),
-                                        ),
+                                        child: Translate.TranslateAndSetText(
+                                            'นิติบุคคล',
+                                            SettingScreen_Color.Colors_Text2_,
+                                            TextAlign.center,
+                                            null,
+                                            Font_.Fonts_T,
+                                            14,
+                                            1),
+                                        // Text(
+                                        //   'นิติบุคคล',
+                                        //   textAlign: TextAlign.center,
+                                        //   style: TextStyle(
+                                        //       color: SettingScreen_Color
+                                        //           .Colors_Text2_,
+                                        //       fontFamily: Font_.Fonts_T
+                                        //       //fontWeight: FontWeight.bold,
+                                        //       //fontSize: 10.0
+                                        //       ),
+                                        // ),
                                       ),
                                     ),
                                   ),
@@ -1017,19 +1341,16 @@ class _BillDocumentState extends State<BillDocument> {
                             padding: const EdgeInsets.all(8.0),
                             child: Row(
                               children: [
-                                const Expanded(
+                                Expanded(
                                   flex: 1,
-                                  child: Text(
-                                    'ที่อยู่',
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                        color:
-                                            SettingScreen_Color.Colors_Text2_,
-                                        fontFamily: Font_.Fonts_T
-                                        //fontWeight: FontWeight.bold,
-                                        //fontSize: 10.0
-                                        ),
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      'ที่อยู่',
+                                      SettingScreen_Color.Colors_Text2_,
+                                      TextAlign.left,
+                                      null,
+                                      Font_.Fonts_T,
+                                      14,
+                                      1),
                                 ),
                                 Expanded(
                                   flex: 8,
@@ -1169,16 +1490,24 @@ class _BillDocumentState extends State<BillDocument> {
                                             ),
                                           ),
                                           padding: const EdgeInsets.all(8.0),
-                                          child: const Text(
-                                            'บันทึก',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontFamily: Font_.Fonts_T
-                                                //fontWeight: FontWeight.bold,
-                                                //fontSize: 10.0
-                                                ),
-                                          ),
+                                          child: Translate.TranslateAndSetText(
+                                              'บันทึก',
+                                              Colors.white,
+                                              TextAlign.left,
+                                              null,
+                                              Font_.Fonts_T,
+                                              14,
+                                              1),
+                                          // const Text(
+                                          //   'บันทึก',
+                                          //   textAlign: TextAlign.center,
+                                          //   style: TextStyle(
+                                          //       color: Colors.white,
+                                          //       fontFamily: Font_.Fonts_T
+                                          //       //fontWeight: FontWeight.bold,
+                                          //       //fontSize: 10.0
+                                          //       ),
+                                          // ),
                                         ),
                                       ),
                                     ),
@@ -1392,35 +1721,43 @@ class _BillDocumentState extends State<BillDocument> {
                                                     padding:
                                                         const EdgeInsets.all(
                                                             8.0),
-                                                    child: const Text(
-                                                      'บันทึก',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontFamily:
-                                                              Font_.Fonts_T
-                                                          //fontWeight: FontWeight.bold,
-                                                          //fontSize: 10.0
-                                                          ),
-                                                    ),
+                                                    child: Translate
+                                                        .TranslateAndSetText(
+                                                            'บันทึก',
+                                                            Colors.white,
+                                                            TextAlign.left,
+                                                            null,
+                                                            Font_.Fonts_T,
+                                                            14,
+                                                            1),
+                                                    // const Text(
+                                                    //   'บันทึก',
+                                                    //   textAlign:
+                                                    //       TextAlign.center,
+                                                    //   style: TextStyle(
+                                                    //       color: Colors.white,
+                                                    //       fontFamily:
+                                                    //           Font_.Fonts_T
+                                                    //       //fontWeight: FontWeight.bold,
+                                                    //       //fontSize: 10.0
+                                                    //       ),
+                                                    // ),
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                          const Expanded(
+                                          Expanded(
                                             flex: 1,
-                                            child: Text(
-                                              'เบอร์โทร',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: SettingScreen_Color
-                                                      .Colors_Text2_,
-                                                  fontFamily: Font_.Fonts_T
-                                                  //fontWeight: FontWeight.bold,
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
+                                            child:
+                                                Translate.TranslateAndSetText(
+                                                    'เบอร์โทร',
+                                                    SettingScreen_Color
+                                                        .Colors_Text2_,
+                                                    TextAlign.left,
+                                                    null,
+                                                    Font_.Fonts_T,
+                                                    14,
+                                                    1),
                                           ),
                                           Expanded(
                                             flex: 2,
@@ -1604,35 +1941,31 @@ class _BillDocumentState extends State<BillDocument> {
                                                     padding:
                                                         const EdgeInsets.all(
                                                             8.0),
-                                                    child: const Text(
-                                                      'บันทึก',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontFamily:
-                                                              Font_.Fonts_T
-                                                          //fontWeight: FontWeight.bold,
-                                                          //fontSize: 10.0
-                                                          ),
-                                                    ),
+                                                    child: Translate
+                                                        .TranslateAndSetText(
+                                                            'บันทึก',
+                                                            Colors.white,
+                                                            TextAlign.left,
+                                                            null,
+                                                            Font_.Fonts_T,
+                                                            14,
+                                                            1),
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                          const Expanded(
+                                          Expanded(
                                             flex: 1,
-                                            child: Text(
-                                              'อีเมล',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: SettingScreen_Color
-                                                      .Colors_Text2_,
-                                                  fontFamily: Font_.Fonts_T
-                                                  //fontWeight: FontWeight.bold,
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
+                                            child:
+                                                Translate.TranslateAndSetText(
+                                                    'อีเมล',
+                                                    SettingScreen_Color
+                                                        .Colors_Text2_,
+                                                    TextAlign.left,
+                                                    null,
+                                                    Font_.Fonts_T,
+                                                    14,
+                                                    1),
                                           ),
                                           Expanded(
                                             flex: 2,
@@ -1822,18 +2155,15 @@ class _BillDocumentState extends State<BillDocument> {
                                                     padding:
                                                         const EdgeInsets.all(
                                                             8.0),
-                                                    child: const Text(
-                                                      'บันทึก',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontFamily:
-                                                              Font_.Fonts_T
-                                                          //fontWeight: FontWeight.bold,
-                                                          //fontSize: 10.0
-                                                          ),
-                                                    ),
+                                                    child: Translate
+                                                        .TranslateAndSetText(
+                                                            'บันทึก',
+                                                            Colors.white,
+                                                            TextAlign.left,
+                                                            null,
+                                                            Font_.Fonts_T,
+                                                            14,
+                                                            1),
                                                   ),
                                                 ),
                                               ),
@@ -1849,18 +2179,26 @@ class _BillDocumentState extends State<BillDocument> {
                         ],
                       ),
                     ),
-                    const Row(
+                    Row(
                       children: [
                         Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'การรับเลขเอกสาร',
-                            style: TextStyle(
-                                color: SettingScreen_Color.Colors_Text1_,
-                                fontFamily: FontWeight_.Fonts_T
-                                //fontSize: 10.0
-                                ),
-                          ),
+                          child: Translate.TranslateAndSetText(
+                              'การรับเลขเอกสาร',
+                              SettingScreen_Color.Colors_Text1_,
+                              TextAlign.left,
+                              null,
+                              Font_.Fonts_T,
+                              14,
+                              1),
+                          // Text(
+                          //   'การรับเลขเอกสาร',
+                          //   style: TextStyle(
+                          //       color: SettingScreen_Color.Colors_Text1_,
+                          //       fontFamily: FontWeight_.Fonts_T
+                          //       //fontSize: 10.0
+                          //       ),
+                          // ),
                         ),
                       ],
                     ),
@@ -1899,19 +2237,16 @@ class _BillDocumentState extends State<BillDocument> {
                                                   ),
                                                   padding:
                                                       const EdgeInsets.all(8.0),
-                                                  child: const Text(
-                                                    'ประเภทเอกสาร',
-                                                    maxLines: 1,
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        color:
-                                                            SettingScreen_Color
-                                                                .Colors_Text1_,
-                                                        fontFamily:
-                                                            FontWeight_.Fonts_T
-                                                        //fontSize: 10.0
-                                                        ),
-                                                  ),
+                                                  child: Translate
+                                                      .TranslateAndSetText(
+                                                          'ประเภทเอกสาร',
+                                                          SettingScreen_Color
+                                                              .Colors_Text1_,
+                                                          TextAlign.left,
+                                                          null,
+                                                          Font_.Fonts_T,
+                                                          14,
+                                                          1),
                                                 ),
                                               ),
                                             ),
@@ -1922,18 +2257,28 @@ class _BillDocumentState extends State<BillDocument> {
                                                     .TiTile_Colors,
                                                 padding:
                                                     const EdgeInsets.all(8.0),
-                                                child: const Text(
-                                                  'หัวบิล',
-                                                  maxLines: 1,
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: SettingScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T
-                                                      //fontSize: 10.0
-                                                      ),
-                                                ),
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'หัวบิล',
+                                                        SettingScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.left,
+                                                        null,
+                                                        Font_.Fonts_T,
+                                                        14,
+                                                        1),
+                                                // Text(
+                                                //   'หัวบิล',
+                                                //   maxLines: 1,
+                                                //   textAlign: TextAlign.center,
+                                                //   style: TextStyle(
+                                                //       color: SettingScreen_Color
+                                                //           .Colors_Text1_,
+                                                //       fontFamily:
+                                                //           FontWeight_.Fonts_T
+                                                //       //fontSize: 10.0
+                                                //       ),
+                                                // ),
                                               ),
                                             ),
                                             Expanded(
@@ -1943,18 +2288,28 @@ class _BillDocumentState extends State<BillDocument> {
                                                     .TiTile_Colors,
                                                 padding:
                                                     const EdgeInsets.all(8.0),
-                                                child: const Text(
-                                                  'เลขรับเริ่มต้น',
-                                                  maxLines: 1,
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: SettingScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T
-                                                      //fontSize: 10.0
-                                                      ),
-                                                ),
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'เลขรับเริ่มต้น',
+                                                        SettingScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.left,
+                                                        null,
+                                                        Font_.Fonts_T,
+                                                        14,
+                                                        1),
+                                                // const Text(
+                                                //   'เลขรับเริ่มต้น',
+                                                //   maxLines: 1,
+                                                //   textAlign: TextAlign.center,
+                                                //   style: TextStyle(
+                                                //       color: SettingScreen_Color
+                                                //           .Colors_Text1_,
+                                                //       fontFamily:
+                                                //           FontWeight_.Fonts_T
+                                                //       //fontSize: 10.0
+                                                //       ),
+                                                // ),
                                               ),
                                             ),
                                             Expanded(
@@ -2047,16 +2402,17 @@ class _BillDocumentState extends State<BillDocument> {
                                                                       .all(8.0),
                                                               child: (elapsed >
                                                                       3.00)
-                                                                  ? const Text(
+                                                                  ? Translate.TranslateAndSetText(
                                                                       'ไม่พบข้อมูล',
-                                                                      style: TextStyle(
-                                                                          color: PeopleChaoScreen_Color
-                                                                              .Colors_Text2_,
-                                                                          fontFamily:
-                                                                              Font_.Fonts_T
-                                                                          //fontSize: 10.0
-                                                                          ),
-                                                                    )
+                                                                      SettingScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      TextAlign
+                                                                          .center,
+                                                                      null,
+                                                                      Font_
+                                                                          .Fonts_T,
+                                                                      14,
+                                                                      1)
                                                                   : const Column(
                                                                       children: [
                                                                         CircularProgressIndicator(),
@@ -2117,21 +2473,32 @@ class _BillDocumentState extends State<BillDocument> {
                                                             children: [
                                                               Expanded(
                                                                 flex: 2,
-                                                                child: Text(
-                                                                  '${doctypeOneModels[index].bills}',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .start,
-                                                                  style: const TextStyle(
-                                                                      color: SettingScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T
-                                                                      //fontWeight: FontWeight.bold,
-                                                                      //fontSize: 10.0
-                                                                      ),
-                                                                ),
+                                                                child: Translate.TranslateAndSetText(
+                                                                    '${doctypeOneModels[index].bills}',
+                                                                    SettingScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    TextAlign
+                                                                        .left,
+                                                                    null,
+                                                                    Font_
+                                                                        .Fonts_T,
+                                                                    14,
+                                                                    1),
+                                                                // Text(
+                                                                //   '${doctypeOneModels[index].bills}',
+                                                                //   textAlign:
+                                                                //       TextAlign
+                                                                //           .start,
+                                                                //   style: const TextStyle(
+                                                                //       color: SettingScreen_Color
+                                                                //           .Colors_Text2_,
+                                                                //       fontFamily:
+                                                                //           Font_
+                                                                //               .Fonts_T
+                                                                //       //fontWeight: FontWeight.bold,
+                                                                //       //fontSize: 10.0
+                                                                //       ),
+                                                                // ),
                                                               ),
                                                               Expanded(
                                                                 flex: 1,
@@ -2188,46 +2555,29 @@ class _BillDocumentState extends State<BillDocument> {
                                                                           '${doctypeOneModels[index].doccode}',
                                                                           '${doctypeOneModels[index].startbill}',
                                                                           '${doctypeOneModels[index].ser}',
+                                                                          '${doctypeOneModels[index].dtype}',
+                                                                          '${doctypeOneModels[index].yy}',
+                                                                          '${doctypeOneModels[index].mm}',
                                                                         );
-                                                                        print(
-                                                                            'แก้ไข${doctypeOneModels[index].bills} // ser : ${doctypeOneModels[index].ser}');
+                                                                        // print(
+                                                                        //     'แก้ไข${doctypeOneModels[index].bills} // ser : ${doctypeOneModels[index].ser}');
                                                                       },
-                                                                      child:
-                                                                          Container(
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          color: Colors
-                                                                              .blueGrey
-                                                                              .shade100,
-                                                                          borderRadius:
-                                                                              const BorderRadius.only(
-                                                                            topLeft:
-                                                                                Radius.circular(10),
-                                                                            topRight:
-                                                                                Radius.circular(10),
-                                                                            bottomLeft:
-                                                                                Radius.circular(10),
-                                                                            bottomRight:
-                                                                                Radius.circular(10),
+                                                                      child: Container(
+                                                                          decoration: BoxDecoration(
+                                                                            color:
+                                                                                Colors.blueGrey.shade100,
+                                                                            borderRadius:
+                                                                                const BorderRadius.only(
+                                                                              topLeft: Radius.circular(10),
+                                                                              topRight: Radius.circular(10),
+                                                                              bottomLeft: Radius.circular(10),
+                                                                              bottomRight: Radius.circular(10),
+                                                                            ),
+                                                                            // border: Border.all(
+                                                                            //     color: Colors.grey, width: 1),
                                                                           ),
-                                                                          // border: Border.all(
-                                                                          //     color: Colors.grey, width: 1),
-                                                                        ),
-                                                                        padding:
-                                                                            const EdgeInsets.all(4.0),
-                                                                        child:
-                                                                            const Text(
-                                                                          'แก้ไข',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style: TextStyle(
-                                                                              color: SettingScreen_Color.Colors_Text2_,
-                                                                              fontFamily: Font_.Fonts_T
-                                                                              //fontWeight: FontWeight.bold,
-                                                                              //fontSize: 10.0
-                                                                              ),
-                                                                        ),
-                                                                      ),
+                                                                          padding: const EdgeInsets.all(4.0),
+                                                                          child: Translate.TranslateAndSetText('แก้ไข', SettingScreen_Color.Colors_Text1_, TextAlign.left, null, Font_.Fonts_T, 14, 1)),
                                                                     ),
                                                                   ],
                                                                 ),
@@ -2257,61 +2607,84 @@ class _BillDocumentState extends State<BillDocument> {
                                               flex: 2,
                                               child: Container(
                                                 child: Container(
-                                                  decoration: BoxDecoration(
-                                                    color: AppbackgroundColor
-                                                        .TiTile_Colors,
-                                                    borderRadius:
-                                                        BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(10),
-                                                      topRight:
-                                                          Radius.circular(0),
-                                                      bottomLeft:
-                                                          Radius.circular(0),
-                                                      bottomRight:
-                                                          Radius.circular(0),
+                                                    decoration: BoxDecoration(
+                                                      color: AppbackgroundColor
+                                                          .TiTile_Colors,
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(10),
+                                                        topRight:
+                                                            Radius.circular(0),
+                                                        bottomLeft:
+                                                            Radius.circular(0),
+                                                        bottomRight:
+                                                            Radius.circular(0),
+                                                      ),
+                                                      // border: Border.all(
+                                                      //     color: Colors.grey, width: 1),
                                                     ),
-                                                    // border: Border.all(
-                                                    //     color: Colors.grey, width: 1),
-                                                  ),
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: const Text(
-                                                    'REFประเภทค่าบริการ',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      color: SettingScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      //fontSize: 10.0
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Translate
+                                                        .TranslateAndSetText(
+                                                            'REFประเภทค่าบริการ',
+                                                            SettingScreen_Color
+                                                                .Colors_Text1_,
+                                                            TextAlign.left,
+                                                            null,
+                                                            Font_.Fonts_T,
+                                                            14,
+                                                            1)
+
+                                                    //  Text(
+                                                    //   'REFประเภทค่าบริการ',
+                                                    //   textAlign: TextAlign.center,
+                                                    //   style: TextStyle(
+                                                    //     color: SettingScreen_Color
+                                                    //         .Colors_Text1_,
+                                                    //     fontFamily:
+                                                    //         FontWeight_.Fonts_T,
+                                                    //     fontWeight:
+                                                    //         FontWeight.bold,
+                                                    //     //fontSize: 10.0
+                                                    //   ),
+                                                    // ),
                                                     ),
-                                                  ),
-                                                ),
                                               ),
                                             ),
                                             Expanded(
                                               flex: 1,
                                               child: Container(
-                                                color: AppbackgroundColor
-                                                    .TiTile_Colors,
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: const Text(
-                                                  'หัวบิล',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text1_,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
+                                                  color: AppbackgroundColor
+                                                      .TiTile_Colors,
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Translate
+                                                      .TranslateAndSetText(
+                                                          'หัวบิล',
+                                                          SettingScreen_Color
+                                                              .Colors_Text1_,
+                                                          TextAlign.left,
+                                                          null,
+                                                          Font_.Fonts_T,
+                                                          14,
+                                                          1)
+
+                                                  //  const Text(
+                                                  //   'หัวบิล',
+                                                  //   textAlign: TextAlign.center,
+                                                  //   style: TextStyle(
+                                                  //     color: SettingScreen_Color
+                                                  //         .Colors_Text1_,
+                                                  //     fontFamily:
+                                                  //         FontWeight_.Fonts_T,
+                                                  //     fontWeight: FontWeight.bold,
+                                                  //     //fontSize: 10.0
+                                                  //   ),
+                                                  // ),
                                                   ),
-                                                ),
-                                              ),
                                             ),
                                             Expanded(
                                               flex: 1,
@@ -2404,16 +2777,17 @@ class _BillDocumentState extends State<BillDocument> {
                                                                       .all(8.0),
                                                               child: (elapsed >
                                                                       3.00)
-                                                                  ? const Text(
+                                                                  ? Translate.TranslateAndSetText(
                                                                       'ไม่พบข้อมูล',
-                                                                      style: TextStyle(
-                                                                          color: PeopleChaoScreen_Color
-                                                                              .Colors_Text2_,
-                                                                          fontFamily:
-                                                                              Font_.Fonts_T
-                                                                          //fontSize: 10.0
-                                                                          ),
-                                                                    )
+                                                                      SettingScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      TextAlign
+                                                                          .left,
+                                                                      null,
+                                                                      Font_
+                                                                          .Fonts_T,
+                                                                      14,
+                                                                      1)
                                                                   : const Column(
                                                                       children: [
                                                                         CircularProgressIndicator(),
@@ -2473,23 +2847,35 @@ class _BillDocumentState extends State<BillDocument> {
                                                           child: Row(
                                                             children: [
                                                               Expanded(
-                                                                flex: 2,
-                                                                child: Text(
-                                                                  '${doctypeTwoModels[index].bills}',
-                                                                  textAlign:
+                                                                  flex: 2,
+                                                                  child: Translate.TranslateAndSetText(
+                                                                      '${doctypeTwoModels[index].bills}',
+                                                                      SettingScreen_Color
+                                                                          .Colors_Text1_,
                                                                       TextAlign
-                                                                          .start,
-                                                                  style: const TextStyle(
-                                                                      color: SettingScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T
-                                                                      //fontWeight: FontWeight.bold,
-                                                                      //fontSize: 10.0
-                                                                      ),
-                                                                ),
-                                                              ),
+                                                                          .left,
+                                                                      null,
+                                                                      Font_
+                                                                          .Fonts_T,
+                                                                      14,
+                                                                      1)
+
+                                                                  //  Text(
+                                                                  //   '${doctypeTwoModels[index].bills}',
+                                                                  //   textAlign:
+                                                                  //       TextAlign
+                                                                  //           .start,
+                                                                  //   style: const TextStyle(
+                                                                  //       color: SettingScreen_Color
+                                                                  //           .Colors_Text2_,
+                                                                  //       fontFamily:
+                                                                  //           Font_
+                                                                  //               .Fonts_T
+                                                                  //       //fontWeight: FontWeight.bold,
+                                                                  //       //fontSize: 10.0
+                                                                  //       ),
+                                                                  // ),
+                                                                  ),
                                                               Expanded(
                                                                 flex: 1,
                                                                 child: Text(
@@ -2545,46 +2931,41 @@ class _BillDocumentState extends State<BillDocument> {
                                                                           '${doctypeTwoModels[index].doccode}',
                                                                           '${doctypeTwoModels[index].startbill}',
                                                                           '${doctypeTwoModels[index].ser}',
+                                                                          '${doctypeTwoModels[index].dtype}',
+                                                                          '${doctypeTwoModels[index].yy}',
+                                                                          '${doctypeTwoModels[index].mm}',
                                                                         );
-                                                                        print(
-                                                                            'แก้ไข${doctypeTwoModels[index].bills}// ser : ${doctypeTwoModels[index].ser}');
+                                                                        // print(
+                                                                        //     'แก้ไข${doctypeTwoModels[index].bills}// ser : ${doctypeTwoModels[index].ser}');
                                                                       },
-                                                                      child:
-                                                                          Container(
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          color: Colors
-                                                                              .blueGrey
-                                                                              .shade100,
-                                                                          borderRadius:
-                                                                              const BorderRadius.only(
-                                                                            topLeft:
-                                                                                Radius.circular(10),
-                                                                            topRight:
-                                                                                Radius.circular(10),
-                                                                            bottomLeft:
-                                                                                Radius.circular(10),
-                                                                            bottomRight:
-                                                                                Radius.circular(10),
+                                                                      child: Container(
+                                                                          decoration: BoxDecoration(
+                                                                            color:
+                                                                                Colors.blueGrey.shade100,
+                                                                            borderRadius:
+                                                                                const BorderRadius.only(
+                                                                              topLeft: Radius.circular(10),
+                                                                              topRight: Radius.circular(10),
+                                                                              bottomLeft: Radius.circular(10),
+                                                                              bottomRight: Radius.circular(10),
+                                                                            ),
+                                                                            // border: Border.all(
+                                                                            //     color: Colors.grey, width: 1),
                                                                           ),
-                                                                          // border: Border.all(
-                                                                          //     color: Colors.grey, width: 1),
-                                                                        ),
-                                                                        padding:
-                                                                            const EdgeInsets.all(4.0),
-                                                                        child:
-                                                                            const Text(
-                                                                          'แก้ไข',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style: TextStyle(
-                                                                              color: SettingScreen_Color.Colors_Text2_,
-                                                                              fontFamily: Font_.Fonts_T
-                                                                              //fontWeight: FontWeight.bold,
-                                                                              //fontSize: 10.0
-                                                                              ),
-                                                                        ),
-                                                                      ),
+                                                                          padding: const EdgeInsets.all(4.0),
+                                                                          child: Translate.TranslateAndSetText('แก้ไข', SettingScreen_Color.Colors_Text1_, TextAlign.left, null, Font_.Fonts_T, 14, 1)
+                                                                          //     const Text(
+                                                                          //   'แก้ไข',
+                                                                          //   textAlign:
+                                                                          //       TextAlign.center,
+                                                                          //   style: TextStyle(
+                                                                          //       color: SettingScreen_Color.Colors_Text2_,
+                                                                          //       fontFamily: Font_.Fonts_T
+                                                                          //       //fontWeight: FontWeight.bold,
+                                                                          //       //fontSize: 10.0
+                                                                          //       ),
+                                                                          // ),
+                                                                          ),
                                                                     ),
                                                                   ],
                                                                 ),
@@ -2657,29 +3038,40 @@ class _BillDocumentState extends State<BillDocument> {
                                                         Radius.circular(0)),
                                                 // border: Border.all(color: Colors.white, width: 1),
                                               ),
-                                              child: const Row(
+                                              child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
                                                 children: [
                                                   Padding(
-                                                    padding:
-                                                        EdgeInsets.all(8.0),
-                                                    child: Text(
-                                                      'ตัวอย่างรูปแบบเลขเอกสาร',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                        color:
-                                                            SettingScreen_Color
-                                                                .Colors_Text2_,
-                                                        fontFamily:
-                                                            FontWeight_.Fonts_T,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        //fontSize: 10.0
+                                                      padding:
+                                                          EdgeInsets.all(8.0),
+                                                      child: Translate
+                                                          .TranslateAndSetText(
+                                                              'ตัวอย่างรูปแบบเลขเอกสาร',
+                                                              SettingScreen_Color
+                                                                  .Colors_Text1_,
+                                                              TextAlign.left,
+                                                              null,
+                                                              Font_.Fonts_T,
+                                                              14,
+                                                              1)
+
+                                                      //  Text(
+                                                      //   'ตัวอย่างรูปแบบเลขเอกสาร',
+                                                      //   textAlign:
+                                                      //       TextAlign.center,
+                                                      //   style: TextStyle(
+                                                      //     color:
+                                                      //         SettingScreen_Color
+                                                      //             .Colors_Text2_,
+                                                      //     fontFamily:
+                                                      //         FontWeight_.Fonts_T,
+                                                      //     fontWeight:
+                                                      //         FontWeight.bold,
+                                                      //     //fontSize: 10.0
+                                                      //   ),
+                                                      // ),
                                                       ),
-                                                    ),
-                                                  ),
                                                 ],
                                               ),
                                             ),
@@ -2759,29 +3151,40 @@ class _BillDocumentState extends State<BillDocument> {
                                                         Radius.circular(0)),
                                                 // border: Border.all(color: Colors.white, width: 1),
                                               ),
-                                              child: const Row(
+                                              child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
                                                 children: [
                                                   Padding(
-                                                    padding:
-                                                        EdgeInsets.all(8.0),
-                                                    child: Text(
-                                                      'ค่า DEFAULT การออกบิล',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                        color:
-                                                            SettingScreen_Color
-                                                                .Colors_Text2_,
-                                                        fontFamily:
-                                                            FontWeight_.Fonts_T,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        //fontSize: 10.0
+                                                      padding:
+                                                          EdgeInsets.all(8.0),
+                                                      child: Translate
+                                                          .TranslateAndSetText(
+                                                              'ค่า DEFAULT การออกบิล',
+                                                              SettingScreen_Color
+                                                                  .Colors_Text1_,
+                                                              TextAlign.left,
+                                                              null,
+                                                              Font_.Fonts_T,
+                                                              14,
+                                                              1)
+
+                                                      // Text(
+                                                      //   'ค่า DEFAULT การออกบิล',
+                                                      //   textAlign:
+                                                      //       TextAlign.center,
+                                                      //   style: TextStyle(
+                                                      //     color:
+                                                      //         SettingScreen_Color
+                                                      //             .Colors_Text2_,
+                                                      //     fontFamily:
+                                                      //         FontWeight_.Fonts_T,
+                                                      //     fontWeight:
+                                                      //         FontWeight.bold,
+                                                      //     //fontSize: 10.0
+                                                      //   ),
+                                                      // ),
                                                       ),
-                                                    ),
-                                                  ),
                                                 ],
                                               ),
                                             ),
@@ -2797,28 +3200,41 @@ class _BillDocumentState extends State<BillDocument> {
                                                       children: [
                                                         Container(
                                                           width: 80,
-                                                          child: const Padding(
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    4.0),
-                                                            child: Text(
-                                                              'ภาษา',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .start,
-                                                              style: TextStyle(
-                                                                color: SettingScreen_Color
-                                                                    .Colors_Text2_,
-                                                                fontFamily:
-                                                                    FontWeight_
-                                                                        .Fonts_T,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                //fontSize: 10.0
+                                                          child: Padding(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(4.0),
+                                                              child: Translate
+                                                                  .TranslateAndSetText(
+                                                                      'ภาษา',
+                                                                      SettingScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      TextAlign
+                                                                          .left,
+                                                                      null,
+                                                                      Font_
+                                                                          .Fonts_T,
+                                                                      14,
+                                                                      1)
+
+                                                              // Text(
+                                                              //   'ภาษา',
+                                                              //   textAlign:
+                                                              //       TextAlign
+                                                              //           .start,
+                                                              //   style: TextStyle(
+                                                              //     color: SettingScreen_Color
+                                                              //         .Colors_Text2_,
+                                                              //     fontFamily:
+                                                              //         FontWeight_
+                                                              //             .Fonts_T,
+                                                              //     fontWeight:
+                                                              //         FontWeight
+                                                              //             .bold,
+                                                              //     //fontSize: 10.0
+                                                              //   ),
+                                                              // ),
                                                               ),
-                                                            ),
-                                                          ),
                                                         ),
                                                         Expanded(
                                                           child: Container(
@@ -3010,28 +3426,39 @@ class _BillDocumentState extends State<BillDocument> {
                                                       children: [
                                                         Container(
                                                           width: 80,
-                                                          child: const Padding(
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    4.0),
-                                                            child: Text(
-                                                              'รูปแบบบิล',
-                                                              textAlign:
+                                                          child: Padding(
+                                                              padding:
+                                                                  EdgeInsets.all(
+                                                                      4.0),
+                                                              child: Translate.TranslateAndSetText(
+                                                                  'รูปแบบบิล',
+                                                                  SettingScreen_Color
+                                                                      .Colors_Text1_,
                                                                   TextAlign
-                                                                      .start,
-                                                              style: TextStyle(
-                                                                color: SettingScreen_Color
-                                                                    .Colors_Text2_,
-                                                                fontFamily:
-                                                                    FontWeight_
-                                                                        .Fonts_T,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                //fontSize: 10.0
+                                                                      .left,
+                                                                  null,
+                                                                  Font_.Fonts_T,
+                                                                  14,
+                                                                  1)
+
+                                                              //  Text(
+                                                              //   'รูปแบบบิล',
+                                                              //   textAlign:
+                                                              //       TextAlign
+                                                              //           .start,
+                                                              //   style: TextStyle(
+                                                              //     color: SettingScreen_Color
+                                                              //         .Colors_Text2_,
+                                                              //     fontFamily:
+                                                              //         FontWeight_
+                                                              //             .Fonts_T,
+                                                              //     fontWeight:
+                                                              //         FontWeight
+                                                              //             .bold,
+                                                              //     //fontSize: 10.0
+                                                              //   ),
+                                                              // ),
                                                               ),
-                                                            ),
-                                                          ),
                                                         ),
                                                         Expanded(
                                                           child: Container(
@@ -3076,20 +3503,34 @@ class _BillDocumentState extends State<BillDocument> {
                                                                 ),
                                                               ),
                                                               isExpanded: true,
-                                                              hint: Text(
-                                                                bill_default ==
-                                                                        'P'
-                                                                    ? 'บิลธรรมดา'
-                                                                    : 'ใบกำกับภาษี',
-                                                                style: const TextStyle(
-                                                                    fontSize:
-                                                                        14,
-                                                                    color: SettingScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T),
-                                                              ),
+                                                              hint: Translate.TranslateAndSetText(
+                                                                  bill_default ==
+                                                                          'P'
+                                                                      ? 'บิลธรรมดา'
+                                                                      : 'ใบกำกับภาษี',
+                                                                  SettingScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  TextAlign
+                                                                      .left,
+                                                                  null,
+                                                                  Font_.Fonts_T,
+                                                                  14,
+                                                                  1),
+
+                                                              // Text(
+                                                              //   bill_default ==
+                                                              //           'P'
+                                                              //       ? 'บิลธรรมดา'
+                                                              //       : 'ใบกำกับภาษี',
+                                                              //   style: const TextStyle(
+                                                              //       fontSize:
+                                                              //           14,
+                                                              //       color: SettingScreen_Color
+                                                              //           .Colors_Text2_,
+                                                              //       fontFamily:
+                                                              //           Font_
+                                                              //               .Fonts_T),
+                                                              // ),
                                                               icon: const Icon(
                                                                 Icons
                                                                     .arrow_drop_down,
@@ -3133,17 +3574,24 @@ class _BillDocumentState extends State<BillDocument> {
                                                                           String>(
                                                                         value:
                                                                             item,
-                                                                        child:
-                                                                            Text(
-                                                                          item,
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            color:
-                                                                                SettingScreen_Color.Colors_Text1_,
-                                                                            fontSize:
-                                                                                14,
-                                                                          ),
-                                                                        ),
+                                                                        child: Translate.TranslateAndSetText(
+                                                                            item,
+                                                                            SettingScreen_Color.Colors_Text1_,
+                                                                            TextAlign.left,
+                                                                            null,
+                                                                            Font_.Fonts_T,
+                                                                            14,
+                                                                            1),
+                                                                        //     Text(
+                                                                        //   item,
+                                                                        //   style:
+                                                                        //       const TextStyle(
+                                                                        //     color:
+                                                                        //         SettingScreen_Color.Colors_Text1_,
+                                                                        //     fontSize:
+                                                                        //         14,
+                                                                        //   ),
+                                                                        // ),
                                                                       )).toList(),
                                                               // validator: (value) {
                                                               //   if (value == null) {
@@ -3227,29 +3675,41 @@ class _BillDocumentState extends State<BillDocument> {
                                                             8.0),
                                                     child: Row(
                                                       children: [
-                                                        const SizedBox(
+                                                        SizedBox(
                                                           width: 80,
                                                           child: Padding(
                                                             padding:
                                                                 EdgeInsets.all(
                                                                     4.0),
-                                                            child: Text(
-                                                              'ใบเสร็จ',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .start,
-                                                              style: TextStyle(
-                                                                color: SettingScreen_Color
-                                                                    .Colors_Text2_,
-                                                                fontFamily:
-                                                                    FontWeight_
+                                                            child: Translate
+                                                                .TranslateAndSetText(
+                                                                    'ใบเสร็จ',
+                                                                    SettingScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    TextAlign
+                                                                        .left,
+                                                                    null,
+                                                                    Font_
                                                                         .Fonts_T,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                //fontSize: 10.0
-                                                              ),
-                                                            ),
+                                                                    14,
+                                                                    1),
+                                                            // Text(
+                                                            //   'ใบเสร็จ',
+                                                            //   textAlign:
+                                                            //       TextAlign
+                                                            //           .start,
+                                                            //   style: TextStyle(
+                                                            //     color: SettingScreen_Color
+                                                            //         .Colors_Text2_,
+                                                            //     fontFamily:
+                                                            //         FontWeight_
+                                                            //             .Fonts_T,
+                                                            //     fontWeight:
+                                                            //         FontWeight
+                                                            //             .bold,
+                                                            //     //fontSize: 10.0
+                                                            //   ),
+                                                            // ),
                                                           ),
                                                         ),
                                                         Expanded(
@@ -3295,20 +3755,33 @@ class _BillDocumentState extends State<BillDocument> {
                                                                 ),
                                                               ),
                                                               isExpanded: true,
-                                                              hint: Text(
-                                                                (Receipt_default ==
-                                                                        'N')
-                                                                    ? 'ไม่ออกใบเสร็จ'
-                                                                    : 'ออกใบเสร็จ',
-                                                                style: const TextStyle(
-                                                                    fontSize:
-                                                                        14,
-                                                                    color: SettingScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T),
-                                                              ),
+                                                              hint: Translate.TranslateAndSetText(
+                                                                  (Receipt_default ==
+                                                                          'N')
+                                                                      ? 'ไม่ออกใบเสร็จ'
+                                                                      : 'ออกใบเสร็จ',
+                                                                  SettingScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  TextAlign
+                                                                      .left,
+                                                                  null,
+                                                                  Font_.Fonts_T,
+                                                                  14,
+                                                                  1),
+                                                              // Text(
+                                                              //   (Receipt_default ==
+                                                              //           'N')
+                                                              //       ? 'ไม่ออกใบเสร็จ'
+                                                              //       : 'ออกใบเสร็จ',
+                                                              //   style: const TextStyle(
+                                                              //       fontSize:
+                                                              //           14,
+                                                              //       color: SettingScreen_Color
+                                                              //           .Colors_Text2_,
+                                                              //       fontFamily:
+                                                              //           Font_
+                                                              //               .Fonts_T),
+                                                              // ),
                                                               icon: const Icon(
                                                                 Icons
                                                                     .arrow_drop_down,
@@ -3336,17 +3809,24 @@ class _BillDocumentState extends State<BillDocument> {
                                                                           String>(
                                                                         value:
                                                                             item,
-                                                                        child:
-                                                                            Text(
-                                                                          item,
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            color:
-                                                                                SettingScreen_Color.Colors_Text1_,
-                                                                            fontSize:
-                                                                                14,
-                                                                          ),
-                                                                        ),
+                                                                        child: Translate.TranslateAndSetText(
+                                                                            item,
+                                                                            SettingScreen_Color.Colors_Text1_,
+                                                                            TextAlign.left,
+                                                                            null,
+                                                                            Font_.Fonts_T,
+                                                                            14,
+                                                                            1),
+                                                                        // Text(
+                                                                        //   item,
+                                                                        //   style:
+                                                                        //       const TextStyle(
+                                                                        //     color:
+                                                                        //         SettingScreen_Color.Colors_Text1_,
+                                                                        //     fontSize:
+                                                                        //         14,
+                                                                        //   ),
+                                                                        // ),
                                                                       )).toList(),
                                                               // validator: (value) {
                                                               //   if (value == null) {
@@ -3430,29 +3910,41 @@ class _BillDocumentState extends State<BillDocument> {
                                                             8.0),
                                                     child: Row(
                                                       children: [
-                                                        const SizedBox(
+                                                        SizedBox(
                                                           width: 80,
                                                           child: Padding(
                                                             padding:
                                                                 EdgeInsets.all(
                                                                     4.0),
-                                                            child: Text(
-                                                              'หัวบิล',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .start,
-                                                              style: TextStyle(
-                                                                color: SettingScreen_Color
-                                                                    .Colors_Text2_,
-                                                                fontFamily:
-                                                                    FontWeight_
+                                                            child: Translate
+                                                                .TranslateAndSetText(
+                                                                    'หัวบิล',
+                                                                    SettingScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    TextAlign
+                                                                        .left,
+                                                                    null,
+                                                                    Font_
                                                                         .Fonts_T,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                //fontSize: 10.0
-                                                              ),
-                                                            ),
+                                                                    14,
+                                                                    1),
+                                                            // Text(
+                                                            //   'หัวบิล',
+                                                            //   textAlign:
+                                                            //       TextAlign
+                                                            //           .start,
+                                                            //   style: TextStyle(
+                                                            //     color: SettingScreen_Color
+                                                            //         .Colors_Text2_,
+                                                            //     fontFamily:
+                                                            //         FontWeight_
+                                                            //             .Fonts_T,
+                                                            //     fontWeight:
+                                                            //         FontWeight
+                                                            //             .bold,
+                                                            //     //fontSize: 10.0
+                                                            //   ),
+                                                            // ),
                                                           ),
                                                         ),
                                                         Expanded(
@@ -3498,17 +3990,28 @@ class _BillDocumentState extends State<BillDocument> {
                                                                 ),
                                                               ),
                                                               isExpanded: true,
-                                                              hint: Text(
-                                                                '${TitleType_Default_Receipt_[Receipt_defaultTitle]}',
-                                                                style: const TextStyle(
-                                                                    fontSize:
-                                                                        14,
-                                                                    color: SettingScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T),
-                                                              ),
+                                                              hint: Translate.TranslateAndSetText(
+                                                                  '${TitleType_Default_Receipt_[Receipt_defaultTitle]}',
+                                                                  SettingScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  TextAlign
+                                                                      .left,
+                                                                  null,
+                                                                  Font_.Fonts_T,
+                                                                  14,
+                                                                  1),
+
+                                                              // Text(
+                                                              //   '${TitleType_Default_Receipt_[Receipt_defaultTitle]}',
+                                                              //   style: const TextStyle(
+                                                              //       fontSize:
+                                                              //           14,
+                                                              //       color: SettingScreen_Color
+                                                              //           .Colors_Text2_,
+                                                              //       fontFamily:
+                                                              //           Font_
+                                                              //               .Fonts_T),
+                                                              // ),
                                                               icon: const Icon(
                                                                 Icons
                                                                     .arrow_drop_down,
@@ -3536,17 +4039,24 @@ class _BillDocumentState extends State<BillDocument> {
                                                                           String>(
                                                                         value:
                                                                             item,
-                                                                        child:
-                                                                            Text(
-                                                                          item,
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            color:
-                                                                                SettingScreen_Color.Colors_Text1_,
-                                                                            fontSize:
-                                                                                14,
-                                                                          ),
-                                                                        ),
+                                                                        child: Translate.TranslateAndSetText(
+                                                                            item,
+                                                                            SettingScreen_Color.Colors_Text1_,
+                                                                            TextAlign.left,
+                                                                            null,
+                                                                            Font_.Fonts_T,
+                                                                            14,
+                                                                            1),
+                                                                        // Text(
+                                                                        //   item,
+                                                                        //   style:
+                                                                        //       const TextStyle(
+                                                                        //     color:
+                                                                        //         SettingScreen_Color.Colors_Text1_,
+                                                                        //     fontSize:
+                                                                        //         14,
+                                                                        //   ),
+                                                                        // ),
                                                                       )).toList(),
                                                               // validator: (value) {
                                                               //   if (value == null) {
@@ -3647,18 +4157,26 @@ class _BillDocumentState extends State<BillDocument> {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          const Row(
+          Row(
             children: [
               Padding(
                 padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'การรับเลขเอกสาร',
-                  style: TextStyle(
-                    color: SettingScreen_Color.Colors_Text1_,
-                    fontWeight: FontWeight.bold,
-                    //fontSize: 10.0
-                  ),
-                ),
+                child: Translate.TranslateAndSetText(
+                    'การรับเลขเอกสาร',
+                    SettingScreen_Color.Colors_Text1_,
+                    TextAlign.left,
+                    null,
+                    Font_.Fonts_T,
+                    14,
+                    1),
+                // Text(
+                //   'การรับเลขเอกสาร',
+                //   style: TextStyle(
+                //     color: SettingScreen_Color.Colors_Text1_,
+                //     fontWeight: FontWeight.bold,
+                //     //fontSize: 10.0
+                //   ),
+                // ),
               ),
             ],
           ),
@@ -3685,16 +4203,14 @@ class _BillDocumentState extends State<BillDocument> {
                               //     color: Colors.grey, width: 1),
                             ),
                             padding: const EdgeInsets.all(8.0),
-                            child: const Text(
-                              'ประเภทเอกสาร',
-                              maxLines: 1,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: SettingScreen_Color.Colors_Text1_,
-                                  fontFamily: FontWeight_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                'ประเภทเอกสาร',
+                                SettingScreen_Color.Colors_Text1_,
+                                TextAlign.left,
+                                null,
+                                Font_.Fonts_T,
+                                14,
+                                1),
                           ),
                         ),
                       ),
@@ -3703,16 +4219,14 @@ class _BillDocumentState extends State<BillDocument> {
                         child: Container(
                           color: AppbackgroundColor.TiTile_Colors,
                           padding: const EdgeInsets.all(8.0),
-                          child: const Text(
-                            'หัวบิล',
-                            maxLines: 1,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: SettingScreen_Color.Colors_Text1_,
-                                fontFamily: FontWeight_.Fonts_T
-                                //fontSize: 10.0
-                                ),
-                          ),
+                          child: Translate.TranslateAndSetText(
+                              'หัวบิล',
+                              SettingScreen_Color.Colors_Text1_,
+                              TextAlign.left,
+                              null,
+                              Font_.Fonts_T,
+                              14,
+                              1),
                         ),
                       ),
                       Expanded(
@@ -3720,16 +4234,14 @@ class _BillDocumentState extends State<BillDocument> {
                         child: Container(
                           color: AppbackgroundColor.TiTile_Colors,
                           padding: const EdgeInsets.all(8.0),
-                          child: const Text(
-                            'เลขรับเริ่มต้น',
-                            maxLines: 1,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: SettingScreen_Color.Colors_Text1_,
-                                fontFamily: FontWeight_.Fonts_T
-                                //fontSize: 10.0
-                                ),
-                          ),
+                          child: Translate.TranslateAndSetText(
+                              'เลขรับเริ่มต้น',
+                              SettingScreen_Color.Colors_Text1_,
+                              TextAlign.left,
+                              null,
+                              Font_.Fonts_T,
+                              14,
+                              1),
                         ),
                       ),
                       Expanded(
@@ -3801,16 +4313,15 @@ class _BillDocumentState extends State<BillDocument> {
                                       return Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: (elapsed > 3.00)
-                                            ? const Text(
+                                            ? Translate.TranslateAndSetText(
                                                 'ไม่พบข้อมูล',
-                                                style: TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    fontFamily: Font_.Fonts_T
-                                                    //fontSize: 10.0
-                                                    ),
-                                              )
+                                                SettingScreen_Color
+                                                    .Colors_Text1_,
+                                                TextAlign.center,
+                                                null,
+                                                Font_.Fonts_T,
+                                                14,
+                                                1)
                                             : const Column(
                                                 children: [
                                                   CircularProgressIndicator(),
@@ -3859,19 +4370,29 @@ class _BillDocumentState extends State<BillDocument> {
                                     child: Row(
                                       children: [
                                         Expanded(
-                                          flex: 2,
-                                          child: Text(
-                                            '${doctypeOneModels[index].bills}',
-                                            textAlign: TextAlign.start,
-                                            style: const TextStyle(
-                                                color: SettingScreen_Color
-                                                    .Colors_Text2_,
-                                                fontFamily: Font_.Fonts_T
-                                                //fontWeight: FontWeight.bold,
-                                                //fontSize: 10.0
-                                                ),
-                                          ),
-                                        ),
+                                            flex: 2,
+                                            child: Translate.TranslateAndSetText(
+                                                '${doctypeOneModels[index].bills}',
+                                                SettingScreen_Color
+                                                    .Colors_Text1_,
+                                                TextAlign.center,
+                                                null,
+                                                Font_.Fonts_T,
+                                                14,
+                                                1)
+
+                                            // Text(
+                                            //   '${doctypeOneModels[index].bills}',
+                                            //   textAlign: TextAlign.start,
+                                            //   style: const TextStyle(
+                                            //       color: SettingScreen_Color
+                                            //           .Colors_Text2_,
+                                            //       fontFamily: Font_.Fonts_T
+                                            //       //fontWeight: FontWeight.bold,
+                                            //       //fontSize: 10.0
+                                            //       ),
+                                            // ),
+                                            ),
                                         Expanded(
                                           flex: 1,
                                           child: Text(
@@ -3916,44 +4437,59 @@ class _BillDocumentState extends State<BillDocument> {
                                                     '${doctypeOneModels[index].doccode}',
                                                     '${doctypeOneModels[index].startbill}',
                                                     '${doctypeOneModels[index].ser}',
+                                                    '${doctypeOneModels[index].dtype}',
+                                                    '${doctypeOneModels[index].yy}',
+                                                    '${doctypeOneModels[index].mm}',
                                                   );
-                                                  print(
-                                                      'แก้ไข${doctypeOneModels[index].bills} // ser : ${doctypeOneModels[index].ser}');
+                                                  // print(
+                                                  //     'แก้ไข${doctypeOneModels[index].bills} // ser : ${doctypeOneModels[index].ser}');
                                                 },
                                                 child: Container(
-                                                  decoration: BoxDecoration(
-                                                    color: Colors
-                                                        .blueGrey.shade100,
-                                                    borderRadius:
-                                                        const BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(10),
-                                                      topRight:
-                                                          Radius.circular(10),
-                                                      bottomLeft:
-                                                          Radius.circular(10),
-                                                      bottomRight:
-                                                          Radius.circular(10),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors
+                                                          .blueGrey.shade100,
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .only(
+                                                        topLeft:
+                                                            Radius.circular(10),
+                                                        topRight:
+                                                            Radius.circular(10),
+                                                        bottomLeft:
+                                                            Radius.circular(10),
+                                                        bottomRight:
+                                                            Radius.circular(10),
+                                                      ),
+                                                      // border: Border.all(
+                                                      //     color: Colors.grey, width: 1),
                                                     ),
-                                                    // border: Border.all(
-                                                    //     color: Colors.grey, width: 1),
-                                                  ),
-                                                  padding:
-                                                      const EdgeInsets.all(4.0),
-                                                  child: const Text(
-                                                    'แก้ไข',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        color:
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            4.0),
+                                                    child: Translate
+                                                        .TranslateAndSetText(
+                                                            'แก้ไข',
                                                             SettingScreen_Color
-                                                                .Colors_Text2_,
-                                                        fontFamily:
-                                                            Font_.Fonts_T
-                                                        //fontWeight: FontWeight.bold,
-                                                        //fontSize: 10.0
-                                                        ),
-                                                  ),
-                                                ),
+                                                                .Colors_Text1_,
+                                                            TextAlign.center,
+                                                            null,
+                                                            Font_.Fonts_T,
+                                                            14,
+                                                            1)
+                                                    // const Text(
+                                                    //   'แก้ไข',
+                                                    //   textAlign: TextAlign.center,
+                                                    //   style: TextStyle(
+                                                    //       color:
+                                                    //           SettingScreen_Color
+                                                    //               .Colors_Text2_,
+                                                    //       fontFamily:
+                                                    //           Font_.Fonts_T
+                                                    //       //fontWeight: FontWeight.bold,
+                                                    //       //fontSize: 10.0
+                                                    //       ),
+                                                    // ),
+                                                    ),
                                               ),
                                             ],
                                           ),
@@ -3981,47 +4517,63 @@ class _BillDocumentState extends State<BillDocument> {
                         flex: 2,
                         child: Container(
                           child: Container(
-                            decoration: BoxDecoration(
-                              color: AppbackgroundColor.TiTile_Colors,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(0),
-                                bottomLeft: Radius.circular(0),
-                                bottomRight: Radius.circular(0),
+                              decoration: BoxDecoration(
+                                color: AppbackgroundColor.TiTile_Colors,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(0),
+                                  bottomLeft: Radius.circular(0),
+                                  bottomRight: Radius.circular(0),
+                                ),
+                                // border: Border.all(
+                                //     color: Colors.grey, width: 1),
                               ),
-                              // border: Border.all(
-                              //     color: Colors.grey, width: 1),
-                            ),
-                            padding: const EdgeInsets.all(8.0),
-                            child: const Text(
-                              'REFประเภทค่าบริการ',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: SettingScreen_Color.Colors_Text1_,
-                                fontFamily: FontWeight_.Fonts_T,
-                                fontWeight: FontWeight.bold,
-                                //fontSize: 10.0
+                              padding: const EdgeInsets.all(8.0),
+                              child: Translate.TranslateAndSetText(
+                                  'REFประเภทค่าบริการ',
+                                  SettingScreen_Color.Colors_Text1_,
+                                  TextAlign.center,
+                                  null,
+                                  Font_.Fonts_T,
+                                  14,
+                                  1)
+                              //  const Text(
+                              //   'REFประเภทค่าบริการ',
+                              //   textAlign: TextAlign.center,
+                              //   style: TextStyle(
+                              //     color: SettingScreen_Color.Colors_Text1_,
+                              //     fontFamily: FontWeight_.Fonts_T,
+                              //     fontWeight: FontWeight.bold,
+                              //     //fontSize: 10.0
+                              //   ),
+                              // ),
                               ),
-                            ),
-                          ),
                         ),
                       ),
                       Expanded(
                         flex: 1,
                         child: Container(
-                          color: AppbackgroundColor.TiTile_Colors,
-                          padding: const EdgeInsets.all(8.0),
-                          child: const Text(
-                            'หัวบิล',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: SettingScreen_Color.Colors_Text1_,
-                              fontFamily: FontWeight_.Fonts_T,
-                              fontWeight: FontWeight.bold,
-                              //fontSize: 10.0
+                            color: AppbackgroundColor.TiTile_Colors,
+                            padding: const EdgeInsets.all(8.0),
+                            child: Translate.TranslateAndSetText(
+                                'หัวบิล',
+                                SettingScreen_Color.Colors_Text1_,
+                                TextAlign.center,
+                                null,
+                                Font_.Fonts_T,
+                                14,
+                                1)
+                            // const Text(
+                            //   'หัวบิล',
+                            //   textAlign: TextAlign.center,
+                            //   style: TextStyle(
+                            //     color: SettingScreen_Color.Colors_Text1_,
+                            //     fontFamily: FontWeight_.Fonts_T,
+                            //     fontWeight: FontWeight.bold,
+                            //     //fontSize: 10.0
+                            //   ),
+                            // ),
                             ),
-                          ),
-                        ),
                       ),
                       Expanded(
                         flex: 1,
@@ -4093,16 +4645,15 @@ class _BillDocumentState extends State<BillDocument> {
                                       return Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: (elapsed > 3.00)
-                                            ? const Text(
+                                            ? Translate.TranslateAndSetText(
                                                 'ไม่พบข้อมูล',
-                                                style: TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    fontFamily: Font_.Fonts_T
-                                                    //fontSize: 10.0
-                                                    ),
-                                              )
+                                                SettingScreen_Color
+                                                    .Colors_Text1_,
+                                                TextAlign.center,
+                                                null,
+                                                Font_.Fonts_T,
+                                                14,
+                                                1)
                                             : const Column(
                                                 children: [
                                                   CircularProgressIndicator(),
@@ -4153,19 +4704,28 @@ class _BillDocumentState extends State<BillDocument> {
                                     child: Row(
                                       children: [
                                         Expanded(
-                                          flex: 2,
-                                          child: Text(
-                                            '${doctypeTwoModels[index].bills}',
-                                            textAlign: TextAlign.start,
-                                            style: const TextStyle(
-                                                color: SettingScreen_Color
-                                                    .Colors_Text2_,
-                                                fontFamily: Font_.Fonts_T
-                                                //fontWeight: FontWeight.bold,
-                                                //fontSize: 10.0
-                                                ),
-                                          ),
-                                        ),
+                                            flex: 2,
+                                            child: Translate.TranslateAndSetText(
+                                                '${doctypeTwoModels[index].bills}',
+                                                SettingScreen_Color
+                                                    .Colors_Text1_,
+                                                TextAlign.left,
+                                                null,
+                                                Font_.Fonts_T,
+                                                14,
+                                                1)
+                                            //  Text(
+                                            //   '${doctypeTwoModels[index].bills}',
+                                            //   textAlign: TextAlign.start,
+                                            //   style: const TextStyle(
+                                            //       color: SettingScreen_Color
+                                            //           .Colors_Text2_,
+                                            //       fontFamily: Font_.Fonts_T
+                                            //       //fontWeight: FontWeight.bold,
+                                            //       //fontSize: 10.0
+                                            //       ),
+                                            // ),
+                                            ),
                                         Expanded(
                                           flex: 1,
                                           child: Text(
@@ -4210,44 +4770,45 @@ class _BillDocumentState extends State<BillDocument> {
                                                     '${doctypeTwoModels[index].doccode}',
                                                     '${doctypeTwoModels[index].startbill}',
                                                     '${doctypeTwoModels[index].ser}',
+                                                    '${doctypeTwoModels[index].dtype}',
+                                                    '${doctypeTwoModels[index].yy}',
+                                                    '${doctypeTwoModels[index].mm}',
                                                   );
-                                                  print(
-                                                      'แก้ไข${doctypeTwoModels[index].bills}// ser : ${doctypeTwoModels[index].ser}');
+                                                  // print(
+                                                  //     'แก้ไข${doctypeTwoModels[index].bills}// ser : ${doctypeTwoModels[index].ser}');
                                                 },
                                                 child: Container(
-                                                  decoration: BoxDecoration(
-                                                    color: Colors
-                                                        .blueGrey.shade100,
-                                                    borderRadius:
-                                                        const BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(10),
-                                                      topRight:
-                                                          Radius.circular(10),
-                                                      bottomLeft:
-                                                          Radius.circular(10),
-                                                      bottomRight:
-                                                          Radius.circular(10),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors
+                                                          .blueGrey.shade100,
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .only(
+                                                        topLeft:
+                                                            Radius.circular(10),
+                                                        topRight:
+                                                            Radius.circular(10),
+                                                        bottomLeft:
+                                                            Radius.circular(10),
+                                                        bottomRight:
+                                                            Radius.circular(10),
+                                                      ),
+                                                      // border: Border.all(
+                                                      //     color: Colors.grey, width: 1),
                                                     ),
-                                                    // border: Border.all(
-                                                    //     color: Colors.grey, width: 1),
-                                                  ),
-                                                  padding:
-                                                      const EdgeInsets.all(4.0),
-                                                  child: const Text(
-                                                    'แก้ไข',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        color:
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            4.0),
+                                                    child: Translate
+                                                        .TranslateAndSetText(
+                                                            'แก้ไข',
                                                             SettingScreen_Color
-                                                                .Colors_Text2_,
-                                                        fontFamily:
-                                                            Font_.Fonts_T
-                                                        //fontWeight: FontWeight.bold,
-                                                        //fontSize: 10.0
-                                                        ),
-                                                  ),
-                                                ),
+                                                                .Colors_Text1_,
+                                                            TextAlign.center,
+                                                            null,
+                                                            Font_.Fonts_T,
+                                                            14,
+                                                            1)),
                                               ),
                                             ],
                                           ),

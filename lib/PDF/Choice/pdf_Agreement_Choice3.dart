@@ -12,6 +12,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../PeopleChao/Rental_Information.dart';
 import '../../../../Style/ThaiBaht.dart';
+import '../../Constant/Myconstant.dart';
+import '../../Style/loadAndCacheImage.dart';
 
 class Pdfgen_Agreement_Choice3 {
 //////////---------------------------------------------------->( **** เอกสารสัญญาบริการ Choice)
@@ -77,11 +79,11 @@ class Pdfgen_Agreement_Choice3 {
     Uint8List imageData = (image).buffer.asUint8List();
     Uint8List imageBG = (BG_PDF).buffer.asUint8List();
 
-    List netImage = [];
-    List signature_Image1 = [];
-    List signature_Image2 = [];
-    List signature_Image3 = [];
-    List signature_Image4 = [];
+    // List netImage = [];
+    // List signature_Image1 = [];
+    // List signature_Image2 = [];
+    // List signature_Image3 = [];
+    // List signature_Image4 = [];
     List footImage = [];
     SharedPreferences preferences = await SharedPreferences.getInstance();
     int pageCount = 1; // Initialize the page count
@@ -90,6 +92,7 @@ class Pdfgen_Agreement_Choice3 {
     // String? base64Image_3 = preferences.getString('base64Image3');
     // String? base64Image_4 = preferences.getString('base64Image4');
     String base64Image_new1 = (base64Image_1 == null) ? '' : base64Image_1;
+    Uint8List? resizedLogo = await getResizedLogo();
     // String base64Image_new2 = (base64Image_2 == null) ? '' : base64Image_2;
     // String base64Image_new3 = (base64Image_3 == null) ? '' : base64Image_3;
     // String base64Image_new4 = (base64Image_4 == null) ? '' : base64Image_4;
@@ -97,22 +100,36 @@ class Pdfgen_Agreement_Choice3 {
     // Uint8List data2 = base64Decode(base64Image_new2);
     // Uint8List data3 = base64Decode(base64Image_new3);
     // Uint8List data4 = base64Decode(base64Image_new4);
-    for (int i = 0; i < newValuePDFimg.length; i++) {
-      netImage.add(await networkImage('${newValuePDFimg[i]}'));
-    }
+    // for (int i = 0; i < newValuePDFimg.length; i++) {
+    //   netImage.add(await networkImage('${newValuePDFimg[i]}'));
+    // }
     ////////////--------------------->
-    for (int i = 0; i < newValuePDFimg.length; i++) {
-      signature_Image1.add(await networkImage('${newValuePDFimg[i]}'));
-    }
-    for (int i = 0; i < newValuePDFimg.length; i++) {
-      signature_Image2.add(await networkImage('${newValuePDFimg[i]}'));
-    }
-    for (int i = 0; i < newValuePDFimg.length; i++) {
-      signature_Image3.add(await networkImage('${newValuePDFimg[i]}'));
-    }
-    for (int i = 0; i < newValuePDFimg.length; i++) {
-      signature_Image4.add(await networkImage('${newValuePDFimg[i]}'));
-    }
+    var licence_name1 = 'สิริกร พรหมปัญญา';
+    var licence_name2 = 'สิริกร พรหมปัญญา';
+    var licence_name3 = 'สิริกร พรหมปัญญา';
+    var licence_name4 = 'สิริกร พรหมปัญญา';
+    var refid = 'LLJZX20241';
+
+    final signature_Image1 = await loadAndCacheImage(
+        '${MyConstant().domain}/gen_licence_img.php?isAdd=true&ren=50&ref_id=$refid&name_id=$licence_name1&doc_id=$Get_Value_cid&extension=.png');
+    final signature_Image2 = await loadAndCacheImage(
+        '${MyConstant().domain}/gen_licence_img.php?isAdd=true&ren=50&ref_id=$refid&name_id=$licence_name2&doc_id=$Get_Value_cid&extension=.png');
+    final signature_Image3 = await loadAndCacheImage(
+        '${MyConstant().domain}/gen_licence_img.php?isAdd=true&ren=50&ref_id=$refid&name_id=$licence_name2&doc_id=$Get_Value_cid&extension=.png');
+    final signature_Image4 = await loadAndCacheImage(
+        '${MyConstant().domain}/gen_licence_img.php?isAdd=true&ren=50&ref_id=$refid&name_id=$licence_name2&doc_id=$Get_Value_cid&extension=.png');
+    // for (int i = 0; i < newValuePDFimg.length; i++) {
+    //   signature_Image1.add(await networkImage('${newValuePDFimg[i]}'));
+    // }
+    // for (int i = 0; i < newValuePDFimg.length; i++) {
+    //   signature_Image2.add(await networkImage('${newValuePDFimg[i]}'));
+    // }
+    // for (int i = 0; i < newValuePDFimg.length; i++) {
+    //   signature_Image3.add(await networkImage('${newValuePDFimg[i]}'));
+    // }
+    // for (int i = 0; i < newValuePDFimg.length; i++) {
+    //   signature_Image4.add(await networkImage('${newValuePDFimg[i]}'));
+    // }
     // final tableData = [
     //   for (int index = 0; index < quotxSelectModels.length; index++)
     //     [
@@ -157,14 +174,22 @@ class Pdfgen_Agreement_Choice3 {
                     width: 30,
                     height: 10,
                   ),
-                  (netImage.isEmpty)
-                      ? pw.Container(
-                          height: 72,
-                          width: 70,
-                          color: PdfColors.grey200,
-                          child: pw.Center(
+                  pw.Container(
+                    height: 60,
+                    width: 60,
+                    decoration: pw.BoxDecoration(
+                      color: PdfColors.grey200,
+                      border: pw.Border.all(color: PdfColors.grey300),
+                    ),
+                    child: resizedLogo != null
+                        ? pw.Image(
+                            pw.MemoryImage(resizedLogo),
+                            height: 60,
+                            width: 60,
+                          )
+                        : pw.Center(
                             child: pw.Text(
-                              '$renTal_name ',
+                              '$bill_name ',
                               maxLines: 1,
                               style: pw.TextStyle(
                                 fontSize: 10,
@@ -172,18 +197,35 @@ class Pdfgen_Agreement_Choice3 {
                                 color: Colors_pd,
                               ),
                             ),
-                          ))
+                          ),
+                  ),
+                  // (netImage.isEmpty)
+                  //     ? pw.Container(
+                  //         height: 72,
+                  //         width: 70,
+                  //         color: PdfColors.grey200,
+                  //         child: pw.Center(
+                  //           child: pw.Text(
+                  //             '$renTal_name ',
+                  //             maxLines: 1,
+                  //             style: pw.TextStyle(
+                  //               fontSize: 10,
+                  //               font: ttf,
+                  //               color: Colors_pd,
+                  //             ),
+                  //           ),
+                  //         ))
 
-                      // pw.Image(
-                      //     pw.MemoryImage(iconImage),
-                      //     height: 72,
-                      //     width: 70,
-                      //   )
-                      : pw.Image(
-                          (netImage[0]),
-                          height: 72,
-                          width: 70,
-                        ),
+                  //     // pw.Image(
+                  //     //     pw.MemoryImage(iconImage),
+                  //     //     height: 72,
+                  //     //     width: 70,
+                  //     //   )
+                  //     : pw.Image(
+                  //         (netImage[0]),
+                  //         height: 72,
+                  //         width: 70,
+                  //       ),
                   pw.SizedBox(width: 1 * PdfPageFormat.mm),
                   pw.Container(
                     width: 280,
@@ -1459,7 +1501,7 @@ class Pdfgen_Agreement_Choice3 {
                                         ),
                                       )
                                     : pw.Image(
-                                        (signature_Image1[0]),
+                                        pw.MemoryImage(signature_Image1),
                                         height: 30,
                                         width: 100,
                                       ),
@@ -1503,7 +1545,7 @@ class Pdfgen_Agreement_Choice3 {
                                         ),
                                       )
                                     : pw.Image(
-                                        (signature_Image2[0]),
+                                        pw.MemoryImage(signature_Image2),
                                         height: 30,
                                         width: 100,
                                       ),
@@ -1549,7 +1591,7 @@ class Pdfgen_Agreement_Choice3 {
                                         ),
                                       )
                                     : pw.Image(
-                                        (signature_Image3[0]),
+                                        pw.MemoryImage(signature_Image3),
                                         height: 30,
                                         width: 100,
                                       ),
@@ -1593,7 +1635,7 @@ class Pdfgen_Agreement_Choice3 {
                                         ),
                                       )
                                     : pw.Image(
-                                        (signature_Image4[0]),
+                                        pw.MemoryImage(signature_Image4),
                                         height: 30,
                                         width: 100,
                                       ),

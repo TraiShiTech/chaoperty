@@ -855,8 +855,7 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
                                         ),
                                         padding: const EdgeInsets.all(8.0),
                                         child: Center(
-                                            child:
-                                                Translate.TranslateAndSetText(
+                                          child:  Translate.TranslateAndSetText(
                                                     '${Status[i]}',
                                                     (Status_ == i + 1)
                                                         ? Colors.white
@@ -866,16 +865,16 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
                                                     FontWeight_.Fonts_T,
                                                     14,
                                                     1)
-                                            // Text(
-                                            //   '${Status[i]}',
-                                            //   style: TextStyle(
-                                            //       color: (Status_ == i + 1)
-                                            //           ? Colors.white
-                                            //           : Colors.black,
-                                            //       fontFamily:
-                                            //           FontWeight_.Fonts_T),
-                                            // ),
-                                            ),
+                                          // Text(
+                                          //   '${Status[i]}',
+                                          //   style: TextStyle(
+                                          //       color: (Status_ == i + 1)
+                                          //           ? Colors.white
+                                          //           : Colors.black,
+                                          //       fontFamily:
+                                          //           FontWeight_.Fonts_T),
+                                          // ),
+                                        ),
                                       ),
                                     )),
                             ])),

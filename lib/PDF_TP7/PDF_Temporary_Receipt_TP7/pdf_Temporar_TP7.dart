@@ -15,6 +15,7 @@ import '../../Constant/Myconstant.dart';
 import '../../PeopleChao/Bills_.dart';
 import '../../PeopleChao/Pays_.dart';
 import '../../Style/ThaiBaht.dart';
+import '../../Style/loadAndCacheImage.dart';
 
 class Pdfgen_Temporary_receipt_TP7 {
   static void exportPDF_Temporary_receipt_TP7(
@@ -82,11 +83,12 @@ class Pdfgen_Temporary_receipt_TP7 {
         (await rootBundle.load('images/LOGO.png')).buffer.asUint8List();
     List netImage = [];
     List netImage_QR = [];
+    Uint8List? resizedLogo = await getResizedLogo();
     String total_QR = '${nFormat.format(double.parse('${Total}'))}';
     String newTotal_QR = total_QR.replaceAll(RegExp(r'[^0-9]'), '');
-    for (int i = 0; i < newValuePDFimg.length; i++) {
-      netImage.add(await networkImage('${newValuePDFimg[i]}'));
-    }
+    // for (int i = 0; i < newValuePDFimg.length; i++) {
+    //   netImage.add(await networkImage('${newValuePDFimg[i]}'));
+    // }
     for (int i = 0; i < finnancetransModels.length; i++) {
       if (finnancetransModels[i].img == null ||
           finnancetransModels[i].img.toString() == '') {
@@ -106,131 +108,6 @@ class Pdfgen_Temporary_receipt_TP7 {
       return transaction.ptser.toString() == '2';
     });
 ///////////////////////------------------------------------------------->
-    final List<String> _digitThai = [
-      'ศูนย์',
-      'หนึ่ง',
-      'สอง',
-      'สาม',
-      'สี่',
-      'ห้า',
-      'หก',
-      'เจ็ด',
-      'แปด',
-      'เก้า'
-    ];
-
-    final List<String> _positionThai = [
-      '',
-      'สิบ',
-      'ร้อย',
-      'พัน',
-      'หมื่น',
-      'แสน',
-      'ล้าน'
-    ];
-/////////////////////////////------------------------>(จำนวนเต็ม)
-    String convertNumberToText(int number) {
-      String result = '';
-      int numberIntPart = number.toInt();
-      int numberDecimalPart = ((number - numberIntPart) * 100).toInt();
-      final List<String> digits = numberIntPart.toString().split('');
-      int position = digits.length - 1;
-      for (int i = 0; i < digits.length; i++) {
-        final int digit = int.parse(digits[i]);
-        if (digit != 0) {
-          if (position == 6) {
-            result = '$result${_positionThai[6]}';
-          }
-          if (position != 6 && position != 8) {
-            if (digit == 1 && position == 1) {
-              // result = '$resultเอ็ด';
-              result = '$resultสิบ';
-            } else {
-              result =
-                  '$result${_digitThai[digit]}${_positionThai[position % 6]}';
-            }
-          } else if (position == 8) {
-            result = '$result${_digitThai[digit]}${_positionThai[6]}';
-          }
-        }
-        position--;
-      }
-      // final String decimalText =
-      //     convertNumberToText(numberDecimalPart).replaceAll(_digitThai[0], "");
-      return result;
-    }
-
-/////////////////////////////------------------------>(จำนวนทศนิยม สตางค์)
-    String convertNumberToText2(int number2) {
-      String result = '';
-      int numberIntPart = number2.toInt();
-      int numberDecimalPart = ((number2 - numberIntPart) * 100).toInt();
-      final List<String> digits = numberIntPart.toString().split('');
-      int position = digits.length - 1;
-      for (int i = 0; i < digits.length; i++) {
-        final int digit = int.parse(digits[i]);
-        if (digit != 0) {
-          if (position == 6) {
-            result = '$result${_positionThai[6]}';
-          }
-          if (position != 6 && position != 8) {
-            if (digit == 1 && position == 1) {
-              // result = '$resultเอ็ด';
-              result = '$resultสิบ';
-            } else {
-              result =
-                  '$result${_digitThai[digit]}${_positionThai[position % 6]}';
-            }
-          } else if (position == 8) {
-            result = '$result${_digitThai[digit]}${_positionThai[6]}';
-          }
-        }
-        position--;
-      }
-      // final String decimalText =
-      //     convertNumberToText(numberDecimalPart).replaceAll(_digitThai[0], "");
-      return result;
-    }
-
-////////////////----------------------------->(ตัด หน้าจุดกับหลังจุดออกจากกัน)
-    var number_ = "${nFormat2.format(double.parse(Total.toString()))}";
-    var parts = number_.split('.');
-    var front = parts[0];
-    var back = parts[1];
-
-////////////////--------------------------------->(บาท)
-    double number = double.parse(front);
-    final int numberIntPart = number.toInt();
-    final double numberDecimalPart = (number - numberIntPart) * 100;
-    final String numberText = convertNumberToText(numberIntPart);
-    final String decimalText = convertNumberToText(numberDecimalPart.toInt());
-////////////////---------------------------------->(สตางค์)
-    double number2 = double.parse(number_);
-    final int numberIntPart2 = number.toInt();
-    final int numberDecimalPart2 = ((number2 - numberIntPart2) * 100).round();
-    final String numberText2 = convertNumberToText2(numberIntPart2);
-    final String decimalText2 =
-        convertNumberToText2(numberDecimalPart2.toInt());
-////////////////------------------------------->(เช็คและเพิ่มตัวอักษร)
-    final String formattedNumber = (decimalText2.replaceAll(
-                _digitThai[0], "") ==
-            '')
-        ? '$numberTextบาทถ้วน'
-        : (back[0].toString() == '0')
-            ? '$numberTextบาทจุดศูนย์${decimalText2.replaceAll(_digitThai[0], "")}สตางค์'
-            : '$numberTextบาทจุด${decimalText2.replaceAll(_digitThai[0], "")}สตางค์';
-
-    String text_Number1 = formattedNumber;
-    RegExp exp1 = RegExp(r"สองสิบ");
-    if (exp1.hasMatch(text_Number1)) {
-      text_Number1 = text_Number1.replaceAll(exp1, 'ยี่สิบ');
-    }
-    String text_Number2 = text_Number1;
-    RegExp exp2 = RegExp(r"สิบหนึ่ง");
-    if (exp2.hasMatch(text_Number2)) {
-      text_Number2 = text_Number2.replaceAll(exp2, 'สิบเอ็ด');
-    }
-//////////---------------------------------->
 
     pw.Widget Header(int serpang) {
       return pw.Column(children: [
@@ -242,20 +119,20 @@ class Pdfgen_Temporary_receipt_TP7 {
                 mainAxisSize: pw.MainAxisSize.min,
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
                 children: [
-                  (netImage.isEmpty)
-                      ? pw.Container(
-                          height: 30,
-                          width: 40,
-                          decoration: const pw.BoxDecoration(
-                            color: PdfColors.grey200,
-                            border: pw.Border(
-                              right: pw.BorderSide(color: PdfColors.grey300),
-                              left: pw.BorderSide(color: PdfColors.grey300),
-                              top: pw.BorderSide(color: PdfColors.grey300),
-                              bottom: pw.BorderSide(color: PdfColors.grey300),
-                            ),
-                          ),
-                          child: pw.Center(
+                  pw.Container(
+                    height: 30,
+                    width: 40,
+                    decoration: pw.BoxDecoration(
+                      color: PdfColors.grey200,
+                      border: pw.Border.all(color: PdfColors.grey300),
+                    ),
+                    child: resizedLogo != null
+                        ? pw.Image(
+                            pw.MemoryImage(resizedLogo),
+                            height: 30,
+                            width: 40,
+                          )
+                        : pw.Center(
                             child: pw.Text(
                               '$bill_name ',
                               maxLines: 1,
@@ -265,25 +142,50 @@ class Pdfgen_Temporary_receipt_TP7 {
                                 color: Colors_pd,
                               ),
                             ),
-                          ))
-                      : pw.Container(
-                          height: 30,
-                          width: 40,
-                          decoration: const pw.BoxDecoration(
-                            color: PdfColors.grey200,
-                            border: pw.Border(
-                              right: pw.BorderSide(color: PdfColors.grey300),
-                              left: pw.BorderSide(color: PdfColors.grey300),
-                              top: pw.BorderSide(color: PdfColors.grey300),
-                              bottom: pw.BorderSide(color: PdfColors.grey300),
-                            ),
                           ),
-                          child: pw.Image(
-                            (netImage[0]),
-                            height: 30,
-                            width: 40,
-                          ),
-                        ),
+                  ),
+                  // (netImage.isEmpty)
+                  //     ? pw.Container(
+                  //         height: 30,
+                  //         width: 40,
+                  //         decoration: const pw.BoxDecoration(
+                  //           color: PdfColors.grey200,
+                  //           border: pw.Border(
+                  //             right: pw.BorderSide(color: PdfColors.grey300),
+                  //             left: pw.BorderSide(color: PdfColors.grey300),
+                  //             top: pw.BorderSide(color: PdfColors.grey300),
+                  //             bottom: pw.BorderSide(color: PdfColors.grey300),
+                  //           ),
+                  //         ),
+                  //         child: pw.Center(
+                  //           child: pw.Text(
+                  //             '$bill_name ',
+                  //             maxLines: 1,
+                  //             style: pw.TextStyle(
+                  //               fontSize: 10,
+                  //               font: ttf,
+                  //               color: Colors_pd,
+                  //             ),
+                  //           ),
+                  //         ))
+                  //     : pw.Container(
+                  //         height: 30,
+                  //         width: 40,
+                  //         decoration: const pw.BoxDecoration(
+                  //           color: PdfColors.grey200,
+                  //           border: pw.Border(
+                  //             right: pw.BorderSide(color: PdfColors.grey300),
+                  //             left: pw.BorderSide(color: PdfColors.grey300),
+                  //             top: pw.BorderSide(color: PdfColors.grey300),
+                  //             bottom: pw.BorderSide(color: PdfColors.grey300),
+                  //           ),
+                  //         ),
+                  //         child: pw.Image(
+                  //           (netImage[0]),
+                  //           height: 30,
+                  //           width: 40,
+                  //         ),
+                  //       ),
                   pw.SizedBox(height: 1 * PdfPageFormat.mm),
                   pw.Text(
                     '${bill_name.toString().trim()}',

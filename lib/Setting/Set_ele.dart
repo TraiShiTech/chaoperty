@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 
 import '../Constant/Myconstant.dart';
 import '../Model/electricity_model.dart';
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 
 class SetEle extends StatefulWidget {
@@ -57,7 +58,7 @@ class _SetEleState extends State<SetEle> {
     return Column(
       children: [
         Container(
-          decoration:  BoxDecoration(
+          decoration: BoxDecoration(
             color: AppbackgroundColor.TiTile_Colors,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10),
@@ -71,15 +72,23 @@ class _SetEleState extends State<SetEle> {
             children: [
               Padding(
                 padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'ปรับตั้งค่า การคำนวณอัตราค่าไฟ',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: SettingScreen_Color.Colors_Text1_,
-                    fontFamily: FontWeight_.Fonts_T,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                child: Translate.TranslateAndSetText(
+                    'ปรับตั้งค่า การคำนวณอัตราค่าไฟ',
+                    PeopleChaoScreen_Color.Colors_Text1_,
+                    TextAlign.center,
+                    FontWeight.bold,
+                    Font_.Fonts_T,
+                    14,
+                    1),
+                // Text(
+                //   'ปรับตั้งค่า การคำนวณอัตราค่าไฟ',
+                //   textAlign: TextAlign.center,
+                //   style: TextStyle(
+                //     color: SettingScreen_Color.Colors_Text1_,
+                //     fontFamily: FontWeight_.Fonts_T,
+                //     fontWeight: FontWeight.bold,
+                //   ),
+                // ),
               ),
               InkWell(
                 onTap: () async {
@@ -107,14 +116,22 @@ class _SetEleState extends State<SetEle> {
                             return Dialog(
                               child: Padding(
                                 padding: const EdgeInsets.all(20.0),
-                                child: Text(
-                                  'ไม่สามารถเพิ่มได้',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: SettingScreen_Color.Colors_Text1_,
-                                    fontFamily: Font_.Fonts_T,
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'ไม่สามารถเพิ่มได้',
+                                    PeopleChaoScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    null,
+                                    Font_.Fonts_T,
+                                    12,
+                                    1),
+                                //  Text(
+                                //   'ไม่สามารถเพิ่มได้',
+                                //   textAlign: TextAlign.center,
+                                //   style: TextStyle(
+                                //     color: SettingScreen_Color.Colors_Text1_,
+                                //     fontFamily: Font_.Fonts_T,
+                                //   ),
+                                // ),
                               ),
                             );
                           });
@@ -137,23 +154,21 @@ class _SetEleState extends State<SetEle> {
                     //     color: Colors.grey, width: 1),
                   ),
                   padding: const EdgeInsets.all(8.0),
-                  child: const Text(
-                    '+ เพิ่มอัตราคำนวณ',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: SettingScreen_Color.Colors_Text3_,
-                      fontFamily: FontWeight_.Fonts_T,
-                      fontWeight: FontWeight.bold,
-                      //fontSize: 10.0
-                    ),
-                  ),
+                  child: Translate.TranslateAndSetText(
+                      '+ เพิ่มอัตราคำนวณ',
+                      PeopleChaoScreen_Color.Colors_Text3_,
+                      TextAlign.center,
+                      null,
+                      Font_.Fonts_T,
+                      12,
+                      1),
                 ),
               ),
             ],
           ),
         ),
         Container(
-          decoration:  BoxDecoration(
+          decoration: BoxDecoration(
             color: AppbackgroundColor.TiTile_Colors,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(0),
@@ -168,45 +183,51 @@ class _SetEleState extends State<SetEle> {
                 flex: 2,
                 child: Padding(
                   padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    'ประเภท',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: SettingScreen_Color.Colors_Text1_,
-                      fontFamily: FontWeight_.Fonts_T,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: Translate.TranslateAndSetText(
+                      'ประเภท',
+                      PeopleChaoScreen_Color.Colors_Text1_,
+                      TextAlign.center,
+                      FontWeight.bold,
+                      FontWeight_.Fonts_T,
+                      12,
+                      1),
+                  // Text(
+                  //   'ประเภท',
+                  //   textAlign: TextAlign.center,
+                  //   style: TextStyle(
+                  //     color: SettingScreen_Color.Colors_Text1_,
+                  //     fontFamily: FontWeight_.Fonts_T,
+                  //     fontWeight: FontWeight.bold,
+                  //   ),
+                  // ),
                 ),
               ),
               Expanded(
                 flex: 1,
                 child: Padding(
                   padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    'ค่าบริการ',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: SettingScreen_Color.Colors_Text1_,
-                      fontFamily: FontWeight_.Fonts_T,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: Translate.TranslateAndSetText(
+                      'ค่าบริการ',
+                      PeopleChaoScreen_Color.Colors_Text1_,
+                      TextAlign.center,
+                      FontWeight.bold,
+                      FontWeight_.Fonts_T,
+                      12,
+                      1),
                 ),
               ),
               Expanded(
                 flex: 1,
                 child: Padding(
                   padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    'ค่า Ft',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: SettingScreen_Color.Colors_Text1_,
-                      fontFamily: FontWeight_.Fonts_T,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: Translate.TranslateAndSetText(
+                      'ค่า Ft',
+                      PeopleChaoScreen_Color.Colors_Text1_,
+                      TextAlign.center,
+                      FontWeight.bold,
+                      FontWeight_.Fonts_T,
+                      12,
+                      1),
                 ),
               ),
               Expanded(
@@ -233,40 +254,37 @@ class _SetEleState extends State<SetEle> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            'ขั้นที่ 1',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: SettingScreen_Color.Colors_Text1_,
-                              fontFamily: FontWeight_.Fonts_T,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          Translate.TranslateAndSetText(
+                              'ขั้นที่ 1',
+                              PeopleChaoScreen_Color.Colors_Text1_,
+                              TextAlign.center,
+                              FontWeight.bold,
+                              FontWeight_.Fonts_T,
+                              12,
+                              1),
                         ],
                       ),
                       Row(
                         children: [
                           Expanded(
-                            child: Text(
-                              'ต่อหน่วย',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: SettingScreen_Color.Colors_Text1_,
-                                fontFamily: FontWeight_.Fonts_T,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                'ต่อหน่วย',
+                                PeopleChaoScreen_Color.Colors_Text1_,
+                                TextAlign.center,
+                                FontWeight.bold,
+                                FontWeight_.Fonts_T,
+                                12,
+                                1),
                           ),
                           Expanded(
-                            child: Text(
-                              'เหมา',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: SettingScreen_Color.Colors_Text1_,
-                                fontFamily: FontWeight_.Fonts_T,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                'เหมา',
+                                PeopleChaoScreen_Color.Colors_Text1_,
+                                TextAlign.center,
+                                FontWeight.bold,
+                                FontWeight_.Fonts_T,
+                                12,
+                                1),
                           ),
                         ],
                       ),
@@ -283,40 +301,37 @@ class _SetEleState extends State<SetEle> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            'ขั้นที่ 2',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: SettingScreen_Color.Colors_Text1_,
-                              fontFamily: FontWeight_.Fonts_T,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          Translate.TranslateAndSetText(
+                              'ขั้นที่ 2',
+                              PeopleChaoScreen_Color.Colors_Text1_,
+                              TextAlign.center,
+                              FontWeight.bold,
+                              FontWeight_.Fonts_T,
+                              12,
+                              1),
                         ],
                       ),
                       Row(
                         children: [
                           Expanded(
-                            child: Text(
-                              'ต่อหน่วย',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: SettingScreen_Color.Colors_Text1_,
-                                fontFamily: FontWeight_.Fonts_T,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                'ต่อหน่วย',
+                                PeopleChaoScreen_Color.Colors_Text1_,
+                                TextAlign.center,
+                                FontWeight.bold,
+                                FontWeight_.Fonts_T,
+                                12,
+                                1),
                           ),
                           Expanded(
-                            child: Text(
-                              'เหมา',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: SettingScreen_Color.Colors_Text1_,
-                                fontFamily: FontWeight_.Fonts_T,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                'เหมา',
+                                PeopleChaoScreen_Color.Colors_Text1_,
+                                TextAlign.center,
+                                FontWeight.bold,
+                                FontWeight_.Fonts_T,
+                                12,
+                                1),
                           ),
                         ],
                       ),
@@ -333,40 +348,37 @@ class _SetEleState extends State<SetEle> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            'ขั้นที่ 3',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: SettingScreen_Color.Colors_Text1_,
-                              fontFamily: FontWeight_.Fonts_T,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          Translate.TranslateAndSetText(
+                              'ขั้นที่ 3',
+                              PeopleChaoScreen_Color.Colors_Text1_,
+                              TextAlign.center,
+                              FontWeight.bold,
+                              FontWeight_.Fonts_T,
+                              12,
+                              1),
                         ],
                       ),
                       Row(
                         children: [
                           Expanded(
-                            child: Text(
-                              'ต่อหน่วย',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: SettingScreen_Color.Colors_Text1_,
-                                fontFamily: FontWeight_.Fonts_T,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                'ต่อหน่วย',
+                                PeopleChaoScreen_Color.Colors_Text1_,
+                                TextAlign.center,
+                                FontWeight.bold,
+                                FontWeight_.Fonts_T,
+                                12,
+                                1),
                           ),
                           Expanded(
-                            child: Text(
-                              'เหมา',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: SettingScreen_Color.Colors_Text1_,
-                                fontFamily: FontWeight_.Fonts_T,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                'เหมา',
+                                PeopleChaoScreen_Color.Colors_Text1_,
+                                TextAlign.center,
+                                FontWeight.bold,
+                                FontWeight_.Fonts_T,
+                                12,
+                                1),
                           ),
                         ],
                       ),
@@ -383,40 +395,37 @@ class _SetEleState extends State<SetEle> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            'ขั้นที่ 4',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: SettingScreen_Color.Colors_Text1_,
-                              fontFamily: FontWeight_.Fonts_T,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          Translate.TranslateAndSetText(
+                              'ขั้นที่ 4',
+                              PeopleChaoScreen_Color.Colors_Text1_,
+                              TextAlign.center,
+                              FontWeight.bold,
+                              FontWeight_.Fonts_T,
+                              12,
+                              1),
                         ],
                       ),
                       Row(
                         children: [
                           Expanded(
-                            child: Text(
-                              'ต่อหน่วย',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: SettingScreen_Color.Colors_Text1_,
-                                fontFamily: FontWeight_.Fonts_T,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                'ต่อหน่วย',
+                                PeopleChaoScreen_Color.Colors_Text1_,
+                                TextAlign.center,
+                                FontWeight.bold,
+                                FontWeight_.Fonts_T,
+                                12,
+                                1),
                           ),
                           Expanded(
-                            child: Text(
-                              'เหมา',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: SettingScreen_Color.Colors_Text1_,
-                                fontFamily: FontWeight_.Fonts_T,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                'เหมา',
+                                PeopleChaoScreen_Color.Colors_Text1_,
+                                TextAlign.center,
+                                FontWeight.bold,
+                                FontWeight_.Fonts_T,
+                                12,
+                                1),
                           ),
                         ],
                       ),
@@ -433,40 +442,37 @@ class _SetEleState extends State<SetEle> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            'ขั้นที่ 5',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: SettingScreen_Color.Colors_Text1_,
-                              fontFamily: FontWeight_.Fonts_T,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          Translate.TranslateAndSetText(
+                              'ขั้นที่ 5',
+                              PeopleChaoScreen_Color.Colors_Text1_,
+                              TextAlign.center,
+                              FontWeight.bold,
+                              FontWeight_.Fonts_T,
+                              12,
+                              1),
                         ],
                       ),
                       Row(
                         children: [
                           Expanded(
-                            child: Text(
-                              'ต่อหน่วย',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: SettingScreen_Color.Colors_Text1_,
-                                fontFamily: FontWeight_.Fonts_T,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                'ต่อหน่วย',
+                                PeopleChaoScreen_Color.Colors_Text1_,
+                                TextAlign.center,
+                                FontWeight.bold,
+                                FontWeight_.Fonts_T,
+                                12,
+                                1),
                           ),
                           Expanded(
-                            child: Text(
-                              'เหมา',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: SettingScreen_Color.Colors_Text1_,
-                                fontFamily: FontWeight_.Fonts_T,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                'เหมา',
+                                PeopleChaoScreen_Color.Colors_Text1_,
+                                TextAlign.center,
+                                FontWeight.bold,
+                                FontWeight_.Fonts_T,
+                                12,
+                                1),
                           ),
                         ],
                       ),
@@ -483,40 +489,37 @@ class _SetEleState extends State<SetEle> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            'ขั้นที่ 6',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: SettingScreen_Color.Colors_Text1_,
-                              fontFamily: FontWeight_.Fonts_T,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          Translate.TranslateAndSetText(
+                              'ขั้นที่ 6',
+                              PeopleChaoScreen_Color.Colors_Text1_,
+                              TextAlign.center,
+                              FontWeight.bold,
+                              FontWeight_.Fonts_T,
+                              12,
+                              1),
                         ],
                       ),
                       Row(
                         children: [
                           Expanded(
-                            child: Text(
-                              'ต่อหน่วย',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: SettingScreen_Color.Colors_Text1_,
-                                fontFamily: FontWeight_.Fonts_T,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                'ต่อหน่วย',
+                                PeopleChaoScreen_Color.Colors_Text1_,
+                                TextAlign.center,
+                                FontWeight.bold,
+                                FontWeight_.Fonts_T,
+                                12,
+                                1),
                           ),
                           Expanded(
-                            child: Text(
-                              'เหมา',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: SettingScreen_Color.Colors_Text1_,
-                                fontFamily: FontWeight_.Fonts_T,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                'เหมา',
+                                PeopleChaoScreen_Color.Colors_Text1_,
+                                TextAlign.center,
+                                FontWeight.bold,
+                                FontWeight_.Fonts_T,
+                                12,
+                                1),
                           ),
                         ],
                       ),
@@ -528,15 +531,14 @@ class _SetEleState extends State<SetEle> {
                 flex: 1,
                 child: Padding(
                   padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    'ลบ',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: SettingScreen_Color.Colors_Text1_,
-                      fontFamily: FontWeight_.Fonts_T,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: Translate.TranslateAndSetText(
+                      'ลบ',
+                      PeopleChaoScreen_Color.Colors_Text1_,
+                      TextAlign.center,
+                      FontWeight.bold,
+                      FontWeight_.Fonts_T,
+                      12,
+                      1),
                 ),
               ),
             ],
@@ -861,10 +863,18 @@ class _SetEleState extends State<SetEle> {
                               child: Padding(
                                 padding: const EdgeInsets.all(2.0),
                                 child: Container(
-                                  child: Text(
-                                    '0 ถึง ',
-                                    textAlign: TextAlign.center,
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      '0 ถึง ',
+                                      PeopleChaoScreen_Color.Colors_Text1_,
+                                      TextAlign.center,
+                                      null,
+                                      Font_.Fonts_T,
+                                      12,
+                                      1),
+                                  // Text(
+                                  //   '0 ถึง ',
+                                  //   textAlign: TextAlign.center,
+                                  // ),
                                 ),
                               ),
                             ),
@@ -1166,10 +1176,18 @@ class _SetEleState extends State<SetEle> {
                               child: Padding(
                                 padding: const EdgeInsets.all(2.0),
                                 child: Container(
-                                  child: Text(
-                                    '${int.parse(electricityModels[index].eleOne!) + 1} ถึง ',
-                                    textAlign: TextAlign.center,
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      '${int.parse(electricityModels[index].eleOne!) + 1} ถึง ',
+                                      PeopleChaoScreen_Color.Colors_Text1_,
+                                      TextAlign.center,
+                                      null,
+                                      Font_.Fonts_T,
+                                      12,
+                                      1),
+                                  // Text(
+                                  //   '${int.parse(electricityModels[index].eleOne!) + 1} ถึง ',
+                                  //   textAlign: TextAlign.center,
+                                  // ),
                                 ),
                               ),
                             ),
@@ -1480,10 +1498,18 @@ class _SetEleState extends State<SetEle> {
                               child: Padding(
                                 padding: const EdgeInsets.all(2.0),
                                 child: Container(
-                                  child: Text(
-                                    '${int.parse(electricityModels[index].eleTwo!) + 1} ถึง ',
-                                    textAlign: TextAlign.center,
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      '${int.parse(electricityModels[index].eleTwo!) + 1} ถึง ',
+                                      PeopleChaoScreen_Color.Colors_Text1_,
+                                      TextAlign.center,
+                                      null,
+                                      Font_.Fonts_T,
+                                      12,
+                                      1),
+                                  // Text(
+                                  //   '${int.parse(electricityModels[index].eleTwo!) + 1} ถึง ',
+                                  //   textAlign: TextAlign.center,
+                                  // ),
                                 ),
                               ),
                             ),
@@ -1794,10 +1820,18 @@ class _SetEleState extends State<SetEle> {
                               child: Padding(
                                 padding: const EdgeInsets.all(2.0),
                                 child: Container(
-                                  child: Text(
-                                    '${int.parse(electricityModels[index].eleThree!) + 1} ถึง ',
-                                    textAlign: TextAlign.center,
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      '${int.parse(electricityModels[index].eleThree!) + 1} ถึง ',
+                                      PeopleChaoScreen_Color.Colors_Text1_,
+                                      TextAlign.center,
+                                      null,
+                                      Font_.Fonts_T,
+                                      12,
+                                      1),
+                                  // Text(
+                                  //   '${int.parse(electricityModels[index].eleThree!) + 1} ถึง ',
+                                  //   textAlign: TextAlign.center,
+                                  // ),
                                 ),
                               ),
                             ),
@@ -2023,7 +2057,7 @@ class _SetEleState extends State<SetEle> {
 
                                       var result = json.decode(response.body);
                                       print(result);
-                                      if (result.toString () == 'Yes') {
+                                      if (result.toString() == 'Yes') {
                                         setState(() {
                                           read_Electricity();
                                         });
@@ -2108,10 +2142,18 @@ class _SetEleState extends State<SetEle> {
                               child: Padding(
                                 padding: const EdgeInsets.all(2.0),
                                 child: Container(
-                                  child: Text(
-                                    '${int.parse(electricityModels[index].eleTour!) + 1} ถึง ',
-                                    textAlign: TextAlign.center,
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      '${int.parse(electricityModels[index].eleTour!) + 1} ถึง ',
+                                      PeopleChaoScreen_Color.Colors_Text1_,
+                                      TextAlign.center,
+                                      null,
+                                      Font_.Fonts_T,
+                                      12,
+                                      1),
+                                  // Text(
+                                  //   '${int.parse(electricityModels[index].eleTour!) + 1} ถึง ',
+                                  //   textAlign: TextAlign.center,
+                                  // ),
                                 ),
                               ),
                             ),
@@ -2514,10 +2556,18 @@ class _SetEleState extends State<SetEle> {
                               child: Padding(
                                 padding: const EdgeInsets.all(2.0),
                                 child: Container(
-                                  child: Text(
-                                    'ขึ้นไป',
-                                    textAlign: TextAlign.center,
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      'ขึ้นไป',
+                                      PeopleChaoScreen_Color.Colors_Text1_,
+                                      TextAlign.center,
+                                      null,
+                                      Font_.Fonts_T,
+                                      12,
+                                      1),
+                                  // Text(
+                                  //   'ขึ้นไป',
+                                  //   textAlign: TextAlign.center,
+                                  // ),
                                 ),
                               ),
                             ),
@@ -2808,7 +2858,6 @@ class _SetEleState extends State<SetEle> {
   }
 
   Future<dynamic> noAdd(BuildContext context) {
-    
     return showDialog(
         context: context,
         builder: (_) {

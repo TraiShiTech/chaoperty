@@ -1,6 +1,7 @@
 // ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, prefer_const_constructors, unnecessary_import, implementation_imports, prefer_const_constructors_in_immutables, non_constant_identifier_names, avoid_init_to_null, prefer_void_to_null, unnecessary_brace_in_string_interps, avoid_print, empty_catches, sized_box_for_whitespace, use_build_context_synchronously, file_names, curly_braces_in_flow_control_structures
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:get_ip_address/get_ip_address.dart';
 import 'package:marquee/marquee.dart';
 import 'package:device_marketing_names/device_marketing_names.dart';
@@ -50,6 +51,7 @@ import '../Setting_NainaService/Web_view_NainaSetting.dart';
 import '../Style/Translate.dart';
 import '../Style/colors.dart';
 
+import '../Style/loadAndCacheImage.dart';
 import 'Chat_Screen.dart';
 
 class AdminScafScreen extends StatefulWidget {
@@ -941,6 +943,8 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
             pkname = pkx;
             img_ = img;
             img_logo = imglogo;
+            preferences.setString('renTal_logo',
+                '${MyConstant().domain}/files/$foder/logo/$imglogo');
             pkldate = pkldatex;
             data_update = data_updatex;
             renTalModels.add(renTalModel);

@@ -1,12 +1,17 @@
 import 'dart:convert';
+import 'dart:html';
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../Constant/Myconstant.dart';
 import '../Model/GetRenTal_Model.dart';
+import '../PeopleChao/Pays_.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 
@@ -260,7 +265,7 @@ class _Bill_DocumentTemplateState extends State<Bill_DocumentTemplate> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    for (int index = 0; index < 5; index++)
+                    for (int index = 0; index < 6; index++)
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
@@ -298,7 +303,19 @@ class _Bill_DocumentTemplateState extends State<Bill_DocumentTemplate> {
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 13.0),
                                             )
-                                          : SizedBox(),
+                                          : (rtser.toString() == '106')
+                                              ? Text(
+                                                  'พิเศษเฉพาะบริษัท ชอยส์ มินิสโตร์ จำกัด',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color: Colors.orange[900],
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 13.0),
+                                                )
+                                              : SizedBox(),
                                     Row(
                                       children: [
                                         Text(
@@ -400,298 +417,371 @@ class _Bill_DocumentTemplateState extends State<Bill_DocumentTemplate> {
                               Stack(
                                 children: [
                                   Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(0),
-                                          topRight: Radius.circular(0),
-                                          bottomLeft: Radius.circular(10),
-                                          bottomRight: Radius.circular(10)),
-                                      border: Border.all(
-                                          color: Colors.grey, width: 1),
-                                    ),
-                                    child: Image(
-                                      image: AssetImage(
-                                        (index + 1 == 4)
-                                            ? (rtser.toString() == '72' ||
-                                                    rtser.toString() == '92' ||
-                                                    rtser.toString() == '93' ||
-                                                    rtser.toString() == '94')
-                                                ? 'images/TP${index + 1}_1/B1_TP${index + 1}_1.png'
-                                                : 'images/TP${index + 1}/B1_TP${index + 1}.png'
-                                            : 'images/TP${index + 1}/B1_TP${index + 1}.png',
+                                      width: 400,
+                                      height: 570,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(0),
+                                            topRight: Radius.circular(0),
+                                            bottomLeft: Radius.circular(10),
+                                            bottomRight: Radius.circular(10)),
+                                        border: Border.all(
+                                            color: Colors.grey, width: 1),
                                       ),
-                                    ),
-                                  ),
+                                      child: (index + 1 == 4)
+                                          ? (rtser.toString() == '72' ||
+                                                  rtser.toString() == '92' ||
+                                                  rtser.toString() == '93' ||
+                                                  rtser.toString() == '94')
+                                              ? SfPdfViewer.asset(
+                                                  'images/TP${index + 1}/B1_PDF_Ortor.pdf',
+                                                  enableDocumentLinkAnnotation:
+                                                      false,
+                                                  canShowScrollHead: false,
+                                                  canShowScrollStatus: false,
+                                                  pageLayoutMode:
+                                                      PdfPageLayoutMode
+                                                          .continuous,
+                                                  enableDoubleTapZooming: false,
+                                                )
+                                              : (rtser.toString() == '106')
+                                                  ? SfPdfViewer.asset(
+                                                      'images/TP${index + 1}/B1_PDF_Choice.pdf',
+                                                      enableDocumentLinkAnnotation:
+                                                          false,
+                                                      canShowScrollHead: false,
+                                                      canShowScrollStatus:
+                                                          false,
+                                                      pageLayoutMode:
+                                                          PdfPageLayoutMode
+                                                              .continuous,
+                                                      enableDoubleTapZooming:
+                                                          false,
+                                                    )
+                                                  : PreviewScreen_doc2(
+                                                      Url: (index + 1 == 4)
+                                                          ? 'images/TP${index + 1}/B1_PDF.pdf'
+                                                          : 'images/TP${index + 1}/B1_PDF.pdf',
+                                                      //'images/TP6/B1_TP60.pdf',
+                                                      title:
+                                                          '${rtser}Sample-TP${index + 1}')
+                                          : PreviewScreen_doc2(
+                                              Url: (index + 1 == 4)
+                                                  ? 'images/TP${index + 1}/B1_PDF.pdf'
+                                                  : 'images/TP${index + 1}/B1_PDF.pdf',
+                                              //'images/TP6/B1_TP60.pdf',
+                                              title:
+                                                  '${rtser}Sample-TP${index + 1}')
+                                      // Image(
+                                      //   image: AssetImage(
+                                      //     (index + 1 == 4)
+                                      //         ? (rtser.toString() == '72' ||
+                                      //                 rtser.toString() == '92' ||
+                                      //                 rtser.toString() == '93' ||
+                                      //                 rtser.toString() == '94')
+                                      //             ? 'images/TP${index + 1}_1/B1_TP${index + 1}_1.png'
+                                      //             : 'images/TP${index + 1}/B1_TP${index + 1}.png'
+                                      //         : 'images/TP${index + 1}/B1_TP${index + 1}.png',
+                                      //   ),
+                                      // ),
+                                      ),
                                   Positioned(
                                       top: 10,
                                       right: 20,
                                       child: IconButton(
-                                          onPressed: () {
-                                            showDialog<void>(
-                                              context: context,
-                                              barrierDismissible:
-                                                  false, // user must tap button!
-                                              builder: (BuildContext context) {
-                                                return StreamBuilder(
-                                                    stream: Stream.periodic(
-                                                        const Duration(
-                                                            milliseconds: 400)),
-                                                    builder:
-                                                        (context, snapshot) {
-                                                      return AlertDialog(
-                                                        backgroundColor:
-                                                            Colors.grey[200],
-                                                        title: Column(
-                                                          children: [
-                                                            if (index + 1 == 4)
-                                                              Text(
-                                                                (rtser.toString() == '72' ||
-                                                                        rtser.toString() ==
-                                                                            '92' ||
-                                                                        rtser.toString() ==
-                                                                            '93' ||
-                                                                        rtser.toString() ==
-                                                                            '94')
-                                                                    ? 'พิเศษเฉพาะเครือ องค์การตลาด กระทรวงมหาดไทย [อ.ต.] '
-                                                                    : '',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                            .orange[
-                                                                        900],
-                                                                    fontFamily:
-                                                                        FontWeight_
-                                                                            .Fonts_T,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontSize:
-                                                                        13.0),
-                                                              ),
-                                                            Text(
-                                                              (index + 1 == 1)
-                                                                  ? 'ตัวอย่าง เทมเพลต ${index + 1} ( Standard )'
-                                                                  : 'ตัวอย่าง เทมเพลต ${index + 1} ',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: TextStyle(
-                                                                fontSize: 12,
-                                                                color: Colors
-                                                                    .black,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T,
-                                                              ),
-                                                            ),
-                                                            Row(
-                                                              children: [
-                                                                for (int i = 0;
-                                                                    i < 3;
-                                                                    i++)
-                                                                  Padding(
-                                                                    padding:
-                                                                        const EdgeInsets.all(
-                                                                            2.0),
-                                                                    child:
-                                                                        InkWell(
-                                                                      onTap:
-                                                                          () async {
-                                                                        setState(
-                                                                            () {
-                                                                          sertap_dialog_tempage =
-                                                                              i;
-                                                                          _controller
-                                                                              .value = Matrix4.identity()
-                                                                            ..scale(1.0);
-                                                                        });
-                                                                        // print(
-                                                                        //     '${'images/TP${index + 1}/${name_bill_png[sertap_dialog_tempage]}_TP${index + 1}.png'}');
-                                                                      },
-                                                                      child:
-                                                                          Container(
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          color: (sertap_dialog_tempage != i)
-                                                                              ? null
-                                                                              : Colors.blue[200],
-                                                                          borderRadius: BorderRadius.only(
-                                                                              topLeft: Radius.circular(10),
-                                                                              topRight: Radius.circular(10),
-                                                                              bottomLeft: Radius.circular(10),
-                                                                              bottomRight: Radius.circular(10)),
-                                                                        ),
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
-                                                                        child:
-                                                                            Text(
-                                                                          '${i + 1}',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style:
-                                                                              TextStyle(
-                                                                            fontSize:
-                                                                                12,
-                                                                            color:
-                                                                                Colors.blue,
-                                                                            fontFamily:
-                                                                                Font_.Fonts_T,
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                              ],
-                                                            )
-                                                          ],
-                                                        ),
-                                                        content:
-                                                            InteractiveViewer(
-                                                          alignment:
-                                                              Alignment.center,
-                                                          scaleEnabled: false,
-                                                          trackpadScrollCausesScale:
-                                                              false,
-                                                          transformationController:
-                                                              _controller,
-                                                          minScale: 0.9,
-                                                          maxScale: 2.0,
-                                                          constrained: true,
-                                                          boundaryMargin:
-                                                              const EdgeInsets
-                                                                      .all(
-                                                                  double
-                                                                      .infinity),
-                                                          child:
-                                                              SingleChildScrollView(
-                                                            child: ListBody(
-                                                              children: <Widget>[
-                                                                Image(
-                                                                  image:
-                                                                      AssetImage(
-                                                                    (index + 1 ==
-                                                                            4)
-                                                                        ? (rtser.toString() == '72' ||
-                                                                                rtser.toString() == '92' ||
-                                                                                rtser.toString() == '93' ||
-                                                                                rtser.toString() == '94')
-                                                                            ? 'images/TP${index + 1}_1/${name_bill_png[sertap_dialog_tempage]}_TP${index + 1}_1.png'
-                                                                            : 'images/TP${index + 1}/${name_bill_png[sertap_dialog_tempage]}_TP${index + 1}.png'
-                                                                        : 'images/TP${index + 1}/${name_bill_png[sertap_dialog_tempage]}_TP${index + 1}.png',
-                                                                    // 'images/TP${index + 1}/${name_bill_png[sertap_dialog_tempage]}_TP${index + 1}.png'
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        actions: <Widget>[
-                                                          Column(
-                                                            children: [
-                                                              Divider(
-                                                                color: Colors
-                                                                    .grey[300],
-                                                                height: 1.0,
-                                                              ),
-                                                              const SizedBox(
-                                                                height: 5.0,
-                                                              ),
-                                                              Row(
-                                                                children: [
-                                                                  Container(
-                                                                    decoration:
-                                                                        const BoxDecoration(
-                                                                      color: Colors
-                                                                          .grey,
-                                                                      borderRadius: BorderRadius.only(
-                                                                          topLeft: Radius.circular(
-                                                                              10),
-                                                                          topRight: Radius.circular(
-                                                                              10),
-                                                                          bottomLeft: Radius.circular(
-                                                                              10),
-                                                                          bottomRight:
-                                                                              Radius.circular(10)),
-                                                                    ),
-                                                                    child: Row(
-                                                                      children: [
-                                                                        IconButton(
-                                                                          icon:
-                                                                              const Icon(
-                                                                            Icons.zoom_in,
-                                                                            color:
-                                                                                Colors.black,
-                                                                          ),
-                                                                          onPressed:
-                                                                              _zoomInSVG,
-                                                                        ),
-                                                                        IconButton(
-                                                                          icon:
-                                                                              const Icon(
-                                                                            Icons.zoom_out,
-                                                                            color:
-                                                                                Colors.black,
-                                                                          ),
-                                                                          onPressed:
-                                                                              _zoomOutSVG,
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                  Expanded(
-                                                                    child:
-                                                                        Align(
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .centerRight,
-                                                                      child:
-                                                                          Container(
-                                                                        width:
-                                                                            80,
-                                                                        decoration:
-                                                                            const BoxDecoration(
-                                                                          color:
-                                                                              Colors.black,
-                                                                          borderRadius: BorderRadius.only(
-                                                                              topLeft: Radius.circular(10),
-                                                                              topRight: Radius.circular(10),
-                                                                              bottomLeft: Radius.circular(10),
-                                                                              bottomRight: Radius.circular(10)),
-                                                                        ),
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
-                                                                        child:
-                                                                            TextButton(
-                                                                          onPressed:
-                                                                              () {
-                                                                            setState(() {
-                                                                              _controller.value = Matrix4.identity()..scale(1.0);
-                                                                            });
-                                                                            Navigator.pop(context,
-                                                                                'OK');
-                                                                          },
-                                                                          child:
-                                                                              const Text(
-                                                                            'ปิด',
-                                                                            style: TextStyle(
-                                                                                color: Colors.white,
-                                                                                fontWeight: FontWeight.bold,
-                                                                                fontFamily: FontWeight_.Fonts_T),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ],
-                                                      );
-                                                    });
-                                              },
+                                          onPressed: () async {
+                                            // showDialog<void>(
+                                            //   context: context,
+                                            //   barrierDismissible:
+                                            //       false, // user must tap button!
+                                            //   builder: (BuildContext context) {
+                                            //     return
+                                            // StreamBuilder(
+                                            //         stream: Stream.periodic(
+                                            //             const Duration(
+                                            //                 milliseconds: 400)),
+                                            //         builder:
+                                            //             (context, snapshot) {
+                                            //           return AlertDialog(
+                                            //             backgroundColor:
+                                            //                 Colors.grey[200],
+                                            //             title: Column(
+                                            //               children: [
+                                            //                 if (index + 1 == 4)
+                                            //                   Text(
+                                            //                     (rtser.toString() == '72' ||
+                                            //                             rtser.toString() ==
+                                            //                                 '92' ||
+                                            //                             rtser.toString() ==
+                                            //                                 '93' ||
+                                            //                             rtser.toString() ==
+                                            //                                 '94')
+                                            //                         ? 'พิเศษเฉพาะเครือ องค์การตลาด กระทรวงมหาดไทย [อ.ต.] '
+                                            //                         : '',
+                                            //                     textAlign:
+                                            //                         TextAlign
+                                            //                             .center,
+                                            //                     style: TextStyle(
+                                            //                         color: Colors
+                                            //                                 .orange[
+                                            //                             900],
+                                            //                         fontFamily:
+                                            //                             FontWeight_
+                                            //                                 .Fonts_T,
+                                            //                         fontWeight:
+                                            //                             FontWeight
+                                            //                                 .bold,
+                                            //                         fontSize:
+                                            //                             13.0),
+                                            //                   ),
+                                            //                 Text(
+                                            //                   (index + 1 == 1)
+                                            //                       ? 'ตัวอย่าง เทมเพลต ${index + 1} ( Standard )'
+                                            //                       : 'ตัวอย่าง เทมเพลต ${index + 1} ',
+                                            //                   textAlign:
+                                            //                       TextAlign
+                                            //                           .center,
+                                            //                   style: TextStyle(
+                                            //                     fontSize: 12,
+                                            //                     color: Colors
+                                            //                         .black,
+                                            //                     fontFamily: Font_
+                                            //                         .Fonts_T,
+                                            //                   ),
+                                            //                 ),
+                                            //                 Row(
+                                            //                   children: [
+                                            //                     for (int i = 0;
+                                            //                         i < 3;
+                                            //                         i++)
+                                            //                       Padding(
+                                            //                         padding:
+                                            //                             const EdgeInsets.all(
+                                            //                                 2.0),
+                                            //                         child:
+                                            //                             InkWell(
+                                            //                           onTap:
+                                            //                               () async {
+                                            //                             setState(
+                                            //                                 () {
+                                            //                               sertap_dialog_tempage =
+                                            //                                   i;
+                                            //                               _controller
+                                            //                                   .value = Matrix4.identity()
+                                            //                                 ..scale(1.0);
+                                            //                             });
+                                            //                             // print(
+                                            //                             //     '${'images/TP${index + 1}/${name_bill_png[sertap_dialog_tempage]}_TP${index + 1}.png'}');
+                                            //                           },
+                                            //                           child:
+                                            //                               Container(
+                                            //                             decoration:
+                                            //                                 BoxDecoration(
+                                            //                               color: (sertap_dialog_tempage != i)
+                                            //                                   ? null
+                                            //                                   : Colors.blue[200],
+                                            //                               borderRadius: BorderRadius.only(
+                                            //                                   topLeft: Radius.circular(10),
+                                            //                                   topRight: Radius.circular(10),
+                                            //                                   bottomLeft: Radius.circular(10),
+                                            //                                   bottomRight: Radius.circular(10)),
+                                            //                             ),
+                                            //                             padding:
+                                            //                                 const EdgeInsets.all(8.0),
+                                            //                             child:
+                                            //                                 Text(
+                                            //                               '${i + 1}',
+                                            //                               textAlign:
+                                            //                                   TextAlign.center,
+                                            //                               style:
+                                            //                                   TextStyle(
+                                            //                                 fontSize:
+                                            //                                     12,
+                                            //                                 color:
+                                            //                                     Colors.blue,
+                                            //                                 fontFamily:
+                                            //                                     Font_.Fonts_T,
+                                            //                               ),
+                                            //                             ),
+                                            //                           ),
+                                            //                         ),
+                                            //                       ),
+                                            //                   ],
+                                            //                 )
+                                            //               ],
+                                            //             ),
+                                            //             content:
+                                            //                 InteractiveViewer(
+                                            //               alignment:
+                                            //                   Alignment.center,
+                                            //               scaleEnabled: false,
+                                            //               trackpadScrollCausesScale:
+                                            //                   false,
+                                            //               transformationController:
+                                            //                   _controller,
+                                            //               minScale: 0.9,
+                                            //               maxScale: 2.0,
+                                            //               constrained: true,
+                                            //               boundaryMargin:
+                                            //                   const EdgeInsets
+                                            //                           .all(
+                                            //                       double
+                                            //                           .infinity),
+                                            //               child:
+                                            //                   SingleChildScrollView(
+                                            //                 child: ListBody(
+                                            //                   children: <Widget>[
+                                            //                     Image(
+                                            //                       image:
+                                            //                           AssetImage(
+                                            //                         (index + 1 ==
+                                            //                                 4)
+                                            //                             ? (rtser.toString() == '72' ||
+                                            //                                     rtser.toString() == '92' ||
+                                            //                                     rtser.toString() == '93' ||
+                                            //                                     rtser.toString() == '94')
+                                            //                                 ? 'images/TP${index + 1}_1/${name_bill_png[sertap_dialog_tempage]}_TP${index + 1}_1.png'
+                                            //                                 : 'images/TP${index + 1}/${name_bill_png[sertap_dialog_tempage]}_TP${index + 1}.png'
+                                            //                             : 'images/TP${index + 1}/${name_bill_png[sertap_dialog_tempage]}_TP${index + 1}.png',
+                                            //                         // 'images/TP${index + 1}/${name_bill_png[sertap_dialog_tempage]}_TP${index + 1}.png'
+                                            //                       ),
+                                            //                     ),
+                                            //                   ],
+                                            //                 ),
+                                            //               ),
+                                            //             ),
+                                            //             actions: <Widget>[
+                                            //               Column(
+                                            //                 children: [
+                                            //                   Divider(
+                                            //                     color: Colors
+                                            //                         .grey[300],
+                                            //                     height: 1.0,
+                                            //                   ),
+                                            //                   const SizedBox(
+                                            //                     height: 5.0,
+                                            //                   ),
+                                            //                   Row(
+                                            //                     children: [
+                                            //                       Container(
+                                            //                         decoration:
+                                            //                             const BoxDecoration(
+                                            //                           color: Colors
+                                            //                               .grey,
+                                            //                           borderRadius: BorderRadius.only(
+                                            //                               topLeft: Radius.circular(
+                                            //                                   10),
+                                            //                               topRight: Radius.circular(
+                                            //                                   10),
+                                            //                               bottomLeft: Radius.circular(
+                                            //                                   10),
+                                            //                               bottomRight:
+                                            //                                   Radius.circular(10)),
+                                            //                         ),
+                                            //                         child: Row(
+                                            //                           children: [
+                                            //                             IconButton(
+                                            //                               icon:
+                                            //                                   const Icon(
+                                            //                                 Icons.zoom_in,
+                                            //                                 color:
+                                            //                                     Colors.black,
+                                            //                               ),
+                                            //                               onPressed:
+                                            //                                   _zoomInSVG,
+                                            //                             ),
+                                            //                             IconButton(
+                                            //                               icon:
+                                            //                                   const Icon(
+                                            //                                 Icons.zoom_out,
+                                            //                                 color:
+                                            //                                     Colors.black,
+                                            //                               ),
+                                            //                               onPressed:
+                                            //                                   _zoomOutSVG,
+                                            //                             ),
+                                            //                           ],
+                                            //                         ),
+                                            //                       ),
+                                            //                       Expanded(
+                                            //                         child:
+                                            //                             Align(
+                                            //                           alignment:
+                                            //                               Alignment
+                                            //                                   .centerRight,
+                                            //                           child:
+                                            //                               Container(
+                                            //                             width:
+                                            //                                 80,
+                                            //                             decoration:
+                                            //                                 const BoxDecoration(
+                                            //                               color:
+                                            //                                   Colors.black,
+                                            //                               borderRadius: BorderRadius.only(
+                                            //                                   topLeft: Radius.circular(10),
+                                            //                                   topRight: Radius.circular(10),
+                                            //                                   bottomLeft: Radius.circular(10),
+                                            //                                   bottomRight: Radius.circular(10)),
+                                            //                             ),
+                                            //                             padding:
+                                            //                                 const EdgeInsets.all(8.0),
+                                            //                             child:
+                                            //                                 TextButton(
+                                            //                               onPressed:
+                                            //                                   () {
+                                            //                                 setState(() {
+                                            //                                   _controller.value = Matrix4.identity()..scale(1.0);
+                                            //                                 });
+                                            //                                 Navigator.pop(context,
+                                            //                                     'OK');
+                                            //                               },
+                                            //                               child:
+                                            //                                   const Text(
+                                            //                                 'ปิด',
+                                            //                                 style: TextStyle(
+                                            //                                     color: Colors.white,
+                                            //                                     fontWeight: FontWeight.bold,
+                                            //                                     fontFamily: FontWeight_.Fonts_T),
+                                            //                               ),
+                                            //                             ),
+                                            //                           ),
+                                            //                         ),
+                                            //                       ),
+                                            //                     ],
+                                            //                   ),
+                                            //                 ],
+                                            //               ),
+                                            //             ],
+                                            //           );
+                                            //         });
+                                            //   },
+                                            // );
+
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      PreviewScreen_doc(
+                                                          Url: (index + 1 == 4)
+                                                              ? (rtser.toString() == '72' ||
+                                                                      rtser.toString() ==
+                                                                          '92' ||
+                                                                      rtser.toString() ==
+                                                                          '93' ||
+                                                                      rtser.toString() ==
+                                                                          '94')
+                                                                  ? 'images/TP${index + 1}/B1_PDF_Ortor.pdf'
+                                                                  : (rtser.toString() ==
+                                                                          '106')
+                                                                      ? 'images/TP${index + 1}/B1_PDF_Choice.pdf'
+                                                                      : 'images/TP${index + 1}/B1_PDF.pdf'
+                                                              : 'images/TP${index + 1}/B1_PDF.pdf',
+                                                          //'images/TP6/B1_TP60.pdf',
+                                                          title: (index + 1 ==
+                                                                  1)
+                                                              ? 'ตัวอย่าง เทมเพลต ${index + 1} ( Standard )'
+                                                              : 'ตัวอย่าง เทมเพลต ${index + 1} ')),
                                             );
                                           },
                                           icon: Icon(
@@ -710,5 +800,110 @@ class _Bill_DocumentTemplateState extends State<Bill_DocumentTemplate> {
             ),
           ]),
         ));
+  }
+}
+
+class PreviewScreen_doc extends StatefulWidget {
+  final title;
+  final Url;
+
+  const PreviewScreen_doc({super.key, required this.title, required this.Url});
+  @override
+  _PreviewScreen_docState createState() => _PreviewScreen_docState();
+}
+
+class _PreviewScreen_docState extends State<PreviewScreen_doc> {
+  final GlobalKey<SfPdfViewerState> _pdfViewerKey =
+      GlobalKey<SfPdfViewerState>();
+  final PdfViewerController _pdfViewerController = PdfViewerController();
+  double _currentZoomLevel = 1.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        // title: 'Flutter Demo',
+
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          appBar: AppBar(
+            backgroundColor: AppBarColors.hexColor,
+            leading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(
+                Icons.arrow_back_outlined,
+                color: Colors.white,
+              ),
+            ),
+            centerTitle: true,
+            title: Text('${widget.title}'),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.zoom_in),
+                onPressed: () {
+                  setState(() {
+                    _currentZoomLevel += 0.25;
+                    if (_currentZoomLevel > 3.0) _currentZoomLevel = 3.0;
+                    _pdfViewerController.zoomLevel = _currentZoomLevel;
+                  });
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.zoom_out),
+                onPressed: () {
+                  setState(() {
+                    _currentZoomLevel -= 0.25;
+                    if (_currentZoomLevel < 1.0) _currentZoomLevel = 1.0;
+                    _pdfViewerController.zoomLevel = _currentZoomLevel;
+                  });
+                },
+              ),
+            ],
+          ),
+          body: SfPdfViewer.asset(
+            '${widget.Url}',
+            key: _pdfViewerKey,
+            controller: _pdfViewerController,
+            enableDocumentLinkAnnotation: false,
+            canShowScrollHead: false,
+            canShowScrollStatus: false,
+            pageLayoutMode: PdfPageLayoutMode.continuous,
+            enableDoubleTapZooming: true,
+            onZoomLevelChanged: (details) {
+              setState(() {
+                _currentZoomLevel = details.newZoomLevel;
+              });
+            },
+          ),
+        ));
+  }
+}
+
+class PreviewScreen_doc2 extends StatefulWidget {
+  final title;
+  final Url;
+
+  const PreviewScreen_doc2({super.key, required this.title, required this.Url});
+  @override
+  _PreviewScreen_doc2State createState() => _PreviewScreen_doc2State();
+}
+
+class _PreviewScreen_doc2State extends State<PreviewScreen_doc2> {
+  final GlobalKey<SfPdfViewerState> _pdfViewerKey =
+      GlobalKey<SfPdfViewerState>();
+  final PdfViewerController _pdfViewerController = PdfViewerController();
+  double _currentZoomLevel = 1.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return SfPdfViewer.asset(
+      '${widget.Url}',
+      key: _pdfViewerKey,
+      controller: _pdfViewerController,
+      enableDocumentLinkAnnotation: false,
+      canShowScrollHead: false,
+      canShowScrollStatus: false,
+      pageLayoutMode: PdfPageLayoutMode.continuous,
+      enableDoubleTapZooming: false,
+    );
   }
 }

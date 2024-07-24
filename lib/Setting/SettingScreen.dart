@@ -33,10 +33,10 @@ import '../Model/GetZone_Model.dart';
 import '../PeopleChao/PeopleChao_Screen.dart';
 import '../Responsive/responsive.dart';
 import '../Setting_NainaService/Web_view_NainaSetting.dart';
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 import '../Style/downloadImage.dart';
 import '../Style/view_pagenow.dart';
-
 import 'Access_Rights.dart';
 import 'Advance_Setting.dart';
 import 'Bill_Document.dart';
@@ -143,7 +143,7 @@ class _SettingScreenState extends State<SettingScreen> {
   ];
   List Status_area = [
     'ข้อมูลทั่วไป',
-    'แผนผัง',
+    'แผนผังพื้นที่',
   ];
   String? renTal_user, renTal_name, renTal_ser, zone_ser, zone_name;
   String? rtname, type, typex, renname, pkname, ser_Zonex;
@@ -999,16 +999,15 @@ class _SettingScreenState extends State<SettingScreen> {
                   ),
                 ),
                 padding: const EdgeInsets.all(4.0),
-                child: const Center(
-                  child: Text(
-                    'ปิด',
-                    style: TextStyle(
-                      // fontSize: 15,
-                      color: Colors.white,
-                      fontFamily: Font_.Fonts_T,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                child: Center(
+                  child: Translate.TranslateAndSetText(
+                      'ปิด',
+                      SettingScreen_Color.Colors_Text3_,
+                      TextAlign.start,
+                      null,
+                      Font_.Fonts_T,
+                      14,
+                      1),
                 ),
               ),
               onTap: () {
@@ -1030,14 +1029,14 @@ class _SettingScreenState extends State<SettingScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Center(
-                  child: Text(
-                    'Level ของคุณไม่สามารถเข้าถึงได้',
-                    style: TextStyle(
-                      color: ReportScreen_Color.Colors_Text1_,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: FontWeight_.Fonts_T,
-                    ),
-                  ),
+                  child: Translate.TranslateAndSetText(
+                      'Level ของคุณไม่สามารถเข้าถึงได้',
+                      SettingScreen_Color.Colors_Text1_,
+                      TextAlign.center,
+                      FontWeight.bold,
+                      FontWeight_.Fonts_T,
+                      16,
+                      1),
                 ),
               ),
             )
@@ -1086,18 +1085,27 @@ class _SettingScreenState extends State<SettingScreen> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const AutoSizeText(
-                                    'ตั้งค่า',
-                                    overflow: TextOverflow.ellipsis,
-                                    minFontSize: 8,
-                                    maxFontSize: 20,
-                                    style: TextStyle(
-                                      decoration: TextDecoration.underline,
-                                      color: ReportScreen_Color.Colors_Text1_,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: FontWeight_.Fonts_T,
-                                    ),
-                                  ),
+                                  Translate.TranslateAndSet_TextAutoSize(
+                                      'การตั้งค่า',
+                                      SettingScreen_Color.Colors_Text1_,
+                                      TextAlign.center,
+                                      FontWeight.bold,
+                                      FontWeight_.Fonts_T,
+                                      8,
+                                      20,
+                                      1),
+                                  // const AutoSizeText(
+                                  //   'ตั้งค่า',
+                                  //   overflow: TextOverflow.ellipsis,
+                                  //   minFontSize: 8,
+                                  //   maxFontSize: 20,
+                                  //   style: TextStyle(
+                                  //     ตั้งค่า
+                                  //     color: ReportScreen_Color.Colors_Text1_,
+                                  //     fontWeight: FontWeight.bold,
+                                  //     fontFamily: FontWeight_.Fonts_T,
+                                  //   ),
+                                  // ),
                                   const AutoSizeText(
                                     ' > >',
                                     overflow: TextOverflow.ellipsis,
@@ -1176,348 +1184,321 @@ class _SettingScreenState extends State<SettingScreen> {
                 //     ),
                 //   ],
                 // ),
-                if (Status_area_ == 1)
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      decoration: const BoxDecoration(
-                        color: AppbackgroundColor.TiTile_Box,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(10),
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10)),
-                        // border: Border.all(color: Colors.grey, width: 1),
-                      ),
-                      padding: const EdgeInsets.all(4.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: ScrollConfiguration(
-                                behavior: ScrollConfiguration.of(context)
-                                    .copyWith(dragDevices: {
-                                  PointerDeviceKind.touch,
-                                  PointerDeviceKind.mouse,
-                                }),
-                                child: SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: (acc_2! == '1')
-                                        ? Row(children: [
-                                            for (int i = 0;
-                                                i < Status_2.length;
-                                                i++)
-                                              Padding(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          8, 4, 4, 2),
-                                                  child: InkWell(
-                                                    onTap: () {
-                                                      print(i);
-                                                      setState(() {
-                                                        Status_ = i + 1;
-                                                      });
-                                                      // if (i == 6) {
-                                                      //   setState(() {
-                                                      //     Status_ = 9;
-                                                      //   });
-                                                      // } else {
-                                                      //   setState(() {
-                                                      //     Status_ = i + 1;
-                                                      //   });
-                                                      // }
-                                                    },
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        color: (i + 1 == 1)
-                                                            ? (Status_ == i + 1)
-                                                                ? Colors
-                                                                    .grey[700]
-                                                                : Colors
-                                                                    .grey[300]
-                                                            : (i + 1 == 2)
-                                                                ? (Status_ ==
-                                                                        i + 1)
-                                                                    ? Colors.red[
-                                                                        700]
-                                                                    : Colors.red[
-                                                                        200]
-                                                                : (i + 1 == 3)
-                                                                    ? (Status_ ==
-                                                                            i +
-                                                                                1)
-                                                                        ? Colors.green[
-                                                                            700]
-                                                                        : Colors.green[
-                                                                            200]
-                                                                    : (i + 1 ==
-                                                                            4)
-                                                                        ? (Status_ ==
-                                                                                i + 1)
-                                                                            ? Colors.blue[700]
-                                                                            : Colors.blue[200]
-                                                                        : (i + 1 == 5)
-                                                                            ? (Status_ == i + 1)
-                                                                                ? Colors.orange[700]
-                                                                                : Colors.orange[200]
-                                                                            : (i + 1 == 6)
-                                                                                ? (Status_ == i + 1)
-                                                                                    ? Colors.blueGrey
-                                                                                    : Colors.blueGrey[200]
-                                                                                : (i + 1 == 7)
-                                                                                    ? (Status_ == i + 1)
-                                                                                        ? Colors.deepPurple
-                                                                                        : Colors.deepPurple[200]
-                                                                                    : (i + 1 == 8)
-                                                                                        ? (Status_ == i + 1)
-                                                                                            ? Colors.brown
-                                                                                            : Colors.brown[200]
-                                                                                        : (i + 1 == 9)
-                                                                                            ? (Status_ == i + 1)
-                                                                                                ? Colors.pink
-                                                                                                : Colors.pink[200]
-                                                                                            : (Status_ == i + 1)
-                                                                                                ? Colors.yellow[600]
-                                                                                                : Colors.yellow[200],
-                                                        //     ? Colors.green
-                                                        //     : (i + 1 == 2)
-                                                        //         ? Colors.blue
-                                                        //         : (i + 1 == 3)
-                                                        //             ? Colors
-                                                        //                 .deepPurple[300]
-                                                        //             : (i + 1 == 4)
-                                                        //                 ? Colors.red
-                                                        //                 : (i + 1 == 5)
-                                                        //                     ? Colors
-                                                        //                         .orange
-                                                        //                     : (i + 1 ==
-                                                        //                             7)
-                                                        //                         ? Colors
-                                                        //                             .pink
-                                                        //                         : (i + 1 ==
-                                                        //                                 8)
-                                                        //                             ? Colors.green
-                                                        //                             : Colors.teal,
-                                                        borderRadius: const BorderRadius
-                                                                .only(
-                                                            topLeft: Radius
-                                                                .circular(10),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    10)),
-                                                        border: (Status_ ==
-                                                                i + 1)
-                                                            ? Border.all(
-                                                                color: Colors
-                                                                    .white,
-                                                                width: 1)
-                                                            : null,
-                                                      ),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              6.0),
-                                                      child: Center(
-                                                        child: Text(
-                                                          '${Status_2[i]}',
-                                                          style: TextStyle(
-                                                              color: (Status_ ==
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: const BoxDecoration(
+                      color: AppbackgroundColor.TiTile_Box,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10)),
+                      // border: Border.all(color: Colors.grey, width: 1),
+                    ),
+                    padding: const EdgeInsets.all(4.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: ScrollConfiguration(
+                              behavior: ScrollConfiguration.of(context)
+                                  .copyWith(dragDevices: {
+                                PointerDeviceKind.touch,
+                                PointerDeviceKind.mouse,
+                              }),
+                              child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: (acc_2! == '1')
+                                      ? Row(children: [
+                                          for (int i = 0;
+                                              i < Status_2.length;
+                                              i++)
+                                            Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        8, 4, 4, 2),
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    print(i);
+                                                    setState(() {
+                                                      Status_ = i + 1;
+                                                    });
+                                                    // if (i == 6) {
+                                                    //   setState(() {
+                                                    //     Status_ = 9;
+                                                    //   });
+                                                    // } else {
+                                                    //   setState(() {
+                                                    //     Status_ = i + 1;
+                                                    //   });
+                                                    // }
+                                                  },
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: (i + 1 == 1)
+                                                          ? (Status_ == i + 1)
+                                                              ? Colors.grey[700]
+                                                              : Colors.grey[300]
+                                                          : (i + 1 == 2)
+                                                              ? (Status_ ==
                                                                       i + 1)
+                                                                  ? Colors
+                                                                      .red[700]
+                                                                  : Colors
+                                                                      .red[200]
+                                                              : (i + 1 == 3)
+                                                                  ? (Status_ ==
+                                                                          i + 1)
+                                                                      ? Colors.green[
+                                                                          700]
+                                                                      : Colors.green[
+                                                                          200]
+                                                                  : (i + 1 == 4)
+                                                                      ? (Status_ ==
+                                                                              i +
+                                                                                  1)
+                                                                          ? Colors.blue[
+                                                                              700]
+                                                                          : Colors.blue[
+                                                                              200]
+                                                                      : (i + 1 ==
+                                                                              5)
+                                                                          ? (Status_ == i + 1)
+                                                                              ? Colors.orange[700]
+                                                                              : Colors.orange[200]
+                                                                          : (i + 1 == 6)
+                                                                              ? (Status_ == i + 1)
+                                                                                  ? Colors.blueGrey
+                                                                                  : Colors.blueGrey[200]
+                                                                              : (i + 1 == 7)
+                                                                                  ? (Status_ == i + 1)
+                                                                                      ? Colors.deepPurple
+                                                                                      : Colors.deepPurple[200]
+                                                                                  : (i + 1 == 8)
+                                                                                      ? (Status_ == i + 1)
+                                                                                          ? Colors.brown
+                                                                                          : Colors.brown[200]
+                                                                                      : (i + 1 == 9)
+                                                                                          ? (Status_ == i + 1)
+                                                                                              ? Colors.pink
+                                                                                              : Colors.pink[200]
+                                                                                          : (Status_ == i + 1)
+                                                                                              ? Colors.yellow[600]
+                                                                                              : Colors.yellow[200],
+                                                      //     ? Colors.green
+                                                      //     : (i + 1 == 2)
+                                                      //         ? Colors.blue
+                                                      //         : (i + 1 == 3)
+                                                      //             ? Colors
+                                                      //                 .deepPurple[300]
+                                                      //             : (i + 1 == 4)
+                                                      //                 ? Colors.red
+                                                      //                 : (i + 1 == 5)
+                                                      //                     ? Colors
+                                                      //                         .orange
+                                                      //                     : (i + 1 ==
+                                                      //                             7)
+                                                      //                         ? Colors
+                                                      //                             .pink
+                                                      //                         : (i + 1 ==
+                                                      //                                 8)
+                                                      //                             ? Colors.green
+                                                      //                             : Colors.teal,
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                                  .only(
+                                                              topLeft: Radius
+                                                                  .circular(10),
+                                                              topRight: Radius
+                                                                  .circular(10),
+                                                              bottomLeft: Radius
+                                                                  .circular(10),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          10)),
+                                                      border: (Status_ == i + 1)
+                                                          ? Border.all(
+                                                              color:
+                                                                  Colors.white,
+                                                              width: 1)
+                                                          : null,
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            6.0),
+                                                    child: Center(
+                                                      child: Translate
+                                                          .TranslateAndSetText(
+                                                              '${Status_2[i]}',
+                                                              (Status_ == i + 1)
                                                                   ? Colors.white
                                                                   : Colors
                                                                       .black,
-                                                              fontFamily:
-                                                                  FontWeight_
-                                                                      .Fonts_T),
-                                                        ),
-                                                      ),
+                                                              TextAlign.center,
+                                                              FontWeight.bold,
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                              14,
+                                                              1),
+                                                      // Text(
+                                                      //   '${Status_2[i]}',
+                                                      //   style: TextStyle(
+                                                      //       color: (Status_ ==
+                                                      //               i + 1)
+                                                      //           ? Colors.white
+                                                      //           : Colors.black,
+                                                      //       fontFamily:
+                                                      //           FontWeight_
+                                                      //               .Fonts_T),
+                                                      // ),
                                                     ),
-                                                  )),
-                                          ])
-                                        : Row(children: [
-                                            for (int i = 0;
-                                                i < Status.length;
-                                                i++)
-                                              Padding(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          8, 4, 4, 2),
-                                                  child: InkWell(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        Status_ = i + 1;
-                                                      });
-                                                      // setState(() {
-                                                      //   if (i + 1 > 5) {
-                                                      //     Status_ = i + 2;
-                                                      //   } else {
-                                                      //     Status_ = i + 1;
-                                                      //   }
-                                                      // });
-                                                    },
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        color: (i + 1 == 1)
-                                                            ? (Status_ == i + 1)
-                                                                ? Colors
-                                                                    .grey[700]
-                                                                : Colors
-                                                                    .grey[300]
-                                                            : (i + 1 == 2)
-                                                                ? (Status_ ==
-                                                                        i + 1)
-                                                                    ? Colors.red[
-                                                                        700]
-                                                                    : Colors.red[
-                                                                        200]
-                                                                : (i + 1 == 3)
-                                                                    ? (Status_ ==
-                                                                            i +
-                                                                                1)
-                                                                        ? Colors.green[
-                                                                            700]
-                                                                        : Colors.green[
-                                                                            200]
-                                                                    : (i + 1 ==
-                                                                            4)
-                                                                        ? (Status_ ==
-                                                                                i + 1)
-                                                                            ? Colors.blue[700]
-                                                                            : Colors.blue[200]
-                                                                        : (i + 1 == 5)
-                                                                            ? (Status_ == i + 1)
-                                                                                ? Colors.orange[700]
-                                                                                : Colors.orange[200]
-                                                                            : (i + 1 == 6)
-                                                                                ? (Status_ == i + 1)
-                                                                                    ? Colors.blueGrey
-                                                                                    : Colors.blueGrey[200]
-                                                                                : (i + 1 == 7)
-                                                                                    ? (Status_ == i + 1)
-                                                                                        ? Colors.deepPurple
-                                                                                        : Colors.deepPurple[200]
-                                                                                    : (i + 1 == 8)
-                                                                                        ? (Status_ == i + 1)
-                                                                                            ? Colors.brown
-                                                                                            : Colors.brown[200]
-                                                                                        : (i + 1 == 9)
-                                                                                            ? (Status_ == i + 1)
-                                                                                                ? Colors.pink
-                                                                                                : Colors.pink[200]
-                                                                                            : (Status_ == i + 1)
-                                                                                                ? Colors.yellow[600]
-                                                                                                : Colors.yellow[200],
-                                                        // ? Colors.green
-                                                        // : (i + 1 == 2)
-                                                        //     ? Colors.blue
-                                                        //     : (i + 1 == 3)
-                                                        //         ? Colors
-                                                        //             .deepPurple[300]
-                                                        //         : (i + 1 == 4)
-                                                        //             ? Colors.red
-                                                        //             : (i + 1 == 5)
-                                                        //                 ? Colors
-                                                        //                     .orange
-                                                        //                 : (i + 1 ==
-                                                        //                         7)
-                                                        //                     ? Colors
-                                                        //                         .green
-                                                        //                     : (i + 1 ==
-                                                        //                             8)
-                                                        //                         ? Colors.lime.shade800
-                                                        //                         : Colors.teal,
-                                                        borderRadius: const BorderRadius
-                                                                .only(
-                                                            topLeft: Radius
-                                                                .circular(10),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    10)),
-                                                        border: (Status_ ==
-                                                                i + 1)
-                                                            ? Border.all(
-                                                                color: Colors
-                                                                    .white,
-                                                                width: 1)
-                                                            : null,
-                                                      ),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              6.0),
-                                                      child: Center(
-                                                        child: Text(
-                                                          '${Status[i]}',
-                                                          style: TextStyle(
-                                                              color: (Status_ ==
+                                                  ),
+                                                )),
+                                        ])
+                                      : Row(children: [
+                                          for (int i = 0;
+                                              i < Status.length;
+                                              i++)
+                                            Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        8, 4, 4, 2),
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      Status_ = i + 1;
+                                                    });
+                                                    // setState(() {
+                                                    //   if (i + 1 > 5) {
+                                                    //     Status_ = i + 2;
+                                                    //   } else {
+                                                    //     Status_ = i + 1;
+                                                    //   }
+                                                    // });
+                                                  },
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: (i + 1 == 1)
+                                                          ? (Status_ == i + 1)
+                                                              ? Colors.grey[700]
+                                                              : Colors.grey[300]
+                                                          : (i + 1 == 2)
+                                                              ? (Status_ ==
                                                                       i + 1)
+                                                                  ? Colors
+                                                                      .red[700]
+                                                                  : Colors
+                                                                      .red[200]
+                                                              : (i + 1 == 3)
+                                                                  ? (Status_ ==
+                                                                          i + 1)
+                                                                      ? Colors.green[
+                                                                          700]
+                                                                      : Colors.green[
+                                                                          200]
+                                                                  : (i + 1 == 4)
+                                                                      ? (Status_ ==
+                                                                              i +
+                                                                                  1)
+                                                                          ? Colors.blue[
+                                                                              700]
+                                                                          : Colors.blue[
+                                                                              200]
+                                                                      : (i + 1 ==
+                                                                              5)
+                                                                          ? (Status_ == i + 1)
+                                                                              ? Colors.orange[700]
+                                                                              : Colors.orange[200]
+                                                                          : (i + 1 == 6)
+                                                                              ? (Status_ == i + 1)
+                                                                                  ? Colors.blueGrey
+                                                                                  : Colors.blueGrey[200]
+                                                                              : (i + 1 == 7)
+                                                                                  ? (Status_ == i + 1)
+                                                                                      ? Colors.deepPurple
+                                                                                      : Colors.deepPurple[200]
+                                                                                  : (i + 1 == 8)
+                                                                                      ? (Status_ == i + 1)
+                                                                                          ? Colors.brown
+                                                                                          : Colors.brown[200]
+                                                                                      : (i + 1 == 9)
+                                                                                          ? (Status_ == i + 1)
+                                                                                              ? Colors.pink
+                                                                                              : Colors.pink[200]
+                                                                                          : (Status_ == i + 1)
+                                                                                              ? Colors.yellow[600]
+                                                                                              : Colors.yellow[200],
+                                                      // ? Colors.green
+                                                      // : (i + 1 == 2)
+                                                      //     ? Colors.blue
+                                                      //     : (i + 1 == 3)
+                                                      //         ? Colors
+                                                      //             .deepPurple[300]
+                                                      //         : (i + 1 == 4)
+                                                      //             ? Colors.red
+                                                      //             : (i + 1 == 5)
+                                                      //                 ? Colors
+                                                      //                     .orange
+                                                      //                 : (i + 1 ==
+                                                      //                         7)
+                                                      //                     ? Colors
+                                                      //                         .green
+                                                      //                     : (i + 1 ==
+                                                      //                             8)
+                                                      //                         ? Colors.lime.shade800
+                                                      //                         : Colors.teal,
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                                  .only(
+                                                              topLeft: Radius
+                                                                  .circular(10),
+                                                              topRight: Radius
+                                                                  .circular(10),
+                                                              bottomLeft: Radius
+                                                                  .circular(10),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          10)),
+                                                      border: (Status_ == i + 1)
+                                                          ? Border.all(
+                                                              color:
+                                                                  Colors.white,
+                                                              width: 1)
+                                                          : null,
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            6.0),
+                                                    child: Center(
+                                                      child: Translate
+                                                          .TranslateAndSetText(
+                                                              '${Status[i]}',
+                                                              (Status_ == i + 1)
                                                                   ? Colors.white
                                                                   : Colors
                                                                       .black,
-                                                              fontFamily:
-                                                                  FontWeight_
-                                                                      .Fonts_T),
-                                                        ),
-                                                      ),
+                                                              TextAlign.center,
+                                                              FontWeight.bold,
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                              14,
+                                                              1),
                                                     ),
-                                                  )),
-                                          ])),
-                              ),
+                                                  ),
+                                                )),
+                                        ])),
                             ),
                           ),
-                          // Padding(
-                          //   padding: const EdgeInsets.all(8.0),
-                          //   child: InkWell(
-                          //     onTap: () {
-                          //       setState(() {
-                          //         Status_ = 7;
-                          //       });
-                          //     },
-                          //     child: Container(
-                          //       decoration: BoxDecoration(
-                          //         color: Colors.purpleAccent,
-                          //         borderRadius: const BorderRadius.only(
-                          //             topLeft: Radius.circular(10),
-                          //             topRight: Radius.circular(10),
-                          //             bottomLeft: Radius.circular(10),
-                          //             bottomRight: Radius.circular(10)),
-                          //         border: (Status_ == 6)
-                          //             ? Border.all(color: Colors.white, width: 1)
-                          //             : null,
-                          //       ),
-                          //       padding: const EdgeInsets.all(8.0),
-                          //       width: 120,
-                          //       // height: 30,
-                          //       child: Center(
-                          //         child: Text(
-                          //           'ข้อมูลผู้ใช้งาน',
-                          //           style: TextStyle(
-                          //               color: (Status_ == 7)
-                          //                   ? Colors.white
-                          //                   : Colors.black,
-                          //               fontFamily: FontWeight_.Fonts_T),
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ),
-                          // )
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-
+                ),
                 (!Responsive.isDesktop(context))
                     ? BodyHome_mobile()
                     : BodyHome_Web()
@@ -1559,14 +1540,24 @@ class _SettingScreenState extends State<SettingScreen> {
                               ),
                               padding: const EdgeInsets.all(6.0),
                               child: Center(
-                                child: Text(
-                                  '${Status_area[i]}',
-                                  style: TextStyle(
-                                      color: (Status_area_ == i + 1)
-                                          ? Colors.white
-                                          : Colors.black,
-                                      fontFamily: FontWeight_.Fonts_T),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    '${Status_area[i]}',
+                                    (Status_area_ == i + 1)
+                                        ? Colors.white
+                                        : Colors.black,
+                                    TextAlign.center,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    14,
+                                    1),
+                                //  Text(
+                                //   '${Status_area[i]}',
+                                //   style: TextStyle(
+                                //       color: (Status_area_ == i + 1)
+                                //           ? Colors.white
+                                //           : Colors.black,
+                                //       fontFamily: FontWeight_.Fonts_T),
+                                // ),
                               ),
                             ),
                           ),
@@ -1605,7 +1596,7 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget Status1_Web() {
     double Width_ = MediaQuery.of(context).size.width;
     return StreamBuilder(
-        stream: Stream.periodic(const Duration(seconds: 0)),
+        stream: Stream.periodic(const Duration(seconds: 30)),
         builder: (context, snapshot) {
           return Padding(
             padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
@@ -1640,21 +1631,17 @@ class _SettingScreenState extends State<SettingScreen> {
                           alignment: Alignment.center,
                           child: Container(
                             width: 300,
-                            child: const Row(
+                            child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text('แผนผัง',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    softWrap: false,
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color:
-                                            SettingScreen_Color.Colors_Text2_,
-                                        fontFamily: Font_.Fonts_T
-                                        // fontWeight: FontWeight.bold,
-                                        )),
+                                Translate.TranslateAndSetText(
+                                    'แผนผัง',
+                                    SettingScreen_Color.Colors_Text2_,
+                                    TextAlign.center,
+                                    FontWeight.bold,
+                                    Font_.Fonts_T,
+                                    14,
+                                    1),
                               ],
                             ),
                           ),
@@ -1703,19 +1690,15 @@ class _SettingScreenState extends State<SettingScreen> {
                                             bottomRight: Radius.circular(10)),
                                       ),
                                       padding: const EdgeInsets.all(4.0),
-                                      child: const Center(
-                                        child: Text('ดูรูปแผนผัง',
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            softWrap: false,
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                color: SettingScreen_Color
-                                                    .Colors_Text2_,
-                                                fontFamily: Font_.Fonts_T
-                                                // fontWeight: FontWeight.bold,
-                                                )),
+                                      child: Center(
+                                        child: Translate.TranslateAndSetText(
+                                            'ดูรูปแผนผัง',
+                                            SettingScreen_Color.Colors_Text2_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            Font_.Fonts_T,
+                                            14,
+                                            1),
                                       ),
                                     ),
                                     onTap: () {
@@ -1765,20 +1748,29 @@ class _SettingScreenState extends State<SettingScreen> {
                                               ),
                                               padding:
                                                   const EdgeInsets.all(8.0),
-                                              child: const Text(
-                                                  '1.ลักษณะพื้นที่เช่า',
-                                                  maxLines: 3,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  softWrap: false,
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      color: SettingScreen_Color
-                                                          .Colors_Text2_,
-                                                      fontFamily: Font_.Fonts_T
-                                                      // fontWeight: FontWeight.bold,
-                                                      )),
+                                              child: Translate.TranslateAndSetText(
+                                                  '1.ลักษณะ/ประเภทพื้นที่เช่า',
+                                                  SettingScreen_Color
+                                                      .Colors_Text2_,
+                                                  TextAlign.start,
+                                                  null,
+                                                  Font_.Fonts_T,
+                                                  14,
+                                                  3),
+                                              // const Text(
+                                              //     '1.ลักษณะพื้นที่เช่า',
+                                              //     maxLines: 3,
+                                              //     overflow:
+                                              //         TextOverflow.ellipsis,
+                                              //     softWrap: false,
+                                              //     textAlign: TextAlign.start,
+                                              //     style: TextStyle(
+                                              //         fontSize: 15,
+                                              //         color: SettingScreen_Color
+                                              //             .Colors_Text2_,
+                                              //         fontFamily: Font_.Fonts_T
+                                              //         // fontWeight: FontWeight.bold,
+                                              //         )),
                                             ),
                                           ),
                                         ),
@@ -1819,21 +1811,32 @@ class _SettingScreenState extends State<SettingScreen> {
                                                           const EdgeInsets.all(
                                                               8.0),
                                                       child: Center(
-                                                        child: Text('$typex',
-                                                            maxLines: 3,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            softWrap: false,
-                                                            style: const TextStyle(
-                                                                fontSize: 15,
-                                                                color: SettingScreen_Color
+                                                        child: Translate
+                                                            .TranslateAndSetText(
+                                                                '$typex',
+                                                                SettingScreen_Color
                                                                     .Colors_Text2_,
-                                                                fontFamily:
-                                                                    Font_
-                                                                        .Fonts_T
-                                                                // fontWeight: FontWeight.bold,
-                                                                )),
+                                                                TextAlign
+                                                                    .center,
+                                                                null,
+                                                                Font_.Fonts_T,
+                                                                14,
+                                                                3),
+                                                        //  Text('$typex',
+                                                        //     maxLines: 3,
+                                                        //     overflow:
+                                                        //         TextOverflow
+                                                        //             .ellipsis,
+                                                        //     softWrap: false,
+                                                        //     style: const TextStyle(
+                                                        //         fontSize: 15,
+                                                        //         color: SettingScreen_Color
+                                                        //             .Colors_Text2_,
+                                                        //         fontFamily:
+                                                        //             Font_
+                                                        //                 .Fonts_T
+                                                        //         // fontWeight: FontWeight.bold,
+                                                        //         )),
                                                       ),
                                                     ),
                                                   ],
@@ -1866,20 +1869,30 @@ class _SettingScreenState extends State<SettingScreen> {
                                               ),
                                               padding:
                                                   const EdgeInsets.all(8.0),
-                                              child: const Text(
-                                                  '2.การคิดค่าเช่า',
-                                                  maxLines: 3,
-                                                  textAlign: TextAlign.start,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  softWrap: false,
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      color: SettingScreen_Color
+                                              child:
+                                                  Translate.TranslateAndSetText(
+                                                      '2.การคิดค่าเช่า',
+                                                      SettingScreen_Color
                                                           .Colors_Text2_,
-                                                      fontFamily: Font_.Fonts_T
-                                                      // fontWeight: FontWeight.bold,
-                                                      )),
+                                                      TextAlign.start,
+                                                      null,
+                                                      Font_.Fonts_T,
+                                                      14,
+                                                      3),
+                                              // const Text(
+                                              //     '2.การคิดค่าเช่า',
+                                              //     maxLines: 3,
+                                              //     textAlign: TextAlign.start,
+                                              //     overflow:
+                                              //         TextOverflow.ellipsis,
+                                              //     softWrap: false,
+                                              //     style: TextStyle(
+                                              //         fontSize: 15,
+                                              //         color: SettingScreen_Color
+                                              //             .Colors_Text2_,
+                                              //         fontFamily: Font_.Fonts_T
+                                              //         // fontWeight: FontWeight.bold,
+                                              //         )),
                                             ),
                                           ),
                                         ),
@@ -1919,20 +1932,30 @@ class _SettingScreenState extends State<SettingScreen> {
                                                 padding:
                                                     const EdgeInsets.all(8.0),
                                                 child: Center(
-                                                  child: Text('$rtname',
-                                                      maxLines: 3,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      softWrap: false,
-                                                      style: const TextStyle(
-                                                          fontSize: 15,
-                                                          color:
-                                                              SettingScreen_Color
-                                                                  .Colors_Text2_,
-                                                          fontFamily:
-                                                              Font_.Fonts_T
-                                                          // fontWeight: FontWeight.bold,
-                                                          )),
+                                                  child: Translate
+                                                      .TranslateAndSetText(
+                                                          '$rtname',
+                                                          SettingScreen_Color
+                                                              .Colors_Text2_,
+                                                          TextAlign.center,
+                                                          null,
+                                                          Font_.Fonts_T,
+                                                          14,
+                                                          3),
+                                                  // Text('$rtname',
+                                                  //     maxLines: 3,
+                                                  //     overflow:
+                                                  //         TextOverflow.ellipsis,
+                                                  //     softWrap: false,
+                                                  //     style: const TextStyle(
+                                                  //         fontSize: 15,
+                                                  //         color:
+                                                  //             SettingScreen_Color
+                                                  //                 .Colors_Text2_,
+                                                  //         fontFamily:
+                                                  //             Font_.Fonts_T
+                                                  //         // fontWeight: FontWeight.bold,
+                                                  //         )),
                                                 ),
                                               ),
                                             ),
@@ -1962,19 +1985,29 @@ class _SettingScreenState extends State<SettingScreen> {
                                               ),
                                               padding:
                                                   const EdgeInsets.all(8.0),
-                                              child: const Text('3.การใช้งาน',
-                                                  textAlign: TextAlign.start,
-                                                  maxLines: 3,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  softWrap: false,
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      color: SettingScreen_Color
+                                              child:
+                                                  Translate.TranslateAndSetText(
+                                                      '3.ลักษณะการใช้งาน',
+                                                      SettingScreen_Color
                                                           .Colors_Text2_,
-                                                      fontFamily: Font_.Fonts_T
-                                                      // fontWeight: FontWeight.bold,
-                                                      )),
+                                                      TextAlign.start,
+                                                      null,
+                                                      Font_.Fonts_T,
+                                                      14,
+                                                      3),
+                                              //  const Text('3.การใช้งาน',
+                                              //     textAlign: TextAlign.start,
+                                              //     maxLines: 3,
+                                              //     overflow:
+                                              //         TextOverflow.ellipsis,
+                                              //     softWrap: false,
+                                              //     style: TextStyle(
+                                              //         fontSize: 15,
+                                              //         color: SettingScreen_Color
+                                              //             .Colors_Text2_,
+                                              //         fontFamily: Font_.Fonts_T
+                                              //         // fontWeight: FontWeight.bold,
+                                              //         )),
                                             ),
                                           ),
                                         ),
@@ -2011,20 +2044,30 @@ class _SettingScreenState extends State<SettingScreen> {
                                                 padding:
                                                     const EdgeInsets.all(8.0),
                                                 child: Center(
-                                                  child: Text('$type',
-                                                      maxLines: 3,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      softWrap: false,
-                                                      style: const TextStyle(
-                                                          fontSize: 15,
-                                                          color:
-                                                              SettingScreen_Color
-                                                                  .Colors_Text2_,
-                                                          fontFamily:
-                                                              Font_.Fonts_T
-                                                          // fontWeight: FontWeight.bold,
-                                                          )),
+                                                  child: Translate
+                                                      .TranslateAndSetText(
+                                                          '$type',
+                                                          SettingScreen_Color
+                                                              .Colors_Text2_,
+                                                          TextAlign.center,
+                                                          null,
+                                                          Font_.Fonts_T,
+                                                          14,
+                                                          3),
+                                                  // Text('$type',
+                                                  //     maxLines: 3,
+                                                  //     overflow:
+                                                  //         TextOverflow.ellipsis,
+                                                  //     softWrap: false,
+                                                  //     style: const TextStyle(
+                                                  //         fontSize: 15,
+                                                  //         color:
+                                                  //             SettingScreen_Color
+                                                  //                 .Colors_Text2_,
+                                                  //         fontFamily:
+                                                  //             Font_.Fonts_T
+                                                  //         // fontWeight: FontWeight.bold,
+                                                  //         )),
                                                 ),
                                               ),
                                             ),
@@ -2095,19 +2138,29 @@ class _SettingScreenState extends State<SettingScreen> {
                                                     Radius.circular(10)),
                                           ),
                                           padding: const EdgeInsets.all(4.0),
-                                          child: const Center(
-                                            child: Text('ดูรูปแผนผัง',
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                softWrap: false,
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                    fontSize: 15,
-                                                    color: SettingScreen_Color
+                                          child: Center(
+                                            child:
+                                                Translate.TranslateAndSetText(
+                                                    'ดูรูปแผนผัง',
+                                                    SettingScreen_Color
                                                         .Colors_Text2_,
-                                                    fontFamily: Font_.Fonts_T
-                                                    // fontWeight: FontWeight.bold,
-                                                    )),
+                                                    TextAlign.start,
+                                                    null,
+                                                    Font_.Fonts_T,
+                                                    14,
+                                                    1),
+                                            // Text('ดูรูปแผนผัง',
+                                            //     maxLines: 1,
+                                            //     overflow: TextOverflow.ellipsis,
+                                            //     softWrap: false,
+                                            //     textAlign: TextAlign.start,
+                                            //     style: TextStyle(
+                                            //         fontSize: 15,
+                                            //         color: SettingScreen_Color
+                                            //             .Colors_Text2_,
+                                            //         fontFamily: Font_.Fonts_T
+                                            //         // fontWeight: FontWeight.bold,
+                                            //         )),
                                           ),
                                         ),
                                         onTap: () {
@@ -2349,18 +2402,26 @@ class _SettingScreenState extends State<SettingScreen> {
                                             bottomRight: Radius.circular(10)),
                                       ),
                                       padding: const EdgeInsets.all(8.0),
-                                      child: const Text('4.ชื่อสถานที่',
-                                          textAlign: TextAlign.start,
-                                          maxLines: 3,
-                                          overflow: TextOverflow.ellipsis,
-                                          softWrap: false,
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: SettingScreen_Color
-                                                  .Colors_Text2_,
-                                              fontFamily: Font_.Fonts_T
-                                              // fontWeight: FontWeight.bold,
-                                              )),
+                                      child: Translate.TranslateAndSetText(
+                                          '4.ชื่อสถานที่',
+                                          SettingScreen_Color.Colors_Text2_,
+                                          TextAlign.start,
+                                          null,
+                                          Font_.Fonts_T,
+                                          14,
+                                          1),
+                                      // Text('4.ชื่อสถานที่',
+                                      //     textAlign: TextAlign.start,
+                                      //     maxLines: 3,
+                                      //     overflow: TextOverflow.ellipsis,
+                                      //     softWrap: false,
+                                      //     style: TextStyle(
+                                      //         fontSize: 15,
+                                      //         color: SettingScreen_Color
+                                      //             .Colors_Text2_,
+                                      //         fontFamily: Font_.Fonts_T
+                                      //         // fontWeight: FontWeight.bold,
+                                      //         )),
                                     ),
                                   ),
                                   Padding(
@@ -2497,18 +2558,28 @@ class _SettingScreenState extends State<SettingScreen> {
                                         ),
                                         padding: const EdgeInsets.all(8.0),
                                         child: PopupMenuButton(
-                                          child: const Center(
-                                            child: Text('เพิ่มรูป',
-                                                maxLines: 3,
-                                                overflow: TextOverflow.ellipsis,
-                                                softWrap: false,
-                                                style: TextStyle(
-                                                    fontSize: 15,
-                                                    color: SettingScreen_Color
+                                          child: Center(
+                                            child:
+                                                Translate.TranslateAndSetText(
+                                                    'เพิ่มรูปภาพ',
+                                                    SettingScreen_Color
                                                         .Colors_Text3_,
-                                                    fontFamily: Font_.Fonts_T
-                                                    // fontWeight: FontWeight.bold,
-                                                    )),
+                                                    TextAlign.start,
+                                                    null,
+                                                    Font_.Fonts_T,
+                                                    14,
+                                                    1),
+                                            // Text('เพิ่มรูป',
+                                            //     maxLines: 3,
+                                            //     overflow: TextOverflow.ellipsis,
+                                            //     softWrap: false,
+                                            //     style: TextStyle(
+                                            //         fontSize: 15,
+                                            //         color: SettingScreen_Color
+                                            //             .Colors_Text3_,
+                                            //         fontFamily: Font_.Fonts_T
+                                            //         // fontWeight: FontWeight.bold,
+                                            //         )),
                                           ),
                                           itemBuilder: (BuildContext context) =>
                                               [
@@ -2533,31 +2604,33 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                     .all(Radius
                                                                         .circular(
                                                                             10.0))),
-                                                            title: const Center(
-                                                                child: Text(
-                                                              'มีรูปโลโก้อยู่แล้ว',
-                                                              style: TextStyle(
-                                                                  color: SettingScreen_Color
+                                                            title: Center(
+                                                              child: Translate.TranslateAndSetText(
+                                                                  'มีรูปโลโก้อยู่แล้ว',
+                                                                  SettingScreen_Color
                                                                       .Colors_Text1_,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T),
-                                                            )),
+                                                                  TextAlign
+                                                                      .start,
+                                                                  null,
+                                                                  Font_.Fonts_T,
+                                                                  14,
+                                                                  1),
+                                                            ),
                                                             content:
-                                                                const SingleChildScrollView(
+                                                                SingleChildScrollView(
                                                               child: ListBody(
                                                                 children: <Widget>[
-                                                                  Text(
-                                                                    'มีรูปโลโก้ หากต้องการอัพโหลดกรุณาลบรูปโลโก้ที่มีอยู่แล้วก่อน',
-                                                                    style: TextStyle(
-                                                                        color: SettingScreen_Color
-                                                                            .Colors_Text2_,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T),
-                                                                  ),
+                                                                  Translate.TranslateAndSetText(
+                                                                      'มีรูปโลโก้ หากต้องการอัพโหลดกรุณาลบรูปโลโก้ที่มีอยู่แล้วก่อน',
+                                                                      SettingScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      TextAlign
+                                                                          .start,
+                                                                      null,
+                                                                      Font_
+                                                                          .Fonts_T,
+                                                                      14,
+                                                                      1),
                                                                 ],
                                                               ),
                                                             ),
@@ -2593,11 +2666,9 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                                 // border: Border.all(color: Colors.white, width: 1),
                                                                               ),
                                                                               padding: const EdgeInsets.all(8.0),
-                                                                              child: const Center(
-                                                                                  child: Text(
-                                                                                'ลบรูป',
-                                                                                style: TextStyle(color: SettingScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
-                                                                              ))),
+                                                                              child: Center(
+                                                                                child: Translate.TranslateAndSetText('ลบรูป', SettingScreen_Color.Colors_Text3_, TextAlign.start, null, Font_.Fonts_T, 14, 1),
+                                                                              )),
                                                                           onTap:
                                                                               () async {
                                                                             String
@@ -2627,11 +2698,9 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                                       // border: Border.all(color: Colors.white, width: 1),
                                                                                     ),
                                                                                     padding: const EdgeInsets.all(8.0),
-                                                                                    child: const Center(
-                                                                                        child: Text(
-                                                                                      'ดูรูป',
-                                                                                      style: TextStyle(color: SettingScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
-                                                                                    ))),
+                                                                                    child: Center(
+                                                                                      child: Translate.TranslateAndSetText('ดูรูป', SettingScreen_Color.Colors_Text3_, TextAlign.start, null, Font_.Fonts_T, 14, 1),
+                                                                                    )),
                                                                                 onTap: () async {
                                                                                   String url = await '${MyConstant().domain}/files/$foder/logo/$img_logo';
                                                                                   Navigator.of(context).pop();
@@ -2652,11 +2721,9 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                                       // border: Border.all(color: Colors.white, width: 1),
                                                                                     ),
                                                                                     padding: const EdgeInsets.all(8.0),
-                                                                                    child: const Center(
-                                                                                        child: Text(
-                                                                                      'ปิด',
-                                                                                      style: TextStyle(color: SettingScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
-                                                                                    ))),
+                                                                                    child: Center(
+                                                                                      child: Translate.TranslateAndSetText('ปิด', SettingScreen_Color.Colors_Text3_, TextAlign.start, null, Font_.Fonts_T, 14, 1),
+                                                                                    )),
                                                                                 onTap: () {
                                                                                   Navigator.of(context).pop();
                                                                                   Navigator.of(context).pop();
@@ -2907,20 +2974,17 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                   color: Colors
                                                                       .green,
                                                                 ),
-                                                          const Expanded(
-                                                            child: Text(
-                                                              ' รูปแผนผัง',
-                                                              style: TextStyle(
-                                                                  color: SettingScreen_Color
-                                                                      .Colors_Text1_,
-                                                                  fontSize: 14,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T),
-                                                            ),
+                                                          Expanded(
+                                                            child: Translate.TranslateAndSetText(
+                                                                ' รูปแผนผังพื้นที่',
+                                                                SettingScreen_Color
+                                                                    .Colors_Text1_,
+                                                                TextAlign.start,
+                                                                FontWeight.bold,
+                                                                FontWeight_
+                                                                    .Fonts_T,
+                                                                14,
+                                                                1),
                                                           ),
                                                         ],
                                                       ))),
@@ -2959,7 +3023,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                 ),
                                                           Expanded(
                                                             child: Text(
-                                                              ' รูปโซนพื้นที่(${zoneModels[index].zn})',
+                                                              '${zoneModels[index].zn}',
                                                               style: const TextStyle(
                                                                   color: SettingScreen_Color
                                                                       .Colors_Text1_,
@@ -3174,16 +3238,43 @@ class _SettingScreenState extends State<SettingScreen> {
                                                     Radius.circular(10)),
                                           ),
                                           padding: const EdgeInsets.all(8.0),
-                                          child: AutoSizeText(
-                                            minFontSize: 10,
-                                            maxFontSize: 18,
-                                            'Package $pkname : $pkqty ล็อค/แผง \n จำนวน $pkuser สิทธิผู้ใช้งาน',
-                                            textAlign: TextAlign.end,
-                                            style: const TextStyle(
-                                                color: SettingScreen_Color
-                                                    .Colors_Text1_,
-                                                fontFamily: Font_.Fonts_T),
+                                          child: Column(
+                                            children: [
+                                              Translate
+                                                  .TranslateAndSet_TextAutoSize(
+                                                      'Package $pkname : $pkqty ล็อค/แผง ',
+                                                      SettingScreen_Color
+                                                          .Colors_Text1_,
+                                                      TextAlign.center,
+                                                      FontWeight.bold,
+                                                      FontWeight_.Fonts_T,
+                                                      10,
+                                                      18,
+                                                      2),
+                                              Translate
+                                                  .TranslateAndSet_TextAutoSize(
+                                                      'จำนวน $pkuser สิทธิผู้ใช้งาน',
+                                                      SettingScreen_Color
+                                                          .Colors_Text1_,
+                                                      TextAlign.center,
+                                                      FontWeight.bold,
+                                                      FontWeight_.Fonts_T,
+                                                      10,
+                                                      18,
+                                                      2),
+                                            ],
                                           ),
+
+                                          //  AutoSizeText(
+                                          //   minFontSize: 10,
+                                          //   maxFontSize: 18,
+                                          //   'Package $pkname : $pkqty ล็อค/แผง \n จำนวน $pkuser สิทธิผู้ใช้งาน',
+                                          //   textAlign: TextAlign.end,
+                                          //   style: const TextStyle(
+                                          //       color: SettingScreen_Color
+                                          //           .Colors_Text1_,
+                                          //       fontFamily: Font_.Fonts_T),
+                                          // ),
                                         ),
                                       ],
                                     ),
@@ -3551,16 +3642,14 @@ class _SettingScreenState extends State<SettingScreen> {
                                             bottomRight: Radius.circular(10)),
                                       ),
                                       padding: const EdgeInsets.all(8.0),
-                                      child: const Text('+เพิ่มโซนพื้นที่',
-                                          maxLines: 3,
-                                          overflow: TextOverflow.ellipsis,
-                                          softWrap: false,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: SettingScreen_Color
-                                                  .Colors_Text3_,
-                                              fontFamily: Font_.Fonts_T)),
+                                      child: Translate.TranslateAndSetText(
+                                          '+เพิ่มโซนพื้นที่',
+                                          SettingScreen_Color.Colors_Text3_,
+                                          TextAlign.center,
+                                          FontWeight.bold,
+                                          FontWeight_.Fonts_T,
+                                          14,
+                                          1),
                                     ),
                                     onTap: () {
                                       showDialog<String>(
@@ -3572,16 +3661,18 @@ class _SettingScreenState extends State<SettingScreen> {
                                             shape: const RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(20.0))),
-                                            title: const Center(
-                                                child: Text(
-                                              'เพิ่มโซนพื้นที่',
-                                              style: TextStyle(
-                                                color: SettingScreen_Color
-                                                    .Colors_Text1_,
-                                                fontFamily: FontWeight_.Fonts_T,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            )),
+                                            title: Center(
+                                              child:
+                                                  Translate.TranslateAndSetText(
+                                                      'เพิ่มโซนพื้นที่',
+                                                      SettingScreen_Color
+                                                          .Colors_Text1_,
+                                                      TextAlign.left,
+                                                      FontWeight.bold,
+                                                      FontWeight_.Fonts_T,
+                                                      14,
+                                                      1),
+                                            ),
                                             content: Container(
                                               // height: MediaQuery.of(context).size.height / 1.5,
                                               width: (!Responsive.isDesktop(
@@ -3624,20 +3715,14 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                   children: [
                                                                     Row(
                                                                       children: [
-                                                                        Text(
-                                                                          '# ชื่อโซนที่ใกล้เครียง : ',
-                                                                          textAlign:
-                                                                              TextAlign.left,
-                                                                          style:
-                                                                              TextStyle(
-                                                                            color:
-                                                                                SettingScreen_Color.Colors_Text1_,
-                                                                            fontFamily:
-                                                                                FontWeight_.Fonts_T,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                          ),
-                                                                        ),
+                                                                        Translate.TranslateAndSetText(
+                                                                            '# ชื่อโซนที่ใกล้เครียง : ',
+                                                                            SettingScreen_Color.Colors_Text1_,
+                                                                            TextAlign.left,
+                                                                            FontWeight.bold,
+                                                                            FontWeight_.Fonts_T,
+                                                                            14,
+                                                                            1),
                                                                         Expanded(
                                                                             flex:
                                                                                 1,
@@ -3681,27 +3766,25 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                   ],
                                                                 );
                                                         }),
-                                                    const Row(
+                                                    Row(
                                                       children: [
                                                         Padding(
                                                           padding:
                                                               EdgeInsets.all(
                                                                   8.0),
-                                                          child: Text(
-                                                            'ชื่อโซน',
-                                                            textAlign:
-                                                                TextAlign.left,
-                                                            style: TextStyle(
-                                                              color: SettingScreen_Color
-                                                                  .Colors_Text1_,
-                                                              fontFamily:
-                                                                  FontWeight_
-                                                                      .Fonts_T,
-                                                              fontWeight:
+                                                          child: Translate
+                                                              .TranslateAndSetText(
+                                                                  'ชื่อโซน',
+                                                                  SettingScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  TextAlign
+                                                                      .center,
                                                                   FontWeight
                                                                       .bold,
-                                                            ),
-                                                          ),
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  14,
+                                                                  1),
                                                         ),
                                                       ],
                                                     ),
@@ -3916,19 +3999,18 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                               }
                                                                             }
                                                                           },
-                                                                    child:
-                                                                        const Text(
-                                                                      'บันทึก',
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: Colors
+                                                                    child: Translate.TranslateAndSetText(
+                                                                        'บันทึก',
+                                                                        Colors
                                                                             .white,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                      ),
-                                                                    ),
+                                                                        TextAlign
+                                                                            .center,
+                                                                        FontWeight
+                                                                            .bold,
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                        14,
+                                                                        1),
                                                                   ),
                                                                 );
                                                               }),
@@ -3965,20 +4047,19 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                   Navigator.pop(
                                                                       context,
                                                                       'OK'),
-                                                              child: const Text(
-                                                                'ยกเลิก',
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T,
-                                                                  fontWeight:
+                                                              child: Translate
+                                                                  .TranslateAndSetText(
+                                                                      'ยกเลิก',
+                                                                      Colors
+                                                                          .white,
+                                                                      TextAlign
+                                                                          .center,
                                                                       FontWeight
                                                                           .bold,
-                                                                ),
-                                                              ),
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                      14,
+                                                                      1),
                                                             ),
                                                           ),
                                                         ),
@@ -4011,19 +4092,27 @@ class _SettingScreenState extends State<SettingScreen> {
                                             bottomRight: Radius.circular(10)),
                                       ),
                                       padding: const EdgeInsets.all(8.0),
-                                      child: const Text(
+                                      child: Translate.TranslateAndSetText(
                                           '5.ระยะเวลาแจ้งใกล้หมดสัญญา',
-                                          textAlign: TextAlign.start,
-                                          maxLines: 3,
-                                          overflow: TextOverflow.ellipsis,
-                                          softWrap: false,
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: SettingScreen_Color
-                                                  .Colors_Text2_,
-                                              fontFamily: Font_.Fonts_T
-                                              // fontWeight: FontWeight.bold,
-                                              )),
+                                          SettingScreen_Color.Colors_Text2_,
+                                          TextAlign.start,
+                                          null,
+                                          Font_.Fonts_T,
+                                          14,
+                                          1),
+                                      //  const Text(
+                                      //     '5.ระยะเวลาแจ้งใกล้หมดสัญญา',
+                                      //     textAlign: TextAlign.start,
+                                      //     maxLines: 3,
+                                      //     overflow: TextOverflow.ellipsis,
+                                      //     softWrap: false,
+                                      //     style: TextStyle(
+                                      //         fontSize: 15,
+                                      //         color: SettingScreen_Color
+                                      //             .Colors_Text2_,
+                                      //         fontFamily: Font_.Fonts_T
+                                      //         // fontWeight: FontWeight.bold,
+                                      //         )),
                                     ),
                                   ),
                                   Padding(
@@ -4127,18 +4216,26 @@ class _SettingScreenState extends State<SettingScreen> {
                                             bottomRight: Radius.circular(10)),
                                       ),
                                       padding: const EdgeInsets.all(8.0),
-                                      child: const Text('วัน',
-                                          textAlign: TextAlign.start,
-                                          maxLines: 3,
-                                          overflow: TextOverflow.ellipsis,
-                                          softWrap: false,
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: SettingScreen_Color
-                                                  .Colors_Text2_,
-                                              fontFamily: Font_.Fonts_T
-                                              // fontWeight: FontWeight.bold,
-                                              )),
+                                      child: Translate.TranslateAndSetText(
+                                          'วัน',
+                                          SettingScreen_Color.Colors_Text2_,
+                                          TextAlign.start,
+                                          null,
+                                          Font_.Fonts_T,
+                                          14,
+                                          1),
+                                      // Text('วัน',
+                                      //     textAlign: TextAlign.start,
+                                      //     maxLines: 3,
+                                      //     overflow: TextOverflow.ellipsis,
+                                      //     softWrap: false,
+                                      //     style: TextStyle(
+                                      //         fontSize: 15,
+                                      //         color: SettingScreen_Color
+                                      //             .Colors_Text2_,
+                                      //         fontFamily: Font_.Fonts_T
+                                      //         // fontWeight: FontWeight.bold,
+                                      //         )),
                                     ),
                                   ),
                                 ],
@@ -4170,19 +4267,27 @@ class _SettingScreenState extends State<SettingScreen> {
                                             bottomRight: Radius.circular(10)),
                                       ),
                                       padding: const EdgeInsets.all(8.0),
-                                      child: const Text(
+                                      child: Translate.TranslateAndSetText(
                                           '6.เปิดแจ้งผ่านไลน์ (อาจมีค่าใช้จ่ายเพิ่มเติม)',
-                                          textAlign: TextAlign.start,
-                                          maxLines: 3,
-                                          overflow: TextOverflow.ellipsis,
-                                          softWrap: false,
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: SettingScreen_Color
-                                                  .Colors_Text2_,
-                                              fontFamily: Font_.Fonts_T
-                                              // fontWeight: FontWeight.bold,
-                                              )),
+                                          SettingScreen_Color.Colors_Text2_,
+                                          TextAlign.start,
+                                          null,
+                                          Font_.Fonts_T,
+                                          14,
+                                          1),
+                                      //    const Text(
+                                      //       '6.เปิดแจ้งผ่านไลน์ (อาจมีค่าใช้จ่ายเพิ่มเติม)',
+                                      //       textAlign: TextAlign.start,
+                                      //       maxLines: 3,
+                                      //       overflow: TextOverflow.ellipsis,
+                                      //       softWrap: false,
+                                      //       style: TextStyle(
+                                      //           fontSize: 15,
+                                      //           color: SettingScreen_Color
+                                      //               .Colors_Text2_,
+                                      //           fontFamily: Font_.Fonts_T
+                                      //           // fontWeight: FontWeight.bold,
+                                      //           )),
                                     ),
                                   ),
                                   Padding(
@@ -4239,11 +4344,19 @@ class _SettingScreenState extends State<SettingScreen> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      mass_on == 1 ? 'เปิดอยู่' : 'ปิดอยู่',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                                    child: Translate.TranslateAndSetText(
+                                        mass_on == 1 ? 'เปิดอยู่' : 'ปิดอยู่',
+                                        SettingScreen_Color.Colors_Text2_,
+                                        TextAlign.start,
+                                        null,
+                                        Font_.Fonts_T,
+                                        14,
+                                        1),
+                                    // Text(
+                                    //   mass_on == 1 ? 'เปิดอยู่' : 'ปิดอยู่',
+                                    //   style: const TextStyle(
+                                    //       fontWeight: FontWeight.bold),
+                                    // ),
                                   ),
                                 ],
                               ),
@@ -4506,17 +4619,26 @@ class _SettingScreenState extends State<SettingScreen> {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  'ตั้งค่าพื้นที่ - Nainaservice',
-                                  style: const TextStyle(
-                                    fontFamily: FontWeight_.Fonts_T,
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                    decoration: TextDecoration.underline,
-                                    // textBaseline:TextBaseline.alphabetic
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'ตั้งค่าพื้นที่ - Nainaservice',
+                                    SettingScreen_Color.Colors_Text2_,
+                                    TextAlign.start,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    14,
+                                    1),
+                                // Text(
+                                // Text(
+                                //   'ตั้งค่าพื้นที่ - Nainaservice',
+                                //   style: const TextStyle(
+                                //     fontFamily: FontWeight_.Fonts_T,
+                                //     fontSize: 20.0,
+                                //     fontWeight: FontWeight.bold,
+                                //     color: Colors.black,
+                                //     decoration: TextDecoration.underline,
+                                //     // textBaseline:TextBaseline.alphabetic
+                                //   ),
+                                // ),
                               ),
                               CircleAvatar(
                                 backgroundColor:
@@ -4686,16 +4808,17 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                                                   children: [
                                                                                     Container(
-                                                                                        alignment: Alignment.center,
-                                                                                        width: MediaQuery.of(context).size.width * 0.2,
-                                                                                        child: Text(
-                                                                                          'ลบโซน $name_Zone ??????',
-                                                                                          style: TextStyle(
-                                                                                            fontSize: 20.0,
-                                                                                            fontWeight: FontWeight.bold,
-                                                                                            color: Colors.black,
-                                                                                          ),
-                                                                                        )),
+                                                                                      alignment: Alignment.center,
+                                                                                      width: MediaQuery.of(context).size.width * 0.2,
+                                                                                      child: Text(
+                                                                                        '$name_Zone ??????',
+                                                                                        style: TextStyle(
+                                                                                          fontSize: 20.0,
+                                                                                          fontWeight: FontWeight.bold,
+                                                                                          color: Colors.black,
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
                                                                                   ],
                                                                                 ),
                                                                                 const SizedBox(
@@ -4705,16 +4828,18 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                                                   children: [
                                                                                     Container(
-                                                                                        alignment: Alignment.center,
-                                                                                        width: MediaQuery.of(context).size.width * 0.2,
-                                                                                        child: Text(
-                                                                                          'ต้องการลบโซนพื้นที่ใช่หรือไม่ ??',
-                                                                                          style: const TextStyle(
-                                                                                            fontSize: 16.0,
-                                                                                            fontWeight: FontWeight.bold,
-                                                                                            color: Colors.red,
-                                                                                          ),
-                                                                                        )),
+                                                                                      alignment: Alignment.center,
+                                                                                      width: MediaQuery.of(context).size.width * 0.2,
+                                                                                      child: Translate.TranslateAndSetText('ต้องการลบโซนพื้นที่ใช่หรือไม่ ??', SettingScreen_Color.Colors_Text2_, TextAlign.start, FontWeight.bold, Font_.Fonts_T, 14, 1),
+                                                                                      // Text(
+                                                                                      //   'ต้องการลบโซนพื้นที่ใช่หรือไม่ ??',
+                                                                                      //   style: const TextStyle(
+                                                                                      //     fontSize: 16.0,
+                                                                                      //     fontWeight: FontWeight.bold,
+                                                                                      //     color: Colors.red,
+                                                                                      //   ),
+                                                                                      // ),
+                                                                                    ),
                                                                                   ],
                                                                                 ),
                                                                               ],
@@ -4763,14 +4888,15 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                                             print(e);
                                                                                           }
                                                                                         },
-                                                                                        child: const Text(
-                                                                                          'ยันยัน',
-                                                                                          style: TextStyle(
-                                                                                            // fontSize: 20.0,
-                                                                                            // fontWeight: FontWeight.bold,
-                                                                                            color: Colors.white,
-                                                                                          ),
-                                                                                        ),
+                                                                                        child: Translate.TranslateAndSetText('ยันยัน', Colors.white, TextAlign.start, null, Font_.Fonts_T, 14, 1),
+                                                                                        // const Text(
+                                                                                        //   'ยันยัน',
+                                                                                        //   style: TextStyle(
+                                                                                        //     // fontSize: 20.0,
+                                                                                        //     // fontWeight: FontWeight.bold,
+                                                                                        //     color: Colors.white,
+                                                                                        //   ),
+                                                                                        // ),
                                                                                         // color: Colors.orange[900],
                                                                                       ),
                                                                                     ),
@@ -4783,14 +4909,15 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                                           backgroundColor: Colors.black,
                                                                                         ),
                                                                                         onPressed: () => Navigator.pop(context),
-                                                                                        child: const Text(
-                                                                                          'ยกเลิก',
-                                                                                          style: TextStyle(
-                                                                                            // fontSize: 20.0,
-                                                                                            // fontWeight: FontWeight.bold,
-                                                                                            color: Colors.white,
-                                                                                          ),
-                                                                                        ),
+                                                                                        child: Translate.TranslateAndSetText('ยันยัน', Colors.white, TextAlign.start, null, Font_.Fonts_T, 14, 1),
+                                                                                        // const Text(
+                                                                                        //   'ยกเลิก',
+                                                                                        //   style: TextStyle(
+                                                                                        //     // fontSize: 20.0,
+                                                                                        //     // fontWeight: FontWeight.bold,
+                                                                                        //     color: Colors.white,
+                                                                                        //   ),
+                                                                                        // ),
                                                                                         // color: Colors.black,
                                                                                       ),
                                                                                     ),
@@ -4930,13 +5057,22 @@ class _SettingScreenState extends State<SettingScreen> {
                                           ),
                                           padding: const EdgeInsets.all(8.0),
                                           child: Center(
-                                            child: Text(
-                                              'จัดลำดับ',
-                                              style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T),
-                                            ),
+                                            child:
+                                                Translate.TranslateAndSetText(
+                                                    'จัดลำดับ',
+                                                    Colors.white,
+                                                    TextAlign.start,
+                                                    FontWeight.bold,
+                                                    FontWeight_.Fonts_T,
+                                                    14,
+                                                    1),
+                                            // Text(
+                                            //   'จัดลำดับ',
+                                            //   style: const TextStyle(
+                                            //       color: Colors.white,
+                                            //       fontFamily:
+                                            //           FontWeight_.Fonts_T),
+                                            // ),
                                           ),
                                         ),
                                       )),
@@ -4970,13 +5106,22 @@ class _SettingScreenState extends State<SettingScreen> {
                                           ),
                                           padding: const EdgeInsets.all(8.0),
                                           child: Center(
-                                            child: Text(
-                                              'จัดหมวดโซนใหญ่',
-                                              style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T),
-                                            ),
+                                            child:
+                                                Translate.TranslateAndSetText(
+                                                    'จัดหมวดโซนใหญ่',
+                                                    Colors.white,
+                                                    TextAlign.start,
+                                                    FontWeight.bold,
+                                                    FontWeight_.Fonts_T,
+                                                    14,
+                                                    1),
+                                            // Text(
+                                            //   'จัดหมวดโซนใหญ่',
+                                            //   style: const TextStyle(
+                                            //       color: Colors.white,
+                                            //       fontFamily:
+                                            //           FontWeight_.Fonts_T),
+                                            // ),
                                           ),
                                         ),
                                       )),
@@ -4984,18 +5129,26 @@ class _SettingScreenState extends State<SettingScreen> {
                                       ? SizedBox()
                                       : Padding(
                                           padding: EdgeInsets.all(8.0),
-                                          child: Text('โซน/ชั้น',
-                                              textAlign: TextAlign.center,
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              softWrap: false,
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: SettingScreen_Color
-                                                      .Colors_Text2_,
-                                                  fontFamily: Font_.Fonts_T
-                                                  // fontWeight: FontWeight.bold,
-                                                  )),
+                                          child: Translate.TranslateAndSetText(
+                                              'โซน/ชั้น',
+                                              SettingScreen_Color.Colors_Text2_,
+                                              TextAlign.start,
+                                              null,
+                                              Font_.Fonts_T,
+                                              14,
+                                              1),
+                                          //  Text('โซน/ชั้น',
+                                          //     textAlign: TextAlign.center,
+                                          //     maxLines: 2,
+                                          //     overflow: TextOverflow.ellipsis,
+                                          //     softWrap: false,
+                                          //     style: TextStyle(
+                                          //         fontSize: 15,
+                                          //         color: SettingScreen_Color
+                                          //             .Colors_Text2_,
+                                          //         fontFamily: Font_.Fonts_T
+                                          //         // fontWeight: FontWeight.bold,
+                                          //         )),
                                         ),
                                   row_num == 1
                                       ? SizedBox()
@@ -5039,19 +5192,28 @@ class _SettingScreenState extends State<SettingScreen> {
                                                   Form_Zone_text == null ||
                                                   name_Zone.toString() ==
                                                       'ทั้งหมด')
-                                              ? Text('${name_Zone}',
-                                                  maxLines: 3,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  softWrap: false,
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                      fontSize: 15,
-                                                      color: SettingScreen_Color
-                                                          .Colors_Text2_,
-                                                      fontFamily: Font_.Fonts_T
-                                                      // fontWeight: FontWeight.bold,
-                                                      ))
+                                              ? Translate.TranslateAndSetText(
+                                                  '${name_Zone}',
+                                                  SettingScreen_Color
+                                                      .Colors_Text2_,
+                                                  TextAlign.start,
+                                                  null,
+                                                  Font_.Fonts_T,
+                                                  14,
+                                                  1)
+                                              // Text('${name_Zone}',
+                                              //     maxLines: 3,
+                                              //     overflow:
+                                              //         TextOverflow.ellipsis,
+                                              //     softWrap: false,
+                                              //     textAlign: TextAlign.center,
+                                              //     style: const TextStyle(
+                                              //         fontSize: 15,
+                                              //         color: SettingScreen_Color
+                                              //             .Colors_Text2_,
+                                              //         fontFamily: Font_.Fonts_T
+                                              //         // fontWeight: FontWeight.bold,
+                                              //         ))
                                               : TextFormField(
                                                   keyboardType:
                                                       TextInputType.number,
@@ -5183,18 +5345,26 @@ class _SettingScreenState extends State<SettingScreen> {
                                       ? SizedBox()
                                       : Padding(
                                           padding: EdgeInsets.all(8.0),
-                                          child: Text('จำนวนพื้นที่ทั้งหมด ',
-                                              maxLines: 3,
-                                              overflow: TextOverflow.ellipsis,
-                                              softWrap: false,
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: SettingScreen_Color
-                                                      .Colors_Text2_,
-                                                  fontFamily: Font_.Fonts_T
-                                                  // fontWeight: FontWeight.bold,
-                                                  )),
-                                        ),
+                                          child: Translate.TranslateAndSetText(
+                                              'พื้นที่ทั้งหมด ',
+                                              SettingScreen_Color.Colors_Text2_,
+                                              TextAlign.start,
+                                              null,
+                                              Font_.Fonts_T,
+                                              14,
+                                              1)
+                                          // Text('จำนวนพื้นที่ทั้งหมด ',
+                                          //     maxLines: 3,
+                                          //     overflow: TextOverflow.ellipsis,
+                                          //     softWrap: false,
+                                          //     style: TextStyle(
+                                          //         fontSize: 15,
+                                          //         color: SettingScreen_Color
+                                          //             .Colors_Text2_,
+                                          //         fontFamily: Font_.Fonts_T
+                                          //         // fontWeight: FontWeight.bold,
+                                          //         )),
+                                          ),
                                   row_num == 1
                                       ? SizedBox()
                                       : Container(
@@ -5230,17 +5400,25 @@ class _SettingScreenState extends State<SettingScreen> {
                                       ? SizedBox()
                                       : Padding(
                                           padding: EdgeInsets.all(8.0),
-                                          child: Text('จำนวนพื้นที่คงเหลือ',
-                                              maxLines: 3,
-                                              overflow: TextOverflow.ellipsis,
-                                              softWrap: false,
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: SettingScreen_Color
-                                                      .Colors_Text2_,
-                                                  fontFamily: Font_.Fonts_T
-                                                  // fontWeight: FontWeight.bold,
-                                                  )),
+                                          child: Translate.TranslateAndSetText(
+                                              'พื้นที่คงเหลือ',
+                                              SettingScreen_Color.Colors_Text2_,
+                                              TextAlign.start,
+                                              null,
+                                              Font_.Fonts_T,
+                                              14,
+                                              1),
+                                          // Text('จำนวนพื้นที่คงเหลือ',
+                                          //     maxLines: 3,
+                                          //     overflow: TextOverflow.ellipsis,
+                                          //     softWrap: false,
+                                          //     style: TextStyle(
+                                          //         fontSize: 15,
+                                          //         color: SettingScreen_Color
+                                          //             .Colors_Text2_,
+                                          //         fontFamily: Font_.Fonts_T
+                                          //         // fontWeight: FontWeight.bold,
+                                          //         )),
                                         ),
                                   row_num == 1
                                       ? SizedBox()
@@ -5307,7 +5485,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                             20.0))),
                                                             title: Center(
                                                                 child: Text(
-                                                              'เพิ่มพื้นที่ใน (โซน : $name_Zone)',
+                                                              '$name_Zone',
                                                               style: TextStyle(
                                                                 color: SettingScreen_Color
                                                                     .Colors_Text1_,
@@ -5372,15 +5550,16 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                                   children: [
                                                                                     Row(
                                                                                       children: [
-                                                                                        Text(
-                                                                                          '# รหัสพื้นที่ใกล้เครียง : ',
-                                                                                          textAlign: TextAlign.left,
-                                                                                          style: TextStyle(
-                                                                                            color: SettingScreen_Color.Colors_Text1_,
-                                                                                            fontFamily: FontWeight_.Fonts_T,
-                                                                                            fontWeight: FontWeight.bold,
-                                                                                          ),
-                                                                                        ),
+                                                                                        Translate.TranslateAndSetText('# รหัสพื้นที่ใกล้เครียง : ', SettingScreen_Color.Colors_Text2_, TextAlign.start, null, Font_.Fonts_T, 14, 1),
+                                                                                        // Text(
+                                                                                        //   '# รหัสพื้นที่ใกล้เครียง : ',
+                                                                                        //   textAlign: TextAlign.left,
+                                                                                        //   style: TextStyle(
+                                                                                        //     color: SettingScreen_Color.Colors_Text1_,
+                                                                                        //     fontFamily: FontWeight_.Fonts_T,
+                                                                                        //     fontWeight: FontWeight.bold,
+                                                                                        //   ),
+                                                                                        // ),
                                                                                         Expanded(
                                                                                             flex: 1,
                                                                                             child: ScrollConfiguration(
@@ -5432,15 +5611,16 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                                   children: [
                                                                                     Row(
                                                                                       children: [
-                                                                                        Text(
-                                                                                          '# ชื่อพื้นที่ใกล้เครียง : ',
-                                                                                          textAlign: TextAlign.left,
-                                                                                          style: TextStyle(
-                                                                                            color: SettingScreen_Color.Colors_Text1_,
-                                                                                            fontFamily: FontWeight_.Fonts_T,
-                                                                                            fontWeight: FontWeight.bold,
-                                                                                          ),
-                                                                                        ),
+                                                                                        Translate.TranslateAndSetText('# ชื่อพื้นที่ใกล้เครียง : ', SettingScreen_Color.Colors_Text2_, TextAlign.start, null, Font_.Fonts_T, 14, 1),
+                                                                                        // Text(
+                                                                                        //   '# ชื่อพื้นที่ใกล้เครียง : ',
+                                                                                        //   textAlign: TextAlign.left,
+                                                                                        //   style: TextStyle(
+                                                                                        //     color: SettingScreen_Color.Colors_Text1_,
+                                                                                        //     fontFamily: FontWeight_.Fonts_T,
+                                                                                        //     fontWeight: FontWeight.bold,
+                                                                                        //   ),
+                                                                                        // ),
                                                                                         Expanded(
                                                                                             flex: 1,
                                                                                             child: ScrollConfiguration(
@@ -5487,19 +5667,20 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                             child:
                                                                                 Column(
                                                                               children: [
-                                                                                const Padding(
+                                                                                Padding(
                                                                                   padding: EdgeInsets.all(8.0),
                                                                                   child: Row(
                                                                                     children: [
-                                                                                      Text(
-                                                                                        'รหัสพื้นที่',
-                                                                                        textAlign: TextAlign.left,
-                                                                                        style: TextStyle(
-                                                                                          color: SettingScreen_Color.Colors_Text1_,
-                                                                                          fontFamily: FontWeight_.Fonts_T,
-                                                                                          fontWeight: FontWeight.bold,
-                                                                                        ),
-                                                                                      ),
+                                                                                      Translate.TranslateAndSetText('รหัสพื้นที่', SettingScreen_Color.Colors_Text2_, TextAlign.start, null, Font_.Fonts_T, 14, 1),
+                                                                                      // Text(
+                                                                                      //   'รหัสพื้นที่',
+                                                                                      //   textAlign: TextAlign.left,
+                                                                                      //   style: TextStyle(
+                                                                                      //     color: SettingScreen_Color.Colors_Text1_,
+                                                                                      //     fontFamily: FontWeight_.Fonts_T,
+                                                                                      //     fontWeight: FontWeight.bold,
+                                                                                      //   ),
+                                                                                      // ),
                                                                                     ],
                                                                                   ),
                                                                                 ),
@@ -5577,19 +5758,20 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                             child:
                                                                                 Column(
                                                                               children: [
-                                                                                const Padding(
+                                                                                Padding(
                                                                                   padding: EdgeInsets.all(8.0),
                                                                                   child: Row(
                                                                                     children: [
-                                                                                      Text(
-                                                                                        'ชื่อพื้นที่',
-                                                                                        textAlign: TextAlign.start,
-                                                                                        style: TextStyle(
-                                                                                          color: SettingScreen_Color.Colors_Text1_,
-                                                                                          fontFamily: FontWeight_.Fonts_T,
-                                                                                          fontWeight: FontWeight.bold,
-                                                                                        ),
-                                                                                      ),
+                                                                                      Translate.TranslateAndSetText('ชื่อพื้นที่', SettingScreen_Color.Colors_Text2_, TextAlign.start, null, Font_.Fonts_T, 14, 1),
+                                                                                      // Text(
+                                                                                      //   'ชื่อพื้นที่',
+                                                                                      //   textAlign: TextAlign.start,
+                                                                                      //   style: TextStyle(
+                                                                                      //     color: SettingScreen_Color.Colors_Text1_,
+                                                                                      //     fontFamily: FontWeight_.Fonts_T,
+                                                                                      //     fontWeight: FontWeight.bold,
+                                                                                      //   ),
+                                                                                      // ),
                                                                                     ],
                                                                                   ),
                                                                                 ),
@@ -5665,7 +5847,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                             )),
                                                                       ],
                                                                     ),
-                                                                    const Align(
+                                                                    Align(
                                                                       alignment:
                                                                           Alignment
                                                                               .topLeft,
@@ -5676,15 +5858,23 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                         child:
                                                                             Row(
                                                                           children: [
-                                                                            Text(
-                                                                              'ขนาดพื้นที่-ค่าบริการหลัก',
-                                                                              textAlign: TextAlign.left,
-                                                                              style: TextStyle(
-                                                                                color: SettingScreen_Color.Colors_Text1_,
-                                                                                fontFamily: FontWeight_.Fonts_T,
-                                                                                fontWeight: FontWeight.bold,
-                                                                              ),
-                                                                            ),
+                                                                            Translate.TranslateAndSetText(
+                                                                                'ขนาดพื้นที่-ค่าบริการหลัก',
+                                                                                SettingScreen_Color.Colors_Text2_,
+                                                                                TextAlign.start,
+                                                                                null,
+                                                                                Font_.Fonts_T,
+                                                                                14,
+                                                                                1),
+                                                                            // Text(
+                                                                            //   'ขนาดพื้นที่-ค่าบริการหลัก',
+                                                                            //   textAlign: TextAlign.left,
+                                                                            //   style: TextStyle(
+                                                                            //     color: SettingScreen_Color.Colors_Text1_,
+                                                                            //     fontFamily: FontWeight_.Fonts_T,
+                                                                            //     fontWeight: FontWeight.bold,
+                                                                            //   ),
+                                                                            // ),
                                                                           ],
                                                                         ),
                                                                       ),
@@ -5932,14 +6122,15 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                                               }
                                                                                             }
                                                                                           },
-                                                                                    child: const Text(
-                                                                                      'บันทึก',
-                                                                                      style: TextStyle(
-                                                                                        color: Colors.white,
-                                                                                        fontFamily: FontWeight_.Fonts_T,
-                                                                                        fontWeight: FontWeight.bold,
-                                                                                      ),
-                                                                                    ),
+                                                                                    child: Translate.TranslateAndSetText('บันทึก', Colors.white, TextAlign.start, null, Font_.Fonts_T, 14, 1),
+                                                                                    // const Text(
+                                                                                    //   'บันทึก',
+                                                                                    //   style: TextStyle(
+                                                                                    //     color: Colors.white,
+                                                                                    //     fontFamily: FontWeight_.Fonts_T,
+                                                                                    //     fontWeight: FontWeight.bold,
+                                                                                    //   ),
+                                                                                    // ),
                                                                                   ),
                                                                                 );
                                                                               }),
@@ -5969,14 +6160,15 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                                 });
                                                                                 Navigator.pop(context, 'OK');
                                                                               },
-                                                                              child: const Text(
-                                                                                'ยกเลิก',
-                                                                                style: TextStyle(
-                                                                                  color: Colors.white,
-                                                                                  fontFamily: FontWeight_.Fonts_T,
-                                                                                  fontWeight: FontWeight.bold,
-                                                                                ),
-                                                                              ),
+                                                                              child: Translate.TranslateAndSetText('ยกเลิก', Colors.white, TextAlign.start, null, Font_.Fonts_T, 14, 1),
+                                                                              //  const Text(
+                                                                              //   'ยกเลิก',
+                                                                              //   style: TextStyle(
+                                                                              //     color: Colors.white,
+                                                                              //     fontFamily: FontWeight_.Fonts_T,
+                                                                              //     fontWeight: FontWeight.bold,
+                                                                              //   ),
+                                                                              // ),
                                                                             ),
                                                                           ),
                                                                         ),
@@ -6012,16 +6204,25 @@ class _SettingScreenState extends State<SettingScreen> {
                                                       padding:
                                                           const EdgeInsets.all(
                                                               8.0),
-                                                      child: const Center(
-                                                        child: Text(
-                                                          'เพิ่ม',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontFamily:
-                                                                  FontWeight_
-                                                                      .Fonts_T),
-                                                        ),
+                                                      child: Center(
+                                                        child: Translate
+                                                            .TranslateAndSetText(
+                                                                'เพิ่ม',
+                                                                Colors.white,
+                                                                TextAlign.start,
+                                                                null,
+                                                                Font_.Fonts_T,
+                                                                14,
+                                                                1),
+                                                        // Text(
+                                                        //   'เพิ่ม',
+                                                        //   style: TextStyle(
+                                                        //       color:
+                                                        //           Colors.white,
+                                                        //       fontFamily:
+                                                        //           FontWeight_
+                                                        //               .Fonts_T),
+                                                        // ),
                                                       ),
                                                     ),
                                                   ))
@@ -6058,14 +6259,23 @@ class _SettingScreenState extends State<SettingScreen> {
                                                         const EdgeInsets.all(
                                                             8.0),
                                                     child: Center(
-                                                      child: Text(
-                                                        'เพิ่มแบบAuto',
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T),
-                                                      ),
+                                                      child: Translate
+                                                          .TranslateAndSetText(
+                                                              'เพิ่มแบบAuto',
+                                                              Colors.white,
+                                                              TextAlign.start,
+                                                              null,
+                                                              Font_.Fonts_T,
+                                                              14,
+                                                              1),
+                                                      //  Text(
+                                                      //   'เพิ่มแบบAuto',
+                                                      //   style: TextStyle(
+                                                      //       color: Colors.white,
+                                                      //       fontFamily:
+                                                      //           FontWeight_
+                                                      //               .Fonts_T),
+                                                      // ),
                                                     ),
                                                   ),
                                                   onTap: () {
@@ -6090,7 +6300,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                           20.0))),
                                                           title: Center(
                                                               child: Text(
-                                                            'เพิ่มจำนวนพื้นที่แบบAutoใน (โซน : $name_Zone)',
+                                                            '$name_Zone',
                                                             style: TextStyle(
                                                               color: SettingScreen_Color
                                                                   .Colors_Text1_,
@@ -6141,24 +6351,31 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                 children: [
                                                                   Row(
                                                                     children: [
-                                                                      const Padding(
+                                                                      Padding(
                                                                         padding:
                                                                             EdgeInsets.all(8.0),
-                                                                        child:
-                                                                            Text(
-                                                                          'จำนวนที่ต้องการเพิ่ม',
-                                                                          textAlign:
-                                                                              TextAlign.left,
-                                                                          style:
-                                                                              TextStyle(
-                                                                            color:
-                                                                                SettingScreen_Color.Colors_Text1_,
-                                                                            fontFamily:
-                                                                                FontWeight_.Fonts_T,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                          ),
-                                                                        ),
+                                                                        child: Translate.TranslateAndSetText(
+                                                                            'จำนวนที่ต้องการเพิ่ม',
+                                                                            SettingScreen_Color.Colors_Text1_,
+                                                                            TextAlign.start,
+                                                                            FontWeight.bold,
+                                                                            FontWeight_.Fonts_T,
+                                                                            14,
+                                                                            1),
+                                                                        //     Text(
+                                                                        //   'จำนวนที่ต้องการเพิ่ม',
+                                                                        //   textAlign:
+                                                                        //       TextAlign.left,
+                                                                        //   style:
+                                                                        //       TextStyle(
+                                                                        //     color:
+                                                                        //         SettingScreen_Color.Colors_Text1_,
+                                                                        //     fontFamily:
+                                                                        //         FontWeight_.Fonts_T,
+                                                                        //     fontWeight:
+                                                                        //         FontWeight.bold,
+                                                                        //   ),
+                                                                        // ),
                                                                       ),
                                                                       Expanded(
                                                                         child:
@@ -6259,7 +6476,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                  const Align(
+                                                                  Align(
                                                                     alignment:
                                                                         Alignment
                                                                             .topLeft,
@@ -6271,17 +6488,27 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                               4,
                                                                               4,
                                                                               4),
-                                                                      child:
-                                                                          Text(
-                                                                        '**เหตุ : หากต้องการเพิ่มรหัสพื้นที่ คือ A1 ให้ใส่ที่ช่องตัวอักษร เท่ากับ A และให้ใส่ที่ช่องตัวเลข เท่ากับ 1',
-                                                                        textAlign:
-                                                                            TextAlign.left,
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                Colors.red,
-                                                                            fontFamily: FontWeight_.Fonts_T,
-                                                                            fontSize: 12),
-                                                                      ),
+                                                                      child: Translate.TranslateAndSetText(
+                                                                          '**เหตุ : หากต้องการเพิ่มรหัสพื้นที่ คือ A1 ให้ใส่ที่ช่องตัวอักษร เท่ากับ A และให้ใส่ที่ช่องตัวเลข เท่ากับ 1',
+                                                                          Colors
+                                                                              .red,
+                                                                          TextAlign
+                                                                              .start,
+                                                                          null,
+                                                                          Font_
+                                                                              .Fonts_T,
+                                                                          12,
+                                                                          1),
+                                                                      //     Text(
+                                                                      //   '**เหตุ : หากต้องการเพิ่มรหัสพื้นที่ คือ A1 ให้ใส่ที่ช่องตัวอักษร เท่ากับ A และให้ใส่ที่ช่องตัวเลข เท่ากับ 1',
+                                                                      //   textAlign:
+                                                                      //       TextAlign.left,
+                                                                      //   style: TextStyle(
+                                                                      //       color:
+                                                                      //           Colors.red,
+                                                                      //       fontFamily: FontWeight_.Fonts_T,
+                                                                      //       fontSize: 12),
+                                                                      // ),
                                                                     ),
                                                                   ),
                                                                   Row(
@@ -6455,7 +6682,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                  const Align(
+                                                                  Align(
                                                                     alignment:
                                                                         Alignment
                                                                             .topLeft,
@@ -6467,17 +6694,27 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                               4,
                                                                               4,
                                                                               4),
-                                                                      child:
-                                                                          Text(
-                                                                        '**เหตุ : หากต้องการเพิ่มชื่อพื้นที่ คือ A1 ให้ใส่ที่ช่องตัวอักษร เท่ากับ A และให้ใส่ที่ช่องตัวเลข เท่ากับ 1',
-                                                                        textAlign:
-                                                                            TextAlign.left,
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                Colors.red,
-                                                                            fontFamily: FontWeight_.Fonts_T,
-                                                                            fontSize: 12),
-                                                                      ),
+                                                                      child: Translate.TranslateAndSetText(
+                                                                          '**เหตุ : หากต้องการเพิ่มชื่อพื้นที่ คือ A1 ให้ใส่ที่ช่องตัวอักษร เท่ากับ A และให้ใส่ที่ช่องตัวเลข เท่ากับ 1',
+                                                                          Colors
+                                                                              .red,
+                                                                          TextAlign
+                                                                              .start,
+                                                                          null,
+                                                                          Font_
+                                                                              .Fonts_T,
+                                                                          12,
+                                                                          1),
+                                                                      //     Text(
+                                                                      //   '**เหตุ : หากต้องการเพิ่มชื่อพื้นที่ คือ A1 ให้ใส่ที่ช่องตัวอักษร เท่ากับ A และให้ใส่ที่ช่องตัวเลข เท่ากับ 1',
+                                                                      //   textAlign:
+                                                                      //       TextAlign.left,
+                                                                      //   style: TextStyle(
+                                                                      //       color:
+                                                                      //           Colors.red,
+                                                                      //       fontFamily: FontWeight_.Fonts_T,
+                                                                      //       fontSize: 12),
+                                                                      // ),
                                                                     ),
                                                                   ),
                                                                   Row(
@@ -6624,7 +6861,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                           )),
                                                                     ],
                                                                   ),
-                                                                  const Align(
+                                                                  Align(
                                                                     alignment:
                                                                         Alignment
                                                                             .topLeft,
@@ -6636,21 +6873,32 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                               4,
                                                                               4,
                                                                               4),
-                                                                      child:
-                                                                          Text(
-                                                                        'ขนาดพื้นที่ - ค่าบริการหลัก',
-                                                                        textAlign:
-                                                                            TextAlign.left,
-                                                                        style:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              SettingScreen_Color.Colors_Text1_,
-                                                                          fontFamily:
-                                                                              FontWeight_.Fonts_T,
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
-                                                                        ),
-                                                                      ),
+                                                                      child: Translate.TranslateAndSetText(
+                                                                          'ขนาดพื้นที่ - ค่าบริการหลัก',
+                                                                          SettingScreen_Color
+                                                                              .Colors_Text1_,
+                                                                          TextAlign
+                                                                              .start,
+                                                                          FontWeight
+                                                                              .bold,
+                                                                          FontWeight_
+                                                                              .Fonts_T,
+                                                                          14,
+                                                                          1),
+                                                                      //     Text(
+                                                                      //   'ขนาดพื้นที่ - ค่าบริการหลัก',
+                                                                      //   textAlign:
+                                                                      //       TextAlign.left,
+                                                                      //   style:
+                                                                      //       TextStyle(
+                                                                      //     color:
+                                                                      //         SettingScreen_Color.Colors_Text1_,
+                                                                      //     fontFamily:
+                                                                      //         FontWeight_.Fonts_T,
+                                                                      //     fontWeight:
+                                                                      //         FontWeight.bold,
+                                                                      //   ),
+                                                                      // ),
                                                                     ),
                                                                   ),
                                                                   Row(
@@ -6943,15 +7191,22 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                                 }
                                                                               }
                                                                             },
-                                                                            child:
-                                                                                const Text(
-                                                                              'บันทึก',
-                                                                              style: TextStyle(
-                                                                                color: Colors.white,
-                                                                                fontFamily: FontWeight_.Fonts_T,
-                                                                                fontWeight: FontWeight.bold,
-                                                                              ),
-                                                                            ),
+                                                                            child: Translate.TranslateAndSetText(
+                                                                                'บันทึก',
+                                                                                Colors.white,
+                                                                                TextAlign.start,
+                                                                                FontWeight.bold,
+                                                                                FontWeight_.Fonts_T,
+                                                                                14,
+                                                                                1),
+                                                                            //     const Text(
+                                                                            //   'บันทึก',
+                                                                            //   style: TextStyle(
+                                                                            //     color: Colors.white,
+                                                                            //     fontFamily: FontWeight_.Fonts_T,
+                                                                            //     fontWeight: FontWeight.bold,
+                                                                            //   ),
+                                                                            // ),
                                                                           ),
                                                                         ),
                                                                       ),
@@ -6993,15 +7248,22 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                               });
                                                                               Navigator.pop(context, 'OK');
                                                                             },
-                                                                            child:
-                                                                                const Text(
-                                                                              'ยกเลิก',
-                                                                              style: TextStyle(
-                                                                                color: Colors.white,
-                                                                                fontFamily: FontWeight_.Fonts_T,
-                                                                                fontWeight: FontWeight.bold,
-                                                                              ),
-                                                                            ),
+                                                                            child: Translate.TranslateAndSetText(
+                                                                                'ยกเลิก',
+                                                                                Colors.white,
+                                                                                TextAlign.start,
+                                                                                FontWeight.bold,
+                                                                                FontWeight_.Fonts_T,
+                                                                                14,
+                                                                                1),
+                                                                            //     const Text(
+                                                                            //   'ยกเลิก',
+                                                                            //   style: TextStyle(
+                                                                            //     color: Colors.white,
+                                                                            //     fontFamily: FontWeight_.Fonts_T,
+                                                                            //     fontWeight: FontWeight.bold,
+                                                                            //   ),
+                                                                            // ),
                                                                           ),
                                                                         ),
                                                                       ),
@@ -7137,79 +7399,75 @@ class _SettingScreenState extends State<SettingScreen> {
                                                         children: [
                                                           Expanded(
                                                             flex: 1,
-                                                            child: Text(
-                                                                'รหัสพื้นที่',
-                                                                textAlign:
+                                                            child: Translate
+                                                                .TranslateAndSetText(
+                                                                    'รหัสพื้นที่',
+                                                                    SettingScreen_Color
+                                                                        .Colors_Text1_,
                                                                     TextAlign
                                                                         .center,
-                                                                maxLines: 2,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                softWrap: false,
-                                                                style: TextStyle(
-                                                                    // fontSize: 15,
-                                                                    color: SettingScreen_Color.Colors_Text1_,
-                                                                    fontFamily: FontWeight_.Fonts_T
-                                                                    // fontWeight: FontWeight.bold,
-                                                                    )),
+                                                                    FontWeight
+                                                                        .bold,
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                                    14,
+                                                                    1),
+                                                            //  Text(
+                                                            //     'รหัสพื้นที่',
+                                                            //     textAlign:
+                                                            //         TextAlign
+                                                            //             .center,
+                                                            //     maxLines: 2,
+                                                            //     overflow:
+                                                            //         TextOverflow
+                                                            //             .ellipsis,
+                                                            //     softWrap: false,
+                                                            //     style: TextStyle(
+                                                            //         // fontSize: 15,
+                                                            //         color: SettingScreen_Color.Colors_Text1_,
+                                                            //         fontFamily: FontWeight_.Fonts_T
+                                                            //         // fontWeight: FontWeight.bold,
+                                                            //         )),
                                                           ),
                                                           Expanded(
                                                             flex: 1,
-                                                            child: Text(
+                                                            child: Translate.TranslateAndSetText(
                                                                 'ชื่อพื้นที่เช่า',
-                                                                maxLines: 2,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                softWrap: false,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style: TextStyle(
-                                                                    //fontSize: 15,
-                                                                    color: SettingScreen_Color.Colors_Text1_,
-                                                                    fontFamily: FontWeight_.Fonts_T
-                                                                    // fontWeight: FontWeight.bold,
-                                                                    )),
+                                                                SettingScreen_Color
+                                                                    .Colors_Text1_,
+                                                                TextAlign
+                                                                    .center,
+                                                                FontWeight.bold,
+                                                                FontWeight_
+                                                                    .Fonts_T,
+                                                                14,
+                                                                1),
                                                           ),
                                                           Expanded(
                                                             flex: 1,
-                                                            child: Text(
-                                                                'ขนาดพื้นที่(ต.ร.ม.)',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .end,
-                                                                maxLines: 2,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                softWrap: false,
-                                                                style: TextStyle(
-                                                                    //fontSize: 15,
-                                                                    color: SettingScreen_Color.Colors_Text1_,
-                                                                    fontFamily: FontWeight_.Fonts_T
-                                                                    // fontWeight: FontWeight.bold,
-                                                                    )),
+                                                            child: Translate.TranslateAndSetText(
+                                                                'ขนาดพื้นที่(ตร.ม.)',
+                                                                SettingScreen_Color
+                                                                    .Colors_Text1_,
+                                                                TextAlign.end,
+                                                                FontWeight.bold,
+                                                                FontWeight_
+                                                                    .Fonts_T,
+                                                                14,
+                                                                1),
                                                           ),
                                                           Expanded(
                                                             flex: 1,
-                                                            child: Text(
+                                                            child: Translate.TranslateAndSetText(
                                                                 'ค่าบริการหลัก(ต่องวด)',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .end,
-                                                                maxLines: 2,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                softWrap: false,
-                                                                style: TextStyle(
-                                                                    // fontSize: 15,
-                                                                    color: SettingScreen_Color.Colors_Text1_,
-                                                                    fontFamily: FontWeight_.Fonts_T
-                                                                    // fontWeight: FontWeight.bold,
-                                                                    )),
+                                                                SettingScreen_Color
+                                                                    .Colors_Text1_,
+                                                                TextAlign.end,
+                                                                FontWeight.bold,
+                                                                FontWeight_
+                                                                    .Fonts_T,
+                                                                14,
+                                                                1),
                                                           ),
                                                           Expanded(
                                                             flex: 1,
@@ -7232,16 +7490,10 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                                       mainAxisAlignment: MainAxisAlignment.center,
                                                                                       children: [
                                                                                         Container(
-                                                                                            alignment: Alignment.center,
-                                                                                            width: MediaQuery.of(context).size.width * 0.2,
-                                                                                            child: const Text(
-                                                                                              'ลบพื้นที่ว่างทั้งหมด',
-                                                                                              style: TextStyle(
-                                                                                                fontSize: 20.0,
-                                                                                                fontWeight: FontWeight.bold,
-                                                                                                color: Colors.red,
-                                                                                              ),
-                                                                                            )),
+                                                                                          alignment: Alignment.center,
+                                                                                          width: MediaQuery.of(context).size.width * 0.2,
+                                                                                          child: Translate.TranslateAndSetText('ลบพื้นที่ว่างทั้งหมด', Colors.red, TextAlign.start, FontWeight.bold, FontWeight_.Fonts_T, 14, 1),
+                                                                                        ),
                                                                                       ],
                                                                                     ),
                                                                                     const SizedBox(
@@ -7319,14 +7571,8 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                                                 read_GC_area_count();
                                                                                               });
                                                                                             },
-                                                                                            child: const Text(
-                                                                                              'ยันยัน',
-                                                                                              style: TextStyle(
-                                                                                                // fontSize: 20.0,
-                                                                                                // fontWeight: FontWeight.bold,
-                                                                                                color: Colors.white,
-                                                                                              ),
-                                                                                            ),
+                                                                                            child: Translate.TranslateAndSetText('ยันยัน', Colors.white, TextAlign.start, FontWeight.bold, FontWeight_.Fonts_T, 14, 1),
+
                                                                                             // color: Colors.orange[900],
                                                                                           ),
                                                                                         ),
@@ -7339,14 +7585,8 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                                               backgroundColor: Colors.black,
                                                                                             ),
                                                                                             onPressed: () => Navigator.pop(context),
-                                                                                            child: const Text(
-                                                                                              'ยกเลิก',
-                                                                                              style: TextStyle(
-                                                                                                // fontSize: 20.0,
-                                                                                                // fontWeight: FontWeight.bold,
-                                                                                                color: Colors.white,
-                                                                                              ),
-                                                                                            ),
+                                                                                            child: Translate.TranslateAndSetText('ยกเลิก', Colors.white, TextAlign.start, FontWeight.bold, FontWeight_.Fonts_T, 14, 1),
+
                                                                                             // color: Colors.black,
                                                                                           ),
                                                                                         ),
@@ -7362,23 +7602,18 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                     EdgeInsets
                                                                         .all(
                                                                             8.0),
-                                                                child: Text(
+                                                                child: Translate.TranslateAndSetText(
                                                                     'ลบ',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    maxLines: 2,
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    softWrap:
-                                                                        false,
-                                                                    style: TextStyle(
-                                                                        //fontSize: 15,
-                                                                        color: SettingScreen_Color.Colors_Text1_,
-                                                                        fontFamily: FontWeight_.Fonts_T
-                                                                        // fontWeight: FontWeight.bold,
-                                                                        )),
+                                                                    SettingScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    TextAlign
+                                                                        .center,
+                                                                    FontWeight
+                                                                        .bold,
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                                    14,
+                                                                    1),
                                                               ),
                                                             ),
                                                           ),

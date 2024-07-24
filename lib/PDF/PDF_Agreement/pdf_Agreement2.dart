@@ -16,6 +16,7 @@ import 'dart:html' as html;
 import 'package:html/parser.dart' as htmlParser;
 
 import '../../PeopleChao/Rental_Information.dart';
+import '../../Style/loadAndCacheImage.dart';
 
 class Pdfgen_Agreement_Ekkamai {
 //////////---------------------------------------------------->( **** เอกสารสัญญาเช่า เอกมัยกรุงเทพ  )
@@ -72,7 +73,7 @@ class Pdfgen_Agreement_Ekkamai {
     final iconImage =
         (await rootBundle.load('images/LOGO.png')).buffer.asUint8List();
     List netImage = [];
-
+    Uint8List? resizedLogo = await getResizedLogo();
     // SharedPreferences preferences = await SharedPreferences.getInstance();
 
     // String? base64Image_1 = preferences.getString('base64Image1');
@@ -88,9 +89,9 @@ class Pdfgen_Agreement_Ekkamai {
     // Uint8List data3 = base64Decode(base64Image_3);
     // Uint8List data4 = base64Decode(base64Image_4);
 
-    for (int i = 0; i < newValuePDFimg.length; i++) {
-      netImage.add(await networkImage('${newValuePDFimg[i]}'));
-    }
+    // for (int i = 0; i < newValuePDFimg.length; i++) {
+    //   netImage.add(await networkImage('${newValuePDFimg[i]}'));
+    // }
     // final tableData = [
     //   for (int index = 0; index < quotxSelectModels.length; index++)
     //     [
@@ -243,12 +244,20 @@ use.</span><br><br><span style="margin-top:15px;font-size:12px;">This page is ge
           return pw.Column(children: [
             pw.Row(
               children: [
-                (netImage.isEmpty)
-                    ? pw.Container(
-                        height: 72,
-                        width: 70,
-                        color: PdfColors.grey200,
-                        child: pw.Center(
+                pw.Container(
+                  height: 60,
+                  width: 60,
+                  decoration: pw.BoxDecoration(
+                    color: PdfColors.grey200,
+                    border: pw.Border.all(color: PdfColors.grey300),
+                  ),
+                  child: resizedLogo != null
+                      ? pw.Image(
+                          pw.MemoryImage(resizedLogo),
+                          height: 60,
+                          width: 60,
+                        )
+                      : pw.Center(
                           child: pw.Text(
                             '$bill_name ',
                             maxLines: 1,
@@ -258,18 +267,35 @@ use.</span><br><br><span style="margin-top:15px;font-size:12px;">This page is ge
                               color: PdfColors.grey300,
                             ),
                           ),
-                        ))
+                        ),
+                ),
+                // (netImage.isEmpty)
+                //     ? pw.Container(
+                //         height: 72,
+                //         width: 70,
+                //         color: PdfColors.grey200,
+                //         child: pw.Center(
+                //           child: pw.Text(
+                //             '$bill_name ',
+                //             maxLines: 1,
+                //             style: pw.TextStyle(
+                //               fontSize: 10,
+                //               font: ttf,
+                //               color: PdfColors.grey300,
+                //             ),
+                //           ),
+                //         ))
 
-                    // pw.Image(
-                    //     pw.MemoryImage(iconImage),
-                    //     height: 72,
-                    //     width: 70,
-                    //   )
-                    : pw.Image(
-                        (netImage[0]),
-                        height: 72,
-                        width: 70,
-                      ),
+                //     // pw.Image(
+                //     //     pw.MemoryImage(iconImage),
+                //     //     height: 72,
+                //     //     width: 70,
+                //     //   )
+                //     : pw.Image(
+                //         (netImage[0]),
+                //         height: 72,
+                //         width: 70,
+                //       ),
                 pw.SizedBox(width: 1 * PdfPageFormat.mm),
                 pw.Container(
                   width: 200,
@@ -1384,12 +1410,20 @@ use.</span><br><br><span style="margin-top:15px;font-size:12px;">This page is ge
       return pw.Column(children: [
         pw.Row(
           children: [
-            (netImage.isEmpty)
-                ? pw.Container(
-                    height: 72,
-                    width: 70,
-                    color: PdfColors.grey200,
-                    child: pw.Center(
+            pw.Container(
+              height: 60,
+              width: 60,
+              decoration: pw.BoxDecoration(
+                color: PdfColors.grey200,
+                border: pw.Border.all(color: PdfColors.grey300),
+              ),
+              child: resizedLogo != null
+                  ? pw.Image(
+                      pw.MemoryImage(resizedLogo),
+                      height: 60,
+                      width: 60,
+                    )
+                  : pw.Center(
                       child: pw.Text(
                         '$bill_name ',
                         maxLines: 1,
@@ -1399,18 +1433,35 @@ use.</span><br><br><span style="margin-top:15px;font-size:12px;">This page is ge
                           color: PdfColors.grey300,
                         ),
                       ),
-                    ))
+                    ),
+            ),
+            // (netImage.isEmpty)
+            //     ? pw.Container(
+            //         height: 72,
+            //         width: 70,
+            //         color: PdfColors.grey200,
+            //         child: pw.Center(
+            //           child: pw.Text(
+            //             '$bill_name ',
+            //             maxLines: 1,
+            //             style: pw.TextStyle(
+            //               fontSize: 10,
+            //               font: ttf,
+            //               color: PdfColors.grey300,
+            //             ),
+            //           ),
+            //         ))
 
-                // pw.Image(
-                //     pw.MemoryImage(iconImage),
-                //     height: 72,
-                //     width: 70,
-                //   )
-                : pw.Image(
-                    (netImage[0]),
-                    height: 72,
-                    width: 70,
-                  ),
+            //     // pw.Image(
+            //     //     pw.MemoryImage(iconImage),
+            //     //     height: 72,
+            //     //     width: 70,
+            //     //   )
+            //     : pw.Image(
+            //         (netImage[0]),
+            //         height: 72,
+            //         width: 70,
+            //       ),
             pw.SizedBox(width: 1 * PdfPageFormat.mm),
             pw.Container(
               width: 200,

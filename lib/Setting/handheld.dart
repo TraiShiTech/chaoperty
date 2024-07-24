@@ -33,7 +33,7 @@ class _HandHeldState extends State<HandHeld> {
   final Form2_text = TextEditingController();
   final Form_texthead = TextEditingController();
   GlobalKey qrImageKey = GlobalKey();
-  int index_b = 0;
+  int index_b = 0, _openprint = 0;
   int? _p_logo,
       _p_bill_name,
       _p_bill_addr,
@@ -173,6 +173,8 @@ class _HandHeldState extends State<HandHeld> {
           var imglogo = renTalModel.imglogo;
           var billname = renTalModel.bill_name;
           var billaddr = renTalModel.bill_addr;
+          var print = int.parse(renTalModel.open_print!);
+
           setState(() {
             preferences.setString(
                 'renTalName', renTalModel.pn!.trim().toString());
@@ -188,6 +190,7 @@ class _HandHeldState extends State<HandHeld> {
             img_logo = imglogo;
             bill_name = billname;
             bill_addr = billaddr;
+            _openprint = print;
             renTalModels.add(renTalModel);
           });
         }
@@ -1590,252 +1593,8 @@ class _HandHeldState extends State<HandHeld> {
             ),
             Expanded(
               flex: 2,
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: InkWell(
-                            onTap: () async {
-                              SharedPreferences preferences =
-                                  await SharedPreferences.getInstance();
-                              String? ren = preferences.getString('renTalSer');
-
-                              var nametable = 'logo';
-                              var set = _p_logo == 1 ? 0 : 1;
-                              String url =
-                                  '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
-                              try {
-                                var response = await http.get(Uri.parse(url));
-
-                                var result = json.decode(response.body);
-                                print(result);
-                                if (result.toString() == 'true') {
-                                  read_GC_print();
-                                }
-                              } catch (e) {}
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: _p_logo == 1
-                                    ? Colors.green.shade400
-                                    : Colors.grey.shade400,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: AutoSizeText(
-                                'โลโก้',
-                                overflow: TextOverflow.ellipsis,
-                                minFontSize: 6,
-                                maxFontSize: 16,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: Font_.Fonts_T,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: InkWell(
-                            onTap: () async {
-                              SharedPreferences preferences =
-                                  await SharedPreferences.getInstance();
-                              String? ren = preferences.getString('renTalSer');
-
-                              var nametable = 'bill_name';
-                              var set = _p_bill_name == 1 ? 0 : 1;
-                              String url =
-                                  '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
-                              try {
-                                var response = await http.get(Uri.parse(url));
-
-                                var result = json.decode(response.body);
-                                print(result);
-                                if (result.toString() == 'true') {
-                                  read_GC_print();
-                                }
-                              } catch (e) {}
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: _p_bill_name == 1
-                                    ? Colors.green.shade400
-                                    : _p_bill_name == 2
-                                        ? Colors.green.shade400
-                                        : Colors.grey.shade400,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: AutoSizeText(
-                                'หัวบิล',
-                                overflow: TextOverflow.ellipsis,
-                                minFontSize: 6,
-                                maxFontSize: 16,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: Font_.Fonts_T,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: InkWell(
-                            onTap: () async {
-                              SharedPreferences preferences =
-                                  await SharedPreferences.getInstance();
-                              String? ren = preferences.getString('renTalSer');
-
-                              var nametable = 'bill_name';
-                              var set = _p_bill_name == 2 ? 0 : 2;
-                              String url =
-                                  '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
-                              try {
-                                var response = await http.get(Uri.parse(url));
-
-                                var result = json.decode(response.body);
-                                print(result);
-                                if (result.toString() == 'true') {
-                                  read_GC_print();
-                                }
-                              } catch (e) {}
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: _p_bill_name == 2
-                                    ? Colors.green.shade400
-                                    : Colors.grey.shade400,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: AutoSizeText(
-                                'กำหนด',
-                                overflow: TextOverflow.ellipsis,
-                                minFontSize: 6,
-                                maxFontSize: 16,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: Font_.Fonts_T,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  _p_bill_name == 2
-                      ? Row(
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: TextFormField(
-                                  // maxLines: 3,
-                                  //keyboardType: TextInputType.none,
-                                  controller: Form2_text,
-                                  onChanged: (value) async {},
-                                  onFieldSubmitted: (value) async {
-                                    SharedPreferences preferences =
-                                        await SharedPreferences.getInstance();
-                                    String? ren =
-                                        preferences.getString('renTalSer');
-
-                                    var nametable = 'text';
-                                    var set = value;
-                                    String url =
-                                        '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
-                                    try {
-                                      var response =
-                                          await http.get(Uri.parse(url));
-
-                                      var result = json.decode(response.body);
-                                      print(result);
-                                      if (result.toString() == 'true') {
-                                        read_GC_print();
-                                      }
-                                    } catch (e) {}
-                                  },
-
-                                  decoration: InputDecoration(
-                                      fillColor: Colors.white.withOpacity(0.3),
-                                      filled: true,
-
-                                      // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                      focusedBorder: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(15),
-                                          topLeft: Radius.circular(15),
-                                          bottomRight: Radius.circular(15),
-                                          bottomLeft: Radius.circular(15),
-                                        ),
-                                        borderSide: BorderSide(
-                                          width: 1,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      errorStyle:
-                                          TextStyle(fontFamily: Font_.Fonts_T),
-                                      enabledBorder: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(15),
-                                          topLeft: Radius.circular(15),
-                                          bottomRight: Radius.circular(15),
-                                          bottomLeft: Radius.circular(15),
-                                        ),
-                                        borderSide: BorderSide(
-                                          width: 1,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      labelStyle: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black54,
-                                          fontFamily: Font_.Fonts_T)),
-                                  // inputFormatters: <TextInputFormatter>[
-                                  //   // for below version 2 use this
-                                  //   FilteringTextInputFormatter(RegExp("[a-zA-Z1-9@.]"),
-                                  //       allow: true),
-                                  //   // FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                                  //   // for version 2 and greater youcan also use this
-                                  //   // FilteringTextInputFormatter.digitsOnly
-                                  // ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      : SizedBox(),
-                  Column(
-                    children: [
+              child: _openprint != 0
+                  ? Column(children: [
                       Row(
                         children: [
                           Expanded(
@@ -1848,10 +1607,9 @@ class _HandHeldState extends State<HandHeld> {
                                   String? ren =
                                       preferences.getString('renTalSer');
 
-                                  var nametable = 'head';
-                                  var set = _p_head == 1 ? 0 : 1;
+                                  var op = '0';
                                   String url =
-                                      '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
+                                      '${MyConstant().domain}/U_open_print.php?isAdd=true&ren=$ren&op=$op';
                                   try {
                                     var response =
                                         await http.get(Uri.parse(url));
@@ -1859,14 +1617,15 @@ class _HandHeldState extends State<HandHeld> {
                                     var result = json.decode(response.body);
                                     print(result);
                                     if (result.toString() == 'true') {
+                                      read_GC_rental();
                                       read_GC_print();
                                     }
                                   } catch (e) {}
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    color: _p_head == 1
-                                        ? Colors.green.shade400
+                                    color: _openprint != 0
+                                        ? Colors.red.shade400
                                         : Colors.grey.shade400,
                                     borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(10),
@@ -1876,7 +1635,7 @@ class _HandHeldState extends State<HandHeld> {
                                   ),
                                   padding: const EdgeInsets.all(8.0),
                                   child: AutoSizeText(
-                                    'หัวบิลรอง',
+                                    'เปิดการพิมพ์ใบเสร็จ',
                                     overflow: TextOverflow.ellipsis,
                                     minFontSize: 6,
                                     maxFontSize: 16,
@@ -1892,26 +1651,337 @@ class _HandHeldState extends State<HandHeld> {
                           ),
                         ],
                       ),
-                      _p_head == 1
-                          ? Row(
+                    ])
+                  : Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: InkWell(
+                                  onTap: () async {
+                                    SharedPreferences preferences =
+                                        await SharedPreferences.getInstance();
+                                    String? ren =
+                                        preferences.getString('renTalSer');
+
+                                    var op = '1';
+                                    String url =
+                                        '${MyConstant().domain}/U_open_print.php?isAdd=true&ren=$ren&op=$op';
+                                    try {
+                                      var response =
+                                          await http.get(Uri.parse(url));
+
+                                      var result = json.decode(response.body);
+                                      print(result);
+                                      if (result.toString() == 'true') {
+                                        read_GC_rental();
+                                        read_GC_print();
+                                      }
+                                    } catch (e) {}
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: _openprint != 0
+                                          ? Colors.red.shade400
+                                          : Colors.grey.shade400,
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
+                                    ),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: AutoSizeText(
+                                      'ปิดการพิมพ์ใบเสร็จ',
+                                      overflow: TextOverflow.ellipsis,
+                                      minFontSize: 6,
+                                      maxFontSize: 16,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: Font_.Fonts_T,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: InkWell(
+                                  onTap: () async {
+                                    SharedPreferences preferences =
+                                        await SharedPreferences.getInstance();
+                                    String? ren =
+                                        preferences.getString('renTalSer');
+
+                                    var nametable = 'logo';
+                                    var set = _p_logo == 1 ? 0 : 1;
+                                    String url =
+                                        '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
+                                    try {
+                                      var response =
+                                          await http.get(Uri.parse(url));
+
+                                      var result = json.decode(response.body);
+                                      print(result);
+                                      if (result.toString() == 'true') {
+                                        read_GC_print();
+                                      }
+                                    } catch (e) {}
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: _p_logo == 1
+                                          ? Colors.green.shade400
+                                          : Colors.grey.shade400,
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
+                                    ),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: AutoSizeText(
+                                      'โลโก้',
+                                      overflow: TextOverflow.ellipsis,
+                                      minFontSize: 6,
+                                      maxFontSize: 16,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: Font_.Fonts_T,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: InkWell(
+                                  onTap: () async {
+                                    SharedPreferences preferences =
+                                        await SharedPreferences.getInstance();
+                                    String? ren =
+                                        preferences.getString('renTalSer');
+
+                                    var nametable = 'bill_name';
+                                    var set = _p_bill_name == 1 ? 0 : 1;
+                                    String url =
+                                        '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
+                                    try {
+                                      var response =
+                                          await http.get(Uri.parse(url));
+
+                                      var result = json.decode(response.body);
+                                      print(result);
+                                      if (result.toString() == 'true') {
+                                        read_GC_print();
+                                      }
+                                    } catch (e) {}
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: _p_bill_name == 1
+                                          ? Colors.green.shade400
+                                          : _p_bill_name == 2
+                                              ? Colors.green.shade400
+                                              : Colors.grey.shade400,
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
+                                    ),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: AutoSizeText(
+                                      'หัวบิล',
+                                      overflow: TextOverflow.ellipsis,
+                                      minFontSize: 6,
+                                      maxFontSize: 16,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: Font_.Fonts_T,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: InkWell(
+                                  onTap: () async {
+                                    SharedPreferences preferences =
+                                        await SharedPreferences.getInstance();
+                                    String? ren =
+                                        preferences.getString('renTalSer');
+
+                                    var nametable = 'bill_name';
+                                    var set = _p_bill_name == 2 ? 0 : 2;
+                                    String url =
+                                        '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
+                                    try {
+                                      var response =
+                                          await http.get(Uri.parse(url));
+
+                                      var result = json.decode(response.body);
+                                      print(result);
+                                      if (result.toString() == 'true') {
+                                        read_GC_print();
+                                      }
+                                    } catch (e) {}
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: _p_bill_name == 2
+                                          ? Colors.green.shade400
+                                          : Colors.grey.shade400,
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
+                                    ),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: AutoSizeText(
+                                      'กำหนด',
+                                      overflow: TextOverflow.ellipsis,
+                                      minFontSize: 6,
+                                      maxFontSize: 16,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: Font_.Fonts_T,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        _p_bill_name == 2
+                            ? Row(
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: TextFormField(
+                                        // maxLines: 3,
+                                        //keyboardType: TextInputType.none,
+                                        controller: Form2_text,
+                                        onChanged: (value) async {},
+                                        onFieldSubmitted: (value) async {
+                                          SharedPreferences preferences =
+                                              await SharedPreferences
+                                                  .getInstance();
+                                          String? ren = preferences
+                                              .getString('renTalSer');
+
+                                          var nametable = 'text';
+                                          var set = value;
+                                          String url =
+                                              '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
+                                          try {
+                                            var response =
+                                                await http.get(Uri.parse(url));
+
+                                            var result =
+                                                json.decode(response.body);
+                                            print(result);
+                                            if (result.toString() == 'true') {
+                                              read_GC_print();
+                                            }
+                                          } catch (e) {}
+                                        },
+
+                                        decoration: InputDecoration(
+                                            fillColor:
+                                                Colors.white.withOpacity(0.3),
+                                            filled: true,
+
+                                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                            focusedBorder:
+                                                const OutlineInputBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(15),
+                                                topLeft: Radius.circular(15),
+                                                bottomRight:
+                                                    Radius.circular(15),
+                                                bottomLeft: Radius.circular(15),
+                                              ),
+                                              borderSide: BorderSide(
+                                                width: 1,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            errorStyle: TextStyle(
+                                                fontFamily: Font_.Fonts_T),
+                                            enabledBorder:
+                                                const OutlineInputBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(15),
+                                                topLeft: Radius.circular(15),
+                                                bottomRight:
+                                                    Radius.circular(15),
+                                                bottomLeft: Radius.circular(15),
+                                              ),
+                                              borderSide: BorderSide(
+                                                width: 1,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            labelStyle: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black54,
+                                                fontFamily: Font_.Fonts_T)),
+                                        // inputFormatters: <TextInputFormatter>[
+                                        //   // for below version 2 use this
+                                        //   FilteringTextInputFormatter(RegExp("[a-zA-Z1-9@.]"),
+                                        //       allow: true),
+                                        //   // FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                        //   // for version 2 and greater youcan also use this
+                                        //   // FilteringTextInputFormatter.digitsOnly
+                                        // ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : SizedBox(),
+                        Column(
+                          children: [
+                            Row(
                               children: [
                                 Expanded(
                                   child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: TextFormField(
-                                      // maxLines: 3,
-                                      //keyboardType: TextInputType.none,
-                                      controller: Form_texthead,
-                                      onChanged: (value) async {},
-                                      onFieldSubmitted: (value) async {
+                                    padding: const EdgeInsets.all(5),
+                                    child: InkWell(
+                                      onTap: () async {
                                         SharedPreferences preferences =
                                             await SharedPreferences
                                                 .getInstance();
                                         String? ren =
                                             preferences.getString('renTalSer');
 
-                                        var nametable = 'texthead';
-                                        var set = value;
+                                        var nametable = 'head';
+                                        var set = _p_head == 1 ? 0 : 1;
                                         String url =
                                             '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
                                         try {
@@ -1926,728 +1996,149 @@ class _HandHeldState extends State<HandHeld> {
                                           }
                                         } catch (e) {}
                                       },
-
-                                      decoration: InputDecoration(
-                                          fillColor:
-                                              Colors.white.withOpacity(0.3),
-                                          filled: true,
-
-                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                          focusedBorder:
-                                              const OutlineInputBorder(
-                                            borderRadius: BorderRadius.only(
-                                              topRight: Radius.circular(15),
-                                              topLeft: Radius.circular(15),
-                                              bottomRight: Radius.circular(15),
-                                              bottomLeft: Radius.circular(15),
-                                            ),
-                                            borderSide: BorderSide(
-                                              width: 1,
-                                              color: Colors.black,
-                                            ),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: _p_head == 1
+                                              ? Colors.green.shade400
+                                              : Colors.grey.shade400,
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(10),
+                                              topRight: Radius.circular(10),
+                                              bottomLeft: Radius.circular(10),
+                                              bottomRight: Radius.circular(10)),
+                                        ),
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: AutoSizeText(
+                                          'หัวบิลรอง',
+                                          overflow: TextOverflow.ellipsis,
+                                          minFontSize: 6,
+                                          maxFontSize: 16,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontFamily: Font_.Fonts_T,
                                           ),
-                                          errorStyle: TextStyle(
-                                              fontFamily: Font_.Fonts_T),
-                                          enabledBorder:
-                                              const OutlineInputBorder(
-                                            borderRadius: BorderRadius.only(
-                                              topRight: Radius.circular(15),
-                                              topLeft: Radius.circular(15),
-                                              bottomRight: Radius.circular(15),
-                                              bottomLeft: Radius.circular(15),
-                                            ),
-                                            borderSide: BorderSide(
-                                              width: 1,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          labelStyle: const TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.black54,
-                                              fontFamily: Font_.Fonts_T)),
-                                      // inputFormatters: <TextInputFormatter>[
-                                      //   // for below version 2 use this
-                                      //   FilteringTextInputFormatter(RegExp("[a-zA-Z1-9@.]"),
-                                      //       allow: true),
-                                      //   // FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                                      //   // for version 2 and greater youcan also use this
-                                      //   // FilteringTextInputFormatter.digitsOnly
-                                      // ],
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ],
-                            )
-                          : SizedBox(),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: InkWell(
-                            onTap: () async {
-                              SharedPreferences preferences =
-                                  await SharedPreferences.getInstance();
-                              String? ren = preferences.getString('renTalSer');
-
-                              var nametable = 'bill_addr';
-                              var set = _p_bill_addr == 1 ? 0 : 1;
-                              String url =
-                                  '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
-                              try {
-                                var response = await http.get(Uri.parse(url));
-
-                                var result = json.decode(response.body);
-                                print(result);
-                                if (result.toString() == 'true') {
-                                  read_GC_print();
-                                }
-                              } catch (e) {}
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: _p_bill_addr == 1
-                                    ? Colors.green.shade400
-                                    : Colors.grey.shade400,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: AutoSizeText(
-                                'ที่อยู่',
-                                overflow: TextOverflow.ellipsis,
-                                minFontSize: 6,
-                                maxFontSize: 16,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: Font_.Fonts_T,
-                                ),
-                              ),
                             ),
-                          ),
+                            _p_head == 1
+                                ? Row(
+                                    children: [
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: TextFormField(
+                                            // maxLines: 3,
+                                            //keyboardType: TextInputType.none,
+                                            controller: Form_texthead,
+                                            onChanged: (value) async {},
+                                            onFieldSubmitted: (value) async {
+                                              SharedPreferences preferences =
+                                                  await SharedPreferences
+                                                      .getInstance();
+                                              String? ren = preferences
+                                                  .getString('renTalSer');
+
+                                              var nametable = 'texthead';
+                                              var set = value;
+                                              String url =
+                                                  '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
+                                              try {
+                                                var response = await http
+                                                    .get(Uri.parse(url));
+
+                                                var result =
+                                                    json.decode(response.body);
+                                                print(result);
+                                                if (result.toString() ==
+                                                    'true') {
+                                                  read_GC_print();
+                                                }
+                                              } catch (e) {}
+                                            },
+
+                                            decoration: InputDecoration(
+                                                fillColor: Colors.white
+                                                    .withOpacity(0.3),
+                                                filled: true,
+
+                                                // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                focusedBorder:
+                                                    const OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topRight:
+                                                        Radius.circular(15),
+                                                    topLeft:
+                                                        Radius.circular(15),
+                                                    bottomRight:
+                                                        Radius.circular(15),
+                                                    bottomLeft:
+                                                        Radius.circular(15),
+                                                  ),
+                                                  borderSide: BorderSide(
+                                                    width: 1,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                errorStyle: TextStyle(
+                                                    fontFamily: Font_.Fonts_T),
+                                                enabledBorder:
+                                                    const OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topRight:
+                                                        Radius.circular(15),
+                                                    topLeft:
+                                                        Radius.circular(15),
+                                                    bottomRight:
+                                                        Radius.circular(15),
+                                                    bottomLeft:
+                                                        Radius.circular(15),
+                                                  ),
+                                                  borderSide: BorderSide(
+                                                    width: 1,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                labelStyle: const TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.black54,
+                                                    fontFamily: Font_.Fonts_T)),
+                                            // inputFormatters: <TextInputFormatter>[
+                                            //   // for below version 2 use this
+                                            //   FilteringTextInputFormatter(RegExp("[a-zA-Z1-9@.]"),
+                                            //       allow: true),
+                                            //   // FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                            //   // for version 2 and greater youcan also use this
+                                            //   // FilteringTextInputFormatter.digitsOnly
+                                            // ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : SizedBox(),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: InkWell(
-                            onTap: () async {
-                              SharedPreferences preferences =
-                                  await SharedPreferences.getInstance();
-                              String? ren = preferences.getString('renTalSer');
-
-                              var nametable = 'name';
-                              var set = _p_name == 1 ? 0 : 1;
-                              String url =
-                                  '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
-                              try {
-                                var response = await http.get(Uri.parse(url));
-
-                                var result = json.decode(response.body);
-                                print(result);
-                                if (result.toString() == 'true') {
-                                  read_GC_print();
-                                }
-                              } catch (e) {}
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: _p_name == 1
-                                    ? Colors.green.shade400
-                                    : Colors.grey.shade400,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: AutoSizeText(
-                                'ผู้ทำรายการ',
-                                overflow: TextOverflow.ellipsis,
-                                minFontSize: 6,
-                                maxFontSize: 16,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: Font_.Fonts_T,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: InkWell(
-                            onTap: () async {
-                              SharedPreferences preferences =
-                                  await SharedPreferences.getInstance();
-                              String? ren = preferences.getString('renTalSer');
-
-                              var nametable = 'name_shop';
-                              var set = _p_name_shop == 1 ? 0 : 1;
-                              String url =
-                                  '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
-                              try {
-                                var response = await http.get(Uri.parse(url));
-
-                                var result = json.decode(response.body);
-                                print(result);
-                                if (result.toString() == 'true') {
-                                  read_GC_print();
-                                }
-                              } catch (e) {}
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: _p_name_shop == 1
-                                    ? Colors.green.shade400
-                                    : Colors.grey.shade400,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: AutoSizeText(
-                                'ชื่อร้าน',
-                                overflow: TextOverflow.ellipsis,
-                                minFontSize: 6,
-                                maxFontSize: 16,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: Font_.Fonts_T,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: InkWell(
-                            onTap: () async {
-                              SharedPreferences preferences =
-                                  await SharedPreferences.getInstance();
-                              String? ren = preferences.getString('renTalSer');
-
-                              var nametable = 'name_custno';
-                              var set = _p_name_custno == 1 ? 0 : 1;
-                              String url =
-                                  '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
-                              try {
-                                var response = await http.get(Uri.parse(url));
-
-                                var result = json.decode(response.body);
-                                print(result);
-                                if (result.toString() == 'true') {
-                                  read_GC_print();
-                                }
-                              } catch (e) {}
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: _p_name_custno == 1
-                                    ? Colors.green.shade400
-                                    : Colors.grey.shade400,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: AutoSizeText(
-                                'ชื่อลูกค้า',
-                                overflow: TextOverflow.ellipsis,
-                                minFontSize: 6,
-                                maxFontSize: 16,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: Font_.Fonts_T,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: InkWell(
-                            onTap: () async {
-                              SharedPreferences preferences =
-                                  await SharedPreferences.getInstance();
-                              String? ren = preferences.getString('renTalSer');
-
-                              var nametable = 'invoice';
-                              var set = _p_invoice == 1 ? 0 : 1;
-                              String url =
-                                  '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
-                              try {
-                                var response = await http.get(Uri.parse(url));
-
-                                var result = json.decode(response.body);
-                                print(result);
-                                if (result.toString() == 'true') {
-                                  read_GC_print();
-                                }
-                              } catch (e) {}
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: _p_invoice == 1
-                                    ? Colors.green.shade400
-                                    : Colors.grey.shade400,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: AutoSizeText(
-                                'เลขที่ใบเสร็จ',
-                                overflow: TextOverflow.ellipsis,
-                                minFontSize: 6,
-                                maxFontSize: 16,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: Font_.Fonts_T,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: InkWell(
-                            onTap: () async {
-                              SharedPreferences preferences =
-                                  await SharedPreferences.getInstance();
-                              String? ren = preferences.getString('renTalSer');
-
-                              var nametable = 'datex';
-                              var set = _p_datex == 1 ? 0 : 1;
-                              String url =
-                                  '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
-                              try {
-                                var response = await http.get(Uri.parse(url));
-
-                                var result = json.decode(response.body);
-                                print(result);
-                                if (result.toString() == 'true') {
-                                  read_GC_print();
-                                }
-                              } catch (e) {}
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: _p_datex == 1
-                                    ? Colors.green.shade400
-                                    : Colors.grey.shade400,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: AutoSizeText(
-                                'วันที่',
-                                overflow: TextOverflow.ellipsis,
-                                minFontSize: 6,
-                                maxFontSize: 16,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: Font_.Fonts_T,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: InkWell(
-                            onTap: () async {
-                              SharedPreferences preferences =
-                                  await SharedPreferences.getInstance();
-                              String? ren = preferences.getString('renTalSer');
-
-                              var nametable = 'timex';
-                              var set = _p_timex == 1 ? 0 : 1;
-                              String url =
-                                  '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
-                              try {
-                                var response = await http.get(Uri.parse(url));
-
-                                var result = json.decode(response.body);
-                                print(result);
-                                if (result.toString() == 'true') {
-                                  read_GC_print();
-                                }
-                              } catch (e) {}
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: _p_timex == 1
-                                    ? Colors.green.shade400
-                                    : Colors.grey.shade400,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: AutoSizeText(
-                                'เวลา',
-                                overflow: TextOverflow.ellipsis,
-                                minFontSize: 6,
-                                maxFontSize: 16,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: Font_.Fonts_T,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: InkWell(
-                            onTap: () async {
-                              SharedPreferences preferences =
-                                  await SharedPreferences.getInstance();
-                              String? ren = preferences.getString('renTalSer');
-
-                              var nametable = 'zone';
-                              var set = _p_zone == 1 ? 0 : 1;
-                              String url =
-                                  '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
-                              try {
-                                var response = await http.get(Uri.parse(url));
-
-                                var result = json.decode(response.body);
-                                print(result);
-                                if (result.toString() == 'true') {
-                                  read_GC_print();
-                                }
-                              } catch (e) {}
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: _p_zone == 1
-                                    ? Colors.green.shade400
-                                    : Colors.grey.shade400,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: AutoSizeText(
-                                'โซนพื้นที่',
-                                overflow: TextOverflow.ellipsis,
-                                minFontSize: 6,
-                                maxFontSize: 16,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: Font_.Fonts_T,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: InkWell(
-                            onTap: () async {
-                              SharedPreferences preferences =
-                                  await SharedPreferences.getInstance();
-                              String? ren = preferences.getString('renTalSer');
-
-                              var nametable = 'area';
-                              var set = _p_area == 1 ? 0 : 1;
-                              String url =
-                                  '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
-                              try {
-                                var response = await http.get(Uri.parse(url));
-
-                                var result = json.decode(response.body);
-                                print(result);
-                                if (result.toString() == 'true') {
-                                  read_GC_print();
-                                }
-                              } catch (e) {}
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: _p_area == 1
-                                    ? Colors.green.shade400
-                                    : Colors.grey.shade400,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: AutoSizeText(
-                                'รหัสพื้นที่',
-                                overflow: TextOverflow.ellipsis,
-                                minFontSize: 6,
-                                maxFontSize: 16,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: Font_.Fonts_T,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: InkWell(
-                            onTap: () async {
-                              SharedPreferences preferences =
-                                  await SharedPreferences.getInstance();
-                              String? ren = preferences.getString('renTalSer');
-
-                              var nametable = 'number';
-                              var set = _p_number == 1 ? 0 : 1;
-                              String url =
-                                  '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
-                              try {
-                                var response = await http.get(Uri.parse(url));
-
-                                var result = json.decode(response.body);
-                                print(result);
-                                if (result.toString() == 'true') {
-                                  read_GC_print();
-                                }
-                              } catch (e) {}
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: _p_number == 1
-                                    ? Colors.green.shade400
-                                    : Colors.grey.shade400,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: AutoSizeText(
-                                'ตัวเลขยอดรวม',
-                                overflow: TextOverflow.ellipsis,
-                                minFontSize: 6,
-                                maxFontSize: 16,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: Font_.Fonts_T,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: InkWell(
-                            onTap: () async {
-                              SharedPreferences preferences =
-                                  await SharedPreferences.getInstance();
-                              String? ren = preferences.getString('renTalSer');
-
-                              var nametable = 'foot';
-                              var set = _p_foot == 1 ? 0 : 1;
-                              String url =
-                                  '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
-                              try {
-                                var response = await http.get(Uri.parse(url));
-
-                                var result = json.decode(response.body);
-                                print(result);
-                                if (result.toString() == 'true') {
-                                  read_GC_print();
-                                }
-                              } catch (e) {}
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: _p_foot == 1
-                                    ? Colors.green.shade400
-                                    : Colors.grey.shade400,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: AutoSizeText(
-                                'ท้ายบิล',
-                                overflow: TextOverflow.ellipsis,
-                                minFontSize: 6,
-                                maxFontSize: 16,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: Font_.Fonts_T,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: InkWell(
-                            onTap: () async {
-                              SharedPreferences preferences =
-                                  await SharedPreferences.getInstance();
-                              String? ren = preferences.getString('renTalSer');
-
-                              var nametable = 'cash';
-                              var set = _p_cash == 1 ? 0 : 1;
-                              String url =
-                                  '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
-                              try {
-                                var response = await http.get(Uri.parse(url));
-
-                                var result = json.decode(response.body);
-                                print(result);
-                                if (result.toString() == 'true') {
-                                  read_GC_print();
-                                }
-                              } catch (e) {}
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: _p_cash == 1
-                                    ? Colors.green.shade400
-                                    : Colors.grey.shade400,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: AutoSizeText(
-                                'ช่องทางชำระ',
-                                overflow: TextOverflow.ellipsis,
-                                minFontSize: 6,
-                                maxFontSize: 16,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: Font_.Fonts_T,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  _p_foot == 1
-                      ? Row(
+                        Row(
                           children: [
                             Expanded(
                               child: Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: TextFormField(
-                                  // maxLines: 3,
-                                  //keyboardType: TextInputType.none,
-                                  controller: Form1_text,
-                                  onChanged: (value) async {},
-                                  onFieldSubmitted: (value) async {
+                                padding: const EdgeInsets.all(5),
+                                child: InkWell(
+                                  onTap: () async {
                                     SharedPreferences preferences =
                                         await SharedPreferences.getInstance();
                                     String? ren =
                                         preferences.getString('renTalSer');
 
-                                    var nametable = 'foot_text';
-                                    var set = value;
+                                    var nametable = 'bill_addr';
+                                    var set = _p_bill_addr == 1 ? 0 : 1;
                                     String url =
                                         '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
                                     try {
@@ -2661,58 +2152,742 @@ class _HandHeldState extends State<HandHeld> {
                                       }
                                     } catch (e) {}
                                   },
-
-                                  decoration: InputDecoration(
-                                      fillColor: Colors.white.withOpacity(0.3),
-                                      filled: true,
-
-                                      // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                      focusedBorder: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(15),
-                                          topLeft: Radius.circular(15),
-                                          bottomRight: Radius.circular(15),
-                                          bottomLeft: Radius.circular(15),
-                                        ),
-                                        borderSide: BorderSide(
-                                          width: 1,
-                                          color: Colors.black,
-                                        ),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: _p_bill_addr == 1
+                                          ? Colors.green.shade400
+                                          : Colors.grey.shade400,
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
+                                    ),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: AutoSizeText(
+                                      'ที่อยู่',
+                                      overflow: TextOverflow.ellipsis,
+                                      minFontSize: 6,
+                                      maxFontSize: 16,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: Font_.Fonts_T,
                                       ),
-                                      errorStyle:
-                                          TextStyle(fontFamily: Font_.Fonts_T),
-                                      enabledBorder: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(15),
-                                          topLeft: Radius.circular(15),
-                                          bottomRight: Radius.circular(15),
-                                          bottomLeft: Radius.circular(15),
-                                        ),
-                                        borderSide: BorderSide(
-                                          width: 1,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      labelStyle: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black54,
-                                          fontFamily: Font_.Fonts_T)),
-                                  // inputFormatters: <TextInputFormatter>[
-                                  //   // for below version 2 use this
-                                  //   FilteringTextInputFormatter(RegExp("[a-zA-Z1-9@.]"),
-                                  //       allow: true),
-                                  //   // FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                                  //   // for version 2 and greater youcan also use this
-                                  //   // FilteringTextInputFormatter.digitsOnly
-                                  // ],
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
                           ],
-                        )
-                      : SizedBox(),
-                ],
-              ),
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: InkWell(
+                                  onTap: () async {
+                                    SharedPreferences preferences =
+                                        await SharedPreferences.getInstance();
+                                    String? ren =
+                                        preferences.getString('renTalSer');
+
+                                    var nametable = 'name';
+                                    var set = _p_name == 1 ? 0 : 1;
+                                    String url =
+                                        '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
+                                    try {
+                                      var response =
+                                          await http.get(Uri.parse(url));
+
+                                      var result = json.decode(response.body);
+                                      print(result);
+                                      if (result.toString() == 'true') {
+                                        read_GC_print();
+                                      }
+                                    } catch (e) {}
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: _p_name == 1
+                                          ? Colors.green.shade400
+                                          : Colors.grey.shade400,
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
+                                    ),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: AutoSizeText(
+                                      'ผู้ทำรายการ',
+                                      overflow: TextOverflow.ellipsis,
+                                      minFontSize: 6,
+                                      maxFontSize: 16,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: Font_.Fonts_T,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: InkWell(
+                                  onTap: () async {
+                                    SharedPreferences preferences =
+                                        await SharedPreferences.getInstance();
+                                    String? ren =
+                                        preferences.getString('renTalSer');
+
+                                    var nametable = 'name_shop';
+                                    var set = _p_name_shop == 1 ? 0 : 1;
+                                    String url =
+                                        '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
+                                    try {
+                                      var response =
+                                          await http.get(Uri.parse(url));
+
+                                      var result = json.decode(response.body);
+                                      print(result);
+                                      if (result.toString() == 'true') {
+                                        read_GC_print();
+                                      }
+                                    } catch (e) {}
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: _p_name_shop == 1
+                                          ? Colors.green.shade400
+                                          : Colors.grey.shade400,
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
+                                    ),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: AutoSizeText(
+                                      'ชื่อร้าน',
+                                      overflow: TextOverflow.ellipsis,
+                                      minFontSize: 6,
+                                      maxFontSize: 16,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: Font_.Fonts_T,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: InkWell(
+                                  onTap: () async {
+                                    SharedPreferences preferences =
+                                        await SharedPreferences.getInstance();
+                                    String? ren =
+                                        preferences.getString('renTalSer');
+
+                                    var nametable = 'name_custno';
+                                    var set = _p_name_custno == 1 ? 0 : 1;
+                                    String url =
+                                        '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
+                                    try {
+                                      var response =
+                                          await http.get(Uri.parse(url));
+
+                                      var result = json.decode(response.body);
+                                      print(result);
+                                      if (result.toString() == 'true') {
+                                        read_GC_print();
+                                      }
+                                    } catch (e) {}
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: _p_name_custno == 1
+                                          ? Colors.green.shade400
+                                          : Colors.grey.shade400,
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
+                                    ),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: AutoSizeText(
+                                      'ชื่อลูกค้า',
+                                      overflow: TextOverflow.ellipsis,
+                                      minFontSize: 6,
+                                      maxFontSize: 16,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: Font_.Fonts_T,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: InkWell(
+                                  onTap: () async {
+                                    SharedPreferences preferences =
+                                        await SharedPreferences.getInstance();
+                                    String? ren =
+                                        preferences.getString('renTalSer');
+
+                                    var nametable = 'invoice';
+                                    var set = _p_invoice == 1 ? 0 : 1;
+                                    String url =
+                                        '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
+                                    try {
+                                      var response =
+                                          await http.get(Uri.parse(url));
+
+                                      var result = json.decode(response.body);
+                                      print(result);
+                                      if (result.toString() == 'true') {
+                                        read_GC_print();
+                                      }
+                                    } catch (e) {}
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: _p_invoice == 1
+                                          ? Colors.green.shade400
+                                          : Colors.grey.shade400,
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
+                                    ),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: AutoSizeText(
+                                      'เลขที่ใบเสร็จ',
+                                      overflow: TextOverflow.ellipsis,
+                                      minFontSize: 6,
+                                      maxFontSize: 16,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: Font_.Fonts_T,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: InkWell(
+                                  onTap: () async {
+                                    SharedPreferences preferences =
+                                        await SharedPreferences.getInstance();
+                                    String? ren =
+                                        preferences.getString('renTalSer');
+
+                                    var nametable = 'datex';
+                                    var set = _p_datex == 1 ? 0 : 1;
+                                    String url =
+                                        '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
+                                    try {
+                                      var response =
+                                          await http.get(Uri.parse(url));
+
+                                      var result = json.decode(response.body);
+                                      print(result);
+                                      if (result.toString() == 'true') {
+                                        read_GC_print();
+                                      }
+                                    } catch (e) {}
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: _p_datex == 1
+                                          ? Colors.green.shade400
+                                          : Colors.grey.shade400,
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
+                                    ),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: AutoSizeText(
+                                      'วันที่',
+                                      overflow: TextOverflow.ellipsis,
+                                      minFontSize: 6,
+                                      maxFontSize: 16,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: Font_.Fonts_T,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: InkWell(
+                                  onTap: () async {
+                                    SharedPreferences preferences =
+                                        await SharedPreferences.getInstance();
+                                    String? ren =
+                                        preferences.getString('renTalSer');
+
+                                    var nametable = 'timex';
+                                    var set = _p_timex == 1 ? 0 : 1;
+                                    String url =
+                                        '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
+                                    try {
+                                      var response =
+                                          await http.get(Uri.parse(url));
+
+                                      var result = json.decode(response.body);
+                                      print(result);
+                                      if (result.toString() == 'true') {
+                                        read_GC_print();
+                                      }
+                                    } catch (e) {}
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: _p_timex == 1
+                                          ? Colors.green.shade400
+                                          : Colors.grey.shade400,
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
+                                    ),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: AutoSizeText(
+                                      'เวลา',
+                                      overflow: TextOverflow.ellipsis,
+                                      minFontSize: 6,
+                                      maxFontSize: 16,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: Font_.Fonts_T,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: InkWell(
+                                  onTap: () async {
+                                    SharedPreferences preferences =
+                                        await SharedPreferences.getInstance();
+                                    String? ren =
+                                        preferences.getString('renTalSer');
+
+                                    var nametable = 'zone';
+                                    var set = _p_zone == 1 ? 0 : 1;
+                                    String url =
+                                        '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
+                                    try {
+                                      var response =
+                                          await http.get(Uri.parse(url));
+
+                                      var result = json.decode(response.body);
+                                      print(result);
+                                      if (result.toString() == 'true') {
+                                        read_GC_print();
+                                      }
+                                    } catch (e) {}
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: _p_zone == 1
+                                          ? Colors.green.shade400
+                                          : Colors.grey.shade400,
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
+                                    ),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: AutoSizeText(
+                                      'โซนพื้นที่',
+                                      overflow: TextOverflow.ellipsis,
+                                      minFontSize: 6,
+                                      maxFontSize: 16,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: Font_.Fonts_T,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: InkWell(
+                                  onTap: () async {
+                                    SharedPreferences preferences =
+                                        await SharedPreferences.getInstance();
+                                    String? ren =
+                                        preferences.getString('renTalSer');
+
+                                    var nametable = 'area';
+                                    var set = _p_area == 1 ? 0 : 1;
+                                    String url =
+                                        '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
+                                    try {
+                                      var response =
+                                          await http.get(Uri.parse(url));
+
+                                      var result = json.decode(response.body);
+                                      print(result);
+                                      if (result.toString() == 'true') {
+                                        read_GC_print();
+                                      }
+                                    } catch (e) {}
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: _p_area == 1
+                                          ? Colors.green.shade400
+                                          : Colors.grey.shade400,
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
+                                    ),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: AutoSizeText(
+                                      'รหัสพื้นที่',
+                                      overflow: TextOverflow.ellipsis,
+                                      minFontSize: 6,
+                                      maxFontSize: 16,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: Font_.Fonts_T,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: InkWell(
+                                  onTap: () async {
+                                    SharedPreferences preferences =
+                                        await SharedPreferences.getInstance();
+                                    String? ren =
+                                        preferences.getString('renTalSer');
+
+                                    var nametable = 'number';
+                                    var set = _p_number == 1 ? 0 : 1;
+                                    String url =
+                                        '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
+                                    try {
+                                      var response =
+                                          await http.get(Uri.parse(url));
+
+                                      var result = json.decode(response.body);
+                                      print(result);
+                                      if (result.toString() == 'true') {
+                                        read_GC_print();
+                                      }
+                                    } catch (e) {}
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: _p_number == 1
+                                          ? Colors.green.shade400
+                                          : Colors.grey.shade400,
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
+                                    ),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: AutoSizeText(
+                                      'ตัวเลขยอดรวม',
+                                      overflow: TextOverflow.ellipsis,
+                                      minFontSize: 6,
+                                      maxFontSize: 16,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: Font_.Fonts_T,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: InkWell(
+                                  onTap: () async {
+                                    SharedPreferences preferences =
+                                        await SharedPreferences.getInstance();
+                                    String? ren =
+                                        preferences.getString('renTalSer');
+
+                                    var nametable = 'foot';
+                                    var set = _p_foot == 1 ? 0 : 1;
+                                    String url =
+                                        '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
+                                    try {
+                                      var response =
+                                          await http.get(Uri.parse(url));
+
+                                      var result = json.decode(response.body);
+                                      print(result);
+                                      if (result.toString() == 'true') {
+                                        read_GC_print();
+                                      }
+                                    } catch (e) {}
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: _p_foot == 1
+                                          ? Colors.green.shade400
+                                          : Colors.grey.shade400,
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
+                                    ),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: AutoSizeText(
+                                      'ท้ายบิล',
+                                      overflow: TextOverflow.ellipsis,
+                                      minFontSize: 6,
+                                      maxFontSize: 16,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: Font_.Fonts_T,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: InkWell(
+                                  onTap: () async {
+                                    SharedPreferences preferences =
+                                        await SharedPreferences.getInstance();
+                                    String? ren =
+                                        preferences.getString('renTalSer');
+
+                                    var nametable = 'cash';
+                                    var set = _p_cash == 1 ? 0 : 1;
+                                    String url =
+                                        '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
+                                    try {
+                                      var response =
+                                          await http.get(Uri.parse(url));
+
+                                      var result = json.decode(response.body);
+                                      print(result);
+                                      if (result.toString() == 'true') {
+                                        read_GC_print();
+                                      }
+                                    } catch (e) {}
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: _p_cash == 1
+                                          ? Colors.green.shade400
+                                          : Colors.grey.shade400,
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
+                                    ),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: AutoSizeText(
+                                      'ช่องทางชำระ',
+                                      overflow: TextOverflow.ellipsis,
+                                      minFontSize: 6,
+                                      maxFontSize: 16,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: Font_.Fonts_T,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        _p_foot == 1
+                            ? Row(
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: TextFormField(
+                                        // maxLines: 3,
+                                        //keyboardType: TextInputType.none,
+                                        controller: Form1_text,
+                                        onChanged: (value) async {},
+                                        onFieldSubmitted: (value) async {
+                                          SharedPreferences preferences =
+                                              await SharedPreferences
+                                                  .getInstance();
+                                          String? ren = preferences
+                                              .getString('renTalSer');
+
+                                          var nametable = 'foot_text';
+                                          var set = value;
+                                          String url =
+                                              '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
+                                          try {
+                                            var response =
+                                                await http.get(Uri.parse(url));
+
+                                            var result =
+                                                json.decode(response.body);
+                                            print(result);
+                                            if (result.toString() == 'true') {
+                                              read_GC_print();
+                                            }
+                                          } catch (e) {}
+                                        },
+
+                                        decoration: InputDecoration(
+                                            fillColor:
+                                                Colors.white.withOpacity(0.3),
+                                            filled: true,
+
+                                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                            focusedBorder:
+                                                const OutlineInputBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(15),
+                                                topLeft: Radius.circular(15),
+                                                bottomRight:
+                                                    Radius.circular(15),
+                                                bottomLeft: Radius.circular(15),
+                                              ),
+                                              borderSide: BorderSide(
+                                                width: 1,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            errorStyle: TextStyle(
+                                                fontFamily: Font_.Fonts_T),
+                                            enabledBorder:
+                                                const OutlineInputBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(15),
+                                                topLeft: Radius.circular(15),
+                                                bottomRight:
+                                                    Radius.circular(15),
+                                                bottomLeft: Radius.circular(15),
+                                              ),
+                                              borderSide: BorderSide(
+                                                width: 1,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            labelStyle: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black54,
+                                                fontFamily: Font_.Fonts_T)),
+                                        // inputFormatters: <TextInputFormatter>[
+                                        //   // for below version 2 use this
+                                        //   FilteringTextInputFormatter(RegExp("[a-zA-Z1-9@.]"),
+                                        //       allow: true),
+                                        //   // FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                        //   // for version 2 and greater youcan also use this
+                                        //   // FilteringTextInputFormatter.digitsOnly
+                                        // ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : SizedBox(),
+                      ],
+                    ),
             ),
             Expanded(flex: 1, child: SizedBox()),
           ],

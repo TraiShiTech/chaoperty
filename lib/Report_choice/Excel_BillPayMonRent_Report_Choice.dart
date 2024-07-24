@@ -142,17 +142,32 @@ class Excgen_BillPayMonRentReport_Choice {
     globalStyle.backColorRgb = const Color.fromARGB(255, 90, 192, 59);
     x.Style globalStyle2 = workbook.styles.add('style2');
     globalStyle2.backColorRgb = const Color.fromARGB(255, 147, 223, 124);
-    sheet.getRangeByName('A1:I1').merge();
-    // sheet.getRangeByName('A2:I2').merge();
-    // sheet.getRangeByName('A3:I3').merge();
-    // sheet.getRangeByName('A4:I4').merge();
+    // sheet.getRangeByName('A1:I1').merge();
+    // // sheet.getRangeByName('A2:I2').merge();
+    // // sheet.getRangeByName('A3:I3').merge();
+    // // sheet.getRangeByName('A4:I4').merge();
+
+    // sheet.getRangeByName('A1').setText(
+    //       (Value_Chang_Zone_billpayMon == null)
+    //           ? 'รายงานค่าเช่าประจำเดือน (กรุณาเลือกโซน)'
+    //           : 'รายงานค่าเช่าประจำเดือน (โซน : $Value_Chang_Zone_billpayMon)',
+    //     );
+    sheet.getRangeByName('A1:K1').merge();
+    sheet.getRangeByName('A2:K2').merge();
+    sheet.getRangeByName('A3:K3').merge();
+    sheet.getRangeByName('A4:K4').merge();
 
     sheet.getRangeByName('A1').setText(
           (Value_Chang_Zone_billpayMon == null)
-              ? 'รายงานค่าเช่าประจำเดือน (กรุณาเลือกโซน)'
-              : 'รายงานค่าเช่าประจำเดือน (โซน : $Value_Chang_Zone_billpayMon)',
+              ? 'รายงานค่าเช่า-1  (กรุณาเลือกโซน)'
+              : 'รายงานค่าเช่า-1 (โซน : $Value_Chang_Zone_billpayMon)',
         );
-
+    sheet
+        .getRangeByName('A2')
+        .setText('เดือนภาษี ${Mon_billpay_Mon} ${YE_billpay_Mon}');
+    sheet.getRangeByName('A3').setText(
+        'ชื่อสถานประกอบการ บริษัท ชอยส์มินิสโตร์ จำกัด เลขประจำตัวผู้เสียภาษี 0-1055-31085-43-4');
+    sheet.getRangeByName('A4').setText('ชื่อสถานประกอบการ เซเว่นอีเลฟเว่น');
 // ExcelSheetProtectionOption
     final x.ExcelSheetProtectionOption options = x.ExcelSheetProtectionOption();
     options.all = true;
@@ -188,77 +203,77 @@ class Excgen_BillPayMonRentReport_Choice {
     }
 
     globalStyle2.hAlign = x.HAlignType.center;
-    sheet.getRangeByName('A2').cellStyle = globalStyle1;
-    sheet.getRangeByName('B2').cellStyle = globalStyle1;
-    sheet.getRangeByName('C2').cellStyle = globalStyle1;
-    sheet.getRangeByName('D2').cellStyle = globalStyle1;
-    sheet.getRangeByName('E2').cellStyle = globalStyle1;
-    sheet.getRangeByName('F2').cellStyle = globalStyle1;
-    sheet.getRangeByName('G2').cellStyle = globalStyle1;
-    sheet.getRangeByName('H2').cellStyle = globalStyle1;
-    sheet.getRangeByName('I2').cellStyle = globalStyle1;
-    sheet.getRangeByName('J2').cellStyle = globalStyle1;
-    sheet.getRangeByName('K2').cellStyle = globalStyle1;
-    sheet.getRangeByName('L2').cellStyle = globalStyle1;
-    sheet.getRangeByName('M2').cellStyle = globalStyle1;
-    sheet.getRangeByName('N2').cellStyle = globalStyle1;
-    sheet.getRangeByName('O2').cellStyle = globalStyle1;
-    sheet.getRangeByName('P2').cellStyle = globalStyle1;
-    sheet.getRangeByName('Q2').cellStyle = globalStyle1;
-    sheet.getRangeByName('R2').cellStyle = globalStyle1;
-    sheet.getRangeByName('S2').cellStyle = globalStyle1;
-    sheet.getRangeByName('T2').cellStyle = globalStyle1;
-    sheet.getRangeByName('U2').cellStyle = globalStyle1;
-    sheet.getRangeByName('V2').cellStyle = globalStyle1;
+    sheet.getRangeByName('A6').cellStyle = globalStyle1;
+    sheet.getRangeByName('B6').cellStyle = globalStyle1;
+    sheet.getRangeByName('C6').cellStyle = globalStyle1;
+    sheet.getRangeByName('D6').cellStyle = globalStyle1;
+    sheet.getRangeByName('E6').cellStyle = globalStyle1;
+    sheet.getRangeByName('F6').cellStyle = globalStyle1;
+    sheet.getRangeByName('G6').cellStyle = globalStyle1;
+    sheet.getRangeByName('H6').cellStyle = globalStyle1;
+    sheet.getRangeByName('I6').cellStyle = globalStyle1;
+    sheet.getRangeByName('J6').cellStyle = globalStyle1;
+    sheet.getRangeByName('K6').cellStyle = globalStyle1;
+    sheet.getRangeByName('L6').cellStyle = globalStyle1;
+    sheet.getRangeByName('M6').cellStyle = globalStyle1;
+    sheet.getRangeByName('N6').cellStyle = globalStyle1;
+    sheet.getRangeByName('O6').cellStyle = globalStyle1;
+    sheet.getRangeByName('P6').cellStyle = globalStyle1;
+    sheet.getRangeByName('Q6').cellStyle = globalStyle1;
+    sheet.getRangeByName('R6').cellStyle = globalStyle1;
+    sheet.getRangeByName('S6').cellStyle = globalStyle1;
+    sheet.getRangeByName('T6').cellStyle = globalStyle1;
+    sheet.getRangeByName('U6').cellStyle = globalStyle1;
+    sheet.getRangeByName('V6').cellStyle = globalStyle1;
 
-    sheet.getRangeByName('A2').columnWidth = 10;
-    sheet.getRangeByName('B2').columnWidth = 20;
-    sheet.getRangeByName('C2').columnWidth = 20;
-    sheet.getRangeByName('D2').columnWidth = 25;
-    sheet.getRangeByName('E2').columnWidth = 25;
-    sheet.getRangeByName('F2').columnWidth = 25;
-    sheet.getRangeByName('G2').columnWidth = 18;
-    sheet.getRangeByName('H2').columnWidth = 30;
-    sheet.getRangeByName('I2').columnWidth = 18;
-    sheet.getRangeByName('J2').columnWidth = 18;
-    sheet.getRangeByName('K2').columnWidth = 18;
-    sheet.getRangeByName('L2').columnWidth = 18;
-    sheet.getRangeByName('M2').columnWidth = 18;
-    sheet.getRangeByName('N2').columnWidth = 18;
-    sheet.getRangeByName('O2').columnWidth = 18;
-    sheet.getRangeByName('P2').columnWidth = 18;
-    sheet.getRangeByName('Q2').columnWidth = 18;
-    sheet.getRangeByName('R2').columnWidth = 18;
-    sheet.getRangeByName('S2').columnWidth = 18;
-    sheet.getRangeByName('T2').columnWidth = 18;
-    sheet.getRangeByName('U2').columnWidth = 18;
-    sheet.getRangeByName('V2').columnWidth = 18;
+    sheet.getRangeByName('A6').columnWidth = 10;
+    sheet.getRangeByName('B6').columnWidth = 20;
+    sheet.getRangeByName('C6').columnWidth = 20;
+    sheet.getRangeByName('D6').columnWidth = 25;
+    sheet.getRangeByName('E6').columnWidth = 25;
+    sheet.getRangeByName('F6').columnWidth = 25;
+    sheet.getRangeByName('G6').columnWidth = 18;
+    sheet.getRangeByName('H6').columnWidth = 30;
+    sheet.getRangeByName('I6').columnWidth = 18;
+    sheet.getRangeByName('J6').columnWidth = 18;
+    sheet.getRangeByName('K6').columnWidth = 18;
+    sheet.getRangeByName('L6').columnWidth = 18;
+    sheet.getRangeByName('M6').columnWidth = 18;
+    sheet.getRangeByName('N6').columnWidth = 18;
+    sheet.getRangeByName('O6').columnWidth = 18;
+    sheet.getRangeByName('P6').columnWidth = 18;
+    sheet.getRangeByName('Q6').columnWidth = 18;
+    sheet.getRangeByName('R6').columnWidth = 18;
+    sheet.getRangeByName('S6').columnWidth = 18;
+    sheet.getRangeByName('T6').columnWidth = 18;
+    sheet.getRangeByName('U6').columnWidth = 18;
+    sheet.getRangeByName('V6').columnWidth = 18;
 
-    sheet.getRangeByName('A2').setText('ลำดับที่');
-    sheet.getRangeByName('B2').setText('รหัสสาขา');
-    sheet.getRangeByName('C2').setText('ชื่อสาขา');
-    sheet.getRangeByName('D2').setText('เลขล็อค');
-    sheet.getRangeByName('E2').setText('เลขบัญชีVAN');
-    sheet.getRangeByName('F2').setText('ชื่อ-สกุล ผู้เช่า');
-    sheet.getRangeByName('G2').setText('ประเภทสินค้า');
-    sheet.getRangeByName('H2').setText('เงินประกัน');
-    sheet.getRangeByName('I2').setText('ค่าเช่า');
+    sheet.getRangeByName('A6').setText('ลำดับที่');
+    sheet.getRangeByName('B6').setText('รหัสสาขา');
+    sheet.getRangeByName('C6').setText('ชื่อสาขา');
+    sheet.getRangeByName('D6').setText('เลขล็อค');
+    sheet.getRangeByName('E6').setText('เลขบัญชีVAN');
+    sheet.getRangeByName('F6').setText('ชื่อ-สกุล ผู้เช่า');
+    sheet.getRangeByName('G6').setText('ประเภทสินค้า');
+    sheet.getRangeByName('H6').setText('เงินประกัน');
+    sheet.getRangeByName('I6').setText('ค่าเช่า');
 
-    sheet.getRangeByName('J2').setText('ค่าบริการ');
-    sheet.getRangeByName('K2').setText('ค่าน้ำ');
-    sheet.getRangeByName('L2').setText('ค่าไฟ');
-    sheet.getRangeByName('M2').setText('เดือน');
-    sheet.getRangeByName('N2').setText('วันที่เงินเข้าบัญชี');
-    sheet.getRangeByName('O2').setText('ส่วนลด');
-    sheet.getRangeByName('P2').setText('ค่าปรับ');
-    sheet.getRangeByName('Q2').setText('ค่าเช่า+น้ำ+ไฟฟ้า+vat+ค่าปรับ(ในระบบ)');
-    sheet.getRangeByName('R2').setText('เงินเข้าบัญชี');
+    sheet.getRangeByName('J6').setText('ค่าบริการ');
+    sheet.getRangeByName('K6').setText('ค่าน้ำ');
+    sheet.getRangeByName('L6').setText('ค่าไฟ');
+    sheet.getRangeByName('M6').setText('เดือน');
+    sheet.getRangeByName('N6').setText('วันที่เงินเข้าบัญชี');
+    sheet.getRangeByName('O6').setText('ส่วนลด');
+    sheet.getRangeByName('P6').setText('ค่าปรับ');
+    sheet.getRangeByName('Q6').setText('ค่าเช่า+น้ำ+ไฟฟ้า+vat+ค่าปรับ(ในระบบ)');
+    sheet.getRangeByName('R6').setText('เงินเข้าบัญชี');
 
-    sheet.getRangeByName('S2').setText('ผลต่าง');
-    sheet.getRangeByName('T2').setText('สถานะ');
+    sheet.getRangeByName('S6').setText('ผลต่าง');
+    sheet.getRangeByName('T6').setText('สถานะ');
 
-    sheet.getRangeByName('U2').setText('ผู้ดูแล');
-    sheet.getRangeByName('V2').setText('หมายเหตุ');
+    sheet.getRangeByName('U6').setText('ผู้ดูแล');
+    sheet.getRangeByName('V6').setText('หมายเหตุ');
 
     int index1 = 0;
     int indextotol = 0;
@@ -266,96 +281,95 @@ class Excgen_BillPayMonRentReport_Choice {
 
     for (int index = 0; index < billpay_Mon.length; index++) {
       dynamic numberColor = ((index % 2) == 0) ? globalStyle22 : globalStyle222;
-      sheet.getRangeByName('A${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('B${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('C${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('D${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('E${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('F${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('G${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('H${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('I${index + 3}').cellStyle = numberColor;
+      sheet.getRangeByName('A${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('B${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('C${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('D${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('E${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('F${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('G${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('H${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('I${index + 7}').cellStyle = numberColor;
 
-      sheet.getRangeByName('J${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('K${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('L${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('M${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('N${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('O${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('P${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('Q${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('R${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('S${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('T${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('U${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('V${index + 3}').cellStyle = numberColor;
+      sheet.getRangeByName('J${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('K${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('L${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('M${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('N${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('O${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('P${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('Q${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('R${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('S${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('T${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('U${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('V${index + 7}').cellStyle = numberColor;
 
-      sheet.getRangeByName('A${index + 3}').setText('${index + 1}');
+      sheet.getRangeByName('A${index + 7}').setText('${index + 1}');
       sheet
-          .getRangeByName('B${index + 3}')
+          .getRangeByName('B${index + 7}')
           .setText('${billpay_Mon[index].zser}');
-      sheet.getRangeByName('C${index + 3}').setText('${billpay_Mon[index].zn}');
-      sheet.getRangeByName('D${index + 3}').setText('${billpay_Mon[index].ln}');
-      sheet.getRangeByName('E${index + 3}').setText('');
+      sheet.getRangeByName('C${index + 7}').setText('${billpay_Mon[index].zn}');
+      sheet.getRangeByName('D${index + 7}').setText('${billpay_Mon[index].ln}');
+      sheet.getRangeByName('E${index + 7}').setText('');
       sheet
-          .getRangeByName('F${index + 3}')
+          .getRangeByName('F${index + 7}')
           .setText('${billpay_Mon[index].cname}');
       sheet
-          .getRangeByName('G${index + 3}')
+          .getRangeByName('G${index + 7}')
           .setText('${billpay_Mon[index].stype}');
-      sheet.getRangeByName('H${index + 3}').setNumber(
+      sheet.getRangeByName('H${index + 7}').setNumber(
           (billpay_Mon[index].pakan_total == null)
               ? 0.00
               : double.parse('${billpay_Mon[index].pakan_total}'));
-      sheet.getRangeByName('I${index + 3}').setNumber(
+      sheet.getRangeByName('I${index + 7}').setNumber(
           (billpay_Mon[index].rent_total == null)
               ? 0.00
               : double.parse('${billpay_Mon[index].rent_total}'));
-      sheet.getRangeByName('J${index + 3}').setNumber(
+      sheet.getRangeByName('J${index + 7}').setNumber(
           (billpay_Mon[index].service_total == null)
               ? 0.00
               : double.parse('${billpay_Mon[index].service_total}'));
-      sheet.getRangeByName('K${index + 3}').setNumber(
+      sheet.getRangeByName('K${index + 7}').setNumber(
           (billpay_Mon[index].water == null)
               ? 0.00
               : double.parse('${billpay_Mon[index].water}'));
-      sheet.getRangeByName('L${index + 3}').setNumber(
+      sheet.getRangeByName('L${index + 7}').setNumber(
           (billpay_Mon[index].electricity == null)
               ? 0.00
               : double.parse('${billpay_Mon[index].electricity}'));
-      sheet
-          .getRangeByName('M${index + 3}')
-          .setText('${billpay_Mon[index].daterec}');
-      sheet
-          .getRangeByName('N${index + 3}')
-          .setText('${billpay_Mon[index].pdate}');
-      sheet.getRangeByName('O${index + 3}').setNumber(
+      sheet.getRangeByName('M${index + 7}').setText(
+          '${DateFormat('dd/MM/yyyy').format(DateTime.parse('${billpay_Mon[index].daterec}'))}');
+      sheet.getRangeByName('N${index + 7}').setText(
+            '${DateFormat('dd/MM/yyyy').format(DateTime.parse('${billpay_Mon[index].pdate}'))}',
+          );
+      sheet.getRangeByName('O${index + 7}').setNumber(
           (billpay_Mon[index].total_dis == null)
               ? 0.00
               : double.parse('${billpay_Mon[index].total_dis}'));
-      sheet.getRangeByName('P${index + 3}').setNumber(
+      sheet.getRangeByName('P${index + 7}').setNumber(
           (billpay_Mon[index].fine == null)
               ? 0.00
               : double.parse('${billpay_Mon[index].fine}'));
-      sheet.getRangeByName('Q${index + 3}').setNumber(
+      sheet.getRangeByName('Q${index + 7}').setNumber(
           (billpay_Mon[index].total_bill == null)
               ? 0.00
               : double.parse('${billpay_Mon[index].total_bill}'));
-      sheet.getRangeByName('R${index + 3}').setNumber(
+      sheet.getRangeByName('R${index + 7}').setNumber(
           (billpay_Mon[index].total_bill == null)
               ? 0.00
               : double.parse('${billpay_Mon[index].total_bill}') -
                   double.parse('${billpay_Mon[index].total_dis}'));
-      sheet.getRangeByName('S${index + 3}').setNumber(
+      sheet.getRangeByName('S${index + 7}').setNumber(
           (billpay_Mon[index].total_dis == null)
               ? 0.00
               : double.parse('${billpay_Mon[index].total_dis}'));
-      sheet.getRangeByName('T${index + 3}').setText('${billpay_Mon[index].st}');
+      sheet.getRangeByName('T${index + 7}').setText('${billpay_Mon[index].st}');
       sheet
-          .getRangeByName('U${index + 3}')
+          .getRangeByName('U${index + 7}')
           .setText('${billpay_Mon[index].user}');
       sheet
-          .getRangeByName('V${index + 3}')
+          .getRangeByName('V${index + 7}')
           .setText('${billpay_Mon[index].remark}');
 
       indextotol = indextotol + 1;
@@ -380,8 +394,8 @@ class Excgen_BillPayMonRentReport_Choice {
     MimeType type = MimeType.MICROSOFTEXCEL;
     String path = await FileSaver.instance.saveFile(
         (Value_Chang_Zone_billpayMon == null)
-            ? 'รายงานค่าเช่าประจำเดือน  (กรุณาเลือกโซน)'
-            : 'รายงานค่าเช่าประจำเดือน  (โซน : $Value_Chang_Zone_billpayMon)',
+            ? 'รายงานค่าเช่า-1(กรุณาเลือกโซน)'
+            : 'รายงานค่าเช่า-1(โซน : $Value_Chang_Zone_billpayMon)',
         data,
         "xlsx",
         mimeType: type);

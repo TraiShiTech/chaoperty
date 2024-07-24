@@ -13,6 +13,7 @@ import '../../CRC_16_Prompay/generate_qrcode.dart';
 import '../../Constant/Myconstant.dart';
 import '../../PeopleChao/Pays_.dart';
 import '../../Style/ThaiBaht.dart';
+import '../../Style/loadAndCacheImage.dart';
 
 class Pdfgen_Reduce_debt_TP7 {
 //////////---------------------------------------------------->(ใบเสร็จรับเงิน/ใบกำกับภาษี)   ใช้  //
@@ -76,10 +77,10 @@ class Pdfgen_Reduce_debt_TP7 {
         (await rootBundle.load('images/LOGO.png')).buffer.asUint8List();
     List netImage = [];
     List netImage_QR = [];
-
-    for (int i = 0; i < newValuePDFimg.length; i++) {
-      netImage.add(await networkImage('${newValuePDFimg[i]}'));
-    }
+    Uint8List? resizedLogo = await getResizedLogo();
+    // for (int i = 0; i < newValuePDFimg.length; i++) {
+    //   netImage.add(await networkImage('${newValuePDFimg[i]}'));
+    // }
 
 //////////---------------------------------->
 
@@ -93,20 +94,20 @@ class Pdfgen_Reduce_debt_TP7 {
                 mainAxisSize: pw.MainAxisSize.min,
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
                 children: [
-                  (netImage.isEmpty)
-                      ? pw.Container(
-                          height: 30,
-                          width: 40,
-                          decoration: const pw.BoxDecoration(
-                            color: PdfColors.grey200,
-                            border: pw.Border(
-                              right: pw.BorderSide(color: PdfColors.grey300),
-                              left: pw.BorderSide(color: PdfColors.grey300),
-                              top: pw.BorderSide(color: PdfColors.grey300),
-                              bottom: pw.BorderSide(color: PdfColors.grey300),
-                            ),
-                          ),
-                          child: pw.Center(
+                  pw.Container(
+                    height: 30,
+                    width: 40,
+                    decoration: pw.BoxDecoration(
+                      color: PdfColors.grey200,
+                      border: pw.Border.all(color: PdfColors.grey300),
+                    ),
+                    child: resizedLogo != null
+                        ? pw.Image(
+                            pw.MemoryImage(resizedLogo),
+                            height: 30,
+                            width: 40,
+                          )
+                        : pw.Center(
                             child: pw.Text(
                               '$bill_name ',
                               maxLines: 1,
@@ -116,25 +117,50 @@ class Pdfgen_Reduce_debt_TP7 {
                                 color: Colors_pd,
                               ),
                             ),
-                          ))
-                      : pw.Container(
-                          height: 30,
-                          width: 40,
-                          decoration: const pw.BoxDecoration(
-                            color: PdfColors.grey200,
-                            border: pw.Border(
-                              right: pw.BorderSide(color: PdfColors.grey300),
-                              left: pw.BorderSide(color: PdfColors.grey300),
-                              top: pw.BorderSide(color: PdfColors.grey300),
-                              bottom: pw.BorderSide(color: PdfColors.grey300),
-                            ),
                           ),
-                          child: pw.Image(
-                            (netImage[0]),
-                            height: 30,
-                            width: 40,
-                          ),
-                        ),
+                  ),
+                  // (netImage.isEmpty)
+                  //     ? pw.Container(
+                  //         height: 30,
+                  //         width: 40,
+                  //         decoration: const pw.BoxDecoration(
+                  //           color: PdfColors.grey200,
+                  //           border: pw.Border(
+                  //             right: pw.BorderSide(color: PdfColors.grey300),
+                  //             left: pw.BorderSide(color: PdfColors.grey300),
+                  //             top: pw.BorderSide(color: PdfColors.grey300),
+                  //             bottom: pw.BorderSide(color: PdfColors.grey300),
+                  //           ),
+                  //         ),
+                  //         child: pw.Center(
+                  //           child: pw.Text(
+                  //             '$bill_name ',
+                  //             maxLines: 1,
+                  //             style: pw.TextStyle(
+                  //               fontSize: 10,
+                  //               font: ttf,
+                  //               color: Colors_pd,
+                  //             ),
+                  //           ),
+                  //         ))
+                  //     : pw.Container(
+                  //         height: 30,
+                  //         width: 40,
+                  //         decoration: const pw.BoxDecoration(
+                  //           color: PdfColors.grey200,
+                  //           border: pw.Border(
+                  //             right: pw.BorderSide(color: PdfColors.grey300),
+                  //             left: pw.BorderSide(color: PdfColors.grey300),
+                  //             top: pw.BorderSide(color: PdfColors.grey300),
+                  //             bottom: pw.BorderSide(color: PdfColors.grey300),
+                  //           ),
+                  //         ),
+                  //         child: pw.Image(
+                  //           (netImage[0]),
+                  //           height: 30,
+                  //           width: 40,
+                  //         ),
+                  //       ),
                   pw.SizedBox(height: 1 * PdfPageFormat.mm),
                   pw.Text(
                     '${bill_name.toString().trim()}',

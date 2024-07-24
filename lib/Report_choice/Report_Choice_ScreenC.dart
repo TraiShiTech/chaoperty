@@ -30,6 +30,7 @@ import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 import 'Excel_Area_serviceFeeShort_Report.dart';
 import 'Excel_BillPayFutureMonRent_Report_Choice.dart';
+import 'Excel_PeopleTenant_Report_Choice.dart';
 import 'Excel_SalesTaxFull_Report_Choice.dart';
 import 'Excel_SalesTaxShortReport_Choice.dart';
 
@@ -84,17 +85,21 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
   List<TransBillPayChoiceModel> billpay_Mon = [];
   List<TransBillPayChoiceModel> _billpay_Mon = <TransBillPayChoiceModel>[];
   ///////////////-------------------------------------->
-  List<TransBillPayChoiceModel> Sumbillpay_Mon = [];
-  List<TransBillPayChoiceModel> _Sumbillpay_Mon = <TransBillPayChoiceModel>[];
+  List<TeNantChoiceModel> teNantModels = [];
+  List<TeNantChoiceModel> _teNantModels = <TeNantChoiceModel>[];
   ///////////////-------------------------------------->
-  String? Value_Chang_Zone_GetPakan, Value_Chang_Zone_GetPakan_Ser;
+  List<TeNantChoiceModel> teNantModels_New = [];
+  List<TeNantChoiceModel> _teNantModels_New = <TeNantChoiceModel>[];
+  ///////////////-------------------------------------->
   String? Value_Chang_Zone_billpayMon, Value_Chang_Zone_billpayMon_Ser;
-  String? Value_Chang_Zone_sumbillpayMon, Value_Chang_Zone_sumbillpayMon_Ser;
+  String? Value_Chang_Zone_People_TeNant, Value_Chang_Zone_Ser_People_TeNant;
+  String? Value_Chang_Zone_People_TeNantNew,
+      Value_Chang_Zone_Ser_People_TeNantNew;
   ///////////////-------------------------------------->
-  String? Mon_GetPakan_Mon, YE_GetPakan_Mon;
-  String? Mon_billpay_Mon, YE_billpay_Mon;
-  String? Mon_sumbillpay_Mon, YE_sumbillpay_Mon;
 
+  String? Mon_billpay_Mon, YE_billpay_Mon;
+  String? Mon_PeopleTeNant_Mon, YE_PeopleTeNant_Mon;
+  String? Mon_PeopleTeNantNew_Mon, YE_PeopleTeNantNew_Mon;
   ///////////////-------------------------------------->
   List<String> monthsInThai = [
     'มกราคม', // January
@@ -297,6 +302,84 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
     // print('TransBill_PayTaxShort : ${salesTax_short.length}');
     setState(() {
       Await_Status_Report1 = 1;
+    });
+  }
+
+  ////////-------------------------------------------------------->(รายงานประวัติผู้เช่า)
+  Future<Null> People_tenant() async {
+    if (teNantModels.isNotEmpty) {
+      teNantModels.clear();
+      _teNantModels.clear();
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    var ren = preferences.getString('renTalSer');
+    var zone = (Value_Chang_Zone_Ser_People_TeNant == null)
+        ? '0'
+        : Value_Chang_Zone_Ser_People_TeNant;
+    String url =
+        '${MyConstant().domain}/GC_People_Tenant_AllReport_Choice.php?isAdd=true&ren=$ren&zser=$zone&month_s=$Mon_PeopleTeNant_Mon&year_s=$YE_PeopleTeNant_Mon';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      if (result != null) {
+        for (var map in result) {
+          TeNantChoiceModel teNantModelss = TeNantChoiceModel.fromJson(map);
+
+          setState(() {
+            teNantModels.add(teNantModelss);
+          });
+        }
+        setState(() {
+          _teNantModels = teNantModels;
+        });
+      } else {}
+    } catch (e) {}
+    // print('People_tenant : ${teNantModels.length}');
+    setState(() {
+      Await_Status_Report2 = 1;
+    });
+  }
+
+  ////////-------------------------------------------------------->(รายงานผู้เช่ารายใหม่)
+  Future<Null> People_tenant_New() async {
+    if (teNantModels_New.isNotEmpty) {
+      teNantModels_New.clear();
+      _teNantModels_New.clear();
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    var ren = preferences.getString('renTalSer');
+    var zone = (Value_Chang_Zone_Ser_People_TeNantNew == null)
+        ? '0'
+        : Value_Chang_Zone_Ser_People_TeNantNew;
+    String url =
+        '${MyConstant().domain}/GC_People_Tenant_AllReport_Choice.php?isAdd=true&ren=$ren&zser=$zone&month_s=$Mon_PeopleTeNantNew_Mon&year_s=$YE_PeopleTeNantNew_Mon';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      if (result != null) {
+        for (var map in result) {
+          TeNantChoiceModel teNantModelss = TeNantChoiceModel.fromJson(map);
+
+          setState(() {
+            teNantModels_New.add(teNantModelss);
+          });
+        }
+        setState(() {
+          _teNantModels_New = teNantModels_New;
+        });
+      } else {}
+    } catch (e) {}
+    // print('People_tenant : ${teNantModels.length}');
+    setState(() {
+      Await_Status_Report3 = 1;
     });
   }
 
@@ -856,6 +939,1039 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                                 padding: EdgeInsets.all(8.0),
                                 child: Text(
                                   'กำลังโหลดรายงานค่าบริการ-รับล่วงหน้าประจำเดือน  ✔️',
+                                  style: TextStyle(
+                                    color: ReportScreen_Color.Colors_Text2_,
+                                    // fontWeight: FontWeight.bold,
+                                    fontFamily: Font_.Fonts_T,
+                                  ),
+                                ),
+                              )
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 5.0,
+              ),
+              Row(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width / 2,
+                    height: 4.0,
+                    child: Divider(
+                      color: Colors.grey[300],
+                      height: 4.0,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 5.0,
+              ),
+              ScrollConfiguration(
+                behavior:
+                    ScrollConfiguration.of(context).copyWith(dragDevices: {
+                  PointerDeviceKind.touch,
+                  PointerDeviceKind.mouse,
+                }),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      // Container(
+                      //   width: 40,
+                      //   decoration: BoxDecoration(
+                      //     color: Colors.teal[200],
+                      //     borderRadius: BorderRadius.only(
+                      //         topLeft: Radius.circular(0),
+                      //         topRight: Radius.circular(10),
+                      //         bottomLeft: Radius.circular(0),
+                      //         bottomRight: Radius.circular(10)),
+                      //     border: Border.all(color: Colors.grey, width: 1),
+                      //   ),
+                      //   padding: EdgeInsets.all(4.0),
+                      //   child: Text(
+                      //     '1. ) ',
+                      //     style: TextStyle(
+                      //       color: ReportScreen_Color.Colors_Text2_,
+                      //       fontWeight: FontWeight.bold,
+                      //       fontFamily: FontWeight_.Fonts_T,
+                      //     ),
+                      //   ),
+                      // ),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'เดือน :',
+                          style: TextStyle(
+                            color: ReportScreen_Color.Colors_Text2_,
+                            // fontWeight: FontWeight.bold,
+                            fontFamily: Font_.Fonts_T,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: AppbackgroundColor.Sub_Abg_Colors,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            // border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                          width: 120,
+                          padding: const EdgeInsets.all(8.0),
+                          child: DropdownButtonFormField2(
+                            alignment: Alignment.center,
+                            focusColor: Colors.white,
+                            autofocus: false,
+                            decoration: InputDecoration(
+                              floatingLabelAlignment:
+                                  FloatingLabelAlignment.center,
+                              enabled: true,
+                              hoverColor: Colors.brown,
+                              prefixIconColor: Colors.blue,
+                              fillColor: Colors.white.withOpacity(0.05),
+                              filled: false,
+                              isDense: true,
+                              contentPadding: EdgeInsets.zero,
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(color: Colors.red),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  topLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                ),
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(255, 231, 227, 227),
+                                ),
+                              ),
+                            ),
+                            isExpanded: false,
+                            value: (Mon_PeopleTeNant_Mon == null)
+                                ? null
+                                : Mon_PeopleTeNant_Mon,
+                            // hint: Text(
+                            //   Mon_Income == null
+                            //       ? 'เลือก'
+                            //       : '$Mon_Income',
+                            //   maxLines: 2,
+                            //   textAlign: TextAlign.center,
+                            //   style: const TextStyle(
+                            //     overflow:
+                            //         TextOverflow.ellipsis,
+                            //     fontSize: 14,
+                            //     color: Colors.grey,
+                            //   ),
+                            // ),
+                            icon: const Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black,
+                            ),
+                            style: const TextStyle(
+                              color: Colors.grey,
+                            ),
+                            iconSize: 20,
+                            buttonHeight: 40,
+                            buttonWidth: 200,
+                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                            dropdownDecoration: BoxDecoration(
+                              // color: Colors
+                              //     .amber,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            items: [
+                              for (int item = 1; item < 13; item++)
+                                DropdownMenuItem<String>(
+                                  value: '${item}',
+                                  child: Text(
+                                    '${monthsInThai[item - 1]}',
+                                    //'${item}',
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      overflow: TextOverflow.ellipsis,
+                                      fontSize: 14,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                )
+                            ],
+
+                            onChanged: (value) async {
+                              Mon_PeopleTeNant_Mon = value;
+                            },
+                          ),
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'ปี :',
+                          style: TextStyle(
+                            color: ReportScreen_Color.Colors_Text2_,
+                            // fontWeight: FontWeight.bold,
+                            fontFamily: Font_.Fonts_T,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: AppbackgroundColor.Sub_Abg_Colors,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            // border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                          width: 120,
+                          padding: const EdgeInsets.all(8.0),
+                          child: DropdownButtonFormField2(
+                            alignment: Alignment.center,
+                            focusColor: Colors.white,
+                            autofocus: false,
+                            decoration: InputDecoration(
+                              floatingLabelAlignment:
+                                  FloatingLabelAlignment.center,
+                              enabled: true,
+                              hoverColor: Colors.brown,
+                              prefixIconColor: Colors.blue,
+                              fillColor: Colors.white.withOpacity(0.05),
+                              filled: false,
+                              isDense: true,
+                              contentPadding: EdgeInsets.zero,
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(color: Colors.red),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  topLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                ),
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(255, 231, 227, 227),
+                                ),
+                              ),
+                            ),
+                            isExpanded: false,
+                            value: (YE_PeopleTeNant_Mon == null)
+                                ? null
+                                : YE_PeopleTeNant_Mon,
+                            // hint: Text(
+                            //   YE_Income == null
+                            //       ? 'เลือก'
+                            //       : '$YE_Income',
+                            //   maxLines: 2,
+                            //   textAlign: TextAlign.center,
+                            //   style: const TextStyle(
+                            //     overflow:
+                            //         TextOverflow.ellipsis,
+                            //     fontSize: 14,
+                            //     color: Colors.grey,
+                            //   ),
+                            // ),
+                            icon: const Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black,
+                            ),
+                            style: const TextStyle(
+                              color: Colors.grey,
+                            ),
+                            iconSize: 20,
+                            buttonHeight: 40,
+                            buttonWidth: 200,
+                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                            dropdownDecoration: BoxDecoration(
+                              // color: Colors
+                              //     .amber,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            items: YE_Th.map((item) => DropdownMenuItem<String>(
+                                  value: '${item}',
+                                  child: Text(
+                                    '${item}',
+                                    // '${int.parse(item) + 543}',
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      overflow: TextOverflow.ellipsis,
+                                      fontSize: 14,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                )).toList(),
+
+                            onChanged: (value) async {
+                              YE_PeopleTeNant_Mon = value;
+
+                              // if (Value_Chang_Zone_Income !=
+                              //     null) {
+                              //   red_Trans_billIncome();
+                              //   red_Trans_billMovemen();
+                              // }
+                            },
+                          ),
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'โซน :',
+                          style: TextStyle(
+                            color: ReportScreen_Color.Colors_Text2_,
+                            // fontWeight: FontWeight.bold,
+                            fontFamily: Font_.Fonts_T,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: AppbackgroundColor.Sub_Abg_Colors,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            // border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                          width: 260,
+                          padding: const EdgeInsets.all(8.0),
+                          child: DropdownButtonFormField2(
+                            alignment: Alignment.center,
+                            focusColor: Colors.white,
+                            autofocus: false,
+                            decoration: InputDecoration(
+                              enabled: true,
+                              hoverColor: Colors.brown,
+                              prefixIconColor: Colors.blue,
+                              fillColor: Colors.white.withOpacity(0.05),
+                              filled: false,
+                              isDense: true,
+                              contentPadding: EdgeInsets.zero,
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(color: Colors.red),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  topLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                ),
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(255, 231, 227, 227),
+                                ),
+                              ),
+                            ),
+                            isExpanded: false,
+                            value: Value_Chang_Zone_People_TeNant,
+                            icon: const Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black,
+                            ),
+                            style: const TextStyle(
+                              color: Colors.grey,
+                            ),
+                            iconSize: 20,
+                            buttonHeight: 40,
+                            buttonWidth: 250,
+                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                            dropdownDecoration: BoxDecoration(
+                              // color: Colors
+                              //     .amber,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            items: zoneModels_report
+                                .map((item) => DropdownMenuItem<String>(
+                                      value: '${item.zn}',
+                                      child: Text(
+                                        '${item.zn}',
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          overflow: TextOverflow.ellipsis,
+                                          fontSize: 14,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ))
+                                .toList(),
+
+                            onChanged: (value) async {
+                              int selectedIndex = zoneModels_report
+                                  .indexWhere((item) => item.zn == value);
+
+                              setState(() {
+                                Value_Chang_Zone_People_TeNant = value!;
+                                Value_Chang_Zone_Ser_People_TeNant =
+                                    zoneModels_report[selectedIndex].ser!;
+                              });
+                              // print(
+                              //     'Selected Index: $Value_Chang_Zone_Pakan  //${Value_Chang_Zone_Pakan_Ser}');
+                            },
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          onTap: () async {
+                            if (Value_Chang_Zone_Ser_People_TeNant != null) {
+                              setState(() {
+                                Await_Status_Report2 = 0;
+                              });
+                              Dia_log();
+                            }
+
+                            People_tenant();
+                          },
+                          child: Container(
+                              width: 100,
+                              padding: const EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                color: Colors.green[700],
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'ค้นหา',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T,
+                                  ),
+                                ),
+                              )),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    InkWell(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.yellow[600],
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            border: Border.all(color: Colors.grey, width: 1), //
+                          ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: const Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'เรียกดู',
+                                  style: TextStyle(
+                                    color: ReportScreen_Color.Colors_Text1_,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.navigate_next,
+                                  color: Colors.grey,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        onTap: (Value_Chang_Zone_People_TeNant == null ||
+                                teNantModels.isEmpty)
+                            ? null
+                            : () async {
+                                Insert_log.Insert_logs(
+                                    'รายงาน', 'กดดูรายงานประวัติผู้เช่า');
+                                RE_TeNant_Widget();
+                              }),
+                    (teNantModels.isEmpty || Await_Status_Report2 == null)
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              (teNantModels.isEmpty &&
+                                      Value_Chang_Zone_People_TeNant != null &&
+                                      Await_Status_Report2 != null)
+                                  ? 'รายงานประวัติผู้เช่า (ไม่พบข้อมูล ✖️)'
+                                  : 'รายงานประวัติผู้เช่า',
+                              style: const TextStyle(
+                                color: ReportScreen_Color.Colors_Text2_,
+                                // fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T,
+                              ),
+                            ),
+                          )
+                        : (Await_Status_Report2 == 0)
+                            ? SizedBox(
+                                // height: 20,
+                                child: Row(
+                                children: [
+                                  Container(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: const CircularProgressIndicator()),
+                                  const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'กำลังโหลดรายงานประวัติผู้เช่า...',
+                                      style: TextStyle(
+                                        color: ReportScreen_Color.Colors_Text2_,
+                                        // fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ))
+                            : const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'รายงานประวัติผู้เช่า ✔️',
+                                  style: TextStyle(
+                                    color: ReportScreen_Color.Colors_Text2_,
+                                    // fontWeight: FontWeight.bold,
+                                    fontFamily: Font_.Fonts_T,
+                                  ),
+                                ),
+                              )
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 5.0,
+              ),
+              Row(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width / 2,
+                    height: 4.0,
+                    child: Divider(
+                      color: Colors.grey[300],
+                      height: 4.0,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 5.0,
+              ),
+              ScrollConfiguration(
+                behavior:
+                    ScrollConfiguration.of(context).copyWith(dragDevices: {
+                  PointerDeviceKind.touch,
+                  PointerDeviceKind.mouse,
+                }),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      // Container(
+                      //   width: 40,
+                      //   decoration: BoxDecoration(
+                      //     color: Colors.teal[200],
+                      //     borderRadius: BorderRadius.only(
+                      //         topLeft: Radius.circular(0),
+                      //         topRight: Radius.circular(10),
+                      //         bottomLeft: Radius.circular(0),
+                      //         bottomRight: Radius.circular(10)),
+                      //     border: Border.all(color: Colors.grey, width: 1),
+                      //   ),
+                      //   padding: EdgeInsets.all(4.0),
+                      //   child: Text(
+                      //     '1. ) ',
+                      //     style: TextStyle(
+                      //       color: ReportScreen_Color.Colors_Text2_,
+                      //       fontWeight: FontWeight.bold,
+                      //       fontFamily: FontWeight_.Fonts_T,
+                      //     ),
+                      //   ),
+                      // ),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'เดือน :',
+                          style: TextStyle(
+                            color: ReportScreen_Color.Colors_Text2_,
+                            // fontWeight: FontWeight.bold,
+                            fontFamily: Font_.Fonts_T,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: AppbackgroundColor.Sub_Abg_Colors,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            // border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                          width: 120,
+                          padding: const EdgeInsets.all(8.0),
+                          child: DropdownButtonFormField2(
+                            alignment: Alignment.center,
+                            focusColor: Colors.white,
+                            autofocus: false,
+                            decoration: InputDecoration(
+                              floatingLabelAlignment:
+                                  FloatingLabelAlignment.center,
+                              enabled: true,
+                              hoverColor: Colors.brown,
+                              prefixIconColor: Colors.blue,
+                              fillColor: Colors.white.withOpacity(0.05),
+                              filled: false,
+                              isDense: true,
+                              contentPadding: EdgeInsets.zero,
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(color: Colors.red),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  topLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                ),
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(255, 231, 227, 227),
+                                ),
+                              ),
+                            ),
+                            isExpanded: false,
+                            value: (Mon_PeopleTeNantNew_Mon == null)
+                                ? null
+                                : Mon_PeopleTeNantNew_Mon,
+                            // hint: Text(
+                            //   Mon_Income == null
+                            //       ? 'เลือก'
+                            //       : '$Mon_Income',
+                            //   maxLines: 2,
+                            //   textAlign: TextAlign.center,
+                            //   style: const TextStyle(
+                            //     overflow:
+                            //         TextOverflow.ellipsis,
+                            //     fontSize: 14,
+                            //     color: Colors.grey,
+                            //   ),
+                            // ),
+                            icon: const Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black,
+                            ),
+                            style: const TextStyle(
+                              color: Colors.grey,
+                            ),
+                            iconSize: 20,
+                            buttonHeight: 40,
+                            buttonWidth: 200,
+                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                            dropdownDecoration: BoxDecoration(
+                              // color: Colors
+                              //     .amber,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            items: [
+                              for (int item = 1; item < 13; item++)
+                                DropdownMenuItem<String>(
+                                  value: '${item}',
+                                  child: Text(
+                                    '${monthsInThai[item - 1]}',
+                                    //'${item}',
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      overflow: TextOverflow.ellipsis,
+                                      fontSize: 14,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                )
+                            ],
+
+                            onChanged: (value) async {
+                              Mon_PeopleTeNantNew_Mon = value;
+                            },
+                          ),
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'ปี :',
+                          style: TextStyle(
+                            color: ReportScreen_Color.Colors_Text2_,
+                            // fontWeight: FontWeight.bold,
+                            fontFamily: Font_.Fonts_T,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: AppbackgroundColor.Sub_Abg_Colors,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            // border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                          width: 120,
+                          padding: const EdgeInsets.all(8.0),
+                          child: DropdownButtonFormField2(
+                            alignment: Alignment.center,
+                            focusColor: Colors.white,
+                            autofocus: false,
+                            decoration: InputDecoration(
+                              floatingLabelAlignment:
+                                  FloatingLabelAlignment.center,
+                              enabled: true,
+                              hoverColor: Colors.brown,
+                              prefixIconColor: Colors.blue,
+                              fillColor: Colors.white.withOpacity(0.05),
+                              filled: false,
+                              isDense: true,
+                              contentPadding: EdgeInsets.zero,
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(color: Colors.red),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  topLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                ),
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(255, 231, 227, 227),
+                                ),
+                              ),
+                            ),
+                            isExpanded: false,
+                            value: (YE_PeopleTeNantNew_Mon == null)
+                                ? null
+                                : YE_PeopleTeNantNew_Mon,
+                            // hint: Text(
+                            //   YE_Income == null
+                            //       ? 'เลือก'
+                            //       : '$YE_Income',
+                            //   maxLines: 2,
+                            //   textAlign: TextAlign.center,
+                            //   style: const TextStyle(
+                            //     overflow:
+                            //         TextOverflow.ellipsis,
+                            //     fontSize: 14,
+                            //     color: Colors.grey,
+                            //   ),
+                            // ),
+                            icon: const Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black,
+                            ),
+                            style: const TextStyle(
+                              color: Colors.grey,
+                            ),
+                            iconSize: 20,
+                            buttonHeight: 40,
+                            buttonWidth: 200,
+                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                            dropdownDecoration: BoxDecoration(
+                              // color: Colors
+                              //     .amber,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            items: YE_Th.map((item) => DropdownMenuItem<String>(
+                                  value: '${item}',
+                                  child: Text(
+                                    '${item}',
+                                    // '${int.parse(item) + 543}',
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      overflow: TextOverflow.ellipsis,
+                                      fontSize: 14,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                )).toList(),
+
+                            onChanged: (value) async {
+                              YE_PeopleTeNantNew_Mon = value;
+
+                              // if (Value_Chang_Zone_Income !=
+                              //     null) {
+                              //   red_Trans_billIncome();
+                              //   red_Trans_billMovemen();
+                              // }
+                            },
+                          ),
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'โซน :',
+                          style: TextStyle(
+                            color: ReportScreen_Color.Colors_Text2_,
+                            // fontWeight: FontWeight.bold,
+                            fontFamily: Font_.Fonts_T,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: AppbackgroundColor.Sub_Abg_Colors,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            // border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                          width: 260,
+                          padding: const EdgeInsets.all(8.0),
+                          child: DropdownButtonFormField2(
+                            alignment: Alignment.center,
+                            focusColor: Colors.white,
+                            autofocus: false,
+                            decoration: InputDecoration(
+                              enabled: true,
+                              hoverColor: Colors.brown,
+                              prefixIconColor: Colors.blue,
+                              fillColor: Colors.white.withOpacity(0.05),
+                              filled: false,
+                              isDense: true,
+                              contentPadding: EdgeInsets.zero,
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(color: Colors.red),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  topLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                ),
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(255, 231, 227, 227),
+                                ),
+                              ),
+                            ),
+                            isExpanded: false,
+                            value: Value_Chang_Zone_People_TeNantNew,
+                            icon: const Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black,
+                            ),
+                            style: const TextStyle(
+                              color: Colors.grey,
+                            ),
+                            iconSize: 20,
+                            buttonHeight: 40,
+                            buttonWidth: 250,
+                            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                            dropdownDecoration: BoxDecoration(
+                              // color: Colors
+                              //     .amber,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            items: zoneModels_report
+                                .map((item) => DropdownMenuItem<String>(
+                                      value: '${item.zn}',
+                                      child: Text(
+                                        '${item.zn}',
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          overflow: TextOverflow.ellipsis,
+                                          fontSize: 14,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ))
+                                .toList(),
+
+                            onChanged: (value) async {
+                              int selectedIndex = zoneModels_report
+                                  .indexWhere((item) => item.zn == value);
+
+                              setState(() {
+                                Value_Chang_Zone_People_TeNantNew = value!;
+                                Value_Chang_Zone_Ser_People_TeNantNew =
+                                    zoneModels_report[selectedIndex].ser!;
+                              });
+                              // print(
+                              //     'Selected Index: $Value_Chang_Zone_Pakan  //${Value_Chang_Zone_Pakan_Ser}');
+                            },
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          onTap: () async {
+                            if (Value_Chang_Zone_Ser_People_TeNantNew != null) {
+                              setState(() {
+                                Await_Status_Report3 = 0;
+                              });
+                              Dia_log();
+                            }
+
+                            People_tenant();
+                          },
+                          child: Container(
+                              width: 100,
+                              padding: const EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                color: Colors.green[700],
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'ค้นหา',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T,
+                                  ),
+                                ),
+                              )),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    InkWell(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.yellow[600],
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            border: Border.all(color: Colors.grey, width: 1), //
+                          ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: const Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'เรียกดู',
+                                  style: TextStyle(
+                                    color: ReportScreen_Color.Colors_Text1_,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.navigate_next,
+                                  color: Colors.grey,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        onTap: (Value_Chang_Zone_People_TeNantNew == null ||
+                                teNantModels_New.isEmpty)
+                            ? null
+                            : () async {
+                                Insert_log.Insert_logs(
+                                    'รายงาน', 'กดดูรายงานผู้เช่ารายใหม่');
+                                People_tenant_New();
+                              }),
+                    (teNantModels_New.isEmpty || Await_Status_Report3 == null)
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              (teNantModels_New.isEmpty &&
+                                      Value_Chang_Zone_People_TeNantNew !=
+                                          null &&
+                                      Await_Status_Report3 != null)
+                                  ? 'รายงานผู้เช่ารายใหม่ (ไม่พบข้อมูล ✖️)'
+                                  : 'รายงานผู้เช่ารายใหม่',
+                              style: const TextStyle(
+                                color: ReportScreen_Color.Colors_Text2_,
+                                // fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T,
+                              ),
+                            ),
+                          )
+                        : (Await_Status_Report3 == 0)
+                            ? SizedBox(
+                                // height: 20,
+                                child: Row(
+                                children: [
+                                  Container(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: const CircularProgressIndicator()),
+                                  const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'กำลังโหลดรายงานผู้เช่ารายใหม่...',
+                                      style: TextStyle(
+                                        color: ReportScreen_Color.Colors_Text2_,
+                                        // fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ))
+                            : const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'รายงานผู้เช่ารายใหม่ ✔️',
                                   style: TextStyle(
                                     color: ReportScreen_Color.Colors_Text2_,
                                     // fontWeight: FontWeight.bold,
@@ -1523,6 +2639,1904 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
     );
   }
 
+  ///////////////////////////----------------------------------------------->(รายงานประวัติผู้เช่า)
+  RE_TeNant_Widget() {
+    int? ser_index;
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          title: StreamBuilder(
+              stream: Stream.periodic(const Duration(seconds: 0)),
+              builder: (context, snapshot) {
+                return Column(
+                  children: [
+                    Center(
+                        child: Text(
+                      (Value_Chang_Zone_People_TeNant == null)
+                          ? 'รายงานประวัติผู้เช่า  (กรุณาเลือกโซน)'
+                          : 'รายงานประวัติผู้เช่า  (โซน : $Value_Chang_Zone_People_TeNant)',
+                      style: const TextStyle(
+                        color: ReportScreen_Color.Colors_Text1_,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: FontWeight_.Fonts_T,
+                      ),
+                    )),
+                    Row(
+                      children: [
+                        // Expanded(
+                        //     flex: 1,
+                        //     child: Text(
+                        //       'ผู้เช่า: ${Status_pe}',
+                        //       textAlign: TextAlign.start,
+                        //       style: const TextStyle(
+                        //         fontSize: 14,
+                        //         color: ReportScreen_Color.Colors_Text1_,
+                        //         // fontWeight: FontWeight.bold,
+                        //         fontFamily: FontWeight_.Fonts_T,
+                        //       ),
+                        //     )),
+                        Expanded(
+                            flex: 1,
+                            child: Text(
+                              'ทั้งหมด: ${teNantModels.length}',
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: ReportScreen_Color.Colors_Text1_,
+                                // fontWeight: FontWeight.bold,
+                                fontFamily: FontWeight_.Fonts_T,
+                              ),
+                            )),
+                      ],
+                    ),
+                    const SizedBox(height: 1),
+                    const Divider(),
+                    const SizedBox(height: 1),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      // padding: EdgeInsets.all(10),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          // Expanded(
+                          //   child: _searchBar_GetbackPakan(),
+                          // ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              }),
+          content: StreamBuilder(
+              stream: Stream.periodic(const Duration(seconds: 1)),
+              builder: (context, snapshot) {
+                return ScrollConfiguration(
+                  behavior:
+                      ScrollConfiguration.of(context).copyWith(dragDevices: {
+                    PointerDeviceKind.touch,
+                    PointerDeviceKind.mouse,
+                  }),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        Container(
+                          // color: Colors.grey[50],
+                          width: (Responsive.isDesktop(context))
+                              ? MediaQuery.of(context).size.width * 1.5
+                              : (teNantModels.length == 0)
+                                  ? MediaQuery.of(context).size.width
+                                  : 1400,
+                          // height:
+                          //     MediaQuery.of(context)
+                          //             .size
+                          //             .height *
+                          //         0.3,
+                          child:
+                              // (teNantModels.length == 0)
+                              //     ? const Column(
+                              //         mainAxisAlignment: MainAxisAlignment.center,
+                              //         children: [
+                              //           Center(
+                              //             child: Text(
+                              //               'ไม่พบข้อมูล ณ วันที่เลือก',
+                              //               style: TextStyle(
+                              //                 color:
+                              //                     ReportScreen_Color.Colors_Text1_,
+                              //                 fontWeight: FontWeight.bold,
+                              //                 fontFamily: FontWeight_.Fonts_T,
+                              //               ),
+                              //             ),
+                              //           ),
+                              //         ],
+                              //       )
+                              //     :
+                              Column(
+                            children: <Widget>[
+                              Container(
+                                // width: 1050,
+                                decoration: BoxDecoration(
+                                  color: AppbackgroundColor.TiTile_Colors,
+                                  borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(0),
+                                      bottomRight: Radius.circular(0)),
+                                ),
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Container(
+                                      width: 50,
+                                      child: const Text(
+                                        'ลำดับที่',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'ชื่อ-สกุล ผู้เช่า',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'เลขบปช.',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'รหัสสาขา',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'ชื่อสาขา',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'เลขที่สัญญา',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'เลขสัญญาเก่า',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'เลขที่สัญญาประกัน',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'เลขล็อค',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'วันที่เริ่มเช่า',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'วันที่สิ้นสุดสัญญา',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'ประเภทสินค้า',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'น้ำ + ไฟ',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'ค่าเช่า',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'ค่าบริการ',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'เงินประกัน',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'วันที่ยกเลิก',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'ผู้ดูแล',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                  // height: (Responsive.isDesktop(context))
+                                  //     ? MediaQuery.of(context).size.width * 0.255
+                                  //     : MediaQuery.of(context).size.height * 0.45,
+                                  child: ListView.builder(
+                                itemCount: teNantModels.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return ListTile(
+                                    title: Container(
+                                      decoration: const BoxDecoration(
+                                        // color: Colors.green[100]!
+                                        //     .withOpacity(0.5),
+                                        border: Border(
+                                          bottom: BorderSide(
+                                            color: Colors.black12,
+                                            width: 1,
+                                          ),
+                                        ),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            width: 50,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              '${index + 1}',
+                                              textAlign: TextAlign.left,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              '${teNantModels[index].cname}',
+                                              // '${transKonModels[index].pdate}',
+                                              textAlign: TextAlign.left,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 2,
+                                              '${teNantModels[index].tax}',
+                                              textAlign: TextAlign.left,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 2,
+                                              (teNantModels[index].zser != null)
+                                                  ? '${teNantModels[index].zser}'
+                                                  : '${teNantModels[index].zser1}',
+                                              textAlign: TextAlign.left,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Tooltip(
+                                              richMessage: TextSpan(
+                                                text: (teNantModels[index].zn !=
+                                                        null)
+                                                    ? '${teNantModels[index].zn}'
+                                                    : '${teNantModels[index].zn1}',
+                                                style: const TextStyle(
+                                                  color: HomeScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  //fontSize: 10.0
+                                                ),
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                color: Colors.grey[200],
+                                              ),
+                                              child: AutoSizeText(
+                                                minFontSize: 10,
+                                                maxFontSize: 25,
+                                                maxLines: 2,
+                                                (teNantModels[index].zn != null)
+                                                    ? '${teNantModels[index].zn}'
+                                                    : '${teNantModels[index].zn1}',
+                                                textAlign: TextAlign.left,
+                                                style: const TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text2_,
+                                                    //fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Tooltip(
+                                              richMessage: TextSpan(
+                                                text: (teNantModels[index]
+                                                            .cid ==
+                                                        null)
+                                                    ? ''
+                                                    : '${teNantModels[index].cid}',
+                                                style: const TextStyle(
+                                                  color: HomeScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  //fontSize: 10.0
+                                                ),
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                color: Colors.grey[200],
+                                              ),
+                                              child: AutoSizeText(
+                                                minFontSize: 10,
+                                                maxFontSize: 25,
+                                                maxLines: 1,
+                                                (teNantModels[index].cid ==
+                                                        null)
+                                                    ? ''
+                                                    : '${teNantModels[index].cid}',
+                                                textAlign: TextAlign.left,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text2_,
+                                                    //fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Tooltip(
+                                              richMessage: TextSpan(
+                                                text: (teNantModels[index]
+                                                            .fid ==
+                                                        null)
+                                                    ? ''
+                                                    : '${teNantModels[index].fid}',
+                                                style: const TextStyle(
+                                                  color: HomeScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  //fontSize: 10.0
+                                                ),
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                color: Colors.grey[200],
+                                              ),
+                                              child: AutoSizeText(
+                                                minFontSize: 10,
+                                                maxFontSize: 25,
+                                                maxLines: 1,
+                                                (teNantModels[index].fid ==
+                                                        null)
+                                                    ? ''
+                                                    : '${teNantModels[index].fid}',
+                                                textAlign: TextAlign.left,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text2_,
+                                                    //fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              (teNantModels[index].docno ==
+                                                      null)
+                                                  ? ''
+                                                  : '${teNantModels[index].docno}',
+                                              textAlign: TextAlign.left,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              '${teNantModels[index].ln}',
+                                              textAlign: TextAlign.left,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              '${teNantModels[index].sdate}',
+                                              textAlign: TextAlign.center,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              '${teNantModels[index].ldate}',
+                                              textAlign: TextAlign.center,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              '${teNantModels[index].stype}',
+                                              textAlign: TextAlign.left,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              '${(teNantModels[index].water_electri == null) ? '' : teNantModels[index].water_electri.toString()}',
+                                              textAlign: TextAlign.left,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              // '${teNantModels[index].rent_total}',
+                                              (teNantModels[index].rent_total ==
+                                                      null)
+                                                  ? '0.00'
+                                                  : nFormat
+                                                      .format(double.parse(
+                                                          '${teNantModels[index].rent_total}'))
+                                                      .toString(),
+                                              textAlign: TextAlign.right,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              (teNantModels[index]
+                                                          .service_total ==
+                                                      null)
+                                                  ? '0.00'
+                                                  : nFormat
+                                                      .format(double.parse(
+                                                          '${teNantModels[index].service_total}'))
+                                                      .toString(),
+                                              textAlign: TextAlign.right,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              (teNantModels[index]
+                                                          .service_total ==
+                                                      null)
+                                                  ? '0.00'
+                                                  : nFormat
+                                                      .format(double.parse(
+                                                          '${teNantModels[index].pakan_vat}'))
+                                                      .toString(),
+                                              textAlign: TextAlign.right,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              (teNantModels[index]
+                                                          .cc_date
+                                                          .toString() ==
+                                                      '0000-00-00')
+                                                  ? ''
+                                                  : '${teNantModels[index].cc_date}',
+                                              textAlign: TextAlign.center,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              '${teNantModels[index].user}',
+                                              textAlign: TextAlign.left,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              )),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
+          actions: <Widget>[
+            const SizedBox(height: 1),
+            const Divider(),
+            const SizedBox(height: 1),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    if (teNantModels.length != 0)
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          child: Container(
+                            width: 100,
+                            decoration: const BoxDecoration(
+                              color: Colors.blue,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Center(
+                              child: Text(
+                                'Export file',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                              ),
+                            ),
+                          ),
+                          onTap: () async {
+                            setState(() {
+                              Value_Report = 'รายงานประวัติผู้เช่า';
+                              Pre_and_Dow = 'Download';
+                            });
+                            _showMyDialog_SAVE();
+                          },
+                        ),
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        child: Container(
+                          width: 100,
+                          decoration: const BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                          ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: const Center(
+                            child: Text(
+                              'ปิด',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T,
+                              ),
+                            ),
+                          ),
+                        ),
+                        onTap: () async {
+                          setState(() {
+                            Value_Chang_Zone_People_TeNant = null;
+                            Value_Chang_Zone_Ser_People_TeNant = null;
+
+                            Await_Status_Report2 = null;
+
+                            teNantModels.clear();
+                            _teNantModels.clear();
+                          });
+                          // check_clear();
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  ///////////////////////////----------------------------------------------->(รายงานผู้เช่ารายใหม่)
+  RE_TeNant_New_Widget() {
+    int? ser_index;
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          title: StreamBuilder(
+              stream: Stream.periodic(const Duration(seconds: 0)),
+              builder: (context, snapshot) {
+                return Column(
+                  children: [
+                    Center(
+                        child: Text(
+                      (Value_Chang_Zone_People_TeNantNew == null)
+                          ? 'รายงานผู้เช่ารายใหม่  (กรุณาเลือกโซน)'
+                          : 'รายงานผู้เช่ารายใหม่  (โซน : $Value_Chang_Zone_People_TeNantNew)',
+                      style: const TextStyle(
+                        color: ReportScreen_Color.Colors_Text1_,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: FontWeight_.Fonts_T,
+                      ),
+                    )),
+                    Row(
+                      children: [
+                        // Expanded(
+                        //     flex: 1,
+                        //     child: Text(
+                        //       'ผู้เช่า: ${Status_pe}',
+                        //       textAlign: TextAlign.start,
+                        //       style: const TextStyle(
+                        //         fontSize: 14,
+                        //         color: ReportScreen_Color.Colors_Text1_,
+                        //         // fontWeight: FontWeight.bold,
+                        //         fontFamily: FontWeight_.Fonts_T,
+                        //       ),
+                        //     )),
+                        Expanded(
+                            flex: 1,
+                            child: Text(
+                              'ทั้งหมด: ${teNantModels_New.length}',
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: ReportScreen_Color.Colors_Text1_,
+                                // fontWeight: FontWeight.bold,
+                                fontFamily: FontWeight_.Fonts_T,
+                              ),
+                            )),
+                      ],
+                    ),
+                    const SizedBox(height: 1),
+                    const Divider(),
+                    const SizedBox(height: 1),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      // padding: EdgeInsets.all(10),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          // Expanded(
+                          //   child: _searchBar_GetbackPakan(),
+                          // ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              }),
+          content: StreamBuilder(
+              stream: Stream.periodic(const Duration(seconds: 1)),
+              builder: (context, snapshot) {
+                return ScrollConfiguration(
+                  behavior:
+                      ScrollConfiguration.of(context).copyWith(dragDevices: {
+                    PointerDeviceKind.touch,
+                    PointerDeviceKind.mouse,
+                  }),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        Container(
+                          // color: Colors.grey[50],
+                          width: (Responsive.isDesktop(context))
+                              ? MediaQuery.of(context).size.width * 1.5
+                              : (teNantModels_New.length == 0)
+                                  ? MediaQuery.of(context).size.width
+                                  : 1400,
+                          // height:
+                          //     MediaQuery.of(context)
+                          //             .size
+                          //             .height *
+                          //         0.3,
+                          child:
+                              // (teNantModels.length == 0)
+                              //     ? const Column(
+                              //         mainAxisAlignment: MainAxisAlignment.center,
+                              //         children: [
+                              //           Center(
+                              //             child: Text(
+                              //               'ไม่พบข้อมูล ณ วันที่เลือก',
+                              //               style: TextStyle(
+                              //                 color:
+                              //                     ReportScreen_Color.Colors_Text1_,
+                              //                 fontWeight: FontWeight.bold,
+                              //                 fontFamily: FontWeight_.Fonts_T,
+                              //               ),
+                              //             ),
+                              //           ),
+                              //         ],
+                              //       )
+                              //     :
+                              Column(
+                            children: <Widget>[
+                              Container(
+                                // width: 1050,
+                                decoration: BoxDecoration(
+                                  color: AppbackgroundColor.TiTile_Colors,
+                                  borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(0),
+                                      bottomRight: Radius.circular(0)),
+                                ),
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Container(
+                                      width: 50,
+                                      child: const Text(
+                                        'ลำดับที่',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'ชื่อ-สกุล ผู้เช่า',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'เลขบปช.',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'รหัสสาขา',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'ชื่อสาขา',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'เลขที่สัญญา',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'เลขสัญญาเก่า',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'เลขที่สัญญาประกัน',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'เลขล็อค',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'วันที่เริ่มเช่า',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'วันที่สิ้นสุดสัญญา',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'ประเภทสินค้า',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'น้ำ + ไฟ',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'ค่าเช่า',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'ค่าบริการ',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'เงินประกัน',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'วันที่ยกเลิก',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'ผู้ดูแล',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                  // height: (Responsive.isDesktop(context))
+                                  //     ? MediaQuery.of(context).size.width * 0.255
+                                  //     : MediaQuery.of(context).size.height * 0.45,
+                                  child: ListView.builder(
+                                itemCount: teNantModels_New.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return ListTile(
+                                    title: Container(
+                                      decoration: const BoxDecoration(
+                                        // color: Colors.green[100]!
+                                        //     .withOpacity(0.5),
+                                        border: Border(
+                                          bottom: BorderSide(
+                                            color: Colors.black12,
+                                            width: 1,
+                                          ),
+                                        ),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            width: 50,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              '${index + 1}',
+                                              textAlign: TextAlign.left,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              '${teNantModels_New[index].cname}',
+                                              // '${transKonModels[index].pdate}',
+                                              textAlign: TextAlign.left,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 2,
+                                              '${teNantModels_New[index].tax}',
+                                              textAlign: TextAlign.left,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 2,
+                                              (teNantModels_New[index].zser !=
+                                                      null)
+                                                  ? '${teNantModels_New[index].zser}'
+                                                  : '${teNantModels_New[index].zser1}',
+                                              textAlign: TextAlign.left,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Tooltip(
+                                              richMessage: TextSpan(
+                                                text: (teNantModels_New[index]
+                                                            .zn !=
+                                                        null)
+                                                    ? '${teNantModels_New[index].zn}'
+                                                    : '${teNantModels_New[index].zn1}',
+                                                style: const TextStyle(
+                                                  color: HomeScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  //fontSize: 10.0
+                                                ),
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                color: Colors.grey[200],
+                                              ),
+                                              child: AutoSizeText(
+                                                minFontSize: 10,
+                                                maxFontSize: 25,
+                                                maxLines: 2,
+                                                (teNantModels_New[index].zn !=
+                                                        null)
+                                                    ? '${teNantModels_New[index].zn}'
+                                                    : '${teNantModels_New[index].zn1}',
+                                                textAlign: TextAlign.left,
+                                                style: const TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text2_,
+                                                    //fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Tooltip(
+                                              richMessage: TextSpan(
+                                                text: (teNantModels_New[index]
+                                                            .cid ==
+                                                        null)
+                                                    ? ''
+                                                    : '${teNantModels_New[index].cid}',
+                                                style: const TextStyle(
+                                                  color: HomeScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  //fontSize: 10.0
+                                                ),
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                color: Colors.grey[200],
+                                              ),
+                                              child: AutoSizeText(
+                                                minFontSize: 10,
+                                                maxFontSize: 25,
+                                                maxLines: 1,
+                                                (teNantModels_New[index].cid ==
+                                                        null)
+                                                    ? ''
+                                                    : '${teNantModels_New[index].cid}',
+                                                textAlign: TextAlign.left,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text2_,
+                                                    //fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Tooltip(
+                                              richMessage: TextSpan(
+                                                text: (teNantModels_New[index]
+                                                            .fid ==
+                                                        null)
+                                                    ? ''
+                                                    : '${teNantModels_New[index].fid}',
+                                                style: const TextStyle(
+                                                  color: HomeScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  //fontSize: 10.0
+                                                ),
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                color: Colors.grey[200],
+                                              ),
+                                              child: AutoSizeText(
+                                                minFontSize: 10,
+                                                maxFontSize: 25,
+                                                maxLines: 1,
+                                                (teNantModels_New[index].fid ==
+                                                        null)
+                                                    ? ''
+                                                    : '${teNantModels_New[index].fid}',
+                                                textAlign: TextAlign.left,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text2_,
+                                                    //fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              (teNantModels_New[index].docno ==
+                                                      null)
+                                                  ? ''
+                                                  : '${teNantModels_New[index].docno}',
+                                              textAlign: TextAlign.left,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              '${teNantModels_New[index].ln}',
+                                              textAlign: TextAlign.left,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              '${teNantModels_New[index].sdate}',
+                                              textAlign: TextAlign.center,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              '${teNantModels_New[index].ldate}',
+                                              textAlign: TextAlign.center,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              '${teNantModels_New[index].stype}',
+                                              textAlign: TextAlign.left,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              '${(teNantModels_New[index].water_electri == null) ? '' : teNantModels_New[index].water_electri.toString()}',
+                                              textAlign: TextAlign.left,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              // '${teNantModels[index].rent_total}',
+                                              (teNantModels_New[index]
+                                                          .rent_total ==
+                                                      null)
+                                                  ? '0.00'
+                                                  : nFormat
+                                                      .format(double.parse(
+                                                          '${teNantModels_New[index].rent_total}'))
+                                                      .toString(),
+                                              textAlign: TextAlign.right,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              (teNantModels_New[index]
+                                                          .service_total ==
+                                                      null)
+                                                  ? '0.00'
+                                                  : nFormat
+                                                      .format(double.parse(
+                                                          '${teNantModels_New[index].service_total}'))
+                                                      .toString(),
+                                              textAlign: TextAlign.right,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              (teNantModels_New[index]
+                                                          .service_total ==
+                                                      null)
+                                                  ? '0.00'
+                                                  : nFormat
+                                                      .format(double.parse(
+                                                          '${teNantModels_New[index].pakan_vat}'))
+                                                      .toString(),
+                                              textAlign: TextAlign.right,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              (teNantModels_New[index]
+                                                          .cc_date
+                                                          .toString() ==
+                                                      '0000-00-00')
+                                                  ? ''
+                                                  : '${teNantModels_New[index].cc_date}',
+                                              textAlign: TextAlign.center,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              '${teNantModels_New[index].user}',
+                                              textAlign: TextAlign.left,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              )),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
+          actions: <Widget>[
+            const SizedBox(height: 1),
+            const Divider(),
+            const SizedBox(height: 1),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    if (teNantModels_New.length != 0)
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          child: Container(
+                            width: 100,
+                            decoration: const BoxDecoration(
+                              color: Colors.blue,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Center(
+                              child: Text(
+                                'Export file',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                              ),
+                            ),
+                          ),
+                          onTap: () async {
+                            setState(() {
+                              Value_Report = 'รายงานประวัติผู้เช่า';
+                              Pre_and_Dow = 'Download';
+                            });
+                            _showMyDialog_SAVE();
+                          },
+                        ),
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        child: Container(
+                          width: 100,
+                          decoration: const BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                          ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: const Center(
+                            child: Text(
+                              'ปิด',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T,
+                              ),
+                            ),
+                          ),
+                        ),
+                        onTap: () async {
+                          setState(() {
+                            Value_Chang_Zone_People_TeNantNew = null;
+                            Value_Chang_Zone_Ser_People_TeNantNew = null;
+
+                            Await_Status_Report3 = null;
+
+                            teNantModels_New.clear();
+                            _teNantModels_New.clear();
+                          });
+                          // check_clear();
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   ////////////------------------------------------------------------>(Export file )
   Future<void> _showMyDialog_SAVE() async {
     return showDialog<void>(
@@ -1773,6 +4787,17 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                   billpay_Mon,
                   monthsInThai[int.parse(Mon_billpay_Mon.toString()) - 1],
                   YE_billpay_Mon);
+        } else if (Value_Report == 'รายงานประวัติผู้เช่า') {
+          Excgen_PeopleTenantReport_Choice
+              .exportExcel_PeopleTenantReport_Choice(
+                  context,
+                  NameFile_,
+                  _verticalGroupValue_NameFile,
+                  renTal_name,
+                  Value_Chang_Zone_People_TeNant,
+                  teNantModels,
+                  Mon_PeopleTeNant_Mon,
+                  YE_PeopleTeNant_Mon);
         }
       }
       Navigator.of(context).pop();

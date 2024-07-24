@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../PeopleChao/Rental_Information.dart';
 import '../../Style/ThaiBaht.dart';
+import '../../Style/loadAndCacheImage.dart';
 
 class Pdfgen_Agreement_JSpace2 {
 //////////---------------------------------------------------->( **** เอกสารสัญญาเช่า ปกติ  J Space Sansai)
@@ -73,6 +74,7 @@ class Pdfgen_Agreement_JSpace2 {
     final iconImage =
         (await rootBundle.load('images/LOGO.png')).buffer.asUint8List();
     List netImage = [];
+    Uint8List? resizedLogo = await getResizedLogo();
     SharedPreferences preferences = await SharedPreferences.getInstance();
     int pageCount = 1; // Initialize the page count
     String? base64Image_1 = preferences.getString('base64Image1');
@@ -87,9 +89,9 @@ class Pdfgen_Agreement_JSpace2 {
     // Uint8List data2 = base64Decode(base64Image_new2);
     // Uint8List data3 = base64Decode(base64Image_new3);
     // Uint8List data4 = base64Decode(base64Image_new4);
-    for (int i = 0; i < newValuePDFimg.length; i++) {
-      netImage.add(await networkImage('${newValuePDFimg[i]}'));
-    }
+    // for (int i = 0; i < newValuePDFimg.length; i++) {
+    //   netImage.add(await networkImage('${newValuePDFimg[i]}'));
+    // }
 
 ///////////////////////------------------------------------------------->
 
@@ -106,14 +108,22 @@ class Pdfgen_Agreement_JSpace2 {
           children: [
             pw.Row(
               children: [
-                (netImage.isEmpty)
-                    ? pw.Container(
-                        height: 72,
-                        width: 70,
-                        color: PdfColors.grey200,
-                        child: pw.Center(
+                pw.Container(
+                  height: 60,
+                  width: 60,
+                  decoration: pw.BoxDecoration(
+                    color: PdfColors.grey200,
+                    border: pw.Border.all(color: PdfColors.grey300),
+                  ),
+                  child: resizedLogo != null
+                      ? pw.Image(
+                          pw.MemoryImage(resizedLogo),
+                          height: 60,
+                          width: 60,
+                        )
+                      : pw.Center(
                           child: pw.Text(
-                            '$renTal_name ',
+                            '$bill_name ',
                             maxLines: 1,
                             style: pw.TextStyle(
                               fontSize: 10,
@@ -121,18 +131,35 @@ class Pdfgen_Agreement_JSpace2 {
                               color: Colors_pd,
                             ),
                           ),
-                        ))
+                        ),
+                ),
+                // (netImage.isEmpty)
+                //     ? pw.Container(
+                //         height: 72,
+                //         width: 70,
+                //         color: PdfColors.grey200,
+                //         child: pw.Center(
+                //           child: pw.Text(
+                //             '$renTal_name ',
+                //             maxLines: 1,
+                //             style: pw.TextStyle(
+                //               fontSize: 10,
+                //               font: ttf,
+                //               color: Colors_pd,
+                //             ),
+                //           ),
+                //         ))
 
-                    // pw.Image(
-                    //     pw.MemoryImage(iconImage),
-                    //     height: 72,
-                    //     width: 70,
-                    //   )
-                    : pw.Image(
-                        (netImage[0]),
-                        height: 72,
-                        width: 70,
-                      ),
+                //     // pw.Image(
+                //     //     pw.MemoryImage(iconImage),
+                //     //     height: 72,
+                //     //     width: 70,
+                //     //   )
+                //     : pw.Image(
+                //         (netImage[0]),
+                //         height: 72,
+                //         width: 70,
+                //       ),
                 pw.SizedBox(width: 1 * PdfPageFormat.mm),
                 pw.Container(
                   width: 280,

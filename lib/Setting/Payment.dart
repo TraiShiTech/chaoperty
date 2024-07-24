@@ -74,6 +74,8 @@ class _PaymentState extends State<Payment> {
   final btype_bank = TextEditingController();
   final fine_ba = TextEditingController();
   final fine_bc = TextEditingController();
+  final fine_key = TextEditingController();
+
   String? payment_IMG;
   ///////---------------------------------------------------->
   @override
@@ -1389,240 +1391,24 @@ class _PaymentState extends State<Payment> {
                                                                 ),
                                                               ),
                                                             ),
-                                                          Row(
-                                                            children: const [
-                                                              Padding(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            8.0),
-                                                                child: Text(
-                                                                  'เลขบัญชีธนาคาร',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .left,
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: SettingScreen_Color
-                                                                        .Colors_Text1_,
-                                                                    fontFamily:
-                                                                        FontWeight_
-                                                                            .Fonts_T,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: SizedBox(
-                                                              // width: 200,
-                                                              child:
-                                                                  TextFormField(
-                                                                keyboardType:
-                                                                    TextInputType
-                                                                        .number,
-                                                                controller:
-                                                                    bno_bank,
-
-                                                                // maxLength: 13,
-                                                                cursorColor:
-                                                                    Colors
-                                                                        .green,
-                                                                decoration: InputDecoration(
-                                                                    fillColor: Colors.white.withOpacity(0.3),
-                                                                    filled: true,
-                                                                    // prefixIcon:
-                                                                    //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                    // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                    focusedBorder: const OutlineInputBorder(
-                                                                      borderRadius:
-                                                                          BorderRadius
-                                                                              .only(
-                                                                        topRight:
-                                                                            Radius.circular(15),
-                                                                        topLeft:
-                                                                            Radius.circular(15),
-                                                                        bottomRight:
-                                                                            Radius.circular(15),
-                                                                        bottomLeft:
-                                                                            Radius.circular(15),
-                                                                      ),
-                                                                      borderSide:
-                                                                          BorderSide(
-                                                                        width:
-                                                                            1,
-                                                                        color: Colors
-                                                                            .black,
-                                                                      ),
-                                                                    ),
-                                                                    enabledBorder: const OutlineInputBorder(
-                                                                      borderRadius:
-                                                                          BorderRadius
-                                                                              .only(
-                                                                        topRight:
-                                                                            Radius.circular(15),
-                                                                        topLeft:
-                                                                            Radius.circular(15),
-                                                                        bottomRight:
-                                                                            Radius.circular(15),
-                                                                        bottomLeft:
-                                                                            Radius.circular(15),
-                                                                      ),
-                                                                      borderSide:
-                                                                          BorderSide(
-                                                                        width:
-                                                                            1,
-                                                                        color: Colors
-                                                                            .grey,
-                                                                      ),
-                                                                    ),
-                                                                    labelStyle: const TextStyle(
-                                                                      color: Colors
-                                                                          .black54,
-                                                                      fontFamily:
-                                                                          FontWeight_
-                                                                              .Fonts_T,
-                                                                    )),
-                                                                // inputFormatters: <TextInputFormatter>[
-                                                                //   // for below version 2 use this
-                                                                //   // FilteringTextInputFormatter.allow(
-                                                                //   //     RegExp(r'[0-9]')),
-                                                                //   // for version 2 and greater youcan also use this
-                                                                //   FilteringTextInputFormatter.digitsOnly
-                                                                // ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Row(
-                                                            children: const [
-                                                              Padding(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            8.0),
-                                                                child: Text(
-                                                                  'สาขา',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .left,
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: SettingScreen_Color
-                                                                        .Colors_Text1_,
-                                                                    fontFamily:
-                                                                        FontWeight_
-                                                                            .Fonts_T,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: SizedBox(
-                                                              // width: 200,
-                                                              child:
-                                                                  TextFormField(
-                                                                keyboardType:
-                                                                    TextInputType
-                                                                        .number,
-                                                                controller:
-                                                                    bsaka_bank,
-
-                                                                // maxLength: 13,
-                                                                cursorColor:
-                                                                    Colors
-                                                                        .green,
-                                                                decoration: InputDecoration(
-                                                                    fillColor: Colors.white.withOpacity(0.3),
-                                                                    filled: true,
-                                                                    // prefixIcon:
-                                                                    //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                    // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                    focusedBorder: const OutlineInputBorder(
-                                                                      borderRadius:
-                                                                          BorderRadius
-                                                                              .only(
-                                                                        topRight:
-                                                                            Radius.circular(15),
-                                                                        topLeft:
-                                                                            Radius.circular(15),
-                                                                        bottomRight:
-                                                                            Radius.circular(15),
-                                                                        bottomLeft:
-                                                                            Radius.circular(15),
-                                                                      ),
-                                                                      borderSide:
-                                                                          BorderSide(
-                                                                        width:
-                                                                            1,
-                                                                        color: Colors
-                                                                            .black,
-                                                                      ),
-                                                                    ),
-                                                                    enabledBorder: const OutlineInputBorder(
-                                                                      borderRadius:
-                                                                          BorderRadius
-                                                                              .only(
-                                                                        topRight:
-                                                                            Radius.circular(15),
-                                                                        topLeft:
-                                                                            Radius.circular(15),
-                                                                        bottomRight:
-                                                                            Radius.circular(15),
-                                                                        bottomLeft:
-                                                                            Radius.circular(15),
-                                                                      ),
-                                                                      borderSide:
-                                                                          BorderSide(
-                                                                        width:
-                                                                            1,
-                                                                        color: Colors
-                                                                            .grey,
-                                                                      ),
-                                                                    ),
-                                                                    labelStyle: const TextStyle(
-                                                                      color: Colors
-                                                                          .black54,
-                                                                      fontFamily:
-                                                                          FontWeight_
-                                                                              .Fonts_T,
-                                                                    )),
-                                                                // inputFormatters: <TextInputFormatter>[
-                                                                //   // for below version 2 use this
-                                                                //   // FilteringTextInputFormatter.allow(
-                                                                //   //     RegExp(r'[0-9]')),
-                                                                //   // for version 2 and greater youcan also use this
-                                                                //   FilteringTextInputFormatter.digitsOnly
-                                                                // ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: Row(
-                                                              children: [
-                                                                SizedBox(
+                                                          if (name_typepay
+                                                                  .toString()
+                                                                  .trim() !=
+                                                              'QR IMAGE')
+                                                            Row(
+                                                              children: const [
+                                                                Padding(
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              8.0),
                                                                   child: Text(
-                                                                    'ค่าธรรมเนียม',
+                                                                    'เลขบัญชีธนาคาร',
                                                                     textAlign:
                                                                         TextAlign
                                                                             .left,
                                                                     style:
-                                                                        const TextStyle(
+                                                                        TextStyle(
                                                                       color: SettingScreen_Color
                                                                           .Colors_Text1_,
                                                                       fontFamily:
@@ -1634,225 +1420,433 @@ class _PaymentState extends State<Payment> {
                                                                     ),
                                                                   ),
                                                                 ),
-                                                                SizedBox(
-                                                                  width: 15,
-                                                                ),
-                                                                fine_count ==
-                                                                        '0'
-                                                                    ? IconButton(
-                                                                        onPressed:
-                                                                            () {
-                                                                          setState(
-                                                                              () {
-                                                                            fine_count =
-                                                                                '1';
-                                                                          });
-                                                                        },
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .center,
-                                                                        tooltip:
-                                                                            'ปิด',
-                                                                        iconSize:
-                                                                            50,
-                                                                        icon:
-                                                                            Icon(
-                                                                          Icons
-                                                                              .toggle_off,
+                                                              ],
+                                                            ),
+                                                          if (name_typepay
+                                                                  .toString()
+                                                                  .trim() !=
+                                                              'QR IMAGE')
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: SizedBox(
+                                                                // width: 200,
+                                                                child:
+                                                                    TextFormField(
+                                                                  keyboardType:
+                                                                      TextInputType
+                                                                          .number,
+                                                                  controller:
+                                                                      bno_bank,
+
+                                                                  // maxLength: 13,
+                                                                  cursorColor:
+                                                                      Colors
+                                                                          .green,
+                                                                  decoration: InputDecoration(
+                                                                      fillColor: Colors.white.withOpacity(0.3),
+                                                                      filled: true,
+                                                                      // prefixIcon:
+                                                                      //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                      // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                      focusedBorder: const OutlineInputBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.only(
+                                                                          topRight:
+                                                                              Radius.circular(15),
+                                                                          topLeft:
+                                                                              Radius.circular(15),
+                                                                          bottomRight:
+                                                                              Radius.circular(15),
+                                                                          bottomLeft:
+                                                                              Radius.circular(15),
+                                                                        ),
+                                                                        borderSide:
+                                                                            BorderSide(
+                                                                          width:
+                                                                              1,
                                                                           color:
                                                                               Colors.black,
-                                                                          // size: 50,
-                                                                        ))
-                                                                    : IconButton(
-                                                                        onPressed:
-                                                                            () {
+                                                                        ),
+                                                                      ),
+                                                                      enabledBorder: const OutlineInputBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.only(
+                                                                          topRight:
+                                                                              Radius.circular(15),
+                                                                          topLeft:
+                                                                              Radius.circular(15),
+                                                                          bottomRight:
+                                                                              Radius.circular(15),
+                                                                          bottomLeft:
+                                                                              Radius.circular(15),
+                                                                        ),
+                                                                        borderSide:
+                                                                            BorderSide(
+                                                                          width:
+                                                                              1,
+                                                                          color:
+                                                                              Colors.grey,
+                                                                        ),
+                                                                      ),
+                                                                      labelStyle: const TextStyle(
+                                                                        color: Colors
+                                                                            .black54,
+                                                                        fontFamily:
+                                                                            FontWeight_.Fonts_T,
+                                                                      )),
+                                                                  // inputFormatters: <TextInputFormatter>[
+                                                                  //   // for below version 2 use this
+                                                                  //   // FilteringTextInputFormatter.allow(
+                                                                  //   //     RegExp(r'[0-9]')),
+                                                                  //   // for version 2 and greater youcan also use this
+                                                                  //   FilteringTextInputFormatter.digitsOnly
+                                                                  // ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          if (name_typepay
+                                                                  .toString()
+                                                                  .trim() !=
+                                                              'QR IMAGE')
+                                                            Row(
+                                                              children: const [
+                                                                Padding(
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              8.0),
+                                                                  child: Text(
+                                                                    'สาขา',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .left,
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: SettingScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      fontFamily:
+                                                                          FontWeight_
+                                                                              .Fonts_T,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          if (name_typepay
+                                                                  .toString()
+                                                                  .trim() !=
+                                                              'QR IMAGE')
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: SizedBox(
+                                                                // width: 200,
+                                                                child:
+                                                                    TextFormField(
+                                                                  keyboardType:
+                                                                      TextInputType
+                                                                          .number,
+                                                                  controller:
+                                                                      bsaka_bank,
+
+                                                                  // maxLength: 13,
+                                                                  cursorColor:
+                                                                      Colors
+                                                                          .green,
+                                                                  decoration: InputDecoration(
+                                                                      fillColor: Colors.white.withOpacity(0.3),
+                                                                      filled: true,
+                                                                      // prefixIcon:
+                                                                      //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                      // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                      focusedBorder: const OutlineInputBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.only(
+                                                                          topRight:
+                                                                              Radius.circular(15),
+                                                                          topLeft:
+                                                                              Radius.circular(15),
+                                                                          bottomRight:
+                                                                              Radius.circular(15),
+                                                                          bottomLeft:
+                                                                              Radius.circular(15),
+                                                                        ),
+                                                                        borderSide:
+                                                                            BorderSide(
+                                                                          width:
+                                                                              1,
+                                                                          color:
+                                                                              Colors.black,
+                                                                        ),
+                                                                      ),
+                                                                      enabledBorder: const OutlineInputBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.only(
+                                                                          topRight:
+                                                                              Radius.circular(15),
+                                                                          topLeft:
+                                                                              Radius.circular(15),
+                                                                          bottomRight:
+                                                                              Radius.circular(15),
+                                                                          bottomLeft:
+                                                                              Radius.circular(15),
+                                                                        ),
+                                                                        borderSide:
+                                                                            BorderSide(
+                                                                          width:
+                                                                              1,
+                                                                          color:
+                                                                              Colors.grey,
+                                                                        ),
+                                                                      ),
+                                                                      labelStyle: const TextStyle(
+                                                                        color: Colors
+                                                                            .black54,
+                                                                        fontFamily:
+                                                                            FontWeight_.Fonts_T,
+                                                                      )),
+                                                                  // inputFormatters: <TextInputFormatter>[
+                                                                  //   // for below version 2 use this
+                                                                  //   // FilteringTextInputFormatter.allow(
+                                                                  //   //     RegExp(r'[0-9]')),
+                                                                  //   // for version 2 and greater youcan also use this
+                                                                  //   FilteringTextInputFormatter.digitsOnly
+                                                                  // ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          if (name_typepay
+                                                                  .toString()
+                                                                  .trim() !=
+                                                              'QR IMAGE')
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: Row(
+                                                                children: [
+                                                                  SizedBox(
+                                                                    child: Text(
+                                                                      'ค่าธรรมเนียม',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .left,
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        color: SettingScreen_Color
+                                                                            .Colors_Text1_,
+                                                                        fontFamily:
+                                                                            FontWeight_.Fonts_T,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width: 15,
+                                                                  ),
+                                                                  fine_count ==
+                                                                          '0'
+                                                                      ? IconButton(
+                                                                          onPressed:
+                                                                              () {
+                                                                            setState(() {
+                                                                              fine_count = '1';
+                                                                            });
+                                                                          },
+                                                                          alignment: Alignment
+                                                                              .center,
+                                                                          tooltip:
+                                                                              'ปิด',
+                                                                          iconSize:
+                                                                              50,
+                                                                          icon:
+                                                                              Icon(
+                                                                            Icons.toggle_off,
+                                                                            color:
+                                                                                Colors.black,
+                                                                            // size: 50,
+                                                                          ))
+                                                                      : IconButton(
+                                                                          onPressed:
+                                                                              () {
+                                                                            setState(() {
+                                                                              fine_count = '0';
+                                                                            });
+                                                                          },
+                                                                          alignment: Alignment
+                                                                              .center,
+                                                                          tooltip:
+                                                                              'เปิด',
+                                                                          iconSize:
+                                                                              50,
+                                                                          icon:
+                                                                              Icon(
+                                                                            Icons.toggle_on,
+                                                                            color:
+                                                                                Colors.green,
+                                                                            // size: 50,
+                                                                          )),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          if (name_typepay
+                                                                  .toString()
+                                                                  .trim() !=
+                                                              'QR IMAGE')
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: Row(
+                                                                children: [
+                                                                  Expanded(
+                                                                    flex: 2,
+                                                                    child:
+                                                                        SizedBox(
+                                                                      // width: 200,
+                                                                      child:
+                                                                          TextFormField(
+                                                                        keyboardType:
+                                                                            TextInputType.number,
+                                                                        controller:
+                                                                            fine_bc,
+                                                                        onChanged:
+                                                                            (velue) {
                                                                           setState(
                                                                               () {
-                                                                            fine_count =
-                                                                                '0';
+                                                                            fine_ba.text =
+                                                                                '0.00';
                                                                           });
                                                                         },
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .center,
-                                                                        tooltip:
-                                                                            'เปิด',
-                                                                        iconSize:
-                                                                            50,
-                                                                        icon:
-                                                                            Icon(
-                                                                          Icons
-                                                                              .toggle_on,
-                                                                          color:
-                                                                              Colors.green,
-                                                                          // size: 50,
-                                                                        )),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: Row(
-                                                              children: [
-                                                                Expanded(
-                                                                  flex: 2,
-                                                                  child:
-                                                                      SizedBox(
-                                                                    // width: 200,
-                                                                    child:
-                                                                        TextFormField(
-                                                                      keyboardType:
-                                                                          TextInputType
-                                                                              .number,
-                                                                      controller:
-                                                                          fine_bc,
-                                                                      onChanged:
-                                                                          (velue) {
-                                                                        setState(
-                                                                            () {
-                                                                          fine_ba.text =
-                                                                              '0.00';
-                                                                        });
-                                                                      },
 
-                                                                      // maxLength: 13,
-                                                                      cursorColor:
-                                                                          Colors
-                                                                              .green,
-                                                                      decoration: InputDecoration(
-                                                                          fillColor: Colors.white.withOpacity(0.3),
-                                                                          filled: true,
-                                                                          // prefixIcon:
-                                                                          //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                          focusedBorder: const OutlineInputBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.only(
-                                                                              topRight: Radius.circular(15),
-                                                                              topLeft: Radius.circular(15),
-                                                                              bottomRight: Radius.circular(15),
-                                                                              bottomLeft: Radius.circular(15),
+                                                                        // maxLength: 13,
+                                                                        cursorColor:
+                                                                            Colors.green,
+                                                                        decoration: InputDecoration(
+                                                                            fillColor: Colors.white.withOpacity(0.3),
+                                                                            filled: true,
+                                                                            // prefixIcon:
+                                                                            //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                            focusedBorder: const OutlineInputBorder(
+                                                                              borderRadius: BorderRadius.only(
+                                                                                topRight: Radius.circular(15),
+                                                                                topLeft: Radius.circular(15),
+                                                                                bottomRight: Radius.circular(15),
+                                                                                bottomLeft: Radius.circular(15),
+                                                                              ),
+                                                                              borderSide: BorderSide(
+                                                                                width: 1,
+                                                                                color: Colors.black,
+                                                                              ),
                                                                             ),
-                                                                            borderSide:
-                                                                                BorderSide(
-                                                                              width: 1,
-                                                                              color: Colors.black,
+                                                                            enabledBorder: const OutlineInputBorder(
+                                                                              borderRadius: BorderRadius.only(
+                                                                                topRight: Radius.circular(15),
+                                                                                topLeft: Radius.circular(15),
+                                                                                bottomRight: Radius.circular(15),
+                                                                                bottomLeft: Radius.circular(15),
+                                                                              ),
+                                                                              borderSide: BorderSide(
+                                                                                width: 1,
+                                                                                color: Colors.grey,
+                                                                              ),
                                                                             ),
-                                                                          ),
-                                                                          enabledBorder: const OutlineInputBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.only(
-                                                                              topRight: Radius.circular(15),
-                                                                              topLeft: Radius.circular(15),
-                                                                              bottomRight: Radius.circular(15),
-                                                                              bottomLeft: Radius.circular(15),
-                                                                            ),
-                                                                            borderSide:
-                                                                                BorderSide(
-                                                                              width: 1,
-                                                                              color: Colors.grey,
-                                                                            ),
-                                                                          ),
-                                                                          labelText: 'เปอร์เซนต์',
-                                                                          labelStyle: const TextStyle(
-                                                                            color:
-                                                                                Colors.black54,
-                                                                            fontFamily:
-                                                                                FontWeight_.Fonts_T,
-                                                                          )),
-                                                                      // inputFormatters: <TextInputFormatter>[
-                                                                      //   // for below version 2 use this
-                                                                      //   // FilteringTextInputFormatter.allow(
-                                                                      //   //     RegExp(r'[0-9]')),
-                                                                      //   // for version 2 and greater youcan also use this
-                                                                      //   FilteringTextInputFormatter.digitsOnly
-                                                                      // ],
+                                                                            labelText: 'เปอร์เซนต์',
+                                                                            labelStyle: const TextStyle(
+                                                                              color: Colors.black54,
+                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                            )),
+                                                                        // inputFormatters: <TextInputFormatter>[
+                                                                        //   // for below version 2 use this
+                                                                        //   // FilteringTextInputFormatter.allow(
+                                                                        //   //     RegExp(r'[0-9]')),
+                                                                        //   // for version 2 and greater youcan also use this
+                                                                        //   FilteringTextInputFormatter.digitsOnly
+                                                                        // ],
+                                                                      ),
                                                                     ),
                                                                   ),
-                                                                ),
-                                                                SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                                Expanded(
-                                                                  flex: 2,
-                                                                  child:
-                                                                      SizedBox(
-                                                                    // width: 200,
+                                                                  SizedBox(
+                                                                    width: 10,
+                                                                  ),
+                                                                  Expanded(
+                                                                    flex: 2,
                                                                     child:
-                                                                        TextFormField(
-                                                                      keyboardType:
-                                                                          TextInputType
-                                                                              .number,
-                                                                      controller:
-                                                                          fine_ba,
-                                                                      onChanged:
-                                                                          (velue) {
-                                                                        setState(
-                                                                            () {
-                                                                          fine_bc.text =
-                                                                              '0.00';
-                                                                        });
-                                                                      },
-                                                                      // maxLength: 13,
-                                                                      cursorColor:
-                                                                          Colors
-                                                                              .green,
-                                                                      decoration: InputDecoration(
-                                                                          fillColor: Colors.white.withOpacity(0.3),
-                                                                          filled: true,
-                                                                          // prefixIcon:
-                                                                          //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                          focusedBorder: const OutlineInputBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.only(
-                                                                              topRight: Radius.circular(15),
-                                                                              topLeft: Radius.circular(15),
-                                                                              bottomRight: Radius.circular(15),
-                                                                              bottomLeft: Radius.circular(15),
+                                                                        SizedBox(
+                                                                      // width: 200,
+                                                                      child:
+                                                                          TextFormField(
+                                                                        keyboardType:
+                                                                            TextInputType.number,
+                                                                        controller:
+                                                                            fine_ba,
+                                                                        onChanged:
+                                                                            (velue) {
+                                                                          setState(
+                                                                              () {
+                                                                            fine_bc.text =
+                                                                                '0.00';
+                                                                          });
+                                                                        },
+                                                                        // maxLength: 13,
+                                                                        cursorColor:
+                                                                            Colors.green,
+                                                                        decoration: InputDecoration(
+                                                                            fillColor: Colors.white.withOpacity(0.3),
+                                                                            filled: true,
+                                                                            // prefixIcon:
+                                                                            //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                            focusedBorder: const OutlineInputBorder(
+                                                                              borderRadius: BorderRadius.only(
+                                                                                topRight: Radius.circular(15),
+                                                                                topLeft: Radius.circular(15),
+                                                                                bottomRight: Radius.circular(15),
+                                                                                bottomLeft: Radius.circular(15),
+                                                                              ),
+                                                                              borderSide: BorderSide(
+                                                                                width: 1,
+                                                                                color: Colors.black,
+                                                                              ),
                                                                             ),
-                                                                            borderSide:
-                                                                                BorderSide(
-                                                                              width: 1,
-                                                                              color: Colors.black,
+                                                                            enabledBorder: const OutlineInputBorder(
+                                                                              borderRadius: BorderRadius.only(
+                                                                                topRight: Radius.circular(15),
+                                                                                topLeft: Radius.circular(15),
+                                                                                bottomRight: Radius.circular(15),
+                                                                                bottomLeft: Radius.circular(15),
+                                                                              ),
+                                                                              borderSide: BorderSide(
+                                                                                width: 1,
+                                                                                color: Colors.grey,
+                                                                              ),
                                                                             ),
-                                                                          ),
-                                                                          enabledBorder: const OutlineInputBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.only(
-                                                                              topRight: Radius.circular(15),
-                                                                              topLeft: Radius.circular(15),
-                                                                              bottomRight: Radius.circular(15),
-                                                                              bottomLeft: Radius.circular(15),
-                                                                            ),
-                                                                            borderSide:
-                                                                                BorderSide(
-                                                                              width: 1,
-                                                                              color: Colors.grey,
-                                                                            ),
-                                                                          ),
-                                                                          labelText: 'บาท',
-                                                                          labelStyle: const TextStyle(
-                                                                            color:
-                                                                                Colors.black54,
-                                                                            fontFamily:
-                                                                                FontWeight_.Fonts_T,
-                                                                          )),
-                                                                      // inputFormatters: <TextInputFormatter>[
-                                                                      //   // for below version 2 use this
-                                                                      //   // FilteringTextInputFormatter.allow(
-                                                                      //   //     RegExp(r'[0-9]')),
-                                                                      //   // for version 2 and greater youcan also use this
-                                                                      //   FilteringTextInputFormatter.digitsOnly
-                                                                      // ],
+                                                                            labelText: 'บาท',
+                                                                            labelStyle: const TextStyle(
+                                                                              color: Colors.black54,
+                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                            )),
+                                                                        // inputFormatters: <TextInputFormatter>[
+                                                                        //   // for below version 2 use this
+                                                                        //   // FilteringTextInputFormatter.allow(
+                                                                        //   //     RegExp(r'[0-9]')),
+                                                                        //   // for version 2 and greater youcan also use this
+                                                                        //   FilteringTextInputFormatter.digitsOnly
+                                                                        // ],
+                                                                      ),
                                                                     ),
-                                                                  ),
-                                                                )
-                                                              ],
+                                                                  )
+                                                                ],
+                                                              ),
                                                             ),
-                                                          ),
                                                         ],
                                                       ),
                                                     ),
@@ -2222,17 +2216,11 @@ class _PaymentState extends State<Payment> {
                                                             const EdgeInsets
                                                                 .all(0.0),
                                                         child: (payMentModels[
-                                                                            index]
-                                                                        .co
-                                                                        .toString()
-                                                                        .trim() ==
-                                                                    'AC' ||
-                                                                payMentModels[
-                                                                            index]
-                                                                        .co
-                                                                        .toString()
-                                                                        .trim() ==
-                                                                    'OP')
+                                                                        index]
+                                                                    .co
+                                                                    .toString()
+                                                                    .trim() !=
+                                                                'CASH')
                                                             ? InkWell(
                                                                 child: Container(
                                                                     decoration: const BoxDecoration(
@@ -2663,6 +2651,10 @@ class _PaymentState extends State<Payment> {
                                                                 payMentModels[
                                                                         index]
                                                                     .fine;
+                                                            fine_key.text =
+                                                                payMentModels[
+                                                                        index]
+                                                                    .key_b!;
                                                           });
 
                                                           showDialog<String>(
@@ -3100,325 +3092,399 @@ class _PaymentState extends State<Payment> {
                                                                                         ),
                                                                                       ),
                                                                                     ),
-                                                                                  Align(
-                                                                                    alignment: Alignment.centerLeft,
-                                                                                    child: Padding(
-                                                                                      padding: const EdgeInsets.all(8.0),
-                                                                                      child: Text(
-                                                                                        'เลขบัญชีธนาคาร',
-                                                                                        textAlign: TextAlign.left,
-                                                                                        style: const TextStyle(
-                                                                                          color: SettingScreen_Color.Colors_Text1_,
-                                                                                          fontFamily: FontWeight_.Fonts_T,
-                                                                                          fontWeight: FontWeight.bold,
-                                                                                        ),
-                                                                                      ),
-                                                                                    ),
-                                                                                  ),
-                                                                                  Padding(
-                                                                                    padding: const EdgeInsets.all(8.0),
-                                                                                    child: SizedBox(
-                                                                                      // width: 200,
-                                                                                      child: TextFormField(
-                                                                                        keyboardType: TextInputType.number,
-                                                                                        controller: bno_bank,
-
-                                                                                        // maxLength: 13,
-                                                                                        cursorColor: Colors.green,
-                                                                                        decoration: InputDecoration(
-                                                                                            fillColor: Colors.white.withOpacity(0.3),
-                                                                                            filled: true,
-                                                                                            // prefixIcon:
-                                                                                            //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                                            focusedBorder: const OutlineInputBorder(
-                                                                                              borderRadius: BorderRadius.only(
-                                                                                                topRight: Radius.circular(15),
-                                                                                                topLeft: Radius.circular(15),
-                                                                                                bottomRight: Radius.circular(15),
-                                                                                                bottomLeft: Radius.circular(15),
-                                                                                              ),
-                                                                                              borderSide: BorderSide(
-                                                                                                width: 1,
-                                                                                                color: Colors.black,
-                                                                                              ),
-                                                                                            ),
-                                                                                            enabledBorder: const OutlineInputBorder(
-                                                                                              borderRadius: BorderRadius.only(
-                                                                                                topRight: Radius.circular(15),
-                                                                                                topLeft: Radius.circular(15),
-                                                                                                bottomRight: Radius.circular(15),
-                                                                                                bottomLeft: Radius.circular(15),
-                                                                                              ),
-                                                                                              borderSide: BorderSide(
-                                                                                                width: 1,
-                                                                                                color: Colors.grey,
-                                                                                              ),
-                                                                                            ),
-                                                                                            labelText: 'แก้ไขเลขบัญชีธนาคาร',
-                                                                                            labelStyle: const TextStyle(
-                                                                                              color: Colors.black54,
-                                                                                              fontFamily: FontWeight_.Fonts_T,
-                                                                                            )),
-                                                                                        // inputFormatters: <TextInputFormatter>[
-                                                                                        //   // for below version 2 use this
-                                                                                        //   // FilteringTextInputFormatter.allow(
-                                                                                        //   //     RegExp(r'[0-9]')),
-                                                                                        //   // for version 2 and greater youcan also use this
-                                                                                        //   FilteringTextInputFormatter.digitsOnly
-                                                                                        // ],
-                                                                                      ),
-                                                                                    ),
-                                                                                  ),
-                                                                                  Align(
-                                                                                    alignment: Alignment.centerLeft,
-                                                                                    child: Padding(
-                                                                                      padding: const EdgeInsets.all(8.0),
-                                                                                      child: Text(
-                                                                                        'สาขา',
-                                                                                        textAlign: TextAlign.left,
-                                                                                        style: const TextStyle(
-                                                                                          color: SettingScreen_Color.Colors_Text1_,
-                                                                                          fontFamily: FontWeight_.Fonts_T,
-                                                                                          fontWeight: FontWeight.bold,
-                                                                                        ),
-                                                                                      ),
-                                                                                    ),
-                                                                                  ),
-                                                                                  Padding(
-                                                                                    padding: const EdgeInsets.all(8.0),
-                                                                                    child: SizedBox(
-                                                                                      // width: 200,
-                                                                                      child: TextFormField(
-                                                                                        keyboardType: TextInputType.number,
-                                                                                        controller: bsaka_bank,
-
-                                                                                        // maxLength: 13,
-                                                                                        cursorColor: Colors.green,
-                                                                                        decoration: InputDecoration(
-                                                                                            fillColor: Colors.white.withOpacity(0.3),
-                                                                                            filled: true,
-                                                                                            // prefixIcon:
-                                                                                            //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                                            focusedBorder: const OutlineInputBorder(
-                                                                                              borderRadius: BorderRadius.only(
-                                                                                                topRight: Radius.circular(15),
-                                                                                                topLeft: Radius.circular(15),
-                                                                                                bottomRight: Radius.circular(15),
-                                                                                                bottomLeft: Radius.circular(15),
-                                                                                              ),
-                                                                                              borderSide: BorderSide(
-                                                                                                width: 1,
-                                                                                                color: Colors.black,
-                                                                                              ),
-                                                                                            ),
-                                                                                            enabledBorder: const OutlineInputBorder(
-                                                                                              borderRadius: BorderRadius.only(
-                                                                                                topRight: Radius.circular(15),
-                                                                                                topLeft: Radius.circular(15),
-                                                                                                bottomRight: Radius.circular(15),
-                                                                                                bottomLeft: Radius.circular(15),
-                                                                                              ),
-                                                                                              borderSide: BorderSide(
-                                                                                                width: 1,
-                                                                                                color: Colors.grey,
-                                                                                              ),
-                                                                                            ),
-                                                                                            labelText: 'แก้ไขสาขา',
-                                                                                            labelStyle: const TextStyle(
-                                                                                              color: Colors.black54,
-                                                                                              fontFamily: FontWeight_.Fonts_T,
-                                                                                            )),
-                                                                                        // inputFormatters: <TextInputFormatter>[
-                                                                                        //   // for below version 2 use this
-                                                                                        //   // FilteringTextInputFormatter.allow(
-                                                                                        //   //     RegExp(r'[0-9]')),
-                                                                                        //   // for version 2 and greater youcan also use this
-                                                                                        //   FilteringTextInputFormatter.digitsOnly
-                                                                                        // ],
-                                                                                      ),
-                                                                                    ),
-                                                                                  ),
-                                                                                  Padding(
-                                                                                    padding: const EdgeInsets.all(8.0),
-                                                                                    child: Row(
-                                                                                      children: [
-                                                                                        SizedBox(
-                                                                                          child: Text(
-                                                                                            'ค่าธรรมเนียม',
-                                                                                            textAlign: TextAlign.left,
-                                                                                            style: const TextStyle(
-                                                                                              color: SettingScreen_Color.Colors_Text1_,
-                                                                                              fontFamily: FontWeight_.Fonts_T,
-                                                                                              fontWeight: FontWeight.bold,
-                                                                                            ),
+                                                                                  if (name_typepay.toString().trim() != 'QR IMAGE')
+                                                                                    Align(
+                                                                                      alignment: Alignment.centerLeft,
+                                                                                      child: Padding(
+                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                        child: Text(
+                                                                                          'เลขบัญชีธนาคาร',
+                                                                                          textAlign: TextAlign.left,
+                                                                                          style: const TextStyle(
+                                                                                            color: SettingScreen_Color.Colors_Text1_,
+                                                                                            fontFamily: FontWeight_.Fonts_T,
+                                                                                            fontWeight: FontWeight.bold,
                                                                                           ),
                                                                                         ),
-                                                                                        SizedBox(
-                                                                                          width: 15,
-                                                                                        ),
-                                                                                        fine_count == '0'
-                                                                                            ? IconButton(
-                                                                                                onPressed: () {
-                                                                                                  setState(() {
-                                                                                                    fine_count = '1';
-                                                                                                  });
-                                                                                                },
-                                                                                                alignment: Alignment.center,
-                                                                                                tooltip: 'ปิด',
-                                                                                                iconSize: 50,
-                                                                                                icon: Icon(
-                                                                                                  Icons.toggle_off,
+                                                                                      ),
+                                                                                    ),
+                                                                                  if (name_typepay.toString().trim() != 'QR IMAGE')
+                                                                                    Padding(
+                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                      child: SizedBox(
+                                                                                        // width: 200,
+                                                                                        child: TextFormField(
+                                                                                          keyboardType: TextInputType.number,
+                                                                                          controller: bno_bank,
+
+                                                                                          // maxLength: 13,
+                                                                                          cursorColor: Colors.green,
+                                                                                          decoration: InputDecoration(
+                                                                                              fillColor: Colors.white.withOpacity(0.3),
+                                                                                              filled: true,
+                                                                                              // prefixIcon:
+                                                                                              //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                                              // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                              focusedBorder: const OutlineInputBorder(
+                                                                                                borderRadius: BorderRadius.only(
+                                                                                                  topRight: Radius.circular(15),
+                                                                                                  topLeft: Radius.circular(15),
+                                                                                                  bottomRight: Radius.circular(15),
+                                                                                                  bottomLeft: Radius.circular(15),
+                                                                                                ),
+                                                                                                borderSide: BorderSide(
+                                                                                                  width: 1,
                                                                                                   color: Colors.black,
-                                                                                                  // size: 50,
-                                                                                                ))
-                                                                                            : IconButton(
-                                                                                                onPressed: () {
+                                                                                                ),
+                                                                                              ),
+                                                                                              enabledBorder: const OutlineInputBorder(
+                                                                                                borderRadius: BorderRadius.only(
+                                                                                                  topRight: Radius.circular(15),
+                                                                                                  topLeft: Radius.circular(15),
+                                                                                                  bottomRight: Radius.circular(15),
+                                                                                                  bottomLeft: Radius.circular(15),
+                                                                                                ),
+                                                                                                borderSide: BorderSide(
+                                                                                                  width: 1,
+                                                                                                  color: Colors.grey,
+                                                                                                ),
+                                                                                              ),
+                                                                                              labelText: 'แก้ไขเลขบัญชีธนาคาร',
+                                                                                              labelStyle: const TextStyle(
+                                                                                                color: Colors.black54,
+                                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                              )),
+                                                                                          // inputFormatters: <TextInputFormatter>[
+                                                                                          //   // for below version 2 use this
+                                                                                          //   // FilteringTextInputFormatter.allow(
+                                                                                          //   //     RegExp(r'[0-9]')),
+                                                                                          //   // for version 2 and greater youcan also use this
+                                                                                          //   FilteringTextInputFormatter.digitsOnly
+                                                                                          // ],
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  if (name_typepay.toString().trim() != 'QR IMAGE')
+                                                                                    Align(
+                                                                                      alignment: Alignment.centerLeft,
+                                                                                      child: Padding(
+                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                        child: Text(
+                                                                                          'สาขา',
+                                                                                          textAlign: TextAlign.left,
+                                                                                          style: const TextStyle(
+                                                                                            color: SettingScreen_Color.Colors_Text1_,
+                                                                                            fontFamily: FontWeight_.Fonts_T,
+                                                                                            fontWeight: FontWeight.bold,
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  if (name_typepay.toString().trim() != 'QR IMAGE')
+                                                                                    Padding(
+                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                      child: SizedBox(
+                                                                                        // width: 200,
+                                                                                        child: TextFormField(
+                                                                                          keyboardType: TextInputType.number,
+                                                                                          controller: bsaka_bank,
+
+                                                                                          // maxLength: 13,
+                                                                                          cursorColor: Colors.green,
+                                                                                          decoration: InputDecoration(
+                                                                                              fillColor: Colors.white.withOpacity(0.3),
+                                                                                              filled: true,
+                                                                                              // prefixIcon:
+                                                                                              //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                                              // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                              focusedBorder: const OutlineInputBorder(
+                                                                                                borderRadius: BorderRadius.only(
+                                                                                                  topRight: Radius.circular(15),
+                                                                                                  topLeft: Radius.circular(15),
+                                                                                                  bottomRight: Radius.circular(15),
+                                                                                                  bottomLeft: Radius.circular(15),
+                                                                                                ),
+                                                                                                borderSide: BorderSide(
+                                                                                                  width: 1,
+                                                                                                  color: Colors.black,
+                                                                                                ),
+                                                                                              ),
+                                                                                              enabledBorder: const OutlineInputBorder(
+                                                                                                borderRadius: BorderRadius.only(
+                                                                                                  topRight: Radius.circular(15),
+                                                                                                  topLeft: Radius.circular(15),
+                                                                                                  bottomRight: Radius.circular(15),
+                                                                                                  bottomLeft: Radius.circular(15),
+                                                                                                ),
+                                                                                                borderSide: BorderSide(
+                                                                                                  width: 1,
+                                                                                                  color: Colors.grey,
+                                                                                                ),
+                                                                                              ),
+                                                                                              labelText: 'แก้ไขสาขา',
+                                                                                              labelStyle: const TextStyle(
+                                                                                                color: Colors.black54,
+                                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                              )),
+                                                                                          // inputFormatters: <TextInputFormatter>[
+                                                                                          //   // for below version 2 use this
+                                                                                          //   // FilteringTextInputFormatter.allow(
+                                                                                          //   //     RegExp(r'[0-9]')),
+                                                                                          //   // for version 2 and greater youcan also use this
+                                                                                          //   FilteringTextInputFormatter.digitsOnly
+                                                                                          // ],
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  if (name_typepay.toString().trim() != 'QR IMAGE')
+                                                                                    Padding(
+                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                      child: Row(
+                                                                                        children: [
+                                                                                          SizedBox(
+                                                                                            child: Text(
+                                                                                              'ค่าธรรมเนียม',
+                                                                                              textAlign: TextAlign.left,
+                                                                                              style: const TextStyle(
+                                                                                                color: SettingScreen_Color.Colors_Text1_,
+                                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                                fontWeight: FontWeight.bold,
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                          SizedBox(
+                                                                                            width: 15,
+                                                                                          ),
+                                                                                          fine_count == '0'
+                                                                                              ? IconButton(
+                                                                                                  onPressed: () {
+                                                                                                    setState(() {
+                                                                                                      fine_count = '1';
+                                                                                                    });
+                                                                                                  },
+                                                                                                  alignment: Alignment.center,
+                                                                                                  tooltip: 'ปิด',
+                                                                                                  iconSize: 50,
+                                                                                                  icon: Icon(
+                                                                                                    Icons.toggle_off,
+                                                                                                    color: Colors.black,
+                                                                                                    // size: 50,
+                                                                                                  ))
+                                                                                              : IconButton(
+                                                                                                  onPressed: () {
+                                                                                                    setState(() {
+                                                                                                      fine_count = '0';
+                                                                                                    });
+                                                                                                  },
+                                                                                                  alignment: Alignment.center,
+                                                                                                  tooltip: 'เปิด',
+                                                                                                  iconSize: 50,
+                                                                                                  icon: Icon(
+                                                                                                    Icons.toggle_on,
+                                                                                                    color: Colors.green,
+                                                                                                    // size: 50,
+                                                                                                  )),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ),
+                                                                                  if (name_typepay.toString().trim() != 'QR IMAGE')
+                                                                                    Padding(
+                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                      child: Row(
+                                                                                        children: [
+                                                                                          Expanded(
+                                                                                            flex: 2,
+                                                                                            child: SizedBox(
+                                                                                              // width: 200,
+                                                                                              child: TextFormField(
+                                                                                                keyboardType: TextInputType.number,
+                                                                                                controller: fine_bc,
+                                                                                                onChanged: (velue) {
                                                                                                   setState(() {
-                                                                                                    fine_count = '0';
+                                                                                                    fine_ba.text = '0.00';
                                                                                                   });
                                                                                                 },
-                                                                                                alignment: Alignment.center,
-                                                                                                tooltip: 'เปิด',
-                                                                                                iconSize: 50,
-                                                                                                icon: Icon(
-                                                                                                  Icons.toggle_on,
-                                                                                                  color: Colors.green,
-                                                                                                  // size: 50,
-                                                                                                )),
-                                                                                      ],
-                                                                                    ),
-                                                                                  ),
-                                                                                  Padding(
-                                                                                    padding: const EdgeInsets.all(8.0),
-                                                                                    child: Row(
-                                                                                      children: [
-                                                                                        Expanded(
-                                                                                          flex: 2,
-                                                                                          child: SizedBox(
-                                                                                            // width: 200,
-                                                                                            child: TextFormField(
-                                                                                              keyboardType: TextInputType.number,
-                                                                                              controller: fine_bc,
-                                                                                              onChanged: (velue) {
-                                                                                                setState(() {
-                                                                                                  fine_ba.text = '0.00';
-                                                                                                });
-                                                                                              },
 
-                                                                                              // maxLength: 13,
-                                                                                              cursorColor: Colors.green,
-                                                                                              decoration: InputDecoration(
-                                                                                                  fillColor: Colors.white.withOpacity(0.3),
-                                                                                                  filled: true,
-                                                                                                  // prefixIcon:
-                                                                                                  //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                                                  focusedBorder: const OutlineInputBorder(
-                                                                                                    borderRadius: BorderRadius.only(
-                                                                                                      topRight: Radius.circular(15),
-                                                                                                      topLeft: Radius.circular(15),
-                                                                                                      bottomRight: Radius.circular(15),
-                                                                                                      bottomLeft: Radius.circular(15),
+                                                                                                // maxLength: 13,
+                                                                                                cursorColor: Colors.green,
+                                                                                                decoration: InputDecoration(
+                                                                                                    fillColor: Colors.white.withOpacity(0.3),
+                                                                                                    filled: true,
+                                                                                                    // prefixIcon:
+                                                                                                    //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                                                    // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                                    focusedBorder: const OutlineInputBorder(
+                                                                                                      borderRadius: BorderRadius.only(
+                                                                                                        topRight: Radius.circular(15),
+                                                                                                        topLeft: Radius.circular(15),
+                                                                                                        bottomRight: Radius.circular(15),
+                                                                                                        bottomLeft: Radius.circular(15),
+                                                                                                      ),
+                                                                                                      borderSide: BorderSide(
+                                                                                                        width: 1,
+                                                                                                        color: Colors.black,
+                                                                                                      ),
                                                                                                     ),
-                                                                                                    borderSide: BorderSide(
-                                                                                                      width: 1,
-                                                                                                      color: Colors.black,
+                                                                                                    enabledBorder: const OutlineInputBorder(
+                                                                                                      borderRadius: BorderRadius.only(
+                                                                                                        topRight: Radius.circular(15),
+                                                                                                        topLeft: Radius.circular(15),
+                                                                                                        bottomRight: Radius.circular(15),
+                                                                                                        bottomLeft: Radius.circular(15),
+                                                                                                      ),
+                                                                                                      borderSide: BorderSide(
+                                                                                                        width: 1,
+                                                                                                        color: Colors.grey,
+                                                                                                      ),
                                                                                                     ),
-                                                                                                  ),
-                                                                                                  enabledBorder: const OutlineInputBorder(
-                                                                                                    borderRadius: BorderRadius.only(
-                                                                                                      topRight: Radius.circular(15),
-                                                                                                      topLeft: Radius.circular(15),
-                                                                                                      bottomRight: Radius.circular(15),
-                                                                                                      bottomLeft: Radius.circular(15),
-                                                                                                    ),
-                                                                                                    borderSide: BorderSide(
-                                                                                                      width: 1,
-                                                                                                      color: Colors.grey,
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  labelText: 'เปอร์เซนต์',
-                                                                                                  labelStyle: const TextStyle(
-                                                                                                    color: Colors.black54,
-                                                                                                    fontFamily: FontWeight_.Fonts_T,
-                                                                                                  )),
-                                                                                              // inputFormatters: <TextInputFormatter>[
-                                                                                              //   // for below version 2 use this
-                                                                                              //   // FilteringTextInputFormatter.allow(
-                                                                                              //   //     RegExp(r'[0-9]')),
-                                                                                              //   // for version 2 and greater youcan also use this
-                                                                                              //   FilteringTextInputFormatter.digitsOnly
-                                                                                              // ],
+                                                                                                    labelText: 'เปอร์เซนต์',
+                                                                                                    labelStyle: const TextStyle(
+                                                                                                      color: Colors.black54,
+                                                                                                      fontFamily: FontWeight_.Fonts_T,
+                                                                                                    )),
+                                                                                                // inputFormatters: <TextInputFormatter>[
+                                                                                                //   // for below version 2 use this
+                                                                                                //   // FilteringTextInputFormatter.allow(
+                                                                                                //   //     RegExp(r'[0-9]')),
+                                                                                                //   // for version 2 and greater youcan also use this
+                                                                                                //   FilteringTextInputFormatter.digitsOnly
+                                                                                                // ],
+                                                                                              ),
                                                                                             ),
                                                                                           ),
-                                                                                        ),
-                                                                                        SizedBox(
-                                                                                          width: 10,
-                                                                                        ),
-                                                                                        Expanded(
-                                                                                          flex: 2,
-                                                                                          child: SizedBox(
-                                                                                            // width: 200,
-                                                                                            child: TextFormField(
-                                                                                              keyboardType: TextInputType.number,
-                                                                                              controller: fine_ba,
-                                                                                              onChanged: (velue) {
-                                                                                                setState(() {
-                                                                                                  fine_bc.text = '0.00';
-                                                                                                });
-                                                                                              },
-                                                                                              // maxLength: 13,
-                                                                                              cursorColor: Colors.green,
-                                                                                              decoration: InputDecoration(
-                                                                                                  fillColor: Colors.white.withOpacity(0.3),
-                                                                                                  filled: true,
-                                                                                                  // prefixIcon:
-                                                                                                  //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                                                  focusedBorder: const OutlineInputBorder(
-                                                                                                    borderRadius: BorderRadius.only(
-                                                                                                      topRight: Radius.circular(15),
-                                                                                                      topLeft: Radius.circular(15),
-                                                                                                      bottomRight: Radius.circular(15),
-                                                                                                      bottomLeft: Radius.circular(15),
-                                                                                                    ),
-                                                                                                    borderSide: BorderSide(
-                                                                                                      width: 1,
-                                                                                                      color: Colors.black,
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  enabledBorder: const OutlineInputBorder(
-                                                                                                    borderRadius: BorderRadius.only(
-                                                                                                      topRight: Radius.circular(15),
-                                                                                                      topLeft: Radius.circular(15),
-                                                                                                      bottomRight: Radius.circular(15),
-                                                                                                      bottomLeft: Radius.circular(15),
-                                                                                                    ),
-                                                                                                    borderSide: BorderSide(
-                                                                                                      width: 1,
-                                                                                                      color: Colors.grey,
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  labelText: 'บาท',
-                                                                                                  labelStyle: const TextStyle(
-                                                                                                    color: Colors.black54,
-                                                                                                    fontFamily: FontWeight_.Fonts_T,
-                                                                                                  )),
-                                                                                              // inputFormatters: <TextInputFormatter>[
-                                                                                              //   // for below version 2 use this
-                                                                                              //   // FilteringTextInputFormatter.allow(
-                                                                                              //   //     RegExp(r'[0-9]')),
-                                                                                              //   // for version 2 and greater youcan also use this
-                                                                                              //   FilteringTextInputFormatter.digitsOnly
-                                                                                              // ],
-                                                                                            ),
+                                                                                          SizedBox(
+                                                                                            width: 10,
                                                                                           ),
-                                                                                        )
-                                                                                      ],
+                                                                                          Expanded(
+                                                                                            flex: 2,
+                                                                                            child: SizedBox(
+                                                                                              // width: 200,
+                                                                                              child: TextFormField(
+                                                                                                keyboardType: TextInputType.number,
+                                                                                                controller: fine_ba,
+                                                                                                onChanged: (velue) {
+                                                                                                  setState(() {
+                                                                                                    fine_bc.text = '0.00';
+                                                                                                  });
+                                                                                                },
+                                                                                                // maxLength: 13,
+                                                                                                cursorColor: Colors.green,
+                                                                                                decoration: InputDecoration(
+                                                                                                    fillColor: Colors.white.withOpacity(0.3),
+                                                                                                    filled: true,
+                                                                                                    // prefixIcon:
+                                                                                                    //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                                                    // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                                    focusedBorder: const OutlineInputBorder(
+                                                                                                      borderRadius: BorderRadius.only(
+                                                                                                        topRight: Radius.circular(15),
+                                                                                                        topLeft: Radius.circular(15),
+                                                                                                        bottomRight: Radius.circular(15),
+                                                                                                        bottomLeft: Radius.circular(15),
+                                                                                                      ),
+                                                                                                      borderSide: BorderSide(
+                                                                                                        width: 1,
+                                                                                                        color: Colors.black,
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                    enabledBorder: const OutlineInputBorder(
+                                                                                                      borderRadius: BorderRadius.only(
+                                                                                                        topRight: Radius.circular(15),
+                                                                                                        topLeft: Radius.circular(15),
+                                                                                                        bottomRight: Radius.circular(15),
+                                                                                                        bottomLeft: Radius.circular(15),
+                                                                                                      ),
+                                                                                                      borderSide: BorderSide(
+                                                                                                        width: 1,
+                                                                                                        color: Colors.grey,
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                    labelText: 'บาท',
+                                                                                                    labelStyle: const TextStyle(
+                                                                                                      color: Colors.black54,
+                                                                                                      fontFamily: FontWeight_.Fonts_T,
+                                                                                                    )),
+                                                                                                // inputFormatters: <TextInputFormatter>[
+                                                                                                //   // for below version 2 use this
+                                                                                                //   // FilteringTextInputFormatter.allow(
+                                                                                                //   //     RegExp(r'[0-9]')),
+                                                                                                //   // for version 2 and greater youcan also use this
+                                                                                                //   FilteringTextInputFormatter.digitsOnly
+                                                                                                // ],
+                                                                                              ),
+                                                                                            ),
+                                                                                          )
+                                                                                        ],
+                                                                                      ),
                                                                                     ),
-                                                                                  ),
+                                                                                  // if (name_typepay.toString().trim() == 'QR IMAGE')
+                                                                                  //   Padding(
+                                                                                  //     padding: const EdgeInsets.all(8.0),
+                                                                                  //     child: Row(
+                                                                                  //       children: [
+                                                                                  //         Expanded(
+                                                                                  //           flex: 2,
+                                                                                  //           child: SizedBox(
+                                                                                  //             // width: 200,
+                                                                                  //             child: TextFormField(
+                                                                                  //               keyboardType: TextInputType.none,
+                                                                                  //               controller: fine_key,
+                                                                                  //               onChanged: (velue) {
+                                                                                  //                 setState(() {
+                                                                                  //                   fine_key.text = '';
+                                                                                  //                 });
+                                                                                  //               },
+
+                                                                                  //               // maxLength: 13,
+                                                                                  //               cursorColor: Colors.green,
+                                                                                  //               decoration: InputDecoration(
+                                                                                  //                   fillColor: Colors.white.withOpacity(0.3),
+                                                                                  //                   filled: true,
+                                                                                  //                   // prefixIcon:
+                                                                                  //                   //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                                  //                   // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                  //                   focusedBorder: const OutlineInputBorder(
+                                                                                  //                     borderRadius: BorderRadius.only(
+                                                                                  //                       topRight: Radius.circular(15),
+                                                                                  //                       topLeft: Radius.circular(15),
+                                                                                  //                       bottomRight: Radius.circular(15),
+                                                                                  //                       bottomLeft: Radius.circular(15),
+                                                                                  //                     ),
+                                                                                  //                     borderSide: BorderSide(
+                                                                                  //                       width: 1,
+                                                                                  //                       color: Colors.black,
+                                                                                  //                     ),
+                                                                                  //                   ),
+                                                                                  //                   enabledBorder: const OutlineInputBorder(
+                                                                                  //                     borderRadius: BorderRadius.only(
+                                                                                  //                       topRight: Radius.circular(15),
+                                                                                  //                       topLeft: Radius.circular(15),
+                                                                                  //                       bottomRight: Radius.circular(15),
+                                                                                  //                       bottomLeft: Radius.circular(15),
+                                                                                  //                     ),
+                                                                                  //                     borderSide: BorderSide(
+                                                                                  //                       width: 1,
+                                                                                  //                       color: Colors.grey,
+                                                                                  //                     ),
+                                                                                  //                   ),
+                                                                                  //                   labelText: 'EnCode User Password',
+                                                                                  //                   labelStyle: const TextStyle(
+                                                                                  //                     color: Colors.black54,
+                                                                                  //                     fontFamily: FontWeight_.Fonts_T,
+                                                                                  //                   )),
+                                                                                  //               // inputFormatters: <TextInputFormatter>[
+                                                                                  //               //   // for below version 2 use this
+                                                                                  //               //   // FilteringTextInputFormatter.allow(
+                                                                                  //               //   //     RegExp(r'[0-9]')),
+                                                                                  //               //   // for version 2 and greater youcan also use this
+                                                                                  //               //   FilteringTextInputFormatter.digitsOnly
+                                                                                  //               // ],
+                                                                                  //             ),
+                                                                                  //           ),
+                                                                                  //         ),
+                                                                                  //       ],
+                                                                                  //     ),
+                                                                                  //   ),
                                                                                 ],
                                                                               ),
                                                                             ),
@@ -3541,6 +3607,7 @@ class _PaymentState extends State<Payment> {
                                                                                                         var fine_count_a = fine_count;
                                                                                                         var fine_bca = fine_bc.text;
                                                                                                         var fine_baa = fine_ba.text;
+                                                                                                        var fine_keya = fine_key.text;
                                                                                                         print('$name_name\n$name_num\n$name_sub\n$name_btype\n$name_type\n$name_tpname\n$ser_banks\n$name_banks\n$ser_bank_types\n$name_bank_types');
                                                                                                         SharedPreferences preferences = await SharedPreferences.getInstance();
                                                                                                         String? ren = preferences.getString('renTalSer');
@@ -3551,7 +3618,7 @@ class _PaymentState extends State<Payment> {
                                                                                                         OKuploadFile_Slip();
 
                                                                                                         Future.delayed(const Duration(milliseconds: 200), () async {
-                                                                                                          String url = '${MyConstant().domain}/UpC_payment.php?isAdd=true&ren=$ren&ser_pay=$ser_pay&ser_user=$ser_user&name_name=$name_name&ser_banks=$ser_banks&name_banks=$name_banks&name_num=$name_num&name_sub=$name_sub&name_btype=$name_btype&name_tpname=$name_tpname&name_type=$name_type&ser_bank_types=$ser_bank_types&name_bank_types=$name_bank_types&imgbank=$fileName&fine_count=$fine_count_a&fine_ba=$fine_baa&fine_bc=$fine_bca';
+                                                                                                          String url = '${MyConstant().domain}/UpC_payment.php?isAdd=true&ren=$ren&ser_pay=$ser_pay&ser_user=$ser_user&name_name=$name_name&ser_banks=$ser_banks&name_banks=$name_banks&name_num=$name_num&name_sub=$name_sub&name_btype=$name_btype&name_tpname=$name_tpname&name_type=$name_type&ser_bank_types=$ser_bank_types&name_bank_types=$name_bank_types&imgbank=$fileName&fine_count=$fine_count_a&fine_ba=$fine_baa&fine_bc=$fine_bca&fine_key=$fine_keya';
 
                                                                                                           try {
                                                                                                             var response = await http.get(Uri.parse(url));
@@ -3573,6 +3640,7 @@ class _PaymentState extends State<Payment> {
                                                                                                                 ser_bank_type = null;
                                                                                                                 name_bank_type = null;
                                                                                                                 fine_count == null;
+                                                                                                                fine_key.clear();
                                                                                                                 fine_ba.clear();
                                                                                                                 fine_bc.clear();
                                                                                                                 read_GC_PayMentModel();

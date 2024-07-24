@@ -7,6 +7,7 @@ import '../Constant/Myconstant.dart';
 import '../Model/GetFinnancetrans_Model.dart';
 import '../Model/GetUser_Model.dart';
 import '../Model/Read_DataONBill_PDF_Model.dart';
+import '../Model/electricity_model.dart';
 import '../Model/trans_re_bill_history_model.dart';
 import '../PDF/PDF_Receipt/pdf_AC_his_statusbill.dart';
 import '../PDF/PDF_Temporary_Receipt/pdf_Temporary.dart';
@@ -25,6 +26,7 @@ import '../PDF_TP7/PDF_Temporary_Receipt_TP7/pdf_Temporar_TP7.dart';
 import '../PDF_TP8/PDF_Receipt_TP8/pdf_AC_his_statusbill_TP8.dart';
 import '../PDF_TP8/PDF_Temporary_Receipt_TP8/pdf_Temporar_TP8.dart';
 import '../PDF_TP8_Ortorkor/PDF_Temporary_Receipt_TP8_Ortorkor/pdf_Temporar_TP8.dart';
+import '../PDF_TP9/PDF_Temporary_Receipt_TP9/pdf_Temporar_TP9.dart';
 import '../PDF_TP9_Lao/PDF_Temporary_Receipt_TP9/pdf_Temporar_TP9.dart';
 
 class ManTemporary_Receipt_PDF {
@@ -52,6 +54,7 @@ class ManTemporary_Receipt_PDF {
       bills_name) async {
     List<FinnancetransModel> finnancetransModels = [];
     List<TransReBillHistoryModel> _TransReBillHistoryModels = [];
+    List<ElectricityModel> Water_electricity = [];
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
     var rtser = preferences.getString('renTalSer');
@@ -269,8 +272,24 @@ class ManTemporary_Receipt_PDF {
         }
       }
     } catch (e) {}
+///////////////////----------------------------------------->
+    String url_4 =
+        '${MyConstant().domain}/GC_countmiter_PDF.php?isAdd=true&ren=$ren&ciddoc=$cid_&docnoin=$docnoin&type_doc=Receipt';
+    try {
+      var response = await http.get(Uri.parse(url_4));
 
-    /////////////////------------------------------------------>
+      var result = json.decode(response.body);
+      print(result);
+      if (result.toString() != 'null') {
+        for (var map in result) {
+          ElectricityModel quotxSelectModel = ElectricityModel.fromJson(map);
+          Water_electricity.add(quotxSelectModel);
+        }
+      }
+      print('Water_electricity.length $ren $cid_ $docnoin');
+      print(Water_electricity.length);
+    } catch (e) {}
+///////////////////----------------------------------------->
     print(
         '${finnancetransModels.length}///${dis_sum_Matjum}  // ${sum_amt} //${_TransReBillHistoryModels.length}////$docnoin');
 
@@ -623,6 +642,49 @@ class ManTemporary_Receipt_PDF {
             TitleType_Default_Receipt_Name,
             dis_sum_Pakan,
             fonts_pdf);
+      } else if (tem_page_ser.toString() == '5') {
+        Pdfgen_Temporary_receipt_TP9.exportPDF_Temporary_receipt_TP9(
+            Cust_no,
+            cid_,
+            Zone_s,
+            Ln_s,
+            fname,
+            foder,
+            tableData00,
+            tableData01,
+            context,
+            _TransReBillHistoryModels,
+            'Num_cid',
+            'Namenew',
+            '${sum_pvat}',
+            sum_vat,
+            sum_wht,
+            sum_amt,
+            sum_disp,
+            sum_disamt,
+            '${(sum_amt - sum_disamt)}',
+            renTal_name,
+            scname_,
+            cname_,
+            addr_,
+            tax_,
+            bill_addr,
+            bill_email,
+            bill_tel,
+            bill_tax,
+            bill_name,
+            newValuePDFimg,
+            numinvoice,
+            numdoctax,
+            finnancetransModels,
+            date_Transaction,
+            date_pay,
+            Howto_LockJonPay,
+            dis_sum_Matjum,
+            TitleType_Default_Receipt_Name,
+            dis_sum_Pakan,
+            fonts_pdf,
+            Water_electricity);
       }
     });
     // Future.delayed(Duration(milliseconds: 500), () async {

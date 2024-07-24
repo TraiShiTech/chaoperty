@@ -20,10 +20,7 @@ import 'Setting/Draginto_example.dart';
 import 'Setting/test.dart';
 import 'package:infinite_canvas/infinite_canvas.dart';
 
-
 import 'package:http/http.dart' as http;
-
-
 
 ///099400016565010
 ////Ref1. TC66020607

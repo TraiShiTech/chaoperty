@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,7 +18,6 @@ Future<String> translateText(String text) async {
     return (Lang.toString() == 'th') ? text : translation.text ?? text;
   }
 }
-
 
 class Translate {
   static Widget TranslateAndSetText(
@@ -70,6 +70,66 @@ class Translate {
               fontFamily: fontFamily,
               fontWeight: fontWeight ?? FontWeight.w400,
               fontSize: fontSize ?? 14,
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  static Widget TranslateAndSet_TextAutoSize(
+    String text,
+    Color? color,
+    TextAlign? textAlign,
+    FontWeight? fontWeight,
+    String? fontFamily,
+    double? fontSizeMin,
+    double? fontSizeMax,
+    int? maxLines,
+  ) {
+    return FutureBuilder<String>(
+      future: translateText(text),
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return AutoSizeText(
+            minFontSize: fontSizeMin ?? 8,
+            maxFontSize: fontSizeMax ?? 14,
+            maxLines: 1,
+            'Translating...',
+            overflow: TextOverflow.ellipsis,
+            textAlign: textAlign,
+            style: TextStyle(
+              color: color,
+              fontFamily: fontFamily,
+              fontWeight: fontWeight ?? FontWeight.w400,
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return AutoSizeText(
+            minFontSize: fontSizeMin ?? 8,
+            maxFontSize: fontSizeMax ?? 14,
+            maxLines: 1,
+            'Error: ...',
+            overflow: TextOverflow.ellipsis,
+            textAlign: textAlign,
+            style: TextStyle(
+              color: color,
+              fontFamily: fontFamily,
+              fontWeight: fontWeight ?? FontWeight.w400,
+            ),
+          );
+        } else {
+          return AutoSizeText(
+            minFontSize: fontSizeMin ?? 8,
+            maxFontSize: fontSizeMax ?? 14,
+            maxLines: 1,
+            snapshot.data ?? 'Translation error',
+            overflow: TextOverflow.ellipsis,
+            textAlign: textAlign,
+            style: TextStyle(
+              color: color,
+              fontFamily: fontFamily,
+              fontWeight: fontWeight ?? FontWeight.w400,
             ),
           );
         }

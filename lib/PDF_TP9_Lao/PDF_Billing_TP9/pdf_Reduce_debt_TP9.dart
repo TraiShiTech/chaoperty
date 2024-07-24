@@ -10,6 +10,7 @@ import 'package:printing/printing.dart';
 
 import '../../PeopleChao/Pays_.dart';
 import '../../Style/ThaiBaht.dart';
+import '../../Style/loadAndCacheImage.dart';
 
 class Pdfgen_Reduce_debt_TP9_Lao {
   static void exportPDF_Reduce_debt_TP9_Lao(
@@ -73,7 +74,7 @@ class Pdfgen_Reduce_debt_TP9_Lao {
     Uint8List imageData = (image).buffer.asUint8List();
     List netImage = [];
     List netImage_QR = [];
-
+    Uint8List? resizedLogo = await getResizedLogo();
     // for (int i = 0; i < newValuePDFimg.length; i++) {
     //   netImage.add(await networkImage('${newValuePDFimg[i]}'));
     // }
@@ -84,56 +85,81 @@ class Pdfgen_Reduce_debt_TP9_Lao {
         pw.Row(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
-            (imageData.isEmpty)
-                ? pw.Container(
-                    height: 60,
-                    width: 60,
-                    decoration: const pw.BoxDecoration(
-                      color: PdfColors.grey200,
-                      border: pw.Border(
-                        right: pw.BorderSide(color: PdfColors.grey300),
-                        left: pw.BorderSide(color: PdfColors.grey300),
-                        top: pw.BorderSide(color: PdfColors.grey300),
-                        bottom: pw.BorderSide(color: PdfColors.grey300),
-                      ),
-                    ),
-                    child: pw.Center(
+            pw.Container(
+              height: 60,
+              width: 60,
+              decoration: pw.BoxDecoration(
+                color: PdfColors.grey200,
+                border: pw.Border.all(color: PdfColors.grey300),
+              ),
+              child: resizedLogo != null
+                  ? pw.Image(
+                      pw.MemoryImage(resizedLogo),
+                      height: 60,
+                      width: 60,
+                    )
+                  : pw.Center(
                       child: pw.Text(
                         '$bill_name ',
                         maxLines: 1,
                         style: pw.TextStyle(
-                          fontSize: 7,
+                          fontSize: 10,
                           font: ttf,
                           color: Colors_pd,
                         ),
                       ),
-                    ))
+                    ),
+            ),
+            // (imageData.isEmpty)
+            //     ? pw.Container(
+            //         height: 60,
+            //         width: 60,
+            //         decoration: const pw.BoxDecoration(
+            //           color: PdfColors.grey200,
+            //           border: pw.Border(
+            //             right: pw.BorderSide(color: PdfColors.grey300),
+            //             left: pw.BorderSide(color: PdfColors.grey300),
+            //             top: pw.BorderSide(color: PdfColors.grey300),
+            //             bottom: pw.BorderSide(color: PdfColors.grey300),
+            //           ),
+            //         ),
+            //         child: pw.Center(
+            //           child: pw.Text(
+            //             '$bill_name ',
+            //             maxLines: 1,
+            //             style: pw.TextStyle(
+            //               fontSize: 7,
+            //               font: ttf,
+            //               color: Colors_pd,
+            //             ),
+            //           ),
+            //         ))
 
-                // pw.Image(
-                //     pw.MemoryImage(iconImage),
-                //     height: 72,
-                //     width: 70,
-                //   )
-                : pw.Container(
-                    height: 60,
-                    width: 60,
-                    decoration: const pw.BoxDecoration(
-                      color: PdfColors.grey200,
-                      border: pw.Border(
-                        right: pw.BorderSide(color: PdfColors.grey300),
-                        left: pw.BorderSide(color: PdfColors.grey300),
-                        top: pw.BorderSide(color: PdfColors.grey300),
-                        bottom: pw.BorderSide(color: PdfColors.grey300),
-                      ),
-                    ),
-                    child: pw.Image(pw.MemoryImage(imageData))
-                    // child: pw.Image(
-                    //   (netImage[0]),
-                    //   // fit: pw.BoxFit.fill,
-                    //   height: 60,
-                    //   width: 60,
-                    // )
-                    ),
+            //     // pw.Image(
+            //     //     pw.MemoryImage(iconImage),
+            //     //     height: 72,
+            //     //     width: 70,
+            //     //   )
+            //     : pw.Container(
+            //         height: 60,
+            //         width: 60,
+            //         decoration: const pw.BoxDecoration(
+            //           color: PdfColors.grey200,
+            //           border: pw.Border(
+            //             right: pw.BorderSide(color: PdfColors.grey300),
+            //             left: pw.BorderSide(color: PdfColors.grey300),
+            //             top: pw.BorderSide(color: PdfColors.grey300),
+            //             bottom: pw.BorderSide(color: PdfColors.grey300),
+            //           ),
+            //         ),
+            //         child: pw.Image(pw.MemoryImage(imageData))
+            //         // child: pw.Image(
+            //         //   (netImage[0]),
+            //         //   // fit: pw.BoxFit.fill,
+            //         //   height: 60,
+            //         //   width: 60,
+            //         // )
+            //         ),
             pw.SizedBox(width: 1 * PdfPageFormat.mm),
             pw.Container(
               // color: PdfColors.grey200,

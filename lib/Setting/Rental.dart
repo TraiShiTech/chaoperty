@@ -25,6 +25,7 @@ import '../Model/vat_SC_model.dart';
 import '../Model/vat_s_model.dart';
 import '../Model/wht_SC_model.dart';
 import '../Responsive/responsive.dart';
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 import 'Set_ele.dart';
 
@@ -377,12 +378,20 @@ class _RentalState extends State<Rental> {
                             width: 170,
                             // height: 30,
                             child: Center(
-                              child: Text(
-                                Show_ELE == 0 ? 'ปรับอัตตราค่าไฟ' : 'ปิด',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: Font_.Fonts_T),
-                              ),
+                              child: Translate.TranslateAndSetText(
+                                  Show_ELE == 0 ? 'ปรับอัตตราค่าไฟ' : 'ปิด',
+                                  Colors.white,
+                                  TextAlign.center,
+                                  null,
+                                  Font_.Fonts_T,
+                                  14,
+                                  1),
+                              //  Text(
+                              //   Show_ELE == 0 ? 'ปรับอัตตราค่าไฟ' : 'ปิด',
+                              //   style: TextStyle(
+                              //       color: Colors.white,
+                              //       fontFamily: Font_.Fonts_T),
+                              // ),
                             ),
                           ),
                         ),
@@ -410,12 +419,14 @@ class _RentalState extends State<Rental> {
                                 width: 170,
                                 // height: 30,
                                 child: Center(
-                                  child: Text(
-                                    'X ปิดการตั้งค่า VAT, WHT',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: Font_.Fonts_T),
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      'X ปิดการตั้งค่า VAT, WHT',
+                                      Colors.white,
+                                      TextAlign.center,
+                                      null,
+                                      Font_.Fonts_T,
+                                      14,
+                                      1),
                                 ),
                               ),
                             ),
@@ -450,19 +461,16 @@ class _RentalState extends State<Rental> {
                                                   .width,
                                               child: Row(
                                                 children: [
-                                                  const Expanded(
-                                                    child: Text(
-                                                      '+ ตั้งค่า VAT, WHT',
-                                                      style: TextStyle(
-                                                          color:
-                                                              PeopleChaoScreen_Color
-                                                                  .Colors_Text1_,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T),
-                                                    ),
+                                                  Expanded(
+                                                    child: Translate
+                                                        .TranslateAndSetText(
+                                                            '+ ตั้งค่า VAT, WHT',
+                                                            Colors.black,
+                                                            TextAlign.center,
+                                                            FontWeight.bold,
+                                                            FontWeight_.Fonts_T,
+                                                            14,
+                                                            1),
                                                   )
                                                 ],
                                               ))),
@@ -490,18 +498,17 @@ class _RentalState extends State<Rental> {
               child: Column(
                 children: [
                   Row(
-                    children: const [
+                    children: [
                       Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'ตั้งค่าประเภทค่าบริการ หรือ ค่า Defauilt  และ VAT, WHT',
-                          style: TextStyle(
-                            color: SettingScreen_Color.Colors_Text1_,
-                            fontFamily: FontWeight_.Fonts_T,
-                            fontWeight: FontWeight.bold,
-                            //fontSize: 10.0
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'ตั้งค่าประเภทค่าบริการ หรือ ค่า Defauilt  และ VAT, WHT',
+                            SettingScreen_Color.Colors_Text1_,
+                            TextAlign.center,
+                            FontWeight.bold,
+                            FontWeight_.Fonts_T,
+                            14,
+                            1),
                       ),
                     ],
                   ),
@@ -512,18 +519,16 @@ class _RentalState extends State<Rental> {
                           children: [
                             Row(
                               children: [
-                                const Padding(
+                                Padding(
                                   padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'ตั้งค่า VAT',
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                      color: SettingScreen_Color.Colors_Text1_,
-                                      fontFamily: FontWeight_.Fonts_T,
-                                      fontWeight: FontWeight.bold,
-                                      //fontSize: 10.0
-                                    ),
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      'ตั้งค่า VAT',
+                                      SettingScreen_Color.Colors_Text1_,
+                                      TextAlign.center,
+                                      FontWeight.bold,
+                                      FontWeight_.Fonts_T,
+                                      14,
+                                      1),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -567,16 +572,14 @@ class _RentalState extends State<Rental> {
                                         //     color: Colors.grey, width: 1),
                                       ),
                                       padding: const EdgeInsets.all(8.0),
-                                      child: const Text(
-                                        '+ เพิ่ม',
-                                        style: TextStyle(
-                                          color:
-                                              SettingScreen_Color.Colors_Text3_,
-                                          fontFamily: FontWeight_.Fonts_T,
-                                          fontWeight: FontWeight.bold,
-                                          //fontSize: 10.0
-                                        ),
-                                      ),
+                                      child: Translate.TranslateAndSetText(
+                                          '+ เพิ่ม',
+                                          SettingScreen_Color.Colors_Text3_,
+                                          TextAlign.center,
+                                          FontWeight.bold,
+                                          FontWeight_.Fonts_T,
+                                          14,
+                                          1),
                                     ),
                                   ),
                                 ),
@@ -615,7 +618,7 @@ class _RentalState extends State<Rental> {
                                                       child: Container(
                                                         height: 50,
                                                         decoration:
-                                                             BoxDecoration(
+                                                            BoxDecoration(
                                                           color:
                                                               AppbackgroundColor
                                                                   .TiTile_Colors,
@@ -640,23 +643,20 @@ class _RentalState extends State<Rental> {
                                                         padding:
                                                             const EdgeInsets
                                                                 .all(8.0),
-                                                        child: const Center(
-                                                          child: Text(
-                                                            'รายการเลือก',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                              color: SettingScreen_Color
-                                                                  .Colors_Text1_,
-                                                              fontFamily:
-                                                                  FontWeight_
-                                                                      .Fonts_T,
-                                                              fontWeight:
+                                                        child: Center(
+                                                          child: Translate
+                                                              .TranslateAndSetText(
+                                                                  'รายการเลือก',
+                                                                  SettingScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  TextAlign
+                                                                      .center,
                                                                   FontWeight
                                                                       .bold,
-                                                              //fontSize: 10.0
-                                                            ),
-                                                          ),
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  14,
+                                                                  1),
                                                         ),
                                                       ),
                                                     ),
@@ -665,7 +665,7 @@ class _RentalState extends State<Rental> {
                                                       child: Container(
                                                         height: 50,
                                                         decoration:
-                                                             BoxDecoration(
+                                                            BoxDecoration(
                                                           color:
                                                               AppbackgroundColor
                                                                   .TiTile_Colors,
@@ -715,7 +715,7 @@ class _RentalState extends State<Rental> {
                                                       child: Container(
                                                         height: 50,
                                                         decoration:
-                                                             BoxDecoration(
+                                                            BoxDecoration(
                                                           color:
                                                               AppbackgroundColor
                                                                   .TiTile_Colors,
@@ -740,23 +740,20 @@ class _RentalState extends State<Rental> {
                                                         padding:
                                                             const EdgeInsets
                                                                 .all(8.0),
-                                                        child: const Center(
-                                                          child: Text(
-                                                            'ประเภท',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                              color: SettingScreen_Color
-                                                                  .Colors_Text1_,
-                                                              fontFamily:
-                                                                  FontWeight_
-                                                                      .Fonts_T,
-                                                              fontWeight:
+                                                        child: Center(
+                                                          child: Translate
+                                                              .TranslateAndSetText(
+                                                                  'ประเภท',
+                                                                  SettingScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  TextAlign
+                                                                      .center,
                                                                   FontWeight
                                                                       .bold,
-                                                              //fontSize: 10.0
-                                                            ),
-                                                          ),
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  14,
+                                                                  1),
                                                         ),
                                                       ),
                                                     ),
@@ -765,7 +762,7 @@ class _RentalState extends State<Rental> {
                                                       child: Container(
                                                         height: 50,
                                                         decoration:
-                                                             BoxDecoration(
+                                                            BoxDecoration(
                                                           color:
                                                               AppbackgroundColor
                                                                   .TiTile_Colors,
@@ -790,23 +787,20 @@ class _RentalState extends State<Rental> {
                                                         padding:
                                                             const EdgeInsets
                                                                 .all(8.0),
-                                                        child: const Center(
-                                                          child: Text(
-                                                            'เปิด-ปิด',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                              color: SettingScreen_Color
-                                                                  .Colors_Text1_,
-                                                              fontFamily:
-                                                                  FontWeight_
-                                                                      .Fonts_T,
-                                                              fontWeight:
+                                                        child: Center(
+                                                          child: Translate
+                                                              .TranslateAndSetText(
+                                                                  'เปิด-ปิด',
+                                                                  SettingScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  TextAlign
+                                                                      .center,
                                                                   FontWeight
                                                                       .bold,
-                                                              //fontSize: 10.0
-                                                            ),
-                                                          ),
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  14,
+                                                                  1),
                                                         ),
                                                       ),
                                                     ),
@@ -815,7 +809,7 @@ class _RentalState extends State<Rental> {
                                                       child: Container(
                                                         height: 50,
                                                         decoration:
-                                                             BoxDecoration(
+                                                            BoxDecoration(
                                                           color:
                                                               AppbackgroundColor
                                                                   .TiTile_Colors,
@@ -840,23 +834,20 @@ class _RentalState extends State<Rental> {
                                                         padding:
                                                             const EdgeInsets
                                                                 .all(8.0),
-                                                        child: const Center(
-                                                          child: Text(
-                                                            'ลบ',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                              color: SettingScreen_Color
-                                                                  .Colors_Text1_,
-                                                              fontFamily:
-                                                                  FontWeight_
-                                                                      .Fonts_T,
-                                                              fontWeight:
+                                                        child: Center(
+                                                          child: Translate
+                                                              .TranslateAndSetText(
+                                                                  'ลบ',
+                                                                  SettingScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  TextAlign
+                                                                      .center,
                                                                   FontWeight
                                                                       .bold,
-                                                              //fontSize: 10.0
-                                                            ),
-                                                          ),
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  14,
+                                                                  1),
                                                         ),
                                                       ),
                                                     ),
@@ -919,8 +910,7 @@ class _RentalState extends State<Rental> {
                                                                   child:
                                                                       Padding(
                                                                     padding:
-                                                                        const EdgeInsets
-                                                                            .all(
+                                                                        const EdgeInsets.all(
                                                                             8.0),
                                                                     child:
                                                                         TextFormField(
@@ -1011,8 +1001,7 @@ class _RentalState extends State<Rental> {
                                                                   child:
                                                                       Padding(
                                                                     padding:
-                                                                        const EdgeInsets
-                                                                            .all(
+                                                                        const EdgeInsets.all(
                                                                             8.0),
                                                                     child:
                                                                         TextFormField(
@@ -1125,19 +1114,19 @@ class _RentalState extends State<Rental> {
                                                                     isExpanded:
                                                                         true,
                                                                     // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
-                                                                    hint: Text(
-                                                                      vatModels[index].vtypex ==
-                                                                              '0'
-                                                                          ? 'ไม่มี'
-                                                                          : vatModels[index].vtypex == '1'
-                                                                              ? 'รวมภาษี'
-                                                                              : 'ไม่รวมภาษี',
-                                                                      style: const TextStyle(
-                                                                          fontSize: 14,
-                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                          // fontWeight: FontWeight.bold,
-                                                                          fontFamily: Font_.Fonts_T),
-                                                                    ),
+                                                                    hint: Translate.TranslateAndSetText(
+                                                                        vatModels[index].vtypex == '0'
+                                                                            ? 'ไม่มี'
+                                                                            : vatModels[index].vtypex == '1'
+                                                                                ? 'รวมภาษี'
+                                                                                : 'ไม่รวมภาษี',
+                                                                        SettingScreen_Color.Colors_Text1_,
+                                                                        TextAlign.center,
+                                                                        FontWeight.bold,
+                                                                        FontWeight_.Fonts_T,
+                                                                        14,
+                                                                        1),
+
                                                                     icon:
                                                                         const Icon(
                                                                       Icons
@@ -1150,7 +1139,7 @@ class _RentalState extends State<Rental> {
                                                                     buttonHeight:
                                                                         60,
                                                                     buttonPadding: const EdgeInsets
-                                                                        .only(
+                                                                            .only(
                                                                         left:
                                                                             10,
                                                                         right:
@@ -1395,9 +1384,8 @@ class _RentalState extends State<Rental> {
                                                                               .center,
                                                                       children: [
                                                                         Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
                                                                           child:
                                                                               Container(
                                                                             width:
@@ -1451,19 +1439,21 @@ class _RentalState extends State<Rental> {
                                                     ),
                                                     child: Column(
                                                       children: [
-                                                        const Align(
+                                                        Align(
                                                           alignment: Alignment
                                                               .bottomRight,
-                                                          child: Text(
-                                                            '** กรุณากด Enterทุกครั้งที่มีการเปลี่ยนแปลงข้อมูล **',
-                                                            style: TextStyle(
-                                                                color:
-                                                                    Colors.red,
-                                                                fontSize: 12.0,
-                                                                fontFamily:
-                                                                    FontWeight_
-                                                                        .Fonts_T),
-                                                          ),
+                                                          child: Translate
+                                                              .TranslateAndSetText(
+                                                                  '** กรุณากด Enterทุกครั้งที่มีการเปลี่ยนแปลงข้อมูล **',
+                                                                  Colors.red,
+                                                                  TextAlign
+                                                                      .center,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  12,
+                                                                  1),
                                                         ),
                                                         Row(
                                                           mainAxisAlignment:
@@ -1477,8 +1467,7 @@ class _RentalState extends State<Rental> {
                                                                 children: [
                                                                   Padding(
                                                                     padding:
-                                                                        const EdgeInsets
-                                                                            .all(
+                                                                        const EdgeInsets.all(
                                                                             8.0),
                                                                     child:
                                                                         InkWell(
@@ -1536,8 +1525,7 @@ class _RentalState extends State<Rental> {
                                                                         decoration: BoxDecoration(
                                                                           // color: AppbackgroundColor
                                                                           //     .TiTile_Colors,
-                                                                          borderRadius: const BorderRadius
-                                                                              .only(
+                                                                          borderRadius: const BorderRadius.only(
                                                                               topLeft: Radius.circular(6),
                                                                               topRight: Radius.circular(6),
                                                                               bottomLeft: Radius.circular(6),
@@ -1584,8 +1572,7 @@ class _RentalState extends State<Rental> {
                                                                           BoxDecoration(
                                                                         // color: AppbackgroundColor
                                                                         //     .TiTile_Colors,
-                                                                        borderRadius: const BorderRadius
-                                                                            .only(
+                                                                        borderRadius: const BorderRadius.only(
                                                                             topLeft:
                                                                                 Radius.circular(6),
                                                                             topRight: Radius.circular(6),
@@ -1596,9 +1583,9 @@ class _RentalState extends State<Rental> {
                                                                                 Colors.grey,
                                                                             width: 1),
                                                                       ),
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          3.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              3.0),
                                                                       child:
                                                                           const Text(
                                                                         'Scroll',
@@ -1656,18 +1643,16 @@ class _RentalState extends State<Rental> {
                           children: [
                             Row(
                               children: [
-                                const Padding(
+                                Padding(
                                   padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'ตั้งค่า WHT',
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                      color: SettingScreen_Color.Colors_Text1_,
-                                      fontFamily: FontWeight_.Fonts_T,
-                                      fontWeight: FontWeight.bold,
-                                      //fontSize: 10.0
-                                    ),
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      'ตั้งค่า WHT',
+                                      SettingScreen_Color.Colors_Text1_,
+                                      TextAlign.center,
+                                      FontWeight.bold,
+                                      FontWeight_.Fonts_T,
+                                      14,
+                                      1),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -1711,16 +1696,14 @@ class _RentalState extends State<Rental> {
                                         //     color: Colors.grey, width: 1),
                                       ),
                                       padding: const EdgeInsets.all(8.0),
-                                      child: const Text(
-                                        '+ เพิ่ม',
-                                        style: TextStyle(
-                                          color:
-                                              SettingScreen_Color.Colors_Text3_,
-                                          fontFamily: FontWeight_.Fonts_T,
-                                          fontWeight: FontWeight.bold,
-                                          //fontSize: 10.0
-                                        ),
-                                      ),
+                                      child: Translate.TranslateAndSetText(
+                                          '+ เพิ่ม',
+                                          SettingScreen_Color.Colors_Text3_,
+                                          TextAlign.center,
+                                          FontWeight.bold,
+                                          FontWeight_.Fonts_T,
+                                          14,
+                                          1),
                                     ),
                                   ),
                                 ),
@@ -1759,7 +1742,7 @@ class _RentalState extends State<Rental> {
                                                       child: Container(
                                                         height: 50,
                                                         decoration:
-                                                             BoxDecoration(
+                                                            BoxDecoration(
                                                           color:
                                                               AppbackgroundColor
                                                                   .TiTile_Colors,
@@ -1784,23 +1767,20 @@ class _RentalState extends State<Rental> {
                                                         padding:
                                                             const EdgeInsets
                                                                 .all(8.0),
-                                                        child: const Center(
-                                                          child: Text(
-                                                            'รายการเลือก',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                              color: SettingScreen_Color
-                                                                  .Colors_Text1_,
-                                                              fontFamily:
-                                                                  FontWeight_
-                                                                      .Fonts_T,
-                                                              fontWeight:
+                                                        child: Center(
+                                                          child: Translate
+                                                              .TranslateAndSetText(
+                                                                  'รายการเลือก',
+                                                                  SettingScreen_Color
+                                                                      .Colors_Text3_,
+                                                                  TextAlign
+                                                                      .center,
                                                                   FontWeight
                                                                       .bold,
-                                                              //fontSize: 10.0
-                                                            ),
-                                                          ),
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  14,
+                                                                  1),
                                                         ),
                                                       ),
                                                     ),
@@ -1809,7 +1789,7 @@ class _RentalState extends State<Rental> {
                                                       child: Container(
                                                         height: 50,
                                                         decoration:
-                                                             BoxDecoration(
+                                                            BoxDecoration(
                                                           color:
                                                               AppbackgroundColor
                                                                   .TiTile_Colors,
@@ -1898,7 +1878,7 @@ class _RentalState extends State<Rental> {
                                                       child: Container(
                                                         height: 50,
                                                         decoration:
-                                                             BoxDecoration(
+                                                            BoxDecoration(
                                                           color:
                                                               AppbackgroundColor
                                                                   .TiTile_Colors,
@@ -1923,23 +1903,20 @@ class _RentalState extends State<Rental> {
                                                         padding:
                                                             const EdgeInsets
                                                                 .all(8.0),
-                                                        child: const Center(
-                                                          child: Text(
-                                                            'เปิด-ปิด',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                              color: SettingScreen_Color
-                                                                  .Colors_Text1_,
-                                                              fontFamily:
-                                                                  FontWeight_
-                                                                      .Fonts_T,
-                                                              fontWeight:
+                                                        child: Center(
+                                                          child: Translate
+                                                              .TranslateAndSetText(
+                                                                  'เปิด-ปิด',
+                                                                  SettingScreen_Color
+                                                                      .Colors_Text3_,
+                                                                  TextAlign
+                                                                      .center,
                                                                   FontWeight
                                                                       .bold,
-                                                              //fontSize: 10.0
-                                                            ),
-                                                          ),
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  14,
+                                                                  1),
                                                         ),
                                                       ),
                                                     ),
@@ -1948,7 +1925,7 @@ class _RentalState extends State<Rental> {
                                                       child: Container(
                                                         height: 50,
                                                         decoration:
-                                                             BoxDecoration(
+                                                            BoxDecoration(
                                                           color:
                                                               AppbackgroundColor
                                                                   .TiTile_Colors,
@@ -1973,23 +1950,20 @@ class _RentalState extends State<Rental> {
                                                         padding:
                                                             const EdgeInsets
                                                                 .all(8.0),
-                                                        child: const Center(
-                                                          child: Text(
-                                                            'ลบ',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                              color: SettingScreen_Color
-                                                                  .Colors_Text1_,
-                                                              fontFamily:
-                                                                  FontWeight_
-                                                                      .Fonts_T,
-                                                              fontWeight:
+                                                        child: Center(
+                                                          child: Translate
+                                                              .TranslateAndSetText(
+                                                                  'ลบ',
+                                                                  SettingScreen_Color
+                                                                      .Colors_Text3_,
+                                                                  TextAlign
+                                                                      .center,
                                                                   FontWeight
                                                                       .bold,
-                                                              //fontSize: 10.0
-                                                            ),
-                                                          ),
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  14,
+                                                                  1),
                                                         ),
                                                       ),
                                                     ),
@@ -2154,8 +2128,7 @@ class _RentalState extends State<Rental> {
                                                                   child:
                                                                       Padding(
                                                                     padding:
-                                                                        const EdgeInsets
-                                                                            .all(
+                                                                        const EdgeInsets.all(
                                                                             8.0),
                                                                     child:
                                                                         TextFormField(
@@ -2407,9 +2380,8 @@ class _RentalState extends State<Rental> {
                                                                               .center,
                                                                       children: [
                                                                         Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
                                                                           child:
                                                                               Container(
                                                                             width:
@@ -2463,19 +2435,21 @@ class _RentalState extends State<Rental> {
                                                     ),
                                                     child: Column(
                                                       children: [
-                                                        const Align(
+                                                        Align(
                                                           alignment: Alignment
                                                               .bottomRight,
-                                                          child: Text(
-                                                            '** กรุณากด Enterทุกครั้งที่มีการเปลี่ยนแปลงข้อมูล **',
-                                                            style: TextStyle(
-                                                                color:
-                                                                    Colors.red,
-                                                                fontSize: 12.0,
-                                                                fontFamily:
-                                                                    FontWeight_
-                                                                        .Fonts_T),
-                                                          ),
+                                                          child: Translate
+                                                              .TranslateAndSetText(
+                                                                  '** กรุณากด Enterทุกครั้งที่มีการเปลี่ยนแปลงข้อมูล **',
+                                                                  Colors.red,
+                                                                  TextAlign
+                                                                      .center,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  12,
+                                                                  1),
                                                         ),
                                                         Row(
                                                           mainAxisAlignment:
@@ -2489,8 +2463,7 @@ class _RentalState extends State<Rental> {
                                                                 children: [
                                                                   Padding(
                                                                     padding:
-                                                                        const EdgeInsets
-                                                                            .all(
+                                                                        const EdgeInsets.all(
                                                                             8.0),
                                                                     child:
                                                                         InkWell(
@@ -2548,8 +2521,7 @@ class _RentalState extends State<Rental> {
                                                                         decoration: BoxDecoration(
                                                                           // color: AppbackgroundColor
                                                                           //     .TiTile_Colors,
-                                                                          borderRadius: const BorderRadius
-                                                                              .only(
+                                                                          borderRadius: const BorderRadius.only(
                                                                               topLeft: Radius.circular(6),
                                                                               topRight: Radius.circular(6),
                                                                               bottomLeft: Radius.circular(6),
@@ -2596,8 +2568,7 @@ class _RentalState extends State<Rental> {
                                                                           BoxDecoration(
                                                                         // color: AppbackgroundColor
                                                                         //     .TiTile_Colors,
-                                                                        borderRadius: const BorderRadius
-                                                                            .only(
+                                                                        borderRadius: const BorderRadius.only(
                                                                             topLeft:
                                                                                 Radius.circular(6),
                                                                             topRight: Radius.circular(6),
@@ -2608,9 +2579,9 @@ class _RentalState extends State<Rental> {
                                                                                 Colors.grey,
                                                                             width: 1),
                                                                       ),
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          3.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              3.0),
                                                                       child:
                                                                           const Text(
                                                                         'Scroll',
@@ -2673,16 +2644,25 @@ class _RentalState extends State<Rental> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                '${Ser_Sub + 1}.${expTypeModels[Ser_Sub].bills}',
-                                maxLines: 1,
-                                style: const TextStyle(
-                                  color: SettingScreen_Color.Colors_Text1_,
-                                  fontFamily: FontWeight_.Fonts_T,
-                                  fontWeight: FontWeight.bold,
-                                  //fontSize: 10.0
-                                ),
-                              ),
+                              child: Translate.TranslateAndSetText(
+                                  '${Ser_Sub + 1}.${expTypeModels[Ser_Sub].bills}',
+                                  SettingScreen_Color.Colors_Text1_,
+                                  TextAlign.center,
+                                  FontWeight.bold,
+                                  FontWeight_.Fonts_T,
+                                  14,
+                                  1),
+
+                              //  Text(
+                              //   '${Ser_Sub + 1}.${expTypeModels[Ser_Sub].bills}',
+                              //   maxLines: 1,
+                              //   style: const TextStyle(
+                              //     color: SettingScreen_Color.Colors_Text1_,
+                              //     fontFamily: FontWeight_.Fonts_T,
+                              //     fontWeight: FontWeight.bold,
+                              //     //fontSize: 10.0
+                              //   ),
+                              // ),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -2726,15 +2706,24 @@ class _RentalState extends State<Rental> {
                                     //     color: Colors.grey, width: 1),
                                   ),
                                   padding: const EdgeInsets.all(8.0),
-                                  child: const Text(
-                                    '+ เพิ่ม',
-                                    style: TextStyle(
-                                      color: SettingScreen_Color.Colors_Text3_,
-                                      fontFamily: FontWeight_.Fonts_T,
-                                      fontWeight: FontWeight.bold,
-                                      //fontSize: 10.0
-                                    ),
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      '+ เพิ่ม',
+                                      SettingScreen_Color.Colors_Text3_,
+                                      TextAlign.center,
+                                      FontWeight.bold,
+                                      FontWeight_.Fonts_T,
+                                      14,
+                                      1),
+
+                                  //  const Text(
+                                  //   '+ เพิ่ม',
+                                  //   style: TextStyle(
+                                  //     color: SettingScreen_Color.Colors_Text3_,
+                                  //     fontFamily: FontWeight_.Fonts_T,
+                                  //     fontWeight: FontWeight.bold,
+                                  //     //fontSize: 10.0
+                                  //   ),
+                                  // ),
                                 ),
                               ),
                             ),
@@ -2764,7 +2753,7 @@ class _RentalState extends State<Rental> {
                                             flex: 1,
                                             child: Container(
                                               height: 50,
-                                              decoration:  BoxDecoration(
+                                              decoration: BoxDecoration(
                                                 color: AppbackgroundColor
                                                     .TiTile_Colors,
                                                 borderRadius: BorderRadius.only(
@@ -2801,7 +2790,7 @@ class _RentalState extends State<Rental> {
                                             flex: 4,
                                             child: Container(
                                               height: 50,
-                                              decoration:  BoxDecoration(
+                                              decoration: BoxDecoration(
                                                 color: AppbackgroundColor
                                                     .TiTile_Colors,
                                                 borderRadius: BorderRadius.only(
@@ -2817,19 +2806,17 @@ class _RentalState extends State<Rental> {
                                               ),
                                               padding:
                                                   const EdgeInsets.all(8.0),
-                                              child: const Center(
-                                                child: Text(
-                                                  'ค่า DEFEAULT',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text1_,
-                                                    fontFamily:
+                                              child: Center(
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'ค่า DEFEAULT',
+                                                        SettingScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
                                                         FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                  ),
-                                                ),
+                                                        14,
+                                                        1),
                                               ),
                                             ),
                                           ),
@@ -2837,7 +2824,7 @@ class _RentalState extends State<Rental> {
                                             flex: 1,
                                             child: Container(
                                               height: 50,
-                                              decoration:  BoxDecoration(
+                                              decoration: BoxDecoration(
                                                 color: AppbackgroundColor
                                                     .TiTile_Colors,
                                                 borderRadius: BorderRadius.only(
@@ -2881,19 +2868,17 @@ class _RentalState extends State<Rental> {
                                                   .TiTile_Colors,
                                               padding:
                                                   const EdgeInsets.all(8.0),
-                                              child: const Center(
-                                                child: Text(
-                                                  'ประเภทค่าบริการ',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text1_,
-                                                    fontFamily:
+                                              child: Center(
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'ประเภทค่าบริการ',
+                                                        SettingScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
                                                         FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                  ),
-                                                ),
+                                                        14,
+                                                        1),
                                               ),
                                             ),
                                           ),
@@ -2905,214 +2890,184 @@ class _RentalState extends State<Rental> {
                                                   .TiTile_Colors,
                                               padding:
                                                   const EdgeInsets.all(8.0),
-                                              child: const Center(
-                                                child: Text(
-                                                  'ความถี่',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text1_,
-                                                    fontFamily:
+                                              child: Center(
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'ความถี่',
+                                                        SettingScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
                                                         FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                  ),
-                                                ),
+                                                        14,
+                                                        1),
+
+                                                // Text(
+                                                //   'ความถี่',
+                                                //   textAlign: TextAlign.center,
+                                                //   style: TextStyle(
+                                                //     color: SettingScreen_Color
+                                                //         .Colors_Text1_,
+                                                //     fontFamily:
+                                                //         FontWeight_.Fonts_T,
+                                                //     fontWeight: FontWeight.bold,
+                                                //     //fontSize: 10.0
+                                                //   ),
+                                                // ),
                                               ),
                                             ),
                                           ),
                                           Expanded(
                                             flex: 3,
-                                            child:
-                                                expTypeModels[Ser_Sub].ser ==
-                                                        '3'
-                                                    ? Container(
-                                                        height: 60,
-                                                        color:
-                                                            AppbackgroundColor
-                                                                .TiTile_Colors,
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(0.0),
-                                                        child: Center(
-                                                          child: Column(
+                                            child: expTypeModels[Ser_Sub].ser ==
+                                                    '3'
+                                                ? Container(
+                                                    height: 60,
+                                                    color: AppbackgroundColor
+                                                        .TiTile_Colors,
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            0.0),
+                                                    child: Center(
+                                                      child: Column(
+                                                        children: [
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
                                                             children: [
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
+                                                              Translate.TranslateAndSetText(
+                                                                  'กำหนดราคา',
+                                                                  SettingScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  TextAlign
+                                                                      .center,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  14,
+                                                                  1),
+                                                            ],
+                                                          ),
+                                                          Row(
+                                                            children: [
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: Translate.TranslateAndSetText(
+                                                                    'เปิด/ปิด',
+                                                                    SettingScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    TextAlign
                                                                         .center,
-                                                                children: const [
-                                                                  Text(
-                                                                    'กำหนดราคา',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: SettingScreen_Color
-                                                                          .Colors_Text1_,
-                                                                      fontFamily:
-                                                                          FontWeight_
-                                                                              .Fonts_T,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      //fontSize: 10.0
-                                                                    ),
-                                                                  )
-                                                                ],
+                                                                    FontWeight
+                                                                        .bold,
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                                    14,
+                                                                    1),
                                                               ),
-                                                              Row(
-                                                                children: const [
-                                                                  Expanded(
-                                                                    flex: 1,
-                                                                    child: Text(
-                                                                      'เปิด/ปิด',
-                                                                      maxLines:
-                                                                          1,
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: SettingScreen_Color
-                                                                            .Colors_Text1_,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                        //fontSize: 10.0
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Expanded(
-                                                                    flex: 1,
-                                                                    child: Text(
-                                                                      'ราคา',
-                                                                      maxLines:
-                                                                          1,
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: SettingScreen_Color
-                                                                            .Colors_Text1_,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                        //fontSize: 10.0
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Expanded(
-                                                                    flex: 1,
-                                                                    child: Text(
-                                                                      'มิเตอร์/หน่วย',
-                                                                      maxLines:
-                                                                          1,
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: SettingScreen_Color
-                                                                            .Colors_Text1_,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                        //fontSize: 10.0
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ],
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: Translate.TranslateAndSetText(
+                                                                    'ราคา',
+                                                                    SettingScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    TextAlign
+                                                                        .center,
+                                                                    FontWeight
+                                                                        .bold,
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                                    14,
+                                                                    1),
+                                                              ),
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: Translate.TranslateAndSetText(
+                                                                    'มิเตอร์/หน่วย',
+                                                                    SettingScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    TextAlign
+                                                                        .center,
+                                                                    FontWeight
+                                                                        .bold,
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                                    14,
+                                                                    1),
                                                               ),
                                                             ],
                                                           ),
-                                                        ),
-                                                      )
-                                                    : Container(
-                                                        height: 60,
-                                                        color:
-                                                            AppbackgroundColor
-                                                                .TiTile_Colors,
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(0.0),
-                                                        child: Center(
-                                                          child: Column(
-                                                            children: [
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: const [
-                                                                  Text(
-                                                                    'กำหนดราคา',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: SettingScreen_Color
-                                                                          .Colors_Text1_,
-                                                                      fontFamily:
-                                                                          FontWeight_
-                                                                              .Fonts_T,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      //fontSize: 10.0
-                                                                    ),
-                                                                  )
-                                                                ],
-                                                              ),
-                                                              Row(
-                                                                children: const [
-                                                                  Expanded(
-                                                                    child: Text(
-                                                                      'เปิด/ปิด',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: SettingScreen_Color
-                                                                            .Colors_Text1_,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                        //fontSize: 10.0
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Expanded(
-                                                                    child: Text(
-                                                                      'ราคา',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: SettingScreen_Color
-                                                                            .Colors_Text1_,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                        //fontSize: 10.0
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
+                                                        ],
                                                       ),
+                                                    ),
+                                                  )
+                                                : Container(
+                                                    height: 60,
+                                                    color: AppbackgroundColor
+                                                        .TiTile_Colors,
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            0.0),
+                                                    child: Center(
+                                                      child: Column(
+                                                        children: [
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Translate.TranslateAndSetText(
+                                                                  'กำหนดราคา',
+                                                                  SettingScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  TextAlign
+                                                                      .center,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  14,
+                                                                  1),
+                                                            ],
+                                                          ),
+                                                          Row(
+                                                            children: [
+                                                              Expanded(
+                                                                child: Translate.TranslateAndSetText(
+                                                                    'เปิด/ปิด',
+                                                                    SettingScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    TextAlign
+                                                                        .center,
+                                                                    FontWeight
+                                                                        .bold,
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                                    14,
+                                                                    1),
+                                                              ),
+                                                              Expanded(
+                                                                child: Translate.TranslateAndSetText(
+                                                                    'ราคา',
+                                                                    SettingScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    TextAlign
+                                                                        .center,
+                                                                    FontWeight
+                                                                        .bold,
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                                    14,
+                                                                    1),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
                                           ),
                                           Expanded(
                                             flex: 2,
@@ -3122,19 +3077,17 @@ class _RentalState extends State<Rental> {
                                                   .TiTile_Colors,
                                               padding:
                                                   const EdgeInsets.all(8.0),
-                                              child: const Center(
-                                                child: Text(
-                                                  'วันที่เริ่มงวด',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text1_,
-                                                    fontFamily:
+                                              child: Center(
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'วันที่เริ่มงวด',
+                                                        SettingScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
                                                         FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                  ),
-                                                ),
+                                                        14,
+                                                        1),
                                               ),
                                             ),
                                           ),
@@ -3218,19 +3171,17 @@ class _RentalState extends State<Rental> {
                                                   .TiTile_Colors,
                                               padding:
                                                   const EdgeInsets.all(8.0),
-                                              child: const Center(
-                                                child: Text(
-                                                  'ลบ',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text1_,
-                                                    fontFamily:
+                                              child: Center(
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'ลบ',
+                                                        SettingScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
                                                         FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                  ),
-                                                ),
+                                                        14,
+                                                        1),
                                               ),
                                             ),
                                           ),
@@ -3294,7 +3245,7 @@ class _RentalState extends State<Rental> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .all(
+                                                                            .all(
                                                                         8.0),
                                                                 child:
                                                                     TextFormField(
@@ -3445,19 +3396,28 @@ class _RentalState extends State<Rental> {
                                                                         ),
                                                                         isExpanded:
                                                                             true,
-                                                                        hint:
-                                                                            Text(
-                                                                          expModels[index].unitser == '0'
-                                                                              ? 'ไม่ระบุ'
-                                                                              : '${expModels[index].unit}',
-                                                                          maxLines:
-                                                                              1,
-                                                                          style: const TextStyle(
-                                                                              fontSize: 14,
-                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                              // fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T),
-                                                                        ),
+                                                                        hint: Translate.TranslateAndSetText(
+                                                                            expModels[index].unitser == '0'
+                                                                                ? 'ไม่ระบุ'
+                                                                                : '${expModels[index].unit}',
+                                                                            PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            TextAlign.center,
+                                                                            null,
+                                                                            Font_.Fonts_T,
+                                                                            12,
+                                                                            1),
+                                                                        //     Text(
+                                                                        //   expModels[index].unitser == '0'
+                                                                        //       ? 'ไม่ระบุ'
+                                                                        //       : '${expModels[index].unit}',
+                                                                        //   maxLines:
+                                                                        //       1,
+                                                                        //   style: const TextStyle(
+                                                                        //       fontSize: 14,
+                                                                        //       color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        //       // fontWeight: FontWeight.bold,
+                                                                        //       fontFamily: Font_.Fonts_T),
+                                                                        // ),
                                                                         icon:
                                                                             const Icon(
                                                                           Icons
@@ -3486,15 +3446,22 @@ class _RentalState extends State<Rental> {
                                                                               String>(
                                                                             value:
                                                                                 '${item.ser}:${item.unit}',
-                                                                            child:
-                                                                                Text(
-                                                                              item.unit!,
-                                                                              style: const TextStyle(
-                                                                                  fontSize: 14,
-                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight: FontWeight.bold,
-                                                                                  fontFamily: Font_.Fonts_T),
-                                                                            ),
+                                                                            child: Translate.TranslateAndSetText(
+                                                                                item.unit!,
+                                                                                PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                TextAlign.center,
+                                                                                null,
+                                                                                Font_.Fonts_T,
+                                                                                12,
+                                                                                1),
+                                                                            //     Text(
+                                                                            //   item.unit!,
+                                                                            //   style: const TextStyle(
+                                                                            //       fontSize: 14,
+                                                                            //       color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            //       // fontWeight: FontWeight.bold,
+                                                                            //       fontFamily: Font_.Fonts_T),
+                                                                            // ),
                                                                           );
                                                                         }).toList(),
 
@@ -3558,19 +3525,28 @@ class _RentalState extends State<Rental> {
                                                                         ),
                                                                         isExpanded:
                                                                             true,
-                                                                        hint:
-                                                                            Text(
-                                                                          expModels[index].unitser == '0'
-                                                                              ? 'ไม่ระบุ'
-                                                                              : '${expModels[index].unit}',
-                                                                          maxLines:
-                                                                              1,
-                                                                          style: const TextStyle(
-                                                                              fontSize: 14,
-                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                              // fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T),
-                                                                        ),
+                                                                        hint: Translate.TranslateAndSetText(
+                                                                            expModels[index].unitser == '0'
+                                                                                ? 'ไม่ระบุ'
+                                                                                : '${expModels[index].unit}',
+                                                                            PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            TextAlign.center,
+                                                                            null,
+                                                                            Font_.Fonts_T,
+                                                                            12,
+                                                                            1),
+                                                                        //     Text(
+                                                                        //   expModels[index].unitser == '0'
+                                                                        //       ? 'ไม่ระบุ'
+                                                                        //       : '${expModels[index].unit}',
+                                                                        //   maxLines:
+                                                                        //       1,
+                                                                        //   style: const TextStyle(
+                                                                        //       fontSize: 14,
+                                                                        //       color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        //       // fontWeight: FontWeight.bold,
+                                                                        //       fontFamily: Font_.Fonts_T),
+                                                                        // ),
                                                                         icon:
                                                                             const Icon(
                                                                           Icons
@@ -3602,15 +3578,22 @@ class _RentalState extends State<Rental> {
                                                                               String>(
                                                                             value:
                                                                                 '${item.ser}:${item.unit}',
-                                                                            child:
-                                                                                Text(
-                                                                              item.unit!,
-                                                                              style: const TextStyle(
-                                                                                  fontSize: 14,
-                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight: FontWeight.bold,
-                                                                                  fontFamily: Font_.Fonts_T),
-                                                                            ),
+                                                                            child: Translate.TranslateAndSetText(
+                                                                                item.unit!,
+                                                                                PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                TextAlign.center,
+                                                                                null,
+                                                                                Font_.Fonts_T,
+                                                                                12,
+                                                                                1),
+                                                                            // Text(
+                                                                            //   item.unit!,
+                                                                            //   style: const TextStyle(
+                                                                            //       fontSize: 14,
+                                                                            //       color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            //       // fontWeight: FontWeight.bold,
+                                                                            //       fontFamily: Font_.Fonts_T),
+                                                                            // ),
                                                                           );
                                                                           // } else {}
                                                                           // return dob;
@@ -3669,9 +3652,9 @@ class _RentalState extends State<Rental> {
                                                                           .exptser !=
                                                                       '3'
                                                                   ? Padding(
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           Container(
                                                                         width:
@@ -3694,9 +3677,8 @@ class _RentalState extends State<Rental> {
                                                                           // border: Border.all(
                                                                           //     color: Colors.grey, width: 1),
                                                                         ),
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            8.0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
                                                                         child:
                                                                             Row(
                                                                           children: [
@@ -3812,9 +3794,9 @@ class _RentalState extends State<Rental> {
                                                                       ),
                                                                     )
                                                                   : Padding(
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           Row(
                                                                         children: [
@@ -4050,7 +4032,7 @@ class _RentalState extends State<Rental> {
                                                                     60,
                                                                 buttonPadding:
                                                                     const EdgeInsets
-                                                                        .only(
+                                                                            .only(
                                                                         left:
                                                                             10,
                                                                         right:
@@ -4163,7 +4145,7 @@ class _RentalState extends State<Rental> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .all(
+                                                                            .all(
                                                                         8.0),
                                                                 child:
                                                                     DropdownButtonFormField2(
@@ -4197,14 +4179,15 @@ class _RentalState extends State<Rental> {
                                                                         expModels[index].vat != vatModels[i].ser
                                                                             ? const SizedBox()
                                                                             : SizedBox(
-                                                                                child: Text(
-                                                                                  vatModels[i].vat.toString(),
-                                                                                  style: const TextStyle(
-                                                                                      fontSize: 14,
-                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                      // fontWeight: FontWeight.bold,
-                                                                                      fontFamily: Font_.Fonts_T),
-                                                                                ),
+                                                                                child: Translate.TranslateAndSetText(vatModels[i].vat.toString(), PeopleChaoScreen_Color.Colors_Text2_, TextAlign.center, null, Font_.Fonts_T, 12, 1),
+                                                                                // Text(
+                                                                                //   vatModels[i].vat.toString(),
+                                                                                //   style: const TextStyle(
+                                                                                //       fontSize: 14,
+                                                                                //       color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                //       // fontWeight: FontWeight.bold,
+                                                                                //       fontFamily: Font_.Fonts_T),
+                                                                                // ),
                                                                               ),
                                                                     ],
                                                                   ),
@@ -4220,7 +4203,7 @@ class _RentalState extends State<Rental> {
                                                                       60,
                                                                   buttonPadding:
                                                                       const EdgeInsets
-                                                                          .only(
+                                                                              .only(
                                                                           left:
                                                                               10,
                                                                           right:
@@ -4237,14 +4220,16 @@ class _RentalState extends State<Rental> {
                                                                                 '${item.ser}:${item.vat}',
                                                                             child:
                                                                                 SizedBox(
-                                                                              child: Text(
-                                                                                item.vat!,
-                                                                                style: const TextStyle(
-                                                                                    fontSize: 14,
-                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                    // fontWeight: FontWeight.bold,
-                                                                                    fontFamily: Font_.Fonts_T),
-                                                                              ),
+                                                                              child: Translate.TranslateAndSetText(item.vat!, PeopleChaoScreen_Color.Colors_Text2_, TextAlign.center, null, Font_.Fonts_T, 12, 1),
+
+                                                                              // Text(
+                                                                              //   item.vat!,
+                                                                              //   style: const TextStyle(
+                                                                              //       fontSize: 14,
+                                                                              //       color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                              //       // fontWeight: FontWeight.bold,
+                                                                              //       fontFamily: Font_.Fonts_T),
+                                                                              // ),
                                                                             ),
                                                                           ))
                                                                       .toList(),
@@ -4317,7 +4302,7 @@ class _RentalState extends State<Rental> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .all(
+                                                                            .all(
                                                                         8.0),
                                                                 child:
                                                                     DropdownButtonFormField2(
@@ -4351,14 +4336,15 @@ class _RentalState extends State<Rental> {
                                                                         expModels[index].wht != whtModels[i].ser
                                                                             ? const SizedBox()
                                                                             : SizedBox(
-                                                                                child: Text(
-                                                                                  whtModels[i].wht.toString(),
-                                                                                  style: const TextStyle(
-                                                                                      fontSize: 14,
-                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                      // fontWeight: FontWeight.bold,
-                                                                                      fontFamily: Font_.Fonts_T),
-                                                                                ),
+                                                                                child: Translate.TranslateAndSetText(whtModels[i].wht.toString(), PeopleChaoScreen_Color.Colors_Text2_, TextAlign.center, null, Font_.Fonts_T, 12, 1),
+                                                                                //  Text(
+                                                                                //   whtModels[i].wht.toString(),
+                                                                                //   style: const TextStyle(
+                                                                                //       fontSize: 14,
+                                                                                //       color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                //       // fontWeight: FontWeight.bold,
+                                                                                //       fontFamily: Font_.Fonts_T),
+                                                                                // ),
                                                                               ),
                                                                     ],
                                                                   ),
@@ -4374,7 +4360,7 @@ class _RentalState extends State<Rental> {
                                                                       60,
                                                                   buttonPadding:
                                                                       const EdgeInsets
-                                                                          .only(
+                                                                              .only(
                                                                           left:
                                                                               10,
                                                                           right:
@@ -4391,14 +4377,16 @@ class _RentalState extends State<Rental> {
                                                                                 '${item.ser}:${item.wht}',
                                                                             child:
                                                                                 SizedBox(
-                                                                              child: Text(
-                                                                                item.wht!,
-                                                                                style: const TextStyle(
-                                                                                    fontSize: 14,
-                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                    // fontWeight: FontWeight.bold,
-                                                                                    fontFamily: Font_.Fonts_T),
-                                                                              ),
+                                                                              child: Translate.TranslateAndSetText(item.wht!, PeopleChaoScreen_Color.Colors_Text2_, TextAlign.center, null, Font_.Fonts_T, 12, 1),
+
+                                                                              // Text(
+                                                                              //   item.wht!,
+                                                                              //   style: const TextStyle(
+                                                                              //       fontSize: 14,
+                                                                              //       color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                              //       // fontWeight: FontWeight.bold,
+                                                                              //       fontFamily: Font_.Fonts_T),
+                                                                              // ),
                                                                             ),
                                                                           ))
                                                                       .toList(),
@@ -4471,7 +4459,7 @@ class _RentalState extends State<Rental> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .all(
+                                                                            .all(
                                                                         8.0),
                                                                 child:
                                                                     Container(
@@ -4501,7 +4489,7 @@ class _RentalState extends State<Rental> {
                                                                   ),
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child: GestureDetector(
                                                                       onTap: () async {
@@ -4573,7 +4561,7 @@ class _RentalState extends State<Rental> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .all(
+                                                                            .all(
                                                                         8.0),
                                                                 child:
                                                                     Container(
@@ -4603,7 +4591,7 @@ class _RentalState extends State<Rental> {
                                                                   ),
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child:
                                                                       GestureDetector(
@@ -4707,16 +4695,16 @@ class _RentalState extends State<Rental> {
                                     ),
                                     child: Column(
                                       children: [
-                                        const Align(
+                                        Align(
                                           alignment: Alignment.bottomRight,
-                                          child: Text(
-                                            '** กรุณากด Enterทุกครั้งที่มีการเปลี่ยนแปลงข้อมูล **',
-                                            style: TextStyle(
-                                                color: Colors.red,
-                                                fontSize: 12.0,
-                                                fontFamily:
-                                                    FontWeight_.Fonts_T),
-                                          ),
+                                          child: Translate.TranslateAndSetText(
+                                              '** กรุณากด Enterทุกครั้งที่มีการเปลี่ยนแปลงข้อมูล **',
+                                              Colors.red,
+                                              TextAlign.center,
+                                              FontWeight.bold,
+                                              FontWeight_.Fonts_T,
+                                              12,
+                                              1),
                                         ),
                                         Row(
                                           mainAxisAlignment:
@@ -4748,7 +4736,7 @@ class _RentalState extends State<Rental> {
                                                             // color: AppbackgroundColor
                                                             //     .TiTile_Colors,
                                                             borderRadius: const BorderRadius
-                                                                .only(
+                                                                    .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         6),
@@ -4810,7 +4798,7 @@ class _RentalState extends State<Rental> {
                                                           // color: AppbackgroundColor
                                                           //     .TiTile_Colors,
                                                           borderRadius: const BorderRadius
-                                                              .only(
+                                                                  .only(
                                                               topLeft: Radius
                                                                   .circular(6),
                                                               topRight: Radius
@@ -4879,7 +4867,7 @@ class _RentalState extends State<Rental> {
                                                         // color: AppbackgroundColor
                                                         //     .TiTile_Colors,
                                                         borderRadius: const BorderRadius
-                                                            .only(
+                                                                .only(
                                                             topLeft: Radius
                                                                 .circular(6),
                                                             topRight:
@@ -4957,16 +4945,25 @@ class _RentalState extends State<Rental> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                '${Ser_Sub + 1}.${expTypeModels[Ser_Sub].bills}',
-                                maxLines: 1,
-                                style: const TextStyle(
-                                  color: SettingScreen_Color.Colors_Text1_,
-                                  fontFamily: FontWeight_.Fonts_T,
-                                  fontWeight: FontWeight.bold,
-                                  //fontSize: 10.0
-                                ),
-                              ),
+                              child: Translate.TranslateAndSetText(
+                                  '${Ser_Sub + 1}.${expTypeModels[Ser_Sub].bills}',
+                                  SettingScreen_Color.Colors_Text1_,
+                                  TextAlign.center,
+                                  FontWeight.bold,
+                                  FontWeight_.Fonts_T,
+                                  14,
+                                  1),
+
+                              // Text(
+                              //   '${Ser_Sub + 1}.${expTypeModels[Ser_Sub].bills}',
+                              //   maxLines: 1,
+                              //   style: const TextStyle(
+                              //     color: SettingScreen_Color.Colors_Text1_,
+                              //     fontFamily: FontWeight_.Fonts_T,
+                              //     fontWeight: FontWeight.bold,
+                              //     //fontSize: 10.0
+                              //   ),
+                              // ),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -5010,15 +5007,24 @@ class _RentalState extends State<Rental> {
                                     //     color: Colors.grey, width: 1),
                                   ),
                                   padding: const EdgeInsets.all(8.0),
-                                  child: const Text(
-                                    '+ เพิ่ม',
-                                    style: TextStyle(
-                                      color: SettingScreen_Color.Colors_Text3_,
-                                      fontFamily: FontWeight_.Fonts_T,
-                                      fontWeight: FontWeight.bold,
-                                      //fontSize: 10.0
-                                    ),
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      '+ เพิ่ม',
+                                      SettingScreen_Color.Colors_Text3_,
+                                      TextAlign.center,
+                                      FontWeight.bold,
+                                      FontWeight_.Fonts_T,
+                                      14,
+                                      1),
+
+                                  // const Text(
+                                  //   '+ เพิ่ม',
+                                  //   style: TextStyle(
+                                  //     color: SettingScreen_Color.Colors_Text3_,
+                                  //     fontFamily: FontWeight_.Fonts_T,
+                                  //     fontWeight: FontWeight.bold,
+                                  //     //fontSize: 10.0
+                                  //   ),
+                                  // ),
                                 ),
                               ),
                             ),
@@ -5048,7 +5054,7 @@ class _RentalState extends State<Rental> {
                                             flex: 1,
                                             child: Container(
                                               height: 50,
-                                              decoration:  BoxDecoration(
+                                              decoration: BoxDecoration(
                                                 color: AppbackgroundColor
                                                     .TiTile_Colors,
                                                 borderRadius: BorderRadius.only(
@@ -5085,7 +5091,7 @@ class _RentalState extends State<Rental> {
                                             flex: 6,
                                             child: Container(
                                               height: 50,
-                                              decoration:  BoxDecoration(
+                                              decoration: BoxDecoration(
                                                 color: AppbackgroundColor
                                                     .TiTile_Colors,
                                                 borderRadius: BorderRadius.only(
@@ -5101,19 +5107,17 @@ class _RentalState extends State<Rental> {
                                               ),
                                               padding:
                                                   const EdgeInsets.all(8.0),
-                                              child: const Center(
-                                                child: Text(
-                                                  'ค่า DEFEAULT',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text1_,
-                                                    fontFamily:
+                                              child: Center(
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'ค่า DEFEAULT',
+                                                        SettingScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
                                                         FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                  ),
-                                                ),
+                                                        14,
+                                                        1),
                                               ),
                                             ),
                                           ),
@@ -5121,7 +5125,7 @@ class _RentalState extends State<Rental> {
                                             flex: 1,
                                             child: Container(
                                               height: 50,
-                                              decoration:  BoxDecoration(
+                                              decoration: BoxDecoration(
                                                 color: AppbackgroundColor
                                                     .TiTile_Colors,
                                                 borderRadius: BorderRadius.only(
@@ -5166,19 +5170,17 @@ class _RentalState extends State<Rental> {
                                                   .TiTile_Colors,
                                               padding:
                                                   const EdgeInsets.all(2.0),
-                                              child: const Center(
-                                                child: Text(
-                                                  'ค่าใช้จ่ายที่ต้องการปรับ',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text1_,
-                                                    fontFamily:
+                                              child: Center(
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'ค่าใช้จ่ายที่ต้องการปรับ',
+                                                        SettingScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
                                                         FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                  ),
-                                                ),
+                                                        14,
+                                                        1),
                                               ),
                                             ),
                                           ),
@@ -5190,19 +5192,17 @@ class _RentalState extends State<Rental> {
                                                   .TiTile_Colors,
                                               padding:
                                                   const EdgeInsets.all(2.0),
-                                              child: const Center(
-                                                child: Text(
-                                                  'เกินกำหนด/วัน',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text1_,
-                                                    fontFamily:
+                                              child: Center(
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'เกินกำหนด/วัน',
+                                                        SettingScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
                                                         FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                  ),
-                                                ),
+                                                        14,
+                                                        1),
                                               ),
                                             ),
                                           ),
@@ -5214,19 +5214,17 @@ class _RentalState extends State<Rental> {
                                                   .TiTile_Colors,
                                               padding:
                                                   const EdgeInsets.all(2.0),
-                                              child: const Center(
-                                                child: Text(
-                                                  'การคำนวน %',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text1_,
-                                                    fontFamily:
+                                              child: Center(
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'การคำนวน %',
+                                                        SettingScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
                                                         FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                  ),
-                                                ),
+                                                        14,
+                                                        1),
                                               ),
                                             ),
                                           ),
@@ -5238,19 +5236,17 @@ class _RentalState extends State<Rental> {
                                                   .TiTile_Colors,
                                               padding:
                                                   const EdgeInsets.all(2.0),
-                                              child: const Center(
-                                                child: Text(
-                                                  'การคำนวน บาท',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text1_,
-                                                    fontFamily:
+                                              child: Center(
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'การคำนวน บาท',
+                                                        SettingScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
                                                         FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                  ),
-                                                ),
+                                                        14,
+                                                        1),
                                               ),
                                             ),
                                           ),
@@ -5261,19 +5257,17 @@ class _RentalState extends State<Rental> {
                                               color: Colors.red.shade200,
                                               padding:
                                                   const EdgeInsets.all(8.0),
-                                              child: const Center(
-                                                child: Text(
-                                                  'เกินกำหนด',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text1_,
-                                                    fontFamily:
+                                              child: Center(
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'เกินกำหนด',
+                                                        SettingScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
                                                         FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                  ),
-                                                ),
+                                                        14,
+                                                        1),
                                               ),
                                             ),
                                           ),
@@ -5284,19 +5278,17 @@ class _RentalState extends State<Rental> {
                                               color: Colors.red.shade200,
                                               padding:
                                                   const EdgeInsets.all(2.0),
-                                              child: const Center(
-                                                child: Text(
-                                                  'การคำนวน %',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text1_,
-                                                    fontFamily:
+                                              child: Center(
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'การคำนวน %',
+                                                        SettingScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
                                                         FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                  ),
-                                                ),
+                                                        14,
+                                                        1),
                                               ),
                                             ),
                                           ),
@@ -5307,19 +5299,17 @@ class _RentalState extends State<Rental> {
                                               color: Colors.red.shade200,
                                               padding:
                                                   const EdgeInsets.all(2.0),
-                                              child: const Center(
-                                                child: Text(
-                                                  'การคำนวน บาท',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text1_,
-                                                    fontFamily:
+                                              child: Center(
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'การคำนวน บาท',
+                                                        SettingScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
                                                         FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                  ),
-                                                ),
+                                                        14,
+                                                        1),
                                               ),
                                             ),
                                           ),
@@ -5330,19 +5320,17 @@ class _RentalState extends State<Rental> {
                                               color: Colors.purple.shade200,
                                               padding:
                                                   const EdgeInsets.all(2.0),
-                                              child: const Center(
-                                                child: Text(
-                                                  'เกินกำหนด',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text1_,
-                                                    fontFamily:
+                                              child: Center(
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'เกินกำหนด',
+                                                        SettingScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
                                                         FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                  ),
-                                                ),
+                                                        14,
+                                                        1),
                                               ),
                                             ),
                                           ),
@@ -5353,19 +5341,17 @@ class _RentalState extends State<Rental> {
                                               color: Colors.purple.shade200,
                                               padding:
                                                   const EdgeInsets.all(2.0),
-                                              child: const Center(
-                                                child: Text(
-                                                  'การคำนวน %',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text1_,
-                                                    fontFamily:
+                                              child: Center(
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'การคำนวน %',
+                                                        SettingScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
                                                         FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                  ),
-                                                ),
+                                                        14,
+                                                        1),
                                               ),
                                             ),
                                           ),
@@ -5376,19 +5362,17 @@ class _RentalState extends State<Rental> {
                                               color: Colors.purple.shade200,
                                               padding:
                                                   const EdgeInsets.all(2.0),
-                                              child: const Center(
-                                                child: Text(
-                                                  'การคำนวน บาท',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text1_,
-                                                    fontFamily:
+                                              child: Center(
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'การคำนวน บาท',
+                                                        SettingScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
                                                         FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                  ),
-                                                ),
+                                                        14,
+                                                        1),
                                               ),
                                             ),
                                           ),
@@ -5422,19 +5406,17 @@ class _RentalState extends State<Rental> {
                                               color: Colors.blueGrey.shade400,
                                               padding:
                                                   const EdgeInsets.all(2.0),
-                                              child: const Center(
-                                                child: Text(
-                                                  'สุงสุด บาท',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text1_,
-                                                    fontFamily:
+                                              child: Center(
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'สุงสุด บาท',
+                                                        SettingScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
                                                         FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                  ),
-                                                ),
+                                                        14,
+                                                        1),
                                               ),
                                             ),
                                           ),
@@ -5446,19 +5428,17 @@ class _RentalState extends State<Rental> {
                                                   .TiTile_Colors,
                                               padding:
                                                   const EdgeInsets.all(8.0),
-                                              child: const Center(
-                                                child: Text(
-                                                  'ลบ',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text1_,
-                                                    fontFamily:
+                                              child: Center(
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'ลบ',
+                                                        SettingScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
                                                         FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                  ),
-                                                ),
+                                                        14,
+                                                        1),
                                               ),
                                             ),
                                           ),
@@ -5523,7 +5503,7 @@ class _RentalState extends State<Rental> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .all(
+                                                                            .all(
                                                                         8.0),
                                                                 child:
                                                                     TextFormField(
@@ -5644,7 +5624,7 @@ class _RentalState extends State<Rental> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .all(
+                                                                            .all(
                                                                         8.0),
                                                                 child:
                                                                     TextFormField(
@@ -5771,7 +5751,7 @@ class _RentalState extends State<Rental> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .all(
+                                                                            .all(
                                                                         8.0),
                                                                 child:
                                                                     TextFormField(
@@ -5898,7 +5878,7 @@ class _RentalState extends State<Rental> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .all(
+                                                                            .all(
                                                                         8.0),
                                                                 child:
                                                                     TextFormField(
@@ -6040,7 +6020,7 @@ class _RentalState extends State<Rental> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .all(
+                                                                            .all(
                                                                         8.0),
                                                                 child:
                                                                     TextFormField(
@@ -6167,7 +6147,7 @@ class _RentalState extends State<Rental> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .all(
+                                                                            .all(
                                                                         8.0),
                                                                 child:
                                                                     TextFormField(
@@ -6294,7 +6274,7 @@ class _RentalState extends State<Rental> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .all(
+                                                                            .all(
                                                                         8.0),
                                                                 child:
                                                                     TextFormField(
@@ -6436,7 +6416,7 @@ class _RentalState extends State<Rental> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .all(
+                                                                            .all(
                                                                         8.0),
                                                                 child:
                                                                     TextFormField(
@@ -6565,7 +6545,7 @@ class _RentalState extends State<Rental> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .all(
+                                                                            .all(
                                                                         8.0),
                                                                 child:
                                                                     TextFormField(
@@ -6694,7 +6674,7 @@ class _RentalState extends State<Rental> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .all(
+                                                                            .all(
                                                                         8.0),
                                                                 child:
                                                                     TextFormField(
@@ -6838,7 +6818,7 @@ class _RentalState extends State<Rental> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .all(
+                                                                            .all(
                                                                         8.0),
                                                                 child:
                                                                     TextFormField(
@@ -6982,7 +6962,7 @@ class _RentalState extends State<Rental> {
                                                               child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .all(
+                                                                            .all(
                                                                         8.0),
                                                                 child:
                                                                     Container(
@@ -7011,7 +6991,7 @@ class _RentalState extends State<Rental> {
                                                                   ),
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child:
                                                                       GestureDetector(
@@ -7105,15 +7085,16 @@ class _RentalState extends State<Rental> {
                             ),
                             child: Column(
                               children: [
-                                const Align(
+                                Align(
                                   alignment: Alignment.bottomRight,
-                                  child: Text(
-                                    '** กรุณากด Enterทุกครั้งที่มีการเปลี่ยนแปลงข้อมูล **',
-                                    style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 12.0,
-                                        fontFamily: FontWeight_.Fonts_T),
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      '** กรุณากด Enterทุกครั้งที่มีการเปลี่ยนแปลงข้อมูล **',
+                                      Colors.red,
+                                      TextAlign.center,
+                                      FontWeight.bold,
+                                      FontWeight_.Fonts_T,
+                                      12,
+                                      1),
                                 ),
                                 Row(
                                   mainAxisAlignment:

@@ -44,6 +44,7 @@ import '../Model/GetCustomer_Model.dart';
 import '../Model/GetRenTal_Model.dart';
 import '../Model/GetTeNant_Model.dart';
 import '../Model/GetTrans_Model.dart';
+import '../Model/PakanDocnoModel.dart';
 import '../Model/electricity_model.dart';
 import '../PDF/Choice/pdf_Agreement_Choice.dart';
 import '../PDF/Choice/pdf_Agreement_Choice2.dart';
@@ -99,6 +100,7 @@ class _RentalInformationState extends State<RentalInformation> {
   List<CustomerModel> customer_Models = [];
   List<ElectricityModel> electricityModels = [];
   List<CustomerModel> _customerModels = <CustomerModel>[];
+  List<PakanDocnoModel> pakanDocnoModels = [];
   final _formKey = GlobalKey<FormState>();
   final Form_nameshop = TextEditingController();
   final Form_typeshop = TextEditingController();
@@ -124,6 +126,16 @@ class _RentalInformationState extends State<RentalInformation> {
 
   final Form_User = TextEditingController();
   final Form_UserPass = TextEditingController();
+/////////----------------------------------------->
+  final Form_fid = TextEditingController();
+  final Form_PakanSdate = TextEditingController();
+  final Form_PakanLdate = TextEditingController();
+  final Form_PakanSdate_Doc = TextEditingController();
+  final Form_PakanLdate_Doc = TextEditingController();
+  final Form_PakanAll_amt = TextEditingController();
+  final Form_PakanAll_pvat = TextEditingController();
+  final Form_PakanAll_vat = TextEditingController();
+  final Form_PakanAll_Total = TextEditingController();
   String tappedIndex_1 = ''; // รายละเอียดค่าบริการ
   String tappedIndex_2 = ''; // รายละเอียดค่าบริการ
   List<QuotxSelectModel> quotxSelectModels = [];
@@ -154,6 +166,7 @@ class _RentalInformationState extends State<RentalInformation> {
     super.initState();
     checkPreferance();
     read_customer();
+    read_PakanDocno();
   }
 
   Color cardColor = Colors.green[300]!;
@@ -412,6 +425,7 @@ class _RentalInformationState extends State<RentalInformation> {
             Form_aser.text = teNantModel.aser.toString();
             Form_qty.text = teNantModel.qty.toString();
             Form_cdate.text = teNantModel.cdate.toString();
+            Form_fid.text = teNantModel.fid.toString();
           });
         }
         red_coutumer();
@@ -1278,7 +1292,61 @@ class _RentalInformationState extends State<RentalInformation> {
       print(_customerModels.map((e) => e.scname));
     } catch (e) {}
   }
+////////---------------------------------->
 
+  Future<Null> read_PakanDocno() async {
+    if (pakanDocnoModels.isNotEmpty) {
+      setState(() {
+        pakanDocnoModels.clear();
+      });
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? ren = preferences.getString('renTalSer');
+    String? serzone = preferences.getString('zoneSer');
+    var ciddoc = widget.Get_Value_cid;
+
+    String url =
+        '${MyConstant().domain}/GC_PakanDocno_Choice.php?isAdd=true&ren=$ren&ciddoc=$ciddoc';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      if (result.toString() != 'null') {
+        for (var map in result) {
+          PakanDocnoModel pakanDocnoModel = PakanDocnoModel.fromJson(map);
+          setState(() {
+            Form_PakanSdate.text = pakanDocnoModel.min_date.toString();
+            Form_PakanLdate.text = pakanDocnoModel.max_date.toString();
+            Form_PakanSdate_Doc.text = pakanDocnoModel.min_docno.toString();
+            Form_PakanLdate_Doc.text = pakanDocnoModel.max_docno.toString();
+
+            Form_PakanAll_amt.text = (pakanDocnoModel.amt_pakan == null ||
+                    pakanDocnoModel.amt_pakan.toString() == '')
+                ? '0.00'
+                : pakanDocnoModel.amt_pakan.toString();
+            Form_PakanAll_pvat.text = (pakanDocnoModel.pvat_pakan == null ||
+                    pakanDocnoModel.pvat_pakan.toString() == '')
+                ? '0.00'
+                : pakanDocnoModel.pvat_pakan.toString();
+            Form_PakanAll_vat.text = (pakanDocnoModel.vat_pakan == null ||
+                    pakanDocnoModel.vat_pakan.toString() == '')
+                ? '0.00'
+                : pakanDocnoModel.vat_pakan.toString();
+
+            Form_PakanAll_Total.text = (pakanDocnoModel.total_pakan == null ||
+                    pakanDocnoModel.total_pakan.toString() == '')
+                ? '0.00'
+                : pakanDocnoModel.total_pakan.toString();
+            pakanDocnoModels.add(pakanDocnoModel);
+          });
+        }
+      }
+    } catch (e) {}
+  }
+
+////////---------------------------------->
   _searchBarAll() {
     return StreamBuilder(
         stream: Stream.periodic(const Duration(seconds: 0)),
@@ -3343,113 +3411,143 @@ class _RentalInformationState extends State<RentalInformation> {
                                       'สัญญาเช่าที่ดิน') {
                                     Pdfgen_Agreement_Choice
                                         .exportPDF_Agreement_Choice(
-                                            context,
-                                            '${widget.Get_Value_NameShop_index}',
-                                            '${widget.Get_Value_cid}',
-                                            _verticalGroupValue,
-                                            Form_nameshop.text,
-                                            Form_typeshop.text,
-                                            Form_bussshop.text,
-                                            Form_bussscontact.text,
-                                            Form_address.text,
-                                            Form_tel.text,
-                                            Form_email.text,
-                                            Form_tax.text,
-                                            Form_ln.text,
-                                            Form_zn.text,
-                                            Form_area.text,
-                                            Form_qty.text,
-                                            Form_sdate.text,
-                                            Form_ldate.text,
-                                            Form_period.text,
-                                            Form_rtname.text,
-                                            quotxSelectModels,
-                                            _TransModels,
-                                            '$renTal_name',
-                                            '${renTalModels[0].bill_addr}',
-                                            '${renTalModels[0].bill_email}',
-                                            '${renTalModels[0].bill_tel}',
-                                            '${renTalModels[0].bill_tax}',
-                                            '${renTalModels[0].bill_name}',
-                                            newValuePDFimg,
-                                            tableData00,
-                                            TitleType_Default_Receipt_Name,
-                                            Datex_text,
-                                            _ReportValue_type_docOttor);
+                                      context,
+                                      '${widget.Get_Value_NameShop_index}',
+                                      '${widget.Get_Value_cid}',
+                                      _verticalGroupValue,
+                                      Form_nameshop.text,
+                                      Form_typeshop.text,
+                                      Form_bussshop.text,
+                                      Form_bussscontact.text,
+                                      Form_address.text,
+                                      Form_tel.text,
+                                      Form_email.text,
+                                      Form_tax.text,
+                                      Form_ln.text,
+                                      Form_zn.text,
+                                      Form_area.text,
+                                      Form_qty.text,
+                                      Form_sdate.text,
+                                      Form_ldate.text,
+                                      Form_period.text,
+                                      Form_rtname.text,
+                                      quotxSelectModels,
+                                      _TransModels,
+                                      '$renTal_name',
+                                      '${renTalModels[0].bill_addr}',
+                                      '${renTalModels[0].bill_email}',
+                                      '${renTalModels[0].bill_tel}',
+                                      '${renTalModels[0].bill_tax}',
+                                      '${renTalModels[0].bill_name}',
+                                      newValuePDFimg,
+                                      tableData00,
+                                      TitleType_Default_Receipt_Name,
+                                      Datex_text,
+                                      _ReportValue_type_docOttor,
+                                      Form_fid.text,
+                                      Form_PakanSdate.text,
+                                      Form_PakanLdate.text,
+                                      Form_PakanSdate_Doc.text,
+                                      Form_PakanLdate_Doc.text,
+                                      Form_PakanAll_amt.text,
+                                      Form_PakanAll_pvat.text,
+                                      Form_PakanAll_vat.text,
+                                      Form_PakanAll_Total.text,
+                                    );
                                   } else if (_ReportValue_type ==
                                       'สัญญาห้องเช่า') {
                                     Pdfgen_Agreement_Choice2
                                         .exportPDF_Agreement_Choice2(
-                                            context,
-                                            '${widget.Get_Value_NameShop_index}',
-                                            '${widget.Get_Value_cid}',
-                                            _verticalGroupValue,
-                                            Form_nameshop.text,
-                                            Form_typeshop.text,
-                                            Form_bussshop.text,
-                                            Form_bussscontact.text,
-                                            Form_address.text,
-                                            Form_tel.text,
-                                            Form_email.text,
-                                            Form_tax.text,
-                                            Form_ln.text,
-                                            Form_zn.text,
-                                            Form_area.text,
-                                            Form_qty.text,
-                                            Form_sdate.text,
-                                            Form_ldate.text,
-                                            Form_period.text,
-                                            Form_rtname.text,
-                                            quotxSelectModels,
-                                            _TransModels,
-                                            '$renTal_name',
-                                            '${renTalModels[0].bill_addr}',
-                                            '${renTalModels[0].bill_email}',
-                                            '${renTalModels[0].bill_tel}',
-                                            '${renTalModels[0].bill_tax}',
-                                            '${renTalModels[0].bill_name}',
-                                            newValuePDFimg,
-                                            tableData00,
-                                            TitleType_Default_Receipt_Name,
-                                            Datex_text,
-                                            _ReportValue_type_docOttor);
+                                      context,
+                                      '${widget.Get_Value_NameShop_index}',
+                                      '${widget.Get_Value_cid}',
+                                      _verticalGroupValue,
+                                      Form_nameshop.text,
+                                      Form_typeshop.text,
+                                      Form_bussshop.text,
+                                      Form_bussscontact.text,
+                                      Form_address.text,
+                                      Form_tel.text,
+                                      Form_email.text,
+                                      Form_tax.text,
+                                      Form_ln.text,
+                                      Form_zn.text,
+                                      Form_area.text,
+                                      Form_qty.text,
+                                      Form_sdate.text,
+                                      Form_ldate.text,
+                                      Form_period.text,
+                                      Form_rtname.text,
+                                      quotxSelectModels,
+                                      _TransModels,
+                                      '$renTal_name',
+                                      '${renTalModels[0].bill_addr}',
+                                      '${renTalModels[0].bill_email}',
+                                      '${renTalModels[0].bill_tel}',
+                                      '${renTalModels[0].bill_tax}',
+                                      '${renTalModels[0].bill_name}',
+                                      newValuePDFimg,
+                                      tableData00,
+                                      TitleType_Default_Receipt_Name,
+                                      Datex_text,
+                                      _ReportValue_type_docOttor,
+                                      Form_fid.text,
+                                      Form_PakanSdate.text,
+                                      Form_PakanLdate.text,
+                                      Form_PakanSdate_Doc.text,
+                                      Form_PakanLdate_Doc.text,
+                                      Form_PakanAll_amt.text,
+                                      Form_PakanAll_pvat.text,
+                                      Form_PakanAll_vat.text,
+                                      Form_PakanAll_Total.text,
+                                    );
                                   } else if (_ReportValue_type ==
                                       'สัญญาบริการ') {
                                     Pdfgen_Agreement_Choice3
                                         .exportPDF_Agreement_Choice3(
-                                            context,
-                                            '${widget.Get_Value_NameShop_index}',
-                                            '${widget.Get_Value_cid}',
-                                            _verticalGroupValue,
-                                            Form_nameshop.text,
-                                            Form_typeshop.text,
-                                            Form_bussshop.text,
-                                            Form_bussscontact.text,
-                                            Form_address.text,
-                                            Form_tel.text,
-                                            Form_email.text,
-                                            Form_tax.text,
-                                            Form_ln.text,
-                                            Form_zn.text,
-                                            Form_area.text,
-                                            Form_qty.text,
-                                            Form_sdate.text,
-                                            Form_ldate.text,
-                                            Form_period.text,
-                                            Form_rtname.text,
-                                            quotxSelectModels,
-                                            _TransModels,
-                                            '$renTal_name',
-                                            '${renTalModels[0].bill_addr}',
-                                            '${renTalModels[0].bill_email}',
-                                            '${renTalModels[0].bill_tel}',
-                                            '${renTalModels[0].bill_tax}',
-                                            '${renTalModels[0].bill_name}',
-                                            newValuePDFimg,
-                                            tableData00,
-                                            TitleType_Default_Receipt_Name,
-                                            Datex_text,
-                                            _ReportValue_type_docOttor);
+                                      context,
+                                      '${widget.Get_Value_NameShop_index}',
+                                      '${widget.Get_Value_cid}',
+                                      _verticalGroupValue,
+                                      Form_nameshop.text,
+                                      Form_typeshop.text,
+                                      Form_bussshop.text,
+                                      Form_bussscontact.text,
+                                      Form_address.text,
+                                      Form_tel.text,
+                                      Form_email.text,
+                                      Form_tax.text,
+                                      Form_ln.text,
+                                      Form_zn.text,
+                                      Form_area.text,
+                                      Form_qty.text,
+                                      Form_sdate.text,
+                                      Form_ldate.text,
+                                      Form_period.text,
+                                      Form_rtname.text,
+                                      quotxSelectModels,
+                                      _TransModels,
+                                      '$renTal_name',
+                                      '${renTalModels[0].bill_addr}',
+                                      '${renTalModels[0].bill_email}',
+                                      '${renTalModels[0].bill_tel}',
+                                      '${renTalModels[0].bill_tax}',
+                                      '${renTalModels[0].bill_name}',
+                                      newValuePDFimg,
+                                      tableData00,
+                                      TitleType_Default_Receipt_Name,
+                                      Datex_text,
+                                      _ReportValue_type_docOttor,
+                                      Form_fid.text,
+                                      Form_PakanSdate.text,
+                                      Form_PakanLdate.text,
+                                      Form_PakanSdate_Doc.text,
+                                      Form_PakanLdate_Doc.text,
+                                      Form_PakanAll_amt.text,
+                                      Form_PakanAll_pvat.text,
+                                      Form_PakanAll_vat.text,
+                                      Form_PakanAll_Total.text,
+                                    );
                                   } else if (_ReportValue_type ==
                                       'สัญญาเช่าพื้นที่') {
                                     Pdfgen_Agreement_Ama1000.exportPDF_Agreement_Ama1000(
@@ -6179,6 +6277,251 @@ class _RentalInformationState extends State<RentalInformation> {
                               ),
                               padding: const EdgeInsets.all(8.0),
                             )),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            (Form_PakanSdate == null ||
+                                    Form_PakanSdate.text.toString() == '' ||
+                                    pakanDocnoModels.length == 0)
+                                ? 'เงินประกันครั้งแรก'
+                                : 'เงินประกันครั้งแรก' +
+                                    '/ ${Form_PakanSdate.text} ',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                //fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              // color: Colors.green,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(6),
+                                topRight: Radius.circular(6),
+                                bottomLeft: Radius.circular(6),
+                                bottomRight: Radius.circular(6),
+                              ),
+                              // border: Border.all(color: Colors.grey, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              showCursor: false, //add this line
+                              readOnly: true,
+
+                              controller: Form_PakanSdate_Doc,
+                              cursorColor: Colors.green,
+                              decoration: InputDecoration(
+                                  fillColor: Colors.white.withOpacity(0.3),
+                                  filled: true,
+                                  // prefixIcon:
+                                  //     const Icon(Icons.person, color: Colors.black),
+                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  labelStyle: const TextStyle(
+                                      color: Colors.black54,
+                                      fontFamily: Font_.Fonts_T)),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            (Form_PakanLdate.text == null ||
+                                    Form_PakanLdate.text.toString() == '' ||
+                                    pakanDocnoModels.length == 0)
+                                ? 'เงินประกันครั้งล่าสุด'
+                                : 'เงินประกันครั้งล่าสุด' +
+                                    '/ ${Form_PakanLdate.text} ',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                //fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              // color: Colors.green,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(6),
+                                topRight: Radius.circular(6),
+                                bottomLeft: Radius.circular(6),
+                                bottomRight: Radius.circular(6),
+                              ),
+                              // border: Border.all(color: Colors.grey, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              showCursor: false, //add this line
+                              readOnly: true,
+
+                              controller: Form_PakanLdate_Doc,
+                              cursorColor: Colors.green,
+                              decoration: InputDecoration(
+                                  fillColor: Colors.white.withOpacity(0.3),
+                                  filled: true,
+                                  // prefixIcon:
+                                  //     const Icon(Icons.person, color: Colors.black),
+                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  labelStyle: const TextStyle(
+                                      color: Colors.black54,
+                                      fontFamily: Font_.Fonts_T)),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            'เงินประกันทั้งหมด',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                //fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              // color: Colors.green,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(6),
+                                topRight: Radius.circular(6),
+                                bottomLeft: Radius.circular(6),
+                                bottomRight: Radius.circular(6),
+                              ),
+                              // border: Border.all(color: Colors.grey, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              showCursor: false, //add this line
+                              readOnly: true,
+                              // initialValue: (Form_PakanAll_Total == null ||
+                              //         Form_PakanAll_Total.text == '' ||
+                              //         pakanDocnoModels.length == 0)
+                              //     ? '0.00'
+                              //     : '${nFormat.format(double.parse('${Form_PakanAll_Total.text}'))}',
+
+                              controller: Form_PakanAll_Total,
+                              cursorColor: Colors.green,
+                              decoration: InputDecoration(
+                                  fillColor: Colors.white.withOpacity(0.3),
+                                  filled: true,
+                                  // prefixIcon:
+                                  //     const Icon(Icons.person, color: Colors.black),
+                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  labelStyle: const TextStyle(
+                                      color: Colors.black54,
+                                      fontFamily: Font_.Fonts_T)),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            'บาท',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                //fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T),
+                          ),
+                        ),
+                        Expanded(flex: 2, child: Text('')),
                       ],
                     ),
                   ),

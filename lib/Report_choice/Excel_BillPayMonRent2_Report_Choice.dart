@@ -244,6 +244,8 @@ class Excgen_BillPayMonRent2Report_Choice {
     sheet.getRangeByName('B6').setText('วันที่');
     sheet.getRangeByName('C6').setText('เลขใบกำกับภาษี');
     sheet.getRangeByName('D6').setText('รายชื่อลูกค้า');
+    sheet.getRangeByName('D6').setText('สาขา');
+    sheet.getRangeByName('D6').setText('เลขประจำตัวผู้เสียภาษี');
     sheet.getRangeByName('E6').setText(' จำนวนเงิน');
     sheet.getRangeByName('F6').setText('ภาษีมูลค่าเพิ่ม(7%)');
     sheet.getRangeByName('G6').setText('จำนวนเงินรวมทั้งสิ้น');

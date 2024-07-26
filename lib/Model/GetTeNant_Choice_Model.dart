@@ -22,14 +22,29 @@ class TeNantChoiceModel {
   String? docno;
   String? water_electri;
   String? count_pakan;
+
+  String? pvat_pakan;
   String? pakan_vat;
+  String? total_pakan;
+  String? pakan_doc;
+  String? pakan_daterec;
+
   String? date;
   String? rent_amt;
+  String? rent_pvat;
   String? rent_vat;
   String? rent_total;
+
   String? service_amt;
+  String? service_pvat;
   String? service_vat;
   String? service_total;
+
+  String? equip_amt;
+  String? equip_pvat;
+  String? equip_vat;
+  String? equip_total;
+
   String? water;
   String? electricity;
 
@@ -57,14 +72,24 @@ class TeNantChoiceModel {
       this.docno,
       this.water_electri,
       this.count_pakan,
+      this.pvat_pakan,
       this.pakan_vat,
+      this.total_pakan,
+      this.pakan_doc,
+      this.pakan_daterec,
       this.date,
       this.rent_amt,
+      this.rent_pvat,
       this.rent_vat,
       this.rent_total,
       this.service_amt,
+      this.service_pvat,
       this.service_vat,
       this.service_total,
+      this.equip_amt,
+      this.equip_pvat,
+      this.equip_vat,
+      this.equip_total,
       this.water,
       this.electricity});
 
@@ -92,14 +117,27 @@ class TeNantChoiceModel {
     docno = json['docno'];
     water_electri = json['water_electri'];
     count_pakan = json['count_pakan'];
+    pvat_pakan = json['pvat_pakan'];
     pakan_vat = json['pakan_vat'];
+    total_pakan = json['total_pakan'];
+    pakan_doc = json['pakan_doc'];
+    pakan_daterec = json['pakan_daterec'];
+
     date = json['date'];
     rent_amt = json['rent_amt'];
+    rent_pvat = json['rent_pvat'];
     rent_vat = json['rent_vat'];
     rent_total = json['rent_total'];
     service_amt = json['service_amt'];
+    service_pvat = json['service_pvat'];
     service_vat = json['service_vat'];
     service_total = json['service_total'];
+
+    equip_amt = json['equip_amt'];
+    equip_pvat = json['equip_pvat'];
+    equip_vat = json['equip_vat'];
+    equip_total = json['equip_total'];
+
     water = json['water'];
     electricity = json['electricity'];
   }
@@ -129,14 +167,28 @@ class TeNantChoiceModel {
     data['docno'] = this.docno;
     data['water_electri'] = this.water_electri;
     data['count_pakan'] = this.count_pakan;
+
+    data['pvat_pakan'] = this.pvat_pakan;
     data['pakan_vat'] = this.pakan_vat;
+    data['total_pakan'] = this.total_pakan;
+    data['pakan_doc'] = this.pakan_doc;
+    data['pakan_daterec'] = this.pakan_daterec;
+
     data['date'] = this.date;
     data['rent_amt'] = this.rent_amt;
+    data['rent_pvat'] = this.rent_pvat;
     data['rent_vat'] = this.rent_vat;
     data['rent_total'] = this.rent_total;
     data['service_amt'] = this.service_amt;
+    data['service_pvat'] = this.service_pvat;
     data['service_vat'] = this.service_vat;
     data['service_total'] = this.service_total;
+
+    data['equip_amt'] = this.equip_amt;
+    data['equip_pvat'] = this.equip_pvat;
+    data['equip_vat'] = this.equip_vat;
+    data['equip_total'] = this.equip_total;
+
     data['water'] = this.water;
     data['electricity'] = this.electricity;
     return data;

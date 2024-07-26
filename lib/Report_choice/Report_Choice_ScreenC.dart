@@ -33,6 +33,7 @@ import 'Excel_BillPayFutureMonRent_Report_Choice.dart';
 import 'Excel_PeopleTenant_Report_Choice.dart';
 import 'Excel_SalesTaxFull_Report_Choice.dart';
 import 'Excel_SalesTaxShortReport_Choice.dart';
+import 'Excel_TeNantNew_Report_Choice.dart';
 
 class Report_Choice_ScreenC extends StatefulWidget {
   const Report_Choice_ScreenC({super.key});
@@ -357,7 +358,7 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
         ? '0'
         : Value_Chang_Zone_Ser_People_TeNantNew;
     String url =
-        '${MyConstant().domain}/GC_People_Tenant_AllReport_Choice.php?isAdd=true&ren=$ren&zser=$zone&month_s=$Mon_PeopleTeNantNew_Mon&year_s=$YE_PeopleTeNantNew_Mon';
+        '${MyConstant().domain}/GC_People_TenantNew_AllReport_Choice.php?isAdd=true&ren=$ren&zser=$zone&month_s=$Mon_PeopleTeNantNew_Mon&year_s=$YE_PeopleTeNantNew_Mon';
 
     try {
       var response = await http.get(Uri.parse(url));
@@ -1857,7 +1858,7 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                               Dia_log();
                             }
 
-                            People_tenant();
+                            People_tenant_New();
                           },
                           child: Container(
                               width: 100,
@@ -1928,7 +1929,7 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                             : () async {
                                 Insert_log.Insert_logs(
                                     'รายงาน', 'กดดูรายงานผู้เช่ารายใหม่');
-                                People_tenant_New();
+                                RE_TeNant_New_Widget();
                               }),
                     (teNantModels_New.isEmpty || Await_Status_Report3 == null)
                         ? Padding(
@@ -3614,18 +3615,18 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                     )),
                     Row(
                       children: [
-                        // Expanded(
-                        //     flex: 1,
-                        //     child: Text(
-                        //       'ผู้เช่า: ${Status_pe}',
-                        //       textAlign: TextAlign.start,
-                        //       style: const TextStyle(
-                        //         fontSize: 14,
-                        //         color: ReportScreen_Color.Colors_Text1_,
-                        //         // fontWeight: FontWeight.bold,
-                        //         fontFamily: FontWeight_.Fonts_T,
-                        //       ),
-                        //     )),
+                        Expanded(
+                            flex: 1,
+                            child: Text(
+                              'เดือน: ${monthsInThai[int.parse(Mon_PeopleTeNantNew_Mon.toString()) - 1]} ${YE_PeopleTeNantNew_Mon}',
+                              textAlign: TextAlign.start,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: ReportScreen_Color.Colors_Text1_,
+                                // fontWeight: FontWeight.bold,
+                                fontFamily: FontWeight_.Fonts_T,
+                              ),
+                            )),
                         Expanded(
                             flex: 1,
                             child: Text(
@@ -3674,7 +3675,7 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                         Container(
                           // color: Colors.grey[50],
                           width: (Responsive.isDesktop(context))
-                              ? MediaQuery.of(context).size.width * 1.5
+                              ? MediaQuery.of(context).size.width * 2
                               : (teNantModels_New.length == 0)
                                   ? MediaQuery.of(context).size.width
                                   : 1400,
@@ -3714,7 +3715,7 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                                       bottomLeft: Radius.circular(0),
                                       bottomRight: Radius.circular(0)),
                                 ),
-                                padding: const EdgeInsets.all(8.0),
+                                // padding: const EdgeInsets.all(8.0),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
@@ -3737,7 +3738,7 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                                     const Expanded(
                                       flex: 1,
                                       child: Text(
-                                        'ชื่อ-สกุล ผู้เช่า',
+                                        'เลขที่สัญญา',
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
                                             color: PeopleChaoScreen_Color
@@ -3750,10 +3751,10 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                                             ),
                                       ),
                                     ),
-                                    const Expanded(
-                                      flex: 1,
-                                      child: Text(
-                                        'เลขบปช.',
+                                    Container(
+                                      width: 80,
+                                      child: const Text(
+                                        'เลขบัญชีVAN',
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
                                             color: PeopleChaoScreen_Color
@@ -3801,54 +3802,6 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                                     const Expanded(
                                       flex: 1,
                                       child: Text(
-                                        'เลขที่สัญญา',
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                            color: PeopleChaoScreen_Color
-                                                .Colors_Text1_,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T,
-                                            fontSize: 14.0
-                                            //fontSize: 10.0
-                                            //fontSize: 10.0
-                                            ),
-                                      ),
-                                    ),
-                                    const Expanded(
-                                      flex: 1,
-                                      child: Text(
-                                        'เลขสัญญาเก่า',
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                            color: PeopleChaoScreen_Color
-                                                .Colors_Text1_,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T,
-                                            fontSize: 14.0
-                                            //fontSize: 10.0
-                                            //fontSize: 10.0
-                                            ),
-                                      ),
-                                    ),
-                                    const Expanded(
-                                      flex: 1,
-                                      child: Text(
-                                        'เลขที่สัญญาประกัน',
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                            color: PeopleChaoScreen_Color
-                                                .Colors_Text1_,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T,
-                                            fontSize: 14.0
-                                            //fontSize: 10.0
-                                            //fontSize: 10.0
-                                            ),
-                                      ),
-                                    ),
-                                    const Expanded(
-                                      flex: 1,
-                                      child: Text(
                                         'เลขล็อค',
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
@@ -3865,8 +3818,24 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                                     const Expanded(
                                       flex: 1,
                                       child: Text(
+                                        'ชื่อ-สกุล ผู้เช่า',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
                                         'วันที่เริ่มเช่า',
-                                        textAlign: TextAlign.center,
+                                        textAlign: TextAlign.start,
                                         style: TextStyle(
                                             color: PeopleChaoScreen_Color
                                                 .Colors_Text1_,
@@ -3882,6 +3851,22 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                                       flex: 1,
                                       child: Text(
                                         'วันที่สิ้นสุดสัญญา',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'ระยะเวลา',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: PeopleChaoScreen_Color
@@ -3945,7 +3930,71 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                                     const Expanded(
                                       flex: 1,
                                       child: Text(
+                                        'VAT7% ค่าเช่า',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'ค่าเช่ารวมVAT',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
                                         'ค่าบริการ',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'VAT7% ค่าบริการ',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'ค่าบริการรวมVAT',
                                         textAlign: TextAlign.right,
                                         style: TextStyle(
                                             color: PeopleChaoScreen_Color
@@ -3977,8 +4026,72 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                                     const Expanded(
                                       flex: 1,
                                       child: Text(
-                                        'วันที่ยกเลิก',
-                                        textAlign: TextAlign.center,
+                                        'เงินประกันรวมVAT',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'ค่าอุปกรณ์รวมvat',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'รวมทั้งสิ้น',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'วันที่ใบเสร็จเงินประกัน',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'เลขที่ใบเสร็จเงินประกัน',
+                                        textAlign: TextAlign.right,
                                         style: TextStyle(
                                             color: PeopleChaoScreen_Color
                                                 .Colors_Text1_,
@@ -3994,7 +4107,7 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                                       flex: 1,
                                       child: Text(
                                         'ผู้ดูแล',
-                                        textAlign: TextAlign.start,
+                                        textAlign: TextAlign.right,
                                         style: TextStyle(
                                             color: PeopleChaoScreen_Color
                                                 .Colors_Text1_,
@@ -4029,16 +4142,14 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                                         ),
                                       ),
                                       child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
                                         children: [
                                           Container(
                                             width: 50,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 1,
+                                            child: Text(
                                               '${index + 1}',
-                                              textAlign: TextAlign.left,
-                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.start,
                                               style: const TextStyle(
                                                   color: PeopleChaoScreen_Color
                                                       .Colors_Text2_,
@@ -4048,14 +4159,21 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                                           ),
                                           Expanded(
                                             flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 1,
-                                              '${teNantModels_New[index].cname}',
-                                              // '${transKonModels[index].pdate}',
-                                              textAlign: TextAlign.left,
-                                              overflow: TextOverflow.ellipsis,
+                                            child: Text(
+                                              '${teNantModels_New[index].cid}',
+                                              textAlign: TextAlign.start,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Container(
+                                            width: 80,
+                                            child: const Text(
+                                              '',
+                                              textAlign: TextAlign.start,
                                               style: const TextStyle(
                                                   color: PeopleChaoScreen_Color
                                                       .Colors_Text2_,
@@ -4065,30 +4183,12 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                                           ),
                                           Expanded(
                                             flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 2,
-                                              '${teNantModels_New[index].tax}',
-                                              textAlign: TextAlign.left,
-                                              style: const TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
-                                                  //fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 2,
+                                            child: Text(
                                               (teNantModels_New[index].zser !=
                                                       null)
                                                   ? '${teNantModels_New[index].zser}'
                                                   : '${teNantModels_New[index].zser1}',
-                                              textAlign: TextAlign.left,
+                                              textAlign: TextAlign.start,
                                               style: const TextStyle(
                                                   color: PeopleChaoScreen_Color
                                                       .Colors_Text2_,
@@ -4098,141 +4198,39 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                                           ),
                                           Expanded(
                                             flex: 1,
-                                            child: Tooltip(
-                                              richMessage: TextSpan(
-                                                text: (teNantModels_New[index]
-                                                            .zn !=
-                                                        null)
-                                                    ? '${teNantModels_New[index].zn}'
-                                                    : '${teNantModels_New[index].zn1}',
-                                                style: const TextStyle(
-                                                  color: HomeScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T,
-                                                  //fontSize: 10.0
-                                                ),
-                                              ),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                                color: Colors.grey[200],
-                                              ),
-                                              child: AutoSizeText(
-                                                minFontSize: 10,
-                                                maxFontSize: 25,
-                                                maxLines: 2,
-                                                (teNantModels_New[index].zn !=
-                                                        null)
-                                                    ? '${teNantModels_New[index].zn}'
-                                                    : '${teNantModels_New[index].zn1}',
-                                                textAlign: TextAlign.left,
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    //fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T),
-                                              ),
+                                            child: Text(
+                                              (teNantModels_New[index].zn !=
+                                                      null)
+                                                  ? '${teNantModels_New[index].zn}'
+                                                  : '${teNantModels_New[index].zn1}',
+                                              textAlign: TextAlign.start,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
                                             ),
                                           ),
                                           Expanded(
                                             flex: 1,
-                                            child: Tooltip(
-                                              richMessage: TextSpan(
-                                                text: (teNantModels_New[index]
-                                                            .cid ==
-                                                        null)
-                                                    ? ''
-                                                    : '${teNantModels_New[index].cid}',
-                                                style: const TextStyle(
-                                                  color: HomeScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T,
-                                                  //fontSize: 10.0
-                                                ),
-                                              ),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                                color: Colors.grey[200],
-                                              ),
-                                              child: AutoSizeText(
-                                                minFontSize: 10,
-                                                maxFontSize: 25,
-                                                maxLines: 1,
-                                                (teNantModels_New[index].cid ==
-                                                        null)
-                                                    ? ''
-                                                    : '${teNantModels_New[index].cid}',
-                                                textAlign: TextAlign.left,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    //fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T),
-                                              ),
+                                            child: Text(
+                                              '${teNantModels_New[index].ln}',
+                                              textAlign: TextAlign.start,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
                                             ),
                                           ),
                                           Expanded(
                                             flex: 1,
-                                            child: Tooltip(
-                                              richMessage: TextSpan(
-                                                text: (teNantModels_New[index]
-                                                            .fid ==
-                                                        null)
-                                                    ? ''
-                                                    : '${teNantModels_New[index].fid}',
-                                                style: const TextStyle(
-                                                  color: HomeScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T,
-                                                  //fontSize: 10.0
-                                                ),
-                                              ),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                                color: Colors.grey[200],
-                                              ),
-                                              child: AutoSizeText(
-                                                minFontSize: 10,
-                                                maxFontSize: 25,
-                                                maxLines: 1,
-                                                (teNantModels_New[index].fid ==
-                                                        null)
-                                                    ? ''
-                                                    : '${teNantModels_New[index].fid}',
-                                                textAlign: TextAlign.left,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    //fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 1,
-                                              (teNantModels_New[index].docno ==
+                                            child: Text(
+                                              (teNantModels_New[index].cname ==
                                                       null)
                                                   ? ''
-                                                  : '${teNantModels_New[index].docno}',
-                                              textAlign: TextAlign.left,
-                                              overflow: TextOverflow.ellipsis,
+                                                  : '${teNantModels_New[index].cname}',
+                                              textAlign: TextAlign.start,
                                               style: const TextStyle(
                                                   color: PeopleChaoScreen_Color
                                                       .Colors_Text2_,
@@ -4242,13 +4240,12 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                                           ),
                                           Expanded(
                                             flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 1,
-                                              '${teNantModels_New[index].ln}',
-                                              textAlign: TextAlign.left,
-                                              overflow: TextOverflow.ellipsis,
+                                            child: Text(
+                                              (teNantModels_New[index].sdate ==
+                                                      null)
+                                                  ? ''
+                                                  : '${teNantModels_New[index].sdate}',
+                                              textAlign: TextAlign.start,
                                               style: const TextStyle(
                                                   color: PeopleChaoScreen_Color
                                                       .Colors_Text2_,
@@ -4258,13 +4255,24 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                                           ),
                                           Expanded(
                                             flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 1,
-                                              '${teNantModels_New[index].sdate}',
+                                            child: Text(
+                                              (teNantModels_New[index].ldate ==
+                                                      null)
+                                                  ? ''
+                                                  : '${teNantModels_New[index].ldate}',
+                                              textAlign: TextAlign.start,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              '${teNantModels_New[index].nday}',
                                               textAlign: TextAlign.center,
-                                              overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(
                                                   color: PeopleChaoScreen_Color
                                                       .Colors_Text2_,
@@ -4274,29 +4282,9 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                                           ),
                                           Expanded(
                                             flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 1,
-                                              '${teNantModels_New[index].ldate}',
-                                              textAlign: TextAlign.center,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
-                                                  //fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 1,
+                                            child: Text(
                                               '${teNantModels_New[index].stype}',
-                                              textAlign: TextAlign.left,
-                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.start,
                                               style: const TextStyle(
                                                   color: PeopleChaoScreen_Color
                                                       .Colors_Text2_,
@@ -4306,13 +4294,9 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                                           ),
                                           Expanded(
                                             flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 1,
-                                              '${(teNantModels_New[index].water_electri == null) ? '' : teNantModels_New[index].water_electri.toString()}',
-                                              textAlign: TextAlign.left,
-                                              overflow: TextOverflow.ellipsis,
+                                            child: Text(
+                                              '${teNantModels_New[index].water_electri}',
+                                              textAlign: TextAlign.start,
                                               style: const TextStyle(
                                                   color: PeopleChaoScreen_Color
                                                       .Colors_Text2_,
@@ -4322,11 +4306,31 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                                           ),
                                           Expanded(
                                             flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 1,
-                                              // '${teNantModels[index].rent_total}',
+                                            child: Text(
+                                              '${teNantModels_New[index].rent_pvat}',
+                                              textAlign: TextAlign.right,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              '${teNantModels_New[index].rent_vat}',
+                                              textAlign: TextAlign.right,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text(
                                               (teNantModels_New[index]
                                                           .rent_total ==
                                                       null)
@@ -4336,7 +4340,6 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                                                           '${teNantModels_New[index].rent_total}'))
                                                       .toString(),
                                               textAlign: TextAlign.right,
-                                              overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(
                                                   color: PeopleChaoScreen_Color
                                                       .Colors_Text2_,
@@ -4346,10 +4349,46 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                                           ),
                                           Expanded(
                                             flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
+                                            child: Text(
+                                              (teNantModels_New[index]
+                                                          .service_pvat ==
+                                                      null)
+                                                  ? '0.00'
+                                                  : nFormat
+                                                      .format(double.parse(
+                                                          '${teNantModels_New[index].service_pvat}'))
+                                                      .toString(),
+                                              textAlign: TextAlign.right,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text(
                                               maxLines: 1,
+                                              (teNantModels_New[index]
+                                                          .service_vat ==
+                                                      null)
+                                                  ? '0.00'
+                                                  : nFormat
+                                                      .format(double.parse(
+                                                          '${teNantModels_New[index].service_vat}'))
+                                                      .toString(),
+                                              textAlign: TextAlign.right,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text(
                                               (teNantModels_New[index]
                                                           .service_total ==
                                                       null)
@@ -4359,7 +4398,6 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                                                           '${teNantModels_New[index].service_total}'))
                                                       .toString(),
                                               textAlign: TextAlign.right,
-                                              overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(
                                                   color: PeopleChaoScreen_Color
                                                       .Colors_Text2_,
@@ -4369,20 +4407,9 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                                           ),
                                           Expanded(
                                             flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 1,
-                                              (teNantModels_New[index]
-                                                          .service_total ==
-                                                      null)
-                                                  ? '0.00'
-                                                  : nFormat
-                                                      .format(double.parse(
-                                                          '${teNantModels_New[index].pakan_vat}'))
-                                                      .toString(),
+                                            child: Text(
+                                              '${teNantModels_New[index].pvat_pakan}',
                                               textAlign: TextAlign.right,
-                                              overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(
                                                   color: PeopleChaoScreen_Color
                                                       .Colors_Text2_,
@@ -4392,18 +4419,9 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                                           ),
                                           Expanded(
                                             flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 1,
-                                              (teNantModels_New[index]
-                                                          .cc_date
-                                                          .toString() ==
-                                                      '0000-00-00')
-                                                  ? ''
-                                                  : '${teNantModels_New[index].cc_date}',
-                                              textAlign: TextAlign.center,
-                                              overflow: TextOverflow.ellipsis,
+                                            child: Text(
+                                              '${teNantModels_New[index].total_pakan}',
+                                              textAlign: TextAlign.right,
                                               style: const TextStyle(
                                                   color: PeopleChaoScreen_Color
                                                       .Colors_Text2_,
@@ -4413,13 +4431,57 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                                           ),
                                           Expanded(
                                             flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 1,
+                                            child: Text(
+                                              '${teNantModels_New[index].equip_total}',
+                                              textAlign: TextAlign.right,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              '0.00',
+                                              textAlign: TextAlign.right,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              '${teNantModels_New[index].pakan_daterec}',
+                                              textAlign: TextAlign.right,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              '${teNantModels_New[index].pakan_doc}',
+                                              textAlign: TextAlign.right,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text(
                                               '${teNantModels_New[index].user}',
-                                              textAlign: TextAlign.left,
-                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.right,
                                               style: const TextStyle(
                                                   color: PeopleChaoScreen_Color
                                                       .Colors_Text2_,
@@ -4480,7 +4542,7 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                           ),
                           onTap: () async {
                             setState(() {
-                              Value_Report = 'รายงานประวัติผู้เช่า';
+                              Value_Report = 'รายงานผู้เช่ารายใหม่';
                               Pre_and_Dow = 'Download';
                             });
                             _showMyDialog_SAVE();
@@ -4796,8 +4858,18 @@ class _Report_Choice_ScreenCState extends State<Report_Choice_ScreenC> {
                   renTal_name,
                   Value_Chang_Zone_People_TeNant,
                   teNantModels,
-                  Mon_PeopleTeNant_Mon,
+                  monthsInThai[int.parse(Mon_PeopleTeNant_Mon.toString()) - 1],
                   YE_PeopleTeNant_Mon);
+        } else if (Value_Report == 'รายงานผู้เช่ารายใหม่') {
+          Excgen_TeNantNewReport_Choice.exportExcel_TeNantNewReport_Choice(
+              context,
+              NameFile_,
+              _verticalGroupValue_NameFile,
+              renTal_name,
+              Value_Chang_Zone_People_TeNantNew,
+              teNantModels_New,
+              monthsInThai[int.parse(Mon_PeopleTeNantNew_Mon.toString()) - 1],
+              YE_PeopleTeNantNew_Mon);
         }
       }
       Navigator.of(context).pop();

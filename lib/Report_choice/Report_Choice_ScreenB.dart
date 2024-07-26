@@ -328,7 +328,7 @@ class _Report_Choice_ScreenBState extends State<Report_Choice_ScreenB> {
     } catch (e) {}
     // print('TransBill_PayTaxFull : ${salesTax_full.length}');
     setState(() {
-      Await_Status_Report2 = 1;
+      Await_Status_Report1 = 1;
     });
   }
 
@@ -368,7 +368,7 @@ class _Report_Choice_ScreenBState extends State<Report_Choice_ScreenB> {
     } catch (e) {}
     // print('TransBill_PayTaxFull : ${salesTax_full.length}');
     setState(() {
-      Await_Status_Report3 = 1;
+      Await_Status_Report2 = 1;
     });
   }
 
@@ -862,7 +862,7 @@ class _Report_Choice_ScreenBState extends State<Report_Choice_ScreenB> {
                           onTap: () async {
                             if (Value_Chang_Zone_Ser_SalesTax_Full != null) {
                               setState(() {
-                                Await_Status_Report2 = 0;
+                                Await_Status_Report1 = 0;
                               });
                               Dia_log();
                             }
@@ -940,13 +940,13 @@ class _Report_Choice_ScreenBState extends State<Report_Choice_ScreenB> {
                                     'รายงาน', 'กดดูรายงานภาษีขาย-1');
                                 RE_SalesTax_Full_Widget();
                               }),
-                    (salesTax_full.isEmpty || Await_Status_Report2 == null)
+                    (salesTax_full.isEmpty || Await_Status_Report1 == null)
                         ? Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
                               (salesTax_full.isEmpty &&
                                       Value_Chang_Zone_SalesTax_Full != null &&
-                                      Await_Status_Report2 != null)
+                                      Await_Status_Report1 != null)
                                   ? 'รายงานภาษีขาย-1 (ไม่พบข้อมูล ✖️)'
                                   : 'รายงานภาษีขาย-1',
                               style: const TextStyle(
@@ -956,7 +956,7 @@ class _Report_Choice_ScreenBState extends State<Report_Choice_ScreenB> {
                               ),
                             ),
                           )
-                        : (Await_Status_Report2 == 0)
+                        : (Await_Status_Report1 == 0)
                             ? SizedBox(
                                 // height: 20,
                                 child: Row(
@@ -1378,7 +1378,7 @@ class _Report_Choice_ScreenBState extends State<Report_Choice_ScreenB> {
                           onTap: () async {
                             if (Value_Chang_Zone_Ser_SalesTax_Full2 != null) {
                               setState(() {
-                                Await_Status_Report3 = 0;
+                                Await_Status_Report2 = 0;
                               });
                               Dia_log();
                             }
@@ -1456,13 +1456,13 @@ class _Report_Choice_ScreenBState extends State<Report_Choice_ScreenB> {
                                     'รายงาน', 'กดดูรายงานภาษีขาย-2');
                                 RE_SalesTax_Full_Widget2();
                               }),
-                    (salesTax_full2.isEmpty || Await_Status_Report3 == null)
+                    (salesTax_full2.isEmpty || Await_Status_Report2 == null)
                         ? Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
                               (salesTax_full2.isEmpty &&
                                       Value_Chang_Zone_SalesTax_Full2 != null &&
-                                      Await_Status_Report3 != null)
+                                      Await_Status_Report2 != null)
                                   ? 'รายงานภาษีขาย-2 (ไม่พบข้อมูล ✖️)'
                                   : 'รายงานภาษีขาย-2',
                               style: const TextStyle(
@@ -1472,7 +1472,7 @@ class _Report_Choice_ScreenBState extends State<Report_Choice_ScreenB> {
                               ),
                             ),
                           )
-                        : (Await_Status_Report3 == 0)
+                        : (Await_Status_Report2 == 0)
                             ? SizedBox(
                                 // height: 20,
                                 child: Row(
@@ -3477,7 +3477,7 @@ class _Report_Choice_ScreenBState extends State<Report_Choice_ScreenB> {
                             Value_Chang_Zone_Ser_SalesTax_Full = null;
                             Value_Chang_Zone_SalesTax_Full = null;
 
-                            Await_Status_Report2 = null;
+                            Await_Status_Report1 = null;
 
                             salesTax_full.clear();
                             _salesTax_full.clear();
@@ -4150,7 +4150,7 @@ class _Report_Choice_ScreenBState extends State<Report_Choice_ScreenB> {
                             Value_Chang_Zone_Ser_SalesTax_Full2 = null;
                             Value_Chang_Zone_SalesTax_Full2 = null;
 
-                            Await_Status_Report3 = null;
+                            Await_Status_Report2 = null;
 
                             salesTax_full2.clear();
                             _salesTax_full2.clear();
@@ -5401,6 +5401,38 @@ class _Report_Choice_ScreenBState extends State<Report_Choice_ScreenB> {
                                             ),
                                       ),
                                     ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'สาขา',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'เลขประจำตัวผู้เสียภาษี',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontSize: 14.0
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
                                     Container(
                                       width: 80,
                                       child: const Text(
@@ -5532,6 +5564,38 @@ class _Report_Choice_ScreenBState extends State<Report_Choice_ScreenB> {
                                               maxFontSize: 25,
                                               maxLines: 1,
                                               '${billpay_Mon2[index].cname}',
+                                              textAlign: TextAlign.start,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              '${billpay_Mon2[index].zn}',
+                                              textAlign: TextAlign.start,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              '${billpay_Mon2[index].tax}',
                                               textAlign: TextAlign.start,
                                               overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(

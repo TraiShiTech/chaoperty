@@ -37,7 +37,7 @@ class Excgen_SalesTax_FutureReport_Choice {
     final x.Workbook workbook = x.Workbook();
 
     final x.Worksheet sheet = workbook.worksheets[0];
-    sheet.name = 'รายงานภาษีขาย';
+    sheet.name = 'รายงานค่าบริการรับล่วงหน้า';
     sheet.pageSetup.topMargin = 1;
     sheet.pageSetup.bottomMargin = 1;
     sheet.pageSetup.leftMargin = 1;
@@ -150,12 +150,12 @@ class Excgen_SalesTax_FutureReport_Choice {
 
     sheet.getRangeByName('A1').setText(
           (Value_Chang_Zone_billpayMon == null)
-              ? 'รายงานภาษีขาย  (กรุณาเลือกโซน)'
-              : 'รายงานภาษีขาย  (โซน : $Value_Chang_Zone_billpayMon)',
+              ? 'รายงานค่าบริการรับล่วงหน้า  (กรุณาเลือกโซน)'
+              : 'รายงานค่าบริการรับล่วงหน้า  (โซน : $Value_Chang_Zone_billpayMon)',
         );
     sheet
         .getRangeByName('A2')
-        .setText('เดือนภาษี ${Mon_billpay_Mon} ${YE_billpay_Mon}');
+        .setText('เดือน ${Mon_billpay_Mon} ${YE_billpay_Mon}');
     sheet.getRangeByName('A3').setText(
         'ชื่อสถานประกอบการ บริษัท ชอยส์มินิสโตร์ จำกัด เลขประจำตัวผู้เสียภาษี 0-1055-31085-43-4');
     sheet.getRangeByName('A4').setText('ชื่อสถานประกอบการ เซเว่นอีเลฟเว่น');

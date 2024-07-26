@@ -19,39 +19,49 @@ class Pdfgen_Agreement_Choice3 {
 //////////---------------------------------------------------->( **** เอกสารสัญญาบริการ Choice)
 
   static void exportPDF_Agreement_Choice3(
-      context,
-      Get_Value_NameShop_index,
-      Get_Value_cid,
-      _verticalGroupValue,
-      Form_nameshop,
-      Form_typeshop,
-      Form_bussshop,
-      Form_bussscontact,
-      Form_address,
-      Form_tel,
-      Form_email,
-      Form_tax,
-      Form_ln,
-      Form_zn,
-      Form_area,
-      Form_qty,
-      Form_sdate,
-      Form_ldate,
-      Form_period,
-      Form_rtname,
-      quotxSelectModels,
-      _TransModels,
-      renTal_name,
-      bill_addr,
-      bill_email,
-      bill_tel,
-      bill_tax,
-      bill_name,
-      newValuePDFimg,
-      tableData00,
-      TitleType_Default_Receipt_Name,
-      Datex_text,
-      _ReportValue_type_docOttor) async {
+    context,
+    Get_Value_NameShop_index,
+    Get_Value_cid,
+    _verticalGroupValue,
+    Form_nameshop,
+    Form_typeshop,
+    Form_bussshop,
+    Form_bussscontact,
+    Form_address,
+    Form_tel,
+    Form_email,
+    Form_tax,
+    Form_ln,
+    Form_zn,
+    Form_area,
+    Form_qty,
+    Form_sdate,
+    Form_ldate,
+    Form_period,
+    Form_rtname,
+    quotxSelectModels,
+    _TransModels,
+    renTal_name,
+    bill_addr,
+    bill_email,
+    bill_tel,
+    bill_tax,
+    bill_name,
+    newValuePDFimg,
+    tableData00,
+    TitleType_Default_Receipt_Name,
+    Datex_text,
+    _ReportValue_type_docOttor,
+    Form_fid,
+    Form_PakanSdate,
+    Form_PakanLdate,
+    Form_PakanSdate_Doc,
+    Form_PakanLdate_Doc,
+    Form_PakanAll_amt,
+    Form_PakanAll_pvat,
+    Form_PakanAll_vat,
+    Form_PakanAll_Total,
+  ) async {
     ////
     //// ------------>(J Space Sansai)
     ///////
@@ -340,7 +350,7 @@ class Pdfgen_Agreement_Choice3 {
                   mainAxisAlignment: pw.MainAxisAlignment.end,
                   children: [
                     pw.Text(
-                      'สัญญาเลขที่   1008/04/2567    ',
+                      'สัญญาเลขที่  $Get_Value_cid',
                       textAlign: pw.TextAlign.center,
                       style: pw.TextStyle(
                         color: Colors_pd,
@@ -381,7 +391,10 @@ class Pdfgen_Agreement_Choice3 {
                               crossAxisAlignment: pw.CrossAxisAlignment.end,
                               children: [
                                 pw.Text(
-                                  'อ้างอิงสัญญาเดิมเลขที่...................',
+                                  (Get_Value_cid.toString() ==
+                                          Form_fid.toString())
+                                      ? 'อ้างอิงสัญญาเดิมเลขที่________________'
+                                      : 'อ้างอิงสัญญาเดิมเลขที่ ${Form_fid}',
                                   // 'ทำที่ $renTal_name ',
                                   textAlign: pw.TextAlign.right,
                                   style: pw.TextStyle(
@@ -398,7 +411,7 @@ class Pdfgen_Agreement_Choice3 {
                       pw.SizedBox(height: 2 * PdfPageFormat.mm),
                       pw.Text(
                         ' ' * 12 +
-                            'สัญญาฉบับนี้ทำขึ้นที่ บริษัท ชอยส์มินิสโตร์ จำกัด เลขประจำตัวนิติบุคคล 0-1055-31085-43-4 สำนักงานใหญ่ตั้งอยู่เลขที่ 7/11 หมู่ที่ 5 ตำบลท่าศาลา อำเภอเมืองเชียงใหม่ จังหวัดเชียงใหม่ เมื่อวันที่ 12 เดือน มิถุนายน พ.ศ. 2567 ระหว่าง บริษัท ชอยส์ มินิส โตร์ จำกัด โดยนางฤทัยรัตน์ วิสิทธิ์ และนายวธัญญู ตันตรานนท์ กรรมการผู้มีอำนาจ ',
+                            'สัญญาฉบับนี้ทำขึ้นที่ บริษัท ชอยส์มินิสโตร์ จำกัด เลขประจำตัวนิติบุคคล 0-1055-31085-43-4 สำนักงานใหญ่ตั้งอยู่เลขที่ 7/11 หมู่ที่ 5 ตำบลท่าศาลา อำเภอเมืองเชียงใหม่ จังหวัดเชียงใหม่ เมื่อวันที่ ${Datex_text.text} ระหว่าง บริษัท ชอยส์ มินิส โตร์ จำกัด โดยนางฤทัยรัตน์ วิสิทธิ์ และนายวธัญญู ตันตรานนท์ กรรมการผู้มีอำนาจ ',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
                           color: Colors_pd,
@@ -429,7 +442,7 @@ class Pdfgen_Agreement_Choice3 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  "น.ส. กฤษณา คำปิงชัย ",
+                                  "$Form_bussshop",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -463,7 +476,7 @@ class Pdfgen_Agreement_Choice3 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  "5-5007-90008-68-4 ",
+                                  "$Form_tax",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -492,7 +505,7 @@ class Pdfgen_Agreement_Choice3 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  "09-5259-5208 ",
+                                  "$Form_tel",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -526,7 +539,7 @@ class Pdfgen_Agreement_Choice3 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  "11/1 หมู่ 6 ตำบล หารแก้ว อำเภอ หางดง จังหวัด เชียงใหม่ รหัสไปรษณีย์ 50230 ",
+                                  "$Form_address",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -583,7 +596,7 @@ class Pdfgen_Agreement_Choice3 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  "สาขา บ้านแม่ขัก(อ.หางดง) (16260)",
+                                  "$Form_zn",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -617,7 +630,7 @@ class Pdfgen_Agreement_Choice3 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  "8",
+                                  "$Form_ln",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -646,7 +659,7 @@ class Pdfgen_Agreement_Choice3 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  "2.25 ตรม.",
+                                  "$Form_qty ตร.ม.",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -709,7 +722,10 @@ class Pdfgen_Agreement_Choice3 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  "หม่าล่า",
+                                  (Form_nameshop == null ||
+                                          Form_nameshop.toString() == 'null')
+                                      ? "$Form_bussshop"
+                                      : "$Form_nameshop",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -843,7 +859,7 @@ class Pdfgen_Agreement_Choice3 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  " 16 เดือน มิถุนายน พ.ศ. 2567 ",
+                                  "$Form_sdate",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -872,7 +888,7 @@ class Pdfgen_Agreement_Choice3 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  " 30 เดือน พฤศจิกายน พ.ศ. 2567  ",
+                                  "$Form_ldate",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -905,7 +921,13 @@ class Pdfgen_Agreement_Choice3 {
                               width: 0.3, // Underline thickness
                             ))),
                             child: pw.Text(
-                              "6 เดือน",
+                              (Form_rtname.toString() == 'รายวัน')
+                                  ? '$Form_period วัน '
+                                  : (Form_rtname.toString() == 'รายเดือน')
+                                      ? '$Form_period เดือน '
+                                      : (Form_rtname.toString() == 'รายปี')
+                                          ? '$Form_period ปี '
+                                          : '$Form_period $Form_rtname ',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
                                 color: Colors_pd,
@@ -951,7 +973,7 @@ class Pdfgen_Agreement_Choice3 {
                                 width: 0.3, // Underline thickness
                               ))),
                               child: pw.Text(
-                                "5,000    บาท (ห้าพันบาทถ้วน)",
+                                " - บาท (  -  )",
                                 textAlign: pw.TextAlign.center,
                                 style: pw.TextStyle(
                                   color: Colors_pd,
@@ -1005,7 +1027,7 @@ class Pdfgen_Agreement_Choice3 {
                                 width: 0.3, // Underline thickness
                               ))),
                               child: pw.Text(
-                                "1,070 บาท  (ห้าพันบาทถ้วน)",
+                                "  -  บาท  (   -   )",
                                 textAlign: pw.TextAlign.center,
                                 style: pw.TextStyle(
                                   color: Colors_pd,
@@ -1035,7 +1057,10 @@ class Pdfgen_Agreement_Choice3 {
                                 width: 0.3, // Underline thickness
                               ))),
                               child: pw.Text(
-                                "3,000 บาท ",
+                                (Form_PakanAll_pvat == null ||
+                                        Form_PakanAll_pvat.toString() == '')
+                                    ? '0.00'
+                                    : '${nFormat.format(double.parse('${Form_PakanAll_pvat}'))}',
                                 textAlign: pw.TextAlign.center,
                                 style: pw.TextStyle(
                                   color: Colors_pd,
@@ -1070,7 +1095,10 @@ class Pdfgen_Agreement_Choice3 {
                                 width: 0.3, // Underline thickness
                               ))),
                               child: pw.Text(
-                                "210 บาท ",
+                                (Form_PakanAll_vat == null ||
+                                        Form_PakanAll_vat.toString() == '')
+                                    ? '0.00'
+                                    : '${nFormat.format(double.parse('${Form_PakanAll_vat}'))}',
                                 textAlign: pw.TextAlign.center,
                                 style: pw.TextStyle(
                                   color: Colors_pd,
@@ -1100,7 +1128,11 @@ class Pdfgen_Agreement_Choice3 {
                                 width: 0.3, // Underline thickness
                               ))),
                               child: pw.Text(
-                                " 3,210 บาท (สามพันสองร้อยสิบบาทถ้วน)",
+                                (Form_PakanAll_Total == null ||
+                                        Form_PakanAll_Total.toString() == '')
+                                    ? '0.00 (~${convertToThaiBaht(0.00)}~)'
+                                    : '${nFormat.format(double.parse('${Form_PakanAll_Total}'))} บาท ' +
+                                        '(~${convertToThaiBaht(double.parse('${Form_PakanAll_Total}'))}~)',
                                 textAlign: pw.TextAlign.center,
                                 style: pw.TextStyle(
                                   color: Colors_pd,
@@ -1142,7 +1174,7 @@ class Pdfgen_Agreement_Choice3 {
                             flex: 1,
                             child: pw.Text(
                               ' ' * 15 +
-                                  '[ / ] ค่ามิเตอร์ไฟฟ้าและน้ำประปา จำนวน 500 บาท',
+                                  '[ / ] ค่ามิเตอร์ไฟฟ้าและน้ำประปา จำนวน_____บาท',
                               textAlign: pw.TextAlign.left,
                               style: pw.TextStyle(
                                 color: Colors_pd,
@@ -1155,7 +1187,7 @@ class Pdfgen_Agreement_Choice3 {
                           pw.Expanded(
                             flex: 1,
                             child: pw.Text(
-                              ' ' * 15 + '[   ] ค่ามิเตอร์ไฟฟ้า จำนวน 250 บาท',
+                              ' ' * 15 + '[   ] ค่ามิเตอร์ไฟฟ้า จำนวน_____บาท',
                               textAlign: pw.TextAlign.left,
                               style: pw.TextStyle(
                                 color: Colors_pd,
@@ -1174,7 +1206,7 @@ class Pdfgen_Agreement_Choice3 {
                             flex: 1,
                             child: pw.Text(
                               ' ' * 15 +
-                                  '[   ] ค่ามิเตอร์น้ำประปา จำนวน 250 บาท',
+                                  '[   ] ค่ามิเตอร์น้ำประปา จำนวน_____บาท',
                               textAlign: pw.TextAlign.left,
                               style: pw.TextStyle(
                                 color: Colors_pd,
@@ -1233,7 +1265,7 @@ class Pdfgen_Agreement_Choice3 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  " 7 บาท",
+                                  " -  บาท",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -1263,7 +1295,7 @@ class Pdfgen_Agreement_Choice3 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  " 30 บาท ",
+                                  " -  บาท ",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -1308,7 +1340,7 @@ class Pdfgen_Agreement_Choice3 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  " 5,000 บาท (ห้าพันบาทถ้วน) ",
+                                  " -  บาท (   -   ) ",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -1343,7 +1375,10 @@ class Pdfgen_Agreement_Choice3 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  "CMN202406-016",
+                                  (Form_PakanSdate_Doc == null ||
+                                          Form_PakanSdate_Doc.toString() == '')
+                                      ? ' - '
+                                      : '${Form_PakanSdate_Doc}',
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -1373,7 +1408,10 @@ class Pdfgen_Agreement_Choice3 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  "12 เดือน มิถุนายน พ.ศ. 2567",
+                                  (Form_PakanSdate == null ||
+                                          Form_PakanSdate.toString() == '')
+                                      ? ' - '
+                                      : '${Form_PakanSdate}',
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,

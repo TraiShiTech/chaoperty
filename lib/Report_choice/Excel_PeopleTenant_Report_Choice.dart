@@ -142,16 +142,33 @@ class Excgen_PeopleTenantReport_Choice {
     globalStyle.backColorRgb = const Color.fromARGB(255, 90, 192, 59);
     x.Style globalStyle2 = workbook.styles.add('style2');
     globalStyle2.backColorRgb = const Color.fromARGB(255, 147, 223, 124);
-    sheet.getRangeByName('A1:I1').merge();
-    // sheet.getRangeByName('A2:I2').merge();
-    // sheet.getRangeByName('A3:I3').merge();
-    // sheet.getRangeByName('A4:I4').merge();
+    // sheet.getRangeByName('A1:I1').merge();
+    // // sheet.getRangeByName('A2:I2').merge();
+    // // sheet.getRangeByName('A3:I3').merge();
+    // // sheet.getRangeByName('A4:I4').merge();
+
+    // sheet.getRangeByName('A1').setText(
+    //       (Value_Chang_Zone_People_TeNant == null)
+    //           ? 'รายงานประวัติผู้เช่า  (กรุณาเลือกโซน)'
+    //           : 'รายงานประวัติผู้เช่า  (โซน : $Value_Chang_Zone_People_TeNant)',
+    //     );
+
+    sheet.getRangeByName('A1:K1').merge();
+    sheet.getRangeByName('A2:K2').merge();
+    sheet.getRangeByName('A3:K3').merge();
+    sheet.getRangeByName('A4:K4').merge();
 
     sheet.getRangeByName('A1').setText(
           (Value_Chang_Zone_People_TeNant == null)
               ? 'รายงานประวัติผู้เช่า  (กรุณาเลือกโซน)'
               : 'รายงานประวัติผู้เช่า  (โซน : $Value_Chang_Zone_People_TeNant)',
         );
+    sheet
+        .getRangeByName('A2')
+        .setText('เดือน ${Mon_PeopleTeNant_Mon} ${YE_PeopleTeNant_Mon}');
+    sheet.getRangeByName('A3').setText(
+        'ชื่อสถานประกอบการ บริษัท ชอยส์มินิสโตร์ จำกัด เลขประจำตัวผู้เสียภาษี 0-1055-31085-43-4');
+    sheet.getRangeByName('A4').setText('ชื่อสถานประกอบการ เซเว่นอีเลฟเว่น');
 
 // ExcelSheetProtectionOption
     final x.ExcelSheetProtectionOption options = x.ExcelSheetProtectionOption();
@@ -184,62 +201,62 @@ class Excgen_PeopleTenantReport_Choice {
     }
 
     globalStyle2.hAlign = x.HAlignType.center;
-    sheet.getRangeByName('A2').cellStyle = globalStyle1;
-    sheet.getRangeByName('B2').cellStyle = globalStyle1;
-    sheet.getRangeByName('C2').cellStyle = globalStyle1;
-    sheet.getRangeByName('D2').cellStyle = globalStyle1;
-    sheet.getRangeByName('E2').cellStyle = globalStyle1;
-    sheet.getRangeByName('F2').cellStyle = globalStyle1;
-    sheet.getRangeByName('G2').cellStyle = globalStyle1;
-    sheet.getRangeByName('H2').cellStyle = globalStyle1;
-    sheet.getRangeByName('I2').cellStyle = globalStyle1;
-    sheet.getRangeByName('J2').cellStyle = globalStyle1;
-    sheet.getRangeByName('K2').cellStyle = globalStyle1;
-    sheet.getRangeByName('L2').cellStyle = globalStyle1;
-    sheet.getRangeByName('M2').cellStyle = globalStyle1;
-    sheet.getRangeByName('N2').cellStyle = globalStyle1;
-    sheet.getRangeByName('O2').cellStyle = globalStyle1;
-    sheet.getRangeByName('P2').cellStyle = globalStyle1;
-    sheet.getRangeByName('Q2').cellStyle = globalStyle1;
-    sheet.getRangeByName('R2').cellStyle = globalStyle1;
+    sheet.getRangeByName('A6').cellStyle = globalStyle1;
+    sheet.getRangeByName('B6').cellStyle = globalStyle1;
+    sheet.getRangeByName('C6').cellStyle = globalStyle1;
+    sheet.getRangeByName('D6').cellStyle = globalStyle1;
+    sheet.getRangeByName('E6').cellStyle = globalStyle1;
+    sheet.getRangeByName('F6').cellStyle = globalStyle1;
+    sheet.getRangeByName('G6').cellStyle = globalStyle1;
+    sheet.getRangeByName('H6').cellStyle = globalStyle1;
+    sheet.getRangeByName('I6').cellStyle = globalStyle1;
+    sheet.getRangeByName('J6').cellStyle = globalStyle1;
+    sheet.getRangeByName('K6').cellStyle = globalStyle1;
+    sheet.getRangeByName('L6').cellStyle = globalStyle1;
+    sheet.getRangeByName('M6').cellStyle = globalStyle1;
+    sheet.getRangeByName('N6').cellStyle = globalStyle1;
+    sheet.getRangeByName('O6').cellStyle = globalStyle1;
+    sheet.getRangeByName('P6').cellStyle = globalStyle1;
+    sheet.getRangeByName('Q6').cellStyle = globalStyle1;
+    sheet.getRangeByName('R6').cellStyle = globalStyle1;
 
-    sheet.getRangeByName('A2').columnWidth = 10;
-    sheet.getRangeByName('B2').columnWidth = 20;
-    sheet.getRangeByName('C2').columnWidth = 20;
-    sheet.getRangeByName('D2').columnWidth = 25;
-    sheet.getRangeByName('E2').columnWidth = 25;
-    sheet.getRangeByName('F2').columnWidth = 25;
-    sheet.getRangeByName('G2').columnWidth = 18;
-    sheet.getRangeByName('H2').columnWidth = 30;
-    sheet.getRangeByName('I2').columnWidth = 18;
-    sheet.getRangeByName('J2').columnWidth = 18;
-    sheet.getRangeByName('K2').columnWidth = 18;
-    sheet.getRangeByName('L2').columnWidth = 18;
-    sheet.getRangeByName('M2').columnWidth = 18;
-    sheet.getRangeByName('N2').columnWidth = 18;
-    sheet.getRangeByName('O2').columnWidth = 18;
-    sheet.getRangeByName('P2').columnWidth = 18;
-    sheet.getRangeByName('Q2').columnWidth = 18;
-    sheet.getRangeByName('R2').columnWidth = 18;
+    sheet.getRangeByName('A6').columnWidth = 10;
+    sheet.getRangeByName('B6').columnWidth = 20;
+    sheet.getRangeByName('C6').columnWidth = 20;
+    sheet.getRangeByName('D6').columnWidth = 25;
+    sheet.getRangeByName('E6').columnWidth = 25;
+    sheet.getRangeByName('F6').columnWidth = 25;
+    sheet.getRangeByName('G6').columnWidth = 18;
+    sheet.getRangeByName('H6').columnWidth = 30;
+    sheet.getRangeByName('I6').columnWidth = 18;
+    sheet.getRangeByName('J6').columnWidth = 18;
+    sheet.getRangeByName('K6').columnWidth = 18;
+    sheet.getRangeByName('L6').columnWidth = 18;
+    sheet.getRangeByName('M6').columnWidth = 18;
+    sheet.getRangeByName('N6').columnWidth = 18;
+    sheet.getRangeByName('O6').columnWidth = 18;
+    sheet.getRangeByName('P6').columnWidth = 18;
+    sheet.getRangeByName('Q6').columnWidth = 18;
+    sheet.getRangeByName('R6').columnWidth = 18;
 
-    sheet.getRangeByName('A2').setText('ลำดับที่');
-    sheet.getRangeByName('B2').setText('ชื่อ-สกุล ผู้เช่า');
-    sheet.getRangeByName('C2').setText('เลขบปช.');
-    sheet.getRangeByName('D2').setText('รหัสสาขา');
-    sheet.getRangeByName('E2').setText('ชื่อสาขา');
-    sheet.getRangeByName('F2').setText('เลขที่สัญญา');
-    sheet.getRangeByName('G2').setText('เลขสัญญาเก่า');
-    sheet.getRangeByName('H2').setText('เลขที่สัญญาประกัน');
-    sheet.getRangeByName('I2').setText('เลขล็อค');
-    sheet.getRangeByName('J2').setText('วันที่เริ่มเช่า');
-    sheet.getRangeByName('K2').setText('วันที่สิ้นสุดสัญญา');
-    sheet.getRangeByName('L2').setText('ประเภทสินค้า');
-    sheet.getRangeByName('M2').setText('น้ำ + ไฟ');
-    sheet.getRangeByName('N2').setText('ค่าเช่า');
-    sheet.getRangeByName('O2').setText('ค่าบริการ');
-    sheet.getRangeByName('P2').setText('เงินประกัน');
-    sheet.getRangeByName('Q2').setText('วันที่ยกเลิก');
-    sheet.getRangeByName('R2').setText('ผู้ดูแล');
+    sheet.getRangeByName('A6').setText('ลำดับที่');
+    sheet.getRangeByName('B6').setText('ชื่อ-สกุล ผู้เช่า');
+    sheet.getRangeByName('C6').setText('เลขบปช.');
+    sheet.getRangeByName('D6').setText('รหัสสาขา');
+    sheet.getRangeByName('E6').setText('ชื่อสาขา');
+    sheet.getRangeByName('F6').setText('เลขที่สัญญา');
+    sheet.getRangeByName('G6').setText('เลขสัญญาเก่า');
+    sheet.getRangeByName('H6').setText('เลขที่สัญญาประกัน');
+    sheet.getRangeByName('I6').setText('เลขล็อค');
+    sheet.getRangeByName('J6').setText('วันที่เริ่มเช่า');
+    sheet.getRangeByName('K6').setText('วันที่สิ้นสุดสัญญา');
+    sheet.getRangeByName('L6').setText('ประเภทสินค้า');
+    sheet.getRangeByName('M6').setText('น้ำ + ไฟ');
+    sheet.getRangeByName('N6').setText('ค่าเช่า');
+    sheet.getRangeByName('O6').setText('ค่าบริการ');
+    sheet.getRangeByName('P6').setText('เงินประกัน');
+    sheet.getRangeByName('Q6').setText('วันที่ยกเลิก');
+    sheet.getRangeByName('R6').setText('ผู้ดูแล');
 
     int index1 = 0;
     int indextotol = 0;
@@ -247,86 +264,86 @@ class Excgen_PeopleTenantReport_Choice {
 
     for (int index = 0; index < teNantModels.length; index++) {
       dynamic numberColor = ((index % 2) == 0) ? globalStyle22 : globalStyle222;
-      sheet.getRangeByName('A${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('B${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('C${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('D${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('E${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('F${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('G${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('H${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('I${index + 3}').cellStyle = numberColor;
+      sheet.getRangeByName('A${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('B${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('C${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('D${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('E${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('F${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('G${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('H${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('I${index + 7}').cellStyle = numberColor;
 
-      sheet.getRangeByName('J${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('K${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('L${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('M${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('N${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('O${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('P${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('Q${index + 3}').cellStyle = numberColor;
-      sheet.getRangeByName('R${index + 3}').cellStyle = numberColor;
+      sheet.getRangeByName('J${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('K${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('L${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('M${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('N${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('O${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('P${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('Q${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('R${index + 7}').cellStyle = numberColor;
 
-      sheet.getRangeByName('A${index + 3}').setText('${index + 1}');
+      sheet.getRangeByName('A${index + 7}').setText('${index + 1}');
       sheet
-          .getRangeByName('B${index + 3}')
+          .getRangeByName('B${index + 7}')
           .setText('${teNantModels[index].cname}');
       sheet
-          .getRangeByName('C${index + 3}')
+          .getRangeByName('C${index + 7}')
           .setText('${teNantModels[index].tax}');
-      sheet.getRangeByName('D${index + 3}').setText(
+      sheet.getRangeByName('D${index + 7}').setText(
           (teNantModels[index].zser != null)
               ? '${teNantModels[index].zser}'
               : '${teNantModels[index].zser1}');
-      sheet.getRangeByName('E${index + 3}').setText(
+      sheet.getRangeByName('E${index + 7}').setText(
           (teNantModels[index].zn != null)
               ? '${teNantModels[index].zn}'
               : '${teNantModels[index].zn1}');
-      sheet.getRangeByName('F${index + 3}').setText(
+      sheet.getRangeByName('F${index + 7}').setText(
           (teNantModels[index].cid == null)
               ? ''
               : '${teNantModels[index].cid}');
-      sheet.getRangeByName('G${index + 3}').setText(
+      sheet.getRangeByName('G${index + 7}').setText(
           (teNantModels[index].fid == null)
               ? ''
               : '${teNantModels[index].fid}');
-      sheet.getRangeByName('H${index + 3}').setText(
+      sheet.getRangeByName('H${index + 7}').setText(
           (teNantModels[index].docno == null)
               ? ''
               : '${teNantModels[index].docno}');
       sheet
-          .getRangeByName('I${index + 3}')
+          .getRangeByName('I${index + 7}')
           .setText('${teNantModels[index].ln}');
       sheet
-          .getRangeByName('J${index + 3}')
+          .getRangeByName('J${index + 7}')
           .setText('${teNantModels[index].sdate}');
       sheet
-          .getRangeByName('K${index + 3}')
+          .getRangeByName('K${index + 7}')
           .setText('${teNantModels[index].ldate}');
       sheet
-          .getRangeByName('L${index + 3}')
+          .getRangeByName('L${index + 7}')
           .setText('${teNantModels[index].stype}');
-      sheet.getRangeByName('M${index + 3}').setText(
+      sheet.getRangeByName('M${index + 7}').setText(
           '${(teNantModels[index].water_electri == null) ? '' : teNantModels[index].water_electri.toString()}');
-      sheet.getRangeByName('N${index + 3}').setNumber(
+      sheet.getRangeByName('N${index + 7}').setNumber(
           (teNantModels[index].rent_total == null)
               ? 0.00
               : double.parse('${teNantModels[index].rent_total}'));
 
-      sheet.getRangeByName('O${index + 3}').setNumber(
+      sheet.getRangeByName('O${index + 7}').setNumber(
           (teNantModels[index].service_total == null)
               ? 0.00
               : double.parse('${teNantModels[index].service_total}'));
-      sheet.getRangeByName('P${index + 3}').setNumber(
+      sheet.getRangeByName('P${index + 7}').setNumber(
           (teNantModels[index].pakan_vat == null)
               ? 0.00
               : double.parse('${teNantModels[index].pakan_vat}'));
-      sheet.getRangeByName('Q${index + 3}').setText(
+      sheet.getRangeByName('Q${index + 7}').setText(
           (teNantModels[index].cc_date.toString() == '0000-00-00')
               ? ''
               : '${teNantModels[index].cc_date}');
       sheet
-          .getRangeByName('R${index + 3}')
+          .getRangeByName('R${index + 7}')
           .setText('${teNantModels[index].user}');
 
       indextotol = indextotol + 1;

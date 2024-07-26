@@ -499,8 +499,6 @@ class ManPay_Receipt_PDF {
     print(
         '${finnancetransModels.length}///${dis_sum_Matjum}  // ${sum_amt} //${_TransReBillHistoryModels.length}////$docnoin  ****date_pay : $date_pay ');
 
-
-
     Future.delayed(Duration(milliseconds: 500), () async {
       if (tem_page_ser.toString() == '0' || tem_page_ser == null) {
         Pdfgen_his_statusbill_TP3.exportPDF_statusbill_TP3(

@@ -19,39 +19,49 @@ class Pdfgen_Agreement_Choice2 {
 //////////---------------------------------------------------->( **** เอกสารสัญญาห้องเช่า  Choice)
 
   static void exportPDF_Agreement_Choice2(
-      context,
-      Get_Value_NameShop_index,
-      Get_Value_cid,
-      _verticalGroupValue,
-      Form_nameshop,
-      Form_typeshop,
-      Form_bussshop,
-      Form_bussscontact,
-      Form_address,
-      Form_tel,
-      Form_email,
-      Form_tax,
-      Form_ln,
-      Form_zn,
-      Form_area,
-      Form_qty,
-      Form_sdate,
-      Form_ldate,
-      Form_period,
-      Form_rtname,
-      quotxSelectModels,
-      _TransModels,
-      renTal_name,
-      bill_addr,
-      bill_email,
-      bill_tel,
-      bill_tax,
-      bill_name,
-      newValuePDFimg,
-      tableData00,
-      TitleType_Default_Receipt_Name,
-      Datex_text,
-      _ReportValue_type_docOttor) async {
+    context,
+    Get_Value_NameShop_index,
+    Get_Value_cid,
+    _verticalGroupValue,
+    Form_nameshop,
+    Form_typeshop,
+    Form_bussshop,
+    Form_bussscontact,
+    Form_address,
+    Form_tel,
+    Form_email,
+    Form_tax,
+    Form_ln,
+    Form_zn,
+    Form_area,
+    Form_qty,
+    Form_sdate,
+    Form_ldate,
+    Form_period,
+    Form_rtname,
+    quotxSelectModels,
+    _TransModels,
+    renTal_name,
+    bill_addr,
+    bill_email,
+    bill_tel,
+    bill_tax,
+    bill_name,
+    newValuePDFimg,
+    tableData00,
+    TitleType_Default_Receipt_Name,
+    Datex_text,
+    _ReportValue_type_docOttor,
+    Form_fid,
+    Form_PakanSdate,
+    Form_PakanLdate,
+    Form_PakanSdate_Doc,
+    Form_PakanLdate_Doc,
+    Form_PakanAll_amt,
+    Form_PakanAll_pvat,
+    Form_PakanAll_vat,
+    Form_PakanAll_Total,
+  ) async {
     ////
     //// ------------>(J Space Sansai)
     ///////
@@ -341,7 +351,7 @@ class Pdfgen_Agreement_Choice2 {
                   children: [
                     if (context.pageNumber.toString() == '1')
                       pw.Text(
-                        'สาขา อบต.ริมเหนือ (8409)',
+                        '$Form_zn',
                         textAlign: pw.TextAlign.center,
                         style: pw.TextStyle(
                           color: Colors_pd,
@@ -352,7 +362,7 @@ class Pdfgen_Agreement_Choice2 {
                       ),
                     pw.Spacer(),
                     pw.Text(
-                      'สัญญาเลขที่   1008/04/2567    ',
+                      'สัญญาเลขที่  $Get_Value_cid',
                       textAlign: pw.TextAlign.center,
                       style: pw.TextStyle(
                         color: Colors_pd,
@@ -393,7 +403,10 @@ class Pdfgen_Agreement_Choice2 {
                               crossAxisAlignment: pw.CrossAxisAlignment.end,
                               children: [
                                 pw.Text(
-                                  'อ้างอิงสัญญาเดิมเลขที่...................',
+                                  (Get_Value_cid.toString() ==
+                                          Form_fid.toString())
+                                      ? 'อ้างอิงสัญญาเดิมเลขที่________________'
+                                      : 'อ้างอิงสัญญาเดิมเลขที่ ${Form_fid}',
                                   // 'ทำที่ $renTal_name ',
                                   textAlign: pw.TextAlign.right,
                                   style: pw.TextStyle(
@@ -421,7 +434,7 @@ class Pdfgen_Agreement_Choice2 {
                         mainAxisAlignment: pw.MainAxisAlignment.center,
                         children: [
                           pw.Text(
-                            'วันที่ 22 มีนาคม 2567',
+                            'วันที่  ${Datex_text.text} ',
                             textAlign: pw.TextAlign.center,
                             style: pw.TextStyle(
                               color: Colors_pd,
@@ -476,7 +489,7 @@ class Pdfgen_Agreement_Choice2 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  "นางสาวอาเรือง พรหมมี",
+                                  "$Form_bussshop",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -510,7 +523,7 @@ class Pdfgen_Agreement_Choice2 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  "3-8602-00301-26-5",
+                                  "$Form_tax",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -539,7 +552,7 @@ class Pdfgen_Agreement_Choice2 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  "093-305-9499   ",
+                                  "$Form_tel",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -573,7 +586,7 @@ class Pdfgen_Agreement_Choice2 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  "24/27 ถ.พิศิษฐ์กรณีย์ ต.ป่าตอง อ.กระทู้ จ.ภูเก็ต  ",
+                                  "$Form_address",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -630,7 +643,7 @@ class Pdfgen_Agreement_Choice2 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  "209/1 หมู่ที่ 1 ตำบลริมเหนือ อำเภอแม่ริม จังหวัดเชียงใหม่",
+                                  "$Form_ln",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -664,7 +677,7 @@ class Pdfgen_Agreement_Choice2 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  "24.00    ตร.ม",
+                                  "$Form_qty ตร.ม.",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -693,7 +706,7 @@ class Pdfgen_Agreement_Choice2 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  " 1   ห้อง",
+                                  " $Form_qty ห้อง",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -749,7 +762,10 @@ class Pdfgen_Agreement_Choice2 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  "ของเล่นเด็ก และลูกชิ้นทอด",
+                                  (Form_nameshop == null ||
+                                          Form_nameshop.toString() == 'null')
+                                      ? "$Form_bussshop"
+                                      : "$Form_nameshop",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -813,7 +829,7 @@ class Pdfgen_Agreement_Choice2 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  "  1 เมษายน 2567     ",
+                                  "$Form_sdate",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -842,7 +858,7 @@ class Pdfgen_Agreement_Choice2 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  "  31 มีนาคม 2568   ",
+                                  "$Form_ldate",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -876,7 +892,7 @@ class Pdfgen_Agreement_Choice2 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  "  12 ",
+                                  "$Form_period",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -887,7 +903,14 @@ class Pdfgen_Agreement_Choice2 {
                                 ),
                               )),
                           pw.Text(
-                            'เดือนและผู้ให้เช่าตกลงส่งมอบทรัพย์สินที่เช่าให้แก่ผู้เช่าครอบครองในวันที่',
+                            (Form_rtname.toString() == 'รายวัน')
+                                ? 'วัน และผู้ให้เช่าตกลงส่งมอบทรัพย์สินที่เช่าให้แก่ผู้เช่าครอบครองในวันที่ '
+                                : (Form_rtname.toString() == 'รายเดือน')
+                                    ? 'เดือน และผู้ให้เช่าตกลงส่งมอบทรัพย์สินที่เช่าให้แก่ผู้เช่าครอบครองในวันที่ '
+                                    : (Form_rtname.toString() == 'รายปี')
+                                        ? 'ปี และผู้ให้เช่าตกลงส่งมอบทรัพย์สินที่เช่าให้แก่ผู้เช่าครอบครองในวันที่ '
+                                        : '$Form_rtname และผู้ให้เช่าตกลงส่งมอบทรัพย์สินที่เช่าให้แก่ผู้เช่าครอบครองในวันที่ ',
+                            // 'เดือนและผู้ให้เช่าตกลงส่งมอบทรัพย์สินที่เช่าให้แก่ผู้เช่าครอบครองในวันที่',
                             textAlign: pw.TextAlign.left,
                             style: pw.TextStyle(
                               fontSize: font_Size,
@@ -990,7 +1013,7 @@ class Pdfgen_Agreement_Choice2 {
                                 width: 0.3, // Underline thickness
                               ))),
                               child: pw.Text(
-                                "5,000    บาท (ห้าพันบาทถ้วน)",
+                                " -  บาท ( - )",
                                 textAlign: pw.TextAlign.center,
                                 style: pw.TextStyle(
                                   color: Colors_pd,
@@ -1056,7 +1079,7 @@ class Pdfgen_Agreement_Choice2 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  "100   บาท (หนึ่งร้อยบาทถ้วน) ",
+                                  "  -   บาท (    -    ) ",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -1157,7 +1180,11 @@ class Pdfgen_Agreement_Choice2 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  "10,000    บาท (หนึ่งหมื่นบาทถ้วน) ",
+                                  (Form_PakanAll_Total == null ||
+                                          Form_PakanAll_Total.toString() == '')
+                                      ? '0.00 (~${convertToThaiBaht(0.00)}~)'
+                                      : '${nFormat.format(double.parse('${Form_PakanAll_Total}'))} บาท ' +
+                                          '(~${convertToThaiBaht(double.parse('${Form_PakanAll_Total}'))}~)',
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -1286,7 +1313,7 @@ class Pdfgen_Agreement_Choice2 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  " 22 มีนาคม 2567  ",
+                                  " -   ",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -1494,7 +1521,7 @@ class Pdfgen_Agreement_Choice2 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  " 1,000    บาท (หนึ่งพันบาทถ้วน) ",
+                                  " -   บาท (   -   ) ",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -1778,7 +1805,7 @@ class Pdfgen_Agreement_Choice2 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  "1,000.00   บาท ( หนึ่งพันบาทถ้วน ) ",
+                                  " -   บาท (    -     ) ",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,

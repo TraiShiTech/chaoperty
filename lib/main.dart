@@ -76,7 +76,7 @@ void main() async {
 //1.----> git add .
 //2.------> git remote set-url origin https://gitlab.com/traishitech.com/chaoperty.git
 
-//3.-------->git commit -m "ก่อนQ"
+//3.-------->git commit -m "แก้market"
 //4.-----------> git push origin main
 //----------------------------------------------------->
 //----(Git Hub)

@@ -691,10 +691,17 @@ class Excgen_IncomeReport {
                 : '${TranHisBillModels[index2].ldate}',
           );
       sheet.getRangeByName('X${indextotol + 5 - 1}').setText(
-            (TranHisBillModels[index2].date_book == '' ||
-                    TranHisBillModels[index2].date_book == null)
+            (TranHisBillModels[index2].room_number.toString() == '' ||
+                    TranHisBillModels[index2].room_number == null)
                 ? ''
-                : '${TranHisBillModels[index2].date_book}',
+                : (TranHisBillModels[index2].date == null ||
+                        TranHisBillModels[index2].date.toString() == '')
+                    ? ''
+                    : '${TranHisBillModels[index2].date}',
+            // (TranHisBillModels[index2].date_book == '' ||
+            //         TranHisBillModels[index2].date_book == null)
+            //     ? ''
+            //     : '${TranHisBillModels[index2].date_book}',
           );
       sheet.getRangeByName('Y${indextotol + 5 - 1}').setText(
             (TranHisBillModels[index2].timex == '' ||

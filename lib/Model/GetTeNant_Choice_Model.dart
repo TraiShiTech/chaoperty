@@ -1,13 +1,17 @@
 class TeNantChoiceModel {
   String? ser;
   String? user;
+  String? name_user;
   String? datex;
+  String? daterec;
+  String? pdate;
   String? st;
   String? cid;
   String? fid;
   String? zser;
   String? zser1;
   String? zn;
+  String? znn;
   String? zn1;
   String? ln;
   String? cname;
@@ -20,10 +24,12 @@ class TeNantChoiceModel {
   String? cc_date;
   String? cc_remark;
   String? docno;
+  String? doctax;
   String? water_electri;
   String? count_pakan;
-
+  String? amt_pakan;
   String? pvat_pakan;
+
   String? pakan_vat;
   String? total_pakan;
   String? pakan_doc;
@@ -47,17 +53,27 @@ class TeNantChoiceModel {
 
   String? water;
   String? electricity;
+  String? remark;
+
+  String? service_total_future;
+  String? rent_total_future;
+  String? total_bill;
+  String? renew_cid;
 
   TeNantChoiceModel(
       {this.ser,
       this.user,
+      this.name_user,
       this.datex,
+      this.daterec,
+      this.pdate,
       this.st,
       this.cid,
       this.fid,
       this.zser,
       this.zser1,
       this.zn,
+      this.znn,
       this.zn1,
       this.ln,
       this.cname,
@@ -70,8 +86,10 @@ class TeNantChoiceModel {
       this.cc_date,
       this.cc_remark,
       this.docno,
+      this.doctax,
       this.water_electri,
       this.count_pakan,
+      this.amt_pakan,
       this.pvat_pakan,
       this.pakan_vat,
       this.total_pakan,
@@ -91,18 +109,27 @@ class TeNantChoiceModel {
       this.equip_vat,
       this.equip_total,
       this.water,
-      this.electricity});
+      this.electricity,
+      this.remark,
+      this.service_total_future,
+      this.rent_total_future,
+      this.total_bill,
+      this.renew_cid});
 
   TeNantChoiceModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
     user = json['user'];
+    name_user = json['name_user'];
     datex = json['datex'];
+    daterec = json['daterec'];
+    pdate = json['pdate'];
     st = json['st'];
     cid = json['cid'];
     fid = json['fid'];
     zser = json['zser'];
     zser1 = json['zser1'];
     zn = json['zn'];
+    znn = json['znn'];
     zn1 = json['zn1'];
     ln = json['ln'];
     cname = json['cname'];
@@ -115,8 +142,10 @@ class TeNantChoiceModel {
     cc_date = json['cc_date'];
     cc_remark = json['cc_remark'];
     docno = json['docno'];
+    doctax = json['doctax'];
     water_electri = json['water_electri'];
     count_pakan = json['count_pakan'];
+    amt_pakan = json['amt_pakan'];
     pvat_pakan = json['pvat_pakan'];
     pakan_vat = json['pakan_vat'];
     total_pakan = json['total_pakan'];
@@ -140,19 +169,28 @@ class TeNantChoiceModel {
 
     water = json['water'];
     electricity = json['electricity'];
+    remark = json['remark'];
+    service_total_future = json['service_total_future'];
+    rent_total_future = json['rent_total_future'];
+    total_bill = json['total_bill'];
+    renew_cid = json['renew_cid'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['ser'] = this.ser;
     data['user'] = this.user;
+    data['name_user'] = this.name_user;
     data['datex'] = this.datex;
+    data['daterec'] = this.daterec;
+    data['pdate'] = this.pdate;
     data['st'] = this.st;
     data['cid'] = this.cid;
     data['fid'] = this.fid;
     data['zser'] = this.zser;
     data['zser1'] = this.zser1;
     data['zn'] = this.zn;
+    data['znn'] = this.znn;
     data['zn1'] = this.zn1;
     data['ln'] = this.ln;
     data['cname'] = this.cname;
@@ -165,9 +203,10 @@ class TeNantChoiceModel {
     data['cc_date'] = this.cc_date;
     data['cc_remark'] = this.cc_remark;
     data['docno'] = this.docno;
+    data['doctax'] = this.doctax;
     data['water_electri'] = this.water_electri;
     data['count_pakan'] = this.count_pakan;
-
+    data['amt_pakan'] = this.amt_pakan;
     data['pvat_pakan'] = this.pvat_pakan;
     data['pakan_vat'] = this.pakan_vat;
     data['total_pakan'] = this.total_pakan;
@@ -191,6 +230,11 @@ class TeNantChoiceModel {
 
     data['water'] = this.water;
     data['electricity'] = this.electricity;
+    data['remark'] = this.remark;
+    data['service_total_future'] = this.service_total_future;
+    data['rent_total_future'] = this.rent_total_future;
+    data['total_bill'] = this.total_bill;
+    data['renew_cid'] = this.renew_cid;
     return data;
   }
 }

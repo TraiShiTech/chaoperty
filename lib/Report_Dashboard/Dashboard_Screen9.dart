@@ -22,6 +22,7 @@ import '../Model/GetTeNant_Model.dart';
 import '../Model/GetZone_Model.dart';
 import '../Model/Get_tran_meter_model.dart';
 import '../Model/trans_re_bill_model.dart';
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 import '../Style/downloadImage.dart';
 import 'dart:ui' as ui;
@@ -497,16 +498,16 @@ class _Dashboard_Screen9State extends State<Dashboard_Screen9> {
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             children: [
-                              const Padding(
+                              Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'รายงาน ค้างชำระ : ',
-                                  style: TextStyle(
-                                    color: ReportScreen_Color.Colors_Text2_,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'รายงาน ค้างชำระ : ',
+                                    ReportScreen_Color.Colors_Text2_,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               ),
                               const Padding(
                                 padding: EdgeInsets.all(8.0),
@@ -638,15 +639,15 @@ class _Dashboard_Screen9State extends State<Dashboard_Screen9> {
                                           bottomLeft: Radius.circular(10),
                                           bottomRight: Radius.circular(10)),
                                     ),
-                                    child: const Center(
-                                      child: Text(
-                                        'ค้นหา',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: FontWeight_.Fonts_T,
-                                        ),
-                                      ),
+                                    child: Center(
+                                      child: Translate.TranslateAndSetText(
+                                          'ค้นหา',
+                                          Colors.white,
+                                          TextAlign.center,
+                                          FontWeight.w500,
+                                          Font_.Fonts_T,
+                                          16,
+                                          1),
                                     )),
                               ),
                             ],
@@ -991,15 +992,15 @@ class _Dashboard_Screen9State extends State<Dashboard_Screen9> {
                                     bottomLeft: Radius.circular(8),
                                     bottomRight: Radius.circular(8)),
                               ),
-                              child: const Center(
-                                child: Text(
-                                  'พิมพ์',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                  ),
-                                ),
+                              child: Center(
+                                child: Translate.TranslateAndSetText(
+                                    'พิมพ์',
+                                    Colors.white,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               )),
                         ),
                       ),

@@ -70,6 +70,7 @@ class TeNantRenewChoiceModel {
   String? zn1;
   String? pdate;
   String? user;
+  String? name_user;
   String? water_electri;
   String? deposit;
   String? water;
@@ -79,13 +80,16 @@ class TeNantRenewChoiceModel {
 
   String? rent_name;
   String? rent_amt;
+  String? rent_pvat;
   String? rent_vat;
   String? rent_total;
 
   String? service_name;
   String? service_amt;
+  String? service_pvat;
   String? service_vat;
   String? service_total;
+  String? renew_cid;
 
   TeNantRenewChoiceModel({
     this.ser,
@@ -159,6 +163,7 @@ class TeNantRenewChoiceModel {
     this.zn1,
     this.pdate,
     this.user,
+    this.name_user,
     this.water_electri,
     this.deposit,
     this.water,
@@ -167,12 +172,15 @@ class TeNantRenewChoiceModel {
     this.nday,
     this.rent_name,
     this.rent_amt,
+    this.rent_pvat,
     this.rent_vat,
     this.rent_total,
     this.service_name,
     this.service_amt,
+    this.service_pvat,
     this.service_vat,
     this.service_total,
+    this.renew_cid,
   });
 
   TeNantRenewChoiceModel.fromJson(Map<String, dynamic> json) {
@@ -250,6 +258,7 @@ class TeNantRenewChoiceModel {
     zn1 = json['zn1'];
     pdate = json['pdate'];
     user = json['user'];
+    name_user = json['name_user'];
     water_electri = json['water_electri'];
     deposit = json['deposit'];
     water = json['water'];
@@ -259,12 +268,15 @@ class TeNantRenewChoiceModel {
 
     rent_name = json['rent_name'];
     rent_amt = json['rent_amt'];
+    rent_pvat = json['rent_pvat'];
     rent_vat = json['rent_vat'];
     rent_total = json['rent_total'];
     service_name = json['service_name'];
     service_amt = json['service_amt'];
+    service_pvat = json['service_pvat'];
     service_vat = json['service_vat'];
     service_total = json['service_total'];
+    renew_cid = json['renew_cid'];
   }
 
   Map<String, dynamic> toJson() {
@@ -342,6 +354,7 @@ class TeNantRenewChoiceModel {
     data['zn1'] = this.zn1;
     data['pdate'] = this.pdate;
     data['user'] = this.user;
+    data['name_user'] = this.name_user;
 
     data['water_electri'] = this.water_electri;
     data['deposit'] = this.deposit;
@@ -352,12 +365,15 @@ class TeNantRenewChoiceModel {
 
     data['rent_name'] = this.rent_name;
     data['rent_amt'] = this.rent_amt;
+    data['rent_pvat'] = this.rent_pvat;
     data['rent_vat'] = this.rent_vat;
     data['rent_total'] = this.rent_total;
     data['service_name'] = this.service_name;
     data['service_amt'] = this.service_amt;
+    data['service_pvat'] = this.service_pvat;
     data['service_vat'] = this.service_vat;
     data['service_total'] = this.service_total;
+    data['renew_cid'] = this.renew_cid;
 
     return data;
   }

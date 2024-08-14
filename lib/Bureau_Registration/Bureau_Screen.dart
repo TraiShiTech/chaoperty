@@ -7,6 +7,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 import '../Style/view_pagenow.dart';
 import 'Add_Custo_Screen.dart';
@@ -98,19 +99,15 @@ class _BureauScreenState extends State<BureauScreen> {
                             padding: const EdgeInsets.all(5.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
-                                AutoSizeText(
-                                  'ทะเบียน ',
-                                  overflow: TextOverflow.ellipsis,
-                                  minFontSize: 8,
-                                  maxFontSize: 20,
-                                  style: TextStyle(
-                                    decoration: TextDecoration.underline,
-                                    color: ReportScreen_Color.Colors_Text1_,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                  ),
-                                ),
+                              children: [
+                                Translate.TranslateAndSetText(
+                                    'ทะเบียน',
+                                    SettingScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    16,
+                                    1),
                                 AutoSizeText(
                                   ' > >',
                                   overflow: TextOverflow.ellipsis,
@@ -199,14 +196,16 @@ class _BureauScreenState extends State<BureauScreen> {
                                       ),
                                       padding: const EdgeInsets.all(8.0),
                                       child: Center(
-                                        child: Text(
-                                          Status[i],
-                                          style: TextStyle(
-                                              color: (Status_ == i + 1)
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                              fontFamily: FontWeight_.Fonts_T),
-                                        ),
+                                        child: Translate.TranslateAndSetText(
+                                            Status[i],
+                                            (Status_ == i + 1)
+                                                ? Colors.white
+                                                : Colors.black,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            14,
+                                            1),
                                       ),
                                     ),
                                   )),

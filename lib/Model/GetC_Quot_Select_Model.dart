@@ -8,6 +8,7 @@ class QuotxSelectModel {
   String? exptser;
   String? sunit;
   String? unit;
+  String? unitser;
   String? day;
   String? sday;
   String? term;
@@ -39,48 +40,52 @@ class QuotxSelectModel {
   String? fine_cal_three;
   String? fine_max;
   String? fine_max_cal;
+  String? pay_pakan;
 
-  QuotxSelectModel(
-      {this.ser,
-      this.datex,
-      this.qser,
-      this.docno,
-      this.expser,
-      this.expname,
-      this.exptser,
-      this.sunit,
-      this.unit,
-      this.day,
-      this.sday,
-      this.term,
-      this.sdate,
-      this.meter,
-      this.qty,
-      this.ldate,
-      this.amt,
-      this.vtype,
-      this.nvat,
-      this.vat,
-      this.pvat,
-      this.nwht,
-      this.wht,
-      this.fine,
-      this.fineUnit,
-      this.fineLate,
-      this.fineCal,
-      this.finePri,
-      this.st,
-      this.total,
-      this.dataUpdate,
-      this.dtype,
-      this.etype,
-      this.ele_ty,
-      this.amt_ty,
-      this.fine_three,
-      this.fine_late_three,
-      this.fine_cal_three,
-      this.fine_max,
-      this.fine_max_cal});
+  QuotxSelectModel({
+    this.ser,
+    this.datex,
+    this.qser,
+    this.docno,
+    this.expser,
+    this.expname,
+    this.exptser,
+    this.sunit,
+    this.unit,
+    this.unitser,
+    this.day,
+    this.sday,
+    this.term,
+    this.sdate,
+    this.meter,
+    this.qty,
+    this.ldate,
+    this.amt,
+    this.vtype,
+    this.nvat,
+    this.vat,
+    this.pvat,
+    this.nwht,
+    this.wht,
+    this.fine,
+    this.fineUnit,
+    this.fineLate,
+    this.fineCal,
+    this.finePri,
+    this.st,
+    this.total,
+    this.dataUpdate,
+    this.dtype,
+    this.etype,
+    this.ele_ty,
+    this.amt_ty,
+    this.fine_three,
+    this.fine_late_three,
+    this.fine_cal_three,
+    this.fine_max,
+    this.fine_max_cal,
+    this.pay_pakan,
+  });
 
   QuotxSelectModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -92,6 +97,7 @@ class QuotxSelectModel {
     exptser = json['exptser'];
     sunit = json['sunit'];
     unit = json['unit'];
+    unitser = json['unitser'];
     day = json['day'];
     sday = json['sday'];
     term = json['term'];
@@ -123,6 +129,7 @@ class QuotxSelectModel {
     fine_cal_three = json['fine_cal_three'];
     fine_max = json['fine_max'];
     fine_max_cal = json['fine_max_cal'];
+    pay_pakan = json['pay_pakan'];
   }
 
   Map<String, dynamic> toJson() {
@@ -136,6 +143,7 @@ class QuotxSelectModel {
     data['exptser'] = this.exptser;
     data['sunit'] = this.sunit;
     data['unit'] = this.unit;
+    data['unitser'] = this.unitser;
     data['day'] = this.day;
     data['sday'] = this.sday;
     data['term'] = this.term;
@@ -167,6 +175,7 @@ class QuotxSelectModel {
     data['fine_cal_three'] = this.fine_cal_three;
     data['fine_max'] = this.fine_max;
     data['fine_max_cal'] = this.fine_max_cal;
+    data['pay_pakan'] = this.pay_pakan;
 
     return data;
   }

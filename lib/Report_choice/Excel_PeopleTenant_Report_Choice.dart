@@ -344,7 +344,7 @@ class Excgen_PeopleTenantReport_Choice {
               : '${teNantModels[index].cc_date}');
       sheet
           .getRangeByName('R${index + 7}')
-          .setText('${teNantModels[index].user}');
+          .setText('${teNantModels[index].name_user}');
 
       indextotol = indextotol + 1;
     }

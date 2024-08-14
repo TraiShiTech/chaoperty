@@ -1,5 +1,6 @@
 // ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, duplicate_import, must_be_immutable, body_might_complete_normally_nullable
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -17,6 +18,7 @@ import '../Account/Account_Screen.dart';
 import '../AdminScaffold/AdminScaffold.dart';
 import '../ChaoArea/ChaoArea_Screen.dart';
 import '../Constant/Myconstant.dart';
+import '../INSERT_Log/Insert_log.dart';
 import '../Manage/Manage_Screen.dart';
 import '../Model/GetArea_Model.dart';
 import '../Model/GetCustomer_Model.dart';
@@ -36,6 +38,7 @@ import '../Responsive/responsive.dart';
 
 import '../Setting/SettingScreen.dart';
 import '../Setting/ttt.dart';
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 import 'home_dashboard.dart';
 import 'home_reservespace.dart';
@@ -700,6 +703,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               setState(() {
                                 show_Dashboard = 1;
                               });
+
+                              SharedPreferences preferences =
+                                  await SharedPreferences.getInstance();
+                              var name = preferences.getString('fname');
+                              Insert_log.Insert_logs(
+                                  'หน้าหลัก', '$name>Dashboard');
                             },
                             child: Container(
                                 width: 130,
@@ -714,16 +723,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                   border:
                                       Border.all(color: Colors.white, width: 1),
                                 ),
-                                child: const Center(
-                                  child: Text(
-                                    'Dashboard',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: FontWeight_.Fonts_T,
-                                    ),
-                                  ),
+                                child: Center(
+                                  child: Translate.TranslateAndSetText(
+                                      'แดชบอร์ด',
+                                      Colors.white,
+                                      TextAlign.center,
+                                      FontWeight.bold,
+                                      FontWeight_.Fonts_T,
+                                      14,
+                                      1),
                                 )),
                           ),
                         ),
@@ -737,6 +745,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               setState(() {
                                 show_Dashboard = 2;
                               });
+                              SharedPreferences preferences =
+                                  await SharedPreferences.getInstance();
+                              var name = preferences.getString('fname');
+                              Insert_log.Insert_logs(
+                                  'หน้าหลัก', '$name>Reserve Space');
                             },
                             child: Container(
                                 width: 130,
@@ -751,16 +764,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                   border:
                                       Border.all(color: Colors.white, width: 1),
                                 ),
-                                child: const Center(
-                                  child: Text(
-                                    'Reserve Space',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: FontWeight_.Fonts_T,
-                                    ),
-                                  ),
+                                child: Center(
+                                  child: Translate.TranslateAndSetText(
+                                      'จองล็อกเสียบ/พื้นที่สำรอง',
+                                      Colors.white,
+                                      TextAlign.center,
+                                      FontWeight.bold,
+                                      FontWeight_.Fonts_T,
+                                      14,
+                                      1),
                                 )),
                           ),
                         ),
@@ -774,6 +786,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       //         setState(() {
                       //           show_Dashboard = 3;
                       //         });
+
+                      //         SharedPreferences preferences =
+                      //             await SharedPreferences.getInstance();
+                      //         var name = preferences.getString('fname');
+                      //         Insert_log.Insert_logs(
+                      //             'หน้าหลัก', '$name>Reserve Space Calendar');
                       //       },
                       //       child: Container(
                       //           width: 130,
@@ -792,7 +810,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       //             child: Text(
                       //               'Reserve Space Calendar',
                       //               style: TextStyle(
-                      //                 fontSize: 14,
                       //                 color: Colors.white,
                       //                 fontWeight: FontWeight.bold,
                       //                 fontFamily: FontWeight_.Fonts_T,
@@ -805,19 +822,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       Expanded(flex: 4, child: SizedBox()),
                       Expanded(
                         flex: 2,
-                        child: const Padding(
+                        child: Padding(
                           padding: EdgeInsets.all(4.0),
-                          child: Text(
-                            'เลือกสถานที่/Portfolio',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
-                              color: HomeScreen_Color.Colors_Text1_,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: FontWeight_.Fonts_T,
-                            ),
-                          ),
+                          child: Translate.TranslateAndSetText(
+                              'เลือกสถานที่/Portfolio',
+                              HomeScreen_Color.Colors_Text1_,
+                              TextAlign.end,
+                              FontWeight.bold,
+                              FontWeight_.Fonts_T,
+                              14,
+                              1),
                         ),
                       ),
                       Expanded(
@@ -844,17 +858,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               isExpanded: true,
-                              hint: Text(
-                                renTal_name == null ? 'ค้นหา' : '$renTal_name',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: HomeScreen_Color.Colors_Text2_,
-                                  // fontWeight: FontWeight.bold,
-                                  fontFamily: Font_.Fonts_T,
-                                ),
-                              ),
+                              hint: Translate.TranslateAndSetText(
+                                  renTal_name == null
+                                      ? 'ค้นหา'
+                                      : '$renTal_name',
+                                  HomeScreen_Color.Colors_Text2_,
+                                  TextAlign.center,
+                                  FontWeight.bold,
+                                  FontWeight_.Fonts_T,
+                                  14,
+                                  1),
+
                               icon: const Icon(
                                 Icons.arrow_drop_down,
                                 color: Colors.black,
@@ -932,14 +946,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Row(
                                     children: [
                                       Center(
-                                        child: Text(
-                                          'กรุณาเลือกสถานที่',
-                                          style: TextStyle(
-                                            color:
-                                                HomeScreen_Color.Colors_Text2_,
-                                            fontFamily: Font_.Fonts_T,
-                                          ),
-                                        ),
+                                        child: Translate.TranslateAndSetText(
+                                            'กรุณาเลือกสถานที่',
+                                            HomeScreen_Color.Colors_Text2_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            16,
+                                            1),
                                       ),
                                     ],
                                   ),
@@ -1015,25 +1029,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               MainAxisAlignment
                                                                   .center,
                                                           children: [
-                                                            AutoSizeText(
-                                                              'เพิ่มสถานที่',
-                                                              minFontSize: 10,
-                                                              maxFontSize: 18,
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: TextStyle(
-                                                                // fontSize: 20,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T,
-                                                                color: PeopleChaoScreen_Color
+                                                            Translate.TranslateAndSet_TextAutoSize(
+                                                                'เพิ่มสถานที่',
+                                                                HomeScreen_Color
                                                                     .Colors_Text2_,
-                                                              ),
-                                                              maxLines: 4,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                            ),
+                                                                TextAlign
+                                                                    .center,
+                                                                FontWeight.bold,
+                                                                FontWeight_
+                                                                    .Fonts_T,
+                                                                8,
+                                                                20,
+                                                                1),
                                                           ],
                                                         ),
                                                       ],
@@ -1217,58 +1224,37 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       MainAxisAlignment
                                                                           .center,
                                                                   children: [
-                                                                    if (datex.isAfter(DateTime.parse(renTalModels[i].pkldate == '0000-00-00'
-                                                                                ? '${renTalModels[i].data_update}'
-                                                                                : '${renTalModels[i].pkldate} 00:00:00.000')
-                                                                            .subtract(const Duration(days: 0))) ==
+                                                                    if (datex.isAfter(DateTime.parse(renTalModels[i].pkldate == '0000-00-00' ? '${renTalModels[i].data_update}' : '${renTalModels[i].pkldate} 00:00:00.000').subtract(const Duration(days: 0))) == true)
+                                                                      Translate.TranslateAndSet_TextAutoSize(
+                                                                          'หมดอายุ',
+                                                                          HomeScreen_Color
+                                                                              .Colors_Text2_,
+                                                                          TextAlign
+                                                                              .center,
+                                                                          FontWeight
+                                                                              .bold,
+                                                                          FontWeight_
+                                                                              .Fonts_T,
+                                                                          8,
+                                                                          20,
+                                                                          1)
+                                                                    else if (datex.isAfter(DateTime.parse(renTalModels[i].pkldate == '0000-00-00' ? '${renTalModels[i].data_update}' : '${renTalModels[i].pkldate} 00:00:00.000').subtract(const Duration(
+                                                                            days:
+                                                                                7))) ==
                                                                         true)
-                                                                      AutoSizeText(
-                                                                        'หมดอายุ',
-                                                                        minFontSize:
-                                                                            10,
-                                                                        maxFontSize:
-                                                                            18,
-                                                                        textAlign:
-                                                                            TextAlign.center,
-                                                                        style:
-                                                                            TextStyle(
-                                                                          // fontSize: 20,
-                                                                          fontFamily:
-                                                                              Font_.Fonts_T,
-                                                                          color:
-                                                                              PeopleChaoScreen_Color.Colors_Text2_,
-                                                                        ),
-                                                                        maxLines:
-                                                                            4,
-                                                                        overflow:
-                                                                            TextOverflow.ellipsis,
-                                                                      )
-                                                                    else if (datex.isAfter(DateTime.parse(renTalModels[i].pkldate == '0000-00-00'
-                                                                                ? '${renTalModels[i].data_update}'
-                                                                                : '${renTalModels[i].pkldate} 00:00:00.000')
-                                                                            .subtract(const Duration(days: 7))) ==
-                                                                        true)
-                                                                      AutoSizeText(
-                                                                        'ใกล้หมดอายุ',
-                                                                        minFontSize:
-                                                                            10,
-                                                                        maxFontSize:
-                                                                            18,
-                                                                        textAlign:
-                                                                            TextAlign.center,
-                                                                        style:
-                                                                            TextStyle(
-                                                                          // fontSize: 20,
-                                                                          fontFamily:
-                                                                              Font_.Fonts_T,
-                                                                          color:
-                                                                              PeopleChaoScreen_Color.Colors_Text2_,
-                                                                        ),
-                                                                        maxLines:
-                                                                            4,
-                                                                        overflow:
-                                                                            TextOverflow.ellipsis,
-                                                                      ),
+                                                                      Translate.TranslateAndSet_TextAutoSize(
+                                                                          'ใกล้หมดอายุ',
+                                                                          HomeScreen_Color
+                                                                              .Colors_Text2_,
+                                                                          TextAlign
+                                                                              .center,
+                                                                          FontWeight
+                                                                              .bold,
+                                                                          FontWeight_
+                                                                              .Fonts_T,
+                                                                          8,
+                                                                          20,
+                                                                          1)
                                                                   ],
                                                                 )
                                                               ],
@@ -1332,29 +1318,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       .spaceBetween,
                                               children: [
                                                 Row(
-                                                  children: const [
+                                                  children: [
                                                     // Icon(
                                                     //   Icons
                                                     //       .settings_input_composite,
                                                     //   color: Colors.white,
                                                     // ),
-                                                    Text(
-                                                      'โน๊ตส่วนตัว',
-                                                      maxLines: 1,
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: TextStyle(
-                                                        color: HomeScreen_Color
-                                                            .Colors_Text1_,
-                                                        fontWeight:
+                                                    Translate
+                                                        .TranslateAndSet_TextAutoSize(
+                                                            'โน๊ตส่วนตัว',
+                                                            HomeScreen_Color
+                                                                .Colors_Text2_,
+                                                            TextAlign.center,
                                                             FontWeight.bold,
-                                                        fontFamily:
                                                             FontWeight_.Fonts_T,
-                                                        //fontSize: 10.0
-                                                      ),
-                                                    ),
+                                                            8,
+                                                            20,
+                                                            1)
                                                   ],
                                                 ),
                                                 const Icon(
@@ -1380,24 +1360,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                           padding: const EdgeInsets.all(10.0),
                                           child: Row(
-                                            children: const [
+                                            children: [
                                               Expanded(
-                                                flex: 1,
-                                                child: Text(
-                                                  'รายละเอียด',
-                                                  maxLines: 1,
-                                                  textAlign: TextAlign.start,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    color: HomeScreen_Color
-                                                        .Colors_Text1_,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T,
-                                                  ),
-                                                ),
-                                              ),
+                                                  flex: 1,
+                                                  child: Translate
+                                                      .TranslateAndSet_TextAutoSize(
+                                                          'รายละเอียด',
+                                                          HomeScreen_Color
+                                                              .Colors_Text2_,
+                                                          TextAlign.center,
+                                                          FontWeight.bold,
+                                                          FontWeight_.Fonts_T,
+                                                          8,
+                                                          20,
+                                                          1)),
                                             ],
                                           )),
                                       Expanded(
@@ -1862,28 +1838,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   ),
                                                                   child:
                                                                       InkWell(
-                                                                    child:
-                                                                        const Text(
-                                                                      'รายการรอทำสัญญา',
-                                                                      maxLines:
-                                                                          1,
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .start,
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: HomeScreen_Color
-                                                                            .Colors_Text1_,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T,
-                                                                        //fontSize: 10.0
-                                                                      ),
-                                                                    ),
+                                                                    child: Translate.TranslateAndSetText(
+                                                                        'รายการรอทำสัญญา',
+                                                                        HomeScreen_Color
+                                                                            .Colors_Text2_,
+                                                                        TextAlign
+                                                                            .center,
+                                                                        FontWeight
+                                                                            .bold,
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                        16,
+                                                                        1),
                                                                     onTap:
                                                                         () {},
                                                                   ),
@@ -1925,37 +1891,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           const EdgeInsets.all(
                                                               4.0),
                                                       child: Row(
-                                                        children: const [
+                                                        children: [
                                                           Expanded(
                                                             flex: 1,
                                                             child: Padding(
                                                               padding:
                                                                   EdgeInsets
                                                                       .all(8.0),
-                                                              child:
-                                                                  AutoSizeText(
-                                                                minFontSize: 10,
-                                                                maxFontSize: 25,
-                                                                maxLines: 1,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                'โซนพื้นที่',
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: HomeScreen_Color
+                                                              child: Translate.TranslateAndSet_TextAutoSize(
+                                                                  'โซนพื้นที่',
+                                                                  HomeScreen_Color
                                                                       .Colors_Text1_,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T,
-                                                                ),
-                                                              ),
+                                                                  TextAlign
+                                                                      .start,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  8,
+                                                                  20,
+                                                                  1),
                                                               // Text(
                                                               //   'โซนพื้นที่',
                                                               //   style: TextStyle(
@@ -1973,30 +1928,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               padding:
                                                                   EdgeInsets
                                                                       .all(8.0),
-                                                              child:
-                                                                  AutoSizeText(
-                                                                minFontSize: 10,
-                                                                maxFontSize: 25,
-                                                                maxLines: 1,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                'รหัสพื้นที่',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: HomeScreen_Color
+                                                              child: Translate.TranslateAndSet_TextAutoSize(
+                                                                  'รหัสพื้นที่',
+                                                                  HomeScreen_Color
                                                                       .Colors_Text1_,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T,
-                                                                ),
-                                                              ),
+                                                                  TextAlign
+                                                                      .center,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  8,
+                                                                  20,
+                                                                  1),
+
                                                               // Text(
                                                               //   'รหัสพื้นที่',
                                                               //   style: TextStyle(
@@ -2014,30 +1959,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               padding:
                                                                   EdgeInsets
                                                                       .all(8.0),
-                                                              child:
-                                                                  AutoSizeText(
-                                                                minFontSize: 10,
-                                                                maxFontSize: 25,
-                                                                maxLines: 1,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                'ร้านค้า',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: HomeScreen_Color
+                                                              child: Translate.TranslateAndSet_TextAutoSize(
+                                                                  'ร้านค้า',
+                                                                  HomeScreen_Color
                                                                       .Colors_Text1_,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T,
-                                                                ),
-                                                              ),
+                                                                  TextAlign
+                                                                      .center,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  8,
+                                                                  20,
+                                                                  1),
+
                                                               //  Text(
                                                               //   'ร้านค้า',
                                                               //   style: TextStyle(
@@ -2055,30 +1990,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               padding:
                                                                   EdgeInsets
                                                                       .all(8.0),
-                                                              child:
-                                                                  AutoSizeText(
-                                                                minFontSize: 10,
-                                                                maxFontSize: 25,
-                                                                maxLines: 1,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                'ขนาดพื้นที่(ต.ร.ม.)',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: HomeScreen_Color
+                                                              child: Translate.TranslateAndSet_TextAutoSize(
+                                                                  'ขนาดพื้นที่(ตร.ม.)',
+                                                                  HomeScreen_Color
                                                                       .Colors_Text1_,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T,
-                                                                ),
-                                                              ),
+                                                                  TextAlign
+                                                                      .center,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  8,
+                                                                  20,
+                                                                  1),
 
                                                               //  Text(
                                                               //   'ขนาดพื้นที่(ต.ร.ม.)',
@@ -2097,30 +2021,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               padding:
                                                                   EdgeInsets
                                                                       .all(8.0),
-                                                              child:
-                                                                  AutoSizeText(
-                                                                minFontSize: 10,
-                                                                maxFontSize: 25,
-                                                                maxLines: 1,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                'วันนัดหมาย',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .end,
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: HomeScreen_Color
+                                                              child: Translate.TranslateAndSet_TextAutoSize(
+                                                                  'วันนัดหมาย',
+                                                                  HomeScreen_Color
                                                                       .Colors_Text1_,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T,
-                                                                ),
-                                                              ),
+                                                                  TextAlign
+                                                                      .center,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  8,
+                                                                  20,
+                                                                  1),
+
                                                               // Text(
                                                               //   'วันนัดหมาย',
                                                               //   style: TextStyle(
@@ -2698,28 +2612,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   ),
                                                                   child:
                                                                       InkWell(
-                                                                    child:
-                                                                        const Text(
-                                                                      'รายการแจ้งซ่อม',
-                                                                      maxLines:
-                                                                          1,
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .start,
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: HomeScreen_Color
+                                                                    child: Translate.TranslateAndSet_TextAutoSize(
+                                                                        'รายการแจ้งซ่อม',
+                                                                        HomeScreen_Color
                                                                             .Colors_Text1_,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T,
-                                                                        //fontSize: 10.0
-                                                                      ),
-                                                                    ),
+                                                                        TextAlign
+                                                                            .start,
+                                                                        FontWeight
+                                                                            .bold,
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                        8,
+                                                                        20,
+                                                                        1),
                                                                     onTap:
                                                                         () {},
                                                                   ),
@@ -2762,35 +2667,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           const EdgeInsets.all(
                                                               4.0),
                                                       child: Row(
-                                                        children: const [
+                                                        children: [
                                                           Expanded(
                                                             flex: 2,
                                                             child: Padding(
                                                               padding:
                                                                   EdgeInsets
                                                                       .all(8.0),
-                                                              child: Text(
-                                                                'ร้านค้า',
-                                                                maxLines: 1,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: HomeScreen_Color
+                                                              child: Translate.TranslateAndSet_TextAutoSize(
+                                                                  'ร้านค้า',
+                                                                  HomeScreen_Color
                                                                       .Colors_Text1_,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T,
-                                                                  //fontSize: 10.0
-                                                                ),
-                                                              ),
+                                                                  TextAlign
+                                                                      .start,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  8,
+                                                                  20,
+                                                                  1),
                                                             ),
                                                           ),
                                                           Expanded(
@@ -2799,28 +2695,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               padding:
                                                                   EdgeInsets
                                                                       .all(8.0),
-                                                              child: Text(
-                                                                'รหัสพื้นที่',
-                                                                maxLines: 1,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: HomeScreen_Color
+                                                              child: Translate.TranslateAndSet_TextAutoSize(
+                                                                  'รหัสพื้นที่',
+                                                                  HomeScreen_Color
                                                                       .Colors_Text1_,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T,
-                                                                  //fontSize: 10.0
-                                                                ),
-                                                              ),
+                                                                  TextAlign
+                                                                      .start,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  8,
+                                                                  20,
+                                                                  1),
                                                             ),
                                                           ),
                                                           Expanded(
@@ -2829,28 +2716,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               padding:
                                                                   EdgeInsets
                                                                       .all(8.0),
-                                                              child: Text(
-                                                                'รายละเอียด',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                maxLines: 1,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: HomeScreen_Color
+                                                              child: Translate.TranslateAndSet_TextAutoSize(
+                                                                  'รายละเอียด',
+                                                                  HomeScreen_Color
                                                                       .Colors_Text1_,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T,
-                                                                  //fontSize: 10.0
-                                                                ),
-                                                              ),
+                                                                  TextAlign
+                                                                      .start,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  8,
+                                                                  20,
+                                                                  1),
                                                             ),
                                                           ),
                                                           Expanded(
@@ -2859,28 +2737,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               padding:
                                                                   EdgeInsets
                                                                       .all(8.0),
-                                                              child: Text(
-                                                                'วันแจ้งซ่อม',
-                                                                maxLines: 1,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: HomeScreen_Color
+                                                              child: Translate.TranslateAndSet_TextAutoSize(
+                                                                  'วันแจ้งซ่อม',
+                                                                  HomeScreen_Color
                                                                       .Colors_Text1_,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T,
-                                                                  //fontSize: 10.0
-                                                                ),
-                                                              ),
+                                                                  TextAlign
+                                                                      .start,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  8,
+                                                                  20,
+                                                                  1),
                                                             ),
                                                           ),
                                                           Expanded(
@@ -2889,28 +2758,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               padding:
                                                                   EdgeInsets
                                                                       .all(8.0),
-                                                              child: Text(
-                                                                'สถานะ',
-                                                                maxLines: 1,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .end,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: HomeScreen_Color
+                                                              child: Translate.TranslateAndSet_TextAutoSize(
+                                                                  'สถานะ',
+                                                                  HomeScreen_Color
                                                                       .Colors_Text1_,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T,
-                                                                  //fontSize: 10.0
-                                                                ),
-                                                              ),
+                                                                  TextAlign.end,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  8,
+                                                                  20,
+                                                                  1),
                                                             ),
                                                           ),
                                                         ],
@@ -3129,25 +2988,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                               color: Colors.white10,
                                                                               borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
                                                                             ),
-                                                                            child:
-                                                                                AutoSizeText(
-                                                                              minFontSize: 10,
-                                                                              maxFontSize: 25,
-                                                                              maintenanceModels[index].mst == '0'
-                                                                                  ? ' '
-                                                                                  : maintenanceModels[index].mst == '1'
-                                                                                      ? 'รอดำเนินการ'
-                                                                                      : 'เสร็จสิ้น',
-                                                                              maxLines: 1,
-                                                                              textAlign: TextAlign.end,
-                                                                              overflow: TextOverflow.ellipsis,
-                                                                              style: const TextStyle(
-                                                                                color: HomeScreen_Color.Colors_Text2_,
-                                                                                // fontWeight:
-                                                                                //     FontWeight.bold,
-                                                                                fontFamily: Font_.Fonts_T,
-                                                                              ),
-                                                                            ),
+                                                                            child: Translate.TranslateAndSet_TextAutoSize(
+                                                                                maintenanceModels[index].mst == '0'
+                                                                                    ? ' '
+                                                                                    : maintenanceModels[index].mst == '1'
+                                                                                        ? 'รอดำเนินการ'
+                                                                                        : 'เสร็จสิ้น',
+                                                                                HomeScreen_Color.Colors_Text1_,
+                                                                                TextAlign.end,
+                                                                                FontWeight.bold,
+                                                                                FontWeight_.Fonts_T,
+                                                                                8,
+                                                                                20,
+                                                                                1),
                                                                           ),
                                                                         ),
                                                                       ],
@@ -3467,28 +3320,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   ),
                                                                   child:
                                                                       InkWell(
-                                                                    child:
-                                                                        const Text(
-                                                                      'พื้นที่ใกล้หมดสัญญา',
-                                                                      maxLines:
-                                                                          1,
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .start,
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: HomeScreen_Color
+                                                                    child: Translate.TranslateAndSet_TextAutoSize(
+                                                                        'พื้นที่ใกล้หมดสัญญา',
+                                                                        HomeScreen_Color
                                                                             .Colors_Text1_,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T,
-                                                                        //fontSize: 10.0
-                                                                      ),
-                                                                    ),
+                                                                        TextAlign
+                                                                            .start,
+                                                                        FontWeight
+                                                                            .bold,
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                        8,
+                                                                        20,
+                                                                        1),
                                                                     onTap:
                                                                         () {},
                                                                   ),
@@ -3530,37 +3374,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           const EdgeInsets.all(
                                                               4.0),
                                                       child: Row(
-                                                        children: const [
+                                                        children: [
                                                           Expanded(
                                                             flex: 1,
                                                             child: Padding(
                                                               padding:
                                                                   EdgeInsets
                                                                       .all(8.0),
-                                                              child:
-                                                                  AutoSizeText(
-                                                                minFontSize: 10,
-                                                                maxFontSize: 25,
-                                                                maxLines: 1,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                'โซนพื้นที่',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: HomeScreen_Color
+                                                              child: Translate.TranslateAndSet_TextAutoSize(
+                                                                  'โซนพื้นที่',
+                                                                  HomeScreen_Color
                                                                       .Colors_Text1_,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T,
-                                                                ),
-                                                              ),
+                                                                  TextAlign
+                                                                      .start,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  8,
+                                                                  20,
+                                                                  1),
                                                             ),
                                                           ),
                                                           Expanded(
@@ -3570,32 +3403,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   EdgeInsets
                                                                       .all(8.0),
                                                               child: SizedBox(
-                                                                child:
-                                                                    AutoSizeText(
-                                                                  minFontSize:
-                                                                      10,
-                                                                  maxFontSize:
-                                                                      25,
-                                                                  maxLines: 1,
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                  'รหัสพื้นที่',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: HomeScreen_Color
+                                                                child: Translate.TranslateAndSet_TextAutoSize(
+                                                                    'รหัสพื้นที่',
+                                                                    HomeScreen_Color
                                                                         .Colors_Text1_,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontFamily:
-                                                                        FontWeight_
-                                                                            .Fonts_T,
-                                                                  ),
-                                                                ),
+                                                                    TextAlign
+                                                                        .center,
+                                                                    FontWeight
+                                                                        .bold,
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                                    8,
+                                                                    20,
+                                                                    1),
                                                               ),
                                                             ),
                                                           ),
@@ -3605,31 +3425,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               padding:
                                                                   EdgeInsets
                                                                       .all(8.0),
-                                                              child:
-                                                                  AutoSizeText(
-                                                                minFontSize: 10,
-                                                                maxFontSize: 25,
-                                                                maxLines: 1,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                'ร้านค้า',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: HomeScreen_Color
+                                                              child: Translate.TranslateAndSet_TextAutoSize(
+                                                                  'ร้านค้า',
+                                                                  HomeScreen_Color
                                                                       .Colors_Text1_,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T,
-                                                                  //fontSize: 10.0
-                                                                ),
-                                                              ),
+                                                                  TextAlign
+                                                                      .center,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  8,
+                                                                  20,
+                                                                  1),
                                                             ),
                                                           ),
                                                           Expanded(
@@ -3638,31 +3446,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               padding:
                                                                   EdgeInsets
                                                                       .all(8.0),
-                                                              child:
-                                                                  AutoSizeText(
-                                                                minFontSize: 10,
-                                                                maxFontSize: 25,
-                                                                maxLines: 1,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                'ขนาดพื้นที่(ต.ร.ม.)',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: HomeScreen_Color
+                                                              child: Translate.TranslateAndSet_TextAutoSize(
+                                                                  'ขนาดพื้นที่(ตร.ม.)',
+                                                                  HomeScreen_Color
                                                                       .Colors_Text1_,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T,
-                                                                  //fontSize: 10.0
-                                                                ),
-                                                              ),
+                                                                  TextAlign
+                                                                      .center,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  8,
+                                                                  20,
+                                                                  1),
                                                             ),
                                                           ),
                                                           Expanded(
@@ -3671,31 +3467,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               padding:
                                                                   EdgeInsets
                                                                       .all(8.0),
-                                                              child:
-                                                                  AutoSizeText(
-                                                                minFontSize: 10,
-                                                                maxFontSize: 25,
-                                                                maxLines: 1,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                'วันสิ้นสุดสัญญา',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .end,
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: HomeScreen_Color
+                                                              child: Translate.TranslateAndSet_TextAutoSize(
+                                                                  'วันสิ้นสุดสัญญา',
+                                                                  HomeScreen_Color
                                                                       .Colors_Text1_,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T,
-                                                                  //fontSize: 10.0
-                                                                ),
-                                                              ),
+                                                                  TextAlign.end,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  8,
+                                                                  20,
+                                                                  1),
                                                             ),
                                                           ),
                                                         ],
@@ -4259,28 +4042,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   ),
                                                                   child:
                                                                       InkWell(
-                                                                    child:
-                                                                        const Text(
-                                                                      'รายการค้างชำระ',
-                                                                      maxLines:
-                                                                          1,
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .start,
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: HomeScreen_Color
+                                                                    child: Translate.TranslateAndSet_TextAutoSize(
+                                                                        'รายการค้างชำระ',
+                                                                        HomeScreen_Color
                                                                             .Colors_Text1_,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T,
-                                                                        //fontSize: 10.0
-                                                                      ),
-                                                                    ),
+                                                                        TextAlign
+                                                                            .start,
+                                                                        FontWeight
+                                                                            .bold,
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                        8,
+                                                                        20,
+                                                                        1),
                                                                     onTap:
                                                                         () {},
                                                                   ),
@@ -4323,35 +4097,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           const EdgeInsets.all(
                                                               4.0),
                                                       child: Row(
-                                                        children: const [
+                                                        children: [
                                                           Expanded(
                                                             flex: 2,
                                                             child: Padding(
                                                               padding:
                                                                   EdgeInsets
                                                                       .all(8.0),
-                                                              child: Text(
-                                                                'ร้านค้า',
-                                                                maxLines: 1,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: HomeScreen_Color
+                                                              child: Translate.TranslateAndSet_TextAutoSize(
+                                                                  'ร้านค้า',
+                                                                  HomeScreen_Color
                                                                       .Colors_Text1_,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T,
-                                                                  //fontSize: 10.0
-                                                                ),
-                                                              ),
+                                                                  TextAlign
+                                                                      .start,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  8,
+                                                                  20,
+                                                                  1),
                                                             ),
                                                           ),
                                                           Expanded(
@@ -4360,28 +4125,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               padding:
                                                                   EdgeInsets
                                                                       .all(8.0),
-                                                              child: Text(
-                                                                'รหัสพื้นที่',
-                                                                maxLines: 1,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: HomeScreen_Color
+                                                              child: Translate.TranslateAndSet_TextAutoSize(
+                                                                  'รหัสพื้นที่',
+                                                                  HomeScreen_Color
                                                                       .Colors_Text1_,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T,
-                                                                  //fontSize: 10.0
-                                                                ),
-                                                              ),
+                                                                  TextAlign
+                                                                      .center,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  8,
+                                                                  20,
+                                                                  1),
                                                             ),
                                                           ),
                                                           Expanded(
@@ -4390,28 +4146,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               padding:
                                                                   EdgeInsets
                                                                       .all(8.0),
-                                                              child: Text(
-                                                                'จำนวนเงิน',
-                                                                maxLines: 1,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: HomeScreen_Color
+                                                              child: Translate.TranslateAndSet_TextAutoSize(
+                                                                  'จำนวนเงิน',
+                                                                  HomeScreen_Color
                                                                       .Colors_Text1_,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T,
-                                                                  //fontSize: 10.0
-                                                                ),
-                                                              ),
+                                                                  TextAlign
+                                                                      .center,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  8,
+                                                                  20,
+                                                                  1),
                                                             ),
                                                           ),
                                                           Expanded(
@@ -4420,28 +4167,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               padding:
                                                                   EdgeInsets
                                                                       .all(8.0),
-                                                              child: Text(
-                                                                'กำหนดชำระ',
-                                                                maxLines: 1,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: HomeScreen_Color
+                                                              child: Translate.TranslateAndSet_TextAutoSize(
+                                                                  'กำหนดชำระ',
+                                                                  HomeScreen_Color
                                                                       .Colors_Text1_,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T,
-                                                                  //fontSize: 10.0
-                                                                ),
-                                                              ),
+                                                                  TextAlign
+                                                                      .center,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  8,
+                                                                  20,
+                                                                  1),
                                                             ),
                                                           ),
                                                           Expanded(
@@ -4450,28 +4188,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               padding:
                                                                   EdgeInsets
                                                                       .all(8.0),
-                                                              child: Text(
-                                                                'ค้างชำระ',
-                                                                maxLines: 1,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .end,
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: HomeScreen_Color
+                                                              child: Translate.TranslateAndSet_TextAutoSize(
+                                                                  'ค้างชำระ',
+                                                                  HomeScreen_Color
                                                                       .Colors_Text1_,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T,
-                                                                  //fontSize: 10.0
-                                                                ),
-                                                              ),
+                                                                  TextAlign.end,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  8,
+                                                                  20,
+                                                                  1),
                                                             ),
                                                           ),
                                                         ],

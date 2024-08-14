@@ -12,6 +12,7 @@ import '../Constant/Myconstant.dart';
 import '../Man_PDF/Man_ChartReport_Generate.dart';
 import '../Model/GetArea_Model.dart';
 import '../Model/GetZone_Model.dart';
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 import '../Style/downloadImage.dart';
 
@@ -411,16 +412,16 @@ class _Dashboard_Screen6State extends State<Dashboard_Screen6> {
                       ),
                       child: Row(
                         children: [
-                          const Padding(
+                          Padding(
                             padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'รายงาน ข้อมูลพื้นที่เช่า : ',
-                              style: TextStyle(
-                                color: ReportScreen_Color.Colors_Text2_,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: FontWeight_.Fonts_T,
-                              ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                'รายงาน ข้อมูลพื้นที่เช่า : ',
+                                ReportScreen_Color.Colors_Text2_,
+                                TextAlign.center,
+                                FontWeight.w500,
+                                Font_.Fonts_T,
+                                16,
+                                1),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -439,15 +440,15 @@ class _Dashboard_Screen6State extends State<Dashboard_Screen6> {
                                         bottomLeft: Radius.circular(10),
                                         bottomRight: Radius.circular(10)),
                                   ),
-                                  child: const Center(
-                                    child: Text(
-                                      'ค้นหา',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: FontWeight_.Fonts_T,
-                                      ),
-                                    ),
+                                  child: Center(
+                                    child: Translate.TranslateAndSetText(
+                                        'ค้นหา',
+                                        Colors.white,
+                                        TextAlign.center,
+                                        FontWeight.w500,
+                                        Font_.Fonts_T,
+                                        16,
+                                        1),
                                   )),
                             ),
                           ),
@@ -842,15 +843,15 @@ class _Dashboard_Screen6State extends State<Dashboard_Screen6> {
                                     bottomLeft: Radius.circular(8),
                                     bottomRight: Radius.circular(8)),
                               ),
-                              child: const Center(
-                                child: Text(
-                                  'พิมพ์',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                  ),
-                                ),
+                              child: Center(
+                                child: Translate.TranslateAndSetText(
+                                    'พิมพ์',
+                                    Colors.white,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               )),
                         ),
                       ),

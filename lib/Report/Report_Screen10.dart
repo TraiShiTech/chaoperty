@@ -24,6 +24,7 @@ import '../Model/GetZone_Model.dart';
 import '../Model/Get_TenantAll_billpay_Model.dart';
 import '../Model/Get_TransReteNantModels.dart';
 import '../Responsive/responsive.dart';
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 import 'Excel_GetPakan_Report.dart';
 import 'Excel_PayPakan_Report.dart';
@@ -1146,16 +1147,16 @@ class _ReportScreen10State extends State<ReportScreen10> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'ผู้เช่า :',
-                          style: TextStyle(
-                            color: ReportScreen_Color.Colors_Text2_,
-                            // fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T,
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'ผู้เช่า :',
+                            ReportScreen_Color.Colors_Text1_,
+                            TextAlign.center,
+                            FontWeight.w500,
+                            Font_.Fonts_T,
+                            16,
+                            1),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -1237,15 +1238,14 @@ class _ReportScreen10State extends State<ReportScreen10> {
                             items:
                                 Status.map((item) => DropdownMenuItem<String>(
                                       value: '${item}',
-                                      child: Text(
-                                        '${item}',
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                          overflow: TextOverflow.ellipsis,
-                                          fontSize: 14,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
+                                      child: Translate.TranslateAndSetText(
+                                          '${item}',
+                                          Colors.grey,
+                                          TextAlign.center,
+                                          FontWeight.w500,
+                                          Font_.Fonts_T,
+                                          16,
+                                          1),
                                     )).toList(),
 
                             onChanged: (value) async {
@@ -1260,16 +1260,16 @@ class _ReportScreen10State extends State<ReportScreen10> {
                           ),
                         ),
                       ),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'โซน :',
-                          style: TextStyle(
-                            color: ReportScreen_Color.Colors_Text2_,
-                            // fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T,
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'โซน :',
+                            ReportScreen_Color.Colors_Text2_,
+                            TextAlign.center,
+                            FontWeight.w500,
+                            Font_.Fonts_T,
+                            16,
+                            1),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -1363,16 +1363,16 @@ class _ReportScreen10State extends State<ReportScreen10> {
                           ),
                         ),
                       ),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'ปี :',
-                          style: TextStyle(
-                            color: ReportScreen_Color.Colors_Text2_,
-                            // fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T,
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'ปี :',
+                            ReportScreen_Color.Colors_Text2_,
+                            TextAlign.center,
+                            FontWeight.w500,
+                            Font_.Fonts_T,
+                            16,
+                            1),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -1489,15 +1489,15 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                     bottomLeft: Radius.circular(10),
                                     bottomRight: Radius.circular(10)),
                               ),
-                              child: const Center(
-                                child: Text(
-                                  'ค้นหา',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                  ),
-                                ),
+                              child: Center(
+                                child: Translate.TranslateAndSetText(
+                                    'ค้นหา',
+                                    Colors.white,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               )),
                         ),
                       ),
@@ -1521,18 +1521,18 @@ class _ReportScreen10State extends State<ReportScreen10> {
                             border: Border.all(color: Colors.grey, width: 1),
                           ),
                           padding: const EdgeInsets.all(8.0),
-                          child: const Center(
+                          child: Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  'เรียกดู',
-                                  style: TextStyle(
-                                    color: ReportScreen_Color.Colors_Text1_,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                  ),
-                                ),
+                                Translate.TranslateAndSetText(
+                                    'เรียกดู',
+                                    ReportScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                                 Icon(
                                   Icons.navigate_next,
                                   color: Colors.grey,
@@ -1554,20 +1554,20 @@ class _ReportScreen10State extends State<ReportScreen10> {
                     (teNantModels.isEmpty || Await_Status_Report1 == null)
                         ? Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              (Status_pe != null &&
-                                      teNantModels.isEmpty &&
-                                      Value_Chang_Zone_People != null &&
-                                      YE_Transte_People != null &&
-                                      Await_Status_Report1 != null)
-                                  ? 'รายงานรายรับตามผู้เช่า (ไม่พบข้อมูล ✖️)'
-                                  : 'รายงานรายรับตามผู้เช่า',
-                              style: const TextStyle(
-                                color: ReportScreen_Color.Colors_Text2_,
-                                // fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T,
-                              ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                (Status_pe != null &&
+                                        teNantModels.isEmpty &&
+                                        Value_Chang_Zone_People != null &&
+                                        YE_Transte_People != null &&
+                                        Await_Status_Report1 != null)
+                                    ? 'รายงานรายรับตามผู้เช่า (ไม่พบข้อมูล ✖️)'
+                                    : 'รายงานรายรับตามผู้เช่า',
+                                ReportScreen_Color.Colors_Text1_,
+                                TextAlign.center,
+                                FontWeight.w500,
+                                Font_.Fonts_T,
+                                16,
+                                1),
                           )
                         : (Await_Status_Report1 == 0)
                             ? SizedBox(
@@ -1577,29 +1577,29 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                   Container(
                                       padding: const EdgeInsets.all(4.0),
                                       child: const CircularProgressIndicator()),
-                                  const Padding(
+                                  Padding(
                                     padding: EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'กำลังโหลดรายงานรายรับตามผู้เช่า...',
-                                      style: TextStyle(
-                                        color: ReportScreen_Color.Colors_Text2_,
-                                        // fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
+                                    child: Translate.TranslateAndSetText(
+                                        'กำลังโหลดรายงานรายรับตามผู้เช่า...',
+                                        ReportScreen_Color.Colors_Text1_,
+                                        TextAlign.center,
+                                        FontWeight.w500,
+                                        Font_.Fonts_T,
+                                        16,
+                                        1),
                                   ),
                                 ],
                               ))
-                            : const Padding(
+                            : Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'รายงานรายรับตามผู้เช่า ✔️',
-                                  style: TextStyle(
-                                    color: ReportScreen_Color.Colors_Text2_,
-                                    // fontWeight: FontWeight.bold,
-                                    fontFamily: Font_.Fonts_T,
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'รายงานรายรับตามผู้เช่า ✔️',
+                                    ReportScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               )
                   ],
                 ),
@@ -1632,16 +1632,16 @@ class _ReportScreen10State extends State<ReportScreen10> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'โซน :',
-                          style: TextStyle(
-                            color: ReportScreen_Color.Colors_Text2_,
-                            // fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T,
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'โซน :',
+                            ReportScreen_Color.Colors_Text2_,
+                            TextAlign.center,
+                            FontWeight.w500,
+                            Font_.Fonts_T,
+                            16,
+                            1),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -1761,15 +1761,15 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                     bottomLeft: Radius.circular(10),
                                     bottomRight: Radius.circular(10)),
                               ),
-                              child: const Center(
-                                child: Text(
-                                  'ค้นหา',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                  ),
-                                ),
+                              child: Center(
+                                child: Translate.TranslateAndSetText(
+                                    'ค้นหา',
+                                    Colors.white,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               )),
                         ),
                       ),
@@ -1793,18 +1793,18 @@ class _ReportScreen10State extends State<ReportScreen10> {
                             border: Border.all(color: Colors.grey, width: 1),
                           ),
                           padding: const EdgeInsets.all(8.0),
-                          child: const Center(
+                          child: Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  'เรียกดู',
-                                  style: TextStyle(
-                                    color: ReportScreen_Color.Colors_Text1_,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                  ),
-                                ),
+                                Translate.TranslateAndSetText(
+                                    'เรียกดู',
+                                    ReportScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                                 Icon(
                                   Icons.navigate_next,
                                   color: Colors.grey,
@@ -1825,18 +1825,18 @@ class _ReportScreen10State extends State<ReportScreen10> {
                             Await_Status_Report2 == null)
                         ? Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              (contractxPakanModels.isEmpty &&
-                                      Value_Chang_Zone_Pakan != null &&
-                                      Await_Status_Report2 != null)
-                                  ? 'รายงานรับเงินประกันผู้เช่า (ไม่พบข้อมูล ✖️)'
-                                  : 'รายงานรับเงินประกันผู้เช่า',
-                              style: const TextStyle(
-                                color: ReportScreen_Color.Colors_Text2_,
-                                // fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T,
-                              ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                (contractxPakanModels.isEmpty &&
+                                        Value_Chang_Zone_Pakan != null &&
+                                        Await_Status_Report2 != null)
+                                    ? 'รายงานรับเงินประกันผู้เช่า (ไม่พบข้อมูล ✖️)'
+                                    : 'รายงานรับเงินประกันผู้เช่า',
+                                ReportScreen_Color.Colors_Text2_,
+                                TextAlign.center,
+                                FontWeight.w500,
+                                Font_.Fonts_T,
+                                16,
+                                1),
                           )
                         : (Await_Status_Report2 == 0)
                             ? SizedBox(
@@ -1846,29 +1846,29 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                   Container(
                                       padding: const EdgeInsets.all(4.0),
                                       child: const CircularProgressIndicator()),
-                                  const Padding(
+                                  Padding(
                                     padding: EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'กำลังโหลดรายงานรับเงินประกันผู้เช่า...',
-                                      style: TextStyle(
-                                        color: ReportScreen_Color.Colors_Text2_,
-                                        // fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
+                                    child: Translate.TranslateAndSetText(
+                                        'กำลังโหลดรายงานรับเงินประกันผู้เช่า...',
+                                        ReportScreen_Color.Colors_Text2_,
+                                        TextAlign.center,
+                                        FontWeight.w500,
+                                        Font_.Fonts_T,
+                                        16,
+                                        1),
                                   ),
                                 ],
                               ))
-                            : const Padding(
+                            : Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'รายงานรับเงินประกันผู้เช่า ✔️',
-                                  style: TextStyle(
-                                    color: ReportScreen_Color.Colors_Text2_,
-                                    // fontWeight: FontWeight.bold,
-                                    fontFamily: Font_.Fonts_T,
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'รายงานรับเงินประกันผู้เช่า ✔️',
+                                    ReportScreen_Color.Colors_Text2_,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               )
                   ],
                 ),
@@ -1889,18 +1889,18 @@ class _ReportScreen10State extends State<ReportScreen10> {
                             border: Border.all(color: Colors.grey, width: 1),
                           ),
                           padding: const EdgeInsets.all(8.0),
-                          child: const Center(
+                          child: Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  'เรียกดู',
-                                  style: TextStyle(
-                                    color: ReportScreen_Color.Colors_Text1_,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                  ),
-                                ),
+                                Translate.TranslateAndSetText(
+                                    'เรียกดู',
+                                    ReportScreen_Color.Colors_Text2_,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                                 Icon(
                                   Icons.navigate_next,
                                   color: Colors.grey,
@@ -1920,18 +1920,18 @@ class _ReportScreen10State extends State<ReportScreen10> {
                     (transKonModels.isEmpty || Await_Status_Report3 == null)
                         ? Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              (transKonModels.isEmpty &&
-                                      Value_Chang_Zone_Pakan != null &&
-                                      Await_Status_Report3 != null)
-                                  ? 'รายงานคืนเงินประกันผู้เช่า (ไม่พบข้อมูล ✖️)'
-                                  : 'รายงานคืนเงินประกันผู้เช่า',
-                              style: const TextStyle(
-                                color: ReportScreen_Color.Colors_Text2_,
-                                // fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T,
-                              ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                (transKonModels.isEmpty &&
+                                        Value_Chang_Zone_Pakan != null &&
+                                        Await_Status_Report3 != null)
+                                    ? 'รายงานคืนเงินประกันผู้เช่า (ไม่พบข้อมูล ✖️)'
+                                    : 'รายงานคืนเงินประกันผู้เช่า',
+                                ReportScreen_Color.Colors_Text2_,
+                                TextAlign.center,
+                                FontWeight.w500,
+                                Font_.Fonts_T,
+                                16,
+                                1),
                           )
                         : (Await_Status_Report3 == 0)
                             ? SizedBox(
@@ -1941,29 +1941,29 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                   Container(
                                       padding: const EdgeInsets.all(4.0),
                                       child: const CircularProgressIndicator()),
-                                  const Padding(
+                                  Padding(
                                     padding: EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'กำลังโหลดรายงานคืนเงินประกันผู้เช่า...',
-                                      style: TextStyle(
-                                        color: ReportScreen_Color.Colors_Text2_,
-                                        // fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
+                                    child: Translate.TranslateAndSetText(
+                                        'กำลังโหลดรายงานคืนเงินประกันผู้เช่า...',
+                                        ReportScreen_Color.Colors_Text2_,
+                                        TextAlign.center,
+                                        FontWeight.w500,
+                                        Font_.Fonts_T,
+                                        16,
+                                        1),
                                   ),
                                 ],
                               ))
-                            : const Padding(
+                            : Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'รายงานคืนเงินประกันผู้เช่า ✔️',
-                                  style: TextStyle(
-                                    color: ReportScreen_Color.Colors_Text2_,
-                                    // fontWeight: FontWeight.bold,
-                                    fontFamily: Font_.Fonts_T,
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'รายงานคืนเงินประกันผู้เช่า ✔️',
+                                    ReportScreen_Color.Colors_Text2_,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               )
                   ],
                 ),
@@ -1996,16 +1996,16 @@ class _ReportScreen10State extends State<ReportScreen10> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'ผู้เช่า :',
-                          style: TextStyle(
-                            color: ReportScreen_Color.Colors_Text2_,
-                            // fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T,
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'ผู้เช่า :',
+                            ReportScreen_Color.Colors_Text2_,
+                            TextAlign.center,
+                            FontWeight.w500,
+                            Font_.Fonts_T,
+                            16,
+                            1),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -2087,15 +2087,14 @@ class _ReportScreen10State extends State<ReportScreen10> {
                             items:
                                 Status.map((item) => DropdownMenuItem<String>(
                                       value: '${item}',
-                                      child: Text(
-                                        '${item}',
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                          overflow: TextOverflow.ellipsis,
-                                          fontSize: 14,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
+                                      child: Translate.TranslateAndSetText(
+                                          '${item}',
+                                          Colors.grey,
+                                          TextAlign.center,
+                                          FontWeight.w500,
+                                          Font_.Fonts_T,
+                                          16,
+                                          1),
                                     )).toList(),
 
                             onChanged: (value) async {
@@ -2110,16 +2109,16 @@ class _ReportScreen10State extends State<ReportScreen10> {
                           ),
                         ),
                       ),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'โซน :',
-                          style: TextStyle(
-                            color: ReportScreen_Color.Colors_Text2_,
-                            // fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T,
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'โซน :',
+                            Colors.grey,
+                            TextAlign.center,
+                            FontWeight.w500,
+                            Font_.Fonts_T,
+                            16,
+                            1),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -2215,16 +2214,16 @@ class _ReportScreen10State extends State<ReportScreen10> {
                       ),
 
 /////----------------------------->
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'เดือนที่เริ่มสัญญา :',
-                          style: TextStyle(
-                            color: ReportScreen_Color.Colors_Text2_,
-                            // fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T,
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'เดือนที่เริ่มสัญญา :',
+                            ReportScreen_Color.Colors_Text2_,
+                            TextAlign.center,
+                            FontWeight.w500,
+                            Font_.Fonts_T,
+                            16,
+                            1),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -2297,16 +2296,14 @@ class _ReportScreen10State extends State<ReportScreen10> {
                               for (int item = 1; item < 13; item++)
                                 DropdownMenuItem<String>(
                                   value: '${item}',
-                                  child: Text(
-                                    '${monthsInThai[item - 1]}',
-                                    // '${item}',
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      overflow: TextOverflow.ellipsis,
-                                      fontSize: 14,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      '${monthsInThai[item - 1]}',
+                                      Colors.grey,
+                                      TextAlign.center,
+                                      FontWeight.w500,
+                                      Font_.Fonts_T,
+                                      16,
+                                      1),
                                 )
                             ],
 
@@ -2316,16 +2313,16 @@ class _ReportScreen10State extends State<ReportScreen10> {
                           ),
                         ),
                       ),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'ปีที่เริ่มสัญญา :',
-                          style: TextStyle(
-                            color: ReportScreen_Color.Colors_Text2_,
-                            // fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T,
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'ปีที่เริ่มสัญญา :',
+                            ReportScreen_Color.Colors_Text2_,
+                            TextAlign.center,
+                            FontWeight.w500,
+                            Font_.Fonts_T,
+                            16,
+                            1),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -2442,14 +2439,14 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                     bottomRight: Radius.circular(10)),
                               ),
                               child: Center(
-                                child: Text(
-                                  'ค้นหา',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'ค้นหา',
+                                    Colors.white,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               )),
                         ),
                       ),
@@ -2473,18 +2470,18 @@ class _ReportScreen10State extends State<ReportScreen10> {
                             border: Border.all(color: Colors.grey, width: 1),
                           ),
                           padding: const EdgeInsets.all(8.0),
-                          child: const Center(
+                          child: Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  'เรียกดู',
-                                  style: TextStyle(
-                                    color: ReportScreen_Color.Colors_Text1_,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                  ),
-                                ),
+                                Translate.TranslateAndSetText(
+                                    'เรียกดู',
+                                    ReportScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                                 Icon(
                                   Icons.navigate_next,
                                   color: Colors.grey,
@@ -2504,18 +2501,19 @@ class _ReportScreen10State extends State<ReportScreen10> {
                     (teNantModels_Start.isEmpty || Await_Status_Report4 == null)
                         ? Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              (Status_pe_Start != null &&
-                                      teNantModels_Start.isEmpty &&
-                                      Await_Status_Report4 != null)
-                                  ? 'รายงานรายงานผู้เช่าเริ่มสัญญา (ไม่พบข้อมูล ✖️)'
-                                  : 'รายงานรายงานผู้เช่าเริ่มสัญญา',
-                              style: const TextStyle(
-                                color: ReportScreen_Color.Colors_Text2_,
-                                // fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T,
-                              ),
-                            ))
+                            child: Translate.TranslateAndSetText(
+                                (Status_pe_Start != null &&
+                                        teNantModels_Start.isEmpty &&
+                                        Await_Status_Report4 != null)
+                                    ? 'รายงานรายงานผู้เช่าเริ่มสัญญา (ไม่พบข้อมูล ✖️)'
+                                    : 'รายงานรายงานผู้เช่าเริ่มสัญญา',
+                                ReportScreen_Color.Colors_Text1_,
+                                TextAlign.center,
+                                FontWeight.w500,
+                                Font_.Fonts_T,
+                                16,
+                                1),
+                          )
                         : (Await_Status_Report4 == 0)
                             ? SizedBox(
                                 // height: 20,
@@ -2524,29 +2522,29 @@ class _ReportScreen10State extends State<ReportScreen10> {
                                   Container(
                                       padding: const EdgeInsets.all(4.0),
                                       child: const CircularProgressIndicator()),
-                                  const Padding(
+                                  Padding(
                                     padding: EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'กำลังโหลดรายงานผู้เช่าเริ่มสัญญา...',
-                                      style: TextStyle(
-                                        color: ReportScreen_Color.Colors_Text2_,
-                                        // fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
+                                    child: Translate.TranslateAndSetText(
+                                        'กำลังโหลดรายงานผู้เช่าเริ่มสัญญา...',
+                                        ReportScreen_Color.Colors_Text1_,
+                                        TextAlign.center,
+                                        FontWeight.w500,
+                                        Font_.Fonts_T,
+                                        16,
+                                        1),
                                   ),
                                 ],
                               ))
                             : Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'รายงานผู้เช่าเริ่มสัญญา ✔️',
-                                  style: TextStyle(
-                                    color: ReportScreen_Color.Colors_Text2_,
-                                    // fontWeight: FontWeight.bold,
-                                    fontFamily: Font_.Fonts_T,
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'รายงานผู้เช่าเริ่มสัญญา ✔️',
+                                    ReportScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               )
                     //     onTap:
                     //         (Value_Chang_Zone_Pakan == null ||

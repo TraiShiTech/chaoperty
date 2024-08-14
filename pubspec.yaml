@@ -139,8 +139,7 @@ dependencies:
   translator: ^0.1.7
   infinite_canvas: ^0.0.9
   random_color: ^1.0.6-nullsafety
-
- 
+  time_range_picker: ^2.3.0
 
 
 
@@ -182,6 +181,7 @@ flutter:
     - images/TP4_1/
     - images/TP5/
     - images/TP6/
+    - images/TP7/
     - images/LogoBank/
     - images/card/
     - images/audio/

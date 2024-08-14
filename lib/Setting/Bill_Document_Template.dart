@@ -265,7 +265,7 @@ class _Bill_DocumentTemplateState extends State<Bill_DocumentTemplate> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    for (int index = 0; index < 6; index++)
+                    for (int index = 0; index < 7; index++)
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(

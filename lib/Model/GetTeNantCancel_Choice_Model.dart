@@ -3,6 +3,7 @@ class TeNantCanCellChoiceModel {
   String? datex;
   String? timex;
   String? user;
+  String? name_user;
   String? rser;
   String? daterec;
   String? timerec;
@@ -46,12 +47,14 @@ class TeNantCanCellChoiceModel {
   String? water;
   String? electricity;
   String? fine;
+  String? renew_cid;
 
   TeNantCanCellChoiceModel(
       {this.ser,
       this.datex,
       this.timex,
       this.user,
+      this.name_user,
       this.rser,
       this.daterec,
       this.timerec,
@@ -93,13 +96,15 @@ class TeNantCanCellChoiceModel {
       this.service_total,
       this.water,
       this.electricity,
-      this.fine});
+      this.fine,
+      this.renew_cid});
 
   TeNantCanCellChoiceModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
     datex = json['datex'];
     timex = json['timex'];
     user = json['user'];
+    name_user = json['name_user'];
     rser = json['rser'];
     daterec = json['daterec'];
     timerec = json['timerec'];
@@ -143,6 +148,7 @@ class TeNantCanCellChoiceModel {
     water = json['water'];
     electricity = json['electricity'];
     fine = json['fine'];
+    renew_cid = json['renew_cid'];
   }
 
   Map<String, dynamic> toJson() {
@@ -152,6 +158,7 @@ class TeNantCanCellChoiceModel {
     data['datex'] = this.datex;
     data['timex'] = this.timex;
     data['user'] = this.user;
+    data['name_user'] = this.name_user;
     data['rser'] = this.rser;
     data['daterec'] = this.daterec;
     data['timerec'] = this.timerec;
@@ -195,6 +202,7 @@ class TeNantCanCellChoiceModel {
     data['water'] = this.water;
     data['electricity'] = this.electricity;
     data['fine'] = this.fine;
+    data['renew_cid'] = this.renew_cid;
     return data;
   }
 }

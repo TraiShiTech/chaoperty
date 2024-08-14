@@ -723,10 +723,18 @@ class Excgen_BankDailyReport {
               ? ''
               : '${TransHisBillBank[index2].ldate}');
       sheet.getRangeByName('Y${indextotol + 5 - 1}').setText(
-          (TransHisBillBank[index2].date_book == null ||
-                  TransHisBillBank[index2].date_book == '')
-              ? ''
-              : '${TransHisBillBank[index2].date_book}');
+            (TransHisBillBank[index2].room_number.toString() == '' ||
+                    TransHisBillBank[index2].room_number == null)
+                ? ''
+                : (TransHisBillBank[index2].date == null ||
+                        TransHisBillBank[index2].date.toString() == '')
+                    ? ''
+                    : '${TransHisBillBank[index2].date}',
+            // (TransHisBillBank[index2].date_book == null ||
+            //         TransHisBillBank[index2].date_book == '')
+            //     ? ''
+            //     : '${TransHisBillBank[index2].date_book}'
+          );
       sheet.getRangeByName('Z${indextotol + 5 - 1}').setText(
           (TransHisBillBank[index2].timex == null ||
                   TransHisBillBank[index2].timex == '')

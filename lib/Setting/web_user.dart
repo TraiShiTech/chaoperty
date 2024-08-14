@@ -16,6 +16,7 @@ import '../Model/GetRenTal_Model.dart';
 import '../Model/Get_Image_pro_model.dart';
 import '../Model/Get_Image_pro_set_model.dart';
 import '../Model/Get_Image_text_model.dart';
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 
 class WebUser extends StatefulWidget {
@@ -235,16 +236,14 @@ class _WebUserState extends State<WebUser> {
         child: Row(
           children: [
             Expanded(
-              child: AutoSizeText(
-                minFontSize: 20,
-                maxFontSize: 30,
-                'ตั้งค่า ข่าวสาร',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontFamily: FontWeight_.Fonts_T,
-                ),
-              ),
+              child: Translate.TranslateAndSetText(
+                  'ตั้งค่า ข่าวสาร',
+                  SettingScreen_Color.Colors_Text1_,
+                  TextAlign.center,
+                  FontWeight.bold,
+                  FontWeight_.Fonts_T,
+                  16,
+                  1),
             ),
           ],
         ),
@@ -257,31 +256,28 @@ class _WebUserState extends State<WebUser> {
               flex: 8,
               child: Container(
                 alignment: Alignment.centerLeft,
-                child: Text(
-                  "ตัวอย่างข่าวสาร",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: FontWeight_.Fonts_T,
-                  ),
-                ),
+                child: Translate.TranslateAndSetText(
+                    "ตัวอย่างข่าวสาร",
+                    SettingScreen_Color.Colors_Text1_,
+                    TextAlign.center,
+                    FontWeight.bold,
+                    FontWeight_.Fonts_T,
+                    16,
+                    1),
               ),
             ),
             Expanded(
               flex: 6,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: AutoSizeText(
-                  'รูปภาพ',
-                  minFontSize: 10,
-                  maxFontSize: 16,
-                  maxLines: 1,
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: FontWeight_.Fonts_T,
-                  ),
-                ),
+                child: Translate.TranslateAndSetText(
+                    "รูปภาพ",
+                    SettingScreen_Color.Colors_Text1_,
+                    TextAlign.center,
+                    FontWeight.bold,
+                    FontWeight_.Fonts_T,
+                    16,
+                    1),
               ),
             ),
             Expanded(
@@ -291,17 +287,14 @@ class _WebUserState extends State<WebUser> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    AutoSizeText(
-                      pageimg == 0 ? 'เพิ่ม' : 'ยกเลิก',
-                      minFontSize: 10,
-                      maxFontSize: 18,
-                      maxLines: 1,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontFamily: FontWeight_.Fonts_T,
-                      ),
-                    ),
+                    Translate.TranslateAndSetText(
+                        pageimg == 0 ? 'เพิ่ม' : 'ยกเลิก',
+                        SettingScreen_Color.Colors_Text1_,
+                        TextAlign.center,
+                        FontWeight.bold,
+                        FontWeight_.Fonts_T,
+                        16,
+                        1),
                     IconButton(
                         onPressed: () {
                           // showAddImg();
@@ -329,17 +322,14 @@ class _WebUserState extends State<WebUser> {
               flex: 6,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: AutoSizeText(
-                  'ข้อความ',
-                  minFontSize: 10,
-                  maxFontSize: 18,
-                  maxLines: 1,
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: FontWeight_.Fonts_T,
-                  ),
-                ),
+                child: Translate.TranslateAndSetText(
+                    'ข้อความ',
+                    SettingScreen_Color.Colors_Text1_,
+                    TextAlign.center,
+                    FontWeight.bold,
+                    FontWeight_.Fonts_T,
+                    16,
+                    1),
               ),
             ),
             Expanded(
@@ -349,17 +339,14 @@ class _WebUserState extends State<WebUser> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    AutoSizeText(
-                      pagetext == 0 ? 'เพิ่ม' : 'ยกเลิก',
-                      minFontSize: 10,
-                      maxFontSize: 18,
-                      maxLines: 1,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontFamily: FontWeight_.Fonts_T,
-                      ),
-                    ),
+                    Translate.TranslateAndSetText(
+                        pagetext == 0 ? 'เพิ่ม' : 'ยกเลิก',
+                        SettingScreen_Color.Colors_Text1_,
+                        TextAlign.center,
+                        FontWeight.bold,
+                        FontWeight_.Fonts_T,
+                        16,
+                        1),
                     IconButton(
                         onPressed: () {
                           // showAddImg();
@@ -523,18 +510,20 @@ class _WebUserState extends State<WebUser> {
                                                       padding:
                                                           const EdgeInsets.all(
                                                               8.0),
-                                                      child: Text(
-                                                        base64_Slip == null
-                                                            ? "อัพโหลดรูปภาพ"
-                                                            : "อัพโหลดอีกครั้ง",
-                                                        style: TextStyle(
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
+                                                      child: Translate
+                                                          .TranslateAndSetText(
+                                                              base64_Slip ==
+                                                                      null
+                                                                  ? "อัพโหลดรูปภาพ"
+                                                                  : "อัพโหลดอีกครั้ง",
+                                                              SettingScreen_Color
+                                                                  .Colors_Text3_,
+                                                              TextAlign.center,
+                                                              FontWeight.bold,
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                              16,
+                                                              1),
                                                     ),
                                                   )),
                                             ),
@@ -673,16 +662,17 @@ class _WebUserState extends State<WebUser> {
                                                       padding:
                                                           const EdgeInsets.all(
                                                               8.0),
-                                                      child: Text(
-                                                        "บันทึก",
-                                                        style: TextStyle(
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
+                                                      child: Translate
+                                                          .TranslateAndSetText(
+                                                              "บันทึก",
+                                                              SettingScreen_Color
+                                                                  .Colors_Text3_,
+                                                              TextAlign.center,
+                                                              FontWeight.bold,
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                              16,
+                                                              1),
                                                     ),
                                                   )),
                                             ),
@@ -782,23 +772,19 @@ class _WebUserState extends State<WebUser> {
                                                               ? Colors.green
                                                               : Colors.red,
                                                         )),
-                                                    AutoSizeText(
-                                                      imageProSetModels[index]
-                                                                  .st ==
-                                                              '1'
-                                                          ? 'เปิดอยู่'
-                                                          : 'ปิดอยู่',
-                                                      minFontSize: 10,
-                                                      maxFontSize: 16,
-                                                      maxLines: 1,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontFamily:
-                                                            FontWeight_.Fonts_T,
-                                                      ),
-                                                    ),
+                                                    Translate.TranslateAndSetText(
+                                                        imageProSetModels[index]
+                                                                    .st ==
+                                                                '1'
+                                                            ? 'เปิดอยู่'
+                                                            : 'ปิดอยู่',
+                                                        SettingScreen_Color
+                                                            .Colors_Text3_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
+                                                        FontWeight_.Fonts_T,
+                                                        16,
+                                                        1),
                                                   ],
                                                 ),
                                               ),
@@ -864,7 +850,7 @@ class _WebUserState extends State<WebUser> {
                                           color: Colors.black,
                                         ),
                                       ),
-                                      labelText: 'ข้อความ',
+                                      labelText: '...',
                                       labelStyle: const TextStyle(
                                           fontSize: 14,
                                           color: Colors.black54,
@@ -920,13 +906,16 @@ class _WebUserState extends State<WebUser> {
                                           },
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
-                                            child: Text(
-                                              "บันทึก",
-                                              style: TextStyle(
-                                                  fontFamily: Font_.Fonts_T,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
+                                            child:
+                                                Translate.TranslateAndSetText(
+                                                    "บันทึก",
+                                                    SettingScreen_Color
+                                                        .Colors_Text3_,
+                                                    TextAlign.center,
+                                                    FontWeight.bold,
+                                                    FontWeight_.Fonts_T,
+                                                    16,
+                                                    1),
                                           ),
                                         )),
                                   ),
@@ -1026,23 +1015,19 @@ class _WebUserState extends State<WebUser> {
                                                               ? Colors.green
                                                               : Colors.red,
                                                         )),
-                                                    AutoSizeText(
-                                                      imageProSetModels[index]
-                                                                  .st ==
-                                                              '1'
-                                                          ? 'เปิดอยู่'
-                                                          : 'ปิดอยู่',
-                                                      minFontSize: 10,
-                                                      maxFontSize: 16,
-                                                      maxLines: 1,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontFamily:
-                                                            FontWeight_.Fonts_T,
-                                                      ),
-                                                    ),
+                                                    Translate.TranslateAndSetText(
+                                                        imageProSetModels[index]
+                                                                    .st ==
+                                                                '1'
+                                                            ? 'เปิดอยู่'
+                                                            : 'ปิดอยู่',
+                                                        SettingScreen_Color
+                                                            .Colors_Text2_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
+                                                        FontWeight_.Fonts_T,
+                                                        16,
+                                                        1),
                                                   ],
                                                 ),
                                               )),
@@ -1110,7 +1095,7 @@ class _WebUserState extends State<WebUser> {
         print('Error during image processing: $e');
       }
     } else {
-      print('ยังไม่ได้เลือกรูปภาพ');
+      // print('ยังไม่ได้เลือกรูปภาพ');
     }
   }
 

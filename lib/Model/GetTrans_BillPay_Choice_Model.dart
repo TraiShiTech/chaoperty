@@ -27,6 +27,7 @@ class TransBillPayChoiceModel {
   String? ldate;
   String? pdate;
   String? user;
+  String? name_user;
   String? count_pakan;
   String? pakan_amt;
   String? pakan_pvat;
@@ -62,6 +63,7 @@ class TransBillPayChoiceModel {
   String? electricity;
   String? fine;
   String? stype;
+  String? renew_cid;
 
   TransBillPayChoiceModel(
       {this.ser,
@@ -92,6 +94,7 @@ class TransBillPayChoiceModel {
       this.ldate,
       this.pdate,
       this.user,
+      this.name_user,
       this.count_pakan,
       this.pakan_amt,
       this.pakan_pvat,
@@ -124,7 +127,8 @@ class TransBillPayChoiceModel {
       this.water,
       this.electricity,
       this.fine,
-      this.stype});
+      this.stype,
+      this.renew_cid});
 
   TransBillPayChoiceModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -155,6 +159,7 @@ class TransBillPayChoiceModel {
     ldate = json['ldate'];
     pdate = json['pdate'];
     user = json['user'];
+    name_user = json['name_user'];
     count_pakan = json['count_pakan'];
     pakan_amt = json['pakan_amt'];
     pakan_pvat = json['pakan_pvat'];
@@ -191,6 +196,7 @@ class TransBillPayChoiceModel {
     electricity = json['electricity'];
     fine = json['fine'];
     stype = json['stype'];
+    renew_cid = json['renew_cid'];
   }
 
   Map<String, dynamic> toJson() {
@@ -223,6 +229,7 @@ class TransBillPayChoiceModel {
     data['ldate'] = this.ldate;
     data['pdate'] = this.pdate;
     data['user'] = this.user;
+    data['name_user'] = this.name_user;
     data['count_pakan'] = this.count_pakan;
     data['pakan_amt'] = this.pakan_amt;
     data['pakan_pvat'] = this.pakan_pvat;
@@ -257,6 +264,7 @@ class TransBillPayChoiceModel {
     data['electricity'] = this.electricity;
     data['fine'] = this.fine;
     data['stype'] = this.stype;
+    data['renew_cid'] = this.renew_cid;
 
     return data;
   }

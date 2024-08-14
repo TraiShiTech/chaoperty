@@ -19,6 +19,24 @@ Future<String> translateText(String text) async {
   }
 }
 
+// String convertNumberToText(String text) {
+//   dynamic result =
+//   FutureBuilder<String>(
+//     future: translateText(text),
+//     builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+//       if (snapshot.connectionState == ConnectionState.waiting) {
+//        'Translating...';
+//       } else if (snapshot.hasError) {
+//         result = 'Error: ...';
+//       } else {
+//         result = snapshot.data ?? 'Translation error';
+//       }
+//       return result;
+//     },
+//   );
+//   return result;
+// }
+
 class Translate {
   static Widget TranslateAndSetText(
     String text,
@@ -29,12 +47,13 @@ class Translate {
     double? fontSize,
     int? maxLines,
   ) {
+    var data;
     return FutureBuilder<String>(
-      future: translateText(text),
+      future: Future.delayed(Duration(seconds: 1), () => translateText(text)),
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+        if (snapshot.connectionState == ConnectionState) {
           return Text(
-            'Translating...',
+            '$text',
             overflow: TextOverflow.ellipsis,
             maxLines: maxLines ?? 14,
             textAlign: textAlign,
@@ -47,7 +66,7 @@ class Translate {
           );
         } else if (snapshot.hasError) {
           return Text(
-            'Error: ...',
+            '$text',
             // 'Error: ${snapshot.error}',
             overflow: TextOverflow.ellipsis,
             maxLines: maxLines ?? 14,
@@ -60,8 +79,9 @@ class Translate {
             ),
           );
         } else {
+          data = snapshot.data ?? 'Translation error';
           return Text(
-            snapshot.data ?? 'Translation error',
+            snapshot.data ?? '$text',
             overflow: TextOverflow.ellipsis,
             maxLines: maxLines ?? 14,
             textAlign: textAlign,
@@ -95,7 +115,7 @@ class Translate {
             minFontSize: fontSizeMin ?? 8,
             maxFontSize: fontSizeMax ?? 14,
             maxLines: 1,
-            'Translating...',
+            '$text',
             overflow: TextOverflow.ellipsis,
             textAlign: textAlign,
             style: TextStyle(
@@ -109,7 +129,7 @@ class Translate {
             minFontSize: fontSizeMin ?? 8,
             maxFontSize: fontSizeMax ?? 14,
             maxLines: 1,
-            'Error: ...',
+            '$text',
             overflow: TextOverflow.ellipsis,
             textAlign: textAlign,
             style: TextStyle(
@@ -123,7 +143,7 @@ class Translate {
             minFontSize: fontSizeMin ?? 8,
             maxFontSize: fontSizeMax ?? 14,
             maxLines: 1,
-            snapshot.data ?? 'Translation error',
+            snapshot.data ?? '$text',
             overflow: TextOverflow.ellipsis,
             textAlign: textAlign,
             style: TextStyle(
@@ -133,6 +153,25 @@ class Translate {
             ),
           );
         }
+      },
+    );
+  }
+
+  TranslateAndSet_String(
+    String text,
+  ) {
+    dynamic result = '';
+    return FutureBuilder<String>(
+      future: translateText(text),
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          result = 'Translating...';
+        } else if (snapshot.hasError) {
+          result = 'Error: ...';
+        } else {
+          result = snapshot.data ?? 'Translation error';
+        }
+        return result;
       },
     );
   }

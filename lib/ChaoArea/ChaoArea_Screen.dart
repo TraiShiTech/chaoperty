@@ -30,9 +30,9 @@ import '../Model/GetZone_Model.dart';
 import '../PeopleChao/PeopleChao_Screen2.dart';
 import '../Responsive/responsive.dart';
 
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 import 'package:http/http.dart' as http;
-
 
 import 'ChaoAreaBid_Screen.dart';
 import 'ChaoAreaRenew_Screen.dart';
@@ -927,21 +927,17 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                       Border.all(color: Colors.white, width: 2),
                                 ),
                                 padding: const EdgeInsets.all(5.0),
-                                child: const Row(
+                                child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    AutoSizeText(
-                                      'พื้นที่เช่า ',
-                                      overflow: TextOverflow.ellipsis,
-                                      minFontSize: 8,
-                                      maxFontSize: 20,
-                                      style: TextStyle(
-                                        decoration: TextDecoration.underline,
-                                        color: ReportScreen_Color.Colors_Text1_,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: FontWeight_.Fonts_T,
-                                      ),
-                                    ),
+                                    Translate.TranslateAndSetText(
+                                        'พื้นที่เช่า ',
+                                        ChaoAreaScreen_Color.Colors_Text1_,
+                                        TextAlign.center,
+                                        FontWeight.bold,
+                                        FontWeight_.Fonts_T,
+                                        14,
+                                        2),
                                     AutoSizeText(
                                       ' > > ',
                                       overflow: TextOverflow.ellipsis,
@@ -986,22 +982,19 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                         ),
                         Expanded(
                           flex: 8,
-                          child: AutoSizeText(
-                            minFontSize: 10,
-                            maxFontSize: 25,
-                            maxLines: 1,
-                            Ser_Body == 1
-                                ? 'เสนอราคา'
-                                : Ser_Body == 2
-                                    ? 'ทำ/ต่อสัญญา'
-                                    : '',
-                            textAlign: TextAlign.start,
-                            style: const TextStyle(
-                                fontSize: 20,
-                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: FontWeight_.Fonts_T),
-                          ),
+                          child: Translate.TranslateAndSet_TextAutoSize(
+                              Ser_Body == 1
+                                  ? 'เสนอราคา'
+                                  : Ser_Body == 2
+                                      ? 'ทำ/ต่อสัญญา'
+                                      : '',
+                              ChaoAreaScreen_Color.Colors_Text1_,
+                              TextAlign.center,
+                              FontWeight.bold,
+                              FontWeight_.Fonts_T,
+                              8,
+                              20,
+                              1),
                         ),
                         Expanded(
                           flex: 1,
@@ -1021,7 +1014,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                     bottomRight: Radius.circular(10)),
                               ),
                               padding: const EdgeInsets.all(8.0),
-                              child: const Row(
+                              child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Padding(
@@ -1033,13 +1026,14 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                   ),
                                   Padding(
                                     padding: EdgeInsets.all(4.0),
-                                    child: Text(
-                                      'ปิด',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: FontWeight_.Fonts_T),
-                                    ),
+                                    child: Translate.TranslateAndSetText(
+                                        'ปิด',
+                                        Colors.white,
+                                        TextAlign.center,
+                                        FontWeight.bold,
+                                        FontWeight_.Fonts_T,
+                                        14,
+                                        2),
                                   ),
                                 ],
                               ),
@@ -1069,18 +1063,18 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                               ? SizedBox()
                               : MediaQuery.of(context).size.shortestSide <
                                       MediaQuery.of(context).size.width * 1
-                                  ? const Expanded(
+                                  ? Expanded(
                                       flex: 1,
                                       child: Padding(
                                         padding: EdgeInsets.all(8.0),
-                                        child: Text(
-                                          'โซน:',
-                                          style: TextStyle(
-                                              color: PeopleChaoScreen_Color
-                                                  .Colors_Text1_,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T),
-                                        ),
+                                        child: Translate.TranslateAndSetText(
+                                            'โซน:',
+                                            ChaoAreaScreen_Color.Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            14,
+                                            2),
                                       ))
                                   : const SizedBox(),
 
@@ -1118,17 +1112,17 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                           ),
                                         ),
                                         isExpanded: true,
-                                        hint: Text(
-                                          zone_Subname == null
-                                              ? 'ทั้งหมด'
-                                              : '$zone_Subname',
-                                          maxLines: 1,
-                                          style: const TextStyle(
-                                              fontSize: 14,
-                                              color: PeopleChaoScreen_Color
-                                                  .Colors_Text2_,
-                                              fontFamily: Font_.Fonts_T),
-                                        ),
+                                        hint: Translate.TranslateAndSetText(
+                                            zone_Subname == null
+                                                ? 'ทั้งหมด'
+                                                : '$zone_Subname',
+                                            ChaoAreaScreen_Color.Colors_Text2_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            14,
+                                            2),
+
                                         icon: const Icon(
                                           Icons.arrow_drop_down,
                                           color: TextHome_Color.TextHome_Colors,
@@ -1214,18 +1208,18 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                 ),
                           MediaQuery.of(context).size.shortestSide <
                                   MediaQuery.of(context).size.width * 1
-                              ? const Expanded(
+                              ? Expanded(
                                   flex: 1,
                                   child: Padding(
                                     padding: EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'โซนพื้นที่เช่า:',
-                                      style: TextStyle(
-                                          color: PeopleChaoScreen_Color
-                                              .Colors_Text1_,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: FontWeight_.Fonts_T),
-                                    ),
+                                    child: Translate.TranslateAndSetText(
+                                        'โซนพื้นที่เช่า:',
+                                        ChaoAreaScreen_Color.Colors_Text2_,
+                                        TextAlign.center,
+                                        FontWeight.bold,
+                                        FontWeight_.Fonts_T,
+                                        14,
+                                        2),
                                   ))
                               : const SizedBox(),
                           Expanded(
@@ -1256,17 +1250,17 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                     ),
                                   ),
                                   isExpanded: true,
-                                  hint: Text(
-                                    zone_name == null
-                                        ? 'ทั้งหมด'
-                                        : '$zone_name',
-                                    maxLines: 1,
-                                    style: const TextStyle(
-                                        fontSize: 14,
-                                        color: PeopleChaoScreen_Color
-                                            .Colors_Text2_,
-                                        fontFamily: Font_.Fonts_T),
-                                  ),
+                                  hint: Translate.TranslateAndSetText(
+                                      zone_name == null
+                                          ? 'ทั้งหมด'
+                                          : '$zone_name',
+                                      ChaoAreaScreen_Color.Colors_Text2_,
+                                      TextAlign.center,
+                                      FontWeight.bold,
+                                      FontWeight_.Fonts_T,
+                                      14,
+                                      2),
+
                                   icon: const Icon(
                                     Icons.arrow_drop_down,
                                     color: TextHome_Color.TextHome_Colors,
@@ -1353,16 +1347,16 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                     MediaQuery.of(context).size.width * 1
                                 ? 1
                                 : 2,
-                            child: const Padding(
+                            child: Padding(
                               padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                'ค้นหา:',
-                                textAlign: TextAlign.end,
-                                style: TextStyle(
-                                    color: PeopleChaoScreen_Color.Colors_Text1_,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T),
-                              ),
+                              child: Translate.TranslateAndSetText(
+                                  'ค้นหา:',
+                                  ChaoAreaScreen_Color.Colors_Text2_,
+                                  TextAlign.center,
+                                  FontWeight.bold,
+                                  FontWeight_.Fonts_T,
+                                  14,
+                                  2),
                             ),
                           ),
                           Expanded(
@@ -1557,14 +1551,15 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                   // border: Border.all(color: Colors.grey, width: 1),
                                 ),
                                 padding: const EdgeInsets.all(8.0),
-                                child: const Center(
-                                  child: Text(
-                                    'ดูแผนผัง',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: FontWeight_.Fonts_T),
-                                  ),
+                                child: Center(
+                                  child: Translate.TranslateAndSetText(
+                                      'ดูแผนผัง',
+                                      Colors.white,
+                                      TextAlign.center,
+                                      FontWeight.bold,
+                                      FontWeight_.Fonts_T,
+                                      14,
+                                      2),
                                 ),
                               ),
                               onTap: () {
@@ -1576,15 +1571,16 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                     shape: const RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(20.0))),
-                                    title: const Center(
-                                        child: Text(
-                                      'แผนผัง',
-                                      style: TextStyle(
-                                          color: PeopleChaoScreen_Color
-                                              .Colors_Text1_,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: FontWeight_.Fonts_T),
-                                    )),
+                                    title: Center(
+                                      child: Translate.TranslateAndSetText(
+                                          'แผนผัง',
+                                          ChaoAreaScreen_Color.Colors_Text2_,
+                                          TextAlign.center,
+                                          FontWeight.bold,
+                                          FontWeight_.Fonts_T,
+                                          14,
+                                          2),
+                                    ),
                                     content: SingleChildScrollView(
                                       child: ListBody(
                                         children: <Widget>[
@@ -1658,15 +1654,15 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                               child: TextButton(
                                                 onPressed: () => Navigator.pop(
                                                     context, 'OK'),
-                                                child: const Text(
-                                                  'ปิด',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T),
-                                                ),
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'ปิด',
+                                                        Colors.white,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
+                                                        FontWeight_.Fonts_T,
+                                                        14,
+                                                        2),
                                               ),
                                             ),
                                           ],
@@ -1706,14 +1702,17 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                             if (zone == '0' || zone == null) {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
-                                                const SnackBar(
-                                                    content: Text(
-                                                  'กรุณาเลือกโซนพื้นที่เช่า',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontFamily:
-                                                          Font_.Fonts_T),
-                                                )),
+                                                SnackBar(
+                                                  content: Translate
+                                                      .TranslateAndSetText(
+                                                          'กรุณาเลือกโซนพื้นที่เช่า',
+                                                          Colors.white,
+                                                          TextAlign.center,
+                                                          FontWeight.bold,
+                                                          FontWeight_.Fonts_T,
+                                                          14,
+                                                          2),
+                                                ),
                                               );
                                             } else {
                                               setState(() {
@@ -1733,20 +1732,19 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                             width: MediaQuery.of(context)
                                                 .size
                                                 .width,
-                                            child: const Row(
+                                            child: Row(
                                               children: [
                                                 Expanded(
-                                                  child: Text(
-                                                    '+ เสนอราคา',
-                                                    style: TextStyle(
-                                                        color:
-                                                            PeopleChaoScreen_Color
-                                                                .Colors_Text1_,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontFamily: FontWeight_
-                                                            .Fonts_T),
-                                                  ),
+                                                  child: Translate
+                                                      .TranslateAndSetText(
+                                                          '+ เสนอราคา',
+                                                          ChaoAreaScreen_Color
+                                                              .Colors_Text2_,
+                                                          TextAlign.center,
+                                                          FontWeight.bold,
+                                                          FontWeight_.Fonts_T,
+                                                          14,
+                                                          2),
                                                 )
                                               ],
                                             ))),
@@ -1766,14 +1764,16 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                             if (zone == '0' || zone == null) {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
-                                                const SnackBar(
-                                                    content: Text(
-                                                  'กรุณาเลือกโซนพื้นที่เช่า',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontFamily:
-                                                          Font_.Fonts_T),
-                                                )),
+                                                SnackBar(
+                                                    content: Translate
+                                                        .TranslateAndSetText(
+                                                            'กรุณาเลือกโซนพื้นที่เช่า',
+                                                            Colors.white,
+                                                            TextAlign.center,
+                                                            FontWeight.bold,
+                                                            FontWeight_.Fonts_T,
+                                                            14,
+                                                            2)),
                                               );
                                             } else {
                                               setState(() {
@@ -1793,20 +1793,19 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                             width: MediaQuery.of(context)
                                                 .size
                                                 .width,
-                                            child: const Row(
+                                            child: Row(
                                               children: [
                                                 Expanded(
-                                                  child: Text(
-                                                    '+ ทำ/ต่อสัญญา',
-                                                    style: TextStyle(
-                                                        color:
-                                                            PeopleChaoScreen_Color
-                                                                .Colors_Text1_,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontFamily: FontWeight_
-                                                            .Fonts_T),
-                                                  ),
+                                                  child: Translate
+                                                      .TranslateAndSetText(
+                                                          '+ ทำ/ต่อสัญญา',
+                                                          ChaoAreaScreen_Color
+                                                              .Colors_Text2_,
+                                                          TextAlign.center,
+                                                          FontWeight.bold,
+                                                          FontWeight_.Fonts_T,
+                                                          14,
+                                                          2),
                                                 )
                                               ],
                                             ))),
@@ -1848,14 +1847,14 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                   child: SingleChildScrollView(
                                       scrollDirection: Axis.horizontal,
                                       child: Row(children: [
-                                        const Text(
-                                          'สถานะ : ',
-                                          style: TextStyle(
-                                              color: PeopleChaoScreen_Color
-                                                  .Colors_Text1_,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T),
-                                        ),
+                                        Translate.TranslateAndSetText(
+                                            'สถานะ : ',
+                                            ChaoAreaScreen_Color.Colors_Text2_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            14,
+                                            2),
                                         for (int i = 0; i < Status.length; i++)
                                           Padding(
                                               padding:
@@ -1929,20 +1928,18 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                                   padding:
                                                       const EdgeInsets.all(8.0),
                                                   child: Center(
-                                                    child: Text(
-                                                      Status[i],
-                                                      style: TextStyle(
-                                                          color: (Status_ ==
-                                                                  i + 1)
-                                                              ? Colors.white
-                                                              : PeopleChaoScreen_Color
-                                                                  .Colors_Text1_,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T),
-                                                    ),
+                                                    child: Translate
+                                                        .TranslateAndSetText(
+                                                            Status[i],
+                                                            (Status_ == i + 1)
+                                                                ? Colors.white
+                                                                : ChaoAreaScreen_Color
+                                                                    .Colors_Text2_,
+                                                            TextAlign.center,
+                                                            FontWeight.bold,
+                                                            FontWeight_.Fonts_T,
+                                                            14,
+                                                            2),
                                                   ),
                                                 ),
                                               )),
@@ -2053,16 +2050,15 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                         child: SingleChildScrollView(
                                             scrollDirection: Axis.horizontal,
                                             child: Row(children: [
-                                              const Text(
-                                                'สถานะ : ',
-                                                style: TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text1_,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T),
-                                              ),
+                                              Translate.TranslateAndSetText(
+                                                  'สถานะ : ',
+                                                  ChaoAreaScreen_Color
+                                                      .Colors_Text2_,
+                                                  TextAlign.center,
+                                                  FontWeight.bold,
+                                                  FontWeight_.Fonts_T,
+                                                  14,
+                                                  2),
                                               for (int i = 0;
                                                   i < Status.length;
                                                   i++)
@@ -2142,22 +2138,23 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                                             const EdgeInsets
                                                                 .all(8.0),
                                                         child: Center(
-                                                          child: Text(
-                                                            Status[i],
-                                                            style: TextStyle(
-                                                                color: (Status_ ==
-                                                                        i + 1)
-                                                                    ? Colors
-                                                                        .white
-                                                                    : Colors
-                                                                        .black,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontFamily:
-                                                                    FontWeight_
-                                                                        .Fonts_T),
-                                                          ),
+                                                          child: Translate
+                                                              .TranslateAndSetText(
+                                                                  Status[i],
+                                                                  (Status_ ==
+                                                                          i + 1)
+                                                                      ? Colors
+                                                                          .white
+                                                                      : ChaoAreaScreen_Color
+                                                                          .Colors_Text2_,
+                                                                  TextAlign
+                                                                      .center,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  14,
+                                                                  2),
                                                         ),
                                                       ),
                                                     )),
@@ -2170,18 +2167,16 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      const Padding(
+                                      Padding(
                                         padding: EdgeInsets.all(8.0),
-                                        child: Text(
-                                          'มุมมอง :',
-                                          style: TextStyle(
-                                              color: PeopleChaoScreen_Color
-                                                  .Colors_Text1_,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T
-                                              //fontSize: 10.0
-                                              ),
-                                        ),
+                                        child: Translate.TranslateAndSetText(
+                                            'มุมมอง :',
+                                            ChaoAreaScreen_Color.Colors_Text2_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            14,
+                                            2),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
@@ -2316,7 +2311,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                           bottomRight: Radius.circular(0)),
                     ),
                     padding: const EdgeInsets.all(8.0),
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         // Expanded(
@@ -2337,128 +2332,112 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                           flex: 1,
                           child: Padding(
                             padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'โซนพื้นที่',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text1_,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                'โซนพื้นที่',
+                                ChaoAreaScreen_Color.Colors_Text2_,
+                                TextAlign.center,
+                                FontWeight.bold,
+                                FontWeight_.Fonts_T,
+                                14,
+                                2),
                           ),
                         ),
                         Expanded(
                           flex: 1,
                           child: Padding(
                             padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'ชื้อพื้นที่',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text1_,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                'ชื้อพื้นที่',
+                                ChaoAreaScreen_Color.Colors_Text2_,
+                                TextAlign.center,
+                                FontWeight.bold,
+                                FontWeight_.Fonts_T,
+                                14,
+                                2),
                           ),
                         ),
                         Expanded(
                           flex: 1,
                           child: Padding(
                             padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'ขนาดพื้นที่(ต.ร.ม.)',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text1_,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                'ขนาดพื้นที่(ตร.ม.)',
+                                ChaoAreaScreen_Color.Colors_Text2_,
+                                TextAlign.end,
+                                FontWeight.bold,
+                                FontWeight_.Fonts_T,
+                                14,
+                                2),
                           ),
                         ),
                         Expanded(
                           flex: 1,
                           child: Padding(
                             padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'ค่าเช่าต่องวด',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text1_,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                'ค่าเช่าต่องวด',
+                                ChaoAreaScreen_Color.Colors_Text2_,
+                                TextAlign.end,
+                                FontWeight.bold,
+                                FontWeight_.Fonts_T,
+                                14,
+                                2),
                           ),
                         ),
                         Expanded(
                           flex: 1,
                           child: Padding(
                             padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'เลขที่ใบสัญญา',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text1_,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                'เลขที่ใบสัญญา',
+                                ChaoAreaScreen_Color.Colors_Text2_,
+                                TextAlign.end,
+                                FontWeight.bold,
+                                FontWeight_.Fonts_T,
+                                14,
+                                2),
                           ),
                         ),
                         Expanded(
                           flex: 1,
                           child: Padding(
                             padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'เลขที่ใบเสนอราคา',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text1_,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                'เลขที่ใบเสนอราคา',
+                                ChaoAreaScreen_Color.Colors_Text2_,
+                                TextAlign.end,
+                                FontWeight.bold,
+                                FontWeight_.Fonts_T,
+                                14,
+                                2),
                           ),
                         ),
                         Expanded(
                           flex: 1,
                           child: Padding(
                             padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'วันสิ้นสุดสัญญา',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text1_,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                'วันสิ้นสุดสัญญา',
+                                ChaoAreaScreen_Color.Colors_Text2_,
+                                TextAlign.end,
+                                FontWeight.bold,
+                                FontWeight_.Fonts_T,
+                                14,
+                                2),
                           ),
                         ),
                         Expanded(
                           flex: 1,
                           child: Padding(
                             padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'สถานะ',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text1_,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                'สถานะ',
+                                ChaoAreaScreen_Color.Colors_Text2_,
+                                TextAlign.end,
+                                FontWeight.bold,
+                                FontWeight_.Fonts_T,
+                                14,
+                                2),
                           ),
                         ),
                       ],
@@ -2854,63 +2833,109 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                                 ),
                                                 Expanded(
                                                   flex: 1,
-                                                  child: Text(
-                                                    areaModels[index].quantity ==
-                                                            '1'
-                                                        ? datex.isAfter(DateTime.parse(
-                                                                        '${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000')
-                                                                    .subtract(const Duration(
-                                                                        days:
-                                                                            0))) ==
-                                                                true
-                                                            ? 'หมดสัญญา'
-                                                            : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(
-                                                                        Duration(
-                                                                            days:
-                                                                                open_set_date))) ==
-                                                                    true
-                                                                ? 'ใกล้หมดสัญญา'
-                                                                : 'เช่าอยู่'
-                                                        : areaModels[index]
-                                                                    .quantity ==
-                                                                '2'
-                                                            ? 'เสนอราคา'
-                                                            : areaModels[index]
-                                                                        .quantity ==
-                                                                    '3'
-                                                                ? 'เสนอราคา(มัดจำ)'
-                                                                : 'ว่าง',
-                                                    textAlign: TextAlign.end,
-                                                    style: TextStyle(
-                                                        color: areaModels[index]
-                                                                    .quantity ==
-                                                                '1'
-                                                            ? datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(
-                                                                        const Duration(
-                                                                            days:
-                                                                                0))) ==
-                                                                    true
-                                                                ? Colors.red
-                                                                : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(Duration(days: open_set_date))) ==
-                                                                        true
-                                                                    ? Colors
-                                                                        .orange
-                                                                        .shade900
-                                                                    : Colors
-                                                                        .black
-                                                            : areaModels[index]
-                                                                        .quantity ==
-                                                                    '2'
-                                                                ? Colors.blue
-                                                                : areaModels[index]
-                                                                            .quantity ==
-                                                                        '3'
-                                                                    ? Colors.blue
-                                                                    : Colors.green,
-                                                        fontFamily: Font_.Fonts_T
-                                                        //fontSize: 10.0
-                                                        ),
-                                                  ),
+                                                  child: Translate
+                                                      .TranslateAndSetText(
+                                                          areaModels[index]
+                                                                      .quantity ==
+                                                                  '1'
+                                                              ? datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 0))) ==
+                                                                      true
+                                                                  ? 'หมดสัญญา'
+                                                                  : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(Duration(days: open_set_date))) ==
+                                                                          true
+                                                                      ? 'ใกล้หมดสัญญา'
+                                                                      : 'เช่าอยู่'
+                                                              : areaModels[index]
+                                                                          .quantity ==
+                                                                      '2'
+                                                                  ? 'เสนอราคา'
+                                                                  : areaModels[index].quantity ==
+                                                                          '3'
+                                                                      ? 'เสนอราคา(มัดจำ)'
+                                                                      : 'ว่าง',
+                                                          areaModels[index]
+                                                                      .quantity ==
+                                                                  '1'
+                                                              ? datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 0))) ==
+                                                                      true
+                                                                  ? Colors.red
+                                                                  : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(Duration(days: open_set_date))) ==
+                                                                          true
+                                                                      ? Colors
+                                                                          .orange
+                                                                          .shade900
+                                                                      : Colors
+                                                                          .black
+                                                              : areaModels[index]
+                                                                          .quantity ==
+                                                                      '2'
+                                                                  ? Colors.blue
+                                                                  : areaModels[index].quantity == '3'
+                                                                      ? Colors.blue
+                                                                      : Colors.green,
+                                                          TextAlign.end,
+                                                          null,
+                                                          Font_.Fonts_T,
+                                                          14,
+                                                          2),
+
+                                                  // Text(
+                                                  //   areaModels[index].quantity ==
+                                                  //           '1'
+                                                  //       ? datex.isAfter(DateTime.parse(
+                                                  //                       '${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000')
+                                                  //                   .subtract(const Duration(
+                                                  //                       days:
+                                                  //                           0))) ==
+                                                  //               true
+                                                  //           ? 'หมดสัญญา'
+                                                  //           : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(
+                                                  //                       Duration(
+                                                  //                           days:
+                                                  //                               open_set_date))) ==
+                                                  //                   true
+                                                  //               ? 'ใกล้หมดสัญญา'
+                                                  //               : 'เช่าอยู่'
+                                                  //       : areaModels[index]
+                                                  //                   .quantity ==
+                                                  //               '2'
+                                                  //           ? 'เสนอราคา'
+                                                  //           : areaModels[index]
+                                                  //                       .quantity ==
+                                                  //                   '3'
+                                                  //               ? 'เสนอราคา(มัดจำ)'
+                                                  //               : 'ว่าง',
+                                                  //   textAlign: TextAlign.end,
+                                                  //   style: TextStyle(
+                                                  //       color: areaModels[index]
+                                                  //                   .quantity ==
+                                                  //               '1'
+                                                  //           ? datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(
+                                                  //                       const Duration(
+                                                  //                           days:
+                                                  //                               0))) ==
+                                                  //                   true
+                                                  //               ? Colors.red
+                                                  //               : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(Duration(days: open_set_date))) ==
+                                                  //                       true
+                                                  //                   ? Colors
+                                                  //                       .orange
+                                                  //                       .shade900
+                                                  //                   : Colors
+                                                  //                       .black
+                                                  //           : areaModels[index]
+                                                  //                       .quantity ==
+                                                  //                   '2'
+                                                  //               ? Colors.blue
+                                                  //               : areaModels[index]
+                                                  //                           .quantity ==
+                                                  //                       '3'
+                                                  //                   ? Colors.blue
+                                                  //                   : Colors.green,
+                                                  //       fontFamily: Font_.Fonts_T
+                                                  //       //fontSize: 10.0
+                                                  //       ),
+                                                  // ),
                                                 ),
                                               ],
                                             ),

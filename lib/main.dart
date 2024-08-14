@@ -22,6 +22,8 @@ import 'package:infinite_canvas/infinite_canvas.dart';
 
 import 'package:http/http.dart' as http;
 
+import 'Style/loadAndCacheImage.dart';
+
 ///099400016565010
 ////Ref1. TC66020607
 ///REF2. 15022567
@@ -34,7 +36,7 @@ class MyHttpOverrides extends HttpOverrides {
   }
 }
 
-void main() {
+void main() async {
   HttpOverrides.global = new MyHttpOverrides();
 
   runApp(const MyApp());
@@ -74,7 +76,7 @@ void main() {
 //1.----> git add .
 //2.------> git remote set-url origin https://gitlab.com/traishitech.com/chaoperty.git
 
-//3.-------->git commit -m "รายงาน ชอยส์แก้ก่อนประชุมชอยส์"
+//3.-------->git commit -m "ก่อนQ"
 //4.-----------> git push origin main
 //----------------------------------------------------->
 //----(Git Hub)
@@ -114,7 +116,7 @@ class MyApp extends StatelessWidget {
           )),
       home: SignInScreen(),
       // home: GeneratedNodes(),
-      // home: SignUPLicense()// SignInLicense(), // SignUnAdmin(),  มีโชตฝาก ups โต๊ะป้ากล้วย
+      // home: SignUPLicense()// SignInLicense(), // SignUnAdmin(),
     );
   }
 }

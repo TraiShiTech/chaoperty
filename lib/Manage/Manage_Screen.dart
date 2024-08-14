@@ -23,6 +23,7 @@ import '../Constant/Myconstant.dart';
 import '../INSERT_Log/Insert_log.dart';
 import '../Model/GetArea_Model.dart';
 import '../Model/GetContractx_Model.dart';
+import '../Model/GetPayMent_Model.dart';
 import '../Model/GetRenTal_Model.dart';
 import '../Model/GetSubZone_Model.dart';
 import '../Model/GetTeNant_Model.dart';
@@ -33,9 +34,9 @@ import '../Model/Getexp_sz_model.dart';
 import '../Model/electricity_history_model.dart';
 import '../Model/electricity_model.dart';
 import '../PeopleChao/PeopleChao_Screen.dart';
-import '../Report/Report_Screen.dart';
 import '../Responsive/responsive.dart';
 import '../Setting/SettingScreen.dart';
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart' as http;
@@ -51,10 +52,12 @@ class ManageScreen extends StatefulWidget {
 
 class _ManageScreenState extends State<ManageScreen> {
   var nFormat = NumberFormat("#,##0.00", "en_US");
+  var End_Bill_Paydate;
   DateTime datex = DateTime.now();
   int Status_ = 1;
   int Ser_BodySta1 = 0;
   String Ser_nowpage = '4';
+  String? paymentSer1, paymentName1, selectedValue;
   ///////---------------------------------------------------->
   int tappedIndex_ = -1;
   ScrollController _scrollController1 = ScrollController();
@@ -70,6 +73,7 @@ class _ManageScreenState extends State<ManageScreen> {
   List<ZoneModel> zoneModels = [];
   List<RenTalModel> renTalModels = [];
   List<SubZoneModel> subzoneModels = [];
+  List<PayMentModel> _PayMentModels = [];
   final FormMeter_text = TextEditingController();
   final Formbecause_ = TextEditingController();
   String? typezonesName, typevalue;
@@ -121,7 +125,74 @@ class _ManageScreenState extends State<ManageScreen> {
     red_Trans_c_maintenance();
     red_exp_sz();
     read_GC_areaSelect();
+    red_payMent();
+    End_Bill_Paydate = DateFormat('yyyy-MM-dd').format(datex);
     observerController = ListObserverController(controller: _scrollController1);
+  }
+
+  Future<Null> red_payMent() async {
+    if (_PayMentModels.length != 0) {
+      setState(() {
+        _PayMentModels.clear();
+      });
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+
+    String url = '${MyConstant().domain}/GC_payMent.php?isAdd=true&ren=$ren';
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      if (result.toString() != 'null') {
+        Map<String, dynamic> map = Map();
+        map['ser'] = '0';
+        map['datex'] = '';
+        map['timex'] = '';
+        map['ptser'] = '';
+        map['ptname'] = 'เลือก';
+        map['bser'] = '';
+        map['bank'] = '';
+        map['bno'] = '';
+        map['bname'] = '';
+        map['bsaka'] = '';
+        map['btser'] = '';
+        map['btype'] = '';
+        map['st'] = '1';
+        map['rser'] = '';
+        map['accode'] = '';
+        map['co'] = '';
+        map['data_update'] = '';
+        map['auto'] = '0';
+
+        PayMentModel _PayMentModel = PayMentModel.fromJson(map);
+        setState(() {
+          _PayMentModels.add(_PayMentModel);
+        });
+
+        for (var map in result) {
+          PayMentModel _PayMentModel = PayMentModel.fromJson(map);
+          var autox = _PayMentModel.auto;
+          var serx = _PayMentModel.ser;
+          var ptnamex = _PayMentModel.ptname;
+          setState(() {
+            _PayMentModels.add(_PayMentModel);
+            if (autox == '1') {
+              paymentSer1 = serx.toString();
+              paymentName1 = ptnamex.toString();
+            }
+          });
+          if (_PayMentModel.btser.toString() == '1') {
+          } else {}
+        }
+
+        if (paymentSer1 == null) {
+          paymentSer1 = 0.toString();
+          paymentName1 = 'เลือก'.toString();
+        }
+      }
+    } catch (e) {}
   }
 
   // Future<Null> read_Electricity() async {
@@ -687,10 +758,9 @@ class _ManageScreenState extends State<ManageScreen> {
         if (Status_ == 1) {
           setState(() {
             transMeterModels = _transMeterModels.where((transMeterModels) {
-                           var notTitle = transMeterModels.ln.toString();
+              var notTitle = transMeterModels.ln.toString();
               var notTitle2 = transMeterModels.sname.toString();
-              var notTitle3 =
-                  transMeterModels.num_meter.toString();
+              var notTitle3 = transMeterModels.num_meter.toString();
               var notTitle4 = transMeterModels.refno.toString();
               // var notTitle = transMeterModels.ln.toString().toLowerCase();
               // var notTitle2 = transMeterModels.sname.toString().toLowerCase();
@@ -706,7 +776,7 @@ class _ManageScreenState extends State<ManageScreen> {
         } else if (Status_ == 2) {
           setState(() {
             maintenanceModels = _maintenanceModels.where((maintenanceModelss) {
-                    var notTitle = maintenanceModelss.lncode.toString();
+              var notTitle = maintenanceModelss.lncode.toString();
               var notTitle2 = maintenanceModelss.sname.toString();
               // var notTitle = maintenanceModelss.lncode.toString().toLowerCase();
               // var notTitle2 = maintenanceModelss.sname.toString().toLowerCase();
@@ -1057,19 +1127,15 @@ class _ManageScreenState extends State<ManageScreen> {
                           padding: const EdgeInsets.all(5.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              AutoSizeText(
-                                'จัดการ ',
-                                overflow: TextOverflow.ellipsis,
-                                minFontSize: 8,
-                                maxFontSize: 20,
-                                style: TextStyle(
-                                  decoration: TextDecoration.underline,
-                                  color: ReportScreen_Color.Colors_Text1_,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T,
-                                ),
-                              ),
+                            children: [
+                              Translate.TranslateAndSetText(
+                                  'จัดการ',
+                                  SettingScreen_Color.Colors_Text1_,
+                                  TextAlign.center,
+                                  FontWeight.bold,
+                                  FontWeight_.Fonts_T,
+                                  14,
+                                  2),
                               AutoSizeText(
                                 ' > >',
                                 overflow: TextOverflow.ellipsis,
@@ -1123,18 +1189,18 @@ class _ManageScreenState extends State<ManageScreen> {
                         ? SizedBox()
                         : MediaQuery.of(context).size.shortestSide <
                                 MediaQuery.of(context).size.width * 1
-                            ? const Expanded(
+                            ? Expanded(
                                 flex: 1,
                                 child: Padding(
                                   padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'โซน:',
-                                    style: TextStyle(
-                                        color: PeopleChaoScreen_Color
-                                            .Colors_Text1_,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: FontWeight_.Fonts_T),
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      'โซน:',
+                                      SettingScreen_Color.Colors_Text1_,
+                                      TextAlign.center,
+                                      FontWeight.bold,
+                                      FontWeight_.Fonts_T,
+                                      14,
+                                      2),
                                 ))
                             : const SizedBox(),
                     subzoneModels.length == 1
@@ -1252,17 +1318,18 @@ class _ManageScreenState extends State<ManageScreen> {
                           ),
                     MediaQuery.of(context).size.shortestSide <
                             MediaQuery.of(context).size.width * 1
-                        ? const Expanded(
+                        ? Expanded(
                             flex: 1,
                             child: Padding(
                               padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                'โซนพื้นที่เช่า:',
-                                style: TextStyle(
-                                    color: PeopleChaoScreen_Color.Colors_Text1_,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T),
-                              ),
+                              child: Translate.TranslateAndSetText(
+                                  'โซนพื้นที่เช่า:',
+                                  SettingScreen_Color.Colors_Text1_,
+                                  TextAlign.center,
+                                  FontWeight.bold,
+                                  FontWeight_.Fonts_T,
+                                  14,
+                                  2),
                             ),
                           )
                         : const SizedBox(),
@@ -1353,16 +1420,16 @@ class _ManageScreenState extends State<ManageScreen> {
                     if (Status_ != 3)
                       Expanded(
                         flex: 1,
-                        child: const Padding(
+                        child: Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'ค้นหา:',
-                            style: TextStyle(
-                              color: ManageScreen_Color.Colors_Text1_,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: FontWeight_.Fonts_T,
-                            ),
-                          ),
+                          child: Translate.TranslateAndSetText(
+                              'ค้นหา:',
+                              SettingScreen_Color.Colors_Text1_,
+                              TextAlign.center,
+                              FontWeight.bold,
+                              FontWeight_.Fonts_T,
+                              14,
+                              2),
                         ),
                       ),
                     if (Status_ != 3)
@@ -1419,14 +1486,22 @@ class _ManageScreenState extends State<ManageScreen> {
                         child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Row(children: [
-                              const Text(
-                                'สถานะ : ',
-                                style: TextStyle(
-                                  color: ManageScreen_Color.Colors_Text1_,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T,
-                                ),
-                              ),
+                              Translate.TranslateAndSetText(
+                                  'สถานะ : ',
+                                  SettingScreen_Color.Colors_Text1_,
+                                  TextAlign.center,
+                                  FontWeight.bold,
+                                  FontWeight_.Fonts_T,
+                                  14,
+                                  2),
+                              //  Text(
+                              //   'สถานะ : ',
+                              //   style: TextStyle(
+                              //     color: ManageScreen_Color.Colors_Text1_,
+                              //     fontWeight: FontWeight.bold,
+                              //     fontFamily: FontWeight_.Fonts_T,
+                              //   ),
+                              // ),
                               for (int i = 0; i < Status.length; i++)
                                 Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -1467,16 +1542,26 @@ class _ManageScreenState extends State<ManageScreen> {
                                         ),
                                         padding: const EdgeInsets.all(8.0),
                                         child: Center(
-                                          child: Text(
-                                            Status[i],
-                                            style: TextStyle(
-                                              color: (Status_ == i + 1)
+                                          child: Translate.TranslateAndSetText(
+                                              Status[i],
+                                              (Status_ == i + 1)
                                                   ? Colors.white
                                                   : Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T,
-                                            ),
-                                          ),
+                                              TextAlign.center,
+                                              FontWeight.bold,
+                                              FontWeight_.Fonts_T,
+                                              14,
+                                              2),
+                                          // Text(
+                                          //   Status[i],
+                                          //   style: TextStyle(
+                                          //     color: (Status_ == i + 1)
+                                          //         ? Colors.white
+                                          //         : Colors.black,
+                                          //     fontWeight: FontWeight.bold,
+                                          //     fontFamily: FontWeight_.Fonts_T,
+                                          //   ),
+                                          // ),
                                         ),
                                       ),
                                     )),
@@ -1712,18 +1797,18 @@ class _ManageScreenState extends State<ManageScreen> {
                                               Padding(
                                                 padding:
                                                     const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  (Status_ == 1)
-                                                      ? 'ประเภทรายการ'
-                                                      : 'สถานะ',
-                                                  style: const TextStyle(
-                                                    color: ManageScreen_Color
-                                                        .Colors_Text1_,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        (Status_ == 1)
+                                                            ? 'ประเภทรายการ'
+                                                            : 'สถานะ',
+                                                        ManageScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
                                                         FontWeight_.Fonts_T,
-                                                  ),
-                                                ),
+                                                        14,
+                                                        2),
                                               ),
                                               StreamBuilder(
                                                   stream: Stream.periodic(
@@ -1741,7 +1826,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                                               AppbackgroundColor
                                                                   .Sub_Abg_Colors,
                                                           borderRadius: const BorderRadius
-                                                              .only(
+                                                                  .only(
                                                               topLeft: Radius
                                                                   .circular(10),
                                                               topRight: Radius
@@ -2081,15 +2166,16 @@ class _ManageScreenState extends State<ManageScreen> {
                                                                                   )),
                                                                               Expanded(
                                                                                 flex: 4,
-                                                                                child: Text(
-                                                                                  'วางบิล น้ำ-ไฟ เดือน ${DateFormat.MMM('th_TH').format(datex)}',
-                                                                                  textAlign: TextAlign.center,
-                                                                                  style: TextStyle(
-                                                                                    // fontSize: 20,
-                                                                                    color: SettingScreen_Color.Colors_Text1_,
-                                                                                    fontFamily: FontWeight_.Fonts_T,
-                                                                                  ),
-                                                                                ),
+                                                                                child: Translate.TranslateAndSetText('วางบิล น้ำ-ไฟ เดือน ${DateFormat.MMM('th_TH').format(datex)}', ManageScreen_Color.Colors_Text1_, TextAlign.center, FontWeight.bold, FontWeight_.Fonts_T, 14, 2),
+                                                                                // Text(
+                                                                                //   'วางบิล น้ำ-ไฟ เดือน ${DateFormat.MMM('th_TH').format(datex)}',
+                                                                                //   textAlign: TextAlign.center,
+                                                                                //   style: TextStyle(
+                                                                                //     // fontSize: 20,
+                                                                                //     color: SettingScreen_Color.Colors_Text1_,
+                                                                                //     fontFamily: FontWeight_.Fonts_T,
+                                                                                //   ),
+                                                                                // ),
                                                                               ),
                                                                               Expanded(
                                                                                   flex: 1,
@@ -2115,94 +2201,104 @@ class _ManageScreenState extends State<ManageScreen> {
                                                                               child: Row(
                                                                                 children: [
                                                                                   Expanded(
-                                                                                    child: Text(
-                                                                                      'รหัสพื้นที่',
-                                                                                      textAlign: TextAlign.center,
-                                                                                      style: TextStyle(
-                                                                                        color: SettingScreen_Color.Colors_Text1_,
-                                                                                        fontFamily: Font_.Fonts_T,
-                                                                                      ),
-                                                                                    ),
+                                                                                    child: Translate.TranslateAndSetText('รหัสพื้นที่', ManageScreen_Color.Colors_Text1_, TextAlign.center, FontWeight.bold, FontWeight_.Fonts_T, 14, 2),
+                                                                                    //  Text(
+                                                                                    //   'รหัสพื้นที่',
+                                                                                    //   textAlign: TextAlign.center,
+                                                                                    //   style: TextStyle(
+                                                                                    //     color: SettingScreen_Color.Colors_Text1_,
+                                                                                    //     fontFamily: Font_.Fonts_T,
+                                                                                    //   ),
+                                                                                    // ),
                                                                                   ),
                                                                                   Expanded(
-                                                                                    child: Text(
-                                                                                      'เลขที่สัญญา',
-                                                                                      textAlign: TextAlign.center,
-                                                                                      style: TextStyle(
-                                                                                        color: SettingScreen_Color.Colors_Text1_,
-                                                                                        fontFamily: Font_.Fonts_T,
-                                                                                      ),
-                                                                                    ),
+                                                                                    child: Translate.TranslateAndSetText('เลขที่สัญญา', ManageScreen_Color.Colors_Text1_, TextAlign.center, FontWeight.bold, FontWeight_.Fonts_T, 14, 2),
+                                                                                    // Text(
+                                                                                    //   'เลขที่สัญญา',
+                                                                                    //   textAlign: TextAlign.center,
+                                                                                    //   style: TextStyle(
+                                                                                    //     color: SettingScreen_Color.Colors_Text1_,
+                                                                                    //     fontFamily: Font_.Fonts_T,
+                                                                                    //   ),
+                                                                                    // ),
                                                                                   ),
                                                                                   Expanded(
-                                                                                    child: Text(
-                                                                                      'ชื่อร้านค้า',
-                                                                                      textAlign: TextAlign.center,
-                                                                                      style: TextStyle(
-                                                                                        color: SettingScreen_Color.Colors_Text1_,
-                                                                                        fontFamily: Font_.Fonts_T,
-                                                                                      ),
-                                                                                    ),
+                                                                                    child: Translate.TranslateAndSetText('ชื่อร้านค้า', ManageScreen_Color.Colors_Text1_, TextAlign.center, FontWeight.bold, FontWeight_.Fonts_T, 14, 2),
+                                                                                    // Text(
+                                                                                    //   'ชื่อร้านค้า',
+                                                                                    //   textAlign: TextAlign.center,
+                                                                                    //   style: TextStyle(
+                                                                                    //     color: SettingScreen_Color.Colors_Text1_,
+                                                                                    //     fontFamily: Font_.Fonts_T,
+                                                                                    //   ),
+                                                                                    // ),
                                                                                   ),
                                                                                   Expanded(
-                                                                                    child: Text(
-                                                                                      'รายการ',
-                                                                                      textAlign: TextAlign.center,
-                                                                                      style: TextStyle(
-                                                                                        color: SettingScreen_Color.Colors_Text1_,
-                                                                                        fontFamily: Font_.Fonts_T,
-                                                                                      ),
-                                                                                    ),
+                                                                                    child: Translate.TranslateAndSetText('รายการ', ManageScreen_Color.Colors_Text1_, TextAlign.center, FontWeight.bold, FontWeight_.Fonts_T, 14, 2),
+                                                                                    // Text(
+                                                                                    //   'รายการ',
+                                                                                    //   textAlign: TextAlign.center,
+                                                                                    //   style: TextStyle(
+                                                                                    //     color: SettingScreen_Color.Colors_Text1_,
+                                                                                    //     fontFamily: Font_.Fonts_T,
+                                                                                    //   ),
+                                                                                    // ),
                                                                                   ),
                                                                                   Expanded(
-                                                                                    child: Text(
-                                                                                      'เลขเครื่อง',
-                                                                                      textAlign: TextAlign.center,
-                                                                                      style: TextStyle(
-                                                                                        color: SettingScreen_Color.Colors_Text1_,
-                                                                                        fontFamily: Font_.Fonts_T,
-                                                                                      ),
-                                                                                    ),
+                                                                                    child: Translate.TranslateAndSetText('เลขเครื่อง', ManageScreen_Color.Colors_Text1_, TextAlign.center, FontWeight.bold, FontWeight_.Fonts_T, 14, 2),
+                                                                                    // Text(
+                                                                                    //   'เลขเครื่อง',
+                                                                                    //   textAlign: TextAlign.center,
+                                                                                    //   style: TextStyle(
+                                                                                    //     color: SettingScreen_Color.Colors_Text1_,
+                                                                                    //     fontFamily: Font_.Fonts_T,
+                                                                                    //   ),
+                                                                                    // ),
                                                                                   ),
                                                                                   Expanded(
-                                                                                    child: Text(
-                                                                                      'เลขครั้งก่อน',
-                                                                                      textAlign: TextAlign.center,
-                                                                                      style: TextStyle(
-                                                                                        color: SettingScreen_Color.Colors_Text1_,
-                                                                                        fontFamily: Font_.Fonts_T,
-                                                                                      ),
-                                                                                    ),
+                                                                                    child: Translate.TranslateAndSetText('เลขครั้งก่อน', ManageScreen_Color.Colors_Text1_, TextAlign.center, FontWeight.bold, FontWeight_.Fonts_T, 14, 2),
+                                                                                    //  Text(
+                                                                                    //   'เลขครั้งก่อน',
+                                                                                    //   textAlign: TextAlign.center,
+                                                                                    //   style: TextStyle(
+                                                                                    //     color: SettingScreen_Color.Colors_Text1_,
+                                                                                    //     fontFamily: Font_.Fonts_T,
+                                                                                    //   ),
+                                                                                    // ),
                                                                                   ),
                                                                                   Expanded(
-                                                                                    child: Text(
-                                                                                      'เลขปัจจุบัน',
-                                                                                      textAlign: TextAlign.center,
-                                                                                      style: TextStyle(
-                                                                                        color: SettingScreen_Color.Colors_Text1_,
-                                                                                        fontFamily: Font_.Fonts_T,
-                                                                                      ),
-                                                                                    ),
+                                                                                    child: Translate.TranslateAndSetText('เลขปัจจุบัน', ManageScreen_Color.Colors_Text1_, TextAlign.center, FontWeight.bold, FontWeight_.Fonts_T, 14, 2),
+
+                                                                                    // Text(
+                                                                                    //   'เลขปัจจุบัน',
+                                                                                    //   textAlign: TextAlign.center,
+                                                                                    //   style: TextStyle(
+                                                                                    //     color: SettingScreen_Color.Colors_Text1_,
+                                                                                    //     fontFamily: Font_.Fonts_T,
+                                                                                    //   ),
+                                                                                    // ),
                                                                                   ),
                                                                                   Expanded(
-                                                                                    child: Text(
-                                                                                      'หน่วยที่ใช้',
-                                                                                      textAlign: TextAlign.center,
-                                                                                      style: TextStyle(
-                                                                                        color: SettingScreen_Color.Colors_Text1_,
-                                                                                        fontFamily: Font_.Fonts_T,
-                                                                                      ),
-                                                                                    ),
+                                                                                    child: Translate.TranslateAndSetText('หน่วยที่ใช้', ManageScreen_Color.Colors_Text1_, TextAlign.center, FontWeight.bold, FontWeight_.Fonts_T, 14, 2),
+                                                                                    //  Text(
+                                                                                    //   'หน่วยที่ใช้',
+                                                                                    //   textAlign: TextAlign.center,
+                                                                                    //   style: TextStyle(
+                                                                                    //     color: SettingScreen_Color.Colors_Text1_,
+                                                                                    //     fontFamily: Font_.Fonts_T,
+                                                                                    //   ),
+                                                                                    // ),
                                                                                   ),
                                                                                   Expanded(
-                                                                                    child: Text(
-                                                                                      'ยอดชำระ',
-                                                                                      textAlign: TextAlign.center,
-                                                                                      style: TextStyle(
-                                                                                        color: SettingScreen_Color.Colors_Text1_,
-                                                                                        fontFamily: Font_.Fonts_T,
-                                                                                      ),
-                                                                                    ),
+                                                                                    child: Translate.TranslateAndSetText('ยอดชำระ', ManageScreen_Color.Colors_Text1_, TextAlign.center, FontWeight.bold, FontWeight_.Fonts_T, 14, 2),
+                                                                                    //  Text(
+                                                                                    //   'ยอดชำระ',
+                                                                                    //   textAlign: TextAlign.center,
+                                                                                    //   style: TextStyle(
+                                                                                    //     color: SettingScreen_Color.Colors_Text1_,
+                                                                                    //     fontFamily: Font_.Fonts_T,
+                                                                                    //   ),
+                                                                                    // ),
                                                                                   ),
                                                                                 ],
                                                                               ),
@@ -2331,17 +2427,211 @@ class _ManageScreenState extends State<ManageScreen> {
                                                                           mainAxisAlignment:
                                                                               MainAxisAlignment.end,
                                                                           children: [
+                                                                            Translate.TranslateAndSetText(
+                                                                                'รูปแบบชำระ',
+                                                                                ManageScreen_Color.Colors_Text1_,
+                                                                                TextAlign.center,
+                                                                                FontWeight.bold,
+                                                                                FontWeight_.Fonts_T,
+                                                                                14,
+                                                                                2),
+                                                                            StreamBuilder(
+                                                                                stream: Stream.periodic(const Duration(milliseconds: 0)),
+                                                                                builder: (
+                                                                                  context,
+                                                                                  snapshot,
+                                                                                ) {
+                                                                                  return Container(
+                                                                                    height: 50,
+                                                                                    width: 350,
+                                                                                    // color:
+                                                                                    //     AppbackgroundColor
+                                                                                    //         .Sub_Abg_Colors,
+                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                    child: Container(
+                                                                                      decoration: BoxDecoration(
+                                                                                        color: AppbackgroundColor.Sub_Abg_Colors,
+                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                        // border: Border.all(
+                                                                                        //     color: Colors.grey, width: 1),
+                                                                                      ),
+                                                                                      width: 120,
+                                                                                      child: DropdownButtonFormField2(
+                                                                                        decoration: InputDecoration(
+                                                                                          //Add isDense true and zero Padding.
+                                                                                          //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
+                                                                                          isDense: true,
+                                                                                          contentPadding: EdgeInsets.zero,
+                                                                                          border: OutlineInputBorder(
+                                                                                            borderRadius: BorderRadius.circular(15),
+                                                                                          ),
+                                                                                          //Add more decoration as you want here
+                                                                                          //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
+                                                                                        ),
+                                                                                        isExpanded: true,
+                                                                                        // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
+                                                                                        hint: Row(
+                                                                                          children: [
+                                                                                            Text(
+                                                                                              '$paymentName1',
+                                                                                              style: const TextStyle(
+                                                                                                  fontSize: 14,
+                                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                  // fontWeight: FontWeight.bold,
+                                                                                                  fontFamily: Font_.Fonts_T),
+                                                                                            ),
+                                                                                          ],
+                                                                                        ),
+                                                                                        icon: const Icon(
+                                                                                          Icons.arrow_drop_down,
+                                                                                          color: Colors.black45,
+                                                                                        ),
+                                                                                        iconSize: 25,
+                                                                                        buttonHeight: 42,
+                                                                                        // buttonPadding:
+                                                                                        //     const EdgeInsets
+                                                                                        //         .only(
+                                                                                        //         left:
+                                                                                        //             10,
+                                                                                        //         right:
+                                                                                        //             10),
+                                                                                        dropdownDecoration: BoxDecoration(
+                                                                                          borderRadius: BorderRadius.circular(15),
+                                                                                        ),
+                                                                                        items: _PayMentModels.map((item) => DropdownMenuItem<String>(
+                                                                                              onTap: () {
+                                                                                                setState(() {
+                                                                                                  selectedValue = item.bno!;
+                                                                                                });
+                                                                                                print('**/*/*   --- ${selectedValue}');
+                                                                                              },
+                                                                                              value: '${item.ser}:${item.ptname}',
+                                                                                              child: Row(
+                                                                                                children: [
+                                                                                                  Expanded(
+                                                                                                    child: Text(
+                                                                                                      '${item.ptname!}',
+                                                                                                      textAlign: TextAlign.start,
+                                                                                                      style: const TextStyle(
+                                                                                                          fontSize: 14,
+                                                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                          // fontWeight: FontWeight.bold,
+                                                                                                          fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                  Expanded(
+                                                                                                    child: Text(
+                                                                                                      '${item.bno!}',
+                                                                                                      textAlign: TextAlign.end,
+                                                                                                      style: const TextStyle(
+                                                                                                          fontSize: 14,
+                                                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                          // fontWeight: FontWeight.bold,
+                                                                                                          fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                            )).toList(),
+                                                                                        onChanged: (value) async {
+                                                                                          print(value);
+                                                                                          // Do something when changing the item if you want.
+
+                                                                                          var zones = value!.indexOf(':');
+                                                                                          var rtnameSer = value.substring(0, zones);
+                                                                                          var rtnameName = value.substring(zones + 1);
+                                                                                          // print(
+                                                                                          //     'mmmmm ${rtnameSer.toString()} $rtnameName');
+                                                                                          setState(() {
+                                                                                            paymentSer1 = rtnameSer.toString();
+
+                                                                                            if (rtnameSer.toString() == '0') {
+                                                                                              paymentName1 = null;
+                                                                                            } else {
+                                                                                              paymentName1 = rtnameName.toString();
+                                                                                            }
+                                                                                            // paymentSer1 =
+                                                                                            //     rtnameSer;
+                                                                                          });
+                                                                                          print('mmmmm ${rtnameSer.toString()} $rtnameName');
+                                                                                          // print(
+                                                                                          //     'pppppp $paymentSer1 $paymentName1');
+                                                                                          // print('Form_payment1.text');
+                                                                                          // print(Form_payment1.text);
+                                                                                          // print(Form_payment2.text);
+                                                                                          // print('Form_payment1.text');
+                                                                                        },
+                                                                                        // onSaved: (value) {
+
+                                                                                        // },
+                                                                                      ),
+                                                                                    ),
+                                                                                  );
+                                                                                }),
+                                                                            SizedBox(
+                                                                              height: 40,
+                                                                              child: StreamBuilder(
+                                                                                  stream: Stream.periodic(const Duration(milliseconds: 0)),
+                                                                                  builder: (
+                                                                                    context,
+                                                                                    snapshot,
+                                                                                  ) {
+                                                                                    return InkWell(
+                                                                                      onTap: () async {
+                                                                                        select_Date_Inv(context);
+                                                                                      },
+                                                                                      child: Row(
+                                                                                        children: [
+                                                                                          Text(
+                                                                                            'วันที่ครบกำหนดชำระ : ',
+                                                                                            style: TextStyle(
+                                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                //fontWeight: FontWeight.bold,
+                                                                                                fontFamily: Font_.Fonts_T),
+                                                                                          ),
+                                                                                          Padding(
+                                                                                            padding: const EdgeInsets.fromLTRB(6, 6, 0, 6),
+                                                                                            child: Container(
+                                                                                              decoration: BoxDecoration(
+                                                                                                color: Colors.white,
+                                                                                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(0), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(0)),
+                                                                                                border: Border.all(color: Colors.grey, width: 1),
+                                                                                              ),
+                                                                                              // width: 120,
+                                                                                              padding: const EdgeInsets.all(2.0),
+                                                                                              child: Center(
+                                                                                                child: Text(
+                                                                                                  '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${End_Bill_Paydate}'))}',
+                                                                                                  // '${End_Bill_Paydate}',
+                                                                                                  style: const TextStyle(
+                                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                      //fontWeight: FontWeight.bold,
+                                                                                                      fontFamily: Font_.Fonts_T),
+                                                                                                ),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                          Container(
+                                                                                              decoration: BoxDecoration(
+                                                                                                color: Colors.white,
+                                                                                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(10), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(10)),
+                                                                                                border: Border.all(color: Colors.grey, width: 1),
+                                                                                              ),
+                                                                                              // width: 120,
+                                                                                              child: Icon(
+                                                                                                Icons.arrow_drop_down,
+                                                                                                color: Colors.black,
+                                                                                              )),
+                                                                                        ],
+                                                                                      ),
+                                                                                    );
+                                                                                  }),
+                                                                            ),
                                                                             Container(
                                                                               child: Padding(
-                                                                                  padding: const EdgeInsets.all(8.0),
-                                                                                  child: Text(
-                                                                                    '***หมายเหตุ เลขที่สัญญาเดียวกันจะรวมบิลอัตโนมัติ  ',
-                                                                                    textAlign: TextAlign.center,
-                                                                                    style: TextStyle(
-                                                                                      color: Colors.red,
-                                                                                      fontFamily: Font_.Fonts_T,
-                                                                                    ),
-                                                                                  )),
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: Translate.TranslateAndSetText('***หมายเหตุ เลขที่สัญญาเดียวกันจะรวมบิลอัตโนมัติ  ', Colors.red, TextAlign.center, FontWeight.bold, FontWeight_.Fonts_T, 14, 2),
+                                                                              ),
                                                                             ),
                                                                             Container(
                                                                               child: Padding(
@@ -2355,14 +2645,9 @@ class _ManageScreenState extends State<ManageScreen> {
                                                                                         // border: Border.all(color: Colors.white, width: 1),
                                                                                       ),
                                                                                       padding: const EdgeInsets.all(8.0),
-                                                                                      child: const Center(
-                                                                                          child: Text(
-                                                                                        'บันทึกวางบิล',
-                                                                                        textAlign: TextAlign.center,
-                                                                                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
-                                                                                            //fontSize: 10.0
-                                                                                            ),
-                                                                                      ))),
+                                                                                      child: Center(
+                                                                                        child: Translate.TranslateAndSetText('บันทึกวางบิล', Colors.white, TextAlign.center, FontWeight.bold, FontWeight_.Fonts_T, 14, 2),
+                                                                                      )),
                                                                                   onTap: () {
                                                                                     in_Trans_invoice().then((value) => Navigator.of(context).pop());
                                                                                   },
@@ -2404,20 +2689,24 @@ class _ManageScreenState extends State<ManageScreen> {
                                                             mainAxisAlignment:
                                                                 MainAxisAlignment
                                                                     .center,
-                                                            children: const [
+                                                            children: [
                                                               Padding(
                                                                 padding:
                                                                     EdgeInsets
                                                                         .all(
                                                                             8.0),
-                                                                child: Text(
-                                                                  'แจ้งซ่อมบำรุง',
-                                                                  style: TextStyle(
-                                                                      color: Colors.white,
-                                                                      // fontWeight: FontWeight.bold,
-                                                                      fontFamily: Font_.Fonts_T,
-                                                                      fontSize: 15.0),
-                                                                ),
+                                                                child: Translate.TranslateAndSetText(
+                                                                    'แจ้งซ่อมบำรุง',
+                                                                    Colors
+                                                                        .white,
+                                                                    TextAlign
+                                                                        .center,
+                                                                    FontWeight
+                                                                        .bold,
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                                    14,
+                                                                    2),
                                                               ),
                                                             ],
                                                           )),
@@ -2451,6 +2740,49 @@ class _ManageScreenState extends State<ManageScreen> {
     );
   }
 
+  Future<Null> select_Date_Inv(BuildContext context) async {
+    final Future<DateTime?> picked = showDatePicker(
+      // locale: const Locale('th', 'TH'),
+      helpText: 'เลือกวันที่ครบกำหนด', confirmText: 'ตกลง',
+      cancelText: 'ยกเลิก',
+      context: context,
+      initialDate: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day),
+      initialDatePickerMode: DatePickerMode.day,
+      firstDate: DateTime(2023, 1, 1),
+      lastDate: DateTime(
+          DateTime.now().year, DateTime.now().month + 6, DateTime.now().day),
+      // selectableDayPredicate: _decideWhichDayToEnable,
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: AppBarColors.ABar_Colors, // header background color
+              onPrimary: Colors.white, // header text color
+              onSurface: Colors.black, // body text color
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                primary: Colors.black, // button text color
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    picked.then((result) {
+      // ignore: unnecessary_null_comparison
+      if (picked != null) {
+        var formatter = DateFormat('yyyy-MM-dd');
+        print("${formatter.format(result!)}");
+        setState(() {
+          End_Bill_Paydate = "${formatter.format(result)}";
+        });
+      }
+    });
+  }
+
   Future<Null> in_Trans_invoice() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
@@ -2464,8 +2796,9 @@ class _ManageScreenState extends State<ManageScreen> {
     print(
         'zzzzasaaa123454>>>>  &sertype=$Ser_BodySta1&serzone=$zone_ser&serzonesub=$zone_Sub');
     // String? cFinn;
+
     String url =
-        '${MyConstant().domain}/In_tran_invoice_all.php?isAdd=true&ren=$ren&user=$user&sertype=$Ser_BodySta1&serzone=$zone_ser&serzonesub=$zone_Sub';
+        '${MyConstant().domain}/In_tran_invoice_all.php?isAdd=true&ren=$ren&user=$user&sertype=$Ser_BodySta1&serzone=$zone_ser&serzonesub=$zone_Sub&pSer=$paymentSer1&Paydate=$End_Bill_Paydate';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -2660,19 +2993,15 @@ class _ManageScreenState extends State<ManageScreen> {
                                         // border: Border.all(
                                         //     color: Colors.grey, width: 1),
                                       ),
-                                      child: const Center(
-                                        child: Text(
-                                          'ผู้เช่า',
-                                          textAlign: TextAlign.center,
-                                          maxLines: 1,
-                                          style: TextStyle(
-                                            color: ManageScreen_Color
-                                                .Colors_Text1_,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T,
-                                            // fontSize: 12.0
-                                          ),
-                                        ),
+                                      child: Center(
+                                        child: Translate.TranslateAndSetText(
+                                            'ผู้เช่า',
+                                            ManageScreen_Color.Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            14,
+                                            2),
                                       ),
                                     ),
                                   ),
@@ -2718,17 +3047,15 @@ class _ManageScreenState extends State<ManageScreen> {
                                     child: Container(
                                       height: 30,
                                       color: Colors.orange,
-                                      child: const Center(
-                                        child: Text(
-                                          'หน่วยที่ใช้',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: ManageScreen_Color
-                                                .Colors_Text1_,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T,
-                                          ),
-                                        ),
+                                      child: Center(
+                                        child: Translate.TranslateAndSetText(
+                                            'หน่วยที่ใช้',
+                                            ManageScreen_Color.Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            14,
+                                            2),
                                       ),
                                     ),
                                   ),
@@ -2759,17 +3086,15 @@ class _ManageScreenState extends State<ManageScreen> {
                                         // border: Border.all(
                                         //     color: Colors.grey, width: 1),
                                       ),
-                                      child: const Center(
-                                        child: Text(
-                                          'จำนวนเงิน',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: ManageScreen_Color
-                                                .Colors_Text1_,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T,
-                                          ),
-                                        ),
+                                      child: Center(
+                                        child: Translate.TranslateAndSetText(
+                                            'จำนวนเงิน',
+                                            ManageScreen_Color.Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            14,
+                                            2),
                                       ),
                                     ),
                                   ),
@@ -2794,17 +3119,15 @@ class _ManageScreenState extends State<ManageScreen> {
                                       child: Container(
                                         height: 50,
                                         color: Colors.lightGreen[300],
-                                        child: const Center(
-                                          child: Text(
-                                            'รหัสพื้นที่',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: ManageScreen_Color
-                                                  .Colors_Text1_,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T,
-                                            ),
-                                          ),
+                                        child: Center(
+                                          child: Translate.TranslateAndSetText(
+                                              'รหัสพื้นที่',
+                                              ManageScreen_Color.Colors_Text1_,
+                                              TextAlign.center,
+                                              FontWeight.bold,
+                                              FontWeight_.Fonts_T,
+                                              14,
+                                              2),
                                         ),
                                       ),
                                     ),
@@ -2813,17 +3136,15 @@ class _ManageScreenState extends State<ManageScreen> {
                                       child: Container(
                                         height: 50,
                                         color: Colors.lightGreen[300],
-                                        child: const Center(
-                                          child: Text(
-                                            'เลขที่สัญญา',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: ManageScreen_Color
-                                                  .Colors_Text1_,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T,
-                                            ),
-                                          ),
+                                        child: Center(
+                                          child: Translate.TranslateAndSetText(
+                                              'เลขที่สัญญา',
+                                              ManageScreen_Color.Colors_Text1_,
+                                              TextAlign.center,
+                                              FontWeight.bold,
+                                              FontWeight_.Fonts_T,
+                                              14,
+                                              2),
                                         ),
                                       ),
                                     ),
@@ -2832,57 +3153,15 @@ class _ManageScreenState extends State<ManageScreen> {
                                       child: Container(
                                         height: 50,
                                         color: Colors.lightGreen[300],
-                                        child: const Center(
-                                          child: Text(
-                                            'ชื่อร้านค้า',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: ManageScreen_Color
-                                                  .Colors_Text1_,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Container(
-                                        height: 50,
-                                        color: Colors.lightGreen[300],
-                                        child: const Center(
-                                          child: Text(
-                                            'รายการ',
-                                            textAlign: TextAlign.center,
-                                            maxLines: 1,
-                                            style: TextStyle(
-                                              color: ManageScreen_Color
-                                                  .Colors_Text1_,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Container(
-                                        height: 50,
-                                        color: Colors.lightGreen[300],
-                                        child: const Center(
-                                          child: Text(
-                                            'หมายเลขเครื่อง',
-                                            textAlign: TextAlign.center,
-                                            maxLines: 1,
-                                            style: TextStyle(
-                                              color: ManageScreen_Color
-                                                  .Colors_Text1_,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T,
-                                            ),
-                                          ),
+                                        child: Center(
+                                          child: Translate.TranslateAndSetText(
+                                              'ชื่อร้านค้า',
+                                              ManageScreen_Color.Colors_Text1_,
+                                              TextAlign.center,
+                                              FontWeight.bold,
+                                              FontWeight_.Fonts_T,
+                                              14,
+                                              2),
                                         ),
                                       ),
                                     ),
@@ -2892,16 +3171,58 @@ class _ManageScreenState extends State<ManageScreen> {
                                         height: 50,
                                         color: Colors.lightGreen[300],
                                         child: Center(
-                                          child: Text(
-                                            'เลขมิเตอร์เดือน ${DateFormat.MMM('th_TH').format(DateTime.parse('${DateFormat('yyyy').format(datex)}-${(datex.month - 1).toString().padLeft(2, '0')}-${DateFormat('dd').format(datex)} 00:00:00'))}',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: ManageScreen_Color
-                                                  .Colors_Text1_,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T,
-                                            ),
-                                          ),
+                                          child: Translate.TranslateAndSetText(
+                                              'รายการ',
+                                              ManageScreen_Color.Colors_Text1_,
+                                              TextAlign.center,
+                                              FontWeight.bold,
+                                              FontWeight_.Fonts_T,
+                                              14,
+                                              2),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 3,
+                                      child: Container(
+                                        height: 50,
+                                        color: Colors.lightGreen[300],
+                                        child: Center(
+                                          child: Translate.TranslateAndSetText(
+                                              'หมายเลขเครื่อง',
+                                              ManageScreen_Color.Colors_Text1_,
+                                              TextAlign.center,
+                                              FontWeight.bold,
+                                              FontWeight_.Fonts_T,
+                                              14,
+                                              2),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 3,
+                                      child: Container(
+                                        height: 50,
+                                        color: Colors.lightGreen[300],
+                                        child: Center(
+                                          child: Translate.TranslateAndSetText(
+                                              'เลขมิเตอร์เดือน ${DateFormat.MMM('th_TH').format(DateTime.parse('${DateFormat('yyyy').format(datex)}-${(datex.month - 1).toString().padLeft(2, '0')}-${DateFormat('dd').format(datex)} 00:00:00'))}',
+                                              ManageScreen_Color.Colors_Text1_,
+                                              TextAlign.center,
+                                              FontWeight.bold,
+                                              FontWeight_.Fonts_T,
+                                              14,
+                                              2),
+                                          // Text(
+                                          //   'เลขมิเตอร์เดือน ${DateFormat.MMM('th_TH').format(DateTime.parse('${DateFormat('yyyy').format(datex)}-${(datex.month - 1).toString().padLeft(2, '0')}-${DateFormat('dd').format(datex)} 00:00:00'))}',
+                                          //   textAlign: TextAlign.center,
+                                          //   style: TextStyle(
+                                          //     color: ManageScreen_Color
+                                          //         .Colors_Text1_,
+                                          //     fontWeight: FontWeight.bold,
+                                          //     fontFamily: FontWeight_.Fonts_T,
+                                          //   ),
+                                          // ),
                                         ),
                                       ),
                                     ),
@@ -2911,16 +3232,24 @@ class _ManageScreenState extends State<ManageScreen> {
                                         height: 50,
                                         color: Colors.orange[300],
                                         child: Center(
-                                          child: Text(
-                                            'เลขมิเตอร์เดือน ${DateFormat.MMM('th_TH').format(datex)}',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: ManageScreen_Color
-                                                  .Colors_Text1_,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T,
-                                            ),
-                                          ),
+                                          child: Translate.TranslateAndSetText(
+                                              'เลขมิเตอร์เดือน ${DateFormat.MMM('th_TH').format(datex)}',
+                                              ManageScreen_Color.Colors_Text1_,
+                                              TextAlign.center,
+                                              FontWeight.bold,
+                                              FontWeight_.Fonts_T,
+                                              14,
+                                              2),
+                                          // Text(
+                                          //   'เลขมิเตอร์เดือน ${DateFormat.MMM('th_TH').format(datex)}',
+                                          //   textAlign: TextAlign.center,
+                                          //   style: TextStyle(
+                                          //     color: ManageScreen_Color
+                                          //         .Colors_Text1_,
+                                          //     fontWeight: FontWeight.bold,
+                                          //     fontFamily: FontWeight_.Fonts_T,
+                                          //   ),
+                                          // ),
                                         ),
                                       ),
                                     ),
@@ -2929,17 +3258,26 @@ class _ManageScreenState extends State<ManageScreen> {
                                       child: Container(
                                         height: 50,
                                         color: Colors.orange[300],
-                                        child: const Center(
-                                          child: Text(
-                                            'หน่วยที่ใช้',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: ManageScreen_Color
-                                                  .Colors_Text1_,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T,
-                                            ),
-                                          ),
+                                        child: Center(
+                                          child: Translate.TranslateAndSetText(
+                                              'หน่วยที่ใช้',
+                                              ManageScreen_Color.Colors_Text1_,
+                                              TextAlign.center,
+                                              FontWeight.bold,
+                                              FontWeight_.Fonts_T,
+                                              14,
+                                              2),
+
+                                          // Text(
+                                          //   'หน่วยที่ใช้',
+                                          //   textAlign: TextAlign.center,
+                                          //   style: TextStyle(
+                                          //     color: ManageScreen_Color
+                                          //         .Colors_Text1_,
+                                          //     fontWeight: FontWeight.bold,
+                                          //     fontFamily: FontWeight_.Fonts_T,
+                                          //   ),
+                                          // ),
                                         ),
                                       ),
                                     ),
@@ -2948,17 +3286,15 @@ class _ManageScreenState extends State<ManageScreen> {
                                       child: Container(
                                         height: 50,
                                         color: Colors.deepPurple[300],
-                                        child: const Center(
-                                          child: Text(
-                                            'ราคาต่อหน่วย',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: ManageScreen_Color
-                                                  .Colors_Text1_,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T,
-                                            ),
-                                          ),
+                                        child: Center(
+                                          child: Translate.TranslateAndSetText(
+                                              'ราคาต่อหน่วย',
+                                              ManageScreen_Color.Colors_Text1_,
+                                              TextAlign.center,
+                                              FontWeight.bold,
+                                              FontWeight_.Fonts_T,
+                                              14,
+                                              2),
                                         ),
                                       ),
                                     ),
@@ -3024,17 +3360,25 @@ class _ManageScreenState extends State<ManageScreen> {
                                       child: Container(
                                         height: 50,
                                         color: Colors.deepPurple[300],
-                                        child: const Center(
-                                          child: Text(
-                                            'รวม Vat',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: ManageScreen_Color
-                                                  .Colors_Text1_,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T,
-                                            ),
-                                          ),
+                                        child: Center(
+                                          child: Translate.TranslateAndSetText(
+                                              'รวม Vat',
+                                              ManageScreen_Color.Colors_Text1_,
+                                              TextAlign.center,
+                                              FontWeight.bold,
+                                              FontWeight_.Fonts_T,
+                                              14,
+                                              2),
+                                          //  Text(
+                                          //   'รวม Vat',
+                                          //   textAlign: TextAlign.center,
+                                          //   style: TextStyle(
+                                          //     color: ManageScreen_Color
+                                          //         .Colors_Text1_,
+                                          //     fontWeight: FontWeight.bold,
+                                          //     fontFamily: FontWeight_.Fonts_T,
+                                          //   ),
+                                          // ),
                                         ),
                                       ),
                                     ),
@@ -3121,7 +3465,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                .fromLTRB(
+                                                                    .fromLTRB(
                                                                 2, 0, 2, 0),
                                                         child: Text(
                                                           '${transMeterModels[index].ln}',
@@ -3146,7 +3490,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                .fromLTRB(
+                                                                    .fromLTRB(
                                                                 2, 0, 2, 0),
                                                         child: Text(
                                                           '${transMeterModels[index].refno}',
@@ -3171,7 +3515,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                .fromLTRB(
+                                                                    .fromLTRB(
                                                                 2, 0, 2, 0),
                                                         child: Text(
                                                           '${transMeterModels[index].sname}',
@@ -3196,7 +3540,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                .fromLTRB(
+                                                                    .fromLTRB(
                                                                 2, 0, 2, 0),
                                                         child: Text(
                                                           '${transMeterModels[index].expname} ${transMeterModels[index].date}',
@@ -3222,7 +3566,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                .fromLTRB(
+                                                                    .fromLTRB(
                                                                 2, 0, 2, 0),
                                                         child: Text(
                                                           '${transMeterModels[index].num_meter}',
@@ -3248,7 +3592,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                .fromLTRB(
+                                                                    .fromLTRB(
                                                                 2, 0, 2, 0),
                                                         child: Text(
                                                           '${nFormat.format(double.parse(transMeterModels[index].ovalue!))}',
@@ -3984,7 +4328,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                                         child: Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                  .fromLTRB(
+                                                                      .fromLTRB(
                                                                   8, 2, 8, 2),
                                                           child: InkWell(
                                                             child: Container(
@@ -3999,7 +4343,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                                                     : Colors
                                                                         .green,
                                                                 borderRadius: const BorderRadius
-                                                                    .only(
+                                                                        .only(
                                                                     topLeft:
                                                                         Radius.circular(
                                                                             10),
@@ -4017,28 +4361,45 @@ class _ManageScreenState extends State<ManageScreen> {
                                                                   const EdgeInsets
                                                                       .all(2.0),
                                                               child: Center(
-                                                                child: Text(
-                                                                  (transMeterModels[index]
-                                                                              .img !=
-                                                                          '')
-                                                                      ? 'ดู/แก้ไข'
-                                                                      : 'เพิ่ม',
-                                                                  //'${transMeterModels[index].c_amt}',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .right,
-                                                                  style:
-                                                                      const TextStyle(
-                                                                    color: ManageScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T,
-                                                                  ),
-                                                                ),
+                                                                child: Translate.TranslateAndSetText(
+                                                                    (transMeterModels[index]
+                                                                                .img !=
+                                                                            '')
+                                                                        ? 'ดู/แก้ไข'
+                                                                        : 'เพิ่ม',
+                                                                    ManageScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    TextAlign
+                                                                        .right,
+                                                                    FontWeight
+                                                                        .bold,
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                                    14,
+                                                                    2),
+
+                                                                // Text(
+                                                                //   (transMeterModels[index]
+                                                                //               .img !=
+                                                                //           '')
+                                                                //       ? 'ดู/แก้ไข'
+                                                                //       : 'เพิ่ม',
+                                                                //   //'${transMeterModels[index].c_amt}',
+                                                                //   textAlign:
+                                                                //       TextAlign
+                                                                //           .right,
+                                                                //   style:
+                                                                //       const TextStyle(
+                                                                //     color: ManageScreen_Color
+                                                                //         .Colors_Text2_,
+                                                                //     fontWeight:
+                                                                //         FontWeight
+                                                                //             .bold,
+                                                                //     fontFamily:
+                                                                //         Font_
+                                                                //             .Fonts_T,
+                                                                //   ),
+                                                                // ),
                                                               ),
                                                             ),
                                                             onTap: () {
@@ -4778,9 +5139,8 @@ class _ManageScreenState extends State<ManageScreen> {
                                                                               .center,
                                                                       children: [
                                                                         Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
                                                                           child:
                                                                               Row(
                                                                             mainAxisAlignment:
@@ -4902,9 +5262,8 @@ class _ManageScreenState extends State<ManageScreen> {
                                                                           ],
                                                                         ),
                                                                         Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
                                                                           child:
                                                                               TextFormField(
                                                                             keyboardType:
@@ -4984,9 +5343,8 @@ class _ManageScreenState extends State<ManageScreen> {
                                                                               .center,
                                                                       children: [
                                                                         Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
                                                                           child:
                                                                               Row(
                                                                             mainAxisAlignment:
@@ -5074,9 +5432,8 @@ class _ManageScreenState extends State<ManageScreen> {
                                                                           ),
                                                                         ),
                                                                         Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              8.0),
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
                                                                           child:
                                                                               Row(
                                                                             mainAxisAlignment:

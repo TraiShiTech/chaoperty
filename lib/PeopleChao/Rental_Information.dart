@@ -46,6 +46,9 @@ import '../Model/GetTeNant_Model.dart';
 import '../Model/GetTrans_Model.dart';
 import '../Model/PakanDocnoModel.dart';
 import '../Model/electricity_model.dart';
+import '../PDF/Choice/Sub_Agreement_Choice/pdf_SubAgreement_Choice.dart';
+import '../PDF/Choice/Sub_Agreement_Choice/pdf_SubAgreement_Choice2.dart';
+import '../PDF/Choice/Sub_Agreement_Choice/pdf_SubAgreement_Choice3.dart';
 import '../PDF/Choice/pdf_Agreement_Choice.dart';
 import '../PDF/Choice/pdf_Agreement_Choice2.dart';
 import '../PDF/Choice/pdf_Agreement_Choice3.dart';
@@ -128,6 +131,7 @@ class _RentalInformationState extends State<RentalInformation> {
   final Form_UserPass = TextEditingController();
 /////////----------------------------------------->
   final Form_fid = TextEditingController();
+  final Form_renew_cid = TextEditingController();
   final Form_PakanSdate = TextEditingController();
   final Form_PakanLdate = TextEditingController();
   final Form_PakanSdate_Doc = TextEditingController();
@@ -136,6 +140,11 @@ class _RentalInformationState extends State<RentalInformation> {
   final Form_PakanAll_pvat = TextEditingController();
   final Form_PakanAll_vat = TextEditingController();
   final Form_PakanAll_Total = TextEditingController();
+  final Form_PakanAll_Total_bill = TextEditingController();
+
+  final Form_pvat_pakan_cid = TextEditingController();
+  final Form_vat_pakan_cid = TextEditingController();
+  final Form_total_pakan_cid = TextEditingController();
   String tappedIndex_1 = ''; // รายละเอียดค่าบริการ
   String tappedIndex_2 = ''; // รายละเอียดค่าบริการ
   List<QuotxSelectModel> quotxSelectModels = [];
@@ -166,7 +175,6 @@ class _RentalInformationState extends State<RentalInformation> {
     super.initState();
     checkPreferance();
     read_customer();
-    read_PakanDocno();
   }
 
   Color cardColor = Colors.green[300]!;
@@ -426,9 +434,11 @@ class _RentalInformationState extends State<RentalInformation> {
             Form_qty.text = teNantModel.qty.toString();
             Form_cdate.text = teNantModel.cdate.toString();
             Form_fid.text = teNantModel.fid.toString();
+            Form_renew_cid.text = teNantModel.renew_cid.toString();
           });
         }
         red_coutumer();
+        read_PakanDocno();
       }
     } catch (e) {}
   }
@@ -1306,7 +1316,7 @@ class _RentalInformationState extends State<RentalInformation> {
     var ciddoc = widget.Get_Value_cid;
 
     String url =
-        '${MyConstant().domain}/GC_PakanDocno_Choice.php?isAdd=true&ren=$ren&ciddoc=$ciddoc';
+        '${MyConstant().domain}/GC_PakanDocno_Choice.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&renew_cid=${Form_renew_cid.text}';
 
     try {
       var response = await http.get(Uri.parse(url));
@@ -1339,6 +1349,30 @@ class _RentalInformationState extends State<RentalInformation> {
                     pakanDocnoModel.total_pakan.toString() == '')
                 ? '0.00'
                 : pakanDocnoModel.total_pakan.toString();
+
+            Form_PakanAll_Total_bill.text =
+                (pakanDocnoModel.total_bill == null ||
+                        pakanDocnoModel.total_bill.toString() == '')
+                    ? '0.00'
+                    : pakanDocnoModel.total_bill.toString();
+
+            Form_pvat_pakan_cid.text =
+                (pakanDocnoModel.pvat_pakan_cid == null ||
+                        pakanDocnoModel.pvat_pakan_cid.toString() == '')
+                    ? '0.00'
+                    : pakanDocnoModel.pvat_pakan_cid.toString();
+
+            Form_vat_pakan_cid.text = (pakanDocnoModel.vat_pakan_cid == null ||
+                    pakanDocnoModel.vat_pakan_cid.toString() == '')
+                ? '0.00'
+                : pakanDocnoModel.vat_pakan_cid.toString();
+
+            Form_total_pakan_cid.text =
+                (pakanDocnoModel.total_pakan_cid == null ||
+                        pakanDocnoModel.total_pakan_cid.toString() == '')
+                    ? '0.00'
+                    : pakanDocnoModel.total_pakan_cid.toString();
+
             pakanDocnoModels.add(pakanDocnoModel);
           });
         }
@@ -3276,46 +3310,200 @@ class _RentalInformationState extends State<RentalInformation> {
                         child: InkWell(
                           onTap: (type == 2)
                               ? () {
-                                  Pdfgen_Agreement_JSpace2
-                                      .exportPDF_Agreement_JSpace2(
-                                          context,
-                                          '${widget.Get_Value_NameShop_index}',
-                                          '${widget.Get_Value_cid}',
-                                          _verticalGroupValue,
-                                          Form_nameshop.text,
-                                          Form_typeshop.text,
-                                          Form_bussshop.text,
-                                          Form_bussscontact.text,
-                                          Form_address.text,
-                                          Form_tel.text,
-                                          Form_email.text,
-                                          Form_tax.text,
-                                          Form_ln.text,
-                                          Form_zn.text,
-                                          Form_area.text,
-                                          Form_qty.text,
-                                          Form_sdate.text,
-                                          Form_ldate.text,
-                                          Form_period.text,
-                                          Form_rtname.text,
-                                          quotxSelectModels,
-                                          _TransModels,
-                                          '$renTal_name',
-                                          '${renTalModels[0].bill_addr}',
-                                          '${renTalModels[0].bill_email}',
-                                          '${renTalModels[0].bill_tel}',
-                                          '${renTalModels[0].bill_tax}',
-                                          '${renTalModels[0].bill_name}',
-                                          newValuePDFimg,
-                                          tableData00,
-                                          TitleType_Default_Receipt_Name,
-                                          Datex_text,
-                                          Pri1_text,
-                                          Pri2_text,
-                                          Pri3_text
-
-                                          // (ser_user == null) ? '' : ser_user
-                                          );
+                                  String _ReportValue_type =
+                                      (ren.toString() == '90')
+                                          ? _ReportValue_type_JSpace
+                                          : (ren.toString() == '72' ||
+                                                  ren.toString() == '92' ||
+                                                  ren.toString() == '93' ||
+                                                  ren.toString() == '94')
+                                              ? _ReportValue_type_docOttor
+                                              : (ren.toString() == '102')
+                                                  ? _ReportValue_type_Ama
+                                                  : (ren.toString() == '106')
+                                                      ? _ReportValue_type_Choice
+                                                      : _ReportValue_type_doc;
+                                  print(_ReportValue_type);
+                                  if (_ReportValue_type == 'สัญญาเช่าที่ดิน') {
+                                    Pdfgen_SubAgreement_Choice
+                                        .exportPDF_SubAgreement_Choice(
+                                      context,
+                                      '${widget.Get_Value_NameShop_index}',
+                                      '${widget.Get_Value_cid}',
+                                      _verticalGroupValue,
+                                      Form_nameshop.text,
+                                      Form_typeshop.text,
+                                      Form_bussshop.text,
+                                      Form_bussscontact.text,
+                                      Form_address.text,
+                                      Form_tel.text,
+                                      Form_email.text,
+                                      Form_tax.text,
+                                      Form_ln.text,
+                                      Form_zn.text,
+                                      Form_area.text,
+                                      Form_qty.text,
+                                      Form_sdate.text,
+                                      Form_ldate.text,
+                                      Form_period.text,
+                                      Form_rtname.text,
+                                      quotxSelectModels,
+                                      _TransModels,
+                                      '$renTal_name',
+                                      '${renTalModels[0].bill_addr}',
+                                      '${renTalModels[0].bill_email}',
+                                      '${renTalModels[0].bill_tel}',
+                                      '${renTalModels[0].bill_tax}',
+                                      '${renTalModels[0].bill_name}',
+                                      newValuePDFimg,
+                                      tableData00,
+                                      TitleType_Default_Receipt_Name,
+                                      Datex_text,
+                                      _ReportValue_type_docOttor,
+                                      Form_fid.text,
+                                      Form_renew_cid.text,
+                                      Form_PakanSdate.text,
+                                      Form_PakanLdate.text,
+                                      Form_PakanSdate_Doc.text,
+                                      Form_PakanLdate_Doc.text,
+                                      Form_PakanAll_amt.text,
+                                      Form_PakanAll_pvat.text,
+                                      Form_PakanAll_vat.text,
+                                      Form_PakanAll_Total.text,
+                                    );
+                                  } else if (_ReportValue_type ==
+                                      'สัญญาห้องเช่า') {
+                                    Pdfgen_SubAgreement_Choice2
+                                        .exportPDF_SubAgreement_Choice2(
+                                            context,
+                                            '${widget.Get_Value_NameShop_index}',
+                                            '${widget.Get_Value_cid}',
+                                            _verticalGroupValue,
+                                            Form_nameshop.text,
+                                            Form_typeshop.text,
+                                            Form_bussshop.text,
+                                            Form_bussscontact.text,
+                                            Form_address.text,
+                                            Form_tel.text,
+                                            Form_email.text,
+                                            Form_tax.text,
+                                            Form_ln.text,
+                                            Form_zn.text,
+                                            Form_area.text,
+                                            Form_qty.text,
+                                            Form_sdate.text,
+                                            Form_ldate.text,
+                                            Form_period.text,
+                                            Form_rtname.text,
+                                            quotxSelectModels,
+                                            _TransModels,
+                                            '$renTal_name',
+                                            '${renTalModels[0].bill_addr}',
+                                            '${renTalModels[0].bill_email}',
+                                            '${renTalModels[0].bill_tel}',
+                                            '${renTalModels[0].bill_tax}',
+                                            '${renTalModels[0].bill_name}',
+                                            newValuePDFimg,
+                                            tableData00,
+                                            TitleType_Default_Receipt_Name,
+                                            Datex_text,
+                                            _ReportValue_type_docOttor,
+                                            Form_fid.text,
+                                            Form_renew_cid.text,
+                                            Form_PakanSdate.text,
+                                            Form_PakanLdate.text,
+                                            Form_PakanSdate_Doc.text,
+                                            Form_PakanLdate_Doc.text,
+                                            Form_PakanAll_amt.text,
+                                            Form_PakanAll_pvat.text,
+                                            Form_PakanAll_vat.text,
+                                            Form_PakanAll_Total.text);
+                                  } else if (_ReportValue_type ==
+                                      'สัญญาบริการ') {
+                                    Pdfgen_SubAgreement_Choice3
+                                        .exportPDF_SubAgreement_Choice3(
+                                            context,
+                                            '${widget.Get_Value_NameShop_index}',
+                                            '${widget.Get_Value_cid}',
+                                            _verticalGroupValue,
+                                            Form_nameshop.text,
+                                            Form_typeshop.text,
+                                            Form_bussshop.text,
+                                            Form_bussscontact.text,
+                                            Form_address.text,
+                                            Form_tel.text,
+                                            Form_email.text,
+                                            Form_tax.text,
+                                            Form_ln.text,
+                                            Form_zn.text,
+                                            Form_area.text,
+                                            Form_qty.text,
+                                            Form_sdate.text,
+                                            Form_ldate.text,
+                                            Form_period.text,
+                                            Form_rtname.text,
+                                            quotxSelectModels,
+                                            _TransModels,
+                                            '$renTal_name',
+                                            '${renTalModels[0].bill_addr}',
+                                            '${renTalModels[0].bill_email}',
+                                            '${renTalModels[0].bill_tel}',
+                                            '${renTalModels[0].bill_tax}',
+                                            '${renTalModels[0].bill_name}',
+                                            newValuePDFimg,
+                                            tableData00,
+                                            TitleType_Default_Receipt_Name,
+                                            Datex_text,
+                                            _ReportValue_type_docOttor,
+                                            Form_fid.text,
+                                            Form_renew_cid.text,
+                                            Form_PakanSdate.text,
+                                            Form_PakanLdate.text,
+                                            Form_PakanSdate_Doc.text,
+                                            Form_PakanLdate_Doc.text,
+                                            Form_PakanAll_amt.text,
+                                            Form_PakanAll_pvat.text,
+                                            Form_PakanAll_vat.text,
+                                            Form_PakanAll_Total.text);
+                                  } else if (_ReportValue_type == 'JSpace') {
+                                    Pdfgen_Agreement_JSpace2
+                                        .exportPDF_Agreement_JSpace2(
+                                            context,
+                                            '${widget.Get_Value_NameShop_index}',
+                                            '${widget.Get_Value_cid}',
+                                            _verticalGroupValue,
+                                            Form_nameshop.text,
+                                            Form_typeshop.text,
+                                            Form_bussshop.text,
+                                            Form_bussscontact.text,
+                                            Form_address.text,
+                                            Form_tel.text,
+                                            Form_email.text,
+                                            Form_tax.text,
+                                            Form_ln.text,
+                                            Form_zn.text,
+                                            Form_area.text,
+                                            Form_qty.text,
+                                            Form_sdate.text,
+                                            Form_ldate.text,
+                                            Form_period.text,
+                                            Form_rtname.text,
+                                            quotxSelectModels,
+                                            _TransModels,
+                                            '$renTal_name',
+                                            '${renTalModels[0].bill_addr}',
+                                            '${renTalModels[0].bill_email}',
+                                            '${renTalModels[0].bill_tel}',
+                                            '${renTalModels[0].bill_tax}',
+                                            '${renTalModels[0].bill_name}',
+                                            newValuePDFimg,
+                                            tableData00,
+                                            TitleType_Default_Receipt_Name,
+                                            Datex_text,
+                                            Pri1_text,
+                                            Pri2_text,
+                                            Pri3_text);
+                                  }
                                 }
                               : () {
                                   String _ReportValue_type =
@@ -3445,6 +3633,7 @@ class _RentalInformationState extends State<RentalInformation> {
                                       Datex_text,
                                       _ReportValue_type_docOttor,
                                       Form_fid.text,
+                                      Form_renew_cid.text,
                                       Form_PakanSdate.text,
                                       Form_PakanLdate.text,
                                       Form_PakanSdate_Doc.text,
@@ -3458,96 +3647,97 @@ class _RentalInformationState extends State<RentalInformation> {
                                       'สัญญาห้องเช่า') {
                                     Pdfgen_Agreement_Choice2
                                         .exportPDF_Agreement_Choice2(
-                                      context,
-                                      '${widget.Get_Value_NameShop_index}',
-                                      '${widget.Get_Value_cid}',
-                                      _verticalGroupValue,
-                                      Form_nameshop.text,
-                                      Form_typeshop.text,
-                                      Form_bussshop.text,
-                                      Form_bussscontact.text,
-                                      Form_address.text,
-                                      Form_tel.text,
-                                      Form_email.text,
-                                      Form_tax.text,
-                                      Form_ln.text,
-                                      Form_zn.text,
-                                      Form_area.text,
-                                      Form_qty.text,
-                                      Form_sdate.text,
-                                      Form_ldate.text,
-                                      Form_period.text,
-                                      Form_rtname.text,
-                                      quotxSelectModels,
-                                      _TransModels,
-                                      '$renTal_name',
-                                      '${renTalModels[0].bill_addr}',
-                                      '${renTalModels[0].bill_email}',
-                                      '${renTalModels[0].bill_tel}',
-                                      '${renTalModels[0].bill_tax}',
-                                      '${renTalModels[0].bill_name}',
-                                      newValuePDFimg,
-                                      tableData00,
-                                      TitleType_Default_Receipt_Name,
-                                      Datex_text,
-                                      _ReportValue_type_docOttor,
-                                      Form_fid.text,
-                                      Form_PakanSdate.text,
-                                      Form_PakanLdate.text,
-                                      Form_PakanSdate_Doc.text,
-                                      Form_PakanLdate_Doc.text,
-                                      Form_PakanAll_amt.text,
-                                      Form_PakanAll_pvat.text,
-                                      Form_PakanAll_vat.text,
-                                      Form_PakanAll_Total.text,
-                                    );
+                                            context,
+                                            '${widget.Get_Value_NameShop_index}',
+                                            '${widget.Get_Value_cid}',
+                                            _verticalGroupValue,
+                                            Form_nameshop.text,
+                                            Form_typeshop.text,
+                                            Form_bussshop.text,
+                                            Form_bussscontact.text,
+                                            Form_address.text,
+                                            Form_tel.text,
+                                            Form_email.text,
+                                            Form_tax.text,
+                                            Form_ln.text,
+                                            Form_zn.text,
+                                            Form_area.text,
+                                            Form_qty.text,
+                                            Form_sdate.text,
+                                            Form_ldate.text,
+                                            Form_period.text,
+                                            Form_rtname.text,
+                                            quotxSelectModels,
+                                            _TransModels,
+                                            '$renTal_name',
+                                            '${renTalModels[0].bill_addr}',
+                                            '${renTalModels[0].bill_email}',
+                                            '${renTalModels[0].bill_tel}',
+                                            '${renTalModels[0].bill_tax}',
+                                            '${renTalModels[0].bill_name}',
+                                            newValuePDFimg,
+                                            tableData00,
+                                            TitleType_Default_Receipt_Name,
+                                            Datex_text,
+                                            _ReportValue_type_docOttor,
+                                            Form_fid.text,
+                                            Form_renew_cid.text,
+                                            Form_PakanSdate.text,
+                                            Form_PakanLdate.text,
+                                            Form_PakanSdate_Doc.text,
+                                            Form_PakanLdate_Doc.text,
+                                            Form_PakanAll_amt.text,
+                                            Form_PakanAll_pvat.text,
+                                            Form_PakanAll_vat.text,
+                                            Form_PakanAll_Total.text);
                                   } else if (_ReportValue_type ==
                                       'สัญญาบริการ') {
                                     Pdfgen_Agreement_Choice3
                                         .exportPDF_Agreement_Choice3(
-                                      context,
-                                      '${widget.Get_Value_NameShop_index}',
-                                      '${widget.Get_Value_cid}',
-                                      _verticalGroupValue,
-                                      Form_nameshop.text,
-                                      Form_typeshop.text,
-                                      Form_bussshop.text,
-                                      Form_bussscontact.text,
-                                      Form_address.text,
-                                      Form_tel.text,
-                                      Form_email.text,
-                                      Form_tax.text,
-                                      Form_ln.text,
-                                      Form_zn.text,
-                                      Form_area.text,
-                                      Form_qty.text,
-                                      Form_sdate.text,
-                                      Form_ldate.text,
-                                      Form_period.text,
-                                      Form_rtname.text,
-                                      quotxSelectModels,
-                                      _TransModels,
-                                      '$renTal_name',
-                                      '${renTalModels[0].bill_addr}',
-                                      '${renTalModels[0].bill_email}',
-                                      '${renTalModels[0].bill_tel}',
-                                      '${renTalModels[0].bill_tax}',
-                                      '${renTalModels[0].bill_name}',
-                                      newValuePDFimg,
-                                      tableData00,
-                                      TitleType_Default_Receipt_Name,
-                                      Datex_text,
-                                      _ReportValue_type_docOttor,
-                                      Form_fid.text,
-                                      Form_PakanSdate.text,
-                                      Form_PakanLdate.text,
-                                      Form_PakanSdate_Doc.text,
-                                      Form_PakanLdate_Doc.text,
-                                      Form_PakanAll_amt.text,
-                                      Form_PakanAll_pvat.text,
-                                      Form_PakanAll_vat.text,
-                                      Form_PakanAll_Total.text,
-                                    );
+                                            context,
+                                            '${widget.Get_Value_NameShop_index}',
+                                            '${widget.Get_Value_cid}',
+                                            _verticalGroupValue,
+                                            Form_nameshop.text,
+                                            Form_typeshop.text,
+                                            Form_bussshop.text,
+                                            Form_bussscontact.text,
+                                            Form_address.text,
+                                            Form_tel.text,
+                                            Form_email.text,
+                                            Form_tax.text,
+                                            Form_ln.text,
+                                            Form_zn.text,
+                                            Form_area.text,
+                                            Form_qty.text,
+                                            Form_sdate.text,
+                                            Form_ldate.text,
+                                            Form_period.text,
+                                            Form_rtname.text,
+                                            quotxSelectModels,
+                                            _TransModels,
+                                            '$renTal_name',
+                                            '${renTalModels[0].bill_addr}',
+                                            '${renTalModels[0].bill_email}',
+                                            '${renTalModels[0].bill_tel}',
+                                            '${renTalModels[0].bill_tax}',
+                                            '${renTalModels[0].bill_name}',
+                                            newValuePDFimg,
+                                            tableData00,
+                                            TitleType_Default_Receipt_Name,
+                                            Datex_text,
+                                            _ReportValue_type_docOttor,
+                                            Form_fid.text,
+                                            Form_renew_cid.text,
+                                            Form_PakanSdate.text,
+                                            Form_PakanLdate.text,
+                                            Form_PakanSdate_Doc.text,
+                                            Form_PakanLdate_Doc.text,
+                                            Form_PakanAll_amt.text,
+                                            Form_PakanAll_pvat.text,
+                                            Form_PakanAll_vat.text,
+                                            Form_PakanAll_Total.text,
+                                            Form_PakanAll_Total_bill.text);
                                   } else if (_ReportValue_type ==
                                       'สัญญาเช่าพื้นที่') {
                                     Pdfgen_Agreement_Ama1000.exportPDF_Agreement_Ama1000(
@@ -6440,7 +6630,7 @@ class _RentalInformationState extends State<RentalInformation> {
                         Expanded(
                           flex: 1,
                           child: Text(
-                            'เงินประกันทั้งหมด',
+                            'เงินประกันทั้งหมด(บาท)',
                             textAlign: TextAlign.start,
                             style: TextStyle(
                                 color: PeopleChaoScreen_Color.Colors_Text2_,
@@ -6513,7 +6703,7 @@ class _RentalInformationState extends State<RentalInformation> {
                         Expanded(
                           flex: 1,
                           child: Text(
-                            'บาท',
+                            'เลขที่สัญญาเดิม/ครั้งแรก',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: PeopleChaoScreen_Color.Colors_Text2_,
@@ -6521,7 +6711,68 @@ class _RentalInformationState extends State<RentalInformation> {
                                 fontFamily: Font_.Fonts_T),
                           ),
                         ),
-                        Expanded(flex: 2, child: Text('')),
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              // color: Colors.green,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(6),
+                                topRight: Radius.circular(6),
+                                bottomLeft: Radius.circular(6),
+                                bottomRight: Radius.circular(6),
+                              ),
+                              // border: Border.all(color: Colors.grey, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              showCursor: false, //add this line
+                              readOnly: true,
+                              // initialValue: (Form_PakanAll_Total == null ||
+                              //         Form_PakanAll_Total.text == '' ||
+                              //         pakanDocnoModels.length == 0)
+                              //     ? '0.00'
+                              //     : '${nFormat.format(double.parse('${Form_PakanAll_Total.text}'))}',
+
+                              controller: Form_renew_cid,
+                              cursorColor: Colors.green,
+                              decoration: InputDecoration(
+                                  fillColor: Colors.white.withOpacity(0.3),
+                                  filled: true,
+                                  // prefixIcon:
+                                  //     const Icon(Icons.person, color: Colors.black),
+                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  labelStyle: const TextStyle(
+                                      color: Colors.black54,
+                                      fontFamily: Font_.Fonts_T)),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -8147,14 +8398,19 @@ class _RentalInformationState extends State<RentalInformation> {
                                   ],
                                 ),
                                 if (renTal_user.toString() == '90' ||
-                                    renTal_user.toString() == '50')
+                                    renTal_user.toString() == '50' ||
+                                    renTal_user.toString() == '106')
                                   Container(
                                     child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
-                                        const Padding(
+                                        Padding(
                                           padding: EdgeInsets.all(8.0),
                                           child: Text(
-                                            'เอกสารแนบท้ายสัญญา (J Space)',
+                                            (renTal_user.toString() == '106')
+                                                ? 'เอกสารแนบท้ายสัญญา (ชอยส์ มินิสโตร์ จำกัด)'
+                                                : 'เอกสารแนบท้ายสัญญา (J Space)',
                                             maxLines: 2,
                                             textAlign: TextAlign.start,
                                             style: TextStyle(
@@ -8166,52 +8422,52 @@ class _RentalInformationState extends State<RentalInformation> {
                                                 ),
                                           ),
                                         ),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              flex: 1,
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Container(
-                                                  height: 25,
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                    // color: Colors.orange[600],
-                                                    borderRadius:
-                                                        BorderRadius.only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    10)),
-                                                  ),
-                                                  child: const Center(
-                                                    child: Text(
-                                                      '',
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                      style: TextStyle(
-                                                          color: Colors.green,
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T
-                                                          //fontSize: 10.0
-                                                          ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                        // Row(
+                                        //   children: [
+                                        //     Expanded(
+                                        //       flex: 1,
+                                        //       child: Padding(
+                                        //         padding:
+                                        //             const EdgeInsets.all(8.0),
+                                        //         child: Container(
+                                        //           height: 25,
+                                        //           decoration:
+                                        //               const BoxDecoration(
+                                        //             // color: Colors.orange[600],
+                                        //             borderRadius:
+                                        //                 BorderRadius.only(
+                                        //                     topLeft:
+                                        //                         Radius.circular(
+                                        //                             10),
+                                        //                     topRight:
+                                        //                         Radius.circular(
+                                        //                             10),
+                                        //                     bottomLeft:
+                                        //                         Radius.circular(
+                                        //                             10),
+                                        //                     bottomRight:
+                                        //                         Radius.circular(
+                                        //                             10)),
+                                        //           ),
+                                        //           child: const Center(
+                                        //             child: Text(
+                                        //               '',
+                                        //               textAlign:
+                                        //                   TextAlign.start,
+                                        //               style: TextStyle(
+                                        //                   color: Colors.green,
+                                        //                   // fontWeight: FontWeight.bold,
+                                        //                   fontFamily:
+                                        //                       Font_.Fonts_T
+                                        //                   //fontSize: 10.0
+                                        //                   ),
+                                        //             ),
+                                        //           ),
+                                        //         ),
+                                        //       ),
+                                        //     ),
+                                        //   ],
+                                        // ),
                                         Row(
                                           children: [
                                             Expanded(

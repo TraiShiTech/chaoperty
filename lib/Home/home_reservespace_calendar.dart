@@ -23,6 +23,7 @@ import '../Model/GetRenTal_Model.dart';
 import '../Model/GetZone_Model.dart';
 import '../Model/areak_model.dart';
 import '../PeopleChao/PeopleChao_Screen2.dart';
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 import '../Style/view_pagenow.dart';
 
@@ -691,18 +692,14 @@ class _Homereservespace_calendarState extends State<Homereservespace_calendar> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    AutoSizeText(
-                                      'พื้นที่เช่า ',
-                                      overflow: TextOverflow.ellipsis,
-                                      minFontSize: 8,
-                                      maxFontSize: 20,
-                                      style: TextStyle(
-                                        decoration: TextDecoration.underline,
-                                        color: ReportScreen_Color.Colors_Text1_,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: FontWeight_.Fonts_T,
-                                      ),
-                                    ),
+                                    Translate.TranslateAndSetText(
+                                        'พื้นที่เช่า ',
+                                        ChaoAreaScreen_Color.Colors_Text2_,
+                                        TextAlign.end,
+                                        FontWeight.bold,
+                                        FontWeight_.Fonts_T,
+                                        14,
+                                        2),
                                     AutoSizeText(
                                       ' > > ',
                                       overflow: TextOverflow.ellipsis,
@@ -773,18 +770,16 @@ class _Homereservespace_calendarState extends State<Homereservespace_calendar> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                const Padding(
+                                Padding(
                                   padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'มุมมอง :',
-                                    style: TextStyle(
-                                        color: PeopleChaoScreen_Color
-                                            .Colors_Text1_,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: FontWeight_.Fonts_T
-                                        //fontSize: 10.0
-                                        ),
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      'มุมมอง :',
+                                      ChaoAreaScreen_Color.Colors_Text2_,
+                                      TextAlign.end,
+                                      FontWeight.bold,
+                                      FontWeight_.Fonts_T,
+                                      14,
+                                      2),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -874,15 +869,14 @@ class _Homereservespace_calendarState extends State<Homereservespace_calendar> {
                               return Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: (elapsed > 8.00)
-                                    ? const Text(
+                                    ? Translate.TranslateAndSetText(
                                         'ไม่พบข้อมูล',
-                                        style: TextStyle(
-                                            color: PeopleChaoScreen_Color
-                                                .Colors_Text2_,
-                                            fontFamily: Font_.Fonts_T
-                                            //fontSize: 10.0
-                                            ),
-                                      )
+                                        ChaoAreaScreen_Color.Colors_Text2_,
+                                        TextAlign.end,
+                                        FontWeight.bold,
+                                        FontWeight_.Fonts_T,
+                                        14,
+                                        2)
                                     : Text(
                                         'ดาวน์โหลด : ${elapsed.toStringAsFixed(2)} s.',
                                         // 'Time : ${elapsed.toStringAsFixed(2)} seconds',
@@ -917,22 +911,18 @@ class _Homereservespace_calendarState extends State<Homereservespace_calendar> {
                     ),
                     Expanded(
                       flex: 8,
-                      child: AutoSizeText(
-                        minFontSize: 10,
-                        maxFontSize: 25,
-                        maxLines: 1,
-                        Ser_Body == 1
-                            ? 'เสนอราคา'
-                            : Ser_Body == 2
-                                ? 'ทำ/ต่อสัญญา'
-                                : '',
-                        textAlign: TextAlign.start,
-                        style: const TextStyle(
-                            fontSize: 20,
-                            color: PeopleChaoScreen_Color.Colors_Text2_,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: FontWeight_.Fonts_T),
-                      ),
+                      child: Translate.TranslateAndSetText(
+                          Ser_Body == 1
+                              ? 'เสนอราคา'
+                              : Ser_Body == 2
+                                  ? 'ทำ/ต่อสัญญา'
+                                  : '',
+                          ChaoAreaScreen_Color.Colors_Text2_,
+                          TextAlign.end,
+                          FontWeight.bold,
+                          FontWeight_.Fonts_T,
+                          14,
+                          2),
                     ),
                     Expanded(
                       flex: 1,
@@ -966,7 +956,7 @@ class _Homereservespace_calendarState extends State<Homereservespace_calendar> {
                                 bottomRight: Radius.circular(10)),
                           ),
                           padding: const EdgeInsets.all(8.0),
-                          child: const Row(
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Padding(
@@ -978,13 +968,14 @@ class _Homereservespace_calendarState extends State<Homereservespace_calendar> {
                               ),
                               Padding(
                                 padding: EdgeInsets.all(4.0),
-                                child: Text(
-                                  'ปิด',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: FontWeight_.Fonts_T),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'ปิด',
+                                    Colors.white,
+                                    TextAlign.end,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    14,
+                                    2),
                               ),
                             ],
                           ),
@@ -1077,26 +1068,17 @@ class _Homereservespace_calendarState extends State<Homereservespace_calendar> {
                                                         MainAxisAlignment
                                                             .center,
                                                     children: [
-                                                      AutoSizeText(
-                                                        'พื้นที่เช่า ',
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        minFontSize: 8,
-                                                        maxFontSize: 20,
-                                                        style: TextStyle(
-                                                          decoration:
-                                                              TextDecoration
-                                                                  .underline,
-                                                          color:
-                                                              ReportScreen_Color
-                                                                  .Colors_Text1_,
-                                                          fontWeight:
+                                                      Translate
+                                                          .TranslateAndSetText(
+                                                              'พื้นที่เช่า ',
+                                                              ChaoAreaScreen_Color
+                                                                  .Colors_Text2_,
+                                                              TextAlign.end,
                                                               FontWeight.bold,
-                                                          fontFamily:
                                                               FontWeight_
                                                                   .Fonts_T,
-                                                        ),
-                                                      ),
+                                                              14,
+                                                              2),
                                                       AutoSizeText(
                                                         ' > > ',
                                                         overflow: TextOverflow
@@ -1173,23 +1155,19 @@ class _Homereservespace_calendarState extends State<Homereservespace_calendar> {
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.end,
                                                 children: [
-                                                  const Padding(
+                                                  Padding(
                                                     padding:
                                                         EdgeInsets.all(8.0),
-                                                    child: Text(
-                                                      'มุมมอง :',
-                                                      style: TextStyle(
-                                                          color:
-                                                              PeopleChaoScreen_Color
-                                                                  .Colors_Text1_,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T
-                                                          //fontSize: 10.0
-                                                          ),
-                                                    ),
+                                                    child: Translate
+                                                        .TranslateAndSetText(
+                                                            'มุมมอง :',
+                                                            ChaoAreaScreen_Color
+                                                                .Colors_Text2_,
+                                                            TextAlign.end,
+                                                            FontWeight.bold,
+                                                            FontWeight_.Fonts_T,
+                                                            14,
+                                                            2),
                                                   ),
                                                   Padding(
                                                     padding:
@@ -1488,7 +1466,7 @@ class _Homereservespace_calendarState extends State<Homereservespace_calendar> {
                                             minDate: DateTime(
                                                 DateTime.now().year,
                                                 DateTime.now().month,
-                                                DateTime.now().day - 5),
+                                                DateTime.now().day),
                                             maxDate: DateTime(
                                                 DateTime.now().year,
                                                 DateTime.now().month + 12,
@@ -1760,17 +1738,15 @@ class _Homereservespace_calendarState extends State<Homereservespace_calendar> {
                                                         .withOpacity(0.5),
                                                     width: 150,
                                                     height: 25,
-                                                    child: Text(
-                                                      "# เช่าอยู่",
-                                                      style: TextStyle(
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                          color:
-                                                              Colors.red[800]),
-                                                    ),
+                                                    child: Translate
+                                                        .TranslateAndSetText(
+                                                            "# เช่าอยู่",
+                                                            Colors.red[800],
+                                                            TextAlign.start,
+                                                            FontWeight.bold,
+                                                            FontWeight_.Fonts_T,
+                                                            12,
+                                                            2),
                                                   ),
                                                   Container(
                                                     color: AppbackgroundColor
@@ -1778,17 +1754,15 @@ class _Homereservespace_calendarState extends State<Homereservespace_calendar> {
                                                         .withOpacity(0.5),
                                                     width: 150,
                                                     height: 25,
-                                                    child: Text(
-                                                      "# ว่าง(พื้นที่ทั้งหมด: ${areaModels.length})",
-                                                      style: TextStyle(
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                          color: Colors
-                                                              .green[800]),
-                                                    ),
+                                                    child: Translate
+                                                        .TranslateAndSetText(
+                                                            "# ว่าง(พื้นที่ทั้งหมด: ${areaModels.length})",
+                                                            Colors.green[800],
+                                                            TextAlign.start,
+                                                            FontWeight.bold,
+                                                            FontWeight_.Fonts_T,
+                                                            12,
+                                                            2),
                                                   ),
                                                 ],
                                               ),

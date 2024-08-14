@@ -20,6 +20,7 @@ import '../Model/GetRenTal_Model.dart';
 import '../Model/GetTrans_Model.dart';
 import '../Model/GetType_Model.dart';
 import '../Model/card_model.dart';
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 import 'dart:js' as js;
 
@@ -457,9 +458,9 @@ class _ReadCardState extends State<ReadCard> {
           child: Column(
             children: [
               StreamBuilder(
-                  stream: Stream.periodic(const Duration(seconds: 3)),
+                  stream: Stream.periodic(const Duration(seconds: 10)),
                   builder: (context, snapshot) {
-                    red_card();
+                    // red_card();
 
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -470,14 +471,14 @@ class _ReadCardState extends State<ReadCard> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('อ่านบัตรประชาชน',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                softWrap: false,
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.black,
-                                    fontFamily: FontWeight_.Fonts_T)),
+                            Translate.TranslateAndSetText(
+                                'อ่านบัตรประชาชน',
+                                CustomerScreen_Color.Colors_Text1_,
+                                TextAlign.center,
+                                FontWeight.bold,
+                                FontWeight_.Fonts_T,
+                                16,
+                                1),
                           ],
                         ),
                       ),
@@ -506,16 +507,16 @@ class _ReadCardState extends State<ReadCard> {
                                           children: [
                                             Expanded(
                                               flex: 2,
-                                              child: Text(
-                                                'เลขบัตรประชาชน :',
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                softWrap: false,
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    color: Colors.black,
-                                                    fontFamily: Font_.Fonts_T),
-                                              ),
+                                              child:
+                                                  Translate.TranslateAndSetText(
+                                                      'เลขบัตรประชาชน :',
+                                                      CustomerScreen_Color
+                                                          .Colors_Text1_,
+                                                      TextAlign.center,
+                                                      FontWeight.bold,
+                                                      FontWeight_.Fonts_T,
+                                                      16,
+                                                      1),
                                             ),
                                             Expanded(
                                               flex: 4,
@@ -537,16 +538,16 @@ class _ReadCardState extends State<ReadCard> {
                                           children: [
                                             Expanded(
                                               flex: 2,
-                                              child: Text(
-                                                'ชื่อ-สกุล : ',
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                softWrap: false,
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    color: Colors.black,
-                                                    fontFamily: Font_.Fonts_T),
-                                              ),
+                                              child:
+                                                  Translate.TranslateAndSetText(
+                                                      'ชื่อ-สกุล : ',
+                                                      CustomerScreen_Color
+                                                          .Colors_Text1_,
+                                                      TextAlign.center,
+                                                      FontWeight.bold,
+                                                      FontWeight_.Fonts_T,
+                                                      16,
+                                                      1),
                                             ),
                                             Expanded(
                                               flex: 4,
@@ -568,16 +569,16 @@ class _ReadCardState extends State<ReadCard> {
                                           children: [
                                             Expanded(
                                               flex: 2,
-                                              child: Text(
-                                                'เกิดวันที่ : ',
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                softWrap: false,
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    color: Colors.black,
-                                                    fontFamily: Font_.Fonts_T),
-                                              ),
+                                              child:
+                                                  Translate.TranslateAndSetText(
+                                                      'เกิดวันที่ : ',
+                                                      CustomerScreen_Color
+                                                          .Colors_Text1_,
+                                                      TextAlign.center,
+                                                      FontWeight.bold,
+                                                      FontWeight_.Fonts_T,
+                                                      16,
+                                                      1),
                                             ),
                                             Expanded(
                                               flex: 4,
@@ -599,32 +600,33 @@ class _ReadCardState extends State<ReadCard> {
                                           children: [
                                             Expanded(
                                               flex: 2,
-                                              child: Text(
-                                                'เพศ : ',
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                softWrap: false,
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    color: Colors.black,
-                                                    fontFamily: Font_.Fonts_T),
-                                              ),
+                                              child:
+                                                  Translate.TranslateAndSetText(
+                                                      'เพศ : ',
+                                                      CustomerScreen_Color
+                                                          .Colors_Text1_,
+                                                      TextAlign.center,
+                                                      FontWeight.bold,
+                                                      FontWeight_.Fonts_T,
+                                                      16,
+                                                      1),
                                             ),
                                             Expanded(
                                               flex: 4,
-                                              child: Text(
-                                                cerdModels[index].gender == '1'
-                                                    ? 'ชาย'
-                                                    : 'หญิง',
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                textAlign: TextAlign.start,
-                                                softWrap: false,
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    color: Colors.black,
-                                                    fontFamily: Font_.Fonts_T),
-                                              ),
+                                              child:
+                                                  Translate.TranslateAndSetText(
+                                                      cerdModels[index]
+                                                                  .gender ==
+                                                              '1'
+                                                          ? 'ชาย'
+                                                          : 'หญิง',
+                                                      CustomerScreen_Color
+                                                          .Colors_Text1_,
+                                                      TextAlign.center,
+                                                      FontWeight.bold,
+                                                      FontWeight_.Fonts_T,
+                                                      16,
+                                                      1),
                                             ),
                                           ],
                                         ),
@@ -632,16 +634,16 @@ class _ReadCardState extends State<ReadCard> {
                                           children: [
                                             Expanded(
                                               flex: 2,
-                                              child: Text(
-                                                'ที่อยู่ : ',
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                softWrap: false,
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    color: Colors.black,
-                                                    fontFamily: Font_.Fonts_T),
-                                              ),
+                                              child:
+                                                  Translate.TranslateAndSetText(
+                                                      'ที่อยู่ : ',
+                                                      CustomerScreen_Color
+                                                          .Colors_Text1_,
+                                                      TextAlign.center,
+                                                      FontWeight.bold,
+                                                      FontWeight_.Fonts_T,
+                                                      16,
+                                                      1),
                                             ),
                                             Expanded(
                                               flex: 4,
@@ -663,16 +665,16 @@ class _ReadCardState extends State<ReadCard> {
                                           children: [
                                             Expanded(
                                               flex: 2,
-                                              child: Text(
-                                                'วันออกบัตร : ',
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                softWrap: false,
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    color: Colors.black,
-                                                    fontFamily: Font_.Fonts_T),
-                                              ),
+                                              child:
+                                                  Translate.TranslateAndSetText(
+                                                      'วันออกบัตร : ',
+                                                      CustomerScreen_Color
+                                                          .Colors_Text1_,
+                                                      TextAlign.center,
+                                                      FontWeight.bold,
+                                                      FontWeight_.Fonts_T,
+                                                      16,
+                                                      1),
                                             ),
                                             Expanded(
                                               flex: 4,
@@ -694,16 +696,16 @@ class _ReadCardState extends State<ReadCard> {
                                           children: [
                                             Expanded(
                                               flex: 2,
-                                              child: Text(
-                                                'วันบัตรหมดอายุ : ',
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                softWrap: false,
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    color: Colors.black,
-                                                    fontFamily: Font_.Fonts_T),
-                                              ),
+                                              child:
+                                                  Translate.TranslateAndSetText(
+                                                      'วันบัตรหมดอายุ : ',
+                                                      CustomerScreen_Color
+                                                          .Colors_Text1_,
+                                                      TextAlign.center,
+                                                      FontWeight.bold,
+                                                      FontWeight_.Fonts_T,
+                                                      16,
+                                                      1),
                                             ),
                                             Expanded(
                                               flex: 4,
@@ -965,18 +967,16 @@ class _ReadCardState extends State<ReadCard> {
                                                 flex: 2,
                                                 child: Row(
                                                   children: [
-                                                    Text(
-                                                      'รูปผู้เช่า:',
-                                                      maxLines: 1,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      softWrap: false,
-                                                      style: TextStyle(
-                                                          fontSize: 18,
-                                                          color: Colors.black,
-                                                          fontFamily:
-                                                              Font_.Fonts_T),
-                                                    ),
+                                                    Translate
+                                                        .TranslateAndSetText(
+                                                            'รูปผู้เช่า:',
+                                                            CustomerScreen_Color
+                                                                .Colors_Text1_,
+                                                            TextAlign.center,
+                                                            FontWeight.bold,
+                                                            FontWeight_.Fonts_T,
+                                                            16,
+                                                            1),
                                                     show_but == 1
                                                         ? SizedBox()
                                                         : IconButton(
@@ -2047,45 +2047,45 @@ class _ReadCardState extends State<ReadCard> {
                                                           if (_formKey
                                                               .currentState!
                                                               .validate()) {
-                                                            print(
-                                                                '---------------------------------->');
-                                                            print(
-                                                                Value_AreaSer_);
-                                                            print(
-                                                                _verticalGroupValue);
-                                                            print(
-                                                                '${typeModels.elementAt(Value_AreaSer_).type}');
+                                                            // print(
+                                                            //     '---------------------------------->');
+                                                            // print(
+                                                            //     Value_AreaSer_);
+                                                            // print(
+                                                            //     _verticalGroupValue);
+                                                            // print(
+                                                            //     '${typeModels.elementAt(Value_AreaSer_).type}');
 
-                                                            print(
-                                                                '---------------------------------->');
+                                                            // print(
+                                                            //     '---------------------------------->');
 
-                                                            print(
-                                                                Status4Form_nameshop
-                                                                    .text);
-                                                            print(
-                                                                Status4Form_typeshop
-                                                                    .text);
-                                                            print(
-                                                                Status4Form_nameshop
-                                                                    .text);
-                                                            print(
-                                                                Status4Form_bussshop
-                                                                    .text);
-                                                            print(
-                                                                Status4Form_bussscontact
-                                                                    .text);
+                                                            // print(
+                                                            //     Status4Form_nameshop
+                                                            //         .text);
+                                                            // print(
+                                                            //     Status4Form_typeshop
+                                                            //         .text);
+                                                            // print(
+                                                            //     Status4Form_nameshop
+                                                            //         .text);
+                                                            // print(
+                                                            //     Status4Form_bussshop
+                                                            //         .text);
+                                                            // print(
+                                                            //     Status4Form_bussscontact
+                                                            //         .text);
 
-                                                            print(
-                                                                Status4Form_address
-                                                                    .text);
-                                                            print(
-                                                                Status4Form_email
-                                                                    .text);
-                                                            print(
-                                                                Status4Form_tax
-                                                                    .text);
-                                                            print(
-                                                                '----------------------------------');
+                                                            // print(
+                                                            //     Status4Form_address
+                                                            //         .text);
+                                                            // print(
+                                                            //     Status4Form_email
+                                                            //         .text);
+                                                            // print(
+                                                            //     Status4Form_tax
+                                                            //         .text);
+                                                            // print(
+                                                            //     '----------------------------------');
                                                             // Value_AreaSer_ = int.parse(value!.ser!) - 1;
                                                             // _verticalGroupValue = value.type!;
                                                             SharedPreferences
@@ -2308,22 +2308,19 @@ class _ReadCardState extends State<ReadCard> {
                                                                     .circular(
                                                                         10)),
                                                           ),
-                                                          child: Text(
-                                                            'บันทึก',
-                                                            maxLines: 1,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            softWrap: false,
-                                                            style: TextStyle(
-                                                                fontSize: 18,
-                                                                color: Colors
-                                                                    .white,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T),
-                                                          ),
+                                                          child: Translate
+                                                              .TranslateAndSetText(
+                                                                  'บันทึก',
+                                                                  CustomerScreen_Color
+                                                                      .Colors_Text3_,
+                                                                  TextAlign
+                                                                      .center,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  16,
+                                                                  1),
                                                         ),
                                                       ),
                                               ),
@@ -2348,19 +2345,16 @@ class _ReadCardState extends State<ReadCard> {
                                     ? Row(
                                         children: [
                                           Expanded(
-                                              child: Text('$read_card',
-                                                  maxLines: 3,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  textAlign: TextAlign.center,
-                                                  softWrap: false,
-                                                  style: TextStyle(
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.black,
-                                                      fontFamily:
-                                                          Font_.Fonts_T))),
+                                            child:
+                                                Translate.TranslateAndSetText(
+                                                    '$read_card',
+                                                    Colors.black,
+                                                    TextAlign.center,
+                                                    FontWeight.bold,
+                                                    FontWeight_.Fonts_T,
+                                                    16,
+                                                    1),
+                                          ),
                                         ],
                                       )
                                     : Column(
@@ -2368,20 +2362,16 @@ class _ReadCardState extends State<ReadCard> {
                                           Row(
                                             children: [
                                               Expanded(
-                                                  child: Text('$read_card',
-                                                      maxLines: 3,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      softWrap: false,
-                                                      style: TextStyle(
-                                                          fontSize: 18,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: Colors.black,
-                                                          fontFamily:
-                                                              Font_.Fonts_T))),
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        '$read_card',
+                                                        Colors.black,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
+                                                        FontWeight_.Fonts_T,
+                                                        16,
+                                                        1),
+                                              ),
                                             ],
                                           ),
                                           SizedBox(
@@ -2406,23 +2396,16 @@ class _ReadCardState extends State<ReadCard> {
                                                       padding:
                                                           const EdgeInsets.all(
                                                               8.0),
-                                                      child: Text(
-                                                          'โหลดโปรแกรม Smartdcard Reader',
-                                                          maxLines: 3,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          textAlign:
+                                                      child: Translate
+                                                          .TranslateAndSetText(
+                                                              'โหลดโปรแกรม Smartdcard Reader',
+                                                              Colors.blue,
                                                               TextAlign.center,
-                                                          softWrap: false,
-                                                          style: TextStyle(
-                                                              fontSize: 18,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              color:
-                                                                  Colors.blue,
-                                                              fontFamily: Font_
-                                                                  .Fonts_T)),
+                                                              FontWeight.bold,
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                              16,
+                                                              1),
                                                     ),
                                                   ),
                                                 ),
@@ -2442,23 +2425,16 @@ class _ReadCardState extends State<ReadCard> {
                                                       padding:
                                                           const EdgeInsets.all(
                                                               8.0),
-                                                      child: Text(
-                                                          'เปิดใช้งาน Cors Unblock',
-                                                          maxLines: 3,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          textAlign:
+                                                      child: Translate
+                                                          .TranslateAndSetText(
+                                                              'เปิดใช้งาน Cors Unblock',
+                                                              Colors.blue,
                                                               TextAlign.center,
-                                                          softWrap: false,
-                                                          style: TextStyle(
-                                                              fontSize: 18,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              color:
-                                                                  Colors.blue,
-                                                              fontFamily: Font_
-                                                                  .Fonts_T)),
+                                                              FontWeight.bold,
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                              16,
+                                                              1),
                                                     ),
                                                   ),
                                                 ),
@@ -2487,24 +2463,18 @@ class _ReadCardState extends State<ReadCard> {
                                                               children: [
                                                                 Row(
                                                                   children: [
-                                                                    Text(
+                                                                    Translate.TranslateAndSetText(
                                                                         'โหลดโปรแกรม คลิก >>',
-                                                                        maxLines:
-                                                                            3,
-                                                                        overflow:
-                                                                            TextOverflow
-                                                                                .ellipsis,
-                                                                        textAlign:
-                                                                            TextAlign
-                                                                                .start,
-                                                                        softWrap:
-                                                                            false,
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                18,
-                                                                            color:
-                                                                                Colors.black,
-                                                                            fontFamily: Font_.Fonts_T)),
+                                                                        Colors
+                                                                            .black,
+                                                                        TextAlign
+                                                                            .center,
+                                                                        FontWeight
+                                                                            .bold,
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                        16,
+                                                                        1),
                                                                     GestureDetector(
                                                                       onTap:
                                                                           () async {
@@ -2558,24 +2528,18 @@ class _ReadCardState extends State<ReadCard> {
                                                                       MainAxisAlignment
                                                                           .start,
                                                                   children: [
-                                                                    Text(
+                                                                    Translate.TranslateAndSetText(
                                                                         'หากดาวโหลดแล้วข้ามไปข้อ 3. ',
-                                                                        maxLines:
-                                                                            1,
-                                                                        overflow:
-                                                                            TextOverflow
-                                                                                .ellipsis,
-                                                                        textAlign:
-                                                                            TextAlign
-                                                                                .start,
-                                                                        softWrap:
-                                                                            false,
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                14,
-                                                                            color:
-                                                                                Colors.red,
-                                                                            fontFamily: Font_.Fonts_T)),
+                                                                        Colors
+                                                                            .red,
+                                                                        TextAlign
+                                                                            .center,
+                                                                        FontWeight
+                                                                            .bold,
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                        16,
+                                                                        1),
                                                                   ],
                                                                 ),
                                                                 SizedBox(
@@ -2586,24 +2550,18 @@ class _ReadCardState extends State<ReadCard> {
                                                                       MainAxisAlignment
                                                                           .start,
                                                                   children: [
-                                                                    Text(
+                                                                    Translate.TranslateAndSetText(
                                                                         '1.แตกไฟล์ smartcard_reader.rar ที่ดาวโหลดมา คลิ๊กขวา กด Extract Here',
-                                                                        maxLines:
-                                                                            1,
-                                                                        overflow:
-                                                                            TextOverflow
-                                                                                .ellipsis,
-                                                                        textAlign:
-                                                                            TextAlign
-                                                                                .start,
-                                                                        softWrap:
-                                                                            false,
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                18,
-                                                                            color:
-                                                                                Colors.black,
-                                                                            fontFamily: Font_.Fonts_T)),
+                                                                        Colors
+                                                                            .black,
+                                                                        TextAlign
+                                                                            .center,
+                                                                        FontWeight
+                                                                            .bold,
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                        16,
+                                                                        1),
                                                                   ],
                                                                 ),
                                                                 Row(
@@ -2633,24 +2591,18 @@ class _ReadCardState extends State<ReadCard> {
                                                                       MainAxisAlignment
                                                                           .start,
                                                                   children: [
-                                                                    Text(
+                                                                    Translate.TranslateAndSetText(
                                                                         '2.เปิดโฟร์เดอร์ที่แตกไฟล์ออกมา',
-                                                                        maxLines:
-                                                                            1,
-                                                                        overflow:
-                                                                            TextOverflow
-                                                                                .ellipsis,
-                                                                        textAlign:
-                                                                            TextAlign
-                                                                                .start,
-                                                                        softWrap:
-                                                                            false,
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                18,
-                                                                            color:
-                                                                                Colors.black,
-                                                                            fontFamily: Font_.Fonts_T)),
+                                                                        Colors
+                                                                            .black,
+                                                                        TextAlign
+                                                                            .center,
+                                                                        FontWeight
+                                                                            .bold,
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                        16,
+                                                                        1),
                                                                   ],
                                                                 ),
                                                                 Row(
@@ -2680,24 +2632,18 @@ class _ReadCardState extends State<ReadCard> {
                                                                       MainAxisAlignment
                                                                           .start,
                                                                   children: [
-                                                                    Text(
+                                                                    Translate.TranslateAndSetText(
                                                                         '3.เปิดโปรแกรม Smartcard_Reader',
-                                                                        maxLines:
-                                                                            1,
-                                                                        overflow:
-                                                                            TextOverflow
-                                                                                .ellipsis,
-                                                                        textAlign:
-                                                                            TextAlign
-                                                                                .start,
-                                                                        softWrap:
-                                                                            false,
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                18,
-                                                                            color:
-                                                                                Colors.black,
-                                                                            fontFamily: Font_.Fonts_T)),
+                                                                        Colors
+                                                                            .black,
+                                                                        TextAlign
+                                                                            .center,
+                                                                        FontWeight
+                                                                            .bold,
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                        16,
+                                                                        1),
                                                                   ],
                                                                 ),
                                                                 Row(
@@ -2727,24 +2673,18 @@ class _ReadCardState extends State<ReadCard> {
                                                                       MainAxisAlignment
                                                                           .start,
                                                                   children: [
-                                                                    Text(
+                                                                    Translate.TranslateAndSetText(
                                                                         '4.อนุญาติการใช้โปรแกรม Smartcard_Reader',
-                                                                        maxLines:
-                                                                            1,
-                                                                        overflow:
-                                                                            TextOverflow
-                                                                                .ellipsis,
-                                                                        textAlign:
-                                                                            TextAlign
-                                                                                .start,
-                                                                        softWrap:
-                                                                            false,
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                18,
-                                                                            color:
-                                                                                Colors.black,
-                                                                            fontFamily: Font_.Fonts_T)),
+                                                                        Colors
+                                                                            .black,
+                                                                        TextAlign
+                                                                            .center,
+                                                                        FontWeight
+                                                                            .bold,
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                        16,
+                                                                        1),
                                                                   ],
                                                                 ),
                                                                 Row(
@@ -2774,24 +2714,18 @@ class _ReadCardState extends State<ReadCard> {
                                                                       MainAxisAlignment
                                                                           .start,
                                                                   children: [
-                                                                    Text(
+                                                                    Translate.TranslateAndSetText(
                                                                         '5.ตรวจสอบการใช้โปรแกรม Smartcard_Reader ที่มุมล่างขวา ** หากไม่มีกดเครื่องหมาย ^ เพื่อเรียกดู เสร็จสิ้น',
-                                                                        maxLines:
-                                                                            1,
-                                                                        overflow:
-                                                                            TextOverflow
-                                                                                .ellipsis,
-                                                                        textAlign:
-                                                                            TextAlign
-                                                                                .start,
-                                                                        softWrap:
-                                                                            false,
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                18,
-                                                                            color:
-                                                                                Colors.black,
-                                                                            fontFamily: Font_.Fonts_T)),
+                                                                        Colors
+                                                                            .black,
+                                                                        TextAlign
+                                                                            .center,
+                                                                        FontWeight
+                                                                            .bold,
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                        16,
+                                                                        1),
                                                                   ],
                                                                 ),
                                                                 Row(
@@ -2838,24 +2772,18 @@ class _ReadCardState extends State<ReadCard> {
                                                               children: [
                                                                 Row(
                                                                   children: [
-                                                                    Text(
+                                                                    Translate.TranslateAndSetText(
                                                                         '*** เปิดโปรแกรม Smartdcard Reader ก่อนทำการเปิดใช้งาน Cors Unblock ',
-                                                                        maxLines:
-                                                                            3,
-                                                                        overflow:
-                                                                            TextOverflow
-                                                                                .ellipsis,
-                                                                        textAlign:
-                                                                            TextAlign
-                                                                                .start,
-                                                                        softWrap:
-                                                                            false,
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                18,
-                                                                            color:
-                                                                                Colors.red,
-                                                                            fontFamily: Font_.Fonts_T)),
+                                                                        Colors
+                                                                            .black,
+                                                                        TextAlign
+                                                                            .center,
+                                                                        FontWeight
+                                                                            .bold,
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                        16,
+                                                                        1),
                                                                   ],
                                                                 ),
                                                                 SizedBox(
@@ -2863,24 +2791,18 @@ class _ReadCardState extends State<ReadCard> {
                                                                 ),
                                                                 Row(
                                                                   children: [
-                                                                    Text(
+                                                                    Translate.TranslateAndSetText(
                                                                         '1.เปิดใช้งาน Cors Unblock คลิก >>',
-                                                                        maxLines:
-                                                                            3,
-                                                                        overflow:
-                                                                            TextOverflow
-                                                                                .ellipsis,
-                                                                        textAlign:
-                                                                            TextAlign
-                                                                                .start,
-                                                                        softWrap:
-                                                                            false,
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                18,
-                                                                            color:
-                                                                                Colors.black,
-                                                                            fontFamily: Font_.Fonts_T)),
+                                                                        Colors
+                                                                            .black,
+                                                                        TextAlign
+                                                                            .center,
+                                                                        FontWeight
+                                                                            .bold,
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                        16,
+                                                                        1),
                                                                     GestureDetector(
                                                                       onTap:
                                                                           () async {
@@ -2916,24 +2838,18 @@ class _ReadCardState extends State<ReadCard> {
                                                                       MainAxisAlignment
                                                                           .start,
                                                                   children: [
-                                                                    Text(
+                                                                    Translate.TranslateAndSetText(
                                                                         '2.กดปุ่ม Advanced',
-                                                                        maxLines:
-                                                                            1,
-                                                                        overflow:
-                                                                            TextOverflow
-                                                                                .ellipsis,
-                                                                        textAlign:
-                                                                            TextAlign
-                                                                                .start,
-                                                                        softWrap:
-                                                                            false,
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                18,
-                                                                            color:
-                                                                                Colors.black,
-                                                                            fontFamily: Font_.Fonts_T)),
+                                                                        Colors
+                                                                            .black,
+                                                                        TextAlign
+                                                                            .center,
+                                                                        FontWeight
+                                                                            .bold,
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                        16,
+                                                                        1),
                                                                   ],
                                                                 ),
                                                                 Row(
@@ -2963,24 +2879,18 @@ class _ReadCardState extends State<ReadCard> {
                                                                       MainAxisAlignment
                                                                           .start,
                                                                   children: [
-                                                                    Text(
+                                                                    Translate.TranslateAndSetText(
                                                                         '3.กดปุ่ม Proceed to localhost (unsafe)',
-                                                                        maxLines:
-                                                                            1,
-                                                                        overflow:
-                                                                            TextOverflow
-                                                                                .ellipsis,
-                                                                        textAlign:
-                                                                            TextAlign
-                                                                                .start,
-                                                                        softWrap:
-                                                                            false,
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                18,
-                                                                            color:
-                                                                                Colors.black,
-                                                                            fontFamily: Font_.Fonts_T)),
+                                                                        Colors
+                                                                            .black,
+                                                                        TextAlign
+                                                                            .center,
+                                                                        FontWeight
+                                                                            .bold,
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                        16,
+                                                                        1),
                                                                   ],
                                                                 ),
                                                                 Row(
@@ -3010,24 +2920,18 @@ class _ReadCardState extends State<ReadCard> {
                                                                       MainAxisAlignment
                                                                           .start,
                                                                   children: [
-                                                                    Text(
+                                                                    Translate.TranslateAndSetText(
                                                                         '4.ขึ้นตามรูป เสร็จสิ้นการเปิดใช้งาน ปิดแท็บ',
-                                                                        maxLines:
-                                                                            1,
-                                                                        overflow:
-                                                                            TextOverflow
-                                                                                .ellipsis,
-                                                                        textAlign:
-                                                                            TextAlign
-                                                                                .start,
-                                                                        softWrap:
-                                                                            false,
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                18,
-                                                                            color:
-                                                                                Colors.black,
-                                                                            fontFamily: Font_.Fonts_T)),
+                                                                        Colors
+                                                                            .black,
+                                                                        TextAlign
+                                                                            .center,
+                                                                        FontWeight
+                                                                            .bold,
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                        16,
+                                                                        1),
                                                                   ],
                                                                 ),
                                                                 Row(

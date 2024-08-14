@@ -1,7 +1,6 @@
 // ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, prefer_const_constructors, unnecessary_import, implementation_imports, prefer_const_constructors_in_immutables, non_constant_identifier_names, avoid_init_to_null, prefer_void_to_null, unnecessary_brace_in_string_interps, avoid_print, empty_catches, sized_box_for_whitespace, use_build_context_synchronously, file_names, curly_braces_in_flow_control_structures
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:get_ip_address/get_ip_address.dart';
 import 'package:marquee/marquee.dart';
 import 'package:device_marketing_names/device_marketing_names.dart';
@@ -50,8 +49,6 @@ import '../Setting/ttt.dart';
 import '../Setting_NainaService/Web_view_NainaSetting.dart';
 import '../Style/Translate.dart';
 import '../Style/colors.dart';
-
-import '../Style/loadAndCacheImage.dart';
 import 'Chat_Screen.dart';
 
 class AdminScafScreen extends StatefulWidget {
@@ -1461,15 +1458,14 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
             child: ListBody(
               children: <Widget>[
                 Center(
-                  child: Text(
-                    'แจ้งเตือน',
-                    style: TextStyle(
-                      // fontSize: 15,
-                      color: Colors.black,
-                      fontFamily: FontWeight_.Fonts_T,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: Translate.TranslateAndSetText(
+                      'แจ้งเตือน',
+                      Colors.white,
+                      TextAlign.center,
+                      FontWeight.bold,
+                      FontWeight_.Fonts_T,
+                      14,
+                      1),
                 ),
                 Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -1535,16 +1531,15 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                         ),
                       ),
                       padding: const EdgeInsets.all(8.0),
-                      child: const Center(
-                        child: Text(
-                          'บันทึกข้อความแจ้งเตือน',
-                          style: TextStyle(
-                            // fontSize: 15,
-                            color: Colors.white,
-                            fontFamily: Font_.Fonts_T,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                      child: Center(
+                        child: Translate.TranslateAndSetText(
+                            'บันทึกข้อความแจ้งเตือน',
+                            Colors.white,
+                            TextAlign.center,
+                            FontWeight.bold,
+                            FontWeight_.Fonts_T,
+                            14,
+                            1),
                       ),
                     ),
                     onTap: () async {
@@ -1586,16 +1581,15 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                         ),
                       ),
                       padding: const EdgeInsets.all(8.0),
-                      child: const Center(
-                        child: Text(
-                          'ยกเลิกข้อความแจ้งเตือน',
-                          style: TextStyle(
-                            // fontSize: 15,
-                            color: Colors.white,
-                            fontFamily: Font_.Fonts_T,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                      child: Center(
+                        child: Translate.TranslateAndSetText(
+                            'ยกเลิกข้อความแจ้งเตือน',
+                            Colors.white,
+                            TextAlign.center,
+                            FontWeight.bold,
+                            FontWeight_.Fonts_T,
+                            14,
+                            1),
                       ),
                     ),
                     onTap: () async {
@@ -1647,16 +1641,15 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                           ),
                         ),
                         padding: const EdgeInsets.all(8.0),
-                        child: const Center(
-                          child: Text(
-                            'แจ้งเตือน Dialog หลังอัพเดต',
-                            style: TextStyle(
-                              // fontSize: 15,
-                              color: Colors.white,
-                              fontFamily: Font_.Fonts_T,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                        child: Center(
+                          child: Translate.TranslateAndSetText(
+                              'แจ้งเตือน Dialog หลังอัพเดต',
+                              Colors.white,
+                              TextAlign.center,
+                              FontWeight.bold,
+                              FontWeight_.Fonts_T,
+                              14,
+                              1),
                         ),
                       ),
                       onTap: () async {
@@ -1706,16 +1699,15 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                   ),
                 ),
                 padding: const EdgeInsets.all(8.0),
-                child: const Center(
-                  child: Text(
-                    'ปิด',
-                    style: TextStyle(
-                      // fontSize: 15,
-                      color: Colors.white,
-                      fontFamily: Font_.Fonts_T,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                child: Center(
+                  child: Translate.TranslateAndSetText(
+                      'ปิด',
+                      Colors.white,
+                      TextAlign.center,
+                      FontWeight.bold,
+                      FontWeight_.Fonts_T,
+                      14,
+                      1),
                 ),
               ),
               onTap: () {
@@ -2355,15 +2347,17 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(20.0))),
                                             title: Center(
-                                                child: Text(
-                                              'ผู้ใช้งานระบบขณะนี้ ',
-                                              style: TextStyle(
-                                                  color: AdminScafScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T),
-                                            )),
+                                              child:
+                                                  Translate.TranslateAndSetText(
+                                                      'ผู้ใช้งานระบบขณะนี้ ',
+                                                      AdminScafScreen_Color
+                                                          .Colors_Text1_,
+                                                      TextAlign.center,
+                                                      FontWeight.bold,
+                                                      FontWeight_.Fonts_T,
+                                                      14,
+                                                      1),
+                                            ),
                                             content: ScrollConfiguration(
                                               behavior: ScrollConfiguration.of(
                                                       context)
@@ -2400,16 +2394,18 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                                               children: [
                                                                 Row(
                                                                   children: [
-                                                                    Text(
-                                                                      'ทั้งหมด : ${userModels.length} คน',
-                                                                      style: TextStyle(
-                                                                          color: AdminScafScreen_Color
-                                                                              .Colors_Text1_,
-                                                                          fontWeight: FontWeight
-                                                                              .bold,
-                                                                          fontFamily:
-                                                                              FontWeight_.Fonts_T),
-                                                                    ),
+                                                                    Translate.TranslateAndSetText(
+                                                                        'ทั้งหมด : ${userModels.length} คน',
+                                                                        AdminScafScreen_Color
+                                                                            .Colors_Text1_,
+                                                                        TextAlign
+                                                                            .center,
+                                                                        FontWeight
+                                                                            .bold,
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                        14,
+                                                                        1),
                                                                   ],
                                                                 ),
                                                                 Container(
@@ -2441,7 +2437,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                                                               .all(
                                                                           8.0),
                                                                   child: Row(
-                                                                    children: const [
+                                                                    children: [
                                                                       Expanded(
                                                                         flex: 1,
                                                                         child:
@@ -2470,42 +2466,36 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                                                       ),
                                                                       Expanded(
                                                                         flex: 1,
-                                                                        child:
-                                                                            Text(
-                                                                          'ชื่อ',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style: TextStyle(
-                                                                              color: AdminScafScreen_Color.Colors_Text1_,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontFamily: FontWeight_.Fonts_T),
-                                                                        ),
+                                                                        child: Translate.TranslateAndSetText(
+                                                                            'ชื่อ',
+                                                                            AdminScafScreen_Color.Colors_Text1_,
+                                                                            TextAlign.center,
+                                                                            FontWeight.bold,
+                                                                            FontWeight_.Fonts_T,
+                                                                            14,
+                                                                            1),
                                                                       ),
                                                                       Expanded(
                                                                         flex: 1,
-                                                                        child:
-                                                                            Text(
-                                                                          'ตำแหน่ง',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style: TextStyle(
-                                                                              color: AdminScafScreen_Color.Colors_Text1_,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontFamily: FontWeight_.Fonts_T),
-                                                                        ),
+                                                                        child: Translate.TranslateAndSetText(
+                                                                            'ตำแหน่ง',
+                                                                            AdminScafScreen_Color.Colors_Text1_,
+                                                                            TextAlign.center,
+                                                                            FontWeight.bold,
+                                                                            FontWeight_.Fonts_T,
+                                                                            14,
+                                                                            1),
                                                                       ),
                                                                       Expanded(
                                                                         flex: 1,
-                                                                        child:
-                                                                            Text(
-                                                                          'เวลาอัพเดตล่าสุด',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style: TextStyle(
-                                                                              color: AdminScafScreen_Color.Colors_Text1_,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontFamily: FontWeight_.Fonts_T),
-                                                                        ),
+                                                                        child: Translate.TranslateAndSetText(
+                                                                            'เวลาอัพเดตล่าสุด',
+                                                                            AdminScafScreen_Color.Colors_Text1_,
+                                                                            TextAlign.center,
+                                                                            FontWeight.bold,
+                                                                            FontWeight_.Fonts_T,
+                                                                            14,
+                                                                            1),
                                                                       ),
                                                                     ],
                                                                   ),
@@ -2625,12 +2615,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                                                                           ),
                                                                                       Expanded(
                                                                                         flex: 2,
-                                                                                        child: Text(
-                                                                                          (minutesPassed > 1) ? 'ใช้งานเมื่อ $minutesPassed นาทีที่แล้ว' : ' ${userModels[index].connected}',
-                                                                                          textAlign: TextAlign.center,
-                                                                                          maxLines: 2,
-                                                                                          style: TextStyle(color: AdminScafScreen_Color.Colors_Text1_, fontFamily: Font_.Fonts_T),
-                                                                                        ),
+                                                                                        child: Translate.TranslateAndSetText((minutesPassed > 1) ? 'ใช้งานเมื่อ $minutesPassed นาทีที่แล้ว' : ' ${userModels[index].connected}', AdminScafScreen_Color.Colors_Text1_, TextAlign.center, FontWeight.bold, FontWeight_.Fonts_T, 14, 1),
                                                                                       ),
                                                                                     ],
                                                                                   ),
@@ -2765,18 +2750,18 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                                                       Navigator.pop(
                                                                           context,
                                                                           'OK'),
-                                                                  child:
-                                                                      const Text(
-                                                                    'ปิด',
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T),
-                                                                  ),
+                                                                  child: Translate.TranslateAndSetText(
+                                                                      'ปิด',
+                                                                      Colors
+                                                                          .white,
+                                                                      TextAlign
+                                                                          .center,
+                                                                      FontWeight
+                                                                          .bold,
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                      14,
+                                                                      1),
                                                                 ),
                                                               ),
                                                             ],
@@ -2847,7 +2832,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                           stream: Stream.periodic(const Duration(seconds: 0)),
                           builder: (context, snapshot) {
                             return Text(
-                              'Hi คุณ $fname_user ...',
+                              'Hi $fname_user ...',
                               style: TextStyle(
                                   color: AdminScafScreen_Color.Colors_Text1_,
                                   fontSize: 14,
@@ -2874,14 +2859,16 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                               shape: const RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(20.0))),
-                              title: const Center(
-                                  child: Text(
-                                'ออกจากระบบ',
-                                style: TextStyle(
-                                    color: AdminScafScreen_Color.Colors_Text1_,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T),
-                              )),
+                              title: Center(
+                                child: Translate.TranslateAndSetText(
+                                    'ออกจากระบบ',
+                                    AdminScafScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    14,
+                                    1),
+                              ),
                               actions: <Widget>[
                                 Column(
                                   children: [
@@ -2959,15 +2946,15 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                                     }
                                                   } catch (e) {}
                                                 },
-                                                child: const Text(
-                                                  'ยืนยัน',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T),
-                                                ),
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'ยืนยัน',
+                                                        Colors.white,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
+                                                        FontWeight_.Fonts_T,
+                                                        14,
+                                                        1),
                                               ),
                                             ),
                                           ),
@@ -3003,16 +2990,15 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                                     onPressed: () =>
                                                         Navigator.pop(
                                                             context, 'OK'),
-                                                    child: const Text(
-                                                      'ยกเลิก',
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T),
-                                                    ),
+                                                    child: Translate
+                                                        .TranslateAndSetText(
+                                                            'ยกเลิก',
+                                                            Colors.white,
+                                                            TextAlign.center,
+                                                            FontWeight.bold,
+                                                            FontWeight_.Fonts_T,
+                                                            14,
+                                                            1),
                                                   ),
                                                 ),
                                               ],
@@ -3147,8 +3133,15 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                      content:
-                          Text('กรุณาเลือกสถานที่ของท่านเพื่อเรียกดูข้อมูล')),
+                    content: Translate.TranslateAndSetText(
+                        'กรุณาเลือกสถานที่ของท่านเพื่อเรียกดูข้อมูล',
+                        Colors.black,
+                        TextAlign.center,
+                        FontWeight.bold,
+                        FontWeight_.Fonts_T,
+                        14,
+                        1),
+                  ),
                 );
               }
               read_GC_rentalColor();
@@ -3260,23 +3253,15 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                           bottomLeft: Radius.circular(20),
                           bottomRight: Radius.circular(20)),
                     ),
-                    child: Center(
-                        child: Translate.TranslateAndSetText(
-                            'เมนูหลัก',
-                            SettingScreen_Color.Colors_Text1_,
-                            TextAlign.center,
-                            FontWeight.bold,
-                            FontWeight_.Fonts_T,
-                            14,
-                            1)
-                        //  Text(
-                        //   'เมนูหลัก',
-                        //   style: TextStyle(
-                        //       color: AdminScafScreen_Color.Colors_Text1_,
-                        //       fontWeight: FontWeight.bold,
-                        //       fontFamily: FontWeight_.Fonts_T),
-                        // ),
-                        ),
+                    child: const Center(
+                      child: Text(
+                        'เมนูหลัก',
+                        style: TextStyle(
+                            color: AdminScafScreen_Color.Colors_Text1_,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: FontWeight_.Fonts_T),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -3416,7 +3401,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                               : (Value_Route == 'ทะเบียน')
                                   ? const BureauScreen()
                                   : (Value_Route == 'ตั้งค่า')
-                                      ? const SettingScreen() //GeneratedNodes()
+                                      ? const SettingScreen()
                                       : (Value_Route == 'จัดการข้อมูลส่วนตัว')
                                           ? const SettingUserScreen()
                                           : const SettingUserScreen(),
@@ -4334,7 +4319,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                           stream: Stream.periodic(const Duration(seconds: 0)),
                           builder: (context, snapshot) {
                             return Text(
-                              'คุณ $fname_user ..',
+                              'Hi $fname_user ..',
                               style: TextStyle(
                                   color: AdminScafScreen_Color.Colors_Text1_,
                                   fontWeight: FontWeight.w600,
@@ -4361,14 +4346,16 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                               shape: const RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(20.0))),
-                              title: const Center(
-                                  child: Text(
-                                'ออกจากระบบ',
-                                style: TextStyle(
-                                    color: AdminScafScreen_Color.Colors_Text1_,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T),
-                              )),
+                              title: Center(
+                                child: Translate.TranslateAndSetText(
+                                    'ออกจากระบบ',
+                                    AdminScafScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    14,
+                                    1),
+                              ),
                               actions: <Widget>[
                                 Column(
                                   children: [
@@ -4446,15 +4433,15 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                                     }
                                                   } catch (e) {}
                                                 },
-                                                child: const Text(
-                                                  'ยืนยัน',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T),
-                                                ),
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'ยืนยัน',
+                                                        Colors.white,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
+                                                        FontWeight_.Fonts_T,
+                                                        14,
+                                                        1),
                                               ),
                                             ),
                                           ),
@@ -4490,16 +4477,15 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                                     onPressed: () =>
                                                         Navigator.pop(
                                                             context, 'OK'),
-                                                    child: const Text(
-                                                      'ยกเลิก',
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T),
-                                                    ),
+                                                    child: Translate
+                                                        .TranslateAndSetText(
+                                                            'ยกเลิก',
+                                                            Colors.white,
+                                                            TextAlign.center,
+                                                            FontWeight.bold,
+                                                            FontWeight_.Fonts_T,
+                                                            14,
+                                                            1),
                                                   ),
                                                 ),
                                               ],
@@ -4590,8 +4576,15 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                      content:
-                          Text('กรุณาเลือกสถานที่ของท่านเพื่อเรียกดูข้อมูล')),
+                    content: Translate.TranslateAndSetText(
+                        'กรุณาเลือกสถานที่ของท่านเพื่อเรียกดูข้อมูล',
+                        Colors.black,
+                        TextAlign.center,
+                        FontWeight.bold,
+                        FontWeight_.Fonts_T,
+                        14,
+                        1),
+                  ),
                 );
               }
               read_GC_rentalColor();
@@ -4640,14 +4633,15 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                           bottomLeft: Radius.circular(20),
                           bottomRight: Radius.circular(20)),
                     ),
-                    child: const Center(
-                      child: Text(
-                        'เมนูหลัก',
-                        style: TextStyle(
-                            color: AdminScafScreen_Color.Colors_Text1_,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: FontWeight_.Fonts_T),
-                      ),
+                    child: Center(
+                      child: Translate.TranslateAndSetText(
+                          'เมนูหลัก',
+                          Colors.black,
+                          TextAlign.center,
+                          FontWeight.bold,
+                          FontWeight_.Fonts_T,
+                          14,
+                          1),
                     ),
                   ),
                 ),
@@ -4772,7 +4766,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                 //               ),
                 //             ),
                 //           ),
-                const Center(
+                Center(
                   child: Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Text(

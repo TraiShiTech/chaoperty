@@ -30,7 +30,7 @@ class Pdfgen_QR_ {
     var font = (rt_Language.toString().trim() == 'LA')
         ? await rootBundle.load('fonts/NotoSansLao.ttf')
         : await rootBundle.load('fonts/THSarabunNew.ttf');
-    double font_Size = (rt_Language.toString().trim() == 'LA') ? 8.0 : 8.0;
+    double font_Size = (rt_Language.toString().trim() == 'LA') ? 8.0 : 10.0;
     var Colors_pd = PdfColors.black;
     final ttf = pw.Font.ttf(font.buffer.asByteData());
     final doc = pw.Document();

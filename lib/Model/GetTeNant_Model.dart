@@ -63,13 +63,10 @@ class TeNantModel {
   String? user_name;
   String? passw;
   String? fid;
+  String? renew_cid;
   String? cc_date;
   String? wnote;
   String? daterec;
-  String? zser1;
-  String? zn1;
-  String? pdate;
-  String? user;
 
   TeNantModel(
       {this.ser,
@@ -136,13 +133,10 @@ class TeNantModel {
       this.user_name,
       this.passw,
       this.fid,
+      this.renew_cid,
       this.cc_date,
       this.wnote,
-      this.daterec,
-      this.zser1,
-      this.zn1,
-      this.pdate,
-      this.user});
+      this.daterec});
 
   TeNantModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -212,13 +206,10 @@ class TeNantModel {
     user_name = json['user_name'];
     passw = json['passw'];
     fid = json['fid'];
+    renew_cid = json['renew_cid'];
     cc_date = json['cc_date'];
     wnote = json['wnote'];
     daterec = json['daterec'];
-    zser1 = json['zser1'];
-    zn1 = json['zn1'];
-    pdate = json['pdate'];
-    user = json['user'];
   }
 
   Map<String, dynamic> toJson() {
@@ -289,13 +280,10 @@ class TeNantModel {
     data['user_name'] = this.user_name;
     data['passw'] = this.passw;
     data['fid'] = this.fid;
+    data['renew_cid'] = this.renew_cid;
     data['cc_date'] = this.cc_date;
     data['wnote'] = this.wnote;
     data['daterec'] = this.daterec;
-    data['zser1'] = this.zser1;
-    data['zn1'] = this.zn1;
-    data['pdate'] = this.pdate;
-    data['user'] = this.user;
 
     return data;
   }

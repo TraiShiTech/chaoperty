@@ -1449,7 +1449,7 @@ class Pdfgen_his_statusbill_TP9 {
                         child: pw.Align(
                           alignment: pw.Alignment.topCenter,
                           child: pw.Text(
-                            '${index + 1}',
+                            '${tableData00[index][14].toString()}',
                             maxLines: 2,
                             textAlign: pw.TextAlign.left,
                             style: pw.TextStyle(

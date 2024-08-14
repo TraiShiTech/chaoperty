@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,6 +14,8 @@ import 'package:intl/intl.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:time_range_picker/time_range_picker.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
 import 'dart:html' as html;
@@ -26,9 +29,12 @@ import '../Model/GetRenTal_Model.dart';
 import '../Model/GetRenTalimg_Model.dart';
 import '../Model/GetUser_Model.dart';
 import '../Model/GetZone_Model.dart';
+import '../Model/Get_prebook_Model.dart';
 import '../Responsive/responsive.dart';
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 import '../Style/downloadImage.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class EditwebScreen extends StatefulWidget {
   const EditwebScreen({super.key});
@@ -147,6 +153,7 @@ class _EditwebScreenState extends State<EditwebScreen> {
   List<dynamic> nearby_places = [];
   List<dynamic> title_webs_list = [];
   List<ExpModel> expModels = [];
+  List<PrebookModel> prebookModels = [];
   String? ser_user,
       position_user,
       fname_user,
@@ -185,6 +192,20 @@ class _EditwebScreenState extends State<EditwebScreen> {
       Lock_Day7;
 
   var LDay_Special1, LDay_Special2, LDay_Special3, LDay_Special4, LDay_Special5;
+  //////////////------------------------------------------->
+  var SDay_Prebook1, SDay_Prebook2, SDay_Prebook3, SDay_Prebook4, SDay_Prebook5;
+  var LDay_Prebook1, LDay_Prebook2, LDay_Prebook3, LDay_Prebook4, LDay_Prebook5;
+  var STime_Prebook1,
+      STime_Prebook2,
+      STime_Prebook3,
+      STime_Prebook4,
+      STime_Prebook5;
+  var LTime_Prebook1,
+      LTime_Prebook2,
+      LTime_Prebook3,
+      Lime_Prebook4,
+      LTime_Prebook5;
+  //////////////------------------------------------------->
   final rental_name_text = TextEditingController();
   final rental_nameTH_text = TextEditingController();
   final rental_Line_text = TextEditingController();
@@ -213,6 +234,7 @@ class _EditwebScreenState extends State<EditwebScreen> {
     read_GC_rental_img();
     read_GC_zone();
     read_GC_Exp();
+    CG_Prebook();
     super.initState();
   }
 
@@ -220,13 +242,39 @@ class _EditwebScreenState extends State<EditwebScreen> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
 
-    final String url =
-        'https://www.dzentric.com/chaoperty_market/#/serrental=$ren';
+    final String url = 'https://chaoperties.com/market/#/serrental=$ren';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  Future<Null> CG_Prebook() async {
+    if (prebookModels.isNotEmpty) {
+      prebookModels.clear();
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    var ren = preferences.getString('renTalSer');
+
+    String url = '${MyConstant().domain}/GC_prebook.php?isAdd=true&ren=$ren';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      if (result != null) {
+        for (var map in result) {
+          PrebookModel prebookModelss = PrebookModel.fromJson(map);
+
+          setState(() {
+            prebookModels.add(prebookModelss);
+          });
+        }
+      } else {}
+    } catch (e) {}
   }
 
   Future<Null> read_GC_Exp() async {
@@ -813,6 +861,201 @@ class _EditwebScreenState extends State<EditwebScreen> {
     });
   }
 
+///////--------------------------------------------->
+  DateRangePickerController _datePickerController = DateRangePickerController();
+  var selectsdate;
+  var selectldate;
+  bool rangedate = false;
+  selectdate(index, type_value) {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          backgroundColor: Colors.white,
+          titlePadding: const EdgeInsets.all(0.0),
+          contentPadding: const EdgeInsets.all(5.0),
+          actionsPadding: const EdgeInsets.all(6.0),
+          content: Container(
+            width: (MediaQuery.of(context).size.width < 1000)
+                ? MediaQuery.of(context).size.width
+                : MediaQuery.of(context).size.width * 0.75,
+            // width: Metrics.width(context) * 0.5,
+            height: MediaQuery.of(context).size.height,
+            clipBehavior: Clip.antiAlias,
+            padding: EdgeInsets.all(0),
+            margin: EdgeInsets.all(0),
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(20)),
+            child: SfDateRangePicker(
+              controller: _datePickerController,
+              view: DateRangePickerView.month,
+              // monthViewSettings:
+              //     DateRangePickerMonthViewSettings(firstDayOfWeek: 1),
+              monthViewSettings: const DateRangePickerMonthViewSettings(
+                  // showWeekNumber: true,
+                  ),
+              showActionButtons: true,
+              showTodayButton: true,
+              confirmText: 'OK',
+              cancelText: 'Cancel',
+              backgroundColor: Colors.white,
+              minDate: DateTime(DateTime.now().year, DateTime.now().month, 1,
+                  00, 00, 00, 00, 00),
+              maxDate: DateTime.now().add(Duration(days: 90)),
+              initialSelectedDate: selectsdate,
+              initialSelectedRange: rangedate
+                  ? PickerDateRange(selectsdate, selectldate)
+                  : PickerDateRange(selectsdate, selectldate),
+              headerStyle:
+                  DateRangePickerHeaderStyle(backgroundColor: Colors.white),
+              selectionColor: Color.fromRGBO(232, 191, 66, 1).withOpacity(0.5),
+              startRangeSelectionColor: Colors.green,
+              rangeSelectionColor:
+                  Color.fromRGBO(232, 191, 66, 1).withOpacity(0.5),
+              todayHighlightColor: Colors.green,
+              endRangeSelectionColor: Colors.red,
+              onCancel: () {
+                setState(() {
+                  selectsdate = null;
+                  selectldate = null;
+                  rangedate = false;
+                });
+                Navigator.of(context).pop();
+              },
+              showNavigationArrow: true,
+              navigationMode: DateRangePickerNavigationMode.snap,
+              selectionMode: DateRangePickerSelectionMode.range,
+              onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
+                selectsdate = args.value.startDate;
+                selectldate = args.value.endDate;
+              },
+              // selectableDayPredicate: (DateTime date) {
+              //   return !isNoReservationPeriod(date);
+              // },
+              // onSubmit: (Object? value) {
+              //   if (selectsdate != null && selectldate != null) {
+              //     numberOfDays = selectldate!.difference(selectsdate!).inDays;
+              //     DateTime noReservationStart = DateTime.parse('${S_Datexnow}');
+              //     DateTime noReservationEnd = DateTime.parse('${L_Datexnow}');
+              //     // Define no reservation period
+
+              //     if (selectsdate!.isBefore(noReservationEnd) &&
+              //         selectldate!.isAfter(noReservationStart)) {
+              //       showDialog<void>(
+              //         context: context,
+              //         barrierDismissible: true,
+              //         builder: (BuildContext context) {
+              //           return AlertDialog(
+              //             title: Text('No Reservations'),
+              //             content: Text(
+              //                 'No reservations from 26/06/2024 to 25/07/2024.'),
+              //             actions: <Widget>[
+              //               TextButton(
+              //                 child: Text('OK'),
+              //                 onPressed: () {
+              //                   Navigator.of(context).pop();
+              //                 },
+              //               ),
+              //             ],
+              //           );
+              //         },
+              //       );
+              //     } else {
+              //       setState(() {
+              //         sdate = DateFormat('d MMMM yyyy', 'en_US')
+              //             .format(selectsdate!);
+              //         ldate = DateFormat('d MMMM yyyy', 'en_US')
+              //             .format(selectldate!);
+              //       });
+              //       Navigator.of(context).pop();
+              //     }
+              //   }
+              // },
+              onSubmit: (p0) async {
+                SharedPreferences preferences =
+                    await SharedPreferences.getInstance();
+
+                var ren = preferences.getString('renTalSer');
+                // if (selectsdate != null && selectldate != null) {
+                //   numberOfDays = DateTime.parse(selectldate.toString())
+                //       .difference(DateTime.parse(selectsdate.toString()))
+                //       .inDays;
+                // }
+                // print(selectsdate);
+                // print(selectldate);
+                setState(() {
+                  if (selectldate == null) {
+                    rangedate = false;
+                  } else {
+                    SDay_Prebook1 = DateFormat('yyyy-MM-dd')
+                        .format(DateTime.parse(selectsdate.toString()));
+
+                    LDay_Prebook1 = DateFormat('yyyy-MM-dd')
+                        .format(DateTime.parse(selectldate.toString()));
+                  }
+                });
+                if (type_value.toString() == 'pdate') {
+                  try {
+                    final url =
+                        '${MyConstant().domain}/UP_In_prebook.php?isAdd=true';
+
+                    final response = await http.post(
+                      Uri.parse(url),
+                      body: {
+                        'ren': '$ren',
+                        'type': 'UP',
+                        'ser': '${prebookModels[index].ser}',
+                        'zone': '${prebookModels[index].zone}',
+                        'pdate': '${SDay_Prebook1}',
+                        'ts_padte': '${prebookModels[index].ts_padte}',
+                        'ldate': '${LDay_Prebook1}',
+                        'tl_ldate': '${prebookModels[index].tl_ldate}',
+                        'bdate': '${prebookModels[index].bdate}',
+                        'bldate': '${prebookModels[index].bldate}'
+                      },
+                    );
+                  } catch (e) {}
+                } else {
+                  try {
+                    final url =
+                        '${MyConstant().domain}/UP_In_prebook.php?isAdd=true';
+
+                    final response = await http.post(
+                      Uri.parse(url),
+                      body: {
+                        'ren': '$ren',
+                        'type': 'UP',
+                        'ser': '${prebookModels[index].ser}',
+                        'zone': '${prebookModels[index].zone}',
+                        'pdate': '${prebookModels[index].pdate}',
+                        'ts_padte': '${prebookModels[index].ts_padte}',
+                        'ldate': '${prebookModels[index].ldate}',
+                        'tl_ldate': '${prebookModels[index].tl_ldate}',
+                        'bdate': '${SDay_Prebook1}',
+                        'bldate': '${LDay_Prebook1}'
+                      },
+                    );
+                  } catch (e) {}
+                }
+
+                print('$type_value //// $SDay_Prebook1 //// $LDay_Prebook1');
+                setState(() {
+                  CG_Prebook();
+                  Navigator.of(context).pop();
+                });
+                Dia_log();
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  /////////------------------------------------------->
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
@@ -876,14 +1119,14 @@ class _EditwebScreenState extends State<EditwebScreen> {
                             children: [
                               Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'ตั้งค่าหน้าเว็ป ',
-                                  style: TextStyle(
-                                      color: SettingScreen_Color.Colors_Text1_,
-                                      fontFamily: FontWeight_.Fonts_T,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 25.0),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'ตั้งค่าหน้าเว็ป ',
+                                    SettingScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    16,
+                                    1),
                               ),
                               // Container(
                               //   height: 150,
@@ -979,26 +1222,45 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                             //     color: Colors.grey, width: 3),
                                           ),
                                           child: Center(
-                                            child: Text(
-                                              (renTal_nameTH != null ||
-                                                      renTal_nameTH
-                                                              .toString()
-                                                              .trim() !=
-                                                          '' ||
-                                                      renTal_nameTH
-                                                              .toString() !=
-                                                          'null')
-                                                  ? '🌍 เปิดเว็ปไซต์ : $renTal_nameTH'
-                                                  : '🌍 เปิดเว็ปไซต์ : $renTal_name',
-                                              style: TextStyle(
-                                                  decoration:
-                                                      TextDecoration.underline,
-                                                  color: Colors.black,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 12.0),
-                                            ),
+                                            child: Translate.TranslateAndSetText(
+                                                (renTal_nameTH != null ||
+                                                        renTal_nameTH
+                                                                .toString()
+                                                                .trim() !=
+                                                            '' ||
+                                                        renTal_nameTH
+                                                                .toString() !=
+                                                            'null')
+                                                    ? '🌍 เปิดเว็ปไซต์ : $renTal_nameTH'
+                                                    : '🌍 เปิดเว็ปไซต์ : $renTal_name',
+                                                SettingScreen_Color
+                                                    .Colors_Text1_,
+                                                TextAlign.center,
+                                                FontWeight.bold,
+                                                FontWeight_.Fonts_T,
+                                                16,
+                                                1),
+
+                                            //  Text(
+                                            //   (renTal_nameTH != null ||
+                                            //           renTal_nameTH
+                                            //                   .toString()
+                                            //                   .trim() !=
+                                            //               '' ||
+                                            //           renTal_nameTH
+                                            //                   .toString() !=
+                                            //               'null')
+                                            //       ? '🌍 เปิดเว็ปไซต์ : $renTal_nameTH'
+                                            //       : '🌍 เปิดเว็ปไซต์ : $renTal_name',
+                                            //   style: TextStyle(
+                                            //       decoration:
+                                            //           TextDecoration.underline,
+                                            //       color: Colors.black,
+                                            //       fontFamily:
+                                            //           FontWeight_.Fonts_T,
+                                            //       fontWeight: FontWeight.bold,
+                                            //       fontSize: 12.0),
+                                            // ),
                                           ),
                                         ),
                                       ),
@@ -1114,18 +1376,16 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                     const EdgeInsets.all(2.0),
                                                 child: Row(
                                                   children: [
-                                                    const Text(
-                                                      'ปิดร้าน',
-                                                      style: TextStyle(
-                                                        color:
+                                                    Translate
+                                                        .TranslateAndSetText(
+                                                            'ปิดร้าน',
                                                             SettingScreen_Color
                                                                 .Colors_Text1_,
-                                                        fontFamily:
+                                                            TextAlign.center,
+                                                            null,
                                                             Font_.Fonts_T,
-                                                        // fontWeight: FontWeight.bold,
-                                                        //fontSize: 10.0
-                                                      ),
-                                                    ),
+                                                            12,
+                                                            2),
                                                     InkWell(
                                                       onTap: () async {
                                                         SharedPreferences
@@ -1198,18 +1458,16 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                               size: 35.0,
                                                             ),
                                                     ),
-                                                    const Text(
-                                                      'เปิดร้าน',
-                                                      style: TextStyle(
-                                                        color:
+                                                    Translate
+                                                        .TranslateAndSetText(
+                                                            'เปิดร้าน',
                                                             SettingScreen_Color
                                                                 .Colors_Text1_,
-                                                        fontFamily:
+                                                            TextAlign.center,
+                                                            null,
                                                             Font_.Fonts_T,
-                                                        // fontWeight: FontWeight.bold,
-                                                        //fontSize: 10.0
-                                                      ),
-                                                    ),
+                                                            12,
+                                                            2),
                                                   ],
                                                 ),
                                               ),
@@ -1422,24 +1680,33 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                 width: 180,
                                                 child: Column(
                                                   children: [
-                                                    Text(
-                                                      'พบ ${areaModels.length} พื้นที่พร้อมให้เช่า',
+                                                    Translate.TranslateAndSetText(
+                                                        'พบ ${areaModels.length} พื้นที่พร้อมให้เช่า',
+                                                        SettingScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.left,
+                                                        null,
+                                                        Font_.Fonts_T,
+                                                        16,
+                                                        1),
+                                                    // Text(
+                                                    //   'พบ ${areaModels.length} พื้นที่พร้อมให้เช่า',
 
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      // minFontSize: 1,
-                                                      // maxFontSize: 12,
-                                                      maxLines: 1,
-                                                      textAlign: TextAlign.left,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .subtitle1
-                                                          ?.copyWith(
-                                                            fontSize: 12.0,
-                                                            // fontWeight:
-                                                            //     FontWeight.w700,
-                                                          ),
-                                                    ),
+                                                    //   overflow:
+                                                    //       TextOverflow.ellipsis,
+                                                    //   // minFontSize: 1,
+                                                    //   // maxFontSize: 12,
+                                                    //   maxLines: 1,
+                                                    //   textAlign: TextAlign.left,
+                                                    //   style: Theme.of(context)
+                                                    //       .textTheme
+                                                    //       .subtitle1
+                                                    //       ?.copyWith(
+                                                    //         fontSize: 12.0,
+                                                    //         // fontWeight:
+                                                    //         //     FontWeight.w700,
+                                                    //       ),
+                                                    // ),
                                                   ],
                                                 ),
                                               ),
@@ -1505,24 +1772,16 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                       padding:
                                                           const EdgeInsets.all(
                                                               2.0),
-                                                      child: Text(
-                                                        '$typex',
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        // minFontSize: 1,
-                                                        // maxFontSize: 12,
-                                                        maxLines: 1,
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .subtitle1
-                                                            ?.copyWith(
-                                                              fontSize: 12.0,
-                                                              // fontWeight:
-                                                              //     FontWeight.w700,
-                                                            ),
-                                                      ),
+                                                      child: Translate
+                                                          .TranslateAndSetText(
+                                                              '$typex',
+                                                              SettingScreen_Color
+                                                                  .Colors_Text1_,
+                                                              TextAlign.left,
+                                                              null,
+                                                              Font_.Fonts_T,
+                                                              16,
+                                                              1),
                                                     ),
                                                   ],
                                                 ),
@@ -1580,29 +1839,15 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                           child: Align(
                                                             alignment: Alignment
                                                                 .topCenter,
-                                                            child: Text(
-                                                              'แก้ไขชื่อ(ไทย)',
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              // minFontSize: 1,
-                                                              // maxFontSize: 12,
-                                                              maxLines: 1,
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: Theme.of(
-                                                                      context)
-                                                                  .textTheme
-                                                                  .subtitle1
-                                                                  ?.copyWith(
-                                                                    fontSize:
-                                                                        15.0,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w700,
-                                                                  ),
-                                                            ),
+                                                            child: Translate.TranslateAndSetText(
+                                                                'แก้ไขชื่อ(ไทย)',
+                                                                SettingScreen_Color
+                                                                    .Colors_Text1_,
+                                                                TextAlign.left,
+                                                                FontWeight.w700,
+                                                                Font_.Fonts_T,
+                                                                16,
+                                                                1),
                                                           ),
                                                         ),
                                                         Expanded(
@@ -1610,29 +1855,15 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                           child: Align(
                                                             alignment: Alignment
                                                                 .topCenter,
-                                                            child: Text(
-                                                              'แก้ไขชื่อ(อังกฤษ)',
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              // minFontSize: 1,
-                                                              // maxFontSize: 12,
-                                                              maxLines: 1,
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: Theme.of(
-                                                                      context)
-                                                                  .textTheme
-                                                                  .subtitle1
-                                                                  ?.copyWith(
-                                                                    fontSize:
-                                                                        15.0,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w700,
-                                                                  ),
-                                                            ),
+                                                            child: Translate.TranslateAndSetText(
+                                                                'แก้ไขชื่อ(อังกฤษ)',
+                                                                SettingScreen_Color
+                                                                    .Colors_Text1_,
+                                                                TextAlign.left,
+                                                                FontWeight.w700,
+                                                                Font_.Fonts_T,
+                                                                16,
+                                                                1),
                                                           ),
                                                         ),
                                                       ],
@@ -1851,21 +2082,19 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                                     //     color: Colors.grey, width: 3),
                                                                   ),
                                                                   width: 150,
-                                                                  child:
-                                                                      const Center(
-                                                                    child: Text(
-                                                                      'บันทึก',
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: SettingScreen_Color
+                                                                  child: Center(
+                                                                    child: Translate.TranslateAndSetText(
+                                                                        'บันทึก',
+                                                                        SettingScreen_Color
                                                                             .Colors_Text3_,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                        //fontSize: 10.0
-                                                                      ),
-                                                                    ),
+                                                                        TextAlign
+                                                                            .left,
+                                                                        FontWeight
+                                                                            .w700,
+                                                                        Font_
+                                                                            .Fonts_T,
+                                                                        16,
+                                                                        1),
                                                                   ),
                                                                 ),
                                                                 onTap:
@@ -1969,29 +2198,17 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                               alignment:
                                                                   Alignment
                                                                       .topCenter,
-                                                              child: Text(
-                                                                'แก้ไขรูปภาพหน้าปก',
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                // minFontSize: 1,
-                                                                // maxFontSize: 12,
-                                                                maxLines: 1,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .left,
-                                                                style: Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .subtitle1
-                                                                    ?.copyWith(
-                                                                      fontSize:
-                                                                          15.0,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w700,
-                                                                    ),
-                                                              ),
+                                                              child: Translate.TranslateAndSetText(
+                                                                  'แก้ไขรูปภาพหน้าปก',
+                                                                  SettingScreen_Color
+                                                                      .Colors_Text3_,
+                                                                  TextAlign
+                                                                      .left,
+                                                                  FontWeight
+                                                                      .w700,
+                                                                  Font_.Fonts_T,
+                                                                  16,
+                                                                  1),
                                                             ),
                                                           ),
                                                           Expanded(
@@ -2000,29 +2217,17 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                               alignment:
                                                                   Alignment
                                                                       .topCenter,
-                                                              child: Text(
-                                                                'แก้ไขจังหวัด',
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                // minFontSize: 1,
-                                                                // maxFontSize: 12,
-                                                                maxLines: 1,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .left,
-                                                                style: Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .subtitle1
-                                                                    ?.copyWith(
-                                                                      fontSize:
-                                                                          15.0,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w700,
-                                                                    ),
-                                                              ),
+                                                              child: Translate.TranslateAndSetText(
+                                                                  'แก้ไขจังหวัด',
+                                                                  SettingScreen_Color
+                                                                      .Colors_Text3_,
+                                                                  TextAlign
+                                                                      .left,
+                                                                  FontWeight
+                                                                      .w700,
+                                                                  Font_.Fonts_T,
+                                                                  16,
+                                                                  1),
                                                             ),
                                                           ),
                                                         ],
@@ -2089,22 +2294,20 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                                   ),
                                                                   width: 150,
                                                                   child: Center(
-                                                                    child: Text(
-                                                                      (man_img_ == null ||
-                                                                              man_img_ == '')
-                                                                          ? 'เพิ่ม'
-                                                                          : 'แก้ไข',
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        color: SettingScreen_Color
+                                                                    child: Translate.TranslateAndSetText(
+                                                                        (man_img_ == null || man_img_ == '')
+                                                                            ? 'เพิ่ม'
+                                                                            : 'แก้ไข',
+                                                                        SettingScreen_Color
                                                                             .Colors_Text3_,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                        //fontSize: 10.0
-                                                                      ),
-                                                                    ),
+                                                                        TextAlign
+                                                                            .left,
+                                                                        FontWeight
+                                                                            .w700,
+                                                                        Font_
+                                                                            .Fonts_T,
+                                                                        16,
+                                                                        1),
                                                                   ),
                                                                 ),
                                                                 onTap:
@@ -2128,23 +2331,23 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                                         return AlertDialog(
                                                                           shape:
                                                                               const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                                                                          title: const Center(
-                                                                              child: Text(
-                                                                            'มีรูปหน้าปกอยู่แล้ว ',
-                                                                            style: TextStyle(
-                                                                                color: SettingScreen_Color.Colors_Text1_,
-                                                                                fontWeight: FontWeight.bold,
-                                                                                fontFamily: FontWeight_.Fonts_T),
-                                                                          )),
+                                                                          title:
+                                                                              Center(
+                                                                            child: Translate.TranslateAndSetText(
+                                                                                'มีรูปหน้าปกอยู่แล้ว ',
+                                                                                SettingScreen_Color.Colors_Text1_,
+                                                                                TextAlign.left,
+                                                                                FontWeight.bold,
+                                                                                FontWeight_.Fonts_T,
+                                                                                16,
+                                                                                1),
+                                                                          ),
                                                                           content:
-                                                                              const SingleChildScrollView(
+                                                                              SingleChildScrollView(
                                                                             child:
                                                                                 ListBody(
                                                                               children: <Widget>[
-                                                                                Text(
-                                                                                  'มีหน้าปก หากต้องการอัพโหลดกรุณาลบรูปหน้าปกที่มีอยู่แล้วก่อน',
-                                                                                  style: TextStyle(color: SettingScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                ),
+                                                                                Translate.TranslateAndSetText('มีหน้าปก หากต้องการอัพโหลดกรุณาลบรูปหน้าปกที่มีอยู่แล้วก่อน', SettingScreen_Color.Colors_Text1_, TextAlign.left, FontWeight.bold, FontWeight_.Fonts_T, 16, 1),
                                                                               ],
                                                                             ),
                                                                           ),
@@ -2168,18 +2371,17 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                                                       padding: const EdgeInsets.all(8.0),
                                                                                       child: InkWell(
                                                                                         child: Container(
-                                                                                            width: 50,
-                                                                                            decoration: BoxDecoration(
-                                                                                              color: Colors.red[600],
-                                                                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                              // border: Border.all(color: Colors.white, width: 1),
-                                                                                            ),
-                                                                                            padding: const EdgeInsets.all(8.0),
-                                                                                            child: const Center(
-                                                                                                child: Text(
-                                                                                              'ลบรูป',
-                                                                                              style: TextStyle(color: SettingScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
-                                                                                            ))),
+                                                                                          width: 50,
+                                                                                          decoration: BoxDecoration(
+                                                                                            color: Colors.red[600],
+                                                                                            borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                            // border: Border.all(color: Colors.white, width: 1),
+                                                                                          ),
+                                                                                          padding: const EdgeInsets.all(8.0),
+                                                                                          child: Center(
+                                                                                            child: Translate.TranslateAndSetText('ลบรูป', SettingScreen_Color.Colors_Text3_, TextAlign.left, FontWeight.bold, FontWeight_.Fonts_T, 16, 1),
+                                                                                          ),
+                                                                                        ),
                                                                                         onTap: () async {
                                                                                           // String url =
                                                                                           //     await '${MyConstant().domain}/files/$foder/logo/$img_logo';
@@ -2206,11 +2408,9 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                                                                     // border: Border.all(color: Colors.white, width: 1),
                                                                                                   ),
                                                                                                   padding: const EdgeInsets.all(8.0),
-                                                                                                  child: const Center(
-                                                                                                      child: Text(
-                                                                                                    'ปิด',
-                                                                                                    style: TextStyle(color: SettingScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
-                                                                                                  ))),
+                                                                                                  child: Center(
+                                                                                                    child: Translate.TranslateAndSetText('ปิด', SettingScreen_Color.Colors_Text3_, TextAlign.left, FontWeight.bold, FontWeight_.Fonts_T, 16, 1),
+                                                                                                  )),
                                                                                               onTap: () {
                                                                                                 Navigator.of(context).pop();
                                                                                               },
@@ -2398,15 +2598,14 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                                       .map((item) => DropdownMenuItem<String>(
                                                                             value:
                                                                                 '${item}',
-                                                                            child:
-                                                                                Text(
-                                                                              'จังหวัด : ${item}',
-                                                                              style: const TextStyle(
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                fontSize: 14,
-                                                                                color: Colors.grey,
-                                                                              ),
-                                                                            ),
+                                                                            child: Translate.TranslateAndSetText(
+                                                                                'จังหวัด : ${item}',
+                                                                                SettingScreen_Color.Colors_Text2_,
+                                                                                TextAlign.left,
+                                                                                FontWeight.w600,
+                                                                                FontWeight_.Fonts_T,
+                                                                                16,
+                                                                                1),
                                                                           ))
                                                                       .toList(),
 
@@ -2537,28 +2736,17 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                       child: Align(
                                                         alignment:
                                                             Alignment.topCenter,
-                                                        child: Text(
-                                                          '📠 อื่นๆ',
-
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          // minFontSize: 1,
-                                                          // maxFontSize: 12,
-                                                          maxLines: 1,
-                                                          textAlign:
-                                                              TextAlign.left,
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .subtitle1
-                                                                  ?.copyWith(
-                                                                    fontSize:
-                                                                        15.0,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w700,
-                                                                  ),
-                                                        ),
+                                                        child: Translate
+                                                            .TranslateAndSetText(
+                                                                '📠 อื่นๆ',
+                                                                SettingScreen_Color
+                                                                    .Colors_Text2_,
+                                                                TextAlign.left,
+                                                                FontWeight.bold,
+                                                                FontWeight_
+                                                                    .Fonts_T,
+                                                                16,
+                                                                1),
                                                       ),
                                                     ),
                                                   ),
@@ -2668,25 +2856,20 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                           ),
                                                           width: 150,
                                                           child: Center(
-                                                            child: Text(
-                                                              (qr_img_ == null ||
-                                                                      qr_img_ ==
-                                                                          '')
-                                                                  ? 'เพิ่ม'
-                                                                  : 'แก้ไข',
-                                                              style:
-                                                                  const TextStyle(
-                                                                color: SettingScreen_Color
+                                                            child: Translate.TranslateAndSetText(
+                                                                (qr_img_ == null ||
+                                                                        qr_img_ ==
+                                                                            '')
+                                                                    ? 'เพิ่ม'
+                                                                    : 'แก้ไข',
+                                                                SettingScreen_Color
                                                                     .Colors_Text3_,
-                                                                fontFamily:
-                                                                    FontWeight_
-                                                                        .Fonts_T,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                //fontSize: 10.0
-                                                              ),
-                                                            ),
+                                                                TextAlign.left,
+                                                                FontWeight.bold,
+                                                                FontWeight_
+                                                                    .Fonts_T,
+                                                                16,
+                                                                1),
                                                           ),
                                                         ),
                                                         onTap: () async {
@@ -2708,31 +2891,33 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                                       borderRadius:
                                                                           BorderRadius.all(
                                                                               Radius.circular(10.0))),
-                                                                  title:
-                                                                      const Center(
-                                                                          child:
-                                                                              Text(
-                                                                    'มีรูป QR Code อยู่แล้ว',
-                                                                    style: TextStyle(
-                                                                        color: SettingScreen_Color
+                                                                  title: Center(
+                                                                    child: Translate.TranslateAndSetText(
+                                                                        'มีรูป QR Code อยู่แล้ว',
+                                                                        SettingScreen_Color
                                                                             .Colors_Text1_,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T),
-                                                                  )),
+                                                                        TextAlign
+                                                                            .left,
+                                                                        FontWeight
+                                                                            .bold,
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                        16,
+                                                                        1),
+                                                                  ),
                                                                   content:
-                                                                      const SingleChildScrollView(
+                                                                      SingleChildScrollView(
                                                                     child:
                                                                         ListBody(
                                                                       children: <Widget>[
-                                                                        Text(
-                                                                          'มีหน้าปก หากต้องการอัพโหลดกรุณาลบรูปหน้าปกที่มีอยู่แล้วก่อน',
-                                                                          style: TextStyle(
-                                                                              color: SettingScreen_Color.Colors_Text2_,
-                                                                              fontFamily: Font_.Fonts_T),
-                                                                        ),
+                                                                        Translate.TranslateAndSetText(
+                                                                            'มีหน้าปก หากต้องการอัพโหลดกรุณาลบรูปหน้าปกที่มีอยู่แล้วก่อน',
+                                                                            SettingScreen_Color.Colors_Text2_,
+                                                                            TextAlign.left,
+                                                                            FontWeight.bold,
+                                                                            FontWeight_.Fonts_T,
+                                                                            16,
+                                                                            1),
                                                                       ],
                                                                     ),
                                                                   ),
@@ -2768,11 +2953,9 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                                                       // border: Border.all(color: Colors.white, width: 1),
                                                                                     ),
                                                                                     padding: const EdgeInsets.all(8.0),
-                                                                                    child: const Center(
-                                                                                        child: Text(
-                                                                                      'ลบรูป',
-                                                                                      style: TextStyle(color: SettingScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
-                                                                                    ))),
+                                                                                    child: Center(
+                                                                                      child: Translate.TranslateAndSetText('ลบรูป', SettingScreen_Color.Colors_Text3_, TextAlign.left, FontWeight.bold, FontWeight_.Fonts_T, 16, 1),
+                                                                                    )),
                                                                                 onTap: () async {
                                                                                   // String url =
                                                                                   //     await '${MyConstant().domain}/files/$foder/logo/$img_logo';
@@ -2799,11 +2982,9 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                                                             // border: Border.all(color: Colors.white, width: 1),
                                                                                           ),
                                                                                           padding: const EdgeInsets.all(8.0),
-                                                                                          child: const Center(
-                                                                                              child: Text(
-                                                                                            'ปิด',
-                                                                                            style: TextStyle(color: SettingScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
-                                                                                          ))),
+                                                                                          child: Center(
+                                                                                            child: Translate.TranslateAndSetText('ปิด', SettingScreen_Color.Colors_Text3_, TextAlign.left, FontWeight.bold, FontWeight_.Fonts_T, 16, 1),
+                                                                                          )),
                                                                                       onTap: () {
                                                                                         Navigator.of(context).pop();
                                                                                       },
@@ -3220,29 +3401,19 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                           Align(
                                                             alignment: Alignment
                                                                 .topLeft,
-                                                            child: Text(
-                                                              'ที่จอดรถ.',
-
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              // minFontSize: 1,
-                                                              // maxFontSize: 12,
-                                                              maxLines: 1,
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .left,
-                                                              style: Theme.of(
-                                                                      context)
-                                                                  .textTheme
-                                                                  .subtitle1
-                                                                  ?.copyWith(
-                                                                    fontSize:
-                                                                        15.0,
-                                                                    // fontWeight:
-                                                                    //     FontWeight.w700,
-                                                                  ),
-                                                            ),
+                                                            child: Translate
+                                                                .TranslateAndSetText(
+                                                                    'ที่จอดรถ.',
+                                                                    SettingScreen_Color
+                                                                        .Colors_Text2_,
+                                                                    TextAlign
+                                                                        .left,
+                                                                    FontWeight
+                                                                        .bold,
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                                    16,
+                                                                    1),
                                                           ),
                                                           SizedBox(
                                                             height: 30,
@@ -3326,30 +3497,18 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                                       MainAxisAlignment
                                                                           .center,
                                                                   children: [
-                                                                    Text(
-                                                                      'ไม่มี',
-
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
-                                                                      // minFontSize: 1,
-                                                                      // maxFontSize: 12,
-                                                                      maxLines:
-                                                                          1,
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .left,
-                                                                      style: Theme.of(
-                                                                              context)
-                                                                          .textTheme
-                                                                          .subtitle1
-                                                                          ?.copyWith(
-                                                                            fontSize:
-                                                                                15.0,
-                                                                            // fontWeight:
-                                                                            //     FontWeight.w700,
-                                                                          ),
-                                                                    ),
+                                                                    Translate.TranslateAndSetText(
+                                                                        'ไม่มี',
+                                                                        SettingScreen_Color
+                                                                            .Colors_Text2_,
+                                                                        TextAlign
+                                                                            .left,
+                                                                        FontWeight
+                                                                            .bold,
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                        16,
+                                                                        1),
                                                                     Container(
                                                                         padding:
                                                                             const EdgeInsets.all(
@@ -3365,30 +3524,18 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                                                 Icons.toggle_off,
                                                                                 size: 40,
                                                                               )),
-                                                                    Text(
-                                                                      'มี',
-
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
-                                                                      // minFontSize: 1,
-                                                                      // maxFontSize: 12,
-                                                                      maxLines:
-                                                                          1,
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .left,
-                                                                      style: Theme.of(
-                                                                              context)
-                                                                          .textTheme
-                                                                          .subtitle1
-                                                                          ?.copyWith(
-                                                                            fontSize:
-                                                                                15.0,
-                                                                            // fontWeight:
-                                                                            //     FontWeight.w700,
-                                                                          ),
-                                                                    ),
+                                                                    Translate.TranslateAndSetText(
+                                                                        'มี',
+                                                                        SettingScreen_Color
+                                                                            .Colors_Text2_,
+                                                                        TextAlign
+                                                                            .left,
+                                                                        FontWeight
+                                                                            .bold,
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                        16,
+                                                                        1),
                                                                   ],
                                                                 ),
                                                               ),
@@ -3548,21 +3695,18 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                       //     color: Colors.grey, width: 3),
                                                     ),
                                                     width: 150,
-                                                    child: const Center(
-                                                      child: Text(
-                                                        'บันทึก',
-                                                        style: TextStyle(
-                                                          color:
+                                                    child: Center(
+                                                      child: Translate
+                                                          .TranslateAndSetText(
+                                                              'บันทึก',
                                                               SettingScreen_Color
                                                                   .Colors_Text3_,
-                                                          fontFamily:
+                                                              TextAlign.left,
+                                                              FontWeight.bold,
                                                               FontWeight_
                                                                   .Fonts_T,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          //fontSize: 10.0
-                                                        ),
-                                                      ),
+                                                              16,
+                                                              1),
                                                     ),
                                                   ),
                                                   onTap: () async {
@@ -3632,19 +3776,18 @@ class _EditwebScreenState extends State<EditwebScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  const Row(
+                  Row(
                     children: [
                       Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'ตั้งค่ารายละเอียดพื้นที่',
-                          style: TextStyle(
-                            color: SettingScreen_Color.Colors_Text1_,
-                            fontFamily: FontWeight_.Fonts_T,
-                            fontWeight: FontWeight.bold,
-                            //fontSize: 10.0
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'ตั้งค่ารายละเอียดพื้นที่',
+                            SettingScreen_Color.Colors_Text2_,
+                            TextAlign.left,
+                            FontWeight.bold,
+                            FontWeight_.Fonts_T,
+                            16,
+                            1),
                       ),
                     ],
                   ),
@@ -3690,22 +3833,21 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                       bottomRight:
                                                           Radius.circular(0)),
                                             ),
-                                            child: const Align(
+                                            child: Align(
                                               alignment: Alignment.topLeft,
                                               child: Padding(
                                                 padding: EdgeInsets.fromLTRB(
                                                     20, 8, 8, 8),
-                                                child: Text(
-                                                  'เวลาทำการ',
-                                                  style: TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text1_,
-                                                    fontFamily:
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'เวลาทำการ',
+                                                        SettingScreen_Color
+                                                            .Colors_Text2_,
+                                                        TextAlign.left,
+                                                        FontWeight.bold,
                                                         FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                  ),
-                                                ),
+                                                        16,
+                                                        1),
                                               ),
                                             ),
                                           ),
@@ -3932,17 +4074,17 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                             //     color: Colors.grey, width: 3),
                                           ),
                                           width: 150,
-                                          child: const Center(
-                                            child: Text(
-                                              'บันทึก',
-                                              style: TextStyle(
-                                                color: SettingScreen_Color
-                                                    .Colors_Text3_,
-                                                fontFamily: FontWeight_.Fonts_T,
-                                                fontWeight: FontWeight.bold,
-                                                //fontSize: 10.0
-                                              ),
-                                            ),
+                                          child: Center(
+                                            child:
+                                                Translate.TranslateAndSetText(
+                                                    'บันทึก',
+                                                    SettingScreen_Color
+                                                        .Colors_Text3_,
+                                                    TextAlign.left,
+                                                    FontWeight.bold,
+                                                    FontWeight_.Fonts_T,
+                                                    16,
+                                                    1),
                                           ),
                                         ),
                                         onTap: () async {
@@ -4126,17 +4268,15 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                           //     color: Colors.grey, width: 3),
                                         ),
                                         width: 150,
-                                        child: const Center(
-                                          child: Text(
-                                            'บันทึก',
-                                            style: TextStyle(
-                                              color: SettingScreen_Color
-                                                  .Colors_Text3_,
-                                              fontFamily: FontWeight_.Fonts_T,
-                                              fontWeight: FontWeight.bold,
-                                              //fontSize: 10.0
-                                            ),
-                                          ),
+                                        child: Center(
+                                          child: Translate.TranslateAndSetText(
+                                              'บันทึก',
+                                              SettingScreen_Color.Colors_Text3_,
+                                              TextAlign.left,
+                                              FontWeight.bold,
+                                              FontWeight_.Fonts_T,
+                                              16,
+                                              1),
                                         ),
                                       ),
                                       onTap: () async {
@@ -4236,17 +4376,16 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                               ),
                                               padding:
                                                   const EdgeInsets.all(8.0),
-                                              child: const Text(
-                                                'ช่วงราคา',
-                                                style: TextStyle(
-                                                  color: SettingScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontFamily:
+                                              child:
+                                                  Translate.TranslateAndSetText(
+                                                      'ช่วงราคา',
+                                                      SettingScreen_Color
+                                                          .Colors_Text1_,
+                                                      TextAlign.left,
+                                                      FontWeight.bold,
                                                       FontWeight_.Fonts_T,
-                                                  fontWeight: FontWeight.bold,
-                                                  //fontSize: 10.0
-                                                ),
-                                              ),
+                                                      16,
+                                                      1),
                                             ),
                                           ),
                                         ],
@@ -4478,21 +4617,19 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                       ),
                                                     ),
                                                   ),
-                                                  const Padding(
+                                                  Padding(
                                                     padding:
                                                         EdgeInsets.all(8.0),
-                                                    child: Text(
-                                                      ' / เดือน',
-                                                      style: TextStyle(
-                                                        color:
+                                                    child: Translate
+                                                        .TranslateAndSetText(
+                                                            ' / เดือน',
                                                             SettingScreen_Color
                                                                 .Colors_Text1_,
-                                                        fontFamily:
-                                                            Font_.Fonts_T,
-                                                        // fontWeight: FontWeight.bold,
-                                                        //fontSize: 10.0
-                                                      ),
-                                                    ),
+                                                            TextAlign.left,
+                                                            FontWeight.bold,
+                                                            FontWeight_.Fonts_T,
+                                                            16,
+                                                            1),
                                                   ),
                                                 ],
                                               ),
@@ -4525,20 +4662,17 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                     //     color: Colors.grey, width: 3),
                                                   ),
                                                   width: 150,
-                                                  child: const Center(
-                                                    child: Text(
-                                                      'บันทึก',
-                                                      style: TextStyle(
-                                                        color:
+                                                  child: Center(
+                                                    child: Translate
+                                                        .TranslateAndSetText(
+                                                            'บันทึก',
                                                             SettingScreen_Color
                                                                 .Colors_Text3_,
-                                                        fontFamily:
-                                                            FontWeight_.Fonts_T,
-                                                        fontWeight:
+                                                            TextAlign.left,
                                                             FontWeight.bold,
-                                                        //fontSize: 10.0
-                                                      ),
-                                                    ),
+                                                            FontWeight_.Fonts_T,
+                                                            16,
+                                                            1),
                                                   ),
                                                 ),
                                                 onTap: () async {
@@ -4613,19 +4747,18 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                             8, 0, 8, 0),
                                         child: Row(
                                           children: [
-                                            const Expanded(
+                                            Expanded(
                                               flex: 1,
-                                              child: Text(
-                                                'Dialog แจ้งเตือน',
-                                                style: TextStyle(
-                                                  color: SettingScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontFamily:
+                                              child:
+                                                  Translate.TranslateAndSetText(
+                                                      'Dialog แจ้งเตือน',
+                                                      SettingScreen_Color
+                                                          .Colors_Text2_,
+                                                      TextAlign.left,
+                                                      FontWeight.bold,
                                                       FontWeight_.Fonts_T,
-                                                  fontWeight: FontWeight.bold,
-                                                  //fontSize: 10.0
-                                                ),
-                                              ),
+                                                      16,
+                                                      1),
                                             ),
                                             Expanded(
                                               flex: 1,
@@ -4887,20 +5020,17 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                     //     color: Colors.grey, width: 3),
                                                   ),
                                                   width: 150,
-                                                  child: const Center(
-                                                    child: Text(
-                                                      'บันทึก',
-                                                      style: TextStyle(
-                                                        color:
+                                                  child: Center(
+                                                    child: Translate
+                                                        .TranslateAndSetText(
+                                                            'บันทึก',
                                                             SettingScreen_Color
                                                                 .Colors_Text3_,
-                                                        fontFamily:
-                                                            FontWeight_.Fonts_T,
-                                                        fontWeight:
+                                                            TextAlign.left,
                                                             FontWeight.bold,
-                                                        //fontSize: 10.0
-                                                      ),
-                                                    ),
+                                                            FontWeight_.Fonts_T,
+                                                            16,
+                                                            1),
                                                   ),
                                                 ),
                                                 onTap: () async {
@@ -4959,17 +5089,16 @@ class _EditwebScreenState extends State<EditwebScreen> {
 
                   Row(
                     children: [
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.fromLTRB(20, 8, 8, 8),
-                        child: Text(
-                          'สิ่งอำนวยความสะดวก',
-                          style: TextStyle(
-                            color: SettingScreen_Color.Colors_Text1_,
-                            fontFamily: FontWeight_.Fonts_T,
-                            fontWeight: FontWeight.bold,
-                            //fontSize: 10.0
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'สิ่งอำนวยความสะดวก',
+                            SettingScreen_Color.Colors_Text1_,
+                            TextAlign.left,
+                            FontWeight.bold,
+                            FontWeight_.Fonts_T,
+                            16,
+                            1),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -4986,16 +5115,15 @@ class _EditwebScreenState extends State<EditwebScreen> {
                               // border: Border.all(
                               //     color: Colors.grey, width: 3),
                             ),
-                            child: const Center(
-                              child: Text(
-                                '+เพิ่ม',
-                                style: TextStyle(
-                                  color: SettingScreen_Color.Colors_Text3_,
-                                  fontFamily: FontWeight_.Fonts_T,
-                                  fontWeight: FontWeight.bold,
-                                  //fontSize: 10.0
-                                ),
-                              ),
+                            child: Center(
+                              child: Translate.TranslateAndSetText(
+                                  '+เพิ่ม',
+                                  SettingScreen_Color.Colors_Text3_,
+                                  TextAlign.left,
+                                  FontWeight.bold,
+                                  FontWeight_.Fonts_T,
+                                  16,
+                                  1),
                             ),
                           ),
                           onTap: () {
@@ -5027,15 +5155,18 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                             // border: Border.all(color: Colors.grey, width: 1),
                                           ),
                                           padding: const EdgeInsets.all(5.0),
-                                          child: const Center(
-                                              child: Text(
-                                            'สิ่งอำนวยความสะดวก',
-                                            style: TextStyle(
-                                              color: SettingScreen_Color
-                                                  .Colors_Text1_,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          )),
+                                          child: Center(
+                                            child:
+                                                Translate.TranslateAndSetText(
+                                                    'สิ่งอำนวยความสะดวก',
+                                                    SettingScreen_Color
+                                                        .Colors_Text1_,
+                                                    TextAlign.left,
+                                                    FontWeight.bold,
+                                                    FontWeight_.Fonts_T,
+                                                    16,
+                                                    1),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -5239,16 +5370,17 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                                     print(e);
                                                                   }
                                                                 },
-                                                      child: const Text(
-                                                        'ยืนยัน',
-                                                        style: TextStyle(
-                                                          color:
+                                                      child: Translate
+                                                          .TranslateAndSetText(
+                                                              'ยืนยัน',
                                                               SettingScreen_Color
                                                                   .Colors_Text3_,
-                                                          fontWeight:
+                                                              TextAlign.left,
                                                               FontWeight.bold,
-                                                        ),
-                                                      ),
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                              16,
+                                                              1),
                                                     ),
                                                   ),
                                                 ),
@@ -5290,16 +5422,19 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                                   .clear();
                                                             });
                                                           },
-                                                          child: const Text(
-                                                            'ยกเลิก',
-                                                            style: TextStyle(
-                                                              color: SettingScreen_Color
-                                                                  .Colors_Text3_,
-                                                              fontWeight:
+                                                          child: Translate
+                                                              .TranslateAndSetText(
+                                                                  'ยกเลิก',
+                                                                  SettingScreen_Color
+                                                                      .Colors_Text3_,
+                                                                  TextAlign
+                                                                      .left,
                                                                   FontWeight
                                                                       .bold,
-                                                            ),
-                                                          ),
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  16,
+                                                                  1),
                                                         ),
                                                       ),
                                                     ],
@@ -5428,17 +5563,16 @@ class _EditwebScreenState extends State<EditwebScreen> {
 
                   Row(
                     children: [
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.fromLTRB(20, 8, 8, 8),
-                        child: Text(
-                          'สถานที่ใกล้เคียง',
-                          style: TextStyle(
-                            color: SettingScreen_Color.Colors_Text1_,
-                            fontFamily: FontWeight_.Fonts_T,
-                            fontWeight: FontWeight.bold,
-                            //fontSize: 10.0
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'สถานที่ใกล้เคียง',
+                            SettingScreen_Color.Colors_Text1_,
+                            TextAlign.left,
+                            FontWeight.bold,
+                            FontWeight_.Fonts_T,
+                            16,
+                            1),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -5455,16 +5589,15 @@ class _EditwebScreenState extends State<EditwebScreen> {
                               // border: Border.all(
                               //     color: Colors.grey, width: 3),
                             ),
-                            child: const Center(
-                              child: Text(
-                                '+เพิ่ม',
-                                style: TextStyle(
-                                  color: SettingScreen_Color.Colors_Text3_,
-                                  fontFamily: FontWeight_.Fonts_T,
-                                  fontWeight: FontWeight.bold,
-                                  //fontSize: 10.0
-                                ),
-                              ),
+                            child: Center(
+                              child: Translate.TranslateAndSetText(
+                                  '+เพิ่ม',
+                                  SettingScreen_Color.Colors_Text3_,
+                                  TextAlign.left,
+                                  FontWeight.bold,
+                                  FontWeight_.Fonts_T,
+                                  16,
+                                  1),
                             ),
                           ),
                           onTap: () {
@@ -5496,15 +5629,18 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                             // border: Border.all(color: Colors.grey, width: 1),
                                           ),
                                           padding: const EdgeInsets.all(5.0),
-                                          child: const Center(
-                                              child: Text(
-                                            'สถานที่ใกล้เคียง',
-                                            style: TextStyle(
-                                              color: SettingScreen_Color
-                                                  .Colors_Text1_,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          )),
+                                          child: Center(
+                                            child:
+                                                Translate.TranslateAndSetText(
+                                                    'สถานที่ใกล้เคียง',
+                                                    SettingScreen_Color
+                                                        .Colors_Text1_,
+                                                    TextAlign.left,
+                                                    FontWeight.bold,
+                                                    FontWeight_.Fonts_T,
+                                                    16,
+                                                    1),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -5708,16 +5844,17 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                                     print(e);
                                                                   }
                                                                 },
-                                                      child: const Text(
-                                                        'ยืนยัน',
-                                                        style: TextStyle(
-                                                          color:
+                                                      child: Translate
+                                                          .TranslateAndSetText(
+                                                              'ยืนยัน',
                                                               SettingScreen_Color
                                                                   .Colors_Text3_,
-                                                          fontWeight:
+                                                              TextAlign.left,
                                                               FontWeight.bold,
-                                                        ),
-                                                      ),
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                              16,
+                                                              1),
                                                     ),
                                                   ),
                                                 ),
@@ -5759,16 +5896,19 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                                   .clear();
                                                             });
                                                           },
-                                                          child: const Text(
-                                                            'ยกเลิก',
-                                                            style: TextStyle(
-                                                              color: SettingScreen_Color
-                                                                  .Colors_Text3_,
-                                                              fontWeight:
+                                                          child: Translate
+                                                              .TranslateAndSetText(
+                                                                  'ยกเลิก',
+                                                                  SettingScreen_Color
+                                                                      .Colors_Text3_,
+                                                                  TextAlign
+                                                                      .left,
                                                                   FontWeight
                                                                       .bold,
-                                                            ),
-                                                          ),
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  16,
+                                                                  1),
                                                         ),
                                                       ),
                                                     ],
@@ -5932,17 +6072,14 @@ class _EditwebScreenState extends State<EditwebScreen> {
                               children: [
                                 Expanded(
                                   child: Container(
-                                    child: Text(
-                                      'ล็อคเสียบ',
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                        color:
-                                            SettingScreen_Color.Colors_Text1_,
-                                        fontFamily: FontWeight_.Fonts_T,
-                                        fontWeight: FontWeight.bold,
-                                        //fontSize: 10.0
-                                      ),
-                                    ),
+                                    child: Translate.TranslateAndSetText(
+                                        'ล็อคเสียบ',
+                                        SettingScreen_Color.Colors_Text1_,
+                                        TextAlign.left,
+                                        FontWeight.bold,
+                                        FontWeight_.Fonts_T,
+                                        16,
+                                        1),
                                   ),
                                 ),
                                 Container(
@@ -5998,23 +6135,14 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          Text(
-                                            'ไม่เปิดให้จอง',
-
-                                            overflow: TextOverflow.ellipsis,
-                                            // minFontSize: 1,
-                                            // maxFontSize: 12,
-                                            maxLines: 1,
-                                            textAlign: TextAlign.left,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .subtitle1
-                                                ?.copyWith(
-                                                  fontSize: 15.0,
-                                                  // fontWeight:
-                                                  //     FontWeight.w700,
-                                                ),
-                                          ),
+                                          Translate.TranslateAndSetText(
+                                              'ไม่เปิดให้จอง',
+                                              SettingScreen_Color.Colors_Text1_,
+                                              TextAlign.left,
+                                              FontWeight.bold,
+                                              FontWeight_.Fonts_T,
+                                              16,
+                                              1),
                                           Container(
                                               padding:
                                                   const EdgeInsets.all(0.0),
@@ -6030,23 +6158,14 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                       Icons.toggle_off,
                                                       size: 40,
                                                     )),
-                                          Text(
-                                            'เปิดให้จอง',
-
-                                            overflow: TextOverflow.ellipsis,
-                                            // minFontSize: 1,
-                                            // maxFontSize: 12,
-                                            maxLines: 1,
-                                            textAlign: TextAlign.left,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .subtitle1
-                                                ?.copyWith(
-                                                  fontSize: 15.0,
-                                                  // fontWeight:
-                                                  //     FontWeight.w700,
-                                                ),
-                                          ),
+                                          Translate.TranslateAndSetText(
+                                              'เปิดให้จอง',
+                                              SettingScreen_Color.Colors_Text1_,
+                                              TextAlign.left,
+                                              FontWeight.bold,
+                                              FontWeight_.Fonts_T,
+                                              16,
+                                              1),
                                         ],
                                       ),
                                     ),
@@ -6055,19 +6174,511 @@ class _EditwebScreenState extends State<EditwebScreen> {
                               ],
                             ),
                           ),
-                          const Row(
+                          Row(
                             children: [
                               Padding(
                                 padding: EdgeInsets.fromLTRB(20, 8, 8, 8),
-                                child: Text(
-                                  'วันที่เปิดให้จอง',
-                                  style: TextStyle(
-                                    color: Colors.blueGrey,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                    fontWeight: FontWeight.bold,
-                                    //fontSize: 10.0
+                                child: Translate.TranslateAndSetText(
+                                    'วันที่/เวลาที่เปิดให้จอง',
+                                    Colors.blueGrey,
+                                    TextAlign.left,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    16,
+                                    1),
+                              ),
+                              InkWell(
+                                onTap: () async {
+                                  SharedPreferences preferences =
+                                      await SharedPreferences.getInstance();
+                                  String? ren =
+                                      preferences.getString('renTalSer');
+
+                                  Dia_log();
+                                  try {
+                                    final url =
+                                        '${MyConstant().domain}/UP_In_prebook.php?isAdd=true';
+
+                                    final response = await http.post(
+                                      Uri.parse(url),
+                                      body: {
+                                        'ren': '$ren',
+                                        'type': 'INSERT',
+                                        'ser': '',
+                                        'zone': '',
+                                        'pdate': '',
+                                        'ts_padte': '',
+                                        'ldate': '',
+                                        'tl_ldate': '',
+                                        'bdate': '',
+                                        'bldate': ''
+                                      },
+                                    );
+                                  } catch (e) {}
+                                  setState(() {
+                                    CG_Prebook();
+                                  });
+                                },
+                                child: Icon(
+                                  Icons.add_circle,
+                                  color: Colors.green,
+                                ),
+                              )
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                color: AppbackgroundColor.TiTile_Colors
+                                    .withOpacity(0.1),
+                                // color: const Color.fromARGB(255, 226, 230, 233)!
+                                //     .withOpacity(0.5),
+                                // color: AppbackgroundColor
+                                //     .TiTile_Colors,
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                                border:
+                                    Border.all(color: Colors.grey, width: 0.5),
+                              ),
+                              padding: const EdgeInsets.all(2.0),
+                              child: ScrollConfiguration(
+                                behavior: ScrollConfiguration.of(context)
+                                    .copyWith(dragDevices: {
+                                  PointerDeviceKind.touch,
+                                  PointerDeviceKind.mouse,
+                                }),
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: [
+                                      for (int index = 0;
+                                          index < prebookModels.length;
+                                          index++)
+                                        Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey[200],
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(10),
+                                                      topRight:
+                                                          Radius.circular(10),
+                                                      bottomLeft:
+                                                          Radius.circular(10),
+                                                      bottomRight:
+                                                          Radius.circular(10)),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.all(2.0),
+                                              child: Row(
+                                                children: [
+                                                  Translate.TranslateAndSetText(
+                                                      'เงื่อนไข ${index + 1} :',
+                                                      ReportScreen_Color
+                                                          .Colors_Text2_,
+                                                      TextAlign.left,
+                                                      FontWeight.bold,
+                                                      FontWeight_.Fonts_T,
+                                                      16,
+                                                      1),
+                                                  Stack(
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: InkWell(
+                                                          // onTap: () {
+                                                          //   selectdate(index);
+                                                          // },
+                                                          child: Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: AppbackgroundColor
+                                                                  .Sub_Abg_Colors,
+                                                              borderRadius: const BorderRadius
+                                                                      .only(
+                                                                  topLeft:
+                                                                      Radius.circular(
+                                                                          10),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10)),
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  width: 1),
+                                                            ),
+                                                            width: 260,
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Row(
+                                                                  children: [
+                                                                    Expanded(
+                                                                      child: Translate.TranslateAndSetText(
+                                                                          (prebookModels[index].pdate.toString() == '0000-00-00' || prebookModels[index].ldate.toString() == '0000-00-00' || prebookModels[index].pdate.toString() == 'null' || prebookModels[index].ldate.toString() == 'null')
+                                                                              ? 'เลือก'
+                                                                              : '${DateFormat('dd-MM').format(DateTime.parse('${prebookModels[index].pdate}'))}-${DateTime.parse('${prebookModels[index].pdate}').year + 543} ถึง ${DateFormat('dd-MM').format(DateTime.parse('${prebookModels[index].ldate}'))}-${DateTime.parse('${prebookModels[index].ldate}').year + 0}',
+                                                                          ReportScreen_Color
+                                                                              .Colors_Text2_,
+                                                                          TextAlign
+                                                                              .left,
+                                                                          null,
+                                                                          Font_
+                                                                              .Fonts_T,
+                                                                          12,
+                                                                          1),
+                                                                    ),
+                                                                    InkWell(
+                                                                      onTap:
+                                                                          () {
+                                                                        selectdate(
+                                                                            index,
+                                                                            'pdate');
+                                                                      },
+                                                                      child:
+                                                                          Icon(
+                                                                        Icons
+                                                                            .date_range,
+                                                                        color: Colors
+                                                                            .blue,
+                                                                      ),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                                SizedBox(
+                                                                  height: 5,
+                                                                ),
+                                                                Divider(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    Expanded(
+                                                                      child: Translate.TranslateAndSetText(
+                                                                          'เวลา : ${prebookModels[index].ts_padte} ถึง ${prebookModels[index].tl_ldate}',
+                                                                          ReportScreen_Color
+                                                                              .Colors_Text2_,
+                                                                          TextAlign
+                                                                              .left,
+                                                                          null,
+                                                                          Font_
+                                                                              .Fonts_T,
+                                                                          12,
+                                                                          1),
+                                                                    ),
+                                                                    InkWell(
+                                                                      onTap:
+                                                                          () async {
+                                                                        TimeRange
+                                                                            result =
+                                                                            await showTimeRangePicker(
+                                                                          context:
+                                                                              context,
+                                                                          rotateLabels:
+                                                                              false,
+                                                                          use24HourFormat:
+                                                                              true,
+                                                                          paintingStyle:
+                                                                              PaintingStyle.fill,
+                                                                          ticks:
+                                                                              12,
+                                                                          ticksColor:
+                                                                              Colors.grey,
+                                                                          ticksOffset:
+                                                                              -12,
+                                                                          labels:
+                                                                              [
+                                                                            "24 h",
+                                                                            "3 h",
+                                                                            "6 h",
+                                                                            "9 h",
+                                                                            "12 h",
+                                                                            "15 h",
+                                                                            "18 h",
+                                                                            "21 h"
+                                                                          ].asMap().entries.map((e) {
+                                                                            return ClockLabel.fromIndex(
+                                                                                idx: e.key,
+                                                                                length: 8,
+                                                                                text: e.value);
+                                                                          }).toList(),
+                                                                          labelOffset:
+                                                                              -30,
+                                                                          padding:
+                                                                              55,
+                                                                          start: const TimeOfDay(
+                                                                              hour: 00,
+                                                                              minute: 00),
+                                                                          end: const TimeOfDay(
+                                                                              hour: 06,
+                                                                              minute: 00),
+                                                                          // disabledTime:
+                                                                          //     TimeRange(
+                                                                          //   startTime:
+                                                                          //       const TimeOfDay(hour: 4, minute: 0),
+                                                                          //   endTime:
+                                                                          //       const TimeOfDay(hour: 10, minute: 0),
+                                                                          // ),
+                                                                          maxDuration: Duration(
+                                                                              hours: 23,
+                                                                              minutes: 59),
+                                                                        );
+                                                                        SharedPreferences
+                                                                            preferences =
+                                                                            await SharedPreferences.getInstance();
+
+                                                                        var ren =
+                                                                            preferences.getString('renTalSer');
+                                                                        try {
+                                                                          final url =
+                                                                              '${MyConstant().domain}/UP_In_prebook.php?isAdd=true';
+
+                                                                          final response =
+                                                                              await http.post(
+                                                                            Uri.parse(url),
+                                                                            body: {
+                                                                              'ren': '$ren',
+                                                                              'type': 'UP',
+                                                                              'ser': '${prebookModels[index].ser}',
+                                                                              'zone': '${prebookModels[index].zone}',
+                                                                              'pdate': '${prebookModels[index].pdate}',
+                                                                              'ts_padte': '${result.startTime.hour}:${result.startTime.minute}:00',
+                                                                              'ldate': '${prebookModels[index].ldate}',
+                                                                              'tl_ldate': '${result.endTime.hour}:${result.endTime.minute}:00',
+                                                                              'bdate': '${prebookModels[index].bdate}',
+                                                                              'bldate': '${prebookModels[index].bldate}'
+                                                                            },
+                                                                          );
+                                                                        } catch (e) {}
+                                                                        setState(
+                                                                            () {
+                                                                          CG_Prebook();
+                                                                        });
+                                                                        Dia_log();
+                                                                        print(
+                                                                            '${result.startTime}');
+                                                                      },
+
+                                                                      //  () =>
+                                                                      //     TimeRangePicker
+                                                                      //         .show(
+                                                                      //   context:
+                                                                      //       context,
+                                                                      //   unSelectedEmpty:
+                                                                      //       true,
+                                                                      //   startTime: TimeOfDay(
+                                                                      //       hour:
+                                                                      //           00,
+                                                                      //       minute:
+                                                                      //           30),
+                                                                      //   endTime: TimeOfDay(
+                                                                      //       hour:
+                                                                      //           12,
+                                                                      //       minute:
+                                                                      //           30),
+                                                                      //   onSubmitted:
+                                                                      //       (TimeRangeValue
+                                                                      //           value) async {
+                                                                      //     SharedPreferences
+                                                                      //         preferences =
+                                                                      //         await SharedPreferences.getInstance();
+
+                                                                      //     var ren =
+                                                                      //         preferences.getString('renTalSer');
+                                                                      //     try {
+                                                                      //       final url =
+                                                                      //           '${MyConstant().domain}/UP_In_prebook.php?isAdd=true';
+
+                                                                      //       final response =
+                                                                      //           await http.post(
+                                                                      //         Uri.parse(url),
+                                                                      //         body: {
+                                                                      //           'ren': '$ren',
+                                                                      //           'type': 'UP',
+                                                                      //           'ser': '${prebookModels[index].ser}',
+                                                                      //           'zone': '${prebookModels[index].zone}',
+                                                                      //           'pdate': '${prebookModels[index].pdate}',
+                                                                      //           'ts_padte': '${prebookModels[index].ts_padte}',
+                                                                      //           'ldate': '${prebookModels[index].ldate}',
+                                                                      //           'tl_ldate': '${prebookModels[index].tl_ldate}',
+                                                                      //           'bdate': '${prebookModels[index].bdate}',
+                                                                      //           'bldate': '${prebookModels[index].bldate}'
+                                                                      //         },
+                                                                      //       );
+                                                                      //     } catch (e) {}
+                                                                      //   },
+                                                                      // ),
+                                                                      child:
+                                                                          Icon(
+                                                                        Icons
+                                                                            .timer_sharp,
+                                                                        color: Colors
+                                                                            .blue,
+                                                                      ),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                                SizedBox(
+                                                                  height: 5,
+                                                                ),
+                                                                Divider(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    Translate.TranslateAndSetText(
+                                                                        'เปิดให้จอง : ',
+                                                                        ReportScreen_Color
+                                                                            .Colors_Text2_,
+                                                                        TextAlign
+                                                                            .left,
+                                                                        null,
+                                                                        Font_
+                                                                            .Fonts_T,
+                                                                        12,
+                                                                        1),
+                                                                    Expanded(
+                                                                      child: Translate.TranslateAndSetText(
+                                                                          (prebookModels[index].bdate.toString() == '0000-00-00' || prebookModels[index].bldate.toString() == '0000-00-00' || prebookModels[index].bdate.toString() == 'null' || prebookModels[index].bldate.toString() == 'null')
+                                                                              ? 'เลือก'
+                                                                              : '${DateFormat('dd-MM').format(DateTime.parse('${prebookModels[index].bdate}'))}-${DateTime.parse('${prebookModels[index].bdate}').year + 543} ถึง ${DateFormat('dd-MM').format(DateTime.parse('${prebookModels[index].bldate}'))}-${DateTime.parse('${prebookModels[index].bldate}').year + 0}',
+                                                                          ReportScreen_Color
+                                                                              .Colors_Text2_,
+                                                                          TextAlign
+                                                                              .left,
+                                                                          null,
+                                                                          Font_
+                                                                              .Fonts_T,
+                                                                          12,
+                                                                          1),
+                                                                    ),
+                                                                    InkWell(
+                                                                      onTap:
+                                                                          () {
+                                                                        selectdate(
+                                                                            index,
+                                                                            'bdate');
+                                                                      },
+                                                                      child:
+                                                                          Icon(
+                                                                        Icons
+                                                                            .date_range,
+                                                                        color: Colors
+                                                                            .green,
+                                                                      ),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Positioned(
+                                                          top: 0,
+                                                          left: 5,
+                                                          child: InkWell(
+                                                            onTap: () async {
+                                                              ///-------------------------------->
+                                                              SharedPreferences
+                                                                  preferences =
+                                                                  await SharedPreferences
+                                                                      .getInstance();
+                                                              String? ren =
+                                                                  preferences
+                                                                      .getString(
+                                                                          'renTalSer');
+                                                              // String? ser_user =
+                                                              //     preferences
+                                                              //         .getString(
+                                                              //             'ser');
+                                                              Dia_log();
+                                                              String url =
+                                                                  '${MyConstant().domain}/De_prebook.php?isAdd=true&ren=$ren&ser=${prebookModels[index].ser}';
+
+                                                              try {
+                                                                var response =
+                                                                    await http.get(
+                                                                        Uri.parse(
+                                                                            url));
+
+                                                                var result =
+                                                                    await json.decode(
+                                                                        response
+                                                                            .body);
+
+                                                                if (result
+                                                                        .toString() ==
+                                                                    'true') {
+                                                                  setState(() {
+                                                                    signInThread();
+                                                                    read_GC_rental();
+                                                                    read_GC_area();
+                                                                    read_GC_rentaldata();
+                                                                    read_GC_rental_img();
+                                                                    CG_Prebook();
+                                                                  });
+                                                                } else {}
+                                                              } catch (e) {
+                                                                print(e);
+                                                              }
+                                                            },
+                                                            child: Icon(
+                                                              Icons.cancel,
+                                                              size: 20,
+                                                              color: Colors.red,
+                                                            ),
+                                                          ))
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                    ],
                                   ),
                                 ),
+                              ),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(20, 8, 8, 8),
+                                child: Translate.TranslateAndSetText(
+                                    'วันที่เปิดให้จอง',
+                                    SettingScreen_Color.Colors_Text1_,
+                                    TextAlign.left,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    16,
+                                    1),
                               ),
                             ],
                           ),
@@ -6151,35 +6762,26 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                               padding:
                                                                   const EdgeInsets
                                                                       .all(2.0),
-                                                              child: Text(
-                                                                (index == 0)
-                                                                    ? 'อาทิตย์'
-                                                                    : (index ==
-                                                                            1)
-                                                                        ? 'จันทร์'
-                                                                        : (index ==
-                                                                                2)
-                                                                            ? 'อังคาร'
-                                                                            : (index == 3)
-                                                                                ? 'พุธ'
-                                                                                : (index == 4)
-                                                                                    ? 'พฤหัสบดี'
-                                                                                    : (index == 5)
-                                                                                        ? 'ศุกร์'
-                                                                                        : 'เสาร์',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style:
-                                                                    const TextStyle(
-                                                                  color: SettingScreen_Color
-                                                                      .Colors_Text1_,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T,
-
-                                                                  //fontSize: 10.0
-                                                                ),
-                                                              ),
+                                                              child: Translate.TranslateAndSetText(
+                                                                  (index == 0)
+                                                                      ? 'อาทิตย์'
+                                                                      : (index == 1)
+                                                                          ? 'จันทร์'
+                                                                          : (index == 2)
+                                                                              ? 'อังคาร'
+                                                                              : (index == 3)
+                                                                                  ? 'พุธ'
+                                                                                  : (index == 4)
+                                                                                      ? 'พฤหัสบดี'
+                                                                                      : (index == 5)
+                                                                                          ? 'ศุกร์'
+                                                                                          : 'เสาร์',
+                                                                  SettingScreen_Color.Colors_Text1_,
+                                                                  TextAlign.left,
+                                                                  FontWeight.bold,
+                                                                  FontWeight_.Fonts_T,
+                                                                  16,
+                                                                  1),
                                                             ),
                                                           ),
                                                           StreamBuilder(
@@ -6475,6 +7077,7 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                                                 read_GC_area();
                                                                                 read_GC_rentaldata();
                                                                                 read_GC_rental_img();
+                                                                                CG_Prebook();
                                                                               });
                                                                             } else {}
                                                                           } catch (e) {
@@ -6497,19 +7100,18 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                   ),
                                 )),
                           ),
-                          const Row(
+                          Row(
                             children: [
                               Padding(
                                 padding: EdgeInsets.fromLTRB(20, 8, 8, 8),
-                                child: Text(
-                                  'วันหยุดพิเศษ/วันนักขัตฤกษ์',
-                                  style: TextStyle(
-                                    color: Colors.blueGrey,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                    fontWeight: FontWeight.bold,
-                                    //fontSize: 10.0
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'วันหยุดพิเศษ/วันนักขัตฤกษ์',
+                                    Colors.blueGrey,
+                                    TextAlign.left,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    16,
+                                    1),
                               ),
                             ],
                           ),
@@ -6564,15 +7166,15 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                               padding: EdgeInsets.all(2.0),
                                               child: Row(
                                                 children: [
-                                                  Text(
-                                                    'วันหยุดพิเศษ $index :',
-                                                    style: const TextStyle(
-                                                      color: ReportScreen_Color
+                                                  Translate.TranslateAndSetText(
+                                                      'วันหยุดพิเศษ $index :',
+                                                      ReportScreen_Color
                                                           .Colors_Text2_,
-                                                      // fontWeight: FontWeight.bold,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
-                                                  ),
+                                                      TextAlign.left,
+                                                      FontWeight.bold,
+                                                      FontWeight_.Fonts_T,
+                                                      16,
+                                                      1),
                                                   Stack(
                                                     children: [
                                                       Padding(
@@ -6725,6 +7327,7 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                                     read_GC_area();
                                                                     read_GC_rentaldata();
                                                                     read_GC_rental_img();
+                                                                    CG_Prebook();
                                                                   });
                                                                 } else {}
                                                               } catch (e) {
@@ -6761,38 +7364,65 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                                   const EdgeInsets
                                                                       .all(8.0),
                                                               child: Center(
-                                                                child: Text(
-                                                                  (index == 1)
-                                                                      ? (LDay_Special1.toString() ==
-                                                                              '0000-00-00')
-                                                                          ? 'เลือก'
-                                                                          : '${DateFormat('dd-MM').format(DateTime.parse('${LDay_Special1}'))}-${DateTime.parse('${LDay_Special1}').year + 543}'
-                                                                      : (index ==
-                                                                              2)
-                                                                          ? (LDay_Special2.toString() == '0000-00-00')
-                                                                              ? 'เลือก'
-                                                                              : '${DateFormat('dd-MM').format(DateTime.parse('${LDay_Special2}'))}-${DateTime.parse('${LDay_Special2}').year + 543}'
-                                                                          : (index == 3)
-                                                                              ? (LDay_Special3.toString() == '0000-00-00')
-                                                                                  ? 'เลือก'
-                                                                                  : '${DateFormat('dd-MM').format(DateTime.parse('${LDay_Special3}'))}-${DateTime.parse('${LDay_Special3}').year + 543}'
-                                                                              : (index == 4)
-                                                                                  ? (LDay_Special4.toString() == '0000-00-00')
-                                                                                      ? 'เลือก'
-                                                                                      : '${DateFormat('dd-MM').format(DateTime.parse('${LDay_Special4}'))}-${DateTime.parse('${LDay_Special4}').year + 543}'
-                                                                                  : (LDay_Special5.toString() == '0000-00-00')
-                                                                                      ? 'เลือก'
-                                                                                      : '${DateFormat('dd-MM').format(DateTime.parse('${LDay_Special5}'))}-${DateTime.parse('${LDay_Special5}').year + 543}',
-                                                                  style:
-                                                                      const TextStyle(
-                                                                    color: ReportScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    // fontWeight: FontWeight.bold,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T,
-                                                                  ),
-                                                                ),
+                                                                child: Translate.TranslateAndSetText(
+                                                                    (index == 1)
+                                                                        ? (LDay_Special1.toString() == '0000-00-00')
+                                                                            ? 'เลือก'
+                                                                            : '${DateFormat('dd-MM').format(DateTime.parse('${LDay_Special1}'))}-${DateTime.parse('${LDay_Special1}').year + 543}'
+                                                                        : (index == 2)
+                                                                            ? (LDay_Special2.toString() == '0000-00-00')
+                                                                                ? 'เลือก'
+                                                                                : '${DateFormat('dd-MM').format(DateTime.parse('${LDay_Special2}'))}-${DateTime.parse('${LDay_Special2}').year + 543}'
+                                                                            : (index == 3)
+                                                                                ? (LDay_Special3.toString() == '0000-00-00')
+                                                                                    ? 'เลือก'
+                                                                                    : '${DateFormat('dd-MM').format(DateTime.parse('${LDay_Special3}'))}-${DateTime.parse('${LDay_Special3}').year + 543}'
+                                                                                : (index == 4)
+                                                                                    ? (LDay_Special4.toString() == '0000-00-00')
+                                                                                        ? 'เลือก'
+                                                                                        : '${DateFormat('dd-MM').format(DateTime.parse('${LDay_Special4}'))}-${DateTime.parse('${LDay_Special4}').year + 543}'
+                                                                                    : (LDay_Special5.toString() == '0000-00-00')
+                                                                                        ? 'เลือก'
+                                                                                        : '${DateFormat('dd-MM').format(DateTime.parse('${LDay_Special5}'))}-${DateTime.parse('${LDay_Special5}').year + 543}',
+                                                                    ReportScreen_Color.Colors_Text2_,
+                                                                    TextAlign.left,
+                                                                    FontWeight.bold,
+                                                                    FontWeight_.Fonts_T,
+                                                                    16,
+                                                                    1),
+
+                                                                //  Text(
+                                                                //   (index == 1)
+                                                                //       ? (LDay_Special1.toString() ==
+                                                                //               '0000-00-00')
+                                                                //           ? 'เลือก'
+                                                                //           : '${DateFormat('dd-MM').format(DateTime.parse('${LDay_Special1}'))}-${DateTime.parse('${LDay_Special1}').year + 543}'
+                                                                //       : (index ==
+                                                                //               2)
+                                                                //           ? (LDay_Special2.toString() == '0000-00-00')
+                                                                //               ? 'เลือก'
+                                                                //               : '${DateFormat('dd-MM').format(DateTime.parse('${LDay_Special2}'))}-${DateTime.parse('${LDay_Special2}').year + 543}'
+                                                                //           : (index == 3)
+                                                                //               ? (LDay_Special3.toString() == '0000-00-00')
+                                                                //                   ? 'เลือก'
+                                                                //                   : '${DateFormat('dd-MM').format(DateTime.parse('${LDay_Special3}'))}-${DateTime.parse('${LDay_Special3}').year + 543}'
+                                                                //               : (index == 4)
+                                                                //                   ? (LDay_Special4.toString() == '0000-00-00')
+                                                                //                       ? 'เลือก'
+                                                                //                       : '${DateFormat('dd-MM').format(DateTime.parse('${LDay_Special4}'))}-${DateTime.parse('${LDay_Special4}').year + 543}'
+                                                                //                   : (LDay_Special5.toString() == '0000-00-00')
+                                                                //                       ? 'เลือก'
+                                                                //                       : '${DateFormat('dd-MM').format(DateTime.parse('${LDay_Special5}'))}-${DateTime.parse('${LDay_Special5}').year + 543}',
+                                                                //   style:
+                                                                //       const TextStyle(
+                                                                //     color: ReportScreen_Color
+                                                                //         .Colors_Text2_,
+                                                                //     // fontWeight: FontWeight.bold,
+                                                                //     fontFamily:
+                                                                //         Font_
+                                                                //             .Fonts_T,
+                                                                //   ),
+                                                                // ),
                                                               )),
                                                         ),
                                                       ),
@@ -6894,19 +7524,18 @@ class _EditwebScreenState extends State<EditwebScreen> {
                               ),
                             ),
                           ),
-                          const Row(
+                          Row(
                             children: [
                               Padding(
                                 padding: EdgeInsets.fromLTRB(20, 8, 8, 8),
-                                child: Text(
-                                  'ค่าบริการเพิ่มเติม ล็อคเสียบ',
-                                  style: TextStyle(
-                                    color: Colors.blueGrey,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                    fontWeight: FontWeight.bold,
-                                    //fontSize: 10.0
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'ค่าบริการเพิ่มเติม ล็อคเสียบ',
+                                    Colors.blueGrey,
+                                    TextAlign.left,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    16,
+                                    1),
                               ),
                             ],
                           ),
@@ -7289,7 +7918,7 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                         const EdgeInsets.all(
                                                             4.0),
                                                     child: Text(
-                                                      'บาท',
+                                                      '฿',
                                                       style: TextStyle(
                                                         color:
                                                             SettingScreen_Color
@@ -7318,19 +7947,18 @@ class _EditwebScreenState extends State<EditwebScreen> {
                     height: 20.0,
                   ),
 
-                  const Row(
+                  Row(
                     children: [
                       Padding(
                         padding: EdgeInsets.fromLTRB(20, 8, 8, 8),
-                        child: Text(
-                          'ข้อมูลพื้นที่',
-                          style: TextStyle(
-                            color: SettingScreen_Color.Colors_Text1_,
-                            fontFamily: FontWeight_.Fonts_T,
-                            fontWeight: FontWeight.bold,
-                            //fontSize: 10.0
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'ข้อมูลพื้นที่',
+                            SettingScreen_Color.Colors_Text1_,
+                            TextAlign.left,
+                            FontWeight.bold,
+                            FontWeight_.Fonts_T,
+                            16,
+                            1),
                       ),
                     ],
                   ),
@@ -7374,18 +8002,28 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                           flex: 1,
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
-                                            child: Text(
-                                              '${Show_Titel_webmarket[index]}',
-                                              textAlign: TextAlign.center,
-                                              style: const TextStyle(
-                                                  color: SettingScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
+                                            child: Translate.TranslateAndSetText(
+                                                '${Show_Titel_webmarket[index]}',
+                                                SettingScreen_Color
+                                                    .Colors_Text1_,
+                                                TextAlign.left,
+                                                FontWeight.bold,
+                                                FontWeight_.Fonts_T,
+                                                16,
+                                                1),
+
+                                            //  Text(
+                                            //   '${Show_Titel_webmarket[index]}',
+                                            //   textAlign: TextAlign.center,
+                                            //   style: const TextStyle(
+                                            //       color: SettingScreen_Color
+                                            //           .Colors_Text1_,
+                                            //       fontWeight: FontWeight.bold,
+                                            //       fontFamily:
+                                            //           FontWeight_.Fonts_T
+                                            //       //fontSize: 10.0
+                                            //       ),
+                                            // ),
                                           ),
                                         ),
                                     ],
@@ -7652,15 +8290,14 @@ class _EditwebScreenState extends State<EditwebScreen> {
                               children: [
                                 Padding(
                                   padding: EdgeInsets.fromLTRB(20, 8, 8, 8),
-                                  child: Text(
-                                    'โซนพื้นที่',
-                                    style: TextStyle(
-                                      color: SettingScreen_Color.Colors_Text1_,
-                                      fontFamily: FontWeight_.Fonts_T,
-                                      fontWeight: FontWeight.bold,
-                                      //fontSize: 10.0
-                                    ),
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      'โซนพื้นที่',
+                                      SettingScreen_Color.Colors_Text1_,
+                                      TextAlign.left,
+                                      FontWeight.bold,
+                                      FontWeight_.Fonts_T,
+                                      16,
+                                      1),
                                 ),
                               ],
                             ),
@@ -7923,17 +8560,16 @@ class _EditwebScreenState extends State<EditwebScreen> {
                             ),
                             child: Row(
                               children: [
-                                const Padding(
+                                Padding(
                                   padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'ตั้งค่ารูปอื่นๆ',
-                                    style: TextStyle(
-                                      color: SettingScreen_Color.Colors_Text1_,
-                                      fontFamily: FontWeight_.Fonts_T,
-                                      fontWeight: FontWeight.bold,
-                                      //fontSize: 10.0
-                                    ),
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      'ตั้งค่ารูปอื่นๆ',
+                                      SettingScreen_Color.Colors_Text1_,
+                                      TextAlign.left,
+                                      FontWeight.bold,
+                                      FontWeight_.Fonts_T,
+                                      16,
+                                      1),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -7950,17 +8586,15 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                         // border: Border.all(
                                         //     color: Colors.grey, width: 3),
                                       ),
-                                      child: const Center(
-                                        child: Text(
-                                          '+เพิ่ม',
-                                          style: TextStyle(
-                                            color: SettingScreen_Color
-                                                .Colors_Text3_,
-                                            fontFamily: FontWeight_.Fonts_T,
-                                            fontWeight: FontWeight.bold,
-                                            //fontSize: 10.0
-                                          ),
-                                        ),
+                                      child: Center(
+                                        child: Translate.TranslateAndSetText(
+                                            '+เพิ่ม',
+                                            SettingScreen_Color.Colors_Text3_,
+                                            TextAlign.left,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            16,
+                                            1),
                                       ),
                                     ),
                                     onTap: () {
@@ -8140,19 +8774,18 @@ class _EditwebScreenState extends State<EditwebScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  const Row(
+                  Row(
                     children: [
                       Padding(
                         padding: EdgeInsets.fromLTRB(20, 8, 8, 8),
-                        child: Text(
-                          'คำอธิบายเกี่ยวกับพื้นที่',
-                          style: TextStyle(
-                            color: SettingScreen_Color.Colors_Text1_,
-                            fontFamily: FontWeight_.Fonts_T,
-                            fontWeight: FontWeight.bold,
-                            //fontSize: 10.0
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'คำอธิบายเกี่ยวกับพื้นที่',
+                            SettingScreen_Color.Colors_Text1_,
+                            TextAlign.left,
+                            FontWeight.bold,
+                            FontWeight_.Fonts_T,
+                            16,
+                            1),
                       ),
                     ],
                   ),
@@ -8176,15 +8809,14 @@ class _EditwebScreenState extends State<EditwebScreen> {
                           Expanded(
                             child: Padding(
                               padding: EdgeInsets.fromLTRB(20, 8, 8, 8),
-                              child: Text(
-                                'คำอธิบาย',
-                                style: TextStyle(
-                                  color: SettingScreen_Color.Colors_Text1_,
-                                  fontFamily: FontWeight_.Fonts_T,
-                                  fontWeight: FontWeight.bold,
-                                  //fontSize: 10.0
-                                ),
-                              ),
+                              child: Translate.TranslateAndSetText(
+                                  'คำอธิบาย',
+                                  SettingScreen_Color.Colors_Text1_,
+                                  TextAlign.left,
+                                  FontWeight.bold,
+                                  FontWeight_.Fonts_T,
+                                  16,
+                                  1),
                             ),
                           ),
                           Padding(
@@ -8203,16 +8835,15 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                   //     color: Colors.grey, width: 3),
                                 ),
                                 width: 100,
-                                child: const Center(
-                                  child: Text(
-                                    'บันทึก',
-                                    style: TextStyle(
-                                      color: SettingScreen_Color.Colors_Text3_,
-                                      fontFamily: FontWeight_.Fonts_T,
-                                      fontWeight: FontWeight.bold,
-                                      //fontSize: 10.0
-                                    ),
-                                  ),
+                                child: Center(
+                                  child: Translate.TranslateAndSetText(
+                                      'คำอธิบาย',
+                                      SettingScreen_Color.Colors_Text3_,
+                                      TextAlign.left,
+                                      FontWeight.bold,
+                                      FontWeight_.Fonts_T,
+                                      16,
+                                      1),
                                 ),
                               ),
                               onTap: () async {
@@ -8349,19 +8980,18 @@ class _EditwebScreenState extends State<EditwebScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  const Row(
+                  Row(
                     children: [
                       Padding(
                         padding: EdgeInsets.fromLTRB(20, 8, 8, 8),
-                        child: Text(
-                          'คำอธิบายเพิ่มเติมเกี่ยวกับพื้นที่',
-                          style: TextStyle(
-                            color: SettingScreen_Color.Colors_Text1_,
-                            fontFamily: FontWeight_.Fonts_T,
-                            fontWeight: FontWeight.bold,
-                            //fontSize: 10.0
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'คำอธิบายเพิ่มเติมเกี่ยวกับพื้นที่',
+                            SettingScreen_Color.Colors_Text1_,
+                            TextAlign.left,
+                            FontWeight.bold,
+                            FontWeight_.Fonts_T,
+                            16,
+                            1),
                       ),
                     ],
                   ),
@@ -8384,15 +9014,14 @@ class _EditwebScreenState extends State<EditwebScreen> {
                           Expanded(
                             child: Padding(
                               padding: EdgeInsets.fromLTRB(20, 8, 8, 8),
-                              child: Text(
-                                'คำอธิบายเพิ่มเติม',
-                                style: TextStyle(
-                                  color: SettingScreen_Color.Colors_Text1_,
-                                  fontFamily: FontWeight_.Fonts_T,
-                                  fontWeight: FontWeight.bold,
-                                  //fontSize: 10.0
-                                ),
-                              ),
+                              child: Translate.TranslateAndSetText(
+                                  'คำอธิบายเพิ่มเติม',
+                                  SettingScreen_Color.Colors_Text1_,
+                                  TextAlign.left,
+                                  FontWeight.bold,
+                                  FontWeight_.Fonts_T,
+                                  16,
+                                  1),
                             ),
                           ),
                           Padding(
@@ -8411,16 +9040,15 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                   //     color: Colors.grey, width: 3),
                                 ),
                                 width: 100,
-                                child: const Center(
-                                  child: Text(
-                                    'บันทึก',
-                                    style: TextStyle(
-                                      color: SettingScreen_Color.Colors_Text3_,
-                                      fontFamily: FontWeight_.Fonts_T,
-                                      fontWeight: FontWeight.bold,
-                                      //fontSize: 10.0
-                                    ),
-                                  ),
+                                child: Center(
+                                  child: Translate.TranslateAndSetText(
+                                      'บันทึก',
+                                      SettingScreen_Color.Colors_Text3_,
+                                      TextAlign.left,
+                                      FontWeight.bold,
+                                      FontWeight_.Fonts_T,
+                                      16,
+                                      1),
                                 ),
                               ),
                               onTap: () async {

@@ -120,6 +120,7 @@ class TransKonChoiceModel {
   String? stype;
   String? cc_remark;
   String? cc_date;
+  String? renew_cid;
 
   TransKonChoiceModel({
     this.ser,
@@ -240,6 +241,7 @@ class TransKonChoiceModel {
     this.stype,
     this.cc_remark,
     this.cc_date,
+    this.renew_cid,
   });
 
   TransKonChoiceModel.fromJson(Map<String, dynamic> json) {
@@ -363,6 +365,7 @@ class TransKonChoiceModel {
     stype = json['stype'];
     cc_remark = json['cc_remark'];
     cc_date = json['cc_date'];
+    renew_cid = json['renew_cid'];
   }
 
   Map<String, dynamic> toJson() {
@@ -487,6 +490,7 @@ class TransKonChoiceModel {
     data['stype'] = this.stype;
     data['cc_remark'] = this.cc_remark;
     data['cc_date'] = this.cc_date;
+    data['renew_cid'] = this.renew_cid;
     return data;
   }
 }

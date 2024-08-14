@@ -173,8 +173,8 @@ class Excgen_BillPayMonRent2Report_Choice {
       sheet.getRangeByName('E${index + 1}').cellStyle = globalStyle220;
       sheet.getRangeByName('F${index + 1}').cellStyle = globalStyle220;
       sheet.getRangeByName('G${index + 1}').cellStyle = globalStyle220;
-      // sheet.getRangeByName('H${index + 1}').cellStyle = globalStyle220;
-      // sheet.getRangeByName('I${index + 1}').cellStyle = globalStyle220;
+      sheet.getRangeByName('H${index + 1}').cellStyle = globalStyle220;
+      sheet.getRangeByName('I${index + 1}').cellStyle = globalStyle220;
 
       // sheet.getRangeByName('J${index + 1}').cellStyle = globalStyle220;
       // sheet.getRangeByName('K${index + 1}').cellStyle = globalStyle220;
@@ -201,8 +201,8 @@ class Excgen_BillPayMonRent2Report_Choice {
     sheet.getRangeByName('E6').cellStyle = globalStyle1;
     sheet.getRangeByName('F6').cellStyle = globalStyle1;
     sheet.getRangeByName('G6').cellStyle = globalStyle1;
-    // sheet.getRangeByName('H2').cellStyle = globalStyle1;
-    // sheet.getRangeByName('I2').cellStyle = globalStyle1;
+    sheet.getRangeByName('H6').cellStyle = globalStyle1;
+    sheet.getRangeByName('I6').cellStyle = globalStyle1;
     // sheet.getRangeByName('J2').cellStyle = globalStyle1;
     // sheet.getRangeByName('K2').cellStyle = globalStyle1;
     // sheet.getRangeByName('L2').cellStyle = globalStyle1;
@@ -224,8 +224,8 @@ class Excgen_BillPayMonRent2Report_Choice {
     sheet.getRangeByName('E2').columnWidth = 25;
     sheet.getRangeByName('F2').columnWidth = 25;
     sheet.getRangeByName('G2').columnWidth = 18;
-    // sheet.getRangeByName('H2').columnWidth = 30;
-    // sheet.getRangeByName('I2').columnWidth = 18;
+    sheet.getRangeByName('H2').columnWidth = 30;
+    sheet.getRangeByName('I2').columnWidth = 18;
     // sheet.getRangeByName('J2').columnWidth = 18;
     // sheet.getRangeByName('K2').columnWidth = 18;
     // sheet.getRangeByName('L2').columnWidth = 18;
@@ -244,11 +244,11 @@ class Excgen_BillPayMonRent2Report_Choice {
     sheet.getRangeByName('B6').setText('วันที่');
     sheet.getRangeByName('C6').setText('เลขใบกำกับภาษี');
     sheet.getRangeByName('D6').setText('รายชื่อลูกค้า');
-    sheet.getRangeByName('D6').setText('สาขา');
-    sheet.getRangeByName('D6').setText('เลขประจำตัวผู้เสียภาษี');
-    sheet.getRangeByName('E6').setText(' จำนวนเงิน');
-    sheet.getRangeByName('F6').setText('ภาษีมูลค่าเพิ่ม(7%)');
-    sheet.getRangeByName('G6').setText('จำนวนเงินรวมทั้งสิ้น');
+    sheet.getRangeByName('E6').setText('สาขา');
+    sheet.getRangeByName('F6').setText('เลขประจำตัวผู้เสียภาษี');
+    sheet.getRangeByName('G6').setText(' จำนวนเงิน');
+    sheet.getRangeByName('H6').setText('ภาษีมูลค่าเพิ่ม(7%)');
+    sheet.getRangeByName('I6').setText('จำนวนเงินรวมทั้งสิ้น');
     // sheet.getRangeByName('H2').setText('เงินประกัน');
     // sheet.getRangeByName('I2').setText('ค่าเช่า');
 
@@ -281,8 +281,8 @@ class Excgen_BillPayMonRent2Report_Choice {
       sheet.getRangeByName('E${index + 7}').cellStyle = numberColor;
       sheet.getRangeByName('F${index + 7}').cellStyle = numberColor;
       sheet.getRangeByName('G${index + 7}').cellStyle = numberColor;
-      // sheet.getRangeByName('H${index + 3}').cellStyle = numberColor;
-      // sheet.getRangeByName('I${index + 3}').cellStyle = numberColor;
+      sheet.getRangeByName('H${index + 7}').cellStyle = numberColor;
+      sheet.getRangeByName('I${index + 7}').cellStyle = numberColor;
 
       // sheet.getRangeByName('J${index + 3}').cellStyle = numberColor;
       // sheet.getRangeByName('K${index + 3}').cellStyle = numberColor;
@@ -303,7 +303,8 @@ class Excgen_BillPayMonRent2Report_Choice {
           '${DateFormat('dd/MM/yyyy').format(DateTime.parse('${billpay_Mon2[index].daterec}'))}');
 
       sheet.getRangeByName('C${index + 7}').setText(
-            (billpay_Mon2[index].doctax == null)
+            (billpay_Mon2[index].doctax == null ||
+                    billpay_Mon2[index].doctax.toString() == '')
                 ? '${billpay_Mon2[index].docno}'
                 : '${billpay_Mon2[index].doctax}',
           );
@@ -311,37 +312,43 @@ class Excgen_BillPayMonRent2Report_Choice {
       sheet
           .getRangeByName('D${index + 7}')
           .setText('${billpay_Mon2[index].cname}');
+      sheet
+          .getRangeByName('E${index + 7}')
+          .setText('${billpay_Mon2[index].zn}');
+      sheet
+          .getRangeByName('F${index + 7}')
+          .setText('${billpay_Mon2[index].tax}');
 
-      sheet.getRangeByName('E${index + 7}').setNumber(
+      sheet.getRangeByName('G${index + 7}').setNumber(
           (billpay_Mon2[index].total_bill_pvat == null)
               ? 0.00
               : double.parse('${billpay_Mon2[index].total_bill_pvat}'));
-      sheet.getRangeByName('F${index + 7}').setNumber(
+      sheet.getRangeByName('H${index + 7}').setNumber(
           (billpay_Mon2[index].total_bill_vat == null)
               ? 0.00
               : double.parse('${billpay_Mon2[index].total_bill_vat}'));
-      sheet.getRangeByName('G${index + 7}').setNumber(
+      sheet.getRangeByName('I${index + 7}').setNumber(
           (billpay_Mon2[index].total_bill == null)
               ? 0.00
               : double.parse('${billpay_Mon2[index].total_bill}'));
       indextotol = indextotol + 1;
     }
 /////////---------------------------->
-    sheet.getRangeByName('D${indextotol + 7 + 0}').setText('รวมทั้งหมด: ');
-    sheet
-        .getRangeByName('E${indextotol + 7 + 0}')
-        .setFormula('=SUM(E7:E${indextotol + 7 - 1})');
-    sheet
-        .getRangeByName('F${indextotol + 7 + 0}')
-        .setFormula('=SUM(F7:F${indextotol + 7 - 1})');
+    sheet.getRangeByName('F${indextotol + 7 + 0}').setText('รวมทั้งหมด: ');
     sheet
         .getRangeByName('G${indextotol + 7 + 0}')
         .setFormula('=SUM(G7:G${indextotol + 7 - 1})');
+    sheet
+        .getRangeByName('H${indextotol + 7 + 0}')
+        .setFormula('=SUM(H7:H${indextotol + 7 - 1})');
+    sheet
+        .getRangeByName('I${indextotol + 7 + 0}')
+        .setFormula('=SUM(I7:I${indextotol + 7 - 1})');
 
-    sheet.getRangeByName('D${indextotol + 7 + 0}').cellStyle = globalStyle7;
-    sheet.getRangeByName('E${indextotol + 7 + 0}').cellStyle = globalStyle7;
     sheet.getRangeByName('F${indextotol + 7 + 0}').cellStyle = globalStyle7;
     sheet.getRangeByName('G${indextotol + 7 + 0}').cellStyle = globalStyle7;
+    sheet.getRangeByName('H${indextotol + 7 + 0}').cellStyle = globalStyle7;
+    sheet.getRangeByName('I${indextotol + 7 + 0}').cellStyle = globalStyle7;
 
 /////////---------------------------->
     final List<int> bytes = workbook.saveAsStream();

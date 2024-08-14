@@ -13,6 +13,7 @@ import '../Constant/Myconstant.dart';
 import '../Man_PDF/Man_ChartReport_Generate.dart';
 import '../Model/GetZone_Model.dart';
 import '../Model/Get_maintenance_model.dart';
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 import '../Style/downloadImage.dart';
 
@@ -299,16 +300,16 @@ class _Dashboard_Screen7State extends State<Dashboard_Screen7> {
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             children: [
-                              const Padding(
+                              Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'รายงาน ข้อมูลการแจ้งซ่อม  : ',
-                                  style: TextStyle(
-                                    color: ReportScreen_Color.Colors_Text2_,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'รายงาน ข้อมูลการแจ้งซ่อม  : ',
+                                    ReportScreen_Color.Colors_Text2_,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               ),
                               // const Padding(
                               //   padding: EdgeInsets.all(8.0),
@@ -547,16 +548,16 @@ class _Dashboard_Screen7State extends State<Dashboard_Screen7> {
                                   ),
                                 ),
                               ),
-                              const Padding(
+                              Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'สถานะ :',
-                                  style: TextStyle(
-                                    color: ReportScreen_Color.Colors_Text2_,
-                                    // fontWeight: FontWeight.bold,
-                                    fontFamily: Font_.Fonts_T,
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'สถานะ :',
+                                    ReportScreen_Color.Colors_Text2_,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -628,16 +629,15 @@ class _Dashboard_Screen7State extends State<Dashboard_Screen7> {
                                     items: maintenance_Status
                                         .map((item) => DropdownMenuItem<String>(
                                               value: '${item}',
-                                              child: Text(
-                                                '${item}',
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  fontSize: 14,
-                                                  color: Colors.grey,
-                                                ),
-                                              ),
+                                              child:
+                                                  Translate.TranslateAndSetText(
+                                                      '${item}',
+                                                      Colors.grey,
+                                                      TextAlign.center,
+                                                      FontWeight.w500,
+                                                      Font_.Fonts_T,
+                                                      14,
+                                                      1),
                                             ))
                                         .toList(),
 
@@ -674,15 +674,15 @@ class _Dashboard_Screen7State extends State<Dashboard_Screen7> {
                                             bottomLeft: Radius.circular(10),
                                             bottomRight: Radius.circular(10)),
                                       ),
-                                      child: const Center(
-                                        child: Text(
-                                          'ค้นหา',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T,
-                                          ),
-                                        ),
+                                      child: Center(
+                                        child: Translate.TranslateAndSetText(
+                                            'ค้นหา',
+                                            Colors.white,
+                                            TextAlign.center,
+                                            FontWeight.w500,
+                                            Font_.Fonts_T,
+                                            16,
+                                            1),
                                       )),
                                 ),
                               ),
@@ -986,15 +986,15 @@ class _Dashboard_Screen7State extends State<Dashboard_Screen7> {
                                     bottomLeft: Radius.circular(8),
                                     bottomRight: Radius.circular(8)),
                               ),
-                              child: const Center(
-                                child: Text(
-                                  'พิมพ์',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                  ),
-                                ),
+                              child: Center(
+                                child: Translate.TranslateAndSetText(
+                                    'พิมพ์',
+                                    Colors.white,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               )),
                         ),
                       ),

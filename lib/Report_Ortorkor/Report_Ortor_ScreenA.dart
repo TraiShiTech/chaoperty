@@ -25,6 +25,7 @@ import '../Report/Report_Mini/MIni_Ex_Bankmovemen_Re.dart';
 import '../Report/Report_Mini/MIni_Ex_Daily_Re.dart';
 import '../Report/Report_Mini/MIni_Ex_Income_Re.dart';
 import '../Responsive/responsive.dart';
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 import 'Excel_IncomeOrtor_Report.dart';
 
@@ -491,16 +492,16 @@ class _Report_Ortor_ScreenAState extends State<Report_Ortor_ScreenA> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'เดือนที่ครบกำหนดชำระ :',
-                          style: TextStyle(
-                            color: ReportScreen_Color.Colors_Text2_,
-                            // fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T,
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'เดือนที่ครบกำหนดชำระ :',
+                            ReportScreen_Color.Colors_Text2_,
+                            TextAlign.center,
+                            FontWeight.w500,
+                            Font_.Fonts_T,
+                            16,
+                            1),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -572,16 +573,14 @@ class _Report_Ortor_ScreenAState extends State<Report_Ortor_ScreenA> {
                               for (int item = 1; item < 13; item++)
                                 DropdownMenuItem<String>(
                                   value: '${item}',
-                                  child: Text(
-                                    '${monthsInThai[item - 1]}',
-                                    // '${item}',
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      overflow: TextOverflow.ellipsis,
-                                      fontSize: 14,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      '${monthsInThai[item - 1]}',
+                                      ReportScreen_Color.Colors_Text2_,
+                                      TextAlign.center,
+                                      FontWeight.w500,
+                                      Font_.Fonts_T,
+                                      16,
+                                      1),
                                 )
                             ],
 
@@ -594,16 +593,16 @@ class _Report_Ortor_ScreenAState extends State<Report_Ortor_ScreenA> {
                           ),
                         ),
                       ),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'ปีที่ที่ครบกำหนดชำระ :',
-                          style: TextStyle(
-                            color: ReportScreen_Color.Colors_Text2_,
-                            // fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T,
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'ปีที่ที่ครบกำหนดชำระ :',
+                            ReportScreen_Color.Colors_Text2_,
+                            TextAlign.center,
+                            FontWeight.w500,
+                            Font_.Fonts_T,
+                            16,
+                            1),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -693,16 +692,16 @@ class _Report_Ortor_ScreenAState extends State<Report_Ortor_ScreenA> {
                           ),
                         ),
                       ),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'โซน :',
-                          style: TextStyle(
-                            color: ReportScreen_Color.Colors_Text2_,
-                            // fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T,
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'โซน :',
+                            ReportScreen_Color.Colors_Text2_,
+                            TextAlign.center,
+                            FontWeight.w500,
+                            Font_.Fonts_T,
+                            16,
+                            1),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -825,15 +824,15 @@ class _Report_Ortor_ScreenAState extends State<Report_Ortor_ScreenA> {
                                     bottomLeft: Radius.circular(10),
                                     bottomRight: Radius.circular(10)),
                               ),
-                              child: const Center(
-                                child: Text(
-                                  'ค้นหา',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                  ),
-                                ),
+                              child: Center(
+                                child: Translate.TranslateAndSetText(
+                                    'ค้นหา',
+                                    Colors.white,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               )),
                         ),
                       ),
@@ -864,18 +863,18 @@ class _Report_Ortor_ScreenAState extends State<Report_Ortor_ScreenA> {
                             border: Border.all(color: Colors.grey, width: 1),
                           ),
                           padding: const EdgeInsets.all(8.0),
-                          child: const Center(
+                          child: Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  'เรียกดู',
-                                  style: TextStyle(
-                                    color: ReportScreen_Color.Colors_Text1_,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                  ),
-                                ),
+                                Translate.TranslateAndSetText(
+                                    'เรียกดู',
+                                    ReportScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                                 Icon(
                                   Icons.navigate_next,
                                   color: Colors.grey,
@@ -885,34 +884,33 @@ class _Report_Ortor_ScreenAState extends State<Report_Ortor_ScreenA> {
                           ),
                         )),
                     (Type_search != 'Mon')
-                        ? const Padding(
+                        ? Padding(
                             padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'รายงานตั้งหนี้-ใบแจ้งหนี้/วางบิล [Exclusive-A-Ortor]',
-                              // 'รายงานรายรับใบแจ้งหนี้/วางบิล [Exclusive-A-Ortor]',
-                              style: TextStyle(
-                                color: ReportScreen_Color.Colors_Text2_,
-                                // fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T,
-                              ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                'รายงานตั้งหนี้-ใบแจ้งหนี้/วางบิล [Exclusive-A-Ortor]',
+                                ReportScreen_Color.Colors_Text1_,
+                                TextAlign.center,
+                                FontWeight.w500,
+                                Font_.Fonts_T,
+                                16,
+                                1),
                           )
                         : (TransReBillModels.isEmpty)
                             ? Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  (TransReBillModels.isEmpty &&
-                                          Mon_Trans_Mon != null &&
-                                          YE_Trans_Mon != null &&
-                                          zone_name_Trans_Mon != null)
-                                      ? 'รายงานตั้งหนี้-ใบแจ้งหนี้/วางบิล [Exclusive-A-Ortor] (ไม่พบข้อมูล ✖️)'
-                                      : 'รายงานตั้งหนี้-ใบแจ้งหนี้/วางบิล [Exclusive-A-Ortor]',
-                                  style: const TextStyle(
-                                    color: ReportScreen_Color.Colors_Text2_,
-                                    // fontWeight: FontWeight.bold,
-                                    fontFamily: Font_.Fonts_T,
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    (TransReBillModels.isEmpty &&
+                                            Mon_Trans_Mon != null &&
+                                            YE_Trans_Mon != null &&
+                                            zone_name_Trans_Mon != null)
+                                        ? 'รายงานตั้งหนี้-ใบแจ้งหนี้/วางบิล [Exclusive-A-Ortor] (ไม่พบข้อมูล ✖️)'
+                                        : 'รายงานตั้งหนี้-ใบแจ้งหนี้/วางบิล [Exclusive-A-Ortor]',
+                                    ReportScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               )
                             : (TransReBillModels.length != 0 &&
                                     Type_search == 'Mon' &&
@@ -925,30 +923,29 @@ class _Report_Ortor_ScreenAState extends State<Report_Ortor_ScreenA> {
                                           padding: const EdgeInsets.all(4.0),
                                           child:
                                               const CircularProgressIndicator()),
-                                      const Padding(
+                                      Padding(
                                         padding: EdgeInsets.all(8.0),
-                                        child: Text(
-                                          'กำลังโหลดรายงานตั้งหนี้-ใบแจ้งหนี้/วางบิล [Exclusive-A-Ortor]...',
-                                          style: TextStyle(
-                                            color: ReportScreen_Color
-                                                .Colors_Text2_,
-                                            // fontWeight: FontWeight.bold,
-                                            fontFamily: Font_.Fonts_T,
-                                          ),
-                                        ),
+                                        child: Translate.TranslateAndSetText(
+                                            'กำลังโหลดรายงานตั้งหนี้-ใบแจ้งหนี้/วางบิล [Exclusive-A-Ortor]...',
+                                            ReportScreen_Color.Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.w500,
+                                            Font_.Fonts_T,
+                                            16,
+                                            1),
                                       ),
                                     ],
                                   ))
-                                : const Padding(
+                                : Padding(
                                     padding: EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'รายงานตั้งหนี้-ใบแจ้งหนี้/วางบิล [Exclusive-A-Ortor] ✔️',
-                                      style: TextStyle(
-                                        color: ReportScreen_Color.Colors_Text2_,
-                                        // fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
+                                    child: Translate.TranslateAndSetText(
+                                        'รายงานตั้งหนี้-ใบแจ้งหนี้/วางบิล [Exclusive-A-Ortor] ✔️',
+                                        ReportScreen_Color.Colors_Text1_,
+                                        TextAlign.center,
+                                        FontWeight.w500,
+                                        Font_.Fonts_T,
+                                        16,
+                                        1),
                                   ),
                     Padding(
                       padding: EdgeInsets.all(4.0),
@@ -964,14 +961,14 @@ class _Report_Ortor_ScreenAState extends State<Report_Ortor_ScreenA> {
                           // border: Border.all(color: Colors.grey, width: 1),
                         ),
                         padding: EdgeInsets.all(4.0),
-                        child: Text(
-                          'พิเศษ',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T,
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'พิเศษ',
+                            Colors.red,
+                            TextAlign.center,
+                            FontWeight.w500,
+                            Font_.Fonts_T,
+                            16,
+                            1),
                       ),
                     ),
                   ],

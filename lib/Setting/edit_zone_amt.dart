@@ -17,6 +17,7 @@ import '../Model/GetTrans_Model.dart';
 import '../Model/GetVat_Model.dart';
 import '../Model/GetZone_Model.dart';
 import '../Responsive/responsive.dart';
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 
 class EditZoneAmt extends StatefulWidget {
@@ -188,17 +189,16 @@ class _EditZoneAmtState extends State<EditZoneAmt> {
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              const Padding(
+                              Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'โซน :',
-                                  style: const TextStyle(
-                                    color: SettingScreen_Color.Colors_Text2_,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                    fontWeight: FontWeight.bold,
-                                    //fontSize: 10.0
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'โซน :',
+                                    SettingScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    16,
+                                    1),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -301,18 +301,18 @@ class _EditZoneAmtState extends State<EditZoneAmt> {
                                   : Container(
                                       child: Row(
                                         children: [
-                                          const Padding(
+                                          Padding(
                                             padding: EdgeInsets.all(8.0),
-                                            child: Text(
-                                              'ค่าบริการ :',
-                                              style: const TextStyle(
-                                                color: SettingScreen_Color
-                                                    .Colors_Text2_,
-                                                fontFamily: FontWeight_.Fonts_T,
-                                                fontWeight: FontWeight.bold,
-                                                //fontSize: 10.0
-                                              ),
-                                            ),
+                                            child:
+                                                Translate.TranslateAndSetText(
+                                                    'ค่าบริการ :',
+                                                    SettingScreen_Color
+                                                        .Colors_Text1_,
+                                                    TextAlign.center,
+                                                    FontWeight.bold,
+                                                    FontWeight_.Fonts_T,
+                                                    16,
+                                                    1),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
@@ -613,16 +613,14 @@ class _EditZoneAmtState extends State<EditZoneAmt> {
                                       //     color: Colors.grey, width: 1),
                                     ),
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'กรุณาเลือก โซนพื้นที่ !!!',
-                                      style: const TextStyle(
-                                        color:
-                                            SettingScreen_Color.Colors_Text2_,
-                                        fontFamily: FontWeight_.Fonts_T,
-                                        fontWeight: FontWeight.bold,
-                                        //fontSize: 10.0
-                                      ),
-                                    ),
+                                    child: Translate.TranslateAndSetText(
+                                        'กรุณาเลือก โซนพื้นที่ !!!',
+                                        SettingScreen_Color.Colors_Text1_,
+                                        TextAlign.center,
+                                        FontWeight.bold,
+                                        FontWeight_.Fonts_T,
+                                        16,
+                                        1),
                                   ),
                                 ),
                               )
@@ -643,23 +641,21 @@ class _EditZoneAmtState extends State<EditZoneAmt> {
                                           //     color: Colors.grey, width: 1),
                                         ),
                                         padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          'กรุณาเลือก ค่าบริการ !!!',
-                                          style: const TextStyle(
-                                            color: SettingScreen_Color
-                                                .Colors_Text2_,
-                                            fontFamily: FontWeight_.Fonts_T,
-                                            fontWeight: FontWeight.bold,
-                                            //fontSize: 10.0
-                                          ),
-                                        ),
+                                        child: Translate.TranslateAndSetText(
+                                            'กรุณาเลือก ค่าบริการ !!!',
+                                            SettingScreen_Color.Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            16,
+                                            1),
                                       ),
                                     ),
                                   )
                                 : Column(
                                     children: [
                                       Container(
-                                        decoration:  BoxDecoration(
+                                        decoration: BoxDecoration(
                                           color:
                                               AppbackgroundColor.TiTile_Colors,
                                           borderRadius: BorderRadius.only(
@@ -677,31 +673,28 @@ class _EditZoneAmtState extends State<EditZoneAmt> {
                                             Padding(
                                               padding:
                                                   const EdgeInsets.all(8.0),
-                                              child: Text(
-                                                'แก้ไขค่าบริการทั้งหมด',
-                                                style: const TextStyle(
-                                                  color: SettingScreen_Color
-                                                      .Colors_Text2_,
-                                                  fontFamily:
+                                              child:
+                                                  Translate.TranslateAndSetText(
+                                                      'แก้ไขค่าบริการทั้งหมด',
+                                                      SettingScreen_Color
+                                                          .Colors_Text1_,
+                                                      TextAlign.center,
+                                                      FontWeight.bold,
                                                       FontWeight_.Fonts_T,
-                                                  fontWeight: FontWeight.bold,
-                                                  //fontSize: 10.0
-                                                ),
-                                              ),
+                                                      16,
+                                                      1),
                                             ),
                                             Row(
                                               children: [
-                                                Text(
-                                                  'แก้ไขค่าบริการ',
-                                                  style: const TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text2_,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                  ),
-                                                ),
+                                                Translate.TranslateAndSetText(
+                                                    'แก้ไขค่าบริการ',
+                                                    SettingScreen_Color
+                                                        .Colors_Text1_,
+                                                    TextAlign.center,
+                                                    FontWeight.bold,
+                                                    FontWeight_.Fonts_T,
+                                                    16,
+                                                    1),
                                                 Expanded(
                                                   flex: 2,
                                                   child: Padding(
@@ -845,17 +838,19 @@ class _EditZoneAmtState extends State<EditZoneAmt> {
                                                           ),
                                                         ),
                                                         isExpanded: true,
-                                                        hint: const Text(
-                                                          'เลือก',
-                                                          maxLines: 1,
-                                                          style: TextStyle(
-                                                              fontSize: 14,
-                                                              color: PeopleChaoScreen_Color
-                                                                  .Colors_Text2_,
-                                                              // fontWeight: FontWeight.bold,
-                                                              fontFamily: Font_
-                                                                  .Fonts_T),
-                                                        ),
+                                                        hint: Translate
+                                                            .TranslateAndSetText(
+                                                                'เลือก',
+                                                                SettingScreen_Color
+                                                                    .Colors_Text1_,
+                                                                TextAlign
+                                                                    .center,
+                                                                FontWeight.bold,
+                                                                FontWeight_
+                                                                    .Fonts_T,
+                                                                16,
+                                                                1),
+
                                                         icon: const Icon(
                                                           Icons.arrow_drop_down,
                                                           color: TextHome_Color
@@ -881,14 +876,26 @@ class _EditZoneAmtState extends State<EditZoneAmt> {
                                                                     String>(
                                                                   value:
                                                                       '${item.ser}:${item.vat}',
-                                                                  child: Text(
-                                                                    item.vat!,
-                                                                    style: const TextStyle(
-                                                                        fontSize: 14,
-                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                        // fontWeight: FontWeight.bold,
-                                                                        fontFamily: Font_.Fonts_T),
-                                                                  ),
+                                                                  child: Translate.TranslateAndSetText(
+                                                                      item.vat!,
+                                                                      SettingScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      TextAlign
+                                                                          .center,
+                                                                      FontWeight
+                                                                          .bold,
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                      16,
+                                                                      1),
+                                                                  // Text(
+                                                                  //   item.vat!,
+                                                                  //   style: const TextStyle(
+                                                                  //       fontSize: 14,
+                                                                  //       color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                  //       // fontWeight: FontWeight.bold,
+                                                                  //       fontFamily: Font_.Fonts_T),
+                                                                  // ),
                                                                 ))
                                                             .toList(),
 
@@ -930,19 +937,18 @@ class _EditZoneAmtState extends State<EditZoneAmt> {
                                                                 BorderRadius.all(
                                                                     Radius.circular(
                                                                         20.0))),
-                                                        title: const Center(
-                                                            child: Text(
-                                                          'ยืนยันการแก้ไข ??',
-                                                          style: TextStyle(
-                                                              color: AdminScafScreen_Color
+                                                        title: Center(
+                                                          child: Translate.TranslateAndSetText(
+                                                              'ยืนยันการแก้ไข ??',
+                                                              SettingScreen_Color
                                                                   .Colors_Text1_,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontFamily:
-                                                                  FontWeight_
-                                                                      .Fonts_T),
-                                                        )),
+                                                              TextAlign.center,
+                                                              FontWeight.bold,
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                              16,
+                                                              1),
+                                                        ),
                                                         actions: <Widget>[
                                                           Column(
                                                             children: [
@@ -960,7 +966,7 @@ class _EditZoneAmtState extends State<EditZoneAmt> {
                                                               Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .all(
+                                                                            .all(
                                                                         8.0),
                                                                 child: Row(
                                                                   mainAxisAlignment:
@@ -968,9 +974,9 @@ class _EditZoneAmtState extends State<EditZoneAmt> {
                                                                           .center,
                                                                   children: [
                                                                     Padding(
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           Container(
                                                                         width:
@@ -985,9 +991,8 @@ class _EditZoneAmtState extends State<EditZoneAmt> {
                                                                               bottomLeft: Radius.circular(10),
                                                                               bottomRight: Radius.circular(10)),
                                                                         ),
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            8.0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
                                                                         child:
                                                                             TextButton(
                                                                           onPressed:
@@ -1030,21 +1035,21 @@ class _EditZoneAmtState extends State<EditZoneAmt> {
                                                                               );
                                                                             }
                                                                           },
-                                                                          child:
-                                                                              const Text(
-                                                                            'ยืนยัน',
-                                                                            style: TextStyle(
-                                                                                color: Colors.white,
-                                                                                fontWeight: FontWeight.bold,
-                                                                                fontFamily: FontWeight_.Fonts_T),
-                                                                          ),
+                                                                          child: Translate.TranslateAndSetText(
+                                                                              'ยืนยัน',
+                                                                              SettingScreen_Color.Colors_Text3_,
+                                                                              TextAlign.center,
+                                                                              FontWeight.bold,
+                                                                              FontWeight_.Fonts_T,
+                                                                              16,
+                                                                              1),
                                                                         ),
                                                                       ),
                                                                     ),
                                                                     Padding(
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
                                                                           Row(
                                                                         mainAxisAlignment:
@@ -1063,10 +1068,7 @@ class _EditZoneAmtState extends State<EditZoneAmt> {
                                                                             child:
                                                                                 TextButton(
                                                                               onPressed: () => Navigator.pop(context, 'OK'),
-                                                                              child: const Text(
-                                                                                'ยกเลิก',
-                                                                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
-                                                                              ),
+                                                                              child: Translate.TranslateAndSetText('ยกเลิก', SettingScreen_Color.Colors_Text3_, TextAlign.center, FontWeight.bold, FontWeight_.Fonts_T, 16, 1),
                                                                             ),
                                                                           ),
                                                                         ],
@@ -1087,7 +1089,7 @@ class _EditZoneAmtState extends State<EditZoneAmt> {
                                                         color: Colors
                                                             .green.shade800,
                                                         borderRadius: const BorderRadius
-                                                            .only(
+                                                                .only(
                                                             topLeft: Radius
                                                                 .circular(10),
                                                             topRight:
@@ -1106,14 +1108,17 @@ class _EditZoneAmtState extends State<EditZoneAmt> {
                                                         const EdgeInsets.all(
                                                             8.0),
                                                     child: Center(
-                                                      child: Text(
-                                                        'บันทึก',
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T),
-                                                      ),
+                                                      child: Translate
+                                                          .TranslateAndSetText(
+                                                              'บันทึก',
+                                                              SettingScreen_Color
+                                                                  .Colors_Text3_,
+                                                              TextAlign.center,
+                                                              FontWeight.bold,
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                              16,
+                                                              1),
                                                     ),
                                                   ),
                                                 ),
@@ -1123,7 +1128,7 @@ class _EditZoneAmtState extends State<EditZoneAmt> {
                                         ),
                                       ),
                                       Container(
-                                        decoration:  BoxDecoration(
+                                        decoration: BoxDecoration(
                                           color:
                                               AppbackgroundColor.TiTile_Colors,
                                           borderRadius: BorderRadius.only(
@@ -1142,35 +1147,29 @@ class _EditZoneAmtState extends State<EditZoneAmt> {
                                             children: [
                                               Expanded(
                                                 flex: 1,
-                                                child: Text(
-                                                  'เลขที่สัญญา',
-                                                  maxLines: 2,
-                                                  textAlign: TextAlign.start,
-                                                  style: const TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text2_,
-                                                    fontFamily:
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'เลขที่สัญญา',
+                                                        SettingScreen_Color
+                                                            .Colors_Text3_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
                                                         FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                  ),
-                                                ),
+                                                        16,
+                                                        1),
                                               ),
                                               Expanded(
                                                 flex: 1,
-                                                child: Text(
-                                                  'ค่าบริการ',
-                                                  maxLines: 2,
-                                                  textAlign: TextAlign.start,
-                                                  style: const TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text2_,
-                                                    fontFamily:
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'ค่าบริการ',
+                                                        SettingScreen_Color
+                                                            .Colors_Text3_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
                                                         FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                  ),
-                                                ),
+                                                        16,
+                                                        1),
                                               ),
                                               Expanded(
                                                 flex: 1,
@@ -1206,35 +1205,29 @@ class _EditZoneAmtState extends State<EditZoneAmt> {
                                               ),
                                               Expanded(
                                                 flex: 1,
-                                                child: Text(
-                                                  'ก่อน VAT',
-                                                  maxLines: 2,
-                                                  textAlign: TextAlign.end,
-                                                  style: const TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text2_,
-                                                    fontFamily:
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'ก่อน VAT',
+                                                        SettingScreen_Color
+                                                            .Colors_Text3_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
                                                         FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                  ),
-                                                ),
+                                                        16,
+                                                        1),
                                               ),
                                               Expanded(
                                                 flex: 1,
-                                                child: Text(
-                                                  'รวม',
-                                                  maxLines: 2,
-                                                  textAlign: TextAlign.end,
-                                                  style: const TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text2_,
-                                                    fontFamily:
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'รวม',
+                                                        SettingScreen_Color
+                                                            .Colors_Text3_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
                                                         FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                  ),
-                                                ),
+                                                        16,
+                                                        1),
                                               ),
                                             ],
                                           ),
@@ -1272,19 +1265,22 @@ class _EditZoneAmtState extends State<EditZoneAmt> {
                                                               return Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .all(
+                                                                            .all(
                                                                         8.0),
                                                                 child: (elapsed >
                                                                         8.00)
-                                                                    ? const Text(
+                                                                    ? Translate.TranslateAndSetText(
                                                                         'ไม่พบข้อมูล',
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                PeopleChaoScreen_Color.Colors_Text2_,
-                                                                            fontFamily: Font_.Fonts_T
-                                                                            //fontSize: 10.0
-                                                                            ),
-                                                                      )
+                                                                        SettingScreen_Color
+                                                                            .Colors_Text3_,
+                                                                        TextAlign
+                                                                            .center,
+                                                                        FontWeight
+                                                                            .bold,
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                        16,
+                                                                        1)
                                                                     : Text(
                                                                         'ดาวน์โหลด : ${elapsed.toStringAsFixed(2)} s.',
                                                                         // 'Time : ${elapsed.toStringAsFixed(2)} seconds',
@@ -1999,3 +1995,6 @@ class _EditZoneAmtState extends State<EditZoneAmt> {
     );
   }
 }
+/// https://chaoperties.com/chao_api/GC_areaAll.php?isAdd=true&ren=118&zone=0
+///  https://chaoperties.com/chao_api/GC_user.php?isAdd=true&email=T_T@gmail.com
+///   https://chaoperties.com/chao_api/GC_bill_pay_BC_IncomeReport_All.php?isAdd=true&ren=50&mont_h=07&yea_r=2024&serzone0

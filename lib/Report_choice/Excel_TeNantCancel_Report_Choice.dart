@@ -441,7 +441,7 @@ class Excgen_TeNantCancelReport_Choice {
                   double.parse('${teNantModels_Cancel[index].pakan_vat}'));
       sheet
           .getRangeByName('AA${index + 3}')
-          .setText('${teNantModels_Cancel[index].user}');
+          .setText('${teNantModels_Cancel[index].name_user}');
       sheet
           .getRangeByName('AB${index + 3}')
           .setText('${teNantModels_Cancel[index].cc_remark}');

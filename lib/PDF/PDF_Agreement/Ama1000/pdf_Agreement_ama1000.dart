@@ -973,7 +973,7 @@ class Pdfgen_Agreement_Ama1000 {
                       ),
                       pw.SizedBox(height: 2 * PdfPageFormat.mm),
                       pw.Text(
-                        '2.4	อัตราค่าน้ำปะปา หน่วยละ 20 บาท (รวมภาษีมูลค่าเพิ่ม) อัตราขั้นต่ำ 100 บาท (ทางตลาดขอสงวนสิทธิ์ในการปรับราคาในระหว่างสัญญา)',
+                        '2.4	อัตราค่าน้ำปะปา ตามอัตราที่บริษัทกำหนด (ทางตลาดขอสงวนสิทธิ์ในการปรับราคาในระหว่างสัญญา)',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
                           fontSize: font_Size,
@@ -983,7 +983,7 @@ class Pdfgen_Agreement_Ama1000 {
                       ),
                       pw.SizedBox(height: 2 * PdfPageFormat.mm),
                       pw.Text(
-                        '2.5	อัตราค่าไฟ หน่วยละ 7 บาท (รวมภาษีมูลค่าเพิ่ม) (ทางตลาดขอสงวนสิทธิ์ในการปรับราคาในระหว่างสัญญา)',
+                        '2.5	อัตราค่าไฟ ตามอัตราที่บริษัทกำหนด (ทางตลาดขอสงวนสิทธิ์ในการปรับราคาในระหว่างสัญญา)',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
                           fontSize: font_Size,
@@ -2651,7 +2651,7 @@ class Pdfgen_Agreement_Ama1000 {
                       width: 0.3, // Underline thickness
                     ))),
                     child: pw.Text(
-                      " ${FormNameFile_text} ",
+                      " ${FormNameFile_text.text} ",
                       textAlign: pw.TextAlign.left,
                       style: pw.TextStyle(
                         color: Colors_pd,

@@ -23,6 +23,7 @@ import '../Model/GetRenTal_Model.dart';
 import '../Model/GetUser_Model.dart';
 import '../Model/per_model.dart';
 import '../Responsive/responsive.dart';
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 
 class Accessrights extends StatefulWidget {
@@ -292,15 +293,16 @@ class _AccessrightsState extends State<Accessrights> {
         child: AlertDialog(
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(20.0))),
-          title: const Center(
-              child: Text(
-            'เพิ่มผู้ใช้งาน',
-            style: TextStyle(
-              color: SettingScreen_Color.Colors_Text1_,
-              fontFamily: FontWeight_.Fonts_T,
-              fontWeight: FontWeight.bold,
-            ),
-          )),
+          title: Center(
+            child: Translate.TranslateAndSetText(
+                'เพิ่มผู้ใช้งาน',
+                SettingScreen_Color.Colors_Text1_,
+                TextAlign.center,
+                FontWeight.bold,
+                FontWeight_.Fonts_T,
+                16,
+                1),
+          ),
           content: Container(
             height: MediaQuery.of(context).size.height / 1.5,
             width: (!Responsive.isDesktop(context))
@@ -325,18 +327,17 @@ class _AccessrightsState extends State<Accessrights> {
                           child: Column(
                         children: [
                           Row(
-                            children: const [
+                            children: [
                               Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'ชื่อ',
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    color: SettingScreen_Color.Colors_Text1_,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'ชื่อ',
+                                    SettingScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    16,
+                                    1),
                               ),
                             ],
                           ),
@@ -388,7 +389,7 @@ class _AccessrightsState extends State<Accessrights> {
                                         color: Colors.grey,
                                       ),
                                     ),
-                                    labelText: 'ชื่อ',
+                                    labelText: '',
                                     labelStyle: const TextStyle(
                                         color:
                                             SettingScreen_Color.Colors_Text2_,
@@ -410,18 +411,17 @@ class _AccessrightsState extends State<Accessrights> {
                           child: Column(
                         children: [
                           Row(
-                            children: const [
+                            children: [
                               Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'นามสกุล',
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    color: SettingScreen_Color.Colors_Text1_,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'นามสกุล',
+                                    SettingScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    16,
+                                    1),
                               ),
                             ],
                           ),
@@ -473,7 +473,7 @@ class _AccessrightsState extends State<Accessrights> {
                                         color: Colors.grey,
                                       ),
                                     ),
-                                    labelText: 'นามสกุล',
+                                    labelText: '',
                                     labelStyle: const TextStyle(
                                         color:
                                             SettingScreen_Color.Colors_Text2_,
@@ -499,18 +499,17 @@ class _AccessrightsState extends State<Accessrights> {
                           child: Column(
                         children: [
                           Row(
-                            children: const [
+                            children: [
                               Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'ตำแหน่ง',
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    color: SettingScreen_Color.Colors_Text1_,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'ตำแหน่ง',
+                                    SettingScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    16,
+                                    1),
                               ),
                             ],
                           ),
@@ -562,7 +561,7 @@ class _AccessrightsState extends State<Accessrights> {
                                         color: Colors.grey,
                                       ),
                                     ),
-                                    labelText: 'ตำแหน่ง',
+                                    labelText: '',
                                     labelStyle: const TextStyle(
                                         color:
                                             SettingScreen_Color.Colors_Text2_,
@@ -584,18 +583,17 @@ class _AccessrightsState extends State<Accessrights> {
                           child: Column(
                         children: [
                           Row(
-                            children: const [
+                            children: [
                               Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'เบอร์โทร',
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    color: SettingScreen_Color.Colors_Text1_,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'เบอร์โทร',
+                                    SettingScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    16,
+                                    1),
                               ),
                             ],
                           ),
@@ -647,7 +645,7 @@ class _AccessrightsState extends State<Accessrights> {
                                         color: Colors.grey,
                                       ),
                                     ),
-                                    labelText: 'เบอร์โทร',
+                                    labelText: '',
                                     labelStyle: const TextStyle(
                                         color:
                                             SettingScreen_Color.Colors_Text2_,
@@ -671,18 +669,17 @@ class _AccessrightsState extends State<Accessrights> {
                         child: Column(
                       children: [
                         Row(
-                          children: const [
+                          children: [
                             Padding(
                               padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                'อีเมล',
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  color: SettingScreen_Color.Colors_Text1_,
-                                  fontFamily: FontWeight_.Fonts_T,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                              child: Translate.TranslateAndSetText(
+                                  'อีเมล',
+                                  SettingScreen_Color.Colors_Text1_,
+                                  TextAlign.center,
+                                  FontWeight.bold,
+                                  FontWeight_.Fonts_T,
+                                  16,
+                                  1),
                             ),
                           ],
                         ),
@@ -734,7 +731,7 @@ class _AccessrightsState extends State<Accessrights> {
                                       color: Colors.grey,
                                     ),
                                   ),
-                                  labelText: 'อีเมล',
+                                  labelText: '',
                                   labelStyle: const TextStyle(
                                       color: SettingScreen_Color.Colors_Text2_,
                                       fontFamily: Font_.Fonts_T)),
@@ -755,18 +752,17 @@ class _AccessrightsState extends State<Accessrights> {
                         child: Column(
                       children: [
                         Row(
-                          children: const [
+                          children: [
                             Padding(
                               padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                'รหัสผ่าน',
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  color: SettingScreen_Color.Colors_Text1_,
-                                  fontFamily: FontWeight_.Fonts_T,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                              child: Translate.TranslateAndSetText(
+                                  'รหัสผ่าน',
+                                  SettingScreen_Color.Colors_Text1_,
+                                  TextAlign.center,
+                                  FontWeight.bold,
+                                  FontWeight_.Fonts_T,
+                                  16,
+                                  1),
                             ),
                           ],
                         ),
@@ -818,7 +814,7 @@ class _AccessrightsState extends State<Accessrights> {
                                       color: Colors.grey,
                                     ),
                                   ),
-                                  labelText: 'รหัสผ่าน',
+                                  labelText: '',
                                   labelStyle: const TextStyle(
                                       color: SettingScreen_Color.Colors_Text2_,
                                       fontFamily: Font_.Fonts_T)),
@@ -848,21 +844,14 @@ class _AccessrightsState extends State<Accessrights> {
                                 flex: 1,
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: StreamBuilder(
-                                      stream: Stream.periodic(
-                                          const Duration(seconds: 0)),
-                                      builder: (context, snapshot) {
-                                        return const Text(
-                                          'สิทธิการเข้าถึง',
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                            color: SettingScreen_Color
-                                                .Colors_Text1_,
-                                            fontFamily: FontWeight_.Fonts_T,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        );
-                                      }),
+                                  child: Translate.TranslateAndSetText(
+                                      'สิทธิการเข้าถึง',
+                                      SettingScreen_Color.Colors_Text1_,
+                                      TextAlign.center,
+                                      FontWeight.bold,
+                                      FontWeight_.Fonts_T,
+                                      16,
+                                      1),
                                 ),
                               ),
                             ],
@@ -870,86 +859,90 @@ class _AccessrightsState extends State<Accessrights> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
-                              decoration: const BoxDecoration(
-                                // color: Colors.grey[400],
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(15),
-                                    topRight: Radius.circular(15),
-                                    bottomLeft: Radius.circular(15),
-                                    bottomRight: Radius.circular(15)),
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: StreamBuilder(
-                                  stream: Stream.periodic(
-                                      const Duration(seconds: 0)),
-                                  builder: (context, snapshot) {
-                                    return Column(
-                                      children: [
-                                        for (int index = 0;
-                                            index < perMissionModels.length;
-                                            index++)
-                                          if (perMissionModels[index]
-                                                  .perm
-                                                  .toString() !=
-                                              'จัดการข้อมูลส่วนตัว')
-                                            Row(
-                                              children: [
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Checkbox(
-                                                      activeColor: Colors
-                                                          .blue, // ​​color when activated
-                                                      value: _isChecks[index],
-                                                      onChanged: (bool? val) {
+                                decoration: const BoxDecoration(
+                                  // color: Colors.grey[400],
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(15),
+                                      topRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15)),
+                                ),
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    for (int index = 0;
+                                        index < perMissionModels.length;
+                                        index++)
+                                      if (perMissionModels[index]
+                                              .perm
+                                              .toString() !=
+                                          'จัดการข้อมูลส่วนตัว')
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: Checkbox(
+                                                  activeColor: Colors
+                                                      .blue, // ​​color when activated
+                                                  value: _isChecks[index],
+                                                  onChanged: (bool? val) {
+                                                    setState(() {
+                                                      _isChecks[index] = val!;
+                                                    });
+                                                    // print(checked_Add);
+                                                    checked_value = '';
+                                                    for (var i = 0;
+                                                        i < list.length;
+                                                        i++) {
+                                                      String idmenu =
+                                                          list[i].title;
+                                                      String pnmenu =
+                                                          list[i].content;
+                                                      if (_isChecks[i] ==
+                                                          true) {
                                                         setState(() {
-                                                          _isChecks[index] =
-                                                              val!;
+                                                          checked_value =
+                                                              '$checked_value' +
+                                                                  '$idmenu' +
+                                                                  ',';
                                                         });
-                                                        // print(checked_Add);
-                                                        checked_value = '';
-                                                        for (var i = 0;
-                                                            i < list.length;
-                                                            i++) {
-                                                          String idmenu =
-                                                              list[i].title;
-                                                          String pnmenu =
-                                                              list[i].content;
-                                                          if (_isChecks[i] ==
-                                                              true) {
-                                                            setState(() {
-                                                              checked_value =
-                                                                  '$checked_value' +
-                                                                      '$idmenu' +
-                                                                      ',';
-                                                            });
-                                                          }
-                                                        }
-                                                        print('$checked_value');
-                                                      }),
-                                                ),
-                                                Expanded(
-                                                  flex: 8,
-                                                  child: AutoSizeText(
-                                                    minFontSize: 10,
-                                                    maxFontSize: 15,
-                                                    '${perMissionModels[index].perm}',
-                                                    textAlign: TextAlign.start,
-                                                    style: const TextStyle(
-                                                        color:
-                                                            PeopleChaoScreen_Color
-                                                                .Colors_Text1_,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontFamily: FontWeight_
-                                                            .Fonts_T),
-                                                  ),
-                                                ),
-                                              ],
+                                                      }
+                                                    }
+                                                    print('$checked_value');
+                                                  }),
                                             ),
-                                      ],
-                                    );
-                                  }),
-                            ),
+                                            Expanded(
+                                                flex: 8,
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        '${perMissionModels[index].perm}',
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.start,
+                                                        FontWeight.bold,
+                                                        FontWeight_.Fonts_T,
+                                                        16,
+                                                        1)
+
+                                                //  AutoSizeText(
+                                                //   minFontSize: 10,
+                                                //   maxFontSize: 15,
+                                                //   '${perMissionModels[index].perm}',
+                                                //   textAlign: TextAlign.start,
+                                                //   style: const TextStyle(
+                                                //       color:
+                                                //           PeopleChaoScreen_Color
+                                                //               .Colors_Text1_,
+                                                //       fontWeight:
+                                                //           FontWeight.bold,
+                                                //       fontFamily: FontWeight_
+                                                //           .Fonts_T),
+                                                // ),
+                                                ),
+                                          ],
+                                        ),
+                                  ],
+                                )),
                           ),
                         ],
                       )),
@@ -1063,14 +1056,14 @@ class _AccessrightsState extends State<Accessrights> {
                                   }
                                 }
                               },
-                              child: const Text(
-                                'ตกลง',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: FontWeight_.Fonts_T,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                              child: Translate.TranslateAndSetText(
+                                  'ตกลง',
+                                  Colors.white,
+                                  TextAlign.center,
+                                  FontWeight.bold,
+                                  FontWeight_.Fonts_T,
+                                  16,
+                                  1),
                             ),
                           ),
                         ],
@@ -1094,14 +1087,14 @@ class _AccessrightsState extends State<Accessrights> {
                             padding: const EdgeInsets.all(8.0),
                             child: TextButton(
                               onPressed: () => Navigator.pop(context, 'OK'),
-                              child: const Text(
-                                'ปิด',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: FontWeight_.Fonts_T,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                              child: Translate.TranslateAndSetText(
+                                  'ปิด',
+                                  Colors.white,
+                                  TextAlign.center,
+                                  FontWeight.bold,
+                                  FontWeight_.Fonts_T,
+                                  16,
+                                  1),
                             ),
                           ),
                         ],
@@ -1124,15 +1117,16 @@ class _AccessrightsState extends State<Accessrights> {
         builder: (BuildContext context) => AlertDialog(
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(20.0))),
-            title: const Center(
-                child: Text(
-              'Level Information',
-              style: TextStyle(
-                color: SettingScreen_Color.Colors_Text1_,
-                fontFamily: FontWeight_.Fonts_T,
-                fontWeight: FontWeight.bold,
-              ),
-            )),
+            title: Center(
+              child: Translate.TranslateAndSetText(
+                  'Level Information',
+                  SettingScreen_Color.Colors_Text1_,
+                  TextAlign.center,
+                  FontWeight.bold,
+                  FontWeight_.Fonts_T,
+                  16,
+                  1),
+            ),
             content: Container(
                 padding: EdgeInsets.all(8),
                 decoration: const BoxDecoration(
@@ -1150,39 +1144,81 @@ class _AccessrightsState extends State<Accessrights> {
                     Row(
                       children: [
                         Expanded(flex: 1, child: Text('Level 1')),
-                        Expanded(flex: 6, child: Text('แสดงข้อมูล')),
+                        Expanded(
+                          flex: 6,
+                          child: Translate.TranslateAndSetText(
+                              'แสดงข้อมูล',
+                              SettingScreen_Color.Colors_Text1_,
+                              TextAlign.center,
+                              FontWeight.bold,
+                              FontWeight_.Fonts_T,
+                              16,
+                              1),
+                        ),
                       ],
                     ),
                     Row(
                       children: [
                         Expanded(flex: 1, child: Text('Level 2')),
-                        Expanded(flex: 6, child: Text('บันทึกมิเตอร์')),
+                        Expanded(
+                          flex: 6,
+                          child: Translate.TranslateAndSetText(
+                              'บันทึกมิเตอร์',
+                              SettingScreen_Color.Colors_Text1_,
+                              TextAlign.center,
+                              FontWeight.bold,
+                              FontWeight_.Fonts_T,
+                              16,
+                              1),
+                        ),
                       ],
                     ),
                     Row(
                       children: [
                         Expanded(flex: 1, child: Text('Level 3')),
                         Expanded(
-                            flex: 6,
-                            child: Text('ทำสัญญา,รับชำระ,บันทึกมิเตอร์')),
+                          flex: 6,
+                          child: Translate.TranslateAndSetText(
+                              'ทำสัญญา,รับชำระ,บันทึกมิเตอร์',
+                              SettingScreen_Color.Colors_Text1_,
+                              TextAlign.center,
+                              FontWeight.bold,
+                              FontWeight_.Fonts_T,
+                              16,
+                              1),
+                        ),
                       ],
                     ),
                     Row(
                       children: [
                         Expanded(flex: 1, child: Text('Level 4')),
                         Expanded(
-                            flex: 6,
-                            child: Text(
-                                'ทำสัญญา,รับชำระ,บันทึกมิเตอร์,แก้ไขทะเบียน,แก้ไขสัญญา')),
+                          flex: 6,
+                          child: Translate.TranslateAndSetText(
+                              'ทำสัญญา,รับชำระ,บันทึกมิเตอร์,แก้ไขทะเบียน,แก้ไขสัญญา',
+                              SettingScreen_Color.Colors_Text1_,
+                              TextAlign.center,
+                              FontWeight.bold,
+                              FontWeight_.Fonts_T,
+                              16,
+                              1),
+                        ),
                       ],
                     ),
                     Row(
                       children: [
                         Expanded(flex: 1, child: Text('Level 5')),
                         Expanded(
-                            flex: 6,
-                            child: Text(
-                                'ทำสัญญา,รับชำระ,บันทึกมิเตอร์,แก้ไขทะเบียน,แก้ไขสัญญา,ออกรายงาน,ตั้งค่าต่างๆ')),
+                          flex: 6,
+                          child: Translate.TranslateAndSetText(
+                              'ทำสัญญา,รับชำระ,บันทึกมิเตอร์,แก้ไขทะเบียน,แก้ไขสัญญา,ออกรายงาน,ตั้งค่าต่างๆ',
+                              SettingScreen_Color.Colors_Text1_,
+                              TextAlign.center,
+                              FontWeight.bold,
+                              FontWeight_.Fonts_T,
+                              16,
+                              1),
+                        ),
                       ],
                     ),
                   ],
@@ -1260,15 +1296,16 @@ class _AccessrightsState extends State<Accessrights> {
         child: AlertDialog(
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(20.0))),
-          title: const Center(
-              child: Text(
-            'แก้ไขผู้ใช้งาน',
-            style: TextStyle(
-              color: SettingScreen_Color.Colors_Text1_,
-              fontFamily: FontWeight_.Fonts_T,
-              fontWeight: FontWeight.bold,
-            ),
-          )),
+          title: Center(
+            child: Translate.TranslateAndSetText(
+                'แก้ไขผู้ใช้งาน',
+                SettingScreen_Color.Colors_Text1_,
+                TextAlign.center,
+                FontWeight.bold,
+                FontWeight_.Fonts_T,
+                16,
+                1),
+          ),
           content: Container(
             height: MediaQuery.of(context).size.height / 1.5,
             width: (!Responsive.isDesktop(context))
@@ -1293,18 +1330,17 @@ class _AccessrightsState extends State<Accessrights> {
                           child: Column(
                         children: [
                           Row(
-                            children: const [
+                            children: [
                               Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'ชื่อ',
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    color: SettingScreen_Color.Colors_Text1_,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'ชื่อ',
+                                    SettingScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    16,
+                                    1),
                               ),
                             ],
                           ),
@@ -1356,7 +1392,7 @@ class _AccessrightsState extends State<Accessrights> {
                                         color: Colors.grey,
                                       ),
                                     ),
-                                    labelText: 'ชื่อ',
+                                    labelText: '',
                                     labelStyle: const TextStyle(
                                         color:
                                             SettingScreen_Color.Colors_Text2_,
@@ -1378,18 +1414,17 @@ class _AccessrightsState extends State<Accessrights> {
                           child: Column(
                         children: [
                           Row(
-                            children: const [
+                            children: [
                               Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'นามสกุล',
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    color: SettingScreen_Color.Colors_Text1_,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'นามสกุล',
+                                    SettingScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    16,
+                                    1),
                               ),
                             ],
                           ),
@@ -1441,7 +1476,7 @@ class _AccessrightsState extends State<Accessrights> {
                                         color: Colors.grey,
                                       ),
                                     ),
-                                    labelText: 'นามสกุล',
+                                    labelText: '',
                                     labelStyle: const TextStyle(
                                         color:
                                             SettingScreen_Color.Colors_Text2_,
@@ -1471,16 +1506,14 @@ class _AccessrightsState extends State<Accessrights> {
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'ตำแหน่ง',
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                        color:
-                                            SettingScreen_Color.Colors_Text1_,
-                                        fontFamily: FontWeight_.Fonts_T,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                                    child: Translate.TranslateAndSetText(
+                                        'ตำแหน่ง',
+                                        SettingScreen_Color.Colors_Text1_,
+                                        TextAlign.center,
+                                        FontWeight.bold,
+                                        FontWeight_.Fonts_T,
+                                        16,
+                                        1),
                                   ),
                                 ],
                               ),
@@ -1533,7 +1566,7 @@ class _AccessrightsState extends State<Accessrights> {
                                             color: Colors.grey,
                                           ),
                                         ),
-                                        labelText: 'ตำแหน่ง',
+                                        labelText: '',
                                         labelStyle: const TextStyle(
                                             color: SettingScreen_Color
                                                 .Colors_Text2_,
@@ -1700,16 +1733,14 @@ class _AccessrightsState extends State<Accessrights> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsets.all(8.0),
-                                        child: Text(
-                                          'All Maket',
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                            color: SettingScreen_Color
-                                                .Colors_Text1_,
-                                            fontFamily: FontWeight_.Fonts_T,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
+                                        child: Translate.TranslateAndSetText(
+                                            'All Maket',
+                                            SettingScreen_Color.Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            16,
+                                            1),
                                       ),
                                     ],
                                   ),
@@ -1730,16 +1761,18 @@ class _AccessrightsState extends State<Accessrights> {
                                                       bottomRight:
                                                           Radius.circular(10)),
                                             ),
-                                            child: Text(
-                                              utype_ == 'S' ? 'ปิด' : 'เปิด',
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                color: SettingScreen_Color
-                                                    .Colors_Text1_,
-                                                fontFamily: FontWeight_.Fonts_T,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
+                                            child:
+                                                Translate.TranslateAndSetText(
+                                                    utype_ == 'S'
+                                                        ? 'ปิด'
+                                                        : 'เปิด',
+                                                    SettingScreen_Color
+                                                        .Colors_Text1_,
+                                                    TextAlign.left,
+                                                    FontWeight.bold,
+                                                    FontWeight_.Fonts_T,
+                                                    16,
+                                                    1),
                                           ),
                                         )
                                       : Padding(
@@ -1756,17 +1789,19 @@ class _AccessrightsState extends State<Accessrights> {
                                                 ),
                                               ),
                                               isExpanded: true,
-                                              hint: Text(
-                                                utype_ == 'S' ? 'ปิด' : 'เปิด',
-                                                maxLines: 1,
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    // fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T),
-                                              ),
+                                              hint:
+                                                  Translate.TranslateAndSetText(
+                                                      utype_ == 'S'
+                                                          ? 'ปิด'
+                                                          : 'เปิด',
+                                                      PeopleChaoScreen_Color
+                                                          .Colors_Text2_,
+                                                      TextAlign.left,
+                                                      FontWeight.bold,
+                                                      FontWeight_.Fonts_T,
+                                                      16,
+                                                      1),
+
                                               icon: const Icon(
                                                 Icons.arrow_drop_down,
                                                 color: TextHome_Color
@@ -1784,32 +1819,30 @@ class _AccessrightsState extends State<Accessrights> {
                                               ),
                                               items: [
                                                 DropdownMenuItem<String>(
-                                                  value: 'S',
-                                                  child: Text(
-                                                    'ปิด',
-                                                    style: const TextStyle(
-                                                        fontSize: 14,
-                                                        color:
-                                                            PeopleChaoScreen_Color
-                                                                .Colors_Text2_,
-                                                        // fontWeight: FontWeight.bold,
-                                                        fontFamily:
-                                                            Font_.Fonts_T),
-                                                  ),
-                                                ),
+                                                    value: 'S',
+                                                    child: Translate
+                                                        .TranslateAndSetText(
+                                                      'ปิด',
+                                                      PeopleChaoScreen_Color
+                                                          .Colors_Text2_,
+                                                      TextAlign.left,
+                                                      FontWeight.bold,
+                                                      FontWeight_.Fonts_T,
+                                                      16,
+                                                      1,
+                                                    )),
                                                 DropdownMenuItem<String>(
                                                   value: 'MS',
-                                                  child: Text(
-                                                    'เปิด',
-                                                    style: const TextStyle(
-                                                        fontSize: 14,
-                                                        color:
-                                                            PeopleChaoScreen_Color
-                                                                .Colors_Text2_,
-                                                        // fontWeight: FontWeight.bold,
-                                                        fontFamily:
-                                                            Font_.Fonts_T),
-                                                  ),
+                                                  child: Translate
+                                                      .TranslateAndSetText(
+                                                          'เปิด',
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                          TextAlign.left,
+                                                          FontWeight.bold,
+                                                          FontWeight_.Fonts_T,
+                                                          16,
+                                                          1),
                                                 ),
                                               ],
 
@@ -1828,19 +1861,17 @@ class _AccessrightsState extends State<Accessrights> {
                           child: Column(
                             children: [
                               Row(
-                                children: const [
+                                children: [
                                   Padding(
                                     padding: EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'เบอร์โทร',
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                        color:
-                                            SettingScreen_Color.Colors_Text1_,
-                                        fontFamily: FontWeight_.Fonts_T,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                                    child: Translate.TranslateAndSetText(
+                                        'เบอร์โทร',
+                                        PeopleChaoScreen_Color.Colors_Text2_,
+                                        TextAlign.left,
+                                        FontWeight.bold,
+                                        FontWeight_.Fonts_T,
+                                        16,
+                                        1),
                                   ),
                                 ],
                               ),
@@ -1893,7 +1924,7 @@ class _AccessrightsState extends State<Accessrights> {
                                             color: Colors.grey,
                                           ),
                                         ),
-                                        labelText: 'เบอร์โทร',
+                                        labelText: '',
                                         labelStyle: const TextStyle(
                                             color: SettingScreen_Color
                                                 .Colors_Text2_,
@@ -1917,18 +1948,17 @@ class _AccessrightsState extends State<Accessrights> {
                         child: Column(
                       children: [
                         Row(
-                          children: const [
+                          children: [
                             Padding(
                               padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                'อีเมล',
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  color: SettingScreen_Color.Colors_Text1_,
-                                  fontFamily: FontWeight_.Fonts_T,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                              child: Translate.TranslateAndSetText(
+                                  'อีเมล',
+                                  PeopleChaoScreen_Color.Colors_Text2_,
+                                  TextAlign.left,
+                                  FontWeight.bold,
+                                  FontWeight_.Fonts_T,
+                                  16,
+                                  1),
                             ),
                           ],
                         ),
@@ -1980,7 +2010,7 @@ class _AccessrightsState extends State<Accessrights> {
                                       color: Colors.grey,
                                     ),
                                   ),
-                                  labelText: 'อีเมล',
+                                  labelText: '',
                                   labelStyle: const TextStyle(
                                       color: SettingScreen_Color.Colors_Text2_,
                                       fontFamily: Font_.Fonts_T)),
@@ -2001,18 +2031,17 @@ class _AccessrightsState extends State<Accessrights> {
                         child: Column(
                       children: [
                         Row(
-                          children: const [
+                          children: [
                             Padding(
                               padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                'รหัสผ่าน',
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  color: SettingScreen_Color.Colors_Text1_,
-                                  fontFamily: FontWeight_.Fonts_T,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                              child: Translate.TranslateAndSetText(
+                                  'รหัสผ่าน',
+                                  PeopleChaoScreen_Color.Colors_Text2_,
+                                  TextAlign.left,
+                                  FontWeight.bold,
+                                  FontWeight_.Fonts_T,
+                                  16,
+                                  1),
                             ),
                           ],
                         ),
@@ -2064,7 +2093,7 @@ class _AccessrightsState extends State<Accessrights> {
                                       color: Colors.grey,
                                     ),
                                   ),
-                                  labelText: 'รหัสผ่านใหม่',
+                                  labelText: '',
                                   labelStyle: const TextStyle(
                                       color: SettingScreen_Color.Colors_Text2_,
                                       fontFamily: Font_.Fonts_T)),
@@ -2096,22 +2125,15 @@ class _AccessrightsState extends State<Accessrights> {
                                       flex: 1,
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: StreamBuilder(
-                                            stream: Stream.periodic(
-                                                const Duration(seconds: 0)),
-                                            builder: (context, snapshot) {
-                                              return const Text(
-                                                'สิทธิการเข้าถึง( *กรุณากำหนดสิทธิ )',
-                                                textAlign: TextAlign.left,
-                                                style: TextStyle(
-                                                  color: SettingScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              );
-                                            }),
+                                        child: Translate.TranslateAndSetText(
+                                            'สิทธิการเข้าถึง( *กรุณากำหนดสิทธิ )',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text2_,
+                                            TextAlign.left,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            16,
+                                            1),
                                       ),
                                     ),
                                   ],
@@ -2119,97 +2141,95 @@ class _AccessrightsState extends State<Accessrights> {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
-                                    decoration: const BoxDecoration(
-                                      // color: Colors.grey[400],
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(15),
-                                          topRight: Radius.circular(15),
-                                          bottomLeft: Radius.circular(15),
-                                          bottomRight: Radius.circular(15)),
-                                    ),
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: StreamBuilder(
-                                        stream: Stream.periodic(
-                                            const Duration(seconds: 0)),
-                                        builder: (context, snapshot) {
-                                          return Column(
-                                            children: [
-                                              for (int index = 0;
-                                                  index <
-                                                      perMissionModels.length;
-                                                  index++)
-                                                if (perMissionModels[index]
-                                                        .perm
-                                                        .toString() !=
-                                                    'จัดการข้อมูลส่วนตัว')
-                                                  Row(
-                                                    children: [
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Checkbox(
-                                                            activeColor: Colors
-                                                                .blue, // ​​color when activated
-                                                            value: _isChecks[
-                                                                index],
-                                                            onChanged:
-                                                                (bool? val) {
+                                      decoration: const BoxDecoration(
+                                        // color: Colors.grey[400],
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(15),
+                                            topRight: Radius.circular(15),
+                                            bottomLeft: Radius.circular(15),
+                                            bottomRight: Radius.circular(15)),
+                                      ),
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        children: [
+                                          for (int index = 0;
+                                              index < perMissionModels.length;
+                                              index++)
+                                            if (perMissionModels[index]
+                                                    .perm
+                                                    .toString() !=
+                                                'จัดการข้อมูลส่วนตัว')
+                                              Row(
+                                                children: [
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Checkbox(
+                                                        activeColor: Colors
+                                                            .blue, // ​​color when activated
+                                                        value: _isChecks[index],
+                                                        onChanged: (bool? val) {
+                                                          setState(() {
+                                                            _isChecks[index] =
+                                                                val!;
+                                                          });
+                                                          // print(checked_Add);
+                                                          checked_value = '';
+                                                          for (var i = 0;
+                                                              i < list.length;
+                                                              i++) {
+                                                            String idmenu =
+                                                                list[i].title;
+                                                            String pnmenu =
+                                                                list[i].content;
+                                                            if (_isChecks[i] ==
+                                                                true) {
                                                               setState(() {
-                                                                _isChecks[
-                                                                        index] =
-                                                                    val!;
+                                                                checked_value =
+                                                                    '$checked_value' +
+                                                                        '$idmenu' +
+                                                                        ',';
                                                               });
-                                                              // print(checked_Add);
-                                                              checked_value =
-                                                                  '';
-                                                              for (var i = 0;
-                                                                  i < list.length;
-                                                                  i++) {
-                                                                String idmenu =
-                                                                    list[i]
-                                                                        .title;
-                                                                String pnmenu =
-                                                                    list[i]
-                                                                        .content;
-                                                                if (_isChecks[
-                                                                        i] ==
-                                                                    true) {
-                                                                  setState(() {
-                                                                    checked_value =
-                                                                        '$checked_value' +
-                                                                            '$idmenu' +
-                                                                            ',';
-                                                                  });
-                                                                }
-                                                              }
-                                                              print(
-                                                                  '$checked_value');
-                                                            }),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 8,
-                                                        child: AutoSizeText(
-                                                          minFontSize: 10,
-                                                          maxFontSize: 15,
-                                                          '${perMissionModels[index].perm}',
-                                                          textAlign:
-                                                              TextAlign.start,
-                                                          style: const TextStyle(
-                                                              color: PeopleChaoScreen_Color
-                                                                  .Colors_Text1_,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontFamily:
-                                                                  FontWeight_
-                                                                      .Fonts_T),
-                                                        ),
-                                                      ),
-                                                    ],
+                                                            }
+                                                          }
+                                                          print(
+                                                              '$checked_value');
+                                                        }),
                                                   ),
-                                            ],
-                                          );
-                                        }),
-                                  ),
+                                                  Expanded(
+                                                      flex: 8,
+                                                      child: Translate
+                                                          .TranslateAndSetText(
+                                                              '${perMissionModels[index].perm}',
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text1_,
+                                                              TextAlign.start,
+                                                              FontWeight.bold,
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                              16,
+                                                              1)
+
+                                                      //  AutoSizeText(
+                                                      //   minFontSize: 10,
+                                                      //   maxFontSize: 15,
+                                                      //   '${perMissionModels[index].perm}',
+                                                      //   textAlign:
+                                                      //       TextAlign.start,
+                                                      //   style: const TextStyle(
+                                                      //       color: PeopleChaoScreen_Color
+                                                      //           .Colors_Text1_,
+                                                      //       fontWeight:
+                                                      //           FontWeight
+                                                      //               .bold,
+                                                      //       fontFamily:
+                                                      //           FontWeight_
+                                                      //               .Fonts_T),
+                                                      // ),
+                                                      ),
+                                                ],
+                                              ),
+                                        ],
+                                      )),
                                 ),
                               ],
                             )),
@@ -2306,14 +2326,14 @@ class _AccessrightsState extends State<Accessrights> {
                                       });
                                       Navigator.pop(context);
                                     },
-                                    child: const Text(
-                                      'ลบ',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: FontWeight_.Fonts_T,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                                    child: Translate.TranslateAndSetText(
+                                        'ลบ',
+                                        Colors.white,
+                                        TextAlign.left,
+                                        FontWeight.bold,
+                                        FontWeight_.Fonts_T,
+                                        16,
+                                        1),
                                   ),
                                 ),
                               ),
@@ -2425,14 +2445,14 @@ class _AccessrightsState extends State<Accessrights> {
                                               }
                                             }
                                           },
-                                          child: const Text(
-                                            'ตกลง',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: FontWeight_.Fonts_T,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
+                                          child: Translate.TranslateAndSetText(
+                                              'ตกลง',
+                                              Colors.white,
+                                              TextAlign.left,
+                                              FontWeight.bold,
+                                              FontWeight_.Fonts_T,
+                                              16,
+                                              1),
                                         );
                                       }),
                                 ),
@@ -2457,14 +2477,14 @@ class _AccessrightsState extends State<Accessrights> {
                                       });
                                       Navigator.pop(context, 'OK');
                                     },
-                                    child: const Text(
-                                      'ปิด',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: FontWeight_.Fonts_T,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                                    child: Translate.TranslateAndSetText(
+                                        'ปิด',
+                                        Colors.white,
+                                        TextAlign.left,
+                                        FontWeight.bold,
+                                        FontWeight_.Fonts_T,
+                                        16,
+                                        1),
                                   ),
                                 ),
                               ),
@@ -2546,17 +2566,16 @@ class _AccessrightsState extends State<Accessrights> {
           ),
           Row(
             children: [
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'ผู้ใช้งานระบบ',
-                  style: TextStyle(
-                    color: SettingScreen_Color.Colors_Text1_,
-                    fontFamily: FontWeight_.Fonts_T,
-                    fontWeight: FontWeight.bold,
-                    //fontSize: 10.0
-                  ),
-                ),
+                child: Translate.TranslateAndSetText(
+                    'ผู้ใช้งานระบบ',
+                    SettingScreen_Color.Colors_Text1_,
+                    TextAlign.left,
+                    FontWeight.bold,
+                    FontWeight_.Fonts_T,
+                    16,
+                    1),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -2568,14 +2587,18 @@ class _AccessrightsState extends State<Accessrights> {
                       print('1111 >>> $pkuser >>> $countarae');
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text(
-                                'จำนวนผู้ใช้งานสูงสุดแล้วหากต้องการเพิ่มผู้ใช้งานกรุณา ซื้อ Package เพิ่ม !!!',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: Font_.Fonts_T))),
+                        SnackBar(
+                          content: Translate.TranslateAndSetText(
+                              'จำนวนผู้ใช้งานสูงสุดแล้วหากต้องการเพิ่มผู้ใช้งานกรุณา ซื้อ Package เพิ่ม !!!',
+                              Colors.white,
+                              TextAlign.left,
+                              FontWeight.bold,
+                              FontWeight_.Fonts_T,
+                              16,
+                              1),
+                        ),
                       );
-                      print('2222 >>> $pkuser >>> $countarae');
+                      // print('2222 >>> $pkuser >>> $countarae');
                     }
                     // Add_userAcess();
                   },
@@ -2592,16 +2615,14 @@ class _AccessrightsState extends State<Accessrights> {
                       //     color: Colors.grey, width: 1),
                     ),
                     padding: const EdgeInsets.all(8.0),
-                    child: const Text(
-                      '+ เพิ่ม',
-                      style: TextStyle(
-                        color: Colors.white,
-
-                        fontFamily: FontWeight_.Fonts_T,
-                        fontWeight: FontWeight.bold,
-                        //fontSize: 10.0
-                      ),
-                    ),
+                    child: Translate.TranslateAndSetText(
+                        '+ เพิ่ม',
+                        Colors.white,
+                        TextAlign.left,
+                        FontWeight.bold,
+                        FontWeight_.Fonts_T,
+                        16,
+                        1),
                   ),
                 ),
               ),
@@ -2629,7 +2650,7 @@ class _AccessrightsState extends State<Accessrights> {
                       children: [
                         Container(
                           height: 50,
-                          decoration:  BoxDecoration(
+                          decoration: BoxDecoration(
                             color: AppbackgroundColor.TiTile_Colors,
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(10),
@@ -2646,85 +2667,70 @@ class _AccessrightsState extends State<Accessrights> {
                                 flex: 1,
                                 child: Container(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: const Text(
-                                    'ชื่อผู้ใช้',
-                                    maxLines: 1,
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                      color: SettingScreen_Color.Colors_Text1_,
-                                      fontFamily: FontWeight_.Fonts_T,
-                                      fontWeight: FontWeight.bold,
-                                      //fontSize: 10.0
-                                    ),
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      'ชื่อผู้ใช้',
+                                      SettingScreen_Color.Colors_Text1_,
+                                      TextAlign.start,
+                                      FontWeight.bold,
+                                      FontWeight_.Fonts_T,
+                                      16,
+                                      1),
                                 ),
                               ),
                               Expanded(
                                 flex: 1,
                                 child: Container(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: const Text(
-                                    'อีเมล',
-                                    maxLines: 1,
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                      color: SettingScreen_Color.Colors_Text1_,
-                                      fontFamily: FontWeight_.Fonts_T,
-                                      fontWeight: FontWeight.bold,
-                                      //fontSize: 10.0
-                                    ),
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      'อีเมล',
+                                      SettingScreen_Color.Colors_Text1_,
+                                      TextAlign.start,
+                                      FontWeight.bold,
+                                      FontWeight_.Fonts_T,
+                                      16,
+                                      1),
                                 ),
                               ),
                               Expanded(
                                 flex: 1,
                                 child: Container(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: const Text(
-                                    'ตำแหน่ง',
-                                    maxLines: 1,
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                      color: SettingScreen_Color.Colors_Text1_,
-                                      fontFamily: FontWeight_.Fonts_T,
-                                      fontWeight: FontWeight.bold,
-                                      //fontSize: 10.0
-                                    ),
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      'ตำแหน่ง',
+                                      SettingScreen_Color.Colors_Text1_,
+                                      TextAlign.start,
+                                      FontWeight.bold,
+                                      FontWeight_.Fonts_T,
+                                      16,
+                                      1),
                                 ),
                               ),
                               Expanded(
                                 flex: 2,
                                 child: Container(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: const Text(
-                                    'สิทธิ์การเข้าถึง',
-                                    maxLines: 1,
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                      color: SettingScreen_Color.Colors_Text1_,
-                                      fontFamily: FontWeight_.Fonts_T,
-                                      fontWeight: FontWeight.bold,
-                                      //fontSize: 10.0
-                                    ),
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      'สิทธิ์การเข้าถึง',
+                                      SettingScreen_Color.Colors_Text1_,
+                                      TextAlign.start,
+                                      FontWeight.bold,
+                                      FontWeight_.Fonts_T,
+                                      16,
+                                      1),
                                 ),
                               ),
                               Expanded(
                                 flex: 1,
                                 child: Container(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: const Text(
-                                    'จัดการ',
-                                    maxLines: 1,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: SettingScreen_Color.Colors_Text1_,
-                                      fontFamily: FontWeight_.Fonts_T,
-                                      fontWeight: FontWeight.bold,
-                                      //fontSize: 10.0
-                                    ),
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      'จัดการ',
+                                      SettingScreen_Color.Colors_Text1_,
+                                      TextAlign.start,
+                                      FontWeight.bold,
+                                      FontWeight_.Fonts_T,
+                                      16,
+                                      1),
                                 ),
                               )
                             ],
@@ -2763,17 +2769,15 @@ class _AccessrightsState extends State<Accessrights> {
                                           return Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: (elapsed > 8.00)
-                                                ? const Text(
+                                                ? Translate.TranslateAndSetText(
                                                     'ไม่พบข้อมูล',
-                                                    style: TextStyle(
-                                                        color:
-                                                            PeopleChaoScreen_Color
-                                                                .Colors_Text2_,
-                                                        fontFamily:
-                                                            Font_.Fonts_T
-                                                        //fontSize: 10.0
-                                                        ),
-                                                  )
+                                                    SettingScreen_Color
+                                                        .Colors_Text1_,
+                                                    TextAlign.start,
+                                                    FontWeight.bold,
+                                                    FontWeight_.Fonts_T,
+                                                    16,
+                                                    1)
                                                 : Text(
                                                     'ดาวน์โหลด : ${elapsed.toStringAsFixed(2)} s.',
                                                     // 'Time : ${elapsed.toStringAsFixed(2)} seconds',
@@ -2936,45 +2940,46 @@ class _AccessrightsState extends State<Accessrights> {
                                                               0.0),
                                                       child: InkWell(
                                                         child: Container(
-                                                          width: 100,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: Colors.red,
-                                                            borderRadius:
-                                                                const BorderRadius
-                                                                    .only(
-                                                              topLeft: Radius
-                                                                  .circular(10),
-                                                              topRight: Radius
-                                                                  .circular(10),
-                                                              bottomLeft: Radius
-                                                                  .circular(10),
-                                                              bottomRight:
-                                                                  Radius
-                                                                      .circular(
-                                                                          10),
+                                                            width: 100,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: Colors.red,
+                                                              borderRadius:
+                                                                  const BorderRadius
+                                                                      .only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight:
+                                                                    Radius
+                                                                        .circular(
+                                                                            10),
+                                                              ),
+                                                              // border: Border.all(
+                                                              //     color: Colors.grey, width: 1),
                                                             ),
-                                                            // border: Border.all(
-                                                            //     color: Colors.grey, width: 1),
-                                                          ),
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(1.0),
-                                                          child: const Text(
-                                                            'แก้ไข',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                                color: SettingScreen_Color
-                                                                    .Colors_Text2_,
-                                                                fontFamily:
-                                                                    Font_
-                                                                        .Fonts_T
-                                                                //fontWeight: FontWeight.bold,
-                                                                //fontSize: 10.0
-                                                                ),
-                                                          ),
-                                                        ),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(1.0),
+                                                            child: Translate
+                                                                .TranslateAndSetText(
+                                                                    'แก้ไข',
+                                                                    SettingScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    TextAlign
+                                                                        .center,
+                                                                    FontWeight
+                                                                        .bold,
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                                    16,
+                                                                    1)),
                                                         onTap: () {
                                                           if (renTal_lavel >
                                                               2) {
@@ -2984,14 +2989,19 @@ class _AccessrightsState extends State<Accessrights> {
                                                             ScaffoldMessenger
                                                                     .of(context)
                                                                 .showSnackBar(
-                                                              const SnackBar(
-                                                                  content: Text(
+                                                              SnackBar(
+                                                                  content: Translate.TranslateAndSetText(
                                                                       'ระดับการใช้งานของคุณไม่สามารถแก้ไขได้ !!!',
-                                                                      style: TextStyle(
-                                                                          color: Colors
-                                                                              .white,
-                                                                          fontFamily:
-                                                                              Font_.Fonts_T))),
+                                                                      Colors
+                                                                          .white,
+                                                                      TextAlign
+                                                                          .start,
+                                                                      FontWeight
+                                                                          .bold,
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                      16,
+                                                                      1)),
                                                             );
                                                           }
 

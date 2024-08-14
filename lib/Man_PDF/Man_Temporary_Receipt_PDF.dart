@@ -11,6 +11,7 @@ import '../Model/electricity_model.dart';
 import '../Model/trans_re_bill_history_model.dart';
 import '../PDF/PDF_Receipt/pdf_AC_his_statusbill.dart';
 import '../PDF/PDF_Temporary_Receipt/pdf_Temporary.dart';
+import '../PDF_TP10/PDF_Temporary_Receipt_TP10/pdf_Temporar_TP10.dart';
 import '../PDF_TP2/PDF_Receipt_TP2/pdf_AC_his_statusbill_TP2.dart';
 import '../PDF_TP2/PDF_Temporary_Receipt_TP2/pdf_Temporar_TP2.dart';
 import '../PDF_TP3/PDF_Receipt_TP3/pdf_AC_his_statusbill_TP3.dart';
@@ -685,6 +686,43 @@ class ManTemporary_Receipt_PDF {
             dis_sum_Pakan,
             fonts_pdf,
             Water_electricity);
+      } else if (tem_page_ser.toString() == '6') {
+        Pdfgen_Temporary_receipt_TP10.exportPDF_Temporary_receipt_TP10(
+            foder,
+            tableData00,
+            tableData01,
+            context,
+            _TransReBillHistoryModels,
+            'Num_cid',
+            'Namenew',
+            '${sum_pvat}',
+            sum_vat,
+            sum_wht,
+            sum_amt,
+            sum_disp,
+            sum_disamt,
+            '${(sum_amt - sum_disamt)}',
+            renTal_name,
+            scname_,
+            cname_,
+            addr_,
+            tax_,
+            bill_addr,
+            bill_email,
+            bill_tel,
+            bill_tax,
+            bill_name,
+            newValuePDFimg,
+            numinvoice,
+            numdoctax,
+            finnancetransModels,
+            date_Transaction,
+            date_pay,
+            Howto_LockJonPay,
+            dis_sum_Matjum,
+            TitleType_Default_Receipt_Name,
+            dis_sum_Pakan,
+            fonts_pdf);
       }
     });
     // Future.delayed(Duration(milliseconds: 500), () async {

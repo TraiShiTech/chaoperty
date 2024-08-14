@@ -17,6 +17,7 @@ import '../Model/trans_re_bill_history_model.dart';
 import '../PDF/PDF_Receipt/pdf_AC_his_statusbill.dart';
 import '../PDF/pdf_Cancel_Rental.dart';
 
+import '../PDF_TP10/PDF_Billing_TP10/pdf_Reduce_debt_TP10.dart';
 import '../PDF_TP3/PDF_Billing_TP3/pdf_Reduce_debt_TP3.dart';
 import '../PDF_TP4/PDF_Billing_TP4/pdf_Reduce_debt_TP4.dart';
 import '../PDF_TP7/PDF_Billing_TP7/pdf_Reduce_debt_TP7.dart';
@@ -30,6 +31,7 @@ import '../PDF_TP7/PDF_Receipt_TP7/pdf_AC_his_statusbill_TP7.dart';
 import '../PDF_TP8/PDF_Receipt_TP8/pdf_AC_his_statusbill_TP8.dart';
 import '../PDF_TP8_Choice/PDF_Billing_TP8_Choice/pdf_Reduce_debt_TP8_Choice.dart';
 import '../PDF_TP8_Ortorkor/PDF_Receipt_TP8_Ortorkor/pdf_AC_his_statusbill_TP8.dart';
+import '../PDF_TP9/PDF_Billing_TP9/pdf_Reduce_debt_TP9.dart';
 import '../PDF_TP9_Lao/PDF_Billing_TP9/pdf_Reduce_debt_TP9.dart';
 
 class Man_Reducedebt_PDF {
@@ -510,6 +512,72 @@ class Man_Reducedebt_PDF {
         }
       } else if (tem_page_ser.toString() == '4') {
         Pdfgen_Reduce_debt_TP9_Lao.exportPDF_Reduce_debt_TP9_Lao(
+            TitleType_Default_Receipt_Name,
+            context,
+            foder,
+            renTal_name,
+            bill_addr,
+            bill_email,
+            bill_tel,
+            bill_tax,
+            bill_name,
+            newValuePDFimg,
+            Form_nameshop,
+            Form_bussscontact,
+            Form_address,
+            Form_tax,
+            Form_custno,
+            ciddoc,
+            Form_zn,
+            Form_ln,
+            fname,
+            tableData003,
+            _TransHisDisInvModels,
+            inv_num,
+            docno_inv,
+            Datex_invoice,
+            amt_inv,
+            vat_inv,
+            wht_inv,
+            nwht_inv,
+            nvat_inv,
+            sum_total,
+            fonts_pdf);
+      } else if (tem_page_ser.toString() == '5') {
+        Pdfgen_Reduce_debt_TP9.exportPDF_Reduce_debt_TP9(
+            TitleType_Default_Receipt_Name,
+            context,
+            foder,
+            renTal_name,
+            bill_addr,
+            bill_email,
+            bill_tel,
+            bill_tax,
+            bill_name,
+            newValuePDFimg,
+            Form_nameshop,
+            Form_bussscontact,
+            Form_address,
+            Form_tax,
+            Form_custno,
+            ciddoc,
+            Form_zn,
+            Form_ln,
+            fname,
+            tableData003,
+            _TransHisDisInvModels,
+            inv_num,
+            docno_inv,
+            Datex_invoice,
+            amt_inv,
+            vat_inv,
+            wht_inv,
+            nwht_inv,
+            nvat_inv,
+            sum_total,
+            fonts_pdf);
+      } else if (tem_page_ser.toString() == '6') {
+        Pdfgen_Reduce_debt_TP10.exportPDF_Reduce_debt_TP10(
             TitleType_Default_Receipt_Name,
             context,
             foder,

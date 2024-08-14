@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:htmltopdfwidgets/htmltopdfwidgets.dart';
 import 'package:image/image.dart' as img;
@@ -10,6 +11,29 @@ import 'package:pdf/widgets.dart' as pw;
 import 'dart:math' as math;
 
 import '../Constant/Myconstant.dart';
+
+Future<Uint8List> loadAndCacheAssetImage(String assetPath) async {
+  // Create a unique key for the asset image to use with the cache manager
+  final cacheKey = 'asset-$assetPath';
+
+  // Check if the image is already cached
+  final cacheManager = DefaultCacheManager();
+  final fileInfo = await cacheManager.getFileFromCache(cacheKey);
+
+  if (fileInfo == null) {
+    // Load the image from assets if not cached
+    final ByteData byteData = await rootBundle.load(assetPath);
+    final Uint8List bytes = byteData.buffer.asUint8List();
+
+    // Cache the image file
+    await cacheManager.putFile(cacheKey, bytes);
+
+    return bytes;
+  } else {
+    // Load the image bytes from the cache
+    return fileInfo.file.readAsBytesSync();
+  }
+}
 
 Future<Uint8List> loadAndCacheImage(String imageUrl) async {
   // Check if the image is already cached
@@ -62,16 +86,16 @@ Future<Uint8List> loadAndCacheImage2(String imageUrl) async {
 /////--------------------------->
 Future<Uint8List> resizeAndCompressImage(Uint8List imageBytes) async {
   img.Image image = img.decodeImage(imageBytes)!;
-  img.Image resizedImage = img.copyResize(image, width: 100, height: 100);
+  img.Image resizedImage = img.copyResize(image, width: 400, height: 400);
   Uint8List resizedImageBytes =
-      Uint8List.fromList(img.encodeJpg(resizedImage, quality: 100));
+      Uint8List.fromList(img.encodeJpg(resizedImage, quality: 0));
   return resizedImageBytes;
 }
 
 /////--------------------------->
 Future<Uint8List> resizeAndCompressImage_Map(Uint8List imageBytes) async {
   img.Image image = img.decodeImage(imageBytes)!;
-  img.Image resizedImage = img.copyResize(image, width: 400, height: 400);
+  img.Image resizedImage = img.copyResize(image, width: 800, height: 800);
   Uint8List resizedImageBytes =
       Uint8List.fromList(img.encodeJpg(resizedImage, quality: 100));
   return resizedImageBytes;

@@ -19,49 +19,50 @@ class Pdfgen_Agreement_Choice3 {
 //////////---------------------------------------------------->( **** เอกสารสัญญาบริการ Choice)
 
   static void exportPDF_Agreement_Choice3(
-    context,
-    Get_Value_NameShop_index,
-    Get_Value_cid,
-    _verticalGroupValue,
-    Form_nameshop,
-    Form_typeshop,
-    Form_bussshop,
-    Form_bussscontact,
-    Form_address,
-    Form_tel,
-    Form_email,
-    Form_tax,
-    Form_ln,
-    Form_zn,
-    Form_area,
-    Form_qty,
-    Form_sdate,
-    Form_ldate,
-    Form_period,
-    Form_rtname,
-    quotxSelectModels,
-    _TransModels,
-    renTal_name,
-    bill_addr,
-    bill_email,
-    bill_tel,
-    bill_tax,
-    bill_name,
-    newValuePDFimg,
-    tableData00,
-    TitleType_Default_Receipt_Name,
-    Datex_text,
-    _ReportValue_type_docOttor,
-    Form_fid,
-    Form_PakanSdate,
-    Form_PakanLdate,
-    Form_PakanSdate_Doc,
-    Form_PakanLdate_Doc,
-    Form_PakanAll_amt,
-    Form_PakanAll_pvat,
-    Form_PakanAll_vat,
-    Form_PakanAll_Total,
-  ) async {
+      context,
+      Get_Value_NameShop_index,
+      Get_Value_cid,
+      _verticalGroupValue,
+      Form_nameshop,
+      Form_typeshop,
+      Form_bussshop,
+      Form_bussscontact,
+      Form_address,
+      Form_tel,
+      Form_email,
+      Form_tax,
+      Form_ln,
+      Form_zn,
+      Form_area,
+      Form_qty,
+      Form_sdate,
+      Form_ldate,
+      Form_period,
+      Form_rtname,
+      quotxSelectModels,
+      _TransModels,
+      renTal_name,
+      bill_addr,
+      bill_email,
+      bill_tel,
+      bill_tax,
+      bill_name,
+      newValuePDFimg,
+      tableData00,
+      TitleType_Default_Receipt_Name,
+      Datex_text,
+      _ReportValue_type_docOttor,
+      Form_fid,
+      Form_renew_cid,
+      Form_PakanSdate,
+      Form_PakanLdate,
+      Form_PakanSdate_Doc,
+      Form_PakanLdate_Doc,
+      Form_PakanAll_amt,
+      Form_PakanAll_pvat,
+      Form_PakanAll_vat,
+      Form_PakanAll_Total,
+      Form_PakanAll_Total_bill) async {
     ////
     //// ------------>(J Space Sansai)
     ///////
@@ -74,7 +75,7 @@ class Pdfgen_Agreement_Choice3 {
     var Colors_pd = PdfColors.black;
     var Colors_pd2 = PdfColors.grey;
     final ttf = pw.Font.ttf(font);
-    double font_Size = 13.5;
+    double font_Size = 12.5;
     int space_Size = 10;
     DateTime date = DateTime.now();
     // var formatter = DateFormat('MMMMd', 'th');
@@ -120,14 +121,14 @@ class Pdfgen_Agreement_Choice3 {
     var licence_name4 = 'สิริกร พรหมปัญญา';
     var refid = 'LLJZX20241';
 
-    final signature_Image1 = await loadAndCacheImage(
-        '${MyConstant().domain}/gen_licence_img.php?isAdd=true&ren=50&ref_id=$refid&name_id=$licence_name1&doc_id=$Get_Value_cid&extension=.png');
-    final signature_Image2 = await loadAndCacheImage(
-        '${MyConstant().domain}/gen_licence_img.php?isAdd=true&ren=50&ref_id=$refid&name_id=$licence_name2&doc_id=$Get_Value_cid&extension=.png');
-    final signature_Image3 = await loadAndCacheImage(
-        '${MyConstant().domain}/gen_licence_img.php?isAdd=true&ren=50&ref_id=$refid&name_id=$licence_name2&doc_id=$Get_Value_cid&extension=.png');
-    final signature_Image4 = await loadAndCacheImage(
-        '${MyConstant().domain}/gen_licence_img.php?isAdd=true&ren=50&ref_id=$refid&name_id=$licence_name2&doc_id=$Get_Value_cid&extension=.png');
+    // final signature_Image1 = await loadAndCacheImage(
+    //     '${MyConstant().domain}/gen_licence_img.php?isAdd=true&ren=50&ref_id=$refid&name_id=$licence_name1&doc_id=$Get_Value_cid&extension=.png');
+    // final signature_Image2 = await loadAndCacheImage(
+    //     '${MyConstant().domain}/gen_licence_img.php?isAdd=true&ren=50&ref_id=$refid&name_id=$licence_name2&doc_id=$Get_Value_cid&extension=.png');
+    // final signature_Image3 = await loadAndCacheImage(
+    //     '${MyConstant().domain}/gen_licence_img.php?isAdd=true&ren=50&ref_id=$refid&name_id=$licence_name2&doc_id=$Get_Value_cid&extension=.png');
+    // final signature_Image4 = await loadAndCacheImage(
+    //     '${MyConstant().domain}/gen_licence_img.php?isAdd=true&ren=50&ref_id=$refid&name_id=$licence_name2&doc_id=$Get_Value_cid&extension=.png');
     // for (int i = 0; i < newValuePDFimg.length; i++) {
     //   signature_Image1.add(await networkImage('${newValuePDFimg[i]}'));
     // }
@@ -160,6 +161,27 @@ class Pdfgen_Agreement_Choice3 {
                 : '$Form_rtname';
     double widths = await MediaQuery.of(context).size.width;
     int pange = 1;
+//////////---------------------------->
+    bool hasNonCash_water_ele = quotxSelectModels.any((quotxSelectModels) {
+      return quotxSelectModels.expser.toString() == '20' &&
+          quotxSelectModels.expser.toString() == '21';
+    }); ///// น้ำ-ไฟฟ้า
+//////////---------------------------->
+    bool hasNonCash_water = quotxSelectModels.any((quotxSelectModels) {
+      return quotxSelectModels.expser.toString() == '21' &&
+          quotxSelectModels.expser.toString() != '20';
+    }); ///// น้ำ
+//////////---------------------------->
+    bool hasNonCash_ele = quotxSelectModels.any((quotxSelectModels) {
+      return quotxSelectModels.expser.toString() == '20' &&
+          quotxSelectModels.expser.toString() != '21';
+    }); ///// ไฟฟ้า
+//////////---------------------------->
+    bool hasNonCash_No_water_ele = quotxSelectModels.any((quotxSelectModels) {
+      return quotxSelectModels.expser.toString() != '20' &&
+          quotxSelectModels.expser.toString() != '21';
+    }); ///// ไม่ น้ำ-ไฟฟ้า
+
 ///////////////////////------------------------------------------------->
     pdf.addPage(
       pw.MultiPage(
@@ -185,17 +207,19 @@ class Pdfgen_Agreement_Choice3 {
                     height: 10,
                   ),
                   pw.Container(
-                    height: 60,
-                    width: 60,
-                    decoration: pw.BoxDecoration(
-                      color: PdfColors.grey200,
-                      border: pw.Border.all(color: PdfColors.grey300),
-                    ),
+                    height: 70,
+                    width: 75,
+                    decoration: (resizedLogo != null)
+                        ? null
+                        : pw.BoxDecoration(
+                            color: PdfColors.grey200,
+                            border: pw.Border.all(color: PdfColors.grey300),
+                          ),
                     child: resizedLogo != null
                         ? pw.Image(
                             pw.MemoryImage(resizedLogo),
-                            height: 60,
-                            width: 60,
+                            height: 70,
+                            width: 75,
                           )
                         : pw.Center(
                             child: pw.Text(
@@ -209,6 +233,31 @@ class Pdfgen_Agreement_Choice3 {
                             ),
                           ),
                   ),
+                  // pw.Container(
+                  //   height: 60,
+                  //   width: 60,
+                  //   decoration: pw.BoxDecoration(
+                  //     color: PdfColors.grey200,
+                  //     border: pw.Border.all(color: PdfColors.grey300),
+                  //   ),
+                  //   child: resizedLogo != null
+                  //       ? pw.Image(
+                  //           pw.MemoryImage(resizedLogo),
+                  //           height: 60,
+                  //           width: 60,
+                  //         )
+                  //       : pw.Center(
+                  //           child: pw.Text(
+                  //             '$bill_name ',
+                  //             maxLines: 1,
+                  //             style: pw.TextStyle(
+                  //               fontSize: 10,
+                  //               font: ttf,
+                  //               color: Colors_pd,
+                  //             ),
+                  //           ),
+                  //         ),
+                  // ),
                   // (netImage.isEmpty)
                   //     ? pw.Container(
                   //         height: 72,
@@ -238,7 +287,7 @@ class Pdfgen_Agreement_Choice3 {
                   //       ),
                   pw.SizedBox(width: 1 * PdfPageFormat.mm),
                   pw.Container(
-                    width: 280,
+                    width: 350,
                     child: pw.Column(
                       mainAxisSize: pw.MainAxisSize.min,
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -316,7 +365,7 @@ class Pdfgen_Agreement_Choice3 {
               // pw.SizedBox(height: 1 * PdfPageFormat.mm),
               // pw.Divider(height: 2),
               // pw.SizedBox(height: 1 * PdfPageFormat.mm),
-              pw.SizedBox(height: 2 * PdfPageFormat.mm),
+              pw.SizedBox(height: 1 * PdfPageFormat.mm),
               pw.Row(
                 mainAxisAlignment: pw.MainAxisAlignment.center,
                 children: [
@@ -331,21 +380,12 @@ class Pdfgen_Agreement_Choice3 {
                             font: ttf,
                           ),
                         )
-                      : pw.Text(
-                          '${context.pageNumber} / ${context.pagesCount}',
-                          textAlign: pw.TextAlign.center,
-                          style: pw.TextStyle(
-                            color: Colors_pd,
-                            fontSize: font_Size,
-                            fontWeight: pw.FontWeight.bold,
-                            font: ttf,
-                          ),
-                        ),
+                      : pw.SizedBox(),
                 ],
               ),
               pw.Container(
                 width: PdfPageFormat.a4.width,
-                padding: pw.EdgeInsets.fromLTRB(40, 0, 40, 0),
+                padding: pw.EdgeInsets.fromLTRB(50, 0, 40, 0),
                 child: pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.end,
                   children: [
@@ -362,7 +402,7 @@ class Pdfgen_Agreement_Choice3 {
                   ],
                 ),
               ),
-              pw.SizedBox(height: 2 * PdfPageFormat.mm),
+              pw.SizedBox(height: 1 * PdfPageFormat.mm),
             ],
           );
         },
@@ -376,7 +416,7 @@ class Pdfgen_Agreement_Choice3 {
                   ),
                 ),
                 width: PdfPageFormat.a4.width,
-                padding: pw.EdgeInsets.fromLTRB(40, 0, 40, 0),
+                padding: pw.EdgeInsets.fromLTRB(50, 0, 40, 0),
                 child: pw.Column(
                     mainAxisAlignment: pw.MainAxisAlignment.start,
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -392,9 +432,9 @@ class Pdfgen_Agreement_Choice3 {
                               children: [
                                 pw.Text(
                                   (Get_Value_cid.toString() ==
-                                          Form_fid.toString())
+                                          Form_renew_cid.toString())
                                       ? 'อ้างอิงสัญญาเดิมเลขที่________________'
-                                      : 'อ้างอิงสัญญาเดิมเลขที่ ${Form_fid}',
+                                      : 'อ้างอิงสัญญาเดิมเลขที่ ${Form_renew_cid}',
                                   // 'ทำที่ $renTal_name ',
                                   textAlign: pw.TextAlign.right,
                                   style: pw.TextStyle(
@@ -408,10 +448,10 @@ class Pdfgen_Agreement_Choice3 {
                           ),
                         ],
                       ),
-                      pw.SizedBox(height: 2 * PdfPageFormat.mm),
+                      pw.SizedBox(height: 1 * PdfPageFormat.mm),
                       pw.Text(
                         ' ' * 12 +
-                            'สัญญาฉบับนี้ทำขึ้นที่ บริษัท ชอยส์มินิสโตร์ จำกัด เลขประจำตัวนิติบุคคล 0-1055-31085-43-4 สำนักงานใหญ่ตั้งอยู่เลขที่ 7/11 หมู่ที่ 5 ตำบลท่าศาลา อำเภอเมืองเชียงใหม่ จังหวัดเชียงใหม่ เมื่อวันที่ ${Datex_text.text} ระหว่าง บริษัท ชอยส์ มินิส โตร์ จำกัด โดยนางฤทัยรัตน์ วิสิทธิ์ และนายวธัญญู ตันตรานนท์ กรรมการผู้มีอำนาจ ',
+                            'สัญญาฉบับนี้ทำขึ้นที่ บริษัท ชอยส์มินิสโตร์ จำกัด เลขประจำตัวนิติบุคคล 0-1055-31085-43-4 สำนักงานใหญ่ตั้งอยู่เลขที่\n 7/11 หมู่ที่ 5 ตำบลท่าศาลา อำเภอเมืองเชียงใหม่ จังหวัดเชียงใหม่ เมื่อวันที่ ${Datex_text.text} ระหว่าง บริษัท ชอยส์ มินิส โตร์ จำกัด โดยนางฤทัยรัตน์ วิสิทธิ์ และนายวธัญญู ตันตรานนท์ กรรมการผู้มีอำนาจ ซึ่งต่อไปในสัญญานี้จะเรียกว่า “ผู้ให้เช่า” ฝ่ายหนึ่ง ',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
                           color: Colors_pd,
@@ -424,7 +464,7 @@ class Pdfgen_Agreement_Choice3 {
                       pw.Row(
                         children: [
                           pw.Text(
-                            'ซึ่งต่อไปในสัญญานี้จะเรียกว่า “ผู้ให้เช่า” ฝ่ายหนึ่ง กับ ',
+                            'กับ ',
                             textAlign: pw.TextAlign.left,
                             style: pw.TextStyle(
                               fontSize: font_Size,
@@ -452,13 +492,8 @@ class Pdfgen_Agreement_Choice3 {
                                   ),
                                 ),
                               )),
-                        ],
-                      ),
-                      pw.SizedBox(height: 1 * PdfPageFormat.mm),
-                      pw.Row(
-                        children: [
                           pw.Text(
-                            'เลขประจำตัวประชาชนเลขที่ ',
+                            'เลขประจำตัวประชาชนเลขที่',
                             textAlign: pw.TextAlign.left,
                             style: pw.TextStyle(
                               fontSize: font_Size,
@@ -466,55 +501,25 @@ class Pdfgen_Agreement_Choice3 {
                               color: Colors_pd,
                             ),
                           ),
-                          pw.Expanded(
-                              flex: 2,
-                              child: pw.Container(
-                                decoration: pw.BoxDecoration(
-                                    border: pw.Border(
-                                        bottom: pw.BorderSide(
-                                  color: Colors_pd,
-                                  width: 0.3, // Underline thickness
-                                ))),
-                                child: pw.Text(
-                                  "$Form_tax",
-                                  textAlign: pw.TextAlign.center,
-                                  style: pw.TextStyle(
-                                    color: Colors_pd,
-                                    fontSize: font_Size,
-                                    fontWeight: pw.FontWeight.bold,
-                                    font: ttf,
-                                  ),
-                                ),
-                              )),
-                          pw.Text(
-                            'โทรศัพท์ ',
-                            textAlign: pw.TextAlign.left,
-                            style: pw.TextStyle(
-                              fontSize: font_Size,
-                              font: ttf,
+                          pw.Container(
+                            width: 80,
+                            decoration: pw.BoxDecoration(
+                                border: pw.Border(
+                                    bottom: pw.BorderSide(
                               color: Colors_pd,
+                              width: 0.3, // Underline thickness
+                            ))),
+                            child: pw.Text(
+                              "$Form_tax",
+                              textAlign: pw.TextAlign.center,
+                              style: pw.TextStyle(
+                                color: Colors_pd,
+                                fontSize: font_Size,
+                                fontWeight: pw.FontWeight.bold,
+                                font: ttf,
+                              ),
                             ),
                           ),
-                          pw.Expanded(
-                              flex: 2,
-                              child: pw.Container(
-                                decoration: pw.BoxDecoration(
-                                    border: pw.Border(
-                                        bottom: pw.BorderSide(
-                                  color: Colors_pd,
-                                  width: 0.3, // Underline thickness
-                                ))),
-                                child: pw.Text(
-                                  "$Form_tel",
-                                  textAlign: pw.TextAlign.center,
-                                  style: pw.TextStyle(
-                                    color: Colors_pd,
-                                    fontSize: font_Size,
-                                    fontWeight: pw.FontWeight.bold,
-                                    font: ttf,
-                                  ),
-                                ),
-                              )),
                         ],
                       ),
                       pw.SizedBox(height: 1 * PdfPageFormat.mm),
@@ -549,11 +554,93 @@ class Pdfgen_Agreement_Choice3 {
                                   ),
                                 ),
                               )),
+                          pw.Text(
+                            'โทรศัพท์ ',
+                            textAlign: pw.TextAlign.left,
+                            style: pw.TextStyle(
+                              fontSize: font_Size,
+                              font: ttf,
+                              color: Colors_pd,
+                            ),
+                          ),
+                          pw.Container(
+                            width: 60,
+                            decoration: pw.BoxDecoration(
+                                border: pw.Border(
+                                    bottom: pw.BorderSide(
+                              color: Colors_pd,
+                              width: 0.3, // Underline thickness
+                            ))),
+                            child: pw.Text(
+                              "$Form_tel",
+                              textAlign: pw.TextAlign.center,
+                              style: pw.TextStyle(
+                                color: Colors_pd,
+                                fontSize: font_Size,
+                                fontWeight: pw.FontWeight.bold,
+                                font: ttf,
+                              ),
+                            ),
+                          ),
+                          pw.Text(
+                            'ซึ่งต่อไปในสัญญานี้จะเรียกว่า “ผู้รับบริการ” อีกฝ่ายหนึ่ง คู่สัญญา',
+                            textAlign: pw.TextAlign.left,
+                            style: pw.TextStyle(
+                              color: Colors_pd,
+                              fontSize: font_Size,
+                              fontWeight: pw.FontWeight.bold,
+                              font: ttf,
+                            ),
+                          ),
                         ],
                       ),
+                      // pw.SizedBox(height: 1 * PdfPageFormat.mm),
+                      // pw.Row(
+                      //   children: [
+                      //     pw.Text(
+                      //       'โทรศัพท์ ',
+                      //       textAlign: pw.TextAlign.left,
+                      //       style: pw.TextStyle(
+                      //         fontSize: font_Size,
+                      //         font: ttf,
+                      //         color: Colors_pd,
+                      //       ),
+                      //     ),
+                      //     pw.Expanded(
+                      //         flex: 2,
+                      //         child: pw.Container(
+                      //           decoration: pw.BoxDecoration(
+                      //               border: pw.Border(
+                      //                   bottom: pw.BorderSide(
+                      //             color: Colors_pd,
+                      //             width: 0.3, // Underline thickness
+                      //           ))),
+                      //           child: pw.Text(
+                      //             "$Form_tel",
+                      //             textAlign: pw.TextAlign.center,
+                      //             style: pw.TextStyle(
+                      //               color: Colors_pd,
+                      //               fontSize: font_Size,
+                      //               fontWeight: pw.FontWeight.bold,
+                      //               font: ttf,
+                      //             ),
+                      //           ),
+                      //         )),
+                      //     pw.Text(
+                      //       'ซึ่งต่อไปในสัญญานี้จะเรียกว่า “ผู้รับบริการ” อีกฝ่ายหนึ่ง คู่สัญญา',
+                      //       textAlign: pw.TextAlign.left,
+                      //       style: pw.TextStyle(
+                      //         color: Colors_pd,
+                      //         fontSize: font_Size,
+                      //         fontWeight: pw.FontWeight.bold,
+                      //         font: ttf,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                       pw.SizedBox(height: 1 * PdfPageFormat.mm),
                       pw.Text(
-                        'ซึ่งต่อไปในสัญญานี้จะเรียกว่า “ผู้รับบริการ” อีกฝ่ายหนึ่ง คู่สัญญา ได้ตกลงกันมีข้อความดังต่อไปนี้',
+                        'ได้ตกลงกันมีข้อความดังต่อไปนี้',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
                           color: Colors_pd,
@@ -564,7 +651,7 @@ class Pdfgen_Agreement_Choice3 {
                       ),
                       pw.SizedBox(height: 1 * PdfPageFormat.mm),
                       pw.Text(
-                        'ข้อ 1. ขอบเขตการให้บริการ',
+                        ' ' * 25 + 'ข้อ 1. ขอบเขตการให้บริการ',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
                           color: Colors_pd,
@@ -669,11 +756,6 @@ class Pdfgen_Agreement_Choice3 {
                                   ),
                                 ),
                               )),
-                        ],
-                      ),
-                      pw.SizedBox(height: 1 * PdfPageFormat.mm),
-                      pw.Row(
-                        children: [
                           pw.Text(
                             'เคาน์เตอร์ความสูงไม่เกิน',
                             textAlign: pw.TextAlign.left,
@@ -683,26 +765,30 @@ class Pdfgen_Agreement_Choice3 {
                               color: Colors_pd,
                             ),
                           ),
-                          pw.Expanded(
-                              flex: 2,
-                              child: pw.Container(
-                                decoration: pw.BoxDecoration(
-                                    border: pw.Border(
-                                        bottom: pw.BorderSide(
-                                  color: Colors_pd,
-                                  width: 0.3, // Underline thickness
-                                ))),
-                                child: pw.Text(
-                                  " 0.8 ม.",
-                                  textAlign: pw.TextAlign.center,
-                                  style: pw.TextStyle(
-                                    color: Colors_pd,
-                                    fontSize: font_Size,
-                                    fontWeight: pw.FontWeight.bold,
-                                    font: ttf,
-                                  ),
-                                ),
-                              )),
+                          pw.Container(
+                            width: 100,
+                            decoration: pw.BoxDecoration(
+                                border: pw.Border(
+                                    bottom: pw.BorderSide(
+                              color: Colors_pd,
+                              width: 0.3, // Underline thickness
+                            ))),
+                            child: pw.Text(
+                              " 0.8 ม.",
+                              textAlign: pw.TextAlign.center,
+                              style: pw.TextStyle(
+                                color: Colors_pd,
+                                fontSize: font_Size,
+                                fontWeight: pw.FontWeight.bold,
+                                font: ttf,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      pw.SizedBox(height: 1 * PdfPageFormat.mm),
+                      pw.Row(
+                        children: [
                           pw.Text(
                             'จำหน่ายสินค้า/บริการ ',
                             textAlign: pw.TextAlign.left,
@@ -712,34 +798,33 @@ class Pdfgen_Agreement_Choice3 {
                               color: Colors_pd,
                             ),
                           ),
-                          pw.Expanded(
-                              flex: 2,
-                              child: pw.Container(
-                                decoration: pw.BoxDecoration(
-                                    border: pw.Border(
-                                        bottom: pw.BorderSide(
-                                  color: Colors_pd,
-                                  width: 0.3, // Underline thickness
-                                ))),
-                                child: pw.Text(
-                                  (Form_nameshop == null ||
-                                          Form_nameshop.toString() == 'null')
-                                      ? "$Form_bussshop"
-                                      : "$Form_nameshop",
-                                  textAlign: pw.TextAlign.center,
-                                  style: pw.TextStyle(
-                                    color: Colors_pd,
-                                    fontSize: font_Size,
-                                    fontWeight: pw.FontWeight.bold,
-                                    font: ttf,
-                                  ),
-                                ),
-                              )),
+                          pw.Container(
+                            width: 200,
+                            decoration: pw.BoxDecoration(
+                                border: pw.Border(
+                                    bottom: pw.BorderSide(
+                              color: Colors_pd,
+                              width: 0.3, // Underline thickness
+                            ))),
+                            child: pw.Text(
+                              (Form_typeshop == null ||
+                                      Form_typeshop.toString() == 'null')
+                                  ? "$Form_typeshop"
+                                  : "$Form_typeshop",
+                              textAlign: pw.TextAlign.center,
+                              style: pw.TextStyle(
+                                color: Colors_pd,
+                                fontSize: font_Size,
+                                fontWeight: pw.FontWeight.bold,
+                                font: ttf,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
-                      pw.SizedBox(height: 1 * PdfPageFormat.mm),
+                      pw.SizedBox(height: 2 * PdfPageFormat.mm),
                       pw.Text(
-                        'ข้อ 2. ข้อพึงปฏิบัติตามสัญญาบริการ',
+                        ' ' * 25 + 'ข้อ 2. ข้อพึงปฏิบัติตามสัญญาบริการ',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
                           color: Colors_pd,
@@ -751,7 +836,7 @@ class Pdfgen_Agreement_Choice3 {
                       pw.SizedBox(height: 1 * PdfPageFormat.mm),
                       pw.Text(
                         ' ' * 12 +
-                            '2.1	กรณีผู้รับบริการจำหน่ายสินค้าหน้าร้าน ห้ามมีการเคลื่อนย้ายสถานที่ตั้ง และเพิ่มขนาดของชั้นวางสินค้านอกเหนือจากที่ระบุ ไว้ในสัญญาบริการ',
+                            '2.1	กรณีผู้รับบริการจำหน่ายสินค้าหน้าร้าน ห้ามมีการเคลื่อนย้ายสถานที่ตั้งและเพิ่มขนาดของชั้นวางสินค้านอกเหนือจากที่ระบุ\nไว้ในสัญญาบริการ',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
                           fontSize: font_Size,
@@ -773,7 +858,7 @@ class Pdfgen_Agreement_Choice3 {
                       pw.SizedBox(height: 1 * PdfPageFormat.mm),
                       pw.Text(
                         ' ' * 12 +
-                            '2.3	ผู้รับบริการต้องดูแลทรัพย์สินของผู้รับบริการ หากเกิดความเสียหายใดๆ แก่ทรัพย์สินของผู้รับบริการ ผู้ให้บริการจะไม่รับผิดชอบ\nต่อความเสียหายใดๆ ที่เกิดขึ้นทั้งสิ้น',
+                            '2.3	ผู้รับบริการต้องดูแลทรัพย์สินของผู้รับบริการ หากเกิดความเสียหายใดๆ แก่ทรัพย์สินของผู้รับบริการ ผู้ให้บริการจะไม่\nรับผิดชอบต่อความเสียหายใดๆ ที่เกิดขึ้นทั้งสิ้น',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
                           fontSize: font_Size,
@@ -784,7 +869,7 @@ class Pdfgen_Agreement_Choice3 {
                       pw.SizedBox(height: 1 * PdfPageFormat.mm),
                       pw.Text(
                         ' ' * 12 +
-                            '2.4	กรณีผู้รับบริการต้องการนำทรัพย์สินของผู้รับบริการเข้าไปไว้ เพื่อจัดเตรียม หรือตกแต่งพื้นที่บริการ สามารถกระทำได้ตาม ความเหมาะสม ที่ผู้ให้บริการกำหนดมาตรฐานไว้เท่านั้น และให้รักษาความสะอาดอยู่เสมอ',
+                            '2.4	กรณีผู้รับบริการต้องการนำทรัพย์สินของผู้รับบริการเข้าไปไว้ เพื่อจัดเตรียม หรือตกแต่งพื้นที่บริการ สามารถกระทำได้ตาม\nความเหมาะสม ที่ผู้ให้บริการกำหนดมาตรฐานไว้เท่านั้น และให้รักษาความสะอาดอยู่เสมอ',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
                           fontSize: font_Size,
@@ -817,7 +902,7 @@ class Pdfgen_Agreement_Choice3 {
                       pw.SizedBox(height: 1 * PdfPageFormat.mm),
                       pw.Text(
                         ' ' * 12 +
-                            '2.7	ผู้รับบริการจะต้องดำเนินกิจการที่ถูกต้องตามกฎหมาย อีกทั้งสินค้าและบริการที่นำมาประกอบกิจการจะต้องไม่เป็นการ\nละเมิด ลิขสิทธิ์ สิทธิบัตร เครื่องหมายการค้า ตามกฎหมายว่าด้วยทรัพย์สินทางปัญญา หรือกฎหมายอื่นใดก็ตาม',
+                            '2.7	ผู้รับบริการจะต้องดำเนินกิจการที่ถูกต้องตามกฎหมาย อีกทั้งสินค้าและบริการที่นำมาประกอบกิจการจะต้องไม่เป็นการละเมิด\nลิขสิทธิ์ สิทธิบัตร เครื่องหมายการค้า ตามกฎหมายว่าด้วยทรัพย์สินทางปัญญา หรือกฎหมายอื่นใดก็ตาม',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
                           fontSize: font_Size,
@@ -827,7 +912,7 @@ class Pdfgen_Agreement_Choice3 {
                       ),
                       pw.SizedBox(height: 1 * PdfPageFormat.mm),
                       pw.Text(
-                        'ข้อ 3. ระยะเวลาของสัญญาบริการ',
+                        ' ' * 25 + 'ข้อ 3. ระยะเวลาของสัญญาบริการ',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
                           color: Colors_pd,
@@ -859,7 +944,8 @@ class Pdfgen_Agreement_Choice3 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  "$Form_sdate",
+                                  '${DateFormat('dd MMM', 'th').format(DateTime.parse("${DateFormat("dd-MM-yyyy HH:mm:ss").parse('$Form_sdate 00:00:00')}"))} ${DateTime.parse("${DateFormat("dd-MM-yyyy HH:mm:ss").parse('$Form_sdate 00:00:00')}").year + 543}',
+                                  //   "$Form_sdate",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -888,7 +974,8 @@ class Pdfgen_Agreement_Choice3 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  "$Form_ldate",
+                                  '${DateFormat('dd MMM', 'th').format(DateTime.parse("${DateFormat("dd-MM-yyyy HH:mm:ss").parse('$Form_ldate 00:00:00')}"))} ${DateTime.parse("${DateFormat("dd-MM-yyyy HH:mm:ss").parse('$Form_ldate 00:00:00')}").year + 543}',
+                                  //  "$Form_ldate",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -939,9 +1026,9 @@ class Pdfgen_Agreement_Choice3 {
                           )
                         ],
                       ),
-                      pw.SizedBox(height: 25 * PdfPageFormat.mm),
+                      pw.SizedBox(height: 1 * PdfPageFormat.mm),
                       pw.Text(
-                        'ข้อ 4. ค่าบริการและเงินประกัน',
+                        ' ' * 25 + 'ข้อ 4. ค่าบริการและเงินประกัน',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
                           color: Colors_pd,
@@ -973,7 +1060,10 @@ class Pdfgen_Agreement_Choice3 {
                                 width: 0.3, // Underline thickness
                               ))),
                               child: pw.Text(
-                                " - บาท (  -  )",
+                                (quotxSelectModels.length == 0)
+                                    ? '0.00 (~${convertToThaiBaht(0.00)}~)'
+                                    : '${nFormat.format(quotxSelectModels.where((e) => e.expser.toString() == '16').map((e) => e.total != null ? double.parse(e.total.toString()) : 0.00).fold(0.00, (a, b) => a + b))} บาท ' +
+                                        '(~${convertToThaiBaht(quotxSelectModels.where((e) => e.expser.toString() == '16').map((e) => e.total != null ? double.parse(e.total.toString()) : 0.00).fold(0.00, (a, b) => a + b))}~)',
                                 textAlign: pw.TextAlign.center,
                                 style: pw.TextStyle(
                                   color: Colors_pd,
@@ -1027,7 +1117,7 @@ class Pdfgen_Agreement_Choice3 {
                                 width: 0.3, // Underline thickness
                               ))),
                               child: pw.Text(
-                                "  -  บาท  (   -   )",
+                                "  ${nFormat.format(quotxSelectModels.where((e) => e.expser.toString() == '16').map((e) => e.total != null ? double.parse(e.total.toString()) / 2 : 0.00).fold(0.00, (a, b) => a + b))} บาท",
                                 textAlign: pw.TextAlign.center,
                                 style: pw.TextStyle(
                                   color: Colors_pd,
@@ -1057,10 +1147,13 @@ class Pdfgen_Agreement_Choice3 {
                                 width: 0.3, // Underline thickness
                               ))),
                               child: pw.Text(
-                                (Form_PakanAll_pvat == null ||
-                                        Form_PakanAll_pvat.toString() == '')
-                                    ? '0.00'
-                                    : '${nFormat.format(double.parse('${Form_PakanAll_pvat}'))}',
+                                (quotxSelectModels.length == 0)
+                                    ? '0.00 (~${convertToThaiBaht(0.00)}~)'
+                                    : '${nFormat.format(quotxSelectModels.where((e) => e.expser.toString() == '2').map((e) => e.pvat != null ? double.parse(e.pvat.toString()) : 0.00).fold(0.00, (a, b) => a + b))} บาท ',
+                                // (Form_PakanAll_pvat == null ||
+                                //         Form_PakanAll_pvat.toString() == '')
+                                //     ? '0.00 บาท'
+                                //     : '${nFormat.format(double.parse('${Form_PakanAll_pvat}'))} บาท',
                                 textAlign: pw.TextAlign.center,
                                 style: pw.TextStyle(
                                   color: Colors_pd,
@@ -1095,10 +1188,13 @@ class Pdfgen_Agreement_Choice3 {
                                 width: 0.3, // Underline thickness
                               ))),
                               child: pw.Text(
-                                (Form_PakanAll_vat == null ||
-                                        Form_PakanAll_vat.toString() == '')
-                                    ? '0.00'
-                                    : '${nFormat.format(double.parse('${Form_PakanAll_vat}'))}',
+                                (quotxSelectModels.length == 0)
+                                    ? '0.00 (~${convertToThaiBaht(0.00)}~)'
+                                    : '${nFormat.format(quotxSelectModels.where((e) => e.expser.toString() == '2').map((e) => e.vat != null ? double.parse(e.vat.toString()) : 0.00).fold(0.00, (a, b) => a + b))} บาท ',
+                                // (Form_PakanAll_vat == null ||
+                                //         Form_PakanAll_vat.toString() == '')
+                                //     ? '0.00 บาท'
+                                //     : '${nFormat.format(double.parse('${Form_PakanAll_vat}'))} บาท',
                                 textAlign: pw.TextAlign.center,
                                 style: pw.TextStyle(
                                   color: Colors_pd,
@@ -1128,11 +1224,14 @@ class Pdfgen_Agreement_Choice3 {
                                 width: 0.3, // Underline thickness
                               ))),
                               child: pw.Text(
-                                (Form_PakanAll_Total == null ||
-                                        Form_PakanAll_Total.toString() == '')
+                                (quotxSelectModels.length == 0)
                                     ? '0.00 (~${convertToThaiBaht(0.00)}~)'
-                                    : '${nFormat.format(double.parse('${Form_PakanAll_Total}'))} บาท ' +
-                                        '(~${convertToThaiBaht(double.parse('${Form_PakanAll_Total}'))}~)',
+                                    : '${nFormat.format(quotxSelectModels.where((e) => e.expser.toString() == '2').map((e) => e.total != null ? double.parse(e.total.toString()) : 0.00).fold(0.00, (a, b) => a + b))} บาท ',
+                                // (Form_PakanAll_Total == null ||
+                                //         Form_PakanAll_Total.toString() == '')
+                                //     ? '0.00 บาท (~${convertToThaiBaht(0.00)}~)'
+                                //     : '${nFormat.format(double.parse('${Form_PakanAll_Total}'))} บาท ' +
+                                //         '(~${convertToThaiBaht(double.parse('${Form_PakanAll_Total}'))}~)',
                                 textAlign: pw.TextAlign.center,
                                 style: pw.TextStyle(
                                   color: Colors_pd,
@@ -1155,7 +1254,7 @@ class Pdfgen_Agreement_Choice3 {
                           color: Colors_pd,
                         ),
                       ),
-                      pw.SizedBox(height: 1 * PdfPageFormat.mm),
+                      pw.SizedBox(height: 10 * PdfPageFormat.mm),
                       pw.Text(
                         ' ' * 12 +
                             'หากผู้รับบริการประสงค์จะใช้ไฟฟ้าหรือน้ำประปา จะต้องชำระค่าธรรมเนียมดังนี้',
@@ -1167,14 +1266,17 @@ class Pdfgen_Agreement_Choice3 {
                           font: ttf,
                         ),
                       ),
-                      pw.SizedBox(height: 5 * PdfPageFormat.mm),
+                      pw.SizedBox(height: 1 * PdfPageFormat.mm),
                       pw.Row(
                         children: [
                           pw.Expanded(
                             flex: 1,
                             child: pw.Text(
-                              ' ' * 15 +
-                                  '[ / ] ค่ามิเตอร์ไฟฟ้าและน้ำประปา จำนวน_____บาท',
+                              (hasNonCash_water_ele)
+                                  ? ' ' * 15 +
+                                      '[   ] ค่ามิเตอร์ไฟฟ้าและน้ำประปา จำนวน_____บาท'
+                                  : ' ' * 15 +
+                                      '[ / ] ค่ามิเตอร์ไฟฟ้าและน้ำประปา จำนวน ${quotxSelectModels.where((e) => e.expser.toString() == '20' || e.expser.toString() == '21').map((e) => double.parse(e.total.toString())).reduce((a, b) => a + b)} บาท',
                               textAlign: pw.TextAlign.left,
                               style: pw.TextStyle(
                                 color: Colors_pd,
@@ -1187,7 +1289,11 @@ class Pdfgen_Agreement_Choice3 {
                           pw.Expanded(
                             flex: 1,
                             child: pw.Text(
-                              ' ' * 15 + '[   ] ค่ามิเตอร์ไฟฟ้า จำนวน_____บาท',
+                              (hasNonCash_ele)
+                                  ? ' ' * 15 +
+                                      '[   ]  ค่ามิเตอร์ไฟฟ้า จำนวน_____บาท'
+                                  : ' ' * 15 +
+                                      '[ / ]  ค่ามิเตอร์ไฟฟ้า จำนวน ${quotxSelectModels.where((model) => model.expser == '20').map((model) => model.total).join(', ')} บาท',
                               textAlign: pw.TextAlign.left,
                               style: pw.TextStyle(
                                 color: Colors_pd,
@@ -1205,8 +1311,11 @@ class Pdfgen_Agreement_Choice3 {
                           pw.Expanded(
                             flex: 1,
                             child: pw.Text(
-                              ' ' * 15 +
-                                  '[   ] ค่ามิเตอร์น้ำประปา จำนวน_____บาท',
+                              (hasNonCash_water)
+                                  ? ' ' * 15 +
+                                      '[   ] ค่ามิเตอร์น้ำประปา จำนวน_____บาท'
+                                  : ' ' * 15 +
+                                      '[ / ] ค่ามิเตอร์น้ำประปา จำนวน ${quotxSelectModels.where((model) => model.expser == '21').map((model) => model.total).join(', ')} บาท',
                               textAlign: pw.TextAlign.left,
                               style: pw.TextStyle(
                                 color: Colors_pd,
@@ -1219,7 +1328,11 @@ class Pdfgen_Agreement_Choice3 {
                           pw.Expanded(
                             flex: 1,
                             child: pw.Text(
-                              ' ' * 15 + '[   ] ไม่ใช้มิเตอร์ไฟฟ้าและน้ำประปา ',
+                              (hasNonCash_No_water_ele)
+                                  ? ' ' * 15 +
+                                      '[   ] ไม่ใช้มิเตอร์ไฟฟ้าและน้ำประปา '
+                                  : ' ' * 15 +
+                                      '[ / ] ไม่ใช้มิเตอร์ไฟฟ้าและน้ำประปา ',
                               textAlign: pw.TextAlign.left,
                               style: pw.TextStyle(
                                 color: Colors_pd,
@@ -1231,7 +1344,7 @@ class Pdfgen_Agreement_Choice3 {
                           ),
                         ],
                       ),
-                      pw.SizedBox(height: 5 * PdfPageFormat.mm),
+                      pw.SizedBox(height: 1 * PdfPageFormat.mm),
                       // pw.Text(
                       //   ' ' * 12 +
                       //       'โดยมีค่าบริการไฟฟ้า หน่วยละ 7 บาท ค่าบริการน้ำประปาหน่วยละ 30 บาท เป็นราคาที่ยังไม่รวมภาษีมูลค่าเพิ่ม',
@@ -1265,7 +1378,7 @@ class Pdfgen_Agreement_Choice3 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  " -  บาท",
+                                  " ${quotxSelectModels.where((model) => model.expser == '6').map((model) => model.qty).join(', ')} บาท",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -1295,7 +1408,7 @@ class Pdfgen_Agreement_Choice3 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  " -  บาท ",
+                                  " ${quotxSelectModels.where((model) => model.expser == '7').map((model) => model.qty).join(', ')} บาท",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -1340,7 +1453,13 @@ class Pdfgen_Agreement_Choice3 {
                                   width: 0.3, // Underline thickness
                                 ))),
                                 child: pw.Text(
-                                  " -  บาท (   -   ) ",
+                                  (Form_PakanAll_Total_bill == null ||
+                                          Form_PakanAll_Total_bill.toString() ==
+                                              '')
+                                      ? '0.00 บาท (~${convertToThaiBaht(0.00)}~)'
+                                      : '${nFormat.format(double.parse('${Form_PakanAll_Total_bill}'))} บาท ' +
+                                          '(~${convertToThaiBaht(double.parse('${Form_PakanAll_Total_bill}'))}~)',
+                                  // " ${Form_PakanAll_Total_bill}-  บาท (   -   ) ",
                                   textAlign: pw.TextAlign.center,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -1350,13 +1469,22 @@ class Pdfgen_Agreement_Choice3 {
                                   ),
                                 ),
                               )),
+                          // pw.Text(
+                          //   ' ' * 12 + 'เลขที่ใบเสร็จเงิน',
+                          //   textAlign: pw.TextAlign.left,
+                          //   style: pw.TextStyle(
+                          //     fontSize: font_Size,
+                          //     font: ttf,
+                          //     color: Colors_pd,
+                          //   ),
+                          // ),
                         ],
                       ),
                       pw.SizedBox(height: 1 * PdfPageFormat.mm),
                       pw.Row(
                         children: [
                           pw.Text(
-                            ' ' * 12 + 'เลขที่ใบเสร็จเงิน ประกัน ',
+                            ' ' * 12 + 'เลขที่ใบเสร็จเงินประกัน ',
                             textAlign: pw.TextAlign.left,
                             style: pw.TextStyle(
                               fontSize: font_Size,
@@ -1426,7 +1554,7 @@ class Pdfgen_Agreement_Choice3 {
                       pw.SizedBox(height: 1 * PdfPageFormat.mm),
                       pw.Text(
                         ' ' * 12 +
-                            'อนึ่ง การชำระค่าบริการ ผู้รับบริการต้องชำระค่าบริการล่วงหน้าตั้งแต่วันที่ 25 ถึงวันสุดท้ายของแต่ละเดือนโดยถือเป็นค่าบริการ เดือนถัดไป หากผู้รับบริการไม่ชำระค่าบริการภายในเวลาที่กำหนด ผู้ให้บริการมีสิทธิคิดค่าปรับวันละ 50 บาท นับแต่วันที่เลยกำหนดชำระ และหากผู้รับบริการยังไม่ชำระค่าบริการและค่าปรับภายในวันที่ 5 ของเดือนถัดไป ผู้ให้บริการมีสิทธิบอกเลิกสัญญาได้ทันที',
+                            'อนึ่ง การชำระค่าบริการ ผู้รับบริการต้องชำระค่าบริการล่วงหน้าตั้งแต่วันที่ 25 ถึงวันสุดท้ายของแต่ละเดือนโดยถือเป็นค่าบริการ\nเดือนถัดไป หากผู้รับบริการไม่ชำระค่าบริการภายในเวลาที่กำหนด ผู้ให้บริการมีสิทธิคิดค่าปรับวันละ 50 บาท นับแต่วันที่เลยกำหนดชำระ\nและหากผู้รับบริการยังไม่ชำระค่าบริการและค่าปรับภายในวันที่ 5 ของเดือนถัดไป ผู้ให้บริการมีสิทธิบอกเลิกสัญญาได้ทันที',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
                           fontSize: font_Size,
@@ -1448,7 +1576,7 @@ class Pdfgen_Agreement_Choice3 {
                       pw.SizedBox(height: 1 * PdfPageFormat.mm),
                       pw.Text(
                         ' ' * 12 +
-                            'กรณีผู้รับบริการต้องการบอกเลิกสัญญา ต้องแจ้งให้ผู้ให้บริการทราบล่วงหน้าอย่างน้อย 60 วัน หรือหากผู้รับบริการต้องการหยุด กิจการ หรือไม่มาใช้พื้นที่บริการในวันใด ผู้รับบริการต้องแจ้งให้ผู้จัดการ กับเจ้าหน้าที่เช่าหน้าร้านทราบ และติดป้ายแจ้งหยุดกิจ การไว้ใน พื้นที่บริการ หากผู้รับบริการไม่มาใช้พื้นที่บริการเกินกว่า 5 วัน โดยไม่แจ้งเหตุแก่ผู้จัดการ กับเจ้าหน้าที่ เช่าหน้าร้าน และติดป้ายหยุดกิจการ หรือไม่สามารถติดต่อผู้รับบริการได้ ผู้ให้บริการมีสิทธิบอกเลิกสัญญา ยึดเงินประกัน และให้ถือว่าผู้รับบริการยินยอมส่งมอบ ทรัพย์สินของ ผู้รับบริการ ที่ปล่อยทิ้งไว้ในพื้นที่บริการให้เป็นกรรมสิทธิ์ของผู้ให้บริการ',
+                            'กรณีผู้รับบริการต้องการบอกเลิกสัญญา ต้องแจ้งให้ผู้ให้บริการทราบล่วงหน้าอย่างน้อย 60 วัน หรือหากผู้รับบริการต้องการหยุด\nกิจการ หรือไม่มาใช้พื้นที่บริการในวันใด ผู้รับบริการต้องแจ้งให้ผู้จัดการ กับเจ้าหน้าที่เช่าหน้าร้านทราบ และติดป้ายแจ้งหยุดกิจ การไว้ใน\nพื้นที่บริการ หากผู้รับบริการไม่มาใช้พื้นที่บริการเกินกว่า 5 วัน โดยไม่แจ้งเหตุแก่ผู้จัดการ กับเจ้าหน้าที่ เช่าหน้าร้าน และติดป้ายหยุดกิจการ\nหรือไม่สามารถติดต่อผู้รับบริการได้ ผู้ให้บริการมีสิทธิบอกเลิกสัญญา ยึดเงินประกัน และให้ถือว่าผู้รับบริการยินยอมส่งมอบ ทรัพย์สินของ\nผู้รับบริการ ที่ปล่อยทิ้งไว้ในพื้นที่บริการให้เป็นกรรมสิทธิ์ของผู้ให้บริการ',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
                           fontSize: font_Size,
@@ -1459,7 +1587,7 @@ class Pdfgen_Agreement_Choice3 {
                       pw.SizedBox(height: 1 * PdfPageFormat.mm),
                       pw.Text(
                         ' ' * 12 +
-                            'กรณีผู้ให้บริการต้องการบอกเลิกสัญญา ต้องแจ้งผู้รับบริการทราบล่วงหน้าอย่างน้อย 60 วัน และหากผู้ให้บริการมีเหตุจำเป็นต้องปิดกิจการร้านเซเว่น-อีเลฟเว่น สาขาที่ผู้รับบริการใช้พื้นที่บริการ ให้ถือว่าสัญญาบริการสิ้นสุดลงทันที กรณีผู้รับบริการผิดสัญญา',
+                            'กรณีผู้ให้บริการต้องการบอกเลิกสัญญา ต้องแจ้งผู้รับบริการทราบล่วงหน้าอย่างน้อย 60 วัน และหากผู้ให้บริการมีเหตุจำเป็นต้อง\nปิดกิจการร้านเซเว่น-อีเลฟเว่น สาขาที่ผู้รับบริการใช้พื้นที่บริการ ให้ถือว่าสัญญาบริการสิ้นสุดลงทันที ',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
                           fontSize: font_Size,
@@ -1470,7 +1598,7 @@ class Pdfgen_Agreement_Choice3 {
                       pw.SizedBox(height: 1 * PdfPageFormat.mm),
                       pw.Text(
                         ' ' * 12 +
-                            'ข้อหนึ่งข้อใด ผู้ให้บริการมีสิทธิบอกเลิกสัญญาได้ทันที โดยผู้ให้บริการมีสิทธิยึดเงินประกัน และเรียกเรียกร้องค่าสินไหมทดแทน เพื่อบรรเทาความเสียหายอันเกิดแต่การผิดสัญญานั้น',
+                            'กรณีผู้รับบริการผิดสัญญาข้อหนึงงข้อใด ผู้ให้บริการมีสิทธิบอกเลิกสัญญาได้ทันที โดยผู้ให้บริการมีสิทธิยึดเงินประกัน และเรียก\nเรียกร้องค่าสินไหมทดแทน เพื่อบรรเทาความเสียหายอันเกิดแต่การผิดสัญญานั้น ',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
                           fontSize: font_Size,
@@ -1502,7 +1630,7 @@ class Pdfgen_Agreement_Choice3 {
                       pw.SizedBox(height: 1 * PdfPageFormat.mm),
                       pw.Text(
                         ' ' * 12 +
-                            'การบอกกล่าวตามสัญญานี้ หากผู้ให้บริการได้ทำเป็นหนังสือส่งทางไปรษณีย์ลงทะเบียนไปให้ผู้รับบริการ ตามที่อยู่ ซึ่งระบุไว้ ข้างต้น ตามสัญญานี้ ให้ถือว่าเป็นการบอกกล่าวที่ถูกต้องและถือว่าผู้รับบริการได้รับทราบแล้ว หากผู้รับบริการย้าย หรือเปลี่ยนแปลงที่อยู่ ผู้รับบริการ ต้องแจ้งให้ผู้ให้บริการทราบเป็นหนังสือภายใน 7 วัน นับแต่วันที่ย้ายหรือเปลี่ยนแปลงที่อยู่ มิฉะนั้นให้ถือว่าการส่งคำบอกกล่าว ใดๆ ที่ผู้ ให้บริการส่งให้ผู้รับบริการตามที่ระบุไว้ในวรรคแรก เป็นการบอกกล่าวที่ถูกต้อง และให้ถือว่าผู้รับบริการรับทราบแล้ว',
+                            'การบอกกล่าวตามสัญญานี้ หากผู้ให้บริการได้ทำเป็นหนังสือส่งทางไปรษณีย์ลงทะเบียนไปให้ผู้รับบริการ ตามที่อยู่ ซึ่งระบุไว้ ข้างต้น ตามสัญญานี้ ให้ถือว่าเป็นการบอกกล่าวที่ถูกต้องและถือว่าผู้รับบริการได้รับทราบแล้ว หากผู้รับบริการย้าย หรือเปลี่ยนแปลงที่อยู่ ผู้รับบริการ ต้องแจ้งให้ผู้ให้บริการทราบ\nเป็นหนังสือภายใน 7 วัน นับแต่วันที่ย้ายหรือเปลี่ยนแปลงที่อยู่ มิฉะนั้นให้ถือว่าการส่งคำบอกกล่าว ใดๆ ที่ผู้ ให้บริการส่งให้ผู้รับบริการตามที่ระบุไว้ในวรรคแรก เป็นการบอกกล่าวที่ถูกต้อง และให้ถือว่าผู้รับบริการรับทราบแล้ว',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
                           fontSize: font_Size,
@@ -1510,7 +1638,7 @@ class Pdfgen_Agreement_Choice3 {
                           color: Colors_pd,
                         ),
                       ),
-                      pw.SizedBox(height: 10 * PdfPageFormat.mm),
+                      pw.SizedBox(height: 1 * PdfPageFormat.mm),
                       pw.Text(
                         ' ' * 12 +
                             'สัญญานี้ทำขึ้นสองฉบับ มีข้อความถูกต้องตรงกัน คู่สัญญาได้อ่านและเข้าใจข้อความในสัญญาโดยละเอียดแล้ว จึงได้ลงลายมือชื่อ พร้อมทั้งประทับตรา (ถ้ามี) ไว้เป็นสำคัญต่อหน้าพยาน และคู่สัญญาต่างยึดถือไว้ฝ่ายละฉบับ',
@@ -1521,30 +1649,30 @@ class Pdfgen_Agreement_Choice3 {
                           color: Colors_pd,
                         ),
                       ),
-                      pw.SizedBox(height: 10 * PdfPageFormat.mm),
+                      pw.SizedBox(height: 1 * PdfPageFormat.mm),
                       pw.Row(children: [
                         pw.Expanded(
                             flex: 1,
                             child: pw.Column(
                               crossAxisAlignment: pw.CrossAxisAlignment.center,
                               children: [
-                                (signature_Image1.isEmpty)
-                                    ? pw.Text(
-                                        '',
-                                        maxLines: 1,
-                                        style: pw.TextStyle(
-                                          fontSize: 10,
-                                          font: ttf,
-                                          color: Colors_pd,
-                                        ),
-                                      )
-                                    : pw.Image(
-                                        pw.MemoryImage(signature_Image1),
-                                        height: 30,
-                                        width: 100,
-                                      ),
+                                // (signature_Image1.isEmpty)
+                                //     ? pw.Text(
+                                //         '',
+                                //         maxLines: 1,
+                                //         style: pw.TextStyle(
+                                //           fontSize: 10,
+                                //           font: ttf,
+                                //           color: Colors_pd,
+                                //         ),
+                                //       )
+                                //     : pw.Image(
+                                //         pw.MemoryImage(signature_Image1),
+                                //         height: 30,
+                                //         width: 100,
+                                //       ),
                                 pw.Text(
-                                  'ลงชื่อ___________________________ผู้ให้บริการ    ',
+                                  '(ลงชื่อ)___________________________ผู้ให้บริการ    ',
                                   textAlign: pw.TextAlign.justify,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -1555,7 +1683,7 @@ class Pdfgen_Agreement_Choice3 {
                                 ),
                                 pw.SizedBox(height: 2 * PdfPageFormat.mm),
                                 pw.Text(
-                                  '(นางฤทัยรัตน์ วิสิทธิ์ และ นายวธัญญู ตันตรานนท์) ',
+                                  '( นางฤทัยรัตน์ วิสิทธิ์ และ นายวธัญญู ตันตรานนท์ ) ',
                                   textAlign: pw.TextAlign.justify,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -1566,29 +1694,29 @@ class Pdfgen_Agreement_Choice3 {
                                 ),
                               ],
                             )),
-                        pw.SizedBox(width: 5 * PdfPageFormat.mm),
+                        pw.SizedBox(width: 1 * PdfPageFormat.mm),
                         pw.Expanded(
                             flex: 1,
                             child: pw.Column(
                               crossAxisAlignment: pw.CrossAxisAlignment.center,
                               children: [
-                                (signature_Image2.isEmpty)
-                                    ? pw.Text(
-                                        '',
-                                        maxLines: 1,
-                                        style: pw.TextStyle(
-                                          fontSize: 10,
-                                          font: ttf,
-                                          color: Colors_pd,
-                                        ),
-                                      )
-                                    : pw.Image(
-                                        pw.MemoryImage(signature_Image2),
-                                        height: 30,
-                                        width: 100,
-                                      ),
+                                // (signature_Image2.isEmpty)
+                                //     ? pw.Text(
+                                //         '',
+                                //         maxLines: 1,
+                                //         style: pw.TextStyle(
+                                //           fontSize: 10,
+                                //           font: ttf,
+                                //           color: Colors_pd,
+                                //         ),
+                                //       )
+                                //     : pw.Image(
+                                //         pw.MemoryImage(signature_Image2),
+                                //         height: 30,
+                                //         width: 100,
+                                //       ),
                                 pw.Text(
-                                  'ลงชื่อ___________________________ผู้รับบริการ    ',
+                                  '(ลงชื่อ)___________________________ผู้รับบริการ    ',
                                   textAlign: pw.TextAlign.justify,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -1599,7 +1727,7 @@ class Pdfgen_Agreement_Choice3 {
                                 ),
                                 pw.SizedBox(height: 2 * PdfPageFormat.mm),
                                 pw.Text(
-                                  '(น.ส. กฤษณา คำปิงชัย) ',
+                                  '( $Form_bussshop ) ',
                                   textAlign: pw.TextAlign.justify,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -1611,30 +1739,30 @@ class Pdfgen_Agreement_Choice3 {
                               ],
                             )),
                       ]),
-                      pw.SizedBox(height: 20 * PdfPageFormat.mm),
+                      pw.SizedBox(height: 1 * PdfPageFormat.mm),
                       pw.Row(children: [
                         pw.Expanded(
                             flex: 1,
                             child: pw.Column(
                               crossAxisAlignment: pw.CrossAxisAlignment.center,
                               children: [
-                                (signature_Image3.isEmpty)
-                                    ? pw.Text(
-                                        '',
-                                        maxLines: 1,
-                                        style: pw.TextStyle(
-                                          fontSize: 10,
-                                          font: ttf,
-                                          color: Colors_pd,
-                                        ),
-                                      )
-                                    : pw.Image(
-                                        pw.MemoryImage(signature_Image3),
-                                        height: 30,
-                                        width: 100,
-                                      ),
+                                // (signature_Image3.isEmpty)
+                                //     ? pw.Text(
+                                //         '',
+                                //         maxLines: 1,
+                                //         style: pw.TextStyle(
+                                //           fontSize: 10,
+                                //           font: ttf,
+                                //           color: Colors_pd,
+                                //         ),
+                                //       )
+                                //     : pw.Image(
+                                //         pw.MemoryImage(signature_Image3),
+                                //         height: 30,
+                                //         width: 100,
+                                //       ),
                                 pw.Text(
-                                  'ลงชื่อ___________________________พยาน    ',
+                                  '(ลงชื่อ)___________________________พยาน    ',
                                   textAlign: pw.TextAlign.justify,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -1645,7 +1773,7 @@ class Pdfgen_Agreement_Choice3 {
                                 ),
                                 pw.SizedBox(height: 2 * PdfPageFormat.mm),
                                 pw.Text(
-                                  '(นางสาวชนิดาพร ส่งเจริญ) ',
+                                  '(___________________________) ',
                                   textAlign: pw.TextAlign.justify,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -1656,29 +1784,29 @@ class Pdfgen_Agreement_Choice3 {
                                 ),
                               ],
                             )),
-                        pw.SizedBox(width: 5 * PdfPageFormat.mm),
+                        pw.SizedBox(width: 1 * PdfPageFormat.mm),
                         pw.Expanded(
                             flex: 1,
                             child: pw.Column(
                               crossAxisAlignment: pw.CrossAxisAlignment.center,
                               children: [
-                                (signature_Image4.isEmpty)
-                                    ? pw.Text(
-                                        '',
-                                        maxLines: 1,
-                                        style: pw.TextStyle(
-                                          fontSize: 10,
-                                          font: ttf,
-                                          color: Colors_pd,
-                                        ),
-                                      )
-                                    : pw.Image(
-                                        pw.MemoryImage(signature_Image4),
-                                        height: 30,
-                                        width: 100,
-                                      ),
+                                // (signature_Image4.isEmpty)
+                                //     ? pw.Text(
+                                //         '',
+                                //         maxLines: 1,
+                                //         style: pw.TextStyle(
+                                //           fontSize: 10,
+                                //           font: ttf,
+                                //           color: Colors_pd,
+                                //         ),
+                                //       )
+                                //     : pw.Image(
+                                //         pw.MemoryImage(signature_Image4),
+                                //         height: 30,
+                                //         width: 100,
+                                //       ),
                                 pw.Text(
-                                  'ลงชื่อ___________________________พยาน    ',
+                                  '(ลงชื่อ)___________________________พยาน    ',
                                   textAlign: pw.TextAlign.justify,
                                   style: pw.TextStyle(
                                     color: Colors_pd,
@@ -1714,7 +1842,7 @@ class Pdfgen_Agreement_Choice3 {
                       crossAxisAlignment: pw.CrossAxisAlignment.end,
                       children: [
                         pw.Text(
-                          "${context.pageNumber} / ${context.pagesCount}..........",
+                          "${context.pageNumber} of ${context.pagesCount}",
                           textAlign: pw.TextAlign.center,
                           style: pw.TextStyle(
                             fontWeight: pw.FontWeight.bold,

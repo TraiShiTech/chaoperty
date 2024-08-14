@@ -24,6 +24,7 @@ import '../Model/GetZone_Model.dart';
 import '../Model/trans_re_bill_history_model.dart';
 import '../Model/trans_re_bill_model.dart';
 import '../Responsive/responsive.dart';
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 import '../Style/downloadImage.dart';
 import '../Style/view_pagenow.dart';
@@ -465,21 +466,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           border: Border.all(color: Colors.white, width: 2),
                         ),
                         padding: const EdgeInsets.all(5.0),
-                        child: const Row(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            AutoSizeText(
-                              'รายงาน ',
-                              overflow: TextOverflow.ellipsis,
-                              minFontSize: 8,
-                              maxFontSize: 20,
-                              style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                color: ReportScreen_Color.Colors_Text1_,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: FontWeight_.Fonts_T,
-                              ),
-                            ),
+                            Translate.TranslateAndSetText(
+                                'รายงาน ',
+                                ReportScreen_Color.Colors_Text1_,
+                                TextAlign.end,
+                                FontWeight.w500,
+                                FontWeight_.Fonts_T,
+                                16,
+                                1),
+
+                            // AutoSizeText(
+                            //   'รายงาน ',
+                            //   overflow: TextOverflow.ellipsis,
+                            //   minFontSize: 8,
+                            //   maxFontSize: 20,
+                            //   style: TextStyle(
+                            //     decoration: TextDecoration.underline,
+                            //     color: ReportScreen_Color.Colors_Text1_,
+                            //     fontWeight: FontWeight.bold,
+                            //     fontFamily: FontWeight_.Fonts_T,
+                            //   ),
+                            // ),
                             AutoSizeText(
                               ' > > ',
                               overflow: TextOverflow.ellipsis,
@@ -578,15 +588,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   bottomRight: Radius.circular(8)),
                               border: Border.all(color: Colors.grey, width: 1),
                             ),
-                            child: const Center(
-                              child: Text(
-                                'รายงาน',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T,
-                                ),
-                              ),
+                            child: Center(
+                              child: Translate.TranslateAndSetText(
+                                  'รายงาน',
+                                  Colors.white,
+                                  TextAlign.end,
+                                  FontWeight.w500,
+                                  FontWeight_.Fonts_T,
+                                  16,
+                                  1),
                             )),
                       ),
                     ),
@@ -626,7 +636,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
           ),
-          const Padding(
+          Padding(
               padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -639,17 +649,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           alignment: Alignment.topLeft,
                           child: Padding(
                             padding: EdgeInsets.fromLTRB(8, 8, 2, 8),
-                            child: AutoSizeText(
-                              'ภาพรวมการดำเนินการ ',
-                              overflow: TextOverflow.ellipsis,
-                              minFontSize: 8,
-                              maxFontSize: 20,
-                              style: TextStyle(
-                                color: ReportScreen_Color.Colors_Text1_,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: FontWeight_.Fonts_T,
-                              ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                'ภาพรวมการดำเนินการ ',
+                                ReportScreen_Color.Colors_Text1_,
+                                TextAlign.end,
+                                FontWeight.w500,
+                                FontWeight_.Fonts_T,
+                                16,
+                                1),
+                            // AutoSizeText(
+                            //   'ภาพรวมการดำเนินการ ',
+                            //   overflow: TextOverflow.ellipsis,
+                            //   minFontSize: 8,
+                            //   maxFontSize: 20,
+                            //   style: TextStyle(
+                            //     color: ReportScreen_Color.Colors_Text1_,
+                            //     fontWeight: FontWeight.bold,
+                            //     fontFamily: FontWeight_.Fonts_T,
+                            //   ),
+                            // ),
                           ),
                         ),
                       ],
@@ -714,38 +732,65 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                     height: 35,
                                                     child: Row(
                                                       children: [
-                                                        const Padding(
+                                                        Padding(
                                                           padding:
                                                               EdgeInsets.all(
                                                                   4.0),
-                                                          child: Text(
-                                                            'รายรับ :',
-                                                            style: TextStyle(
-                                                              color: ReportScreen_Color
-                                                                  .Colors_Text2_,
-                                                              fontWeight:
+                                                          child: Translate
+                                                              .TranslateAndSetText(
+                                                                  'รายรับ :',
+                                                                  ReportScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  TextAlign.end,
                                                                   FontWeight
-                                                                      .bold,
-                                                              fontFamily:
+                                                                      .w500,
                                                                   FontWeight_
                                                                       .Fonts_T,
-                                                            ),
-                                                          ),
+                                                                  12,
+                                                                  1),
+
+                                                          //  Text(
+                                                          //   'รายรับ :',
+                                                          //   style: TextStyle(
+                                                          //     color: ReportScreen_Color
+                                                          //         .Colors_Text2_,
+                                                          //     fontWeight:
+                                                          //         FontWeight
+                                                          //             .bold,
+                                                          //     fontFamily:
+                                                          //         FontWeight_
+                                                          //             .Fonts_T,
+                                                          //   ),
+                                                          // ),
                                                         ),
-                                                        const Padding(
+                                                        Padding(
                                                           padding:
                                                               EdgeInsets.all(
                                                                   4.0),
-                                                          child: Text(
-                                                            'โซน ',
-                                                            style: TextStyle(
-                                                              color: ReportScreen_Color
-                                                                  .Colors_Text2_,
-                                                              // fontWeight: FontWeight.bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                            ),
-                                                          ),
+                                                          child: Translate
+                                                              .TranslateAndSetText(
+                                                                  'โซน ',
+                                                                  ReportScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  TextAlign
+                                                                      .start,
+                                                                  FontWeight
+                                                                      .w500,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  12,
+                                                                  1),
+
+                                                          //  Text(
+                                                          //   'โซน ',
+                                                          //   style: TextStyle(
+                                                          //     color: ReportScreen_Color
+                                                          //         .Colors_Text2_,
+                                                          //     // fontWeight: FontWeight.bold,
+                                                          //     fontFamily:
+                                                          //         Font_.Fonts_T,
+                                                          //   ),
+                                                          // ),
                                                         ),
                                                         Padding(
                                                           padding:
@@ -931,19 +976,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                 SizedBox(
                                                   child: Row(
                                                     children: [
-                                                      const Padding(
+                                                      Padding(
                                                         padding:
                                                             EdgeInsets.all(8.0),
-                                                        child: Text(
-                                                          'วันที่ ',
-                                                          style: TextStyle(
-                                                            color: ReportScreen_Color
-                                                                .Colors_Text2_,
-                                                            // fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
-                                                        ),
+                                                        child: Translate
+                                                            .TranslateAndSetText(
+                                                                'วันที่ ',
+                                                                ReportScreen_Color
+                                                                    .Colors_Text1_,
+                                                                TextAlign.start,
+                                                                FontWeight.w500,
+                                                                FontWeight_
+                                                                    .Fonts_T,
+                                                                12,
+                                                                1),
                                                       ),
                                                       Padding(
                                                         padding:
@@ -985,42 +1031,38 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                                   const EdgeInsets
                                                                       .all(2.0),
                                                               child: Center(
-                                                                child: Text(
-                                                                  (SDatex_total1_ ==
-                                                                          null)
-                                                                      ? 'เลือก'
-                                                                      : '$SDatex_total1_',
-                                                                  style:
-                                                                      const TextStyle(
-                                                                    fontSize:
-                                                                        12,
-                                                                    color: ReportScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    // fontWeight: FontWeight.bold,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T,
-                                                                  ),
-                                                                ),
+                                                                child: Translate.TranslateAndSetText(
+                                                                    (SDatex_total1_ ==
+                                                                            null)
+                                                                        ? 'เลือก'
+                                                                        : '$SDatex_total1_',
+                                                                    Colors.grey,
+                                                                    TextAlign
+                                                                        .start,
+                                                                    FontWeight
+                                                                        .w500,
+                                                                    Font_
+                                                                        .Fonts_T,
+                                                                    12,
+                                                                    1),
                                                               )),
                                                         ),
                                                       ),
-                                                      const Padding(
+                                                      Padding(
                                                         padding:
                                                             EdgeInsets.fromLTRB(
                                                                 8, 0, 8, 0),
-                                                        child: Text(
-                                                          'ถึง',
-                                                          style: TextStyle(
-                                                            color: ReportScreen_Color
-                                                                .Colors_Text1_,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
+                                                        child: Translate
+                                                            .TranslateAndSetText(
+                                                                'ถึง',
+                                                                ReportScreen_Color
+                                                                    .Colors_Text1_,
+                                                                TextAlign.start,
+                                                                FontWeight.w500,
                                                                 FontWeight_
                                                                     .Fonts_T,
-                                                          ),
-                                                        ),
+                                                                12,
+                                                                1),
                                                       ),
                                                       Padding(
                                                         padding:
@@ -1062,23 +1104,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                                   const EdgeInsets
                                                                       .all(2.0),
                                                               child: Center(
-                                                                child: Text(
-                                                                  (LDatex_total1_ ==
-                                                                          null)
-                                                                      ? 'เลือก'
-                                                                      : '$LDatex_total1_',
-                                                                  style:
-                                                                      const TextStyle(
-                                                                    fontSize:
-                                                                        12,
-                                                                    color: ReportScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    // fontWeight: FontWeight.bold,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T,
-                                                                  ),
-                                                                ),
+                                                                child: Translate.TranslateAndSetText(
+                                                                    (LDatex_total1_ ==
+                                                                            null)
+                                                                        ? 'เลือก'
+                                                                        : '$LDatex_total1_',
+                                                                    Colors.grey,
+                                                                    TextAlign
+                                                                        .start,
+                                                                    FontWeight
+                                                                        .w500,
+                                                                    Font_
+                                                                        .Fonts_T,
+                                                                    12,
+                                                                    1),
                                                               )),
                                                         ),
                                                       ),
@@ -1111,37 +1150,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                 height: 35,
                                                 child: Row(
                                                   children: [
-                                                    const Padding(
+                                                    Padding(
                                                       padding:
                                                           EdgeInsets.all(4.0),
-                                                      child: Text(
-                                                        'รายรับ :',
-                                                        style: TextStyle(
-                                                          color:
+                                                      child: Translate
+                                                          .TranslateAndSetText(
+                                                              'รายรับ :',
                                                               ReportScreen_Color
-                                                                  .Colors_Text2_,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
+                                                                  .Colors_Text1_,
+                                                              TextAlign.start,
+                                                              FontWeight.w500,
                                                               FontWeight_
                                                                   .Fonts_T,
-                                                        ),
-                                                      ),
+                                                              16,
+                                                              1),
                                                     ),
-                                                    const Padding(
+                                                    Padding(
                                                       padding:
                                                           EdgeInsets.all(4.0),
-                                                      child: Text(
-                                                        'โซน ',
-                                                        style: TextStyle(
-                                                          color:
+                                                      child: Translate
+                                                          .TranslateAndSetText(
+                                                              'โซน ',
                                                               ReportScreen_Color
-                                                                  .Colors_Text2_,
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
+                                                                  .Colors_Text1_,
+                                                              TextAlign.start,
+                                                              FontWeight.w500,
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                              16,
+                                                              1),
                                                     ),
                                                     Padding(
                                                       padding:
@@ -1327,20 +1364,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             SizedBox(
                                               child: Row(
                                                 children: [
-                                                  const Padding(
+                                                  Padding(
                                                     padding:
                                                         EdgeInsets.all(8.0),
-                                                    child: Text(
-                                                      'วันที่ ',
-                                                      style: TextStyle(
-                                                        color:
+                                                    child: Translate
+                                                        .TranslateAndSetText(
+                                                            'วันที่ ',
                                                             ReportScreen_Color
-                                                                .Colors_Text2_,
-                                                        // fontWeight: FontWeight.bold,
-                                                        fontFamily:
-                                                            Font_.Fonts_T,
-                                                      ),
-                                                    ),
+                                                                .Colors_Text1_,
+                                                            TextAlign.start,
+                                                            FontWeight.w500,
+                                                            FontWeight_.Fonts_T,
+                                                            16,
+                                                            1),
                                                   ),
                                                   Padding(
                                                     padding: const EdgeInsets
@@ -1380,40 +1416,36 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                               const EdgeInsets
                                                                   .all(2.0),
                                                           child: Center(
-                                                            child: Text(
-                                                              (SDatex_total1_ ==
-                                                                      null)
-                                                                  ? 'เลือก'
-                                                                  : '$SDatex_total1_',
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontSize: 12,
-                                                                color: ReportScreen_Color
-                                                                    .Colors_Text2_,
-                                                                // fontWeight: FontWeight.bold,
-                                                                fontFamily: Font_
+                                                            child: Translate.TranslateAndSetText(
+                                                                (SDatex_total1_ ==
+                                                                        null)
+                                                                    ? 'เลือก'
+                                                                    : '$SDatex_total1_',
+                                                                ReportScreen_Color
+                                                                    .Colors_Text1_,
+                                                                TextAlign.start,
+                                                                FontWeight.w500,
+                                                                FontWeight_
                                                                     .Fonts_T,
-                                                              ),
-                                                            ),
+                                                                16,
+                                                                1),
                                                           )),
                                                     ),
                                                   ),
-                                                  const Padding(
+                                                  Padding(
                                                     padding:
                                                         EdgeInsets.fromLTRB(
                                                             8, 0, 8, 0),
-                                                    child: Text(
-                                                      'ถึง',
-                                                      style: TextStyle(
-                                                        color:
+                                                    child: Translate
+                                                        .TranslateAndSetText(
+                                                            'ถึง',
                                                             ReportScreen_Color
                                                                 .Colors_Text1_,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontFamily:
+                                                            TextAlign.start,
+                                                            FontWeight.w500,
                                                             FontWeight_.Fonts_T,
-                                                      ),
-                                                    ),
+                                                            16,
+                                                            1),
                                                   ),
                                                   Padding(
                                                     padding: const EdgeInsets
@@ -1453,21 +1485,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                               const EdgeInsets
                                                                   .all(2.0),
                                                           child: Center(
-                                                            child: Text(
-                                                              (LDatex_total1_ ==
-                                                                      null)
-                                                                  ? 'เลือก'
-                                                                  : '$LDatex_total1_',
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontSize: 12,
-                                                                color: ReportScreen_Color
-                                                                    .Colors_Text2_,
-                                                                // fontWeight: FontWeight.bold,
-                                                                fontFamily: Font_
+                                                            child: Translate.TranslateAndSetText(
+                                                                (LDatex_total1_ ==
+                                                                        null)
+                                                                    ? 'เลือก'
+                                                                    : '$LDatex_total1_',
+                                                                ReportScreen_Color
+                                                                    .Colors_Text1_,
+                                                                TextAlign.start,
+                                                                FontWeight.w500,
+                                                                FontWeight_
                                                                     .Fonts_T,
-                                                              ),
-                                                            ),
+                                                                16,
+                                                                1),
                                                           )),
                                                     ),
                                                   ),
@@ -1481,971 +1511,779 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ),
                           ],
                         ),
-                        StreamBuilder(
-                            stream: Stream.periodic(const Duration(seconds: 0)),
-                            builder: (context, snapshot) {
-                              return GridView.count(
-                                  padding: ((MediaQuery.of(context).size.width) < 650)
-                                      ? const EdgeInsets.all(2)
-                                      : const EdgeInsets.all(5),
-                                  crossAxisSpacing:
-                                      ((MediaQuery.of(context).size.width) < 650)
-                                          ? 10.00
-                                          : 16.0,
-                                  mainAxisSpacing:
-                                      ((MediaQuery.of(context).size.width) < 650)
-                                          ? 10.00
-                                          : 16.0,
-                                  crossAxisCount:
-                                      (MediaQuery.of(context).size.width) < 650
-                                          ? 2
-                                          : (MediaQuery.of(context).size.width) <
-                                                  1330
-                                              ? 2
-                                              : 4,
-                                  childAspectRatio: (Responsive.isDesktop(
-                                          context))
-                                      ? ((MediaQuery.of(context).size.width) >=
-                                              1200)
-                                          ? 2
-                                          : 0.8
-                                      : ((MediaQuery.of(context).size.width) < 650 &&
-                                              (MediaQuery.of(context).size.width) >
-                                                  500)
-                                          ? 1.2
-                                          : ((MediaQuery.of(context).size.width) <
-                                                      780 &&
-                                                  (MediaQuery.of(context)
-                                                          .size
-                                                          .width) >
-                                                      650)
-                                              ? 0.8
-                                              : ((MediaQuery.of(context).size.width) < 500)
-                                                  ? 0.8
-                                                  : 0.8,
-                                  // childAspectRatio: ((MediaQuery.of(context)
-                                  //                 .size
-                                  //                 .width) <
-                                  //             650 &&
-                                  //         (MediaQuery.of(context).size.width) >
-                                  //             500)
-                                  //     ? 1.2
-                                  //     : ((MediaQuery.of(context).size.width) <
-                                  //             500)
-                                  //         ? 0.8
-                                  //         : 2,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  children: <Widget>[
-                                    Container(
+                        GridView.count(
+                            padding: ((MediaQuery.of(context).size.width) < 650)
+                                ? const EdgeInsets.all(2)
+                                : const EdgeInsets.all(5),
+                            crossAxisSpacing:
+                                ((MediaQuery.of(context).size.width) < 650)
+                                    ? 10.00
+                                    : 16.0,
+                            mainAxisSpacing:
+                                ((MediaQuery.of(context).size.width) < 650)
+                                    ? 10.00
+                                    : 16.0,
+                            crossAxisCount:
+                                (MediaQuery.of(context).size.width) < 650
+                                    ? 2
+                                    : (MediaQuery.of(context).size.width) < 1330
+                                        ? 2
+                                        : 4,
+                            childAspectRatio: (Responsive.isDesktop(context))
+                                ? ((MediaQuery.of(context).size.width) >= 1200)
+                                    ? 2
+                                    : 0.8
+                                : ((MediaQuery.of(context).size.width) < 650 &&
+                                        (MediaQuery.of(context).size.width) >
+                                            500)
+                                    ? 1.2
+                                    : ((MediaQuery.of(context).size.width) <
+                                                780 &&
+                                            (MediaQuery.of(context)
+                                                    .size
+                                                    .width) >
+                                                650)
+                                        ? 0.8
+                                        : ((MediaQuery.of(context).size.width) <
+                                                500)
+                                            ? 0.8
+                                            : 0.8,
+                            // childAspectRatio: ((MediaQuery.of(context)
+                            //                 .size
+                            //                 .width) <
+                            //             650 &&
+                            //         (MediaQuery.of(context).size.width) >
+                            //             500)
+                            //     ? 1.2
+                            //     : ((MediaQuery.of(context).size.width) <
+                            //             500)
+                            //         ? 0.8
+                            //         : 2,
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            children: <Widget>[
+                              Container(
+                                padding:
+                                    ((MediaQuery.of(context).size.width) < 650)
+                                        ? const EdgeInsets.all(5.0)
+                                        : const EdgeInsets.all(24.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white,
+                                  // color: Color(0xFFA8BFDB),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
                                       padding:
-                                          ((MediaQuery.of(context).size.width) <
-                                                  650)
-                                              ? const EdgeInsets.all(5.0)
-                                              : const EdgeInsets.all(24.0),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.white,
-                                        // color: Color(0xFFA8BFDB),
+                                          const EdgeInsets.fromLTRB(0, 0, 8, 8),
+                                      child: Container(
+                                        height: 40,
+                                        width: 40,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(7),
+                                          color: Colors.orange[700],
+                                        ),
+                                        child: const Icon(
+                                          Icons.map_outlined,
+                                          color: Colors.white,
+                                        ),
                                       ),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                0, 0, 8, 8),
-                                            child: Container(
-                                              height: 40,
-                                              width: 40,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(7),
-                                                color: Colors.orange[700],
-                                              ),
-                                              child: const Icon(
-                                                Icons.map_outlined,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                          const Text(
-                                            'พื้นที่',
+                                    ),
+                                    Translate.TranslateAndSetText(
+                                        'พื้นที่',
+                                        ReportScreen_Color.Colors_Text1_,
+                                        TextAlign.start,
+                                        FontWeight.w500,
+                                        FontWeight_.Fonts_T,
+                                        12,
+                                        1),
+                                    Container(
+                                      child: LinearPercentIndicator(
+                                        // width: MediaQuery.of(context)
+                                        //         .size
+                                        //         .width /
+                                        //     10,
+                                        animation: true,
+                                        lineHeight: 14.0,
+                                        leading: Container(
+                                          width: ((MediaQuery.of(context)
+                                                      .size
+                                                      .width) <
+                                                  650)
+                                              ? 40
+                                              : 100,
+                                          child: Translate.TranslateAndSetText(
+                                              'ทั้งหมด',
+                                              Colors.blue,
+                                              TextAlign.start,
+                                              FontWeight.w500,
+                                              FontWeight_.Fonts_T,
+                                              12,
+                                              1),
+                                        ),
+                                        animationDuration: 3000,
+                                        percent: (total1_).clamp(0.0, 1.0),
+                                        center: Translate.TranslateAndSetText(
+                                            (widget.areaModels == null)
+                                                ? '0 พื้นที่'
+                                                : '${nFormat2.format(double.parse(widget.areaModels.length.toString()))} พื้นที่',
+                                            Colors.blue,
+                                            TextAlign.end,
+                                            FontWeight.w500,
+                                            FontWeight_.Fonts_T,
+                                            12,
+                                            1),
+
+                                        linearStrokeCap:
+                                            LinearStrokeCap.roundAll,
+                                        progressColor: Colors.blue[300],
+                                      ),
+                                    ),
+                                    Container(
+                                      child: LinearPercentIndicator(
+                                        // width: MediaQuery.of(context)
+                                        //         .size
+                                        //         .width /
+                                        //     10,
+                                        animation: true,
+                                        lineHeight: 14.0,
+                                        leading: Container(
+                                          width: ((MediaQuery.of(context)
+                                                      .size
+                                                      .width) <
+                                                  650)
+                                              ? 40
+                                              : 100,
+                                          child: Translate.TranslateAndSetText(
+                                              (widget.areaModels2.length == 0)
+                                                  ? 'ว่าง [0%]'
+                                                  : 'ว่าง [${(((widget.areaModels2.length ?? 0.0) * 100) / widget.areaModels.length ?? 0.0).toStringAsFixed(2)}%]',
+                                              Colors.green,
+                                              TextAlign.start,
+                                              FontWeight.w500,
+                                              FontWeight_.Fonts_T,
+                                              12,
+                                              1),
+                                        ),
+                                        animationDuration: 3000,
+                                        percent: (double.parse(widget
+                                                    .areaModels2.length
+                                                    .toString()) /
+                                                double.parse(widget
+                                                    .areaModels.length
+                                                    .toString()))
+                                            .clamp(0.0, 1.0),
+                                        center: Translate.TranslateAndSetText(
+                                            (widget.areaModels2 == null)
+                                                ? '0 พื้นที่'
+                                                : '${nFormat2.format(double.parse(widget.areaModels2.length.toString()))} พื้นที่',
+                                            Colors.green,
+                                            TextAlign.end,
+                                            FontWeight.w500,
+                                            FontWeight_.Fonts_T,
+                                            12,
+                                            1),
+
+                                        linearStrokeCap:
+                                            LinearStrokeCap.roundAll,
+                                        progressColor: Colors.green[300],
+                                      ),
+                                    ),
+                                    Container(
+                                      child: LinearPercentIndicator(
+                                        // width: MediaQuery.of(context)
+                                        //         .size
+                                        //         .width /
+                                        //     10,
+                                        animation: true,
+                                        lineHeight: 14.0,
+                                        leading: Container(
+                                          width: ((MediaQuery.of(context)
+                                                      .size
+                                                      .width) <
+                                                  650)
+                                              ? 40
+                                              : 120,
+                                          child: Translate.TranslateAndSetText(
+                                              (widget.areaModels1.length == 0)
+                                                  ? 'ใกล้หมด.. [0%]'
+                                                  : 'ใกล้หมด.. [${(((widget.areaModels1.length ?? 0.0) * 100) / widget.areaModels.length ?? 0.0).toStringAsFixed(2)}%]',
+                                              Colors.red,
+                                              TextAlign.start,
+                                              FontWeight.w500,
+                                              FontWeight_.Fonts_T,
+                                              12,
+                                              1),
+                                        ),
+                                        animationDuration: 3000,
+                                        percent: (double.parse(widget
+                                                    .areaModels1.length
+                                                    .toString()) /
+                                                double.parse(widget
+                                                    .areaModels.length
+                                                    .toString()))
+                                            .clamp(0.0, 1.0),
+                                        center: Translate.TranslateAndSetText(
+                                            (widget.areaModels1 == null)
+                                                ? '0 พื้นที่'
+                                                : '${nFormat2.format(double.parse(widget.areaModels1.length.toString()))} พื้นที่',
+                                            Colors.red,
+                                            TextAlign.end,
+                                            FontWeight.w500,
+                                            FontWeight_.Fonts_T,
+                                            12,
+                                            1),
+
+                                        linearStrokeCap:
+                                            LinearStrokeCap.roundAll,
+                                        progressColor: Colors.red[300],
+                                      ),
+                                    ),
+                                    // Text(
+                                    //   (total2_ == null) ? '0.00' : '${nFormat.format(total2_)}',
+                                    // ),
+                                    // const Text(
+                                    //   'บาท',
+                                    // ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding:
+                                    ((MediaQuery.of(context).size.width) < 650)
+                                        ? const EdgeInsets.all(5.0)
+                                        : const EdgeInsets.all(24.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white,
+                                  // color: Color(0xFFA8BFDB),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(0, 0, 8, 8),
+                                      child: Container(
+                                        height: 40,
+                                        width: 40,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(7),
+                                          color: Colors.blue[700],
+                                        ),
+                                        child: const Icon(
+                                          Icons.people,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    Translate.TranslateAndSetText(
+                                        'แอดมิน',
+                                        Colors.black,
+                                        TextAlign.end,
+                                        FontWeight.w500,
+                                        FontWeight_.Fonts_T,
+                                        12,
+                                        1),
+                                    const Row(
+                                      children: [
+                                        Expanded(
+                                          // width: ((MediaQuery.of(
+                                          //                 context)
+                                          //             .size
+                                          //             .width) <
+                                          //         650)
+                                          //     ? 40
+                                          //     : 100,
+                                          child: Text(
+                                            '',
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                              shadows: [
-                                                Shadow(
-                                                    color: Colors.black,
-                                                    offset: Offset(0, -5))
-                                              ],
-                                              color: Colors.transparent,
-                                              // decoration: TextDecoration
-                                              //     .underline,
-                                              decorationColor: Colors.grey,
-                                              decorationThickness: 4,
-                                              // decorationStyle:
-                                              //     TextDecorationStyle
-                                              //         .dashed,
                                               fontSize: 12,
+                                              // decoration:
+                                              //     TextDecoration.underline,
+                                              color: Colors.green,
                                               fontWeight: FontWeight.bold,
                                               fontFamily: FontWeight_.Fonts_T,
                                             ),
                                           ),
-                                          Container(
-                                            child: LinearPercentIndicator(
-                                              // width: MediaQuery.of(context)
-                                              //         .size
-                                              //         .width /
-                                              //     10,
-                                              animation: true,
-                                              lineHeight: 14.0,
-                                              leading: Container(
-                                                width: ((MediaQuery.of(context)
-                                                            .size
-                                                            .width) <
-                                                        650)
-                                                    ? 40
-                                                    : 100,
-                                                child: const Text(
-                                                  'ทั้งหมด',
-                                                  maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    // decoration:
-                                                    //     TextDecoration.underline,
-                                                    color: Colors.blue,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T,
-                                                  ),
-                                                ),
-                                              ),
-                                              animationDuration: 3000,
-                                              percent:
-                                                  (total1_).clamp(0.0, 1.0),
-                                              center: Text(
-                                                (widget.areaModels == null)
-                                                    ? '0 พื้นที่'
-                                                    : '${nFormat2.format(double.parse(widget.areaModels.length.toString()))} พื้นที่',
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                  fontSize: 11.5,
-                                                  // decoration:
-                                                  //     TextDecoration.underline,
-                                                  color: Colors.black,
-                                                  // fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T,
-                                                ),
-                                              ),
-                                              linearStrokeCap:
-                                                  LinearStrokeCap.roundAll,
-                                              progressColor: Colors.blue[300],
-                                            ),
+                                        ),
+                                        Text(
+                                          '',
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            // decoration:
+                                            //     TextDecoration.underline,
+                                            color: Colors.green,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
                                           ),
-                                          Container(
-                                            child: LinearPercentIndicator(
-                                              // width: MediaQuery.of(context)
-                                              //         .size
-                                              //         .width /
-                                              //     10,
-                                              animation: true,
-                                              lineHeight: 14.0,
-                                              leading: Container(
-                                                width: ((MediaQuery.of(context)
-                                                            .size
-                                                            .width) <
-                                                        650)
-                                                    ? 40
-                                                    : 100,
-                                                child: Text(
-                                                  (widget.areaModels2.length ==
-                                                          0)
-                                                      ? 'ว่าง [0%]'
-                                                      : 'ว่าง [${(((widget.areaModels2.length ?? 0.0) * 100) / widget.areaModels.length ?? 0.0).toStringAsFixed(2)}%]',
-                                                  maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    // decoration:
-                                                    //     TextDecoration.underline,
-                                                    color: Colors.green,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T,
-                                                  ),
-                                                ),
-                                              ),
-                                              animationDuration: 3000,
-                                              percent: (double.parse(widget
-                                                          .areaModels2.length
-                                                          .toString()) /
-                                                      double.parse(widget
-                                                          .areaModels.length
-                                                          .toString()))
-                                                  .clamp(0.0, 1.0),
-                                              center: Text(
-                                                (widget.areaModels2 == null)
-                                                    ? '0 พื้นที่'
-                                                    : '${nFormat2.format(double.parse(widget.areaModels2.length.toString()))} พื้นที่',
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                  fontSize: 11.5,
-
-                                                  color: Colors.black,
-                                                  // fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T,
-                                                ),
-                                              ),
-                                              linearStrokeCap:
-                                                  LinearStrokeCap.roundAll,
-                                              progressColor: Colors.green[300],
-                                            ),
-                                          ),
-                                          Container(
-                                            child: LinearPercentIndicator(
-                                              // width: MediaQuery.of(context)
-                                              //         .size
-                                              //         .width /
-                                              //     10,
-                                              animation: true,
-                                              lineHeight: 14.0,
-                                              leading: Container(
-                                                width: ((MediaQuery.of(context)
-                                                            .size
-                                                            .width) <
-                                                        650)
-                                                    ? 40
-                                                    : 120,
-                                                child: Text(
-                                                  (widget.areaModels1.length ==
-                                                          0)
-                                                      ? 'ใกล้หมด.. [0%]'
-                                                      : 'ใกล้หมด.. [${(((widget.areaModels1.length ?? 0.0) * 100) / widget.areaModels.length ?? 0.0).toStringAsFixed(2)}%]',
-                                                  maxLines: 3,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    // decoration:
-                                                    //     TextDecoration.underline,
-                                                    color: Colors.red,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T,
-                                                  ),
-                                                ),
-                                              ),
-                                              animationDuration: 3000,
-                                              percent: (double.parse(widget
-                                                          .areaModels1.length
-                                                          .toString()) /
-                                                      double.parse(widget
-                                                          .areaModels.length
-                                                          .toString()))
-                                                  .clamp(0.0, 1.0),
-                                              center: Text(
-                                                (widget.areaModels1 == null)
-                                                    ? '0 พื้นที่'
-                                                    : '${nFormat2.format(double.parse(widget.areaModels1.length.toString()))} พื้นที่',
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                  fontSize: 11.5,
-                                                  // decoration:
-                                                  //     TextDecoration.underline,
-                                                  color: Colors.black,
-                                                  // fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T,
-                                                ),
-                                              ),
-                                              linearStrokeCap:
-                                                  LinearStrokeCap.roundAll,
-                                              progressColor: Colors.red[300],
-                                            ),
-                                          ),
-                                          // Text(
-                                          //   (total2_ == null) ? '0.00' : '${nFormat.format(total2_)}',
-                                          // ),
-                                          // const Text(
-                                          //   'บาท',
-                                          // ),
-                                        ],
+                                        ),
+                                      ],
+                                    ),
+                                    Container(
+                                      child: LinearPercentIndicator(
+                                        // width: MediaQuery.of(context)
+                                        //         .size
+                                        //         .width /
+                                        //     10,
+                                        animation: true,
+                                        lineHeight: 14.0,
+                                        leading: Container(
+                                          width: ((MediaQuery.of(context)
+                                                      .size
+                                                      .width) <
+                                                  650)
+                                              ? 40
+                                              : 100,
+                                          child: Translate.TranslateAndSetText(
+                                              'ทั้งหมด',
+                                              Colors.green,
+                                              TextAlign.start,
+                                              FontWeight.w500,
+                                              FontWeight_.Fonts_T,
+                                              12,
+                                              1),
+                                        ),
+                                        animationDuration: 3000,
+                                        percent: (double.parse(
+                                                userModels.length.toString()))
+                                            .clamp(0.0, 1.0),
+                                        center: Translate.TranslateAndSetText(
+                                            (userModels.isEmpty)
+                                                ? '0 คน'
+                                                : '${nFormat2.format(userModels.length)} คน',
+                                            Colors.green,
+                                            TextAlign.end,
+                                            FontWeight.w500,
+                                            FontWeight_.Fonts_T,
+                                            12,
+                                            1),
+                                        linearStrokeCap:
+                                            LinearStrokeCap.roundAll,
+                                        progressColor: Colors.green[300],
                                       ),
                                     ),
                                     Container(
-                                      padding:
-                                          ((MediaQuery.of(context).size.width) <
+                                      child: LinearPercentIndicator(
+                                        // width: MediaQuery.of(context)
+                                        //         .size
+                                        //         .width /
+                                        //     10,
+                                        animation: true,
+                                        lineHeight: 14.0,
+                                        leading: Container(
+                                          width: ((MediaQuery.of(context)
+                                                      .size
+                                                      .width) <
                                                   650)
-                                              ? const EdgeInsets.all(5.0)
-                                              : const EdgeInsets.all(24.0),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.white,
-                                        // color: Color(0xFFA8BFDB),
+                                              ? 40
+                                              : 100,
+                                          child: Translate.TranslateAndSetText(
+                                              (user_today == 0.00)
+                                                  ? 'วันนี้ [0%]'
+                                                  : 'วันนี้ [${(((user_today ?? 0.0) * 100) / userModels.length ?? 0.0).toStringAsFixed(2)}%]',
+                                              Colors.red,
+                                              TextAlign.start,
+                                              FontWeight.w500,
+                                              FontWeight_.Fonts_T,
+                                              12,
+                                              1),
+                                        ),
+                                        animationDuration: 3000,
+                                        percent: (user_today /
+                                                double.parse(userModels.length
+                                                    .toString()))
+                                            .clamp(0.0, 1.0),
+                                        center: Translate.TranslateAndSetText(
+                                            '${nFormat2.format(user_today)} คน',
+                                            Colors.red,
+                                            TextAlign.end,
+                                            FontWeight.w500,
+                                            FontWeight_.Fonts_T,
+                                            12,
+                                            1),
+
+                                        linearStrokeCap:
+                                            LinearStrokeCap.roundAll,
+                                        progressColor: Colors.red[300],
                                       ),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                0, 0, 8, 8),
-                                            child: Container(
-                                              height: 40,
-                                              width: 40,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(7),
-                                                color: Colors.blue[700],
-                                              ),
-                                              child: const Icon(
-                                                Icons.people,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                          const Text(
-                                            'แอดมิน',
+                                    ),
+                                    // Text(
+                                    //   (total2_ == null) ? '0.00' : '${nFormat.format(total2_)}',
+                                    // ),
+                                    // const Text(
+                                    //   'บาท',
+                                    // ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding:
+                                    ((MediaQuery.of(context).size.width) < 650)
+                                        ? const EdgeInsets.all(5.0)
+                                        : const EdgeInsets.all(24.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white,
+                                  // color: Color(0xFFA8BFDB),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(0, 0, 8, 8),
+                                      child: Container(
+                                        height: 40,
+                                        width: 40,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(7),
+                                          color: Colors.red[700],
+                                        ),
+                                        child: const Icon(
+                                          Icons.account_balance_wallet,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    Translate.TranslateAndSetText(
+                                        'รวมรายรับ (ชำระแล้ว Cash/Bank)',
+                                        Colors.black,
+                                        TextAlign.start,
+                                        FontWeight.w500,
+                                        FontWeight_.Fonts_T,
+                                        12,
+                                        1),
+                                    Container(
+                                      child: LinearPercentIndicator(
+                                        // width: MediaQuery.of(context)
+                                        //         .size
+                                        //         .width /
+                                        //     10,
+                                        animation: true,
+                                        lineHeight: 14.0,
+                                        leading: Container(
+                                          width: ((MediaQuery.of(context)
+                                                      .size
+                                                      .width) <
+                                                  650)
+                                              ? 40
+                                              : 100,
+                                          child: Translate.TranslateAndSetText(
+                                              'ทั้งหมด ',
+                                              Colors.blue,
+                                              TextAlign.start,
+                                              FontWeight.w500,
+                                              FontWeight_.Fonts_T,
+                                              12,
+                                              1),
+                                        ),
+                                        animationDuration: 3000,
+                                        percent: (total1_).clamp(0.0, 1.0),
+                                        center: Translate.TranslateAndSetText(
+                                            (total1_ == null)
+                                                ? '0.00 บาท'
+                                                : '${nFormat.format(total1_)} บาท',
+                                            Colors.blue,
+                                            TextAlign.end,
+                                            FontWeight.w500,
+                                            FontWeight_.Fonts_T,
+                                            12,
+                                            1),
+                                        linearStrokeCap:
+                                            LinearStrokeCap.roundAll,
+                                        progressColor: Colors.blue[300],
+                                      ),
+                                    ),
+                                    Container(
+                                      child: LinearPercentIndicator(
+                                        // width: MediaQuery.of(context)
+                                        //         .size
+                                        //         .width /
+                                        //     10,
+                                        animation: true,
+                                        lineHeight: 14.0,
+                                        leading: Container(
+                                          width: ((MediaQuery.of(context)
+                                                      .size
+                                                      .width) <
+                                                  650)
+                                              ? 40
+                                              : 100,
+                                          child: Translate.TranslateAndSetText(
+                                              (totalcash_ == 0.00)
+                                                  ? 'Cash [0%]'
+                                                  : 'Cash [${(((totalcash_ ?? 0.0) * 100) / total1_ ?? 0.0).toStringAsFixed(2)}%]',
+                                              Colors.green,
+                                              TextAlign.start,
+                                              FontWeight.w500,
+                                              FontWeight_.Fonts_T,
+                                              12,
+                                              1),
+                                        ),
+                                        animationDuration: 3000,
+                                        percent: (totalcash_ / total1_)
+                                            .clamp(0.0, 1.0),
+                                        center: Translate.TranslateAndSetText(
+                                            (totalcash_ == null)
+                                                ? '0.00 บาท'
+                                                : '${nFormat.format(totalcash_)} บาท',
+                                            Colors.green,
+                                            TextAlign.end,
+                                            FontWeight.w500,
+                                            FontWeight_.Fonts_T,
+                                            12,
+                                            1),
+                                        linearStrokeCap:
+                                            LinearStrokeCap.roundAll,
+                                        progressColor: Colors.green[300],
+                                      ),
+                                    ),
+                                    Container(
+                                      child: LinearPercentIndicator(
+                                        // width: MediaQuery.of(context)
+                                        //         .size
+                                        //         .width /
+                                        //     10,
+                                        animation: true,
+                                        lineHeight: 14.0,
+                                        leading: Container(
+                                          width: ((MediaQuery.of(context)
+                                                      .size
+                                                      .width) <
+                                                  650)
+                                              ? 40
+                                              : 100,
+                                          child: Translate.TranslateAndSetText(
+                                              (totalbank == 0.00)
+                                                  ? 'Bank [0%]'
+                                                  : 'Bank [${(((totalbank ?? 0.0) * 100) / total1_ ?? 0.0).toStringAsFixed(2)}%]',
+                                              Colors.red,
+                                              TextAlign.start,
+                                              FontWeight.w500,
+                                              FontWeight_.Fonts_T,
+                                              12,
+                                              1),
+                                        ),
+                                        animationDuration: 3000,
+                                        percent: (totalbank / total1_)
+                                            .clamp(0.0, 1.0),
+                                        center: Translate.TranslateAndSetText(
+                                            (totalbank == null)
+                                                ? '0.00 บาท'
+                                                : '${nFormat.format(totalbank)} บาท',
+                                            Colors.red,
+                                            TextAlign.end,
+                                            FontWeight.w500,
+                                            FontWeight_.Fonts_T,
+                                            12,
+                                            1),
+                                        linearStrokeCap:
+                                            LinearStrokeCap.roundAll,
+                                        progressColor: Colors.red[300],
+                                      ),
+                                    ),
+                                    // Text(
+                                    //   (total2_ == null) ? '0.00' : '${nFormat.format(total2_)}',
+                                    // ),
+                                    // const Text(
+                                    //   'บาท',
+                                    // ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding:
+                                    ((MediaQuery.of(context).size.width) < 650)
+                                        ? const EdgeInsets.all(5.0)
+                                        : const EdgeInsets.all(24.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white,
+                                  // color: Color(0xFFA8BFDB),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(0, 0, 8, 8),
+                                      child: Container(
+                                        height: 40,
+                                        width: 40,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(7),
+                                          color: Colors.teal[700],
+                                        ),
+                                        child: const Icon(
+                                          Icons.monetization_on_rounded,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    Translate.TranslateAndSetText(
+                                        'รวมรายรับ (ชำระแล้ว )',
+                                        Colors.black,
+                                        TextAlign.start,
+                                        FontWeight.w500,
+                                        FontWeight_.Fonts_T,
+                                        12,
+                                        1),
+                                    const Row(
+                                      children: [
+                                        Expanded(
+                                          // width: ((MediaQuery.of(
+                                          //                 context)
+                                          //             .size
+                                          //             .width) <
+                                          //         650)
+                                          //     ? 40
+                                          //     : 100,
+                                          child: Text(
+                                            '',
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                              shadows: [
-                                                Shadow(
-                                                    color: Colors.black,
-                                                    offset: Offset(0, -5))
-                                              ],
-                                              color: Colors.transparent,
-                                              // decoration: TextDecoration
-                                              //     .underline,
-                                              decorationColor: Colors.grey,
-                                              decorationThickness: 4,
-                                              // decorationStyle:
-                                              //     TextDecorationStyle
-                                              //         .dashed,
                                               fontSize: 12,
+                                              // decoration:
+                                              //     TextDecoration.underline,
+                                              color: Colors.green,
                                               fontWeight: FontWeight.bold,
                                               fontFamily: FontWeight_.Fonts_T,
                                             ),
                                           ),
-                                          const Row(
-                                            children: [
-                                              Expanded(
-                                                // width: ((MediaQuery.of(
-                                                //                 context)
-                                                //             .size
-                                                //             .width) <
-                                                //         650)
-                                                //     ? 40
-                                                //     : 100,
-                                                child: Text(
-                                                  '',
-                                                  maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    // decoration:
-                                                    //     TextDecoration.underline,
-                                                    color: Colors.green,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T,
-                                                  ),
-                                                ),
-                                              ),
-                                              Text(
-                                                '',
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  // decoration:
-                                                  //     TextDecoration.underline,
-                                                  color: Colors.green,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T,
-                                                ),
-                                              ),
-                                            ],
+                                        ),
+                                        Text(
+                                          '',
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            // decoration:
+                                            //     TextDecoration.underline,
+                                            color: Colors.green,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
                                           ),
-                                          Container(
-                                            child: LinearPercentIndicator(
-                                              // width: MediaQuery.of(context)
-                                              //         .size
-                                              //         .width /
-                                              //     10,
-                                              animation: true,
-                                              lineHeight: 14.0,
-                                              leading: Container(
-                                                width: ((MediaQuery.of(context)
-                                                            .size
-                                                            .width) <
-                                                        650)
-                                                    ? 40
-                                                    : 100,
-                                                child: const Text(
-                                                  'ทั้งหมด',
-                                                  maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    // decoration:
-                                                    //     TextDecoration.underline,
-                                                    color: Colors.green,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T,
-                                                  ),
-                                                ),
-                                              ),
-                                              animationDuration: 3000,
-                                              percent: (double.parse(userModels
-                                                      .length
-                                                      .toString()))
-                                                  .clamp(0.0, 1.0),
-                                              center: Text(
-                                                (userModels.isEmpty)
-                                                    ? '0 คน'
-                                                    : '${nFormat2.format(userModels.length)} คน',
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                  fontSize: 11.5,
-
-                                                  color: Colors.black,
-                                                  // fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T,
-                                                ),
-                                              ),
-                                              linearStrokeCap:
-                                                  LinearStrokeCap.roundAll,
-                                              progressColor: Colors.green[300],
-                                            ),
-                                          ),
-                                          Container(
-                                            child: LinearPercentIndicator(
-                                              // width: MediaQuery.of(context)
-                                              //         .size
-                                              //         .width /
-                                              //     10,
-                                              animation: true,
-                                              lineHeight: 14.0,
-                                              leading: Container(
-                                                width: ((MediaQuery.of(context)
-                                                            .size
-                                                            .width) <
-                                                        650)
-                                                    ? 40
-                                                    : 100,
-                                                child: Text(
-                                                  (user_today == 0.00)
-                                                      ? 'วันนี้ [0%]'
-                                                      : 'วันนี้ [${(((user_today ?? 0.0) * 100) / userModels.length ?? 0.0).toStringAsFixed(2)}%]',
-                                                  maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    // decoration:
-                                                    //     TextDecoration.underline,
-                                                    color: Colors.red,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T,
-                                                  ),
-                                                ),
-                                              ),
-                                              animationDuration: 3000,
-                                              percent: (user_today /
-                                                      double.parse(userModels
-                                                          .length
-                                                          .toString()))
-                                                  .clamp(0.0, 1.0),
-                                              center: Text(
-                                                '${nFormat2.format(user_today)} คน',
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                  fontSize: 11.5,
-                                                  // decoration:
-                                                  //     TextDecoration.underline,
-                                                  color: Colors.black,
-                                                  // fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T,
-                                                ),
-                                              ),
-                                              linearStrokeCap:
-                                                  LinearStrokeCap.roundAll,
-                                              progressColor: Colors.red[300],
-                                            ),
-                                          ),
-                                          // Text(
-                                          //   (total2_ == null) ? '0.00' : '${nFormat.format(total2_)}',
-                                          // ),
-                                          // const Text(
-                                          //   'บาท',
-                                          // ),
-                                        ],
+                                        ),
+                                      ],
+                                    ),
+                                    Container(
+                                      child: LinearPercentIndicator(
+                                        // width: MediaQuery.of(context)
+                                        //         .size
+                                        //         .width /
+                                        //     10,
+                                        animation: true,
+                                        lineHeight: 14.0,
+                                        leading: Container(
+                                          width: ((MediaQuery.of(context)
+                                                      .size
+                                                      .width) <
+                                                  650)
+                                              ? 40
+                                              : 100,
+                                          child: Translate.TranslateAndSetText(
+                                              'ก่อน-หักส่วนลด',
+                                              Colors.green,
+                                              TextAlign.start,
+                                              FontWeight.w500,
+                                              FontWeight_.Fonts_T,
+                                              12,
+                                              1),
+                                        ),
+                                        animationDuration: 3000,
+                                        percent: (total2_).clamp(0.0, 1.0),
+                                        center: Translate.TranslateAndSetText(
+                                            (total2_ == null)
+                                                ? '0.00 บาท'
+                                                : '${nFormat.format(total2_)} บาท',
+                                            Colors.green,
+                                            TextAlign.end,
+                                            FontWeight.w500,
+                                            FontWeight_.Fonts_T,
+                                            12,
+                                            1),
+                                        linearStrokeCap:
+                                            LinearStrokeCap.roundAll,
+                                        progressColor: Colors.green[300],
                                       ),
                                     ),
                                     Container(
-                                      padding:
-                                          ((MediaQuery.of(context).size.width) <
+                                      child: LinearPercentIndicator(
+                                        // width: MediaQuery.of(context)
+                                        //         .size
+                                        //         .width /
+                                        //     10,
+                                        animation: true,
+                                        lineHeight: 14.0,
+                                        leading: Container(
+                                          width: ((MediaQuery.of(context)
+                                                      .size
+                                                      .width) <
                                                   650)
-                                              ? const EdgeInsets.all(5.0)
-                                              : const EdgeInsets.all(24.0),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.white,
-                                        // color: Color(0xFFA8BFDB),
-                                      ),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                0, 0, 8, 8),
-                                            child: Container(
-                                              height: 40,
-                                              width: 40,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(7),
-                                                color: Colors.red[700],
-                                              ),
-                                              child: const Icon(
-                                                Icons.account_balance_wallet,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                          const Text(
-                                            'รวมรายรับ (ชำระแล้ว Cash/Bank)',
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              shadows: [
-                                                Shadow(
-                                                    color: Colors.black,
-                                                    offset: Offset(0, -5))
-                                              ],
-                                              color: Colors.transparent,
-                                              // decoration: TextDecoration
-                                              //     .underline,
-                                              decorationColor: Colors.grey,
-                                              decorationThickness: 4,
-                                              // decorationStyle:
-                                              //     TextDecorationStyle
-                                              //         .dashed,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T,
-                                            ),
-                                          ),
-                                          Container(
-                                            child: LinearPercentIndicator(
-                                              // width: MediaQuery.of(context)
-                                              //         .size
-                                              //         .width /
-                                              //     10,
-                                              animation: true,
-                                              lineHeight: 14.0,
-                                              leading: Container(
-                                                width: ((MediaQuery.of(context)
-                                                            .size
-                                                            .width) <
-                                                        650)
-                                                    ? 40
-                                                    : 100,
-                                                child: const Text(
-                                                  'ทั้งหมด',
-                                                  maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    // decoration:
-                                                    //     TextDecoration.underline,
-                                                    color: Colors.blue,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T,
-                                                  ),
-                                                ),
-                                              ),
-                                              animationDuration: 3000,
-                                              percent:
-                                                  (total1_).clamp(0.0, 1.0),
-                                              center: Text(
-                                                (total1_ == null)
-                                                    ? '0.00 บาท'
-                                                    : '${nFormat.format(total1_)} บาท',
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                  fontSize: 11.5,
-                                                  // decoration:
-                                                  //     TextDecoration.underline,
-                                                  color: Colors.black,
-                                                  // fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T,
-                                                ),
-                                              ),
-                                              linearStrokeCap:
-                                                  LinearStrokeCap.roundAll,
-                                              progressColor: Colors.blue[300],
-                                            ),
-                                          ),
-                                          Container(
-                                            child: LinearPercentIndicator(
-                                              // width: MediaQuery.of(context)
-                                              //         .size
-                                              //         .width /
-                                              //     10,
-                                              animation: true,
-                                              lineHeight: 14.0,
-                                              leading: Container(
-                                                width: ((MediaQuery.of(context)
-                                                            .size
-                                                            .width) <
-                                                        650)
-                                                    ? 40
-                                                    : 100,
-                                                child: Text(
-                                                  (totalcash_ == 0.00)
-                                                      ? 'Cash [0%]'
-                                                      : 'Cash [${(((totalcash_ ?? 0.0) * 100) / total1_ ?? 0.0).toStringAsFixed(2)}%]',
-                                                  maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    // decoration:
-                                                    //     TextDecoration.underline,
-                                                    color: Colors.green,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T,
-                                                  ),
-                                                ),
-                                              ),
-                                              animationDuration: 3000,
-                                              percent: (totalcash_ / total1_)
-                                                  .clamp(0.0, 1.0),
-                                              center: Text(
-                                                (totalcash_ == null)
-                                                    ? '0.00 บาท'
-                                                    : '${nFormat.format(totalcash_)} บาท',
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                  fontSize: 11.5,
+                                              ? 40
+                                              : 100,
+                                          child: Translate.TranslateAndSetText(
+                                              'หลัง-หักส่วนลด',
+                                              Colors.red,
+                                              TextAlign.start,
+                                              FontWeight.w500,
+                                              FontWeight_.Fonts_T,
+                                              12,
+                                              1),
+                                        ),
+                                        animationDuration: 3000,
+                                        percent:
+                                            (total1_ / total2_).clamp(0.0, 1.0),
+                                        center: Translate.TranslateAndSetText(
+                                            (total1_ == null)
+                                                ? '0.00 บาท'
+                                                : '${nFormat.format(total1_)} บาท',
+                                            Colors.red,
+                                            TextAlign.end,
+                                            FontWeight.w500,
+                                            FontWeight_.Fonts_T,
+                                            12,
+                                            1),
 
-                                                  color: Colors.black,
-                                                  // fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T,
-                                                ),
-                                              ),
-                                              linearStrokeCap:
-                                                  LinearStrokeCap.roundAll,
-                                              progressColor: Colors.green[300],
-                                            ),
-                                          ),
-                                          Container(
-                                            child: LinearPercentIndicator(
-                                              // width: MediaQuery.of(context)
-                                              //         .size
-                                              //         .width /
-                                              //     10,
-                                              animation: true,
-                                              lineHeight: 14.0,
-                                              leading: Container(
-                                                width: ((MediaQuery.of(context)
-                                                            .size
-                                                            .width) <
-                                                        650)
-                                                    ? 40
-                                                    : 100,
-                                                child: Text(
-                                                  (totalbank == 0.00)
-                                                      ? 'Bank [0%]'
-                                                      : 'Bank [${(((totalbank ?? 0.0) * 100) / total1_ ?? 0.0).toStringAsFixed(2)}%]',
-                                                  maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    // decoration:
-                                                    //     TextDecoration.underline,
-                                                    color: Colors.red,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T,
-                                                  ),
-                                                ),
-                                              ),
-                                              animationDuration: 3000,
-                                              percent: (totalbank / total1_)
-                                                  .clamp(0.0, 1.0),
-                                              center: Text(
-                                                (totalbank == null)
-                                                    ? '0.00 บาท'
-                                                    : '${nFormat.format(totalbank)} บาท',
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                  fontSize: 11.5,
-                                                  // decoration:
-                                                  //     TextDecoration.underline,
-                                                  color: Colors.black,
-                                                  // fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T,
-                                                ),
-                                              ),
-                                              linearStrokeCap:
-                                                  LinearStrokeCap.roundAll,
-                                              progressColor: Colors.red[300],
-                                            ),
-                                          ),
-                                          // Text(
-                                          //   (total2_ == null) ? '0.00' : '${nFormat.format(total2_)}',
-                                          // ),
-                                          // const Text(
-                                          //   'บาท',
-                                          // ),
-                                        ],
+                                        linearStrokeCap:
+                                            LinearStrokeCap.roundAll,
+                                        progressColor: Colors.red[300],
                                       ),
                                     ),
-                                    Container(
-                                      padding:
-                                          ((MediaQuery.of(context).size.width) <
-                                                  650)
-                                              ? const EdgeInsets.all(5.0)
-                                              : const EdgeInsets.all(24.0),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.white,
-                                        // color: Color(0xFFA8BFDB),
-                                      ),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                0, 0, 8, 8),
-                                            child: Container(
-                                              height: 40,
-                                              width: 40,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(7),
-                                                color: Colors.teal[700],
-                                              ),
-                                              child: const Icon(
-                                                Icons.monetization_on_rounded,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                          const Text(
-                                            'รวมรายรับ (ชำระแล้ว )',
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              shadows: [
-                                                Shadow(
-                                                    color: Colors.black,
-                                                    offset: Offset(0, -5))
-                                              ],
-                                              color: Colors.transparent,
-                                              // decoration: TextDecoration
-                                              //     .underline,
-                                              decorationColor: Colors.grey,
-                                              decorationThickness: 4,
-                                              // decorationStyle:
-                                              //     TextDecorationStyle
-                                              //         .dashed,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T,
-                                            ),
-                                          ),
-                                          const Row(
-                                            children: [
-                                              Expanded(
-                                                // width: ((MediaQuery.of(
-                                                //                 context)
-                                                //             .size
-                                                //             .width) <
-                                                //         650)
-                                                //     ? 40
-                                                //     : 100,
-                                                child: Text(
-                                                  '',
-                                                  maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    // decoration:
-                                                    //     TextDecoration.underline,
-                                                    color: Colors.green,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T,
-                                                  ),
-                                                ),
-                                              ),
-                                              Text(
-                                                '',
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  // decoration:
-                                                  //     TextDecoration.underline,
-                                                  color: Colors.green,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Container(
-                                            child: LinearPercentIndicator(
-                                              // width: MediaQuery.of(context)
-                                              //         .size
-                                              //         .width /
-                                              //     10,
-                                              animation: true,
-                                              lineHeight: 14.0,
-                                              leading: Container(
-                                                width: ((MediaQuery.of(context)
-                                                            .size
-                                                            .width) <
-                                                        650)
-                                                    ? 40
-                                                    : 100,
-                                                child: const Text(
-                                                  'ก่อน-หักส่วนลด',
-                                                  maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    // decoration:
-                                                    //     TextDecoration.underline,
-                                                    color: Colors.green,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T,
-                                                  ),
-                                                ),
-                                              ),
-                                              animationDuration: 3000,
-                                              percent:
-                                                  (total2_).clamp(0.0, 1.0),
-                                              center: Text(
-                                                (total2_ == null)
-                                                    ? '0.00 บาท'
-                                                    : '${nFormat.format(total2_)} บาท',
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                  fontSize: 11.5,
 
-                                                  color: Colors.black,
-                                                  // fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T,
-                                                ),
-                                              ),
-                                              linearStrokeCap:
-                                                  LinearStrokeCap.roundAll,
-                                              progressColor: Colors.green[300],
-                                            ),
-                                          ),
-                                          Container(
-                                            child: LinearPercentIndicator(
-                                              // width: MediaQuery.of(context)
-                                              //         .size
-                                              //         .width /
-                                              //     10,
-                                              animation: true,
-                                              lineHeight: 14.0,
-                                              leading: Container(
-                                                width: ((MediaQuery.of(context)
-                                                            .size
-                                                            .width) <
-                                                        650)
-                                                    ? 40
-                                                    : 100,
-                                                child: const Text(
-                                                  'หลัง-หักส่วนลด',
-                                                  maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    // decoration:
-                                                    //     TextDecoration.underline,
-                                                    color: Colors.red,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T,
-                                                  ),
-                                                ),
-                                              ),
-                                              animationDuration: 3000,
-                                              percent: (total1_ / total2_)
-                                                  .clamp(0.0, 1.0),
-                                              center: Text(
-                                                (total1_ == null)
-                                                    ? '0.00 บาท'
-                                                    : '${nFormat.format(total1_)} บาท',
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                  fontSize: 11.5,
-                                                  // decoration:
-                                                  //     TextDecoration.underline,
-                                                  color: Colors.black,
-                                                  // fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T,
-                                                ),
-                                              ),
-                                              linearStrokeCap:
-                                                  LinearStrokeCap.roundAll,
-                                              progressColor: Colors.red[300],
-                                            ),
-                                          ),
-
-                                          // Text(
-                                          //   (total2_ == null) ? '0.00' : '${nFormat.format(total2_)}',
-                                          // ),
-                                          // const Text(
-                                          //   'บาท',
-                                          // ),
-                                        ],
-                                      ),
-                                    ),
-                                  ]
-                                  // itemBuilder: (context, index) =>
-                                  //     demoTransactions[index],
-                                  );
-                            })
+                                    // Text(
+                                    //   (total2_ == null) ? '0.00' : '${nFormat.format(total2_)}',
+                                    // ),
+                                    // const Text(
+                                    //   'บาท',
+                                    // ),
+                                  ],
+                                ),
+                              ),
+                            ]
+                            // itemBuilder: (context, index) =>
+                            //     demoTransactions[index],
+                            )
                       ]),
                 ),
               )),

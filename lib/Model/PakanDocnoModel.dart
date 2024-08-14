@@ -20,6 +20,11 @@ class PakanDocnoModel {
   String? max_doctax;
   String? min_date;
   String? max_date;
+  String? total_bill;
+
+  String? pvat_pakan_cid;
+  String? vat_pakan_cid;
+  String? total_pakan_cid;
 
   PakanDocnoModel(
       {this.st,
@@ -42,7 +47,11 @@ class PakanDocnoModel {
       this.min_doctax,
       this.max_doctax,
       this.min_date,
-      this.max_date});
+      this.max_date,
+      this.total_bill,
+      this.pvat_pakan_cid,
+      this.vat_pakan_cid,
+      this.total_pakan_cid});
 
   PakanDocnoModel.fromJson(Map<String, dynamic> json) {
     st = json['st'];
@@ -66,6 +75,11 @@ class PakanDocnoModel {
     max_doctax = json['max_doctax'];
     min_date = json['min_date'];
     max_date = json['max_date'];
+    total_bill = json['total_bill'];
+
+    pvat_pakan_cid = json['pvat_pakan_cid'];
+    vat_pakan_cid = json['vat_pakan_cid'];
+    total_pakan_cid = json['total_pakan_cid'];
   }
 
   Map<String, dynamic> toJson() {
@@ -91,6 +105,12 @@ class PakanDocnoModel {
     data['max_doctax'] = this.max_doctax;
     data['min_date'] = this.min_date;
     data['max_date'] = this.max_date;
+    data['total_bill'] = this.total_bill;
+
+    data['pvat_pakan_cid'] = this.pvat_pakan_cid;
+    data['vat_pakan_cid'] = this.vat_pakan_cid;
+    data['total_pakan_cid'] = this.total_pakan_cid;
+
     return data;
   }
 }

@@ -11,6 +11,7 @@ import '../Model/GetTeNant_Model.dart';
 import '../Model/GetUser_Model.dart';
 import '../Model/electricity_model.dart';
 import '../PDF/PDF_Billing/pdf_BillingNote_IV.dart';
+import '../PDF_TP10/PDF_Billing_TP10/pdf_BillingNote_IV_TP10.dart';
 import '../PDF_TP2/PDF_Billing_TP2/pdf_BillingNote_IV_TP2.dart';
 import '../PDF_TP3/PDF_Billing_TP3/pdf_BillingNote_IV_TP3.dart';
 import '../PDF_TP4/PDF_Billing_TP4/pdf_BillingNote_IV_TP4.dart';
@@ -746,6 +747,52 @@ class Man_BillingNoteInvlice_PDF {
             End_Bill_Paydate,
             fonts_pdf,
             Water_electricity);
+      } else if (tem_page_ser.toString() == '6') {
+        Pdfgen_BillingNoteInvlice_TP10.exportPDF_BillingNoteInvlice_TP10(
+            foder,
+            Cust_no,
+            cid_,
+            Zone_s,
+            Ln_s,
+            fname,
+            // ser,
+            tableData003,
+            context,
+            Get_Value_cid,
+            namenew,
+            sum_pvat,
+            sum_vat,
+            sum_wht,
+            sum_amt,
+            sum_disamt,
+            sum_total,
+            renTal_name,
+            Form_bussshop,
+            Form_address,
+            Form_tel,
+            Form_email,
+            Form_tax,
+            Form_nameshop,
+            bill_addr,
+            bill_email,
+            bill_tel,
+            bill_tax,
+            bill_name,
+            newValuePDFimg,
+            numinvoice,
+            Datex_invoice,
+            payment_Ptname1,
+            payment_Ptname2,
+            payment_Bno1,
+            payment_Ptser1,
+            bank1,
+            img1,
+            btype1,
+            ptser1,
+            ptname1,
+            Preview_ser,
+            End_Bill_Paydate,
+            fonts_pdf);
       }
     });
     // if (tem_page_ser.toString() == '0' || tem_page_ser == null) {

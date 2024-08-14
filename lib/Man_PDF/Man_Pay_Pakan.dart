@@ -11,6 +11,8 @@ import '../Model/Read_DataONBill_PDF_Model.dart';
 import '../Model/trans_re_bill_history_model.dart';
 import '../PDF/PDF_Receipt/pdf_AC_his_statusbill.dart';
 
+import '../PDF_TP10/PDF_Billing_TP10/pdf_BillingNote_IV_TP10.dart';
+import '../PDF_TP10/PDF_Pakan_TP10/pdf_Receipt_PayPakan_TP10.dart';
 import '../PDF_TP2/PDF_Receipt_TP2/pdf_AC_his_statusbill_TP2.dart';
 import '../PDF_TP3/PDF_Pakan_TP3/pdf_Receipt_PayPakan_TP3.dart';
 import '../PDF_TP3/PDF_Receipt_TP3/pdf_AC_his_statusbill_TP3.dart';
@@ -25,6 +27,7 @@ import '../PDF_TP8/PDF_Receipt_TP8/pdf_AC_his_statusbill_TP8.dart';
 import '../PDF_TP8_Choice/PDF_Pakan_TP8_Choice/pdf_Receipt_PayPakan_TP8.dart';
 import '../PDF_TP8_Ortorkor/PDF_Pakan_TP8_Ortorkor/pdf_Receipt_PayPakan_TP8.dart';
 import '../PDF_TP8_Ortorkor/PDF_Receipt_TP8_Ortorkor/pdf_AC_his_statusbill_TP8.dart';
+import '../PDF_TP9/PDF_Pakan_TP9/pdf_Receipt_PayPakan_TP9.dart';
 import '../PDF_TP9_Lao/PDF_Pakan_TP9/pdf_Receipt_PayPakan_TP9.dart';
 
 class ManPay_Receipt_PakanPDF {
@@ -575,6 +578,87 @@ class ManPay_Receipt_PakanPDF {
             Ln_s,
             cid_,
             fname,
+            fonts_pdf);
+      } else if (tem_page_ser.toString() == '5') {
+        PdfgenReceipt_PayPakan_TP9.exportPDF_Receipt_PayPakan_TP9(
+            foder,
+            tableData00,
+            tableData01,
+            context,
+            _TransReBillHistoryModels,
+            'Num_cid',
+            'Namenew',
+            '${sum_pvat}',
+            sum_vat,
+            sum_wht,
+            sum_amt,
+            sum_disp,
+            sum_disamt,
+            '${(sum_amt - sum_disamt)}',
+            renTal_name,
+            scname_,
+            cname_,
+            addr_,
+            tax_,
+            bill_addr,
+            bill_email,
+            bill_tel,
+            bill_tax,
+            bill_name,
+            newValuePDFimg,
+            numinvoice,
+            numdoctax,
+            finnancetransModels,
+            date_Transaction,
+            date_pay,
+            Howto_LockJonPay,
+            dis_sum_Matjum,
+            TitleType_Default_Receipt_Name,
+            dis_sum_Pakan,
+            sum_fee,
+            Cust_no,
+            Zone_s,
+            Ln_s,
+            cid_,
+            fname,
+            fonts_pdf);
+      } else if (tem_page_ser.toString() == '6') {
+        PdfgenReceipt_PayPakan_TP10.exportPDF_Receipt_PayPakan_TP10(
+            foder,
+            tableData00,
+            tableData01,
+            context,
+            _TransReBillHistoryModels,
+            'Num_cid',
+            'Namenew',
+            '${sum_pvat}',
+            sum_vat,
+            sum_wht,
+            sum_amt,
+            sum_disp,
+            sum_disamt,
+            '${(sum_amt - sum_disamt)}',
+            renTal_name,
+            scname_,
+            cname_,
+            addr_,
+            tax_,
+            bill_addr,
+            bill_email,
+            bill_tel,
+            bill_tax,
+            bill_name,
+            newValuePDFimg,
+            numinvoice,
+            numdoctax,
+            finnancetransModels,
+            date_Transaction,
+            date_pay,
+            Howto_LockJonPay,
+            dis_sum_Matjum,
+            TitleType_Default_Receipt_Name,
+            dis_sum_Pakan,
+            sum_fee,
             fonts_pdf);
       }
     });

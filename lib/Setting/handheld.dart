@@ -13,6 +13,7 @@ import '../Model/GetPayMent_Model.dart';
 import '../Model/GetRenTal_Model.dart';
 import '../Model/Get_C_print.dart';
 import '../Style/ThaiBaht.dart';
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 
 class HandHeld extends StatefulWidget {
@@ -279,16 +280,15 @@ class _HandHeldState extends State<HandHeld> {
             child: Row(
               children: [
                 Expanded(
-                  child: AutoSizeText(
-                    minFontSize: 20,
-                    maxFontSize: 30,
-                    'ตั้งค่า Handheld',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: FontWeight_.Fonts_T,
-                    ),
-                  ),
+                  child: Translate.TranslateAndSet_TextAutoSize(
+                      'ตั้งค่า Handheld',
+                      SettingScreen_Color.Colors_Text1_,
+                      TextAlign.center,
+                      FontWeight.bold,
+                      FontWeight_.Fonts_T,
+                      8,
+                      20,
+                      1),
                 ),
               ],
             ),
@@ -321,18 +321,17 @@ class _HandHeldState extends State<HandHeld> {
                                         });
                                       },
                                       child: Center(
-                                        child: AutoSizeText(
-                                          minFontSize: 10,
-                                          maxFontSize: 20,
-                                          'ตั้งค่าหน้ากระดาษ',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: index_b == 1
-                                                ? Colors.white
-                                                : Colors.black,
-                                            fontFamily: FontWeight_.Fonts_T,
-                                          ),
-                                        ),
+                                        child: Translate
+                                            .TranslateAndSet_TextAutoSize(
+                                                'ตั้งค่าหน้ากระดาษ',
+                                                SettingScreen_Color
+                                                    .Colors_Text1_,
+                                                TextAlign.center,
+                                                FontWeight.bold,
+                                                FontWeight_.Fonts_T,
+                                                8,
+                                                20,
+                                                1),
                                       ),
                                     ),
                                   ),
@@ -359,18 +358,17 @@ class _HandHeldState extends State<HandHeld> {
                                         });
                                       },
                                       child: Center(
-                                        child: AutoSizeText(
-                                          minFontSize: 10,
-                                          maxFontSize: 20,
-                                          'ตั้งค่าแสดงรายการ เพิ่มค่าบริการ',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: index_b == 2
-                                                ? Colors.white
-                                                : Colors.black,
-                                            fontFamily: FontWeight_.Fonts_T,
-                                          ),
-                                        ),
+                                        child: Translate
+                                            .TranslateAndSet_TextAutoSize(
+                                                'ตั้งค่าแสดงรายการ เพิ่มค่าบริการ',
+                                                SettingScreen_Color
+                                                    .Colors_Text1_,
+                                                TextAlign.center,
+                                                FontWeight.bold,
+                                                FontWeight_.Fonts_T,
+                                                8,
+                                                20,
+                                                1),
                                       ),
                                     ),
                                   ),
@@ -397,18 +395,18 @@ class _HandHeldState extends State<HandHeld> {
                                         });
                                       },
                                       child: Center(
-                                        child: AutoSizeText(
-                                          minFontSize: 10,
-                                          maxFontSize: 20,
-                                          'ตั้งค่าแสดงรายการ ช่องทางชำระ',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: index_b == 3
-                                                ? Colors.white
-                                                : Colors.black,
-                                            fontFamily: FontWeight_.Fonts_T,
-                                          ),
-                                        ),
+                                        child: Translate
+                                            .TranslateAndSet_TextAutoSize(
+                                                'ตั้งค่าแสดงรายการ ช่องทางชำระ',
+                                                index_b == 3
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                                TextAlign.center,
+                                                FontWeight.bold,
+                                                FontWeight_.Fonts_T,
+                                                8,
+                                                20,
+                                                1),
                                       ),
                                     ),
                                   ),
@@ -448,17 +446,15 @@ class _HandHeldState extends State<HandHeld> {
               flex: 1,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: AutoSizeText(
-                  'Preview >>> ',
-                  overflow: TextOverflow.ellipsis,
-                  minFontSize: 10,
-                  maxFontSize: 25,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: FontWeight_.Fonts_T,
-                  ),
-                ),
+                child: Translate.TranslateAndSet_TextAutoSize(
+                    'Preview >>> ',
+                    Colors.black,
+                    TextAlign.center,
+                    FontWeight.bold,
+                    FontWeight_.Fonts_T,
+                    8,
+                    20,
+                    1),
               ),
             ),
             Expanded(
@@ -477,16 +473,49 @@ class _HandHeldState extends State<HandHeld> {
                             Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  'เพิ่มรายการชำระ',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color:
-                                          PeopleChaoScreen_Color.Colors_Text1_,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: FontWeight_.Fonts_T
-                                      //fontSize: 10.0
-                                      ),
+                                child: Translate.TranslateAndSet_TextAutoSize(
+                                    'เพิ่มรายการชำระ',
+                                    PeopleChaoScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    8,
+                                    20,
+                                    1),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(15),
+                                        topRight: Radius.circular(15),
+                                        bottomLeft: Radius.circular(15),
+                                        bottomRight: Radius.circular(15)),
+                                    border: Border.all(
+                                        color: Colors.black, width: 1),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'รายการชำระ',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
+                                  ),
                                 ),
                               ),
                             ),
@@ -510,50 +539,17 @@ class _HandHeldState extends State<HandHeld> {
                                   ),
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'รายการชำระ',
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          color: PeopleChaoScreen_Color
-                                              .Colors_Text1_,
-                                          fontFamily: Font_.Fonts_T
-                                          //fontSize: 10.0
-                                          ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(15),
-                                        topRight: Radius.circular(15),
-                                        bottomLeft: Radius.circular(15),
-                                        bottomRight: Radius.circular(15)),
-                                    border: Border.all(
-                                        color: Colors.black, width: 1),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'ยอดชำระ',
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          color: PeopleChaoScreen_Color
-                                              .Colors_Text1_,
-                                          fontFamily: Font_.Fonts_T
-                                          //fontSize: 10.0
-                                          ),
-                                    ),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'ยอดชำระ',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
                                   ),
                                 ),
                               ),
@@ -717,18 +713,19 @@ class _HandHeldState extends State<HandHeld> {
                                           ),
                                   ),
                                   Center(
-                                    child: AutoSizeText(
-                                      minFontSize: 5,
-                                      maxFontSize: 12,
-                                      expModels[i].show_han == '1'
-                                          ? 'เปิดอยู่'
-                                          : 'ปิดอยู่',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            expModels[i].show_han == '1'
+                                                ? 'เปิดอยู่'
+                                                : 'ปิดอยู่',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
                                   ),
                                 ],
                               )),
@@ -844,17 +841,15 @@ class _HandHeldState extends State<HandHeld> {
               flex: 1,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: AutoSizeText(
-                  'Preview >>> ',
-                  overflow: TextOverflow.ellipsis,
-                  minFontSize: 10,
-                  maxFontSize: 25,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: FontWeight_.Fonts_T,
-                  ),
-                ),
+                child: Translate.TranslateAndSet_TextAutoSize(
+                    'Preview >>> ',
+                    PeopleChaoScreen_Color.Colors_Text1_,
+                    TextAlign.center,
+                    FontWeight.bold,
+                    FontWeight_.Fonts_T,
+                    8,
+                    20,
+                    1),
               ),
             ),
             Expanded(
@@ -873,17 +868,15 @@ class _HandHeldState extends State<HandHeld> {
                             Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  'ช่องทางการชำระ',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color:
-                                          PeopleChaoScreen_Color.Colors_Text1_,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: FontWeight_.Fonts_T
-                                      //fontSize: 10.0
-                                      ),
-                                ),
+                                child: Translate.TranslateAndSet_TextAutoSize(
+                                    'ช่องทางการชำระ',
+                                    PeopleChaoScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    8,
+                                    20,
+                                    1),
                               ),
                             ),
                           ],
@@ -1029,16 +1022,20 @@ class _HandHeldState extends State<HandHeld> {
                                                                 Navigator.pop(
                                                                     context,
                                                                     'OK'),
-                                                            child: const Text(
-                                                              'ปิด',
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontWeight:
+                                                            child: Translate
+                                                                .TranslateAndSet_TextAutoSize(
+                                                                    'ปิด',
+                                                                    Colors
+                                                                        .white,
+                                                                    TextAlign
+                                                                        .center,
                                                                     FontWeight
                                                                         .bold,
-                                                              ),
-                                                            ),
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                                    8,
+                                                                    20,
+                                                                    1),
                                                           ),
                                                         ),
                                                       )
@@ -1185,18 +1182,19 @@ class _HandHeldState extends State<HandHeld> {
                                           ),
                                   ),
                                   Center(
-                                    child: AutoSizeText(
-                                      minFontSize: 5,
-                                      maxFontSize: 12,
-                                      _PayMentModels[i].ser_han == '1'
-                                          ? 'เปิดอยู่'
-                                          : 'ปิดอยู่',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            _PayMentModels[i].ser_han == '1'
+                                                ? 'เปิดอยู่'
+                                                : 'ปิดอยู่',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
                                   ),
                                 ],
                               )),
@@ -1227,17 +1225,15 @@ class _HandHeldState extends State<HandHeld> {
               flex: 1,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: AutoSizeText(
-                  'Preview >>> ',
-                  overflow: TextOverflow.ellipsis,
-                  minFontSize: 10,
-                  maxFontSize: 25,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: FontWeight_.Fonts_T,
-                  ),
-                ),
+                child: Translate.TranslateAndSet_TextAutoSize(
+                    'Preview >>> ',
+                    PeopleChaoScreen_Color.Colors_Text1_,
+                    TextAlign.center,
+                    FontWeight.bold,
+                    FontWeight_.Fonts_T,
+                    8,
+                    20,
+                    1),
               ),
             ),
             Expanded(
@@ -1338,11 +1334,18 @@ class _HandHeldState extends State<HandHeld> {
                                     style: TextStyle(fontSize: 12),
                                   )),
                                   Expanded(
-                                      child: Text(
-                                    'ทดสอบ',
-                                    textAlign: TextAlign.end,
-                                    style: TextStyle(fontSize: 12),
-                                  )),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'ทดสอบ',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
+                                  ),
                                 ],
                               )
                             : SizedBox(),
@@ -1350,17 +1353,31 @@ class _HandHeldState extends State<HandHeld> {
                             ? Row(
                                 children: [
                                   Expanded(
-                                      child: Text(
-                                    'ร้านค้า',
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(fontSize: 12),
-                                  )),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'ร้านค้า',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
+                                  ),
                                   Expanded(
-                                      child: Text(
-                                    'ร้านขนมจีน',
-                                    textAlign: TextAlign.end,
-                                    style: TextStyle(fontSize: 12),
-                                  )),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'ร้านขนมจีน',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
+                                  ),
                                 ],
                               )
                             : SizedBox(),
@@ -1375,12 +1392,19 @@ class _HandHeldState extends State<HandHeld> {
                                         style: TextStyle(fontSize: 12),
                                       )),
                                   Expanded(
-                                      flex: 6,
-                                      child: Text(
-                                        'แม่เพอร์ตี้ เช่าเพอร์ตี้',
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(fontSize: 12),
-                                      )),
+                                    flex: 6,
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'แม่เพอร์ตี้ เช่าเพอร์ตี้',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
+                                  ),
                                 ],
                               )
                             : SizedBox(),
@@ -1388,11 +1412,18 @@ class _HandHeldState extends State<HandHeld> {
                             ? Row(
                                 children: [
                                   Expanded(
-                                      child: Text(
-                                    'เลขที่ใบเสร็จ',
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(fontSize: 12),
-                                  )),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'เลขที่ใบเสร็จ',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
+                                  ),
                                   Expanded(
                                       child: Text(
                                     'RE66-05-000059',
@@ -1406,11 +1437,18 @@ class _HandHeldState extends State<HandHeld> {
                             ? Row(
                                 children: [
                                   Expanded(
-                                      child: Text(
-                                    'วันที่',
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(fontSize: 12),
-                                  )),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'วันที่',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
+                                  ),
                                   Expanded(
                                       child: Text(
                                     '$_Date',
@@ -1424,11 +1462,18 @@ class _HandHeldState extends State<HandHeld> {
                             ? Row(
                                 children: [
                                   Expanded(
-                                      child: Text(
-                                    'เวลา',
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(fontSize: 12),
-                                  )),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'เวลา',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
+                                  ),
                                   Expanded(
                                       child: Text(
                                     '$_Time',
@@ -1442,11 +1487,18 @@ class _HandHeldState extends State<HandHeld> {
                             ? Row(
                                 children: [
                                   Expanded(
-                                      child: Text(
-                                    'โซน',
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(fontSize: 12),
-                                  )),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'โซน',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
+                                  ),
                                   Expanded(
                                       child: Text(
                                     'A',
@@ -1460,11 +1512,18 @@ class _HandHeldState extends State<HandHeld> {
                             ? Row(
                                 children: [
                                   Expanded(
-                                      child: Text(
-                                    'พื้นที่',
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(fontSize: 12),
-                                  )),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'พื้นที่',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
+                                  ),
                                   Expanded(
                                       child: Text(
                                     'A01',
@@ -1477,17 +1536,27 @@ class _HandHeldState extends State<HandHeld> {
                         Row(
                           children: [
                             Expanded(
-                                child: Text(
-                              'รายการ',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(fontSize: 12),
-                            )),
+                              child: Translate.TranslateAndSet_TextAutoSize(
+                                  'รายการ',
+                                  PeopleChaoScreen_Color.Colors_Text1_,
+                                  TextAlign.center,
+                                  FontWeight.bold,
+                                  FontWeight_.Fonts_T,
+                                  8,
+                                  20,
+                                  1),
+                            ),
                             Expanded(
-                                child: Text(
-                              'รวม',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(fontSize: 12),
-                            )),
+                              child: Translate.TranslateAndSet_TextAutoSize(
+                                  'รวม',
+                                  PeopleChaoScreen_Color.Colors_Text1_,
+                                  TextAlign.center,
+                                  FontWeight.bold,
+                                  FontWeight_.Fonts_T,
+                                  8,
+                                  20,
+                                  1),
+                            ),
                           ],
                         ),
                         Divider(
@@ -1496,11 +1565,16 @@ class _HandHeldState extends State<HandHeld> {
                         Row(
                           children: [
                             Expanded(
-                                child: Text(
-                              'ค่าเช่า',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(fontSize: 10),
-                            )),
+                              child: Translate.TranslateAndSet_TextAutoSize(
+                                  'ค่าเช่า',
+                                  PeopleChaoScreen_Color.Colors_Text1_,
+                                  TextAlign.center,
+                                  FontWeight.bold,
+                                  FontWeight_.Fonts_T,
+                                  8,
+                                  20,
+                                  1),
+                            ),
                             Expanded(
                                 child: Text(
                               '200.00',
@@ -1521,11 +1595,16 @@ class _HandHeldState extends State<HandHeld> {
                         Row(
                           children: [
                             Expanded(
-                                child: Text(
-                              'รวม',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(fontSize: 16),
-                            )),
+                              child: Translate.TranslateAndSet_TextAutoSize(
+                                  'รวม',
+                                  PeopleChaoScreen_Color.Colors_Text1_,
+                                  TextAlign.center,
+                                  FontWeight.bold,
+                                  FontWeight_.Fonts_T,
+                                  8,
+                                  20,
+                                  1),
+                            ),
                             Expanded(
                                 child: Text(
                               '200.00',
@@ -1556,11 +1635,18 @@ class _HandHeldState extends State<HandHeld> {
                                     style: TextStyle(fontSize: 12),
                                   )),
                                   Expanded(
-                                      child: Text(
-                                    'ชำระเงินสด',
-                                    textAlign: TextAlign.end,
-                                    style: TextStyle(fontSize: 12),
-                                  )),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'ชำระเงินสด',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
+                                  ),
                                 ],
                               )
                             : SizedBox(),
@@ -1634,17 +1720,15 @@ class _HandHeldState extends State<HandHeld> {
                                         bottomRight: Radius.circular(10)),
                                   ),
                                   padding: const EdgeInsets.all(8.0),
-                                  child: AutoSizeText(
-                                    'เปิดการพิมพ์ใบเสร็จ',
-                                    overflow: TextOverflow.ellipsis,
-                                    minFontSize: 6,
-                                    maxFontSize: 16,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontFamily: Font_.Fonts_T,
-                                    ),
-                                  ),
+                                  child: Translate.TranslateAndSet_TextAutoSize(
+                                      'เปิดการพิมพ์ใบเสร็จ',
+                                      PeopleChaoScreen_Color.Colors_Text1_,
+                                      TextAlign.center,
+                                      FontWeight.bold,
+                                      FontWeight_.Fonts_T,
+                                      8,
+                                      20,
+                                      1),
                                 ),
                               ),
                             ),
@@ -1693,17 +1777,17 @@ class _HandHeldState extends State<HandHeld> {
                                           bottomRight: Radius.circular(10)),
                                     ),
                                     padding: const EdgeInsets.all(8.0),
-                                    child: AutoSizeText(
-                                      'ปิดการพิมพ์ใบเสร็จ',
-                                      overflow: TextOverflow.ellipsis,
-                                      minFontSize: 6,
-                                      maxFontSize: 16,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'ปิดการพิมพ์ใบเสร็จ',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
                                   ),
                                 ),
                               ),
@@ -1749,17 +1833,17 @@ class _HandHeldState extends State<HandHeld> {
                                           bottomRight: Radius.circular(10)),
                                     ),
                                     padding: const EdgeInsets.all(8.0),
-                                    child: AutoSizeText(
-                                      'โลโก้',
-                                      overflow: TextOverflow.ellipsis,
-                                      minFontSize: 6,
-                                      maxFontSize: 16,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'โลโก้',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
                                   ),
                                 ),
                               ),
@@ -1807,17 +1891,17 @@ class _HandHeldState extends State<HandHeld> {
                                           bottomRight: Radius.circular(10)),
                                     ),
                                     padding: const EdgeInsets.all(8.0),
-                                    child: AutoSizeText(
-                                      'หัวบิล',
-                                      overflow: TextOverflow.ellipsis,
-                                      minFontSize: 6,
-                                      maxFontSize: 16,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'หัวบิล',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
                                   ),
                                 ),
                               ),
@@ -1859,17 +1943,17 @@ class _HandHeldState extends State<HandHeld> {
                                           bottomRight: Radius.circular(10)),
                                     ),
                                     padding: const EdgeInsets.all(8.0),
-                                    child: AutoSizeText(
-                                      'กำหนด',
-                                      overflow: TextOverflow.ellipsis,
-                                      minFontSize: 6,
-                                      maxFontSize: 16,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'กำหนด',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
                                   ),
                                 ),
                               ),
@@ -2008,17 +2092,17 @@ class _HandHeldState extends State<HandHeld> {
                                               bottomRight: Radius.circular(10)),
                                         ),
                                         padding: const EdgeInsets.all(8.0),
-                                        child: AutoSizeText(
-                                          'หัวบิลรอง',
-                                          overflow: TextOverflow.ellipsis,
-                                          minFontSize: 6,
-                                          maxFontSize: 16,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontFamily: Font_.Fonts_T,
-                                          ),
-                                        ),
+                                        child: Translate
+                                            .TranslateAndSet_TextAutoSize(
+                                                'หัวบิลรอง',
+                                                PeopleChaoScreen_Color
+                                                    .Colors_Text1_,
+                                                TextAlign.center,
+                                                FontWeight.bold,
+                                                FontWeight_.Fonts_T,
+                                                8,
+                                                20,
+                                                1),
                                       ),
                                     ),
                                   ),
@@ -2164,17 +2248,17 @@ class _HandHeldState extends State<HandHeld> {
                                           bottomRight: Radius.circular(10)),
                                     ),
                                     padding: const EdgeInsets.all(8.0),
-                                    child: AutoSizeText(
-                                      'ที่อยู่',
-                                      overflow: TextOverflow.ellipsis,
-                                      minFontSize: 6,
-                                      maxFontSize: 16,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'ที่อยู่',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
                                   ),
                                 ),
                               ),
@@ -2220,17 +2304,17 @@ class _HandHeldState extends State<HandHeld> {
                                           bottomRight: Radius.circular(10)),
                                     ),
                                     padding: const EdgeInsets.all(8.0),
-                                    child: AutoSizeText(
-                                      'ผู้ทำรายการ',
-                                      overflow: TextOverflow.ellipsis,
-                                      minFontSize: 6,
-                                      maxFontSize: 16,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'ผู้ทำรายการ',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
                                   ),
                                 ),
                               ),
@@ -2276,17 +2360,17 @@ class _HandHeldState extends State<HandHeld> {
                                           bottomRight: Radius.circular(10)),
                                     ),
                                     padding: const EdgeInsets.all(8.0),
-                                    child: AutoSizeText(
-                                      'ชื่อร้าน',
-                                      overflow: TextOverflow.ellipsis,
-                                      minFontSize: 6,
-                                      maxFontSize: 16,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'ชื่อร้าน',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
                                   ),
                                 ),
                               ),
@@ -2332,17 +2416,17 @@ class _HandHeldState extends State<HandHeld> {
                                           bottomRight: Radius.circular(10)),
                                     ),
                                     padding: const EdgeInsets.all(8.0),
-                                    child: AutoSizeText(
-                                      'ชื่อลูกค้า',
-                                      overflow: TextOverflow.ellipsis,
-                                      minFontSize: 6,
-                                      maxFontSize: 16,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'ชื่อลูกค้า',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
                                   ),
                                 ),
                               ),
@@ -2388,17 +2472,17 @@ class _HandHeldState extends State<HandHeld> {
                                           bottomRight: Radius.circular(10)),
                                     ),
                                     padding: const EdgeInsets.all(8.0),
-                                    child: AutoSizeText(
-                                      'เลขที่ใบเสร็จ',
-                                      overflow: TextOverflow.ellipsis,
-                                      minFontSize: 6,
-                                      maxFontSize: 16,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'เลขที่ใบเสร็จ',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
                                   ),
                                 ),
                               ),
@@ -2444,17 +2528,17 @@ class _HandHeldState extends State<HandHeld> {
                                           bottomRight: Radius.circular(10)),
                                     ),
                                     padding: const EdgeInsets.all(8.0),
-                                    child: AutoSizeText(
-                                      'วันที่',
-                                      overflow: TextOverflow.ellipsis,
-                                      minFontSize: 6,
-                                      maxFontSize: 16,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'วันที่',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
                                   ),
                                 ),
                               ),
@@ -2500,17 +2584,17 @@ class _HandHeldState extends State<HandHeld> {
                                           bottomRight: Radius.circular(10)),
                                     ),
                                     padding: const EdgeInsets.all(8.0),
-                                    child: AutoSizeText(
-                                      'เวลา',
-                                      overflow: TextOverflow.ellipsis,
-                                      minFontSize: 6,
-                                      maxFontSize: 16,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'วันที่',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
                                   ),
                                 ),
                               ),
@@ -2556,17 +2640,17 @@ class _HandHeldState extends State<HandHeld> {
                                           bottomRight: Radius.circular(10)),
                                     ),
                                     padding: const EdgeInsets.all(8.0),
-                                    child: AutoSizeText(
-                                      'โซนพื้นที่',
-                                      overflow: TextOverflow.ellipsis,
-                                      minFontSize: 6,
-                                      maxFontSize: 16,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'โซนพื้นที่',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
                                   ),
                                 ),
                               ),
@@ -2612,17 +2696,17 @@ class _HandHeldState extends State<HandHeld> {
                                           bottomRight: Radius.circular(10)),
                                     ),
                                     padding: const EdgeInsets.all(8.0),
-                                    child: AutoSizeText(
-                                      'รหัสพื้นที่',
-                                      overflow: TextOverflow.ellipsis,
-                                      minFontSize: 6,
-                                      maxFontSize: 16,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'รหัสพื้นที่',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
                                   ),
                                 ),
                               ),
@@ -2668,17 +2752,17 @@ class _HandHeldState extends State<HandHeld> {
                                           bottomRight: Radius.circular(10)),
                                     ),
                                     padding: const EdgeInsets.all(8.0),
-                                    child: AutoSizeText(
-                                      'ตัวเลขยอดรวม',
-                                      overflow: TextOverflow.ellipsis,
-                                      minFontSize: 6,
-                                      maxFontSize: 16,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'ตัวเลขยอดรวม',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
                                   ),
                                 ),
                               ),
@@ -2689,55 +2773,55 @@ class _HandHeldState extends State<HandHeld> {
                           children: [
                             Expanded(
                               child: Padding(
-                                padding: const EdgeInsets.all(5),
-                                child: InkWell(
-                                  onTap: () async {
-                                    SharedPreferences preferences =
-                                        await SharedPreferences.getInstance();
-                                    String? ren =
-                                        preferences.getString('renTalSer');
+                                  padding: const EdgeInsets.all(5),
+                                  child: InkWell(
+                                      onTap: () async {
+                                        SharedPreferences preferences =
+                                            await SharedPreferences
+                                                .getInstance();
+                                        String? ren =
+                                            preferences.getString('renTalSer');
 
-                                    var nametable = 'foot';
-                                    var set = _p_foot == 1 ? 0 : 1;
-                                    String url =
-                                        '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
-                                    try {
-                                      var response =
-                                          await http.get(Uri.parse(url));
+                                        var nametable = 'foot';
+                                        var set = _p_foot == 1 ? 0 : 1;
+                                        String url =
+                                            '${MyConstant().domain}/U_print.php?isAdd=true&ren=$ren&nametable=$nametable&set=$set';
+                                        try {
+                                          var response =
+                                              await http.get(Uri.parse(url));
 
-                                      var result = json.decode(response.body);
-                                      print(result);
-                                      if (result.toString() == 'true') {
-                                        read_GC_print();
-                                      }
-                                    } catch (e) {}
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: _p_foot == 1
-                                          ? Colors.green.shade400
-                                          : Colors.grey.shade400,
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          topRight: Radius.circular(10),
-                                          bottomLeft: Radius.circular(10),
-                                          bottomRight: Radius.circular(10)),
-                                    ),
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: AutoSizeText(
-                                      'ท้ายบิล',
-                                      overflow: TextOverflow.ellipsis,
-                                      minFontSize: 6,
-                                      maxFontSize: 16,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                                          var result =
+                                              json.decode(response.body);
+                                          print(result);
+                                          if (result.toString() == 'true') {
+                                            read_GC_print();
+                                          }
+                                        } catch (e) {}
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: _p_foot == 1
+                                              ? Colors.green.shade400
+                                              : Colors.grey.shade400,
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(10),
+                                              topRight: Radius.circular(10),
+                                              bottomLeft: Radius.circular(10),
+                                              bottomRight: Radius.circular(10)),
+                                        ),
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Translate
+                                            .TranslateAndSet_TextAutoSize(
+                                                'ท้ายบิล',
+                                                PeopleChaoScreen_Color
+                                                    .Colors_Text1_,
+                                                TextAlign.center,
+                                                FontWeight.bold,
+                                                FontWeight_.Fonts_T,
+                                                8,
+                                                20,
+                                                1),
+                                      ))),
                             ),
                           ],
                         ),
@@ -2780,17 +2864,17 @@ class _HandHeldState extends State<HandHeld> {
                                           bottomRight: Radius.circular(10)),
                                     ),
                                     padding: const EdgeInsets.all(8.0),
-                                    child: AutoSizeText(
-                                      'ช่องทางชำระ',
-                                      overflow: TextOverflow.ellipsis,
-                                      minFontSize: 6,
-                                      maxFontSize: 16,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
+                                    child:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'ช่องทางชำระ',
+                                            PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.bold,
+                                            FontWeight_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
                                   ),
                                 ),
                               ),

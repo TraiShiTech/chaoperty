@@ -28,6 +28,7 @@ import '../Model/Get_tran_meter_model.dart';
 import '../Model/trans_re_bill_history_model.dart';
 import '../Model/trans_re_bill_model.dart';
 import '../Responsive/responsive.dart';
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 import 'package:http/http.dart' as http;
 
@@ -966,16 +967,16 @@ class _ReportScreen9State extends State<ReportScreen9> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'เดือนที่ครบกำหนดชำระ :',
-                          style: TextStyle(
-                            color: ReportScreen_Color.Colors_Text2_,
-                            // fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T,
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'เดือนที่ครบกำหนดชำระ :',
+                            ReportScreen_Color.Colors_Text1_,
+                            TextAlign.center,
+                            FontWeight.w500,
+                            Font_.Fonts_T,
+                            16,
+                            1),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -1060,16 +1061,14 @@ class _ReportScreen9State extends State<ReportScreen9> {
                               for (int item = 1; item < 13; item++)
                                 DropdownMenuItem<String>(
                                   value: '${item}',
-                                  child: Text(
-                                    '${monthsInThai[item - 1]}',
-                                    //'${item}',
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      overflow: TextOverflow.ellipsis,
-                                      fontSize: 14,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      '${monthsInThai[item - 1]}',
+                                      Colors.grey,
+                                      TextAlign.center,
+                                      FontWeight.w500,
+                                      Font_.Fonts_T,
+                                      16,
+                                      1),
                                 )
                             ],
 
@@ -1086,16 +1085,16 @@ class _ReportScreen9State extends State<ReportScreen9> {
                           ),
                         ),
                       ),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'ปีที่ที่ครบกำหนดชำระ :',
-                          style: TextStyle(
-                            color: ReportScreen_Color.Colors_Text2_,
-                            // fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T,
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'ปีที่ที่ครบกำหนดชำระ :',
+                            ReportScreen_Color.Colors_Text2_,
+                            TextAlign.center,
+                            FontWeight.w500,
+                            Font_.Fonts_T,
+                            16,
+                            1),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -1207,16 +1206,16 @@ class _ReportScreen9State extends State<ReportScreen9> {
                           ),
                         ),
                       ),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'โซน :',
-                          style: TextStyle(
-                            color: ReportScreen_Color.Colors_Text2_,
-                            // fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T,
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'โซน :',
+                            ReportScreen_Color.Colors_Text2_,
+                            TextAlign.center,
+                            FontWeight.w500,
+                            Font_.Fonts_T,
+                            16,
+                            1),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -1353,15 +1352,15 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                     bottomLeft: Radius.circular(10),
                                     bottomRight: Radius.circular(10)),
                               ),
-                              child: const Center(
-                                child: Text(
-                                  'ค้นหา',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                  ),
-                                ),
+                              child: Center(
+                                child: Translate.TranslateAndSetText(
+                                    'ค้นหา',
+                                    Colors.white,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               )),
                         ),
                       ),
@@ -1401,18 +1400,18 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                     Border.all(color: Colors.grey, width: 1),
                               ),
                               padding: const EdgeInsets.all(8.0),
-                              child: const Center(
+                              child: Center(
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text(
-                                      'เรียกดู',
-                                      style: TextStyle(
-                                        color: ReportScreen_Color.Colors_Text1_,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: FontWeight_.Fonts_T,
-                                      ),
-                                    ),
+                                    Translate.TranslateAndSetText(
+                                        'เรียกดู',
+                                        ReportScreen_Color.Colors_Text1_,
+                                        TextAlign.center,
+                                        FontWeight.w500,
+                                        Font_.Fonts_T,
+                                        16,
+                                        1),
                                     Icon(
                                       Icons.navigate_next,
                                       color: Colors.grey,
@@ -1422,32 +1421,32 @@ class _ReportScreen9State extends State<ReportScreen9> {
                               ),
                             )),
                         (Ser_BodySta1 != 1)
-                            ? const Padding(
+                            ? Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'รายงานข้อมูลใบแจ้งหนี้/วางบิล ',
-                                  style: TextStyle(
-                                    color: ReportScreen_Color.Colors_Text2_,
-                                    // fontWeight: FontWeight.bold,
-                                    fontFamily: Font_.Fonts_T,
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'รายงานข้อมูลใบแจ้งหนี้/วางบิล ',
+                                    ReportScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               )
                             : (InvoiceModels.isEmpty)
                                 ? Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      (InvoiceModels.isEmpty &&
-                                              zone_name_Invoice_Mon != null &&
-                                              Await_Status_Report2 != null)
-                                          ? 'รายงานข้อมูลใบแจ้งหนี้/วางบิล  (ไม่พบข้อมูล ✖️)'
-                                          : 'รายงานข้อมูลใบแจ้งหนี้/วางบิล ',
-                                      style: const TextStyle(
-                                        color: ReportScreen_Color.Colors_Text2_,
-                                        // fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
+                                    child: Translate.TranslateAndSetText(
+                                        (InvoiceModels.isEmpty &&
+                                                zone_name_Invoice_Mon != null &&
+                                                Await_Status_Report2 != null)
+                                            ? 'รายงานข้อมูลใบแจ้งหนี้/วางบิล  (ไม่พบข้อมูล ✖️)'
+                                            : 'รายงานข้อมูลใบแจ้งหนี้/วางบิล ',
+                                        ReportScreen_Color.Colors_Text1_,
+                                        TextAlign.center,
+                                        FontWeight.w500,
+                                        Font_.Fonts_T,
+                                        16,
+                                        1),
                                   )
                                 : (InvoiceModels.length != 0 &&
                                         Await_Status_Report1 != null &&
@@ -1461,31 +1460,30 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                                   const EdgeInsets.all(4.0),
                                               child:
                                                   const CircularProgressIndicator()),
-                                          const Padding(
+                                          Padding(
                                             padding: EdgeInsets.all(8.0),
-                                            child: Text(
-                                              'กำลังโหลดรายงานข้อมูลใบแจ้งหนี้/วางบิล ...',
-                                              style: TextStyle(
-                                                color: ReportScreen_Color
-                                                    .Colors_Text2_,
-                                                // fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T,
-                                              ),
-                                            ),
+                                            child: Translate.TranslateAndSetText(
+                                                'กำลังโหลดรายงานข้อมูลใบแจ้งหนี้/วางบิล ...',
+                                                ReportScreen_Color
+                                                    .Colors_Text1_,
+                                                TextAlign.center,
+                                                FontWeight.w500,
+                                                Font_.Fonts_T,
+                                                16,
+                                                1),
                                           ),
                                         ],
                                       ))
-                                    : const Padding(
+                                    : Padding(
                                         padding: EdgeInsets.all(8.0),
-                                        child: Text(
-                                          'รายงานข้อมูลใบแจ้งหนี้/วางบิล ✔️',
-                                          style: TextStyle(
-                                            color: ReportScreen_Color
-                                                .Colors_Text2_,
-                                            // fontWeight: FontWeight.bold,
-                                            fontFamily: Font_.Fonts_T,
-                                          ),
-                                        ),
+                                        child: Translate.TranslateAndSetText(
+                                            'รายงานข้อมูลใบแจ้งหนี้/วางบิล ✔️',
+                                            ReportScreen_Color.Colors_Text1_,
+                                            TextAlign.center,
+                                            FontWeight.w500,
+                                            Font_.Fonts_T,
+                                            16,
+                                            1),
                                       ),
                       ],
                     ),
@@ -1520,16 +1518,16 @@ class _ReportScreen9State extends State<ReportScreen9> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'วันที่ที่ครบกำหนดชำระ :',
-                          style: TextStyle(
-                            color: ReportScreen_Color.Colors_Text2_,
-                            // fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T,
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'วันที่ที่ครบกำหนดชำระ :',
+                            ReportScreen_Color.Colors_Text1_,
+                            TextAlign.center,
+                            FontWeight.w500,
+                            Font_.Fonts_T,
+                            16,
+                            1),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -1551,29 +1549,29 @@ class _ReportScreen9State extends State<ReportScreen9> {
                               width: 120,
                               padding: const EdgeInsets.all(8.0),
                               child: Center(
-                                child: Text(
-                                  (Value_InvoiceDate_Daily == null)
-                                      ? 'เลือก'
-                                      : '$Value_InvoiceDate_Daily',
-                                  style: const TextStyle(
-                                    color: ReportScreen_Color.Colors_Text2_,
-                                    // fontWeight: FontWeight.bold,
-                                    fontFamily: Font_.Fonts_T,
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    (Value_InvoiceDate_Daily == null)
+                                        ? 'เลือก'
+                                        : '$Value_InvoiceDate_Daily',
+                                    ReportScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               )),
                         ),
                       ),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'โซน :',
-                          style: TextStyle(
-                            color: ReportScreen_Color.Colors_Text2_,
-                            // fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T,
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'โซน :',
+                            ReportScreen_Color.Colors_Text1_,
+                            TextAlign.center,
+                            FontWeight.w500,
+                            Font_.Fonts_T,
+                            16,
+                            1),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -1694,15 +1692,15 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                     bottomLeft: Radius.circular(10),
                                     bottomRight: Radius.circular(10)),
                               ),
-                              child: const Center(
-                                child: Text(
-                                  'ค้นหา',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                  ),
-                                ),
+                              child: Center(
+                                child: Translate.TranslateAndSetText(
+                                    'ค้นหา',
+                                    Colors.white,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               )),
                         ),
                       ),
@@ -1735,18 +1733,18 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                     Border.all(color: Colors.grey, width: 1),
                               ),
                               padding: const EdgeInsets.all(8.0),
-                              child: const Center(
+                              child: Center(
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text(
-                                      'เรียกดู',
-                                      style: TextStyle(
-                                        color: ReportScreen_Color.Colors_Text1_,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: FontWeight_.Fonts_T,
-                                      ),
-                                    ),
+                                    Translate.TranslateAndSetText(
+                                        'เรียกดู',
+                                        ReportScreen_Color.Colors_Text1_,
+                                        TextAlign.center,
+                                        FontWeight.w500,
+                                        Font_.Fonts_T,
+                                        16,
+                                        1),
                                     Icon(
                                       Icons.navigate_next,
                                       color: Colors.grey,
@@ -1764,32 +1762,33 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                   }
                                 : null),
                         (Ser_BodySta2 != 1)
-                            ? const Padding(
+                            ? Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'รายงานข้อมูลใบแจ้งหนี้/วางบิลรายวัน',
-                                  style: TextStyle(
-                                    color: ReportScreen_Color.Colors_Text2_,
-                                    // fontWeight: FontWeight.bold,
-                                    fontFamily: Font_.Fonts_T,
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'รายงานข้อมูลใบแจ้งหนี้/วางบิลรายวัน',
+                                    ReportScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               )
                             : (InvoiceModels.isEmpty)
                                 ? Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      (InvoiceModels.isEmpty &&
-                                              Value_InvoiceDate_Daily != null &&
-                                              Ser_BodySta2 == 1)
-                                          ? 'รายงานข้อมูลใบแจ้งหนี้/วางบิลรายวัน (ไม่พบข้อมูล ✖️)'
-                                          : 'รายงานข้อมูลใบแจ้งหนี้/วางบิลรายวัน',
-                                      style: const TextStyle(
-                                        color: ReportScreen_Color.Colors_Text2_,
-                                        // fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
+                                    child: Translate.TranslateAndSetText(
+                                        (InvoiceModels.isEmpty &&
+                                                Value_InvoiceDate_Daily !=
+                                                    null &&
+                                                Ser_BodySta2 == 1)
+                                            ? 'รายงานข้อมูลใบแจ้งหนี้/วางบิลรายวัน (ไม่พบข้อมูล ✖️)'
+                                            : 'รายงานข้อมูลใบแจ้งหนี้/วางบิลรายวัน',
+                                        ReportScreen_Color.Colors_Text1_,
+                                        TextAlign.center,
+                                        FontWeight.w500,
+                                        Font_.Fonts_T,
+                                        16,
+                                        1),
                                   )
                                 : (Await_Status_Report2 != null &&
                                         Ser_BodySta2 == 1)
@@ -1802,17 +1801,17 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                                   const EdgeInsets.all(4.0),
                                               child:
                                                   const CircularProgressIndicator()),
-                                          const Padding(
+                                          Padding(
                                             padding: EdgeInsets.all(8.0),
-                                            child: Text(
-                                              'กำลังโหลดรายงานข้อมูลใบแจ้งหนี้/วางบิลรายวัน...',
-                                              style: TextStyle(
-                                                color: ReportScreen_Color
-                                                    .Colors_Text2_,
-                                                // fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T,
-                                              ),
-                                            ),
+                                            child: Translate.TranslateAndSetText(
+                                                'กำลังโหลดรายงานข้อมูลใบแจ้งหนี้/วางบิลรายวัน...',
+                                                ReportScreen_Color
+                                                    .Colors_Text1_,
+                                                TextAlign.center,
+                                                FontWeight.w500,
+                                                Font_.Fonts_T,
+                                                16,
+                                                1),
                                           ),
                                         ],
                                       ))
@@ -1828,31 +1827,32 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                                       const EdgeInsets.all(4.0),
                                                   child:
                                                       const CircularProgressIndicator()),
-                                              const Padding(
+                                              Padding(
                                                 padding: EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  'รายงานข้อมูลใบแจ้งหนี้/วางบิลรายวัน...',
-                                                  style: TextStyle(
-                                                    color: ReportScreen_Color
-                                                        .Colors_Text2_,
-                                                    // fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T,
-                                                  ),
-                                                ),
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'รายงานข้อมูลใบแจ้งหนี้/วางบิลรายวัน...',
+                                                        ReportScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.w500,
+                                                        Font_.Fonts_T,
+                                                        16,
+                                                        1),
                                               ),
                                             ],
                                           ))
-                                        : const Padding(
+                                        : Padding(
                                             padding: EdgeInsets.all(8.0),
-                                            child: Text(
-                                              'รายงานข้อมูลใบแจ้งหนี้/วางบิลรายวัน ✔️',
-                                              style: TextStyle(
-                                                color: ReportScreen_Color
-                                                    .Colors_Text2_,
-                                                // fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T,
-                                              ),
-                                            ),
+                                            child: Translate.TranslateAndSetText(
+                                                'รายงานข้อมูลใบแจ้งหนี้/วางบิลรายวัน ✔️',
+                                                ReportScreen_Color
+                                                    .Colors_Text1_,
+                                                TextAlign.center,
+                                                FontWeight.w500,
+                                                Font_.Fonts_T,
+                                                16,
+                                                1),
                                           ),
                       ],
                     ),
@@ -1887,16 +1887,16 @@ class _ReportScreen9State extends State<ReportScreen9> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'เดือน :',
-                          style: TextStyle(
-                            color: ReportScreen_Color.Colors_Text2_,
-                            // fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T,
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'เดือน :',
+                            ReportScreen_Color.Colors_Text1_,
+                            TextAlign.center,
+                            FontWeight.w500,
+                            Font_.Fonts_T,
+                            16,
+                            1),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -1981,16 +1981,14 @@ class _ReportScreen9State extends State<ReportScreen9> {
                               for (int item = 1; item < 13; item++)
                                 DropdownMenuItem<String>(
                                   value: '${item}',
-                                  child: Text(
-                                    '${monthsInThai[item - 1]}',
-                                    //'${item}',
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      overflow: TextOverflow.ellipsis,
-                                      fontSize: 14,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      '${monthsInThai[item - 1]}',
+                                      ReportScreen_Color.Colors_Text1_,
+                                      TextAlign.center,
+                                      FontWeight.w500,
+                                      Font_.Fonts_T,
+                                      16,
+                                      1),
                                 )
                             ],
 
@@ -2007,16 +2005,16 @@ class _ReportScreen9State extends State<ReportScreen9> {
                           ),
                         ),
                       ),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'ปี :',
-                          style: TextStyle(
-                            color: ReportScreen_Color.Colors_Text2_,
-                            // fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T,
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'ปี :',
+                            ReportScreen_Color.Colors_Text1_,
+                            TextAlign.center,
+                            FontWeight.w500,
+                            Font_.Fonts_T,
+                            16,
+                            1),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -2128,16 +2126,16 @@ class _ReportScreen9State extends State<ReportScreen9> {
                           ),
                         ),
                       ),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'โซน :',
-                          style: TextStyle(
-                            color: ReportScreen_Color.Colors_Text2_,
-                            // fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T,
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'โซน :',
+                            ReportScreen_Color.Colors_Text1_,
+                            TextAlign.center,
+                            FontWeight.w500,
+                            Font_.Fonts_T,
+                            16,
+                            1),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -2272,15 +2270,15 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                     bottomLeft: Radius.circular(10),
                                     bottomRight: Radius.circular(10)),
                               ),
-                              child: const Center(
-                                child: Text(
-                                  'ค้นหา',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                  ),
-                                ),
+                              child: Center(
+                                child: Translate.TranslateAndSetText(
+                                    'ค้นหา',
+                                    Colors.white,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               )),
                         ),
                       ),
@@ -2320,18 +2318,18 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                     Border.all(color: Colors.grey, width: 1),
                               ),
                               padding: const EdgeInsets.all(8.0),
-                              child: const Center(
+                              child: Center(
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text(
-                                      'เรียกดู',
-                                      style: TextStyle(
-                                        color: ReportScreen_Color.Colors_Text1_,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: FontWeight_.Fonts_T,
-                                      ),
-                                    ),
+                                    Translate.TranslateAndSetText(
+                                        'เรียกดู',
+                                        ReportScreen_Color.Colors_Text1_,
+                                        TextAlign.center,
+                                        FontWeight.w500,
+                                        Font_.Fonts_T,
+                                        16,
+                                        1),
                                     Icon(
                                       Icons.navigate_next,
                                       color: Colors.grey,
@@ -2341,33 +2339,33 @@ class _ReportScreen9State extends State<ReportScreen9> {
                               ),
                             )),
                         (Ser_BodySta3 != 1)
-                            ? const Padding(
+                            ? Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'รายงานประวัติชำระรอตรวจสอบ',
-                                  style: TextStyle(
-                                    color: ReportScreen_Color.Colors_Text2_,
-                                    // fontWeight: FontWeight.bold,
-                                    fontFamily: Font_.Fonts_T,
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'รายงานประวัติชำระรอตรวจสอบ',
+                                    ReportScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               )
                             : (TransReBillModels_.isEmpty)
                                 ? Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      (TransReBillModels_.isEmpty &&
-                                              Value_BillAwatCheck_Daily !=
-                                                  null &&
-                                              Ser_BodySta3 == 1)
-                                          ? 'รายงานประวัติชำระรอตรวจสอบ (ไม่พบข้อมูล ✖️)'
-                                          : 'รายงานประวัติชำระรอตรวจสอบ',
-                                      style: const TextStyle(
-                                        color: ReportScreen_Color.Colors_Text2_,
-                                        // fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
+                                    child: Translate.TranslateAndSetText(
+                                        (TransReBillModels_.isEmpty &&
+                                                Value_BillAwatCheck_Daily !=
+                                                    null &&
+                                                Ser_BodySta3 == 1)
+                                            ? 'รายงานประวัติชำระรอตรวจสอบ (ไม่พบข้อมูล ✖️)'
+                                            : 'รายงานประวัติชำระรอตรวจสอบ',
+                                        ReportScreen_Color.Colors_Text1_,
+                                        TextAlign.center,
+                                        FontWeight.w500,
+                                        Font_.Fonts_T,
+                                        16,
+                                        1),
                                   )
                                 : (Await_Status_Report3 != null &&
                                         Ser_BodySta3 == 1)
@@ -2380,17 +2378,17 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                                   const EdgeInsets.all(4.0),
                                               child:
                                                   const CircularProgressIndicator()),
-                                          const Padding(
+                                          Padding(
                                             padding: EdgeInsets.all(8.0),
-                                            child: Text(
-                                              'กำลังโหลดรายงานประวัติชำระรอตรวจสอบ...',
-                                              style: TextStyle(
-                                                color: ReportScreen_Color
-                                                    .Colors_Text2_,
-                                                // fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T,
-                                              ),
-                                            ),
+                                            child: Translate.TranslateAndSetText(
+                                                'กำลังโหลดรายงานประวัติชำระรอตรวจสอบ...',
+                                                ReportScreen_Color
+                                                    .Colors_Text1_,
+                                                TextAlign.center,
+                                                FontWeight.w500,
+                                                Font_.Fonts_T,
+                                                16,
+                                                1),
                                           ),
                                         ],
                                       ))
@@ -2406,31 +2404,32 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                                       const EdgeInsets.all(4.0),
                                                   child:
                                                       const CircularProgressIndicator()),
-                                              const Padding(
+                                              Padding(
                                                 padding: EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  'รายงานประวัติชำระรอตรวจสอบ...',
-                                                  style: TextStyle(
-                                                    color: ReportScreen_Color
-                                                        .Colors_Text2_,
-                                                    // fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T,
-                                                  ),
-                                                ),
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'รายงานประวัติชำระรอตรวจสอบ...',
+                                                        ReportScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.w500,
+                                                        Font_.Fonts_T,
+                                                        16,
+                                                        1),
                                               ),
                                             ],
                                           ))
-                                        : const Padding(
+                                        : Padding(
                                             padding: EdgeInsets.all(8.0),
-                                            child: Text(
-                                              'รายงานประวัติชำระรอตรวจสอบ ✔️',
-                                              style: TextStyle(
-                                                color: ReportScreen_Color
-                                                    .Colors_Text2_,
-                                                // fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T,
-                                              ),
-                                            ),
+                                            child: Translate.TranslateAndSetText(
+                                                'รายงานประวัติชำระรอตรวจสอบ ✔️',
+                                                ReportScreen_Color
+                                                    .Colors_Text1_,
+                                                TextAlign.center,
+                                                FontWeight.w500,
+                                                Font_.Fonts_T,
+                                                16,
+                                                1),
                                           ),
                       ],
                     ),
@@ -2465,16 +2464,16 @@ class _ReportScreen9State extends State<ReportScreen9> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'วันที่ :',
-                          style: TextStyle(
-                            color: ReportScreen_Color.Colors_Text2_,
-                            // fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T,
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'วันที่ :',
+                            ReportScreen_Color.Colors_Text1_,
+                            TextAlign.center,
+                            FontWeight.w500,
+                            Font_.Fonts_T,
+                            16,
+                            1),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -2496,29 +2495,29 @@ class _ReportScreen9State extends State<ReportScreen9> {
                               width: 120,
                               padding: const EdgeInsets.all(8.0),
                               child: Center(
-                                child: Text(
-                                  (Value_BillAwatCheck_Daily == null)
-                                      ? 'เลือก'
-                                      : '$Value_BillAwatCheck_Daily',
-                                  style: const TextStyle(
-                                    color: ReportScreen_Color.Colors_Text2_,
-                                    // fontWeight: FontWeight.bold,
-                                    fontFamily: Font_.Fonts_T,
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    (Value_BillAwatCheck_Daily == null)
+                                        ? 'เลือก'
+                                        : '$Value_BillAwatCheck_Daily',
+                                    ReportScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               )),
                         ),
                       ),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'โซน :',
-                          style: TextStyle(
-                            color: ReportScreen_Color.Colors_Text2_,
-                            // fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T,
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'โซน :',
+                            ReportScreen_Color.Colors_Text1_,
+                            TextAlign.center,
+                            FontWeight.w500,
+                            Font_.Fonts_T,
+                            16,
+                            1),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -2649,15 +2648,15 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                     bottomLeft: Radius.circular(10),
                                     bottomRight: Radius.circular(10)),
                               ),
-                              child: const Center(
-                                child: Text(
-                                  'ค้นหา',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                  ),
-                                ),
+                              child: Center(
+                                child: Translate.TranslateAndSetText(
+                                    'ค้นหา',
+                                    Colors.white,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               )),
                         ),
                       ),
@@ -2697,18 +2696,18 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                     Border.all(color: Colors.grey, width: 1),
                               ),
                               padding: const EdgeInsets.all(8.0),
-                              child: const Center(
+                              child: Center(
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text(
-                                      'เรียกดู',
-                                      style: TextStyle(
-                                        color: ReportScreen_Color.Colors_Text1_,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: FontWeight_.Fonts_T,
-                                      ),
-                                    ),
+                                    Translate.TranslateAndSetText(
+                                        'เรียกดู',
+                                        ReportScreen_Color.Colors_Text1_,
+                                        TextAlign.center,
+                                        FontWeight.w500,
+                                        Font_.Fonts_T,
+                                        16,
+                                        1),
                                     Icon(
                                       Icons.navigate_next,
                                       color: Colors.grey,
@@ -2718,33 +2717,33 @@ class _ReportScreen9State extends State<ReportScreen9> {
                               ),
                             )),
                         (Ser_BodySta4 != 1)
-                            ? const Padding(
+                            ? Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'รายงานประวัติชำระรอตรวจสอบรายวัน',
-                                  style: TextStyle(
-                                    color: ReportScreen_Color.Colors_Text2_,
-                                    // fontWeight: FontWeight.bold,
-                                    fontFamily: Font_.Fonts_T,
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'รายงานประวัติชำระรอตรวจสอบรายวัน',
+                                    ReportScreen_Color.Colors_Text1_,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               )
                             : (TransReBillModels_.isEmpty)
                                 ? Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      (TransReBillModels_.isEmpty &&
-                                              Value_BillAwatCheck_Daily !=
-                                                  null &&
-                                              Ser_BodySta4 == 1)
-                                          ? 'รายงานประวัติชำระรอตรวจสอบรายวัน (ไม่พบข้อมูล ✖️)'
-                                          : 'รายงานประวัติชำระรอตรวจสอบรายวัน',
-                                      style: const TextStyle(
-                                        color: ReportScreen_Color.Colors_Text2_,
-                                        // fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T,
-                                      ),
-                                    ),
+                                    child: Translate.TranslateAndSetText(
+                                        (TransReBillModels_.isEmpty &&
+                                                Value_BillAwatCheck_Daily !=
+                                                    null &&
+                                                Ser_BodySta4 == 1)
+                                            ? 'รายงานประวัติชำระรอตรวจสอบรายวัน (ไม่พบข้อมูล ✖️)'
+                                            : 'รายงานประวัติชำระรอตรวจสอบรายวัน',
+                                        ReportScreen_Color.Colors_Text1_,
+                                        TextAlign.center,
+                                        FontWeight.w500,
+                                        Font_.Fonts_T,
+                                        16,
+                                        1),
                                   )
                                 : (Await_Status_Report4 != null &&
                                         Ser_BodySta4 == 1)
@@ -2757,17 +2756,17 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                                   const EdgeInsets.all(4.0),
                                               child:
                                                   const CircularProgressIndicator()),
-                                          const Padding(
+                                          Padding(
                                             padding: EdgeInsets.all(8.0),
-                                            child: Text(
-                                              'กำลังโหลดรายงานประวัติชำระรอตรวจสอบรายวัน...',
-                                              style: TextStyle(
-                                                color: ReportScreen_Color
-                                                    .Colors_Text2_,
-                                                // fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T,
-                                              ),
-                                            ),
+                                            child: Translate.TranslateAndSetText(
+                                                'กำลังโหลดรายงานประวัติชำระรอตรวจสอบรายวัน...',
+                                                ReportScreen_Color
+                                                    .Colors_Text1_,
+                                                TextAlign.center,
+                                                FontWeight.w500,
+                                                Font_.Fonts_T,
+                                                16,
+                                                1),
                                           ),
                                         ],
                                       ))
@@ -2783,31 +2782,32 @@ class _ReportScreen9State extends State<ReportScreen9> {
                                                       const EdgeInsets.all(4.0),
                                                   child:
                                                       const CircularProgressIndicator()),
-                                              const Padding(
+                                              Padding(
                                                 padding: EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  'รายงานประวัติชำระรอตรวจสอบรายวัน...',
-                                                  style: TextStyle(
-                                                    color: ReportScreen_Color
-                                                        .Colors_Text2_,
-                                                    // fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T,
-                                                  ),
-                                                ),
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'รายงานประวัติชำระรอตรวจสอบรายวัน...',
+                                                        ReportScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.w500,
+                                                        Font_.Fonts_T,
+                                                        16,
+                                                        1),
                                               ),
                                             ],
                                           ))
-                                        : const Padding(
+                                        : Padding(
                                             padding: EdgeInsets.all(8.0),
-                                            child: Text(
-                                              'รายงานประวัติชำระรอตรวจสอบรายวัน ✔️',
-                                              style: TextStyle(
-                                                color: ReportScreen_Color
-                                                    .Colors_Text2_,
-                                                // fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T,
-                                              ),
-                                            ),
+                                            child: Translate.TranslateAndSetText(
+                                                'รายงานประวัติชำระรอตรวจสอบรายวัน ✔️',
+                                                ReportScreen_Color
+                                                    .Colors_Text1_,
+                                                TextAlign.center,
+                                                FontWeight.w500,
+                                                Font_.Fonts_T,
+                                                16,
+                                                1),
                                           ),
                       ],
                     ),

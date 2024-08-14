@@ -20,6 +20,7 @@ import '../Constant/Myconstant.dart';
 import '../Man_PDF/Man_ChartReport_Generate.dart';
 import '../Model/GetZone_Model.dart';
 import '../Model/trans_re_bill_model.dart';
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 import '../Style/downloadImage.dart';
 import 'dart:ui' as ui;
@@ -516,27 +517,27 @@ class _Dashboard_Screen2State extends State<Dashboard_Screen2> {
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             children: [
-                              const Padding(
+                              Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'รายงาน รายรับ (เฉพาะรายการที่มีส่วนลด): ',
-                                  style: TextStyle(
-                                    color: ReportScreen_Color.Colors_Text2_,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'รายงาน รายรับ (เฉพาะรายการที่มีส่วนลด): ',
+                                    ReportScreen_Color.Colors_Text2_,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               ),
-                              const Padding(
+                              Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'ปี :',
-                                  style: TextStyle(
-                                    color: ReportScreen_Color.Colors_Text2_,
-                                    // fontWeight: FontWeight.bold,
-                                    fontFamily: Font_.Fonts_T,
-                                  ),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'ปี :',
+                                    ReportScreen_Color.Colors_Text2_,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -659,15 +660,15 @@ class _Dashboard_Screen2State extends State<Dashboard_Screen2> {
                                           bottomLeft: Radius.circular(10),
                                           bottomRight: Radius.circular(10)),
                                     ),
-                                    child: const Center(
-                                      child: Text(
-                                        'ค้นหา',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: FontWeight_.Fonts_T,
-                                        ),
-                                      ),
+                                    child: Center(
+                                      child: Translate.TranslateAndSetText(
+                                          'ค้นหา',
+                                          Colors.white,
+                                          TextAlign.center,
+                                          FontWeight.w500,
+                                          Font_.Fonts_T,
+                                          16,
+                                          1),
                                     )),
                               ),
                             ],
@@ -1284,15 +1285,15 @@ class _Dashboard_Screen2State extends State<Dashboard_Screen2> {
                                     bottomLeft: Radius.circular(8),
                                     bottomRight: Radius.circular(8)),
                               ),
-                              child: const Center(
-                                child: Text(
-                                  'พิมพ์',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                  ),
-                                ),
+                              child: Center(
+                                child: Translate.TranslateAndSetText(
+                                    'พิมพ์',
+                                    Colors.white,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               )),
                         ),
                       ),

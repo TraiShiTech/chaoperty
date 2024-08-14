@@ -50,11 +50,13 @@ import '../Report_Ortorkor/Report_Screen9_1.dart';
 import '../Report_choice/Report_Choice_ScreenA.dart';
 import '../Report_choice/Report_Choice_ScreenB.dart';
 import '../Report_choice/Report_Choice_ScreenC.dart';
+import '../Report_choice/Report_Choice_ScreenD.dart';
 import '../Report_cm/Report_cm_ScreenA.dart';
 import '../Report_cm/Report_cm_ScreenB.dart';
 import '../Report_cm/Report_cm_ScreenC.dart';
 import '../Responsive/responsive.dart';
 import '../Setting/SettingScreen.dart';
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' as x;
 import 'package:pdf/widgets.dart' as pw;
@@ -103,7 +105,7 @@ class _ReportScreenState extends State<ReportScreen> {
   ////////--------------------------->
   int ser_pang_CM = -2;
   int ser_pang_Ortor = -1;
-  int ser_pang_Choice = -2;
+  int ser_pang_Choice = -3;
 
   ///
   ///
@@ -1059,21 +1061,29 @@ class _ReportScreenState extends State<ReportScreen> {
                                       Border.all(color: Colors.white, width: 2),
                                 ),
                                 padding: const EdgeInsets.all(5.0),
-                                child: const Row(
+                                child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    AutoSizeText(
-                                      'รายงาน ',
-                                      overflow: TextOverflow.ellipsis,
-                                      minFontSize: 8,
-                                      maxFontSize: 20,
-                                      style: TextStyle(
-                                        decoration: TextDecoration.underline,
-                                        color: ReportScreen_Color.Colors_Text1_,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: FontWeight_.Fonts_T,
-                                      ),
-                                    ),
+                                    Translate.TranslateAndSetText(
+                                        'รายงาน ',
+                                        ReportScreen_Color.Colors_Text1_,
+                                        TextAlign.center,
+                                        FontWeight.w500,
+                                        Font_.Fonts_T,
+                                        16,
+                                        1),
+                                    // AutoSizeText(
+                                    //   'รายงาน ',
+                                    //   overflow: TextOverflow.ellipsis,
+                                    //   minFontSize: 8,
+                                    //   maxFontSize: 20,
+                                    //   style: TextStyle(
+                                    //     decoration: TextDecoration.underline,
+                                    //     color: ReportScreen_Color.Colors_Text1_,
+                                    //     fontWeight: FontWeight.bold,
+                                    //     fontFamily: FontWeight_.Fonts_T,
+                                    //   ),
+                                    // ),
                                     AutoSizeText(
                                       ' > > ',
                                       overflow: TextOverflow.ellipsis,
@@ -1136,15 +1146,15 @@ class _ReportScreenState extends State<ReportScreen> {
                                       border: Border.all(
                                           color: Colors.white, width: 1),
                                     ),
-                                    child: const Center(
-                                      child: Text(
-                                        'รายงาน',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: FontWeight_.Fonts_T,
-                                        ),
-                                      ),
+                                    child: Center(
+                                      child: Translate.TranslateAndSetText(
+                                          'รายงาน',
+                                          Colors.white,
+                                          TextAlign.center,
+                                          FontWeight.w500,
+                                          Font_.Fonts_T,
+                                          16,
+                                          1),
                                     )),
                               ),
                             ),
@@ -1189,7 +1199,7 @@ class _ReportScreenState extends State<ReportScreen> {
                       ),
                     ),
                   ),
-                  const Padding(
+                  Padding(
                       padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -1202,17 +1212,25 @@ class _ReportScreenState extends State<ReportScreen> {
                                   alignment: Alignment.topLeft,
                                   child: Padding(
                                     padding: EdgeInsets.fromLTRB(8, 8, 2, 8),
-                                    child: AutoSizeText(
-                                      'ภาพรวมการดำเนินการ ',
-                                      overflow: TextOverflow.ellipsis,
-                                      minFontSize: 8,
-                                      maxFontSize: 20,
-                                      style: TextStyle(
-                                        color: ReportScreen_Color.Colors_Text1_,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: FontWeight_.Fonts_T,
-                                      ),
-                                    ),
+                                    child: Translate.TranslateAndSetText(
+                                        'ภาพรวมการดำเนินการ ',
+                                        ReportScreen_Color.Colors_Text1_,
+                                        TextAlign.center,
+                                        FontWeight.w500,
+                                        Font_.Fonts_T,
+                                        16,
+                                        1),
+                                    //  AutoSizeText(
+                                    //   'ภาพรวมการดำเนินการ ',
+                                    //   overflow: TextOverflow.ellipsis,
+                                    //   minFontSize: 8,
+                                    //   maxFontSize: 20,
+                                    //   style: TextStyle(
+                                    //     color: ReportScreen_Color.Colors_Text1_,
+                                    //     fontWeight: FontWeight.bold,
+                                    //     fontFamily: FontWeight_.Fonts_T,
+                                    //   ),
+                                    // ),
                                   ),
                                 ),
                               ],
@@ -1306,40 +1324,39 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                 height: 35,
                                                                 child: Row(
                                                                   children: [
-                                                                    const Padding(
+                                                                    Padding(
                                                                       padding:
                                                                           EdgeInsets.all(
                                                                               4.0),
-                                                                      child:
-                                                                          Text(
-                                                                        'รายรับ :',
-                                                                        style:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              ReportScreen_Color.Colors_Text2_,
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
-                                                                          fontFamily:
-                                                                              FontWeight_.Fonts_T,
-                                                                        ),
-                                                                      ),
+                                                                      child: Translate.TranslateAndSetText(
+                                                                          'รายรับ :',
+                                                                          ReportScreen_Color
+                                                                              .Colors_Text1_,
+                                                                          TextAlign
+                                                                              .center,
+                                                                          FontWeight
+                                                                              .w500,
+                                                                          Font_
+                                                                              .Fonts_T,
+                                                                          12,
+                                                                          1),
                                                                     ),
-                                                                    const Padding(
+                                                                    Padding(
                                                                       padding:
                                                                           EdgeInsets.all(
                                                                               4.0),
-                                                                      child:
-                                                                          Text(
-                                                                        'โซน ',
-                                                                        style:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              ReportScreen_Color.Colors_Text2_,
-                                                                          // fontWeight: FontWeight.bold,
-                                                                          fontFamily:
-                                                                              Font_.Fonts_T,
-                                                                        ),
-                                                                      ),
+                                                                      child: Translate.TranslateAndSetText(
+                                                                          'โซน ',
+                                                                          ReportScreen_Color
+                                                                              .Colors_Text1_,
+                                                                          TextAlign
+                                                                              .center,
+                                                                          FontWeight
+                                                                              .w500,
+                                                                          Font_
+                                                                              .Fonts_T,
+                                                                          12,
+                                                                          1),
                                                                     ),
                                                                     Padding(
                                                                       padding:
@@ -1486,21 +1503,22 @@ class _ReportScreenState extends State<ReportScreen> {
                                                             SizedBox(
                                                               child: Row(
                                                                 children: [
-                                                                  const Padding(
+                                                                  Padding(
                                                                     padding:
                                                                         EdgeInsets.all(
                                                                             8.0),
-                                                                    child: Text(
-                                                                      'วันที่ ',
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: ReportScreen_Color
-                                                                            .Colors_Text2_,
-                                                                        // fontWeight: FontWeight.bold,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T,
-                                                                      ),
-                                                                    ),
+                                                                    child: Translate.TranslateAndSetText(
+                                                                        'วันที่ ',
+                                                                        ReportScreen_Color
+                                                                            .Colors_Text1_,
+                                                                        TextAlign
+                                                                            .center,
+                                                                        FontWeight
+                                                                            .w500,
+                                                                        Font_
+                                                                            .Fonts_T,
+                                                                        16,
+                                                                        1),
                                                                   ),
                                                                   Padding(
                                                                     padding:
@@ -1532,38 +1550,36 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                           width: 120,
                                                                           padding: const EdgeInsets.all(2.0),
                                                                           child: Center(
-                                                                            child:
-                                                                                Text(
-                                                                              (SDatex_total1_ == null) ? 'เลือก' : '$SDatex_total1_',
-                                                                              style: const TextStyle(
-                                                                                fontSize: 12,
-                                                                                color: ReportScreen_Color.Colors_Text2_,
-                                                                                // fontWeight: FontWeight.bold,
-                                                                                fontFamily: Font_.Fonts_T,
-                                                                              ),
-                                                                            ),
+                                                                            child: Translate.TranslateAndSetText(
+                                                                                (SDatex_total1_ == null) ? 'เลือก' : '$SDatex_total1_',
+                                                                                Colors.grey,
+                                                                                TextAlign.center,
+                                                                                FontWeight.w500,
+                                                                                Font_.Fonts_T,
+                                                                                12,
+                                                                                1),
                                                                           )),
                                                                     ),
                                                                   ),
-                                                                  const Padding(
+                                                                  Padding(
                                                                     padding:
                                                                         const EdgeInsets.fromLTRB(
                                                                             8,
                                                                             0,
                                                                             8,
                                                                             0),
-                                                                    child: Text(
-                                                                      'ถึง',
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: ReportScreen_Color
+                                                                    child: Translate.TranslateAndSetText(
+                                                                        'ถึง',
+                                                                        ReportScreen_Color
                                                                             .Colors_Text1_,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T,
-                                                                      ),
-                                                                    ),
+                                                                        TextAlign
+                                                                            .center,
+                                                                        FontWeight
+                                                                            .w500,
+                                                                        Font_
+                                                                            .Fonts_T,
+                                                                        16,
+                                                                        1),
                                                                   ),
                                                                   Padding(
                                                                     padding:
@@ -1595,16 +1611,14 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                           width: 120,
                                                                           padding: const EdgeInsets.all(2.0),
                                                                           child: Center(
-                                                                            child:
-                                                                                Text(
-                                                                              (LDatex_total1_ == null) ? 'เลือก' : '$LDatex_total1_',
-                                                                              style: const TextStyle(
-                                                                                fontSize: 12,
-                                                                                color: ReportScreen_Color.Colors_Text2_,
-                                                                                // fontWeight: FontWeight.bold,
-                                                                                fontFamily: Font_.Fonts_T,
-                                                                              ),
-                                                                            ),
+                                                                            child: Translate.TranslateAndSetText(
+                                                                                (LDatex_total1_ == null) ? 'เลือก' : '$LDatex_total1_',
+                                                                                Colors.grey,
+                                                                                TextAlign.center,
+                                                                                FontWeight.w500,
+                                                                                Font_.Fonts_T,
+                                                                                12,
+                                                                                1),
                                                                           )),
                                                                     ),
                                                                   ),
@@ -1648,43 +1662,41 @@ class _ReportScreenState extends State<ReportScreen> {
                                                             height: 35,
                                                             child: Row(
                                                               children: [
-                                                                const Padding(
+                                                                Padding(
                                                                   padding:
                                                                       EdgeInsets
                                                                           .all(
                                                                               4.0),
-                                                                  child: Text(
-                                                                    'รายรับ :',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: ReportScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontFamily:
-                                                                          FontWeight_
-                                                                              .Fonts_T,
-                                                                    ),
-                                                                  ),
+                                                                  child: Translate.TranslateAndSetText(
+                                                                      'รายรับ :',
+                                                                      ReportScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      TextAlign
+                                                                          .center,
+                                                                      FontWeight
+                                                                          .w500,
+                                                                      Font_
+                                                                          .Fonts_T,
+                                                                      16,
+                                                                      1),
                                                                 ),
-                                                                const Padding(
+                                                                Padding(
                                                                   padding:
                                                                       EdgeInsets
                                                                           .all(
                                                                               4.0),
-                                                                  child: Text(
-                                                                    'โซน ',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: ReportScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      // fontWeight: FontWeight.bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T,
-                                                                    ),
-                                                                  ),
+                                                                  child: Translate.TranslateAndSetText(
+                                                                      'โซน ',
+                                                                      ReportScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      TextAlign
+                                                                          .center,
+                                                                      FontWeight
+                                                                          .w500,
+                                                                      Font_
+                                                                          .Fonts_T,
+                                                                      16,
+                                                                      1),
                                                                 ),
                                                                 Padding(
                                                                   padding:
@@ -1858,23 +1870,23 @@ class _ReportScreenState extends State<ReportScreen> {
                                                         SizedBox(
                                                           child: Row(
                                                             children: [
-                                                              const Padding(
+                                                              Padding(
                                                                 padding:
                                                                     EdgeInsets
                                                                         .all(
                                                                             8.0),
-                                                                child: Text(
-                                                                  'วันที่ ',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: ReportScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    // fontWeight: FontWeight.bold,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T,
-                                                                  ),
-                                                                ),
+                                                                child: Translate.TranslateAndSetText(
+                                                                    'วันที่ ',
+                                                                    ReportScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    TextAlign
+                                                                        .center,
+                                                                    FontWeight
+                                                                        .w500,
+                                                                    Font_
+                                                                        .Fonts_T,
+                                                                    16,
+                                                                    1),
                                                               ),
                                                               Padding(
                                                                 padding:
@@ -1908,26 +1920,20 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                       width: 110,
                                                                       padding: const EdgeInsets.all(2.0),
                                                                       child: Center(
-                                                                        child:
-                                                                            Text(
-                                                                          (SDatex_total1_ == null)
-                                                                              ? 'เลือก'
-                                                                              : '$SDatex_total1_',
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            fontSize:
-                                                                                12,
-                                                                            color:
-                                                                                ReportScreen_Color.Colors_Text2_,
-                                                                            // fontWeight: FontWeight.bold,
-                                                                            fontFamily:
-                                                                                Font_.Fonts_T,
-                                                                          ),
-                                                                        ),
+                                                                        child: Translate.TranslateAndSetText(
+                                                                            (SDatex_total1_ == null)
+                                                                                ? 'เลือก'
+                                                                                : '$SDatex_total1_',
+                                                                            ReportScreen_Color.Colors_Text1_,
+                                                                            TextAlign.center,
+                                                                            FontWeight.w500,
+                                                                            Font_.Fonts_T,
+                                                                            16,
+                                                                            1),
                                                                       )),
                                                                 ),
                                                               ),
-                                                              const Padding(
+                                                              Padding(
                                                                 padding:
                                                                     const EdgeInsets
                                                                             .fromLTRB(
@@ -1935,20 +1941,18 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                         0,
                                                                         8,
                                                                         0),
-                                                                child: Text(
-                                                                  'ถึง',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: ReportScreen_Color
+                                                                child: Translate.TranslateAndSetText(
+                                                                    'ถึง',
+                                                                    ReportScreen_Color
                                                                         .Colors_Text1_,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontFamily:
-                                                                        FontWeight_
-                                                                            .Fonts_T,
-                                                                  ),
-                                                                ),
+                                                                    TextAlign
+                                                                        .center,
+                                                                    FontWeight
+                                                                        .w500,
+                                                                    Font_
+                                                                        .Fonts_T,
+                                                                    16,
+                                                                    1),
                                                               ),
                                                               Padding(
                                                                 padding:
@@ -1982,22 +1986,16 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                       width: 110,
                                                                       padding: const EdgeInsets.all(2.0),
                                                                       child: Center(
-                                                                        child:
-                                                                            Text(
-                                                                          (LDatex_total1_ == null)
-                                                                              ? 'เลือก'
-                                                                              : '$LDatex_total1_',
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            fontSize:
-                                                                                12,
-                                                                            color:
-                                                                                ReportScreen_Color.Colors_Text2_,
-                                                                            // fontWeight: FontWeight.bold,
-                                                                            fontFamily:
-                                                                                Font_.Fonts_T,
-                                                                          ),
-                                                                        ),
+                                                                        child: Translate.TranslateAndSetText(
+                                                                            (LDatex_total1_ == null)
+                                                                                ? 'เลือก'
+                                                                                : '$LDatex_total1_',
+                                                                            ReportScreen_Color.Colors_Text1_,
+                                                                            TextAlign.center,
+                                                                            FontWeight.w500,
+                                                                            Font_.Fonts_T,
+                                                                            16,
+                                                                            1),
                                                                       )),
                                                                 ),
                                                               ),
@@ -2011,978 +2009,1131 @@ class _ReportScreenState extends State<ReportScreen> {
                                     ),
                                   ],
                                 ),
-                                StreamBuilder(
-                                    stream: Stream.periodic(
-                                        const Duration(seconds: 0)),
-                                    builder: (context, snapshot) {
-                                      return GridView.count(
-                                          padding: ((MediaQuery.of(context)
-                                                      .size
-                                                      .width) <
-                                                  650)
-                                              ? const EdgeInsets.all(2)
-                                              : const EdgeInsets.all(5),
-                                          crossAxisSpacing:
-                                              ((MediaQuery.of(context).size.width) < 650)
-                                                  ? 10.00
-                                                  : 16.0,
-                                          mainAxisSpacing:
-                                              ((MediaQuery.of(context).size.width) <
-                                                      650)
-                                                  ? 10.00
-                                                  : 16.0,
-                                          crossAxisCount:
-                                              (MediaQuery.of(context).size.width) <
-                                                      650
-                                                  ? 2
-                                                  : (MediaQuery.of(context)
-                                                              .size
-                                                              .width) <
-                                                          1330
-                                                      ? 2
-                                                      : 4,
-                                          childAspectRatio: ((MediaQuery.of(context)
-                                                          .size
-                                                          .width) <
-                                                      650 &&
-                                                  (MediaQuery.of(context)
-                                                          .size
-                                                          .width) >
-                                                      500)
-                                              ? 1.2
-                                              : ((MediaQuery.of(context).size.width) < 500)
-                                                  ? 0.8
-                                                  : 2,
-                                          physics: const NeverScrollableScrollPhysics(),
-                                          shrinkWrap: true,
-                                          children: <Widget>[
-                                            Container(
-                                              padding: ((MediaQuery.of(context)
-                                                          .size
-                                                          .width) <
-                                                      650)
-                                                  ? const EdgeInsets.all(5.0)
-                                                  : const EdgeInsets.all(24.0),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                color: Colors.white,
-                                                // color: Color(0xFFA8BFDB),
+                                GridView.count(
+                                    padding: ((MediaQuery.of(context).size.width) <
+                                            650)
+                                        ? const EdgeInsets.all(2)
+                                        : const EdgeInsets.all(5),
+                                    crossAxisSpacing:
+                                        ((MediaQuery.of(context).size.width) <
+                                                650)
+                                            ? 10.00
+                                            : 16.0,
+                                    mainAxisSpacing:
+                                        ((MediaQuery.of(context).size.width) <
+                                                650)
+                                            ? 10.00
+                                            : 16.0,
+                                    crossAxisCount: (MediaQuery.of(context)
+                                                .size
+                                                .width) <
+                                            650
+                                        ? 2
+                                        : (MediaQuery.of(context).size.width) <
+                                                1330
+                                            ? 2
+                                            : 4,
+                                    childAspectRatio: ((MediaQuery.of(context)
+                                                    .size
+                                                    .width) <
+                                                650 &&
+                                            (MediaQuery.of(context).size.width) >
+                                                500)
+                                        ? 1.2
+                                        : ((MediaQuery.of(context).size.width) <
+                                                500)
+                                            ? 0.8
+                                            : 2,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    children: <Widget>[
+                                      Container(
+                                        padding: ((MediaQuery.of(context)
+                                                    .size
+                                                    .width) <
+                                                650)
+                                            ? const EdgeInsets.all(5.0)
+                                            : const EdgeInsets.all(24.0),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.white,
+                                          // color: Color(0xFFA8BFDB),
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 0, 8, 8),
+                                              child: Container(
+                                                height: 40,
+                                                width: 40,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(7),
+                                                  color: Colors.orange[700],
+                                                ),
+                                                child: const Icon(
+                                                  Icons.map_outlined,
+                                                  color: Colors.white,
+                                                ),
                                               ),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .fromLTRB(0, 0, 8, 8),
-                                                    child: Container(
-                                                      height: 40,
-                                                      width: 40,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(7),
-                                                        color:
-                                                            Colors.orange[700],
-                                                      ),
-                                                      child: const Icon(
-                                                        Icons.map_outlined,
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  const Text(
-                                                    'พื้นที่',
-                                                    maxLines: 2,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                      shadows: [
-                                                        Shadow(
-                                                            color: Colors.black,
-                                                            offset:
-                                                                Offset(0, -5))
-                                                      ],
-                                                      color: Colors.transparent,
-                                                      // decoration: TextDecoration
-                                                      //     .underline,
-                                                      decorationColor:
-                                                          Colors.grey,
-                                                      decorationThickness: 4,
-                                                      // decorationStyle:
-                                                      //     TextDecorationStyle
-                                                      //         .dashed,
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                  // Row(
-                                                  //   children: [
-                                                  //     Expanded(flex: 1,
-                                                  //       child: Divider(
-                                                  //         color: Colors.grey[300],
-                                                  //         height: 2.0,
-                                                  //       ),
-                                                  //     ), Expanded(flex: 1,
-                                                  //       child:SizedBox(),
-                                                  //     ),
-                                                  //   ],
-                                                  // ),
-                                                  Row(
-                                                    children: [
-                                                      const Expanded(
-                                                        // width: ((MediaQuery.of(
-                                                        //                 context)
-                                                        //             .size
-                                                        //             .width) <
-                                                        //         650)
-                                                        //     ? 40
-                                                        //     : 100,
-                                                        child: Text(
+                                            ),
+                                            Translate.TranslateAndSetText(
+                                                'พื้นที่',
+                                                ReportScreen_Color
+                                                    .Colors_Text1_,
+                                                TextAlign.start,
+                                                FontWeight.w500,
+                                                FontWeight_.Fonts_T,
+                                                12,
+                                                1),
+                                            // const Text(
+                                            //   'พื้นที่',
+                                            //   maxLines: 2,
+                                            //   overflow:
+                                            //       TextOverflow.ellipsis,
+                                            //   style: TextStyle(
+                                            //     shadows: [
+                                            //       Shadow(
+                                            //           color: Colors.black,
+                                            //           offset:
+                                            //               Offset(0, -5))
+                                            //     ],
+                                            //     color: Colors.transparent,
+                                            //     // decoration: TextDecoration
+                                            //     //     .underline,
+                                            //     decorationColor:
+                                            //         Colors.grey,
+                                            //     decorationThickness: 4,
+                                            //     // decorationStyle:
+                                            //     //     TextDecorationStyle
+                                            //     //         .dashed,
+                                            //     fontSize: 12,
+                                            //     fontWeight:
+                                            //         FontWeight.bold,
+                                            //     fontFamily:
+                                            //         FontWeight_.Fonts_T,
+                                            //   ),
+                                            // ),
+                                            // Row(
+                                            //   children: [
+                                            //     Expanded(flex: 1,
+                                            //       child: Divider(
+                                            //         color: Colors.grey[300],
+                                            //         height: 2.0,
+                                            //       ),
+                                            //     ), Expanded(flex: 1,
+                                            //       child:SizedBox(),
+                                            //     ),
+                                            //   ],
+                                            // ),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  // width: ((MediaQuery.of(
+                                                  //                 context)
+                                                  //             .size
+                                                  //             .width) <
+                                                  //         650)
+                                                  //     ? 40
+                                                  //     : 100,
+                                                  child: Translate
+                                                      .TranslateAndSetText(
                                                           'ทั้งหมด',
-                                                          maxLines: 2,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: TextStyle(
-                                                            fontSize: 12,
-                                                            // decoration:
-                                                            //     TextDecoration.underline,
-                                                            color: Colors.blue,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        (areaModels == null)
-                                                            ? '0 พื้นที่'
-                                                            : '${nFormat2.format(double.parse(areaModels.length.toString()))} พื้นที่',
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: const TextStyle(
-                                                          fontSize: 12,
-                                                          // decoration:
-                                                          //     TextDecoration.underline,
-                                                          color: Colors.blue,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Expanded(
-                                                        // width: ((MediaQuery.of(
-                                                        //                 context)
-                                                        //             .size
-                                                        //             .width) <
-                                                        //         650)
-                                                        //     ? 40
-                                                        //     : 100,
-                                                        child: Text(
+                                                          Colors.blue,
+                                                          TextAlign.start,
+                                                          FontWeight.w500,
+                                                          FontWeight_.Fonts_T,
+                                                          12,
+                                                          1),
+                                                ),
+                                                Translate.TranslateAndSetText(
+                                                    (areaModels == null)
+                                                        ? '0 พื้นที่'
+                                                        : '${nFormat2.format(double.parse(areaModels.length.toString()))} พื้นที่',
+                                                    Colors.blue,
+                                                    TextAlign.end,
+                                                    FontWeight.w500,
+                                                    FontWeight_.Fonts_T,
+                                                    12,
+                                                    1),
+                                                // Text(
+                                                //   (areaModels == null)
+                                                //       ? '0 พื้นที่'
+                                                //       : '${nFormat2.format(double.parse(areaModels.length.toString()))} พื้นที่',
+                                                //   overflow:
+                                                //       TextOverflow.ellipsis,
+                                                //   style: const TextStyle(
+                                                //     fontSize: 12,
+                                                //     // decoration:
+                                                //     //     TextDecoration.underline,
+                                                //     color: Colors.blue,
+                                                //     fontWeight: FontWeight.bold,
+                                                //     fontFamily:
+                                                //         FontWeight_.Fonts_T,
+                                                //   ),
+                                                // ),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  // width: ((MediaQuery.of(
+                                                  //                 context)
+                                                  //             .size
+                                                  //             .width) <
+                                                  //         650)
+                                                  //     ? 40
+                                                  //     : 100,
+                                                  child: Translate
+                                                      .TranslateAndSetText(
                                                           (areaModels2.length ==
                                                                   0)
                                                               ? 'ว่าง [0%]'
                                                               : 'ว่าง [${(((areaModels2.length ?? 0.0) * 100) / areaModels.length ?? 0.0).toStringAsFixed(2)}%]',
-                                                          // 'ว่าง',
-                                                          maxLines: 2,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: TextStyle(
-                                                            fontSize: 12,
+                                                          Colors.green,
+                                                          TextAlign.start,
+                                                          FontWeight.w500,
+                                                          FontWeight_.Fonts_T,
+                                                          12,
+                                                          1),
 
-                                                            // decoration:
+                                                  // Text(
+                                                  //   (areaModels2.length == 0)
+                                                  //       ? 'ว่าง [0%]'
+                                                  //       : 'ว่าง [${(((areaModels2.length ?? 0.0) * 100) / areaModels.length ?? 0.0).toStringAsFixed(2)}%]',
+                                                  //   // 'ว่าง',
+                                                  //   maxLines: 2,
+                                                  //   overflow:
+                                                  //       TextOverflow.ellipsis,
+                                                  //   style: TextStyle(
+                                                  //     fontSize: 12,
 
-                                                            //     TextDecoration.underline,
+                                                  //     // decoration:
 
-                                                            color: Colors.green,
+                                                  //     //     TextDecoration.underline,
 
-                                                            fontWeight:
-                                                                FontWeight.bold,
+                                                  //     color: Colors.green,
 
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        (areaModels2 == null)
-                                                            ? '0 พื้นที่'
-                                                            : '${nFormat2.format(double.parse(areaModels2.length.toString()))} พื้นที่',
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: const TextStyle(
-                                                          fontSize: 12,
+                                                  //     fontWeight:
+                                                  //         FontWeight.bold,
 
-                                                          // decoration:
+                                                  //     fontFamily:
+                                                  //         FontWeight_.Fonts_T,
+                                                  //   ),
+                                                  // ),
+                                                ),
+                                                Translate.TranslateAndSetText(
+                                                    (areaModels2 == null)
+                                                        ? '0 พื้นที่'
+                                                        : '${nFormat2.format(double.parse(areaModels2.length.toString()))} พื้นที่',
+                                                    Colors.green,
+                                                    TextAlign.end,
+                                                    FontWeight.w500,
+                                                    FontWeight_.Fonts_T,
+                                                    12,
+                                                    1),
+                                                // Text(
+                                                //   (areaModels2 == null)
+                                                //       ? '0 พื้นที่'
+                                                //       : '${nFormat2.format(double.parse(areaModels2.length.toString()))} พื้นที่',
+                                                //   maxLines: 1,
+                                                //   overflow:
+                                                //       TextOverflow.ellipsis,
+                                                //   style: const TextStyle(
+                                                //     fontSize: 12,
 
-                                                          //     TextDecoration.underline,
+                                                //     // decoration:
 
-                                                          color: Colors.green,
+                                                //     //     TextDecoration.underline,
 
-                                                          fontWeight:
-                                                              FontWeight.bold,
+                                                //     color: Colors.green,
 
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Expanded(
-                                                        // width: ((MediaQuery.of(
-                                                        //                 context)
-                                                        //             .size
-                                                        //             .width) <
-                                                        //         650)
-                                                        //     ? 40
-                                                        //     : 100,
-                                                        child: Text(
-                                                          (areaModels1.length ==
-                                                                  0)
-                                                              ? 'ใกล้หมดสัญญา [0%]'
-                                                              : 'ใกล้หมดสัญญา [${(((areaModels1.length ?? 0.0) * 100) / areaModels.length ?? 0.0).toStringAsFixed(2)}%]',
-                                                          // 'ใกล้หมดสัญญา',
-                                                          maxLines: 3,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: TextStyle(
-                                                            fontSize: 12,
+                                                //     fontWeight: FontWeight.bold,
 
-                                                            // decoration:
+                                                //     fontFamily:
+                                                //         FontWeight_.Fonts_T,
+                                                //   ),
+                                                // ),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  // width: ((MediaQuery.of(
+                                                  //                 context)
+                                                  //             .size
+                                                  //             .width) <
+                                                  //         650)
+                                                  //     ? 40
+                                                  //     : 100,
+                                                  child: Translate.TranslateAndSetText(
+                                                      (areaModels1.length == 0)
+                                                          ? 'ใกล้หมดสัญญา [0%]'
+                                                          : 'ใกล้หมดสัญญา [${(((areaModels1.length ?? 0.0) * 100) / areaModels.length ?? 0.0).toStringAsFixed(2)}%]',
+                                                      Colors.red,
+                                                      TextAlign.start,
+                                                      FontWeight.w500,
+                                                      FontWeight_.Fonts_T,
+                                                      12,
+                                                      1),
 
-                                                            //     TextDecoration.underline,
+                                                  // Text(
+                                                  //   (areaModels1.length == 0)
+                                                  //       ? 'ใกล้หมดสัญญา [0%]'
+                                                  //       : 'ใกล้หมดสัญญา [${(((areaModels1.length ?? 0.0) * 100) / areaModels.length ?? 0.0).toStringAsFixed(2)}%]',
+                                                  //   // 'ใกล้หมดสัญญา',
+                                                  //   maxLines: 3,
+                                                  //   overflow:
+                                                  //       TextOverflow.ellipsis,
+                                                  //   style: TextStyle(
+                                                  //     fontSize: 12,
 
-                                                            color: Colors.red,
+                                                  //     // decoration:
 
-                                                            fontWeight:
-                                                                FontWeight.bold,
+                                                  //     //     TextDecoration.underline,
 
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        (areaModels1 == null)
-                                                            ? '0 พื้นที่'
-                                                            : '${nFormat2.format(double.parse(areaModels1.length.toString()))} พื้นที่',
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: const TextStyle(
-                                                          fontSize: 12,
+                                                  //     color: Colors.red,
 
-                                                          // decoration:
+                                                  //     fontWeight:
+                                                  //         FontWeight.bold,
 
-                                                          //     TextDecoration.underline,
+                                                  //     fontFamily:
+                                                  //         FontWeight_.Fonts_T,
+                                                  //   ),
+                                                  // ),
+                                                ),
+                                                Translate.TranslateAndSetText(
+                                                    (areaModels1 == null)
+                                                        ? '0 พื้นที่'
+                                                        : '${nFormat2.format(double.parse(areaModels1.length.toString()))} พื้นที่',
+                                                    Colors.red,
+                                                    TextAlign.end,
+                                                    FontWeight.w500,
+                                                    FontWeight_.Fonts_T,
+                                                    12,
+                                                    1),
+                                                // Text(
+                                                //   (areaModels1 == null)
+                                                //       ? '0 พื้นที่'
+                                                //       : '${nFormat2.format(double.parse(areaModels1.length.toString()))} พื้นที่',
+                                                //   overflow:
+                                                //       TextOverflow.ellipsis,
+                                                //   style: const TextStyle(
+                                                //     fontSize: 12,
 
-                                                          color: Colors.red,
+                                                //     // decoration:
 
-                                                          fontWeight:
-                                                              FontWeight.bold,
+                                                //     //     TextDecoration.underline,
 
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
+                                                //     color: Colors.red,
+
+                                                //     fontWeight: FontWeight.bold,
+
+                                                //     fontFamily:
+                                                //         FontWeight_.Fonts_T,
+                                                //   ),
+                                                // ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: ((MediaQuery.of(context)
+                                                    .size
+                                                    .width) <
+                                                650)
+                                            ? const EdgeInsets.all(5.0)
+                                            : const EdgeInsets.all(24.0),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.white,
+                                          // color: Color(0xFFA8BFDB),
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 0, 8, 8),
+                                              child: Container(
+                                                height: 40,
+                                                width: 40,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(7),
+                                                  color: Colors.blue[700],
+                                                ),
+                                                child: const Icon(
+                                                  Icons.people,
+                                                  color: Colors.white,
+                                                ),
                                               ),
                                             ),
-                                            Container(
-                                              padding: ((MediaQuery.of(context)
-                                                          .size
-                                                          .width) <
-                                                      650)
-                                                  ? const EdgeInsets.all(5.0)
-                                                  : const EdgeInsets.all(24.0),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                color: Colors.white,
-                                                // color: Color(0xFFA8BFDB),
-                                              ),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .fromLTRB(0, 0, 8, 8),
-                                                    child: Container(
-                                                      height: 40,
-                                                      width: 40,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(7),
-                                                        color: Colors.blue[700],
-                                                      ),
-                                                      child: const Icon(
-                                                        Icons.people,
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  const Text(
-                                                    'แอดมิน',
+                                            Translate.TranslateAndSetText(
+                                                'แอดมิน',
+                                                Colors.black,
+                                                TextAlign.end,
+                                                FontWeight.w500,
+                                                FontWeight_.Fonts_T,
+                                                12,
+                                                1),
+                                            // const Text(
+                                            //   'แอดมิน',
+                                            //   maxLines: 2,
+                                            //   overflow: TextOverflow.ellipsis,
+                                            //   style: TextStyle(
+                                            //     shadows: [
+                                            //       Shadow(
+                                            //           color: Colors.black,
+                                            //           offset: Offset(0, -5))
+                                            //     ],
+                                            //     color: Colors.transparent,
+                                            //     // decoration: TextDecoration
+                                            //     //     .underline,
+                                            //     decorationColor: Colors.grey,
+                                            //     decorationThickness: 4,
+                                            //     // decorationStyle:
+                                            //     //     TextDecorationStyle
+                                            //     //         .dashed,
+                                            //     fontSize: 12,
+                                            //     fontWeight: FontWeight.bold,
+                                            //     fontFamily: FontWeight_.Fonts_T,
+                                            //   ),
+                                            // ),
+                                            const Row(
+                                              children: [
+                                                Expanded(
+                                                  // width: ((MediaQuery.of(
+                                                  //                 context)
+                                                  //             .size
+                                                  //             .width) <
+                                                  //         650)
+                                                  //     ? 40
+                                                  //     : 100,
+                                                  child: Text(
+                                                    '',
                                                     maxLines: 2,
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     style: TextStyle(
-                                                      shadows: [
-                                                        Shadow(
-                                                            color: Colors.black,
-                                                            offset:
-                                                                Offset(0, -5))
-                                                      ],
-                                                      color: Colors.transparent,
-                                                      // decoration: TextDecoration
-                                                      //     .underline,
-                                                      decorationColor:
-                                                          Colors.grey,
-                                                      decorationThickness: 4,
-                                                      // decorationStyle:
-                                                      //     TextDecorationStyle
-                                                      //         .dashed,
                                                       fontSize: 12,
+                                                      // decoration:
+                                                      //     TextDecoration.underline,
+                                                      color: Colors.green,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       fontFamily:
                                                           FontWeight_.Fonts_T,
                                                     ),
                                                   ),
-                                                  const Row(
-                                                    children: [
-                                                      Expanded(
-                                                        // width: ((MediaQuery.of(
-                                                        //                 context)
-                                                        //             .size
-                                                        //             .width) <
-                                                        //         650)
-                                                        //     ? 40
-                                                        //     : 100,
-                                                        child: Text(
-                                                          '',
-                                                          maxLines: 2,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: TextStyle(
-                                                            fontSize: 12,
-                                                            // decoration:
-                                                            //     TextDecoration.underline,
-                                                            color: Colors.green,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        '',
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: TextStyle(
-                                                          fontSize: 12,
-                                                          // decoration:
-                                                          //     TextDecoration.underline,
-                                                          color: Colors.green,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ],
+                                                ),
+                                                Text(
+                                                  '',
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                    // decoration:
+                                                    //     TextDecoration.underline,
+                                                    color: Colors.green,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T,
                                                   ),
-                                                  Row(
-                                                    children: [
-                                                      const Expanded(
-                                                        // width: ((MediaQuery.of(
-                                                        //                 context)
-                                                        //             .size
-                                                        //             .width) <
-                                                        //         650)
-                                                        //     ? 40
-                                                        //     : 100,
-                                                        child: Text(
+                                                ),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  // width: ((MediaQuery.of(
+                                                  //                 context)
+                                                  //             .size
+                                                  //             .width) <
+                                                  //         650)
+                                                  //     ? 40
+                                                  //     : 100,
+                                                  child: Translate
+                                                      .TranslateAndSetText(
                                                           'ทั้งหมด',
-                                                          maxLines: 2,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: TextStyle(
-                                                            fontSize: 12,
-                                                            // decoration:
-                                                            //     TextDecoration.underline,
-                                                            color: Colors.green,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        (userModels.isEmpty)
-                                                            ? '0 คน'
-                                                            : '${nFormat2.format(userModels.length)} คน',
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: const TextStyle(
-                                                          fontSize: 12,
-                                                          // decoration:
-                                                          //     TextDecoration.underline,
-                                                          color: Colors.green,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Expanded(
-                                                        // width: ((MediaQuery.of(
-                                                        //                 context)
-                                                        //             .size
-                                                        //             .width) <
-                                                        //         650)
-                                                        //     ? 40
-                                                        //     : 100,
-                                                        child: Text(
+                                                          Colors.green,
+                                                          TextAlign.start,
+                                                          FontWeight.w500,
+                                                          FontWeight_.Fonts_T,
+                                                          12,
+                                                          1),
+                                                  // Text(
+                                                  //   'ทั้งหมด',
+                                                  //   maxLines: 2,
+                                                  //   overflow:
+                                                  //       TextOverflow.ellipsis,
+                                                  //   style: TextStyle(
+                                                  //     fontSize: 12,
+                                                  //     // decoration:
+                                                  //     //     TextDecoration.underline,
+                                                  //     color: Colors.green,
+                                                  //     fontWeight:
+                                                  //         FontWeight.bold,
+                                                  //     fontFamily:
+                                                  //         FontWeight_.Fonts_T,
+                                                  //   ),
+                                                  // ),
+                                                ),
+                                                Translate.TranslateAndSetText(
+                                                    (userModels.isEmpty)
+                                                        ? '0 คน'
+                                                        : '${nFormat2.format(userModels.length)} คน',
+                                                    Colors.green,
+                                                    TextAlign.end,
+                                                    FontWeight.w500,
+                                                    FontWeight_.Fonts_T,
+                                                    12,
+                                                    1),
+                                                // Text(
+                                                //   (userModels.isEmpty)
+                                                //       ? '0 คน'
+                                                //       : '${nFormat2.format(userModels.length)} คน',
+                                                //   maxLines: 1,
+                                                //   overflow:
+                                                //       TextOverflow.ellipsis,
+                                                //   style: const TextStyle(
+                                                //     fontSize: 12,
+                                                //     // decoration:
+                                                //     //     TextDecoration.underline,
+                                                //     color: Colors.green,
+                                                //     fontWeight: FontWeight.bold,
+                                                //     fontFamily:
+                                                //         FontWeight_.Fonts_T,
+                                                //   ),
+                                                // ),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  // width: ((MediaQuery.of(
+                                                  //                 context)
+                                                  //             .size
+                                                  //             .width) <
+                                                  //         650)
+                                                  //     ? 40
+                                                  //     : 100,
+                                                  child: Translate
+                                                      .TranslateAndSetText(
                                                           (user_today == 0.00)
                                                               ? 'วันนี้ [0%]'
                                                               : 'วันนี้ [${(((user_today ?? 0.0) * 100) / userModels.length ?? 0.0).toStringAsFixed(2)}%]',
-                                                          // 'ใช้งานวันนี้',
-                                                          maxLines: 2,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: TextStyle(
-                                                            fontSize: 12,
+                                                          Colors.red,
+                                                          TextAlign.start,
+                                                          FontWeight.w500,
+                                                          FontWeight_.Fonts_T,
+                                                          12,
+                                                          1),
+                                                  //  Text(
+                                                  //   (user_today == 0.00)
+                                                  //       ? 'วันนี้ [0%]'
+                                                  //       : 'วันนี้ [${(((user_today ?? 0.0) * 100) / userModels.length ?? 0.0).toStringAsFixed(2)}%]',
+                                                  //   // 'ใช้งานวันนี้',
+                                                  //   maxLines: 2,
+                                                  //   overflow:
+                                                  //       TextOverflow.ellipsis,
+                                                  //   style: TextStyle(
+                                                  //     fontSize: 12,
 
-                                                            // decoration:
+                                                  //     // decoration:
 
-                                                            //     TextDecoration.underline,
+                                                  //     //     TextDecoration.underline,
 
-                                                            color: Colors.red,
+                                                  //     color: Colors.red,
 
-                                                            fontWeight:
-                                                                FontWeight.bold,
+                                                  //     fontWeight:
+                                                  //         FontWeight.bold,
 
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        '${nFormat2.format(user_today)} คน',
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: const TextStyle(
-                                                          fontSize: 12,
+                                                  //     fontFamily:
+                                                  //         FontWeight_.Fonts_T,
+                                                  //   ),
+                                                  // ),
+                                                ),
+                                                Translate.TranslateAndSetText(
+                                                    '${nFormat2.format(user_today)} คน',
+                                                    Colors.red,
+                                                    TextAlign.end,
+                                                    FontWeight.w500,
+                                                    FontWeight_.Fonts_T,
+                                                    12,
+                                                    1),
+                                                // Text(
+                                                //   '${nFormat2.format(user_today)} คน',
+                                                //   overflow:
+                                                //       TextOverflow.ellipsis,
+                                                //   style: const TextStyle(
+                                                //     fontSize: 12,
 
-                                                          // decoration:
+                                                //     // decoration:
 
-                                                          //     TextDecoration.underline,
+                                                //     //     TextDecoration.underline,
 
-                                                          color: Colors.red,
+                                                //     color: Colors.red,
 
-                                                          fontWeight:
-                                                              FontWeight.bold,
+                                                //     fontWeight: FontWeight.bold,
 
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
+                                                //     fontFamily:
+                                                //         FontWeight_.Fonts_T,
+                                                //   ),
+                                                // ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: ((MediaQuery.of(context)
+                                                    .size
+                                                    .width) <
+                                                650)
+                                            ? const EdgeInsets.all(5.0)
+                                            : const EdgeInsets.all(24.0),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.white,
+                                          // color: Color(0xFFA8BFDB),
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 0, 8, 8),
+                                              child: Container(
+                                                height: 40,
+                                                width: 40,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(7),
+                                                  color: Colors.red[700],
+                                                ),
+                                                child: const Icon(
+                                                  Icons.account_balance_wallet,
+                                                  color: Colors.white,
+                                                ),
                                               ),
                                             ),
-                                            Container(
-                                              padding: ((MediaQuery.of(context)
-                                                          .size
-                                                          .width) <
-                                                      650)
-                                                  ? const EdgeInsets.all(5.0)
-                                                  : const EdgeInsets.all(24.0),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                color: Colors.white,
-                                                // color: Color(0xFFA8BFDB),
-                                              ),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .fromLTRB(0, 0, 8, 8),
-                                                    child: Container(
-                                                      height: 40,
-                                                      width: 40,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(7),
-                                                        color: Colors.red[700],
-                                                      ),
-                                                      child: const Icon(
-                                                        Icons
-                                                            .account_balance_wallet,
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  const Text(
-                                                    'รวมรายรับ (ชำระแล้ว Cash/Bank)',
-                                                    maxLines: 2,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                      shadows: [
-                                                        Shadow(
-                                                            color: Colors.black,
-                                                            offset:
-                                                                Offset(0, -5))
-                                                      ],
-                                                      color: Colors.transparent,
-                                                      // decoration: TextDecoration
-                                                      //     .underline,
-                                                      decorationColor:
-                                                          Colors.grey,
-                                                      decorationThickness: 4,
-                                                      // decorationStyle:
-                                                      //     TextDecorationStyle
-                                                      //         .dashed,
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T,
-                                                    ),
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Expanded(
-                                                        // width: ((MediaQuery.of(
-                                                        //                 context)
-                                                        //             .size
-                                                        //             .width) <
-                                                        //         650)
-                                                        //     ? 40
-                                                        //     : 100,
-                                                        child: Text(
+                                            Translate.TranslateAndSetText(
+                                                'รวมรายรับ (ชำระแล้ว Cash/Bank)',
+                                                Colors.black,
+                                                TextAlign.start,
+                                                FontWeight.w500,
+                                                FontWeight_.Fonts_T,
+                                                12,
+                                                1),
+                                            // const Text(
+                                            //   'รวมรายรับ (ชำระแล้ว Cash/Bank)',
+                                            //   maxLines: 2,
+                                            //   overflow: TextOverflow.ellipsis,
+                                            //   style: TextStyle(
+                                            //     shadows: [
+                                            //       Shadow(
+                                            //           color: Colors.black,
+                                            //           offset: Offset(0, -5))
+                                            //     ],
+                                            //     color: Colors.transparent,
+                                            //     // decoration: TextDecoration
+                                            //     //     .underline,
+                                            //     decorationColor: Colors.grey,
+                                            //     decorationThickness: 4,
+                                            //     // decorationStyle:
+                                            //     //     TextDecorationStyle
+                                            //     //         .dashed,
+                                            //     fontSize: 12,
+                                            //     fontWeight: FontWeight.bold,
+                                            //     fontFamily: FontWeight_.Fonts_T,
+                                            //   ),
+                                            // ),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  // width: ((MediaQuery.of(
+                                                  //                 context)
+                                                  //             .size
+                                                  //             .width) <
+                                                  //         650)
+                                                  //     ? 40
+                                                  //     : 100,
+                                                  child: Translate
+                                                      .TranslateAndSetText(
                                                           'ทั้งหมด ',
-                                                          maxLines: 2,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: TextStyle(
-                                                            fontSize: 12,
-                                                            // decoration:
-                                                            //     TextDecoration.underline,
-                                                            color: Colors.blue,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        (total1_ == null)
-                                                            ? '0.00 บาท'
-                                                            : '${nFormat.format(total1_)} บาท',
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: const TextStyle(
-                                                          fontSize: 12,
-                                                          // decoration:
-                                                          //     TextDecoration.underline,
-                                                          color: Colors.blue,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Expanded(
-                                                        // width: ((MediaQuery.of(
-                                                        //                 context)
-                                                        //             .size
-                                                        //             .width) <
-                                                        //         650)
-                                                        //     ? 40
-                                                        //     : 100,
-                                                        child: Text(
+                                                          Colors.blue,
+                                                          TextAlign.start,
+                                                          FontWeight.w500,
+                                                          FontWeight_.Fonts_T,
+                                                          12,
+                                                          1),
+                                                  //  Text(
+                                                  //   'ทั้งหมด ',
+                                                  //   maxLines: 2,
+                                                  //   overflow:
+                                                  //       TextOverflow.ellipsis,
+                                                  //   style: TextStyle(
+                                                  //     fontSize: 12,
+                                                  //     // decoration:
+                                                  //     //     TextDecoration.underline,
+                                                  //     color: Colors.blue,
+                                                  //     fontWeight:
+                                                  //         FontWeight.bold,
+                                                  //     fontFamily:
+                                                  //         FontWeight_.Fonts_T,
+                                                  //   ),
+                                                  // ),
+                                                ),
+                                                Translate.TranslateAndSetText(
+                                                    (total1_ == null)
+                                                        ? '0.00 บาท'
+                                                        : '${nFormat.format(total1_)} บาท',
+                                                    Colors.blue,
+                                                    TextAlign.end,
+                                                    FontWeight.w500,
+                                                    FontWeight_.Fonts_T,
+                                                    12,
+                                                    1),
+                                                // Text(
+                                                //   (total1_ == null)
+                                                //       ? '0.00 บาท'
+                                                //       : '${nFormat.format(total1_)} บาท',
+                                                //   overflow:
+                                                //       TextOverflow.ellipsis,
+                                                //   style: const TextStyle(
+                                                //     fontSize: 12,
+                                                //     // decoration:
+                                                //     //     TextDecoration.underline,
+                                                //     color: Colors.blue,
+                                                //     fontWeight: FontWeight.bold,
+                                                //     fontFamily:
+                                                //         FontWeight_.Fonts_T,
+                                                //   ),
+                                                // ),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  // width: ((MediaQuery.of(
+                                                  //                 context)
+                                                  //             .size
+                                                  //             .width) <
+                                                  //         650)
+                                                  //     ? 40
+                                                  //     : 100,
+                                                  child: Translate
+                                                      .TranslateAndSetText(
                                                           (totalcash_ == 0.00)
                                                               ? 'Cash [0%]'
                                                               : 'Cash [${(((totalcash_ ?? 0.0) * 100) / total1_ ?? 0.0).toStringAsFixed(2)}%]',
-                                                          maxLines: 2,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: TextStyle(
-                                                            fontSize: 12,
-                                                            // decoration:
-                                                            //     TextDecoration.underline,
-                                                            color: Colors.green,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        (totalcash_ == null)
-                                                            ? '0.00 บาท'
-                                                            : '${nFormat.format(totalcash_)} บาท',
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: const TextStyle(
-                                                          fontSize: 12,
-                                                          // decoration:
-                                                          //     TextDecoration.underline,
-                                                          color: Colors.green,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Expanded(
-                                                        // width: ((MediaQuery.of(
-                                                        //                 context)
-                                                        //             .size
-                                                        //             .width) <
-                                                        //         650)
-                                                        //     ? 40
-                                                        //     : 100,
-                                                        child: Text(
+                                                          Colors.green,
+                                                          TextAlign.start,
+                                                          FontWeight.w500,
+                                                          FontWeight_.Fonts_T,
+                                                          12,
+                                                          1),
+
+                                                  // Text(
+                                                  //   (totalcash_ == 0.00)
+                                                  //       ? 'Cash [0%]'
+                                                  //       : 'Cash [${(((totalcash_ ?? 0.0) * 100) / total1_ ?? 0.0).toStringAsFixed(2)}%]',
+                                                  //   maxLines: 2,
+                                                  //   overflow:
+                                                  //       TextOverflow.ellipsis,
+                                                  //   style: TextStyle(
+                                                  //     fontSize: 12,
+                                                  //     // decoration:
+                                                  //     //     TextDecoration.underline,
+                                                  //     color: Colors.green,
+                                                  //     fontWeight:
+                                                  //         FontWeight.bold,
+                                                  //     fontFamily:
+                                                  //         FontWeight_.Fonts_T,
+                                                  //   ),
+                                                  // ),
+                                                ),
+                                                Translate.TranslateAndSetText(
+                                                    (totalcash_ == null)
+                                                        ? '0.00 บาท'
+                                                        : '${nFormat.format(totalcash_)} บาท',
+                                                    Colors.green,
+                                                    TextAlign.end,
+                                                    FontWeight.w500,
+                                                    FontWeight_.Fonts_T,
+                                                    12,
+                                                    1),
+                                                // Text(
+                                                //   (totalcash_ == null)
+                                                //       ? '0.00 บาท'
+                                                //       : '${nFormat.format(totalcash_)} บาท',
+                                                //   maxLines: 1,
+                                                //   overflow:
+                                                //       TextOverflow.ellipsis,
+                                                //   style: const TextStyle(
+                                                //     fontSize: 12,
+                                                //     // decoration:
+                                                //     //     TextDecoration.underline,
+                                                //     color: Colors.green,
+                                                //     fontWeight: FontWeight.bold,
+                                                //     fontFamily:
+                                                //         FontWeight_.Fonts_T,
+                                                //   ),
+                                                // ),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  // width: ((MediaQuery.of(
+                                                  //                 context)
+                                                  //             .size
+                                                  //             .width) <
+                                                  //         650)
+                                                  //     ? 40
+                                                  //     : 100,
+                                                  child: Translate
+                                                      .TranslateAndSetText(
                                                           (totalbank == 0.00)
                                                               ? 'Bank [0%]'
                                                               : 'Bank [${(((totalbank ?? 0.0) * 100) / total1_ ?? 0.0).toStringAsFixed(2)}%]',
-                                                          maxLines: 2,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: TextStyle(
-                                                            fontSize: 12,
+                                                          Colors.red,
+                                                          TextAlign.start,
+                                                          FontWeight.w500,
+                                                          FontWeight_.Fonts_T,
+                                                          12,
+                                                          1),
+                                                  // Text(
+                                                  //   (totalbank == 0.00)
+                                                  //       ? 'Bank [0%]'
+                                                  //       : 'Bank [${(((totalbank ?? 0.0) * 100) / total1_ ?? 0.0).toStringAsFixed(2)}%]',
+                                                  //   maxLines: 2,
+                                                  //   overflow:
+                                                  //       TextOverflow.ellipsis,
+                                                  //   style: TextStyle(
+                                                  //     fontSize: 12,
 
-                                                            // decoration:
+                                                  //     // decoration:
 
-                                                            //     TextDecoration.underline,
+                                                  //     //     TextDecoration.underline,
 
-                                                            color: Colors.red,
+                                                  //     color: Colors.red,
 
-                                                            fontWeight:
-                                                                FontWeight.bold,
+                                                  //     fontWeight:
+                                                  //         FontWeight.bold,
 
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        (totalbank == null)
-                                                            ? '0.00 บาท'
-                                                            : '${nFormat.format(totalbank)} บาท',
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: const TextStyle(
-                                                          fontSize: 12,
+                                                  //     fontFamily:
+                                                  //         FontWeight_.Fonts_T,
+                                                  //   ),
+                                                  // ),
+                                                ),
+                                                Translate.TranslateAndSetText(
+                                                    (totalbank == null)
+                                                        ? '0.00 บาท'
+                                                        : '${nFormat.format(totalbank)} บาท',
+                                                    Colors.red,
+                                                    TextAlign.end,
+                                                    FontWeight.w500,
+                                                    FontWeight_.Fonts_T,
+                                                    12,
+                                                    1),
+                                                // Text(
+                                                //   (totalbank == null)
+                                                //       ? '0.00 บาท'
+                                                //       : '${nFormat.format(totalbank)} บาท',
+                                                //   overflow:
+                                                //       TextOverflow.ellipsis,
+                                                //   style: const TextStyle(
+                                                //     fontSize: 12,
 
-                                                          // decoration:
+                                                //     // decoration:
 
-                                                          //     TextDecoration.underline,
+                                                //     //     TextDecoration.underline,
 
-                                                          color: Colors.red,
+                                                //     color: Colors.red,
 
-                                                          fontWeight:
-                                                              FontWeight.bold,
+                                                //     fontWeight: FontWeight.bold,
 
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
+                                                //     fontFamily:
+                                                //         FontWeight_.Fonts_T,
+                                                //   ),
+                                                // ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: ((MediaQuery.of(context)
+                                                    .size
+                                                    .width) <
+                                                650)
+                                            ? const EdgeInsets.all(5.0)
+                                            : const EdgeInsets.all(24.0),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.white,
+                                          // color: Color(0xFFA8BFDB),
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 0, 8, 8),
+                                              child: Container(
+                                                height: 40,
+                                                width: 40,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(7),
+                                                  color: Colors.teal[700],
+                                                ),
+                                                child: const Icon(
+                                                  Icons.monetization_on_rounded,
+                                                  color: Colors.white,
+                                                ),
                                               ),
                                             ),
-                                            Container(
-                                              padding: ((MediaQuery.of(context)
-                                                          .size
-                                                          .width) <
-                                                      650)
-                                                  ? const EdgeInsets.all(5.0)
-                                                  : const EdgeInsets.all(24.0),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                color: Colors.white,
-                                                // color: Color(0xFFA8BFDB),
-                                              ),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .fromLTRB(0, 0, 8, 8),
-                                                    child: Container(
-                                                      height: 40,
-                                                      width: 40,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(7),
-                                                        color: Colors.teal[700],
-                                                      ),
-                                                      child: const Icon(
-                                                        Icons
-                                                            .monetization_on_rounded,
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  const Text(
-                                                    'รวมรายรับ (ชำระแล้ว )',
+                                            Translate.TranslateAndSetText(
+                                                'รวมรายรับ (ชำระแล้ว )',
+                                                Colors.black,
+                                                TextAlign.start,
+                                                FontWeight.w500,
+                                                FontWeight_.Fonts_T,
+                                                12,
+                                                1),
+                                            // const Text(
+                                            //   'รวมรายรับ (ชำระแล้ว )',
+                                            //   maxLines: 2,
+                                            //   overflow: TextOverflow.ellipsis,
+                                            //   style: TextStyle(
+                                            //     shadows: [
+                                            //       Shadow(
+                                            //           color: Colors.black,
+                                            //           offset: Offset(0, -5))
+                                            //     ],
+                                            //     color: Colors.transparent,
+                                            //     // decoration: TextDecoration
+                                            //     //     .underline,
+                                            //     decorationColor: Colors.grey,
+                                            //     decorationThickness: 4,
+                                            //     // decorationStyle:
+                                            //     //     TextDecorationStyle
+                                            //     //         .dashed,
+                                            //     fontSize: 12,
+                                            //     fontWeight: FontWeight.bold,
+                                            //     fontFamily: FontWeight_.Fonts_T,
+                                            //   ),
+                                            // ),
+                                            const Row(
+                                              children: [
+                                                Expanded(
+                                                  // width: ((MediaQuery.of(
+                                                  //                 context)
+                                                  //             .size
+                                                  //             .width) <
+                                                  //         650)
+                                                  //     ? 40
+                                                  //     : 100,
+                                                  child: Text(
+                                                    '',
                                                     maxLines: 2,
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     style: TextStyle(
-                                                      shadows: [
-                                                        Shadow(
-                                                            color: Colors.black,
-                                                            offset:
-                                                                Offset(0, -5))
-                                                      ],
-                                                      color: Colors.transparent,
-                                                      // decoration: TextDecoration
-                                                      //     .underline,
-                                                      decorationColor:
-                                                          Colors.grey,
-                                                      decorationThickness: 4,
-                                                      // decorationStyle:
-                                                      //     TextDecorationStyle
-                                                      //         .dashed,
                                                       fontSize: 12,
+                                                      // decoration:
+                                                      //     TextDecoration.underline,
+                                                      color: Colors.green,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       fontFamily:
                                                           FontWeight_.Fonts_T,
                                                     ),
                                                   ),
-                                                  const Row(
-                                                    children: [
-                                                      Expanded(
-                                                        // width: ((MediaQuery.of(
-                                                        //                 context)
-                                                        //             .size
-                                                        //             .width) <
-                                                        //         650)
-                                                        //     ? 40
-                                                        //     : 100,
-                                                        child: Text(
-                                                          '',
-                                                          maxLines: 2,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: TextStyle(
-                                                            fontSize: 12,
-                                                            // decoration:
-                                                            //     TextDecoration.underline,
-                                                            color: Colors.green,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        '',
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: TextStyle(
-                                                          fontSize: 12,
-                                                          // decoration:
-                                                          //     TextDecoration.underline,
-                                                          color: Colors.green,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ],
+                                                ),
+                                                Text(
+                                                  '',
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                    // decoration:
+                                                    //     TextDecoration.underline,
+                                                    color: Colors.green,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T,
                                                   ),
-                                                  Row(
-                                                    children: [
-                                                      const Expanded(
-                                                        // width: ((MediaQuery.of(
-                                                        //                 context)
-                                                        //             .size
-                                                        //             .width) <
-                                                        //         650)
-                                                        //     ? 40
-                                                        //     : 100,
-                                                        child: Text(
-                                                          'ก่อน-หักส่วนลด',
-                                                          maxLines: 2,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: TextStyle(
-                                                            fontSize: 12,
-                                                            // decoration:
-                                                            //     TextDecoration.underline,
-                                                            color: Colors.green,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        (total2_ == null)
-                                                            ? '0.00 บาท'
-                                                            : '${nFormat.format(total2_)} บาท',
-                                                        maxLines: 2,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: const TextStyle(
-                                                          fontSize: 12,
-                                                          // decoration:
-                                                          //     TextDecoration.underline,
-                                                          color: Colors.green,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      const Expanded(
-                                                        // width: ((MediaQuery.of(
-                                                        //                 context)
-                                                        //             .size
-                                                        //             .width) <
-                                                        //         650)
-                                                        //     ? 40
-                                                        //     : 100,
-                                                        child: Text(
-                                                          'หลัง-หักส่วนลด',
-                                                          maxLines: 2,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: TextStyle(
-                                                            fontSize: 12,
-                                                            // decoration:
-                                                            //     TextDecoration.underline,
-                                                            color: Colors.red,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        (total1_ == null)
-                                                            ? '0.00 บาท'
-                                                            : '${nFormat.format(total1_)} บาท',
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: const TextStyle(
-                                                          fontSize: 12,
-                                                          // decoration:
-                                                          //     TextDecoration.underline,
-                                                          color: Colors.red,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             ),
-                                          ]
-                                          // itemBuilder: (context, index) =>
-                                          //     demoTransactions[index],
-                                          );
-                                    })
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  // width: ((MediaQuery.of(
+                                                  //                 context)
+                                                  //             .size
+                                                  //             .width) <
+                                                  //         650)
+                                                  //     ? 40
+                                                  //     : 100,
+                                                  child: Translate
+                                                      .TranslateAndSetText(
+                                                          'ก่อน-หักส่วนลด',
+                                                          Colors.green,
+                                                          TextAlign.start,
+                                                          FontWeight.w500,
+                                                          FontWeight_.Fonts_T,
+                                                          12,
+                                                          1),
+
+                                                  //  Text(
+                                                  //   'ก่อน-หักส่วนลด',
+                                                  //   maxLines: 2,
+                                                  //   overflow:
+                                                  //       TextOverflow.ellipsis,
+                                                  //   style: TextStyle(
+                                                  //     fontSize: 12,
+                                                  //     // decoration:
+                                                  //     //     TextDecoration.underline,
+                                                  //     color: Colors.green,
+                                                  //     fontWeight:
+                                                  //         FontWeight.bold,
+                                                  //     fontFamily:
+                                                  //         FontWeight_.Fonts_T,
+                                                  //   ),
+                                                  // ),
+                                                ),
+                                                Translate.TranslateAndSetText(
+                                                    (total2_ == null)
+                                                        ? '0.00 บาท'
+                                                        : '${nFormat.format(total2_)} บาท',
+                                                    Colors.green,
+                                                    TextAlign.end,
+                                                    FontWeight.w500,
+                                                    FontWeight_.Fonts_T,
+                                                    12,
+                                                    1),
+                                                // Text(
+                                                //   (total2_ == null)
+                                                //       ? '0.00 บาท'
+                                                //       : '${nFormat.format(total2_)} บาท',
+                                                //   maxLines: 2,
+                                                //   overflow:
+                                                //       TextOverflow.ellipsis,
+                                                //   style: const TextStyle(
+                                                //     fontSize: 12,
+                                                //     // decoration:
+                                                //     //     TextDecoration.underline,
+                                                //     color: Colors.green,
+                                                //     fontWeight: FontWeight.bold,
+                                                //     fontFamily:
+                                                //         FontWeight_.Fonts_T,
+                                                //   ),
+                                                // ),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  // width: ((MediaQuery.of(
+                                                  //                 context)
+                                                  //             .size
+                                                  //             .width) <
+                                                  //         650)
+                                                  //     ? 40
+                                                  //     : 100,
+                                                  child: Translate
+                                                      .TranslateAndSetText(
+                                                          'หลัง-หักส่วนลด',
+                                                          Colors.red,
+                                                          TextAlign.start,
+                                                          FontWeight.w500,
+                                                          FontWeight_.Fonts_T,
+                                                          12,
+                                                          1),
+
+                                                  //  Text(
+                                                  //   'หลัง-หักส่วนลด',
+                                                  //   maxLines: 2,
+                                                  //   overflow:
+                                                  //       TextOverflow.ellipsis,
+                                                  //   style: TextStyle(
+                                                  //     fontSize: 12,
+                                                  //     // decoration:
+                                                  //     //     TextDecoration.underline,
+                                                  //     color: Colors.red,
+                                                  //     fontWeight:
+                                                  //         FontWeight.bold,
+                                                  //     fontFamily:
+                                                  //         FontWeight_.Fonts_T,
+                                                  //   ),
+                                                  // ),
+                                                ),
+                                                Translate.TranslateAndSetText(
+                                                    (total1_ == null)
+                                                        ? '0.00 บาท'
+                                                        : '${nFormat.format(total1_)} บาท',
+                                                    Colors.red,
+                                                    TextAlign.end,
+                                                    FontWeight.w500,
+                                                    FontWeight_.Fonts_T,
+                                                    12,
+                                                    1),
+
+                                                // Text(
+                                                //   (total1_ == null)
+                                                //       ? '0.00 บาท'
+                                                //       : '${nFormat.format(total1_)} บาท',
+                                                //   overflow:
+                                                //       TextOverflow.ellipsis,
+                                                //   style: const TextStyle(
+                                                //     fontSize: 12,
+                                                //     // decoration:
+                                                //     //     TextDecoration.underline,
+                                                //     color: Colors.red,
+                                                //     fontWeight: FontWeight.bold,
+                                                //     fontFamily:
+                                                //         FontWeight_.Fonts_T,
+                                                //   ),
+                                                // ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ]
+                                    // itemBuilder: (context, index) =>
+                                    //     demoTransactions[index],
+                                    )
                               ]),
                         ),
                       )),
@@ -2991,16 +3142,25 @@ class _ReportScreenState extends State<ReportScreen> {
                   (renTal_user.toString() == '50')
                       ? Row(
                           children: [
-                            const Padding(
+                            Padding(
                               padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                'รายงาน : ',
-                                style: TextStyle(
-                                  color: ReportScreen_Color.Colors_Text1_,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T,
-                                ),
-                              ),
+                              child: Translate.TranslateAndSetText(
+                                  'รายงาน : ',
+                                  ReportScreen_Color.Colors_Text1_,
+                                  TextAlign.end,
+                                  FontWeight.w500,
+                                  FontWeight_.Fonts_T,
+                                  16,
+                                  1),
+
+                              //  Text(
+                              //   'รายงาน : ',
+                              //   style: TextStyle(
+                              //     color: ReportScreen_Color.Colors_Text1_,
+                              //     fontWeight: FontWeight.bold,
+                              //     fontFamily: FontWeight_.Fonts_T,
+                              //   ),
+                              // ),
                             ),
                             Expanded(
                               child: ScrollConfiguration(
@@ -3129,18 +3289,28 @@ class _ReportScreenState extends State<ReportScreen> {
                                               padding:
                                                   const EdgeInsets.all(5.0),
                                               child: Center(
-                                                child: AutoSizeText(
-                                                  minFontSize: 10,
-                                                  maxFontSize: 20,
-                                                  'หน้า ${index}',
-                                                  style: const TextStyle(
-                                                    color: Colors.white,
-                                                    // fontWeight: FontWeight.bold,
-                                                    fontFamily:
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'หน้า ${index}',
+                                                        Colors.white,
+                                                        TextAlign.end,
+                                                        FontWeight.w500,
                                                         FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
+                                                        16,
+                                                        1),
+
+                                                //  AutoSizeText(
+                                                //   minFontSize: 10,
+                                                //   maxFontSize: 20,
+                                                //   'หน้า ${index}',
+                                                //   style: const TextStyle(
+                                                //     color: Colors.white,
+                                                //     // fontWeight: FontWeight.bold,
+                                                //     fontFamily:
+                                                //         FontWeight_.Fonts_T,
+                                                //     fontWeight: FontWeight.bold,
+                                                //   ),
+                                                // ),
                                               ),
                                             ),
                                           ),
@@ -3499,7 +3669,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                           : (rtser.toString() == '106')
                                               ? Row(
                                                   children: [
-                                                    for (int index = -2;
+                                                    for (int index = -3;
                                                         index < 1;
                                                         index++)
                                                       Padding(
@@ -3553,12 +3723,15 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                   AutoSizeText(
                                                                 minFontSize: 10,
                                                                 maxFontSize: 20,
-                                                                (index == -2)
+                                                                (index == -3)
                                                                     ? 'Exclusive - A'
                                                                     : (index ==
-                                                                            -1)
+                                                                            -2)
                                                                         ? 'Exclusive - B'
-                                                                        : 'Exclusive - C',
+                                                                        : (index ==
+                                                                                -1)
+                                                                            ? 'Exclusive - C'
+                                                                            : 'Exclusive - D',
                                                                 style:
                                                                     const TextStyle(
                                                                   color: Colors
@@ -3577,7 +3750,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                         ),
                                                       ),
                                                     for (int index = 1;
-                                                        index < 12;
+                                                        index < 13;
                                                         index++)
                                                       Padding(
                                                         padding:
@@ -3892,32 +4065,35 @@ class _ReportScreenState extends State<ReportScreen> {
   }
 
   Widget Choice(BuildContext context) {
-    return (ser_pang_Choice == -2)
+    return (ser_pang_Choice == -3)
         ? Report_Choice_ScreenA()
-        : (ser_pang_Choice == -1)
+        : (ser_pang_Choice == -2)
             ? Report_Choice_ScreenB()
-            : (ser_pang_Choice == 0)
+            : (ser_pang_Choice == -1)
                 ? Report_Choice_ScreenC()
-                : (ser_pang_Choice == 1)
-                    ? const ReportScreen1()
-                    : (ser_pang_Choice == 2)
-                        ? const ReportScreen2()
-                        : (ser_pang_Choice == 3)
-                            ? const ReportScreen3()
-                            : (ser_pang_Choice == 4)
-                                ? const ReportScreen4()
-                                : (ser_pang_Choice == 5)
-                                    ? const ReportScreen5()
-                                    : (ser_pang_Choice == 6)
-                                        ? const ReportScreen6()
-                                        : (ser_pang_Choice == 7)
-                                            ? const ReportScreen7()
-                                            : (ser_pang_Choice == 8)
-                                                ? const ReportScreen8()
-                                                : (ser_pang_Choice == 9)
-                                                    ? const ReportScreen9()
-                                                    : (ser_pang_Choice == 10)
-                                                        ? const ReportScreen10()
-                                                        : const ReportScreen11();
+                : (ser_pang_Choice == 0)
+                    ? Report_Choice_ScreenD()
+                    : (ser_pang_Choice == 1)
+                        ? const ReportScreen1()
+                        : (ser_pang_Choice == 2)
+                            ? const ReportScreen2()
+                            : (ser_pang_Choice == 3)
+                                ? const ReportScreen3()
+                                : (ser_pang_Choice == 4)
+                                    ? const ReportScreen4()
+                                    : (ser_pang_Choice == 5)
+                                        ? const ReportScreen5()
+                                        : (ser_pang_Choice == 6)
+                                            ? const ReportScreen6()
+                                            : (ser_pang_Choice == 7)
+                                                ? const ReportScreen7()
+                                                : (ser_pang_Choice == 8)
+                                                    ? const ReportScreen8()
+                                                    : (ser_pang_Choice == 9)
+                                                        ? const ReportScreen9()
+                                                        : (ser_pang_Choice ==
+                                                                10)
+                                                            ? const ReportScreen10()
+                                                            : const ReportScreen11();
   }
 }

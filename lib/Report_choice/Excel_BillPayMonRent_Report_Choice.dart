@@ -367,7 +367,7 @@ class Excgen_BillPayMonRentReport_Choice {
       sheet.getRangeByName('T${index + 7}').setText('${billpay_Mon[index].st}');
       sheet
           .getRangeByName('U${index + 7}')
-          .setText('${billpay_Mon[index].user}');
+          .setText('${billpay_Mon[index].name_user}');
       sheet
           .getRangeByName('V${index + 7}')
           .setText('${billpay_Mon[index].remark}');

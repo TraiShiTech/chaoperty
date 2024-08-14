@@ -416,7 +416,7 @@ class Excgen_TeNantNewReport_Choice {
           .setText('${teNantModels_New[index].pakan_doc}');
       sheet
           .getRangeByName('Y${index + 7}')
-          .setText('${teNantModels_New[index].user}');
+          .setText('${teNantModels_New[index].name_user}');
 
       indextotol = indextotol + 1;
     }

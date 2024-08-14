@@ -14485,7 +14485,7 @@ class _AccountScreenState extends State<AccountScreen> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
     var user = preferences.getString('ser');
-    var ciddoc = _TransReBillModels[index].ser;
+    var ciddoc = _TransReBillModels[index].cid;
     var qutser = _TransReBillModels[index].ser_in;
     var docnoin = _TransReBillModels[index].docno;
     String url =

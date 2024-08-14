@@ -14,6 +14,7 @@ import '../Model/GetExp_Model.dart';
 import '../Model/GetZone_Model.dart';
 import '../Model/trans_re_bill_model_REprot_CM.dart';
 import '../Responsive/responsive.dart';
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 import 'Excel_DailyReport_category_cm.dart';
 
@@ -1119,16 +1120,16 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'เดือน :',
-                          style: TextStyle(
-                            color: ReportScreen_Color.Colors_Text2_,
-                            // fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T,
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'เดือน :',
+                            ReportScreen_Color.Colors_Text1_,
+                            TextAlign.center,
+                            FontWeight.w500,
+                            Font_.Fonts_T,
+                            16,
+                            1),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -1211,16 +1212,14 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
                               for (int item = 1; item < 13; item++)
                                 DropdownMenuItem<String>(
                                   value: '${item}',
-                                  child: Text(
-                                    '${monthsInThai[item - 1]}',
-                                    //'${item}',
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      overflow: TextOverflow.ellipsis,
-                                      fontSize: 14,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
+                                  child: Translate.TranslateAndSetText(
+                                      '${monthsInThai[item - 1]}',
+                                      Colors.grey,
+                                      TextAlign.center,
+                                      FontWeight.w500,
+                                      Font_.Fonts_T,
+                                      16,
+                                      1),
                                 )
                             ],
 
@@ -1236,16 +1235,16 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
                           ),
                         ),
                       ),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'ปี :',
-                          style: TextStyle(
-                            color: ReportScreen_Color.Colors_Text2_,
-                            // fontWeight: FontWeight.bold,
-                            fontFamily: Font_.Fonts_T,
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            'ปี :',
+                            ReportScreen_Color.Colors_Text2_,
+                            TextAlign.center,
+                            FontWeight.w500,
+                            Font_.Fonts_T,
+                            16,
+                            1),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -1376,15 +1375,15 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
                                     bottomLeft: Radius.circular(10),
                                     bottomRight: Radius.circular(10)),
                               ),
-                              child: const Center(
-                                child: Text(
-                                  'ค้นหา',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                  ),
-                                ),
+                              child: Center(
+                                child: Translate.TranslateAndSetText(
+                                    'ค้นหา',
+                                    Colors.white,
+                                    TextAlign.center,
+                                    FontWeight.w500,
+                                    Font_.Fonts_T,
+                                    16,
+                                    1),
                               )),
                         ),
                       ),
@@ -1406,18 +1405,18 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
                         border: Border.all(color: Colors.grey, width: 1),
                       ),
                       padding: const EdgeInsets.all(8.0),
-                      child: const Center(
+                      child: Center(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              'เรียกดู',
-                              style: TextStyle(
-                                color: ReportScreen_Color.Colors_Text1_,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: FontWeight_.Fonts_T,
-                              ),
-                            ),
+                            Translate.TranslateAndSetText(
+                                'เรียกดู',
+                                ReportScreen_Color.Colors_Text1_,
+                                TextAlign.center,
+                                FontWeight.w500,
+                                Font_.Fonts_T,
+                                16,
+                                1),
                             Icon(
                               Icons.navigate_next,
                               color: Colors.grey,
@@ -1440,38 +1439,31 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      (Value_selectDate_Daily_Type_ != null ||
-                              Value_select_lastDate_Daily_Type_ != null)
-                          ? 'รายงาน รายรับแยกตามประเภท (รายเดือน)'
-                          : (_TransReBillModels_GropType_Mon.length != 0 ||
-                                  _TransReBillModels_GropType_Sub_zone.length !=
-                                      0)
-                              ? (YE_Income_Type_Mon_User != null &&
-                                          Mon_Income_Type_Mon_User != null ||
-                                      _TransReBillModels_GropType_Mon.length !=
-                                          0 ||
-                                      _TransReBillModels_GropType_Sub_zone
-                                              .length !=
-                                          0)
-                                  ? 'รายงาน รายรับแยกตามประเภท (รายเดือน) (พบข้อมูล ✔️)'
-                                  : 'รายงาน รายรับแยกตามประเภท (รายเดือน) (ไม่พบข้อมูล ✖️)'
-                              : 'รายงาน รายรับแยกตามประเภท (รายเดือน)',
-                      // (YE_Income_Type_Mon_User != null &&
-                      //         _TransReBillModels_GropType_Mon.length == 0 &&
-                      //         Mon_Income_Type_Mon_User != null)
-                      //     ? 'รายงาน รายรับแยกตามประเภท (รายเดือน) (ไม่พบข้อมูล ✖️)'
-                      //     : (YE_Income_Type_Mon_User != null &&
-                      //             _TransReBillModels_GropType_Mon.length != 0 &&
-                      //             Mon_Income_Type_Mon_User != null)
-                      //         ? 'รายงาน รายรับแยกตามประเภท (รายเดือน) (ไม่พบข้อมูล ✔️)'
-                      //         : 'รายงาน รายรับแยกตามประเภท (รายเดือน)',
-                      style: const TextStyle(
-                        color: ReportScreen_Color.Colors_Text2_,
-                        // fontWeight: FontWeight.bold,
-                        fontFamily: Font_.Fonts_T,
-                      ),
-                    ),
+                    child: Translate.TranslateAndSetText(
+                        (Value_selectDate_Daily_Type_ != null ||
+                                Value_select_lastDate_Daily_Type_ != null)
+                            ? 'รายงาน รายรับแยกตามประเภท (รายเดือน)'
+                            : (_TransReBillModels_GropType_Mon.length != 0 ||
+                                    _TransReBillModels_GropType_Sub_zone
+                                            .length !=
+                                        0)
+                                ? (YE_Income_Type_Mon_User != null &&
+                                            Mon_Income_Type_Mon_User != null ||
+                                        _TransReBillModels_GropType_Mon
+                                                .length !=
+                                            0 ||
+                                        _TransReBillModels_GropType_Sub_zone
+                                                .length !=
+                                            0)
+                                    ? 'รายงาน รายรับแยกตามประเภท (รายเดือน) (พบข้อมูล ✔️)'
+                                    : 'รายงาน รายรับแยกตามประเภท (รายเดือน) (ไม่พบข้อมูล ✖️)'
+                                : 'รายงาน รายรับแยกตามประเภท (รายเดือน)',
+                        ReportScreen_Color.Colors_Text1_,
+                        TextAlign.center,
+                        FontWeight.w500,
+                        Font_.Fonts_T,
+                        16,
+                        1),
                   ),
                 ],
               ),
@@ -1495,16 +1487,16 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
               ),
               Row(
                 children: [
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      'วันที่ :',
-                      style: TextStyle(
-                        color: ReportScreen_Color.Colors_Text2_,
-                        // fontWeight: FontWeight.bold,
-                        fontFamily: Font_.Fonts_T,
-                      ),
-                    ),
+                    child: Translate.TranslateAndSetText(
+                        'วันที่ :',
+                        ReportScreen_Color.Colors_Text1_,
+                        TextAlign.center,
+                        FontWeight.w500,
+                        Font_.Fonts_T,
+                        16,
+                        1),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -1525,31 +1517,31 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
                           width: 120,
                           padding: const EdgeInsets.all(8.0),
                           child: Center(
-                            child: Text(
-                              (Value_selectDate_Daily_Type_ == null)
-                                  ? 'เลือก'
-                                  : '$Value_selectDate_Daily_Type_',
-                              style: const TextStyle(
-                                color: ReportScreen_Color.Colors_Text2_,
-                                // fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T,
-                              ),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                (Value_selectDate_Daily_Type_ == null)
+                                    ? 'เลือก'
+                                    : '$Value_selectDate_Daily_Type_',
+                                ReportScreen_Color.Colors_Text1_,
+                                TextAlign.center,
+                                FontWeight.w500,
+                                Font_.Fonts_T,
+                                16,
+                                1),
                           )),
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      (Value_selectDate_Daily_Type_ != null)
-                          ? 'ถึง  ( กรุณาเลือกวันที่เริ่ม )'
-                          : 'ถึง',
-                      style: const TextStyle(
-                        color: ReportScreen_Color.Colors_Text2_,
-                        // fontWeight: FontWeight.bold,
-                        fontFamily: Font_.Fonts_T,
-                      ),
-                    ),
+                    child: Translate.TranslateAndSetText(
+                        (Value_selectDate_Daily_Type_ != null)
+                            ? 'ถึง  ( กรุณาเลือกวันที่เริ่ม )'
+                            : 'ถึง',
+                        ReportScreen_Color.Colors_Text1_,
+                        TextAlign.center,
+                        FontWeight.w500,
+                        Font_.Fonts_T,
+                        16,
+                        1),
                   ),
                   if (Value_selectDate_Daily_Type_ != null)
                     Padding(
@@ -1571,16 +1563,16 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
                             width: 120,
                             padding: const EdgeInsets.all(8.0),
                             child: Center(
-                              child: Text(
-                                (Value_select_lastDate_Daily_Type_ == null)
-                                    ? 'เลือก'
-                                    : '$Value_select_lastDate_Daily_Type_',
-                                style: const TextStyle(
-                                  color: ReportScreen_Color.Colors_Text2_,
-                                  // fontWeight: FontWeight.bold,
-                                  fontFamily: Font_.Fonts_T,
-                                ),
-                              ),
+                              child: Translate.TranslateAndSetText(
+                                  (Value_select_lastDate_Daily_Type_ == null)
+                                      ? 'เลือก'
+                                      : '$Value_select_lastDate_Daily_Type_',
+                                  ReportScreen_Color.Colors_Text1_,
+                                  TextAlign.center,
+                                  FontWeight.w500,
+                                  Font_.Fonts_T,
+                                  16,
+                                  1),
                             )),
                       ),
                     ),
@@ -1613,15 +1605,15 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
                                 bottomLeft: Radius.circular(10),
                                 bottomRight: Radius.circular(10)),
                           ),
-                          child: const Center(
-                            child: Text(
-                              'ค้นหา',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: FontWeight_.Fonts_T,
-                              ),
-                            ),
+                          child: Center(
+                            child: Translate.TranslateAndSetText(
+                                'ค้นหา',
+                                Colors.white,
+                                TextAlign.center,
+                                FontWeight.w500,
+                                Font_.Fonts_T,
+                                16,
+                                1),
                           )),
                     ),
                   ),
@@ -1641,18 +1633,18 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
                         border: Border.all(color: Colors.grey, width: 1),
                       ),
                       padding: const EdgeInsets.all(8.0),
-                      child: const Center(
+                      child: Center(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              'เรียกดู',
-                              style: TextStyle(
-                                color: ReportScreen_Color.Colors_Text1_,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: FontWeight_.Fonts_T,
-                              ),
-                            ),
+                            Translate.TranslateAndSetText(
+                                'เรียกดู',
+                                ReportScreen_Color.Colors_Text1_,
+                                TextAlign.center,
+                                FontWeight.w500,
+                                Font_.Fonts_T,
+                                16,
+                                1),
                             Icon(
                               Icons.navigate_next,
                               color: Colors.grey,
@@ -1673,30 +1665,32 @@ class _Report_cm_ScreenBState extends State<Report_cm_ScreenB> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      (YE_Income_Type_Mon_User != null ||
-                              Mon_Income_Type_Mon_User != null)
-                          ? 'รายงาน รายรับแยกตามประเภท (รายสัปดาห์)'
-                          : (_TransReBillModels_GropType_Mon.length != 0 ||
-                                  _TransReBillModels_GropType_Sub_zone.length !=
-                                      0)
-                              ? (Value_selectDate_Daily_Type_ != null &&
-                                          Value_select_lastDate_Daily_Type_ !=
-                                              null ||
-                                      _TransReBillModels_GropType_Mon.length !=
-                                          0 ||
-                                      _TransReBillModels_GropType_Sub_zone
-                                              .length !=
-                                          0)
-                                  ? 'รายงาน รายรับแยกตามประเภท (รายสัปดาห์) (พบข้อมูล ✔️)'
-                                  : 'รายงาน รายรับแยกตามประเภท (รายสัปดาห์) (ไม่พบข้อมูล ✖️)'
-                              : 'รายงาน รายรับแยกตามประเภท (รายสัปดาห์)',
-                      style: const TextStyle(
-                        color: ReportScreen_Color.Colors_Text2_,
-                        // fontWeight: FontWeight.bold,
-                        fontFamily: Font_.Fonts_T,
-                      ),
-                    ),
+                    child: Translate.TranslateAndSetText(
+                        (YE_Income_Type_Mon_User != null ||
+                                Mon_Income_Type_Mon_User != null)
+                            ? 'รายงาน รายรับแยกตามประเภท (รายสัปดาห์)'
+                            : (_TransReBillModels_GropType_Mon.length != 0 ||
+                                    _TransReBillModels_GropType_Sub_zone
+                                            .length !=
+                                        0)
+                                ? (Value_selectDate_Daily_Type_ != null &&
+                                            Value_select_lastDate_Daily_Type_ !=
+                                                null ||
+                                        _TransReBillModels_GropType_Mon
+                                                .length !=
+                                            0 ||
+                                        _TransReBillModels_GropType_Sub_zone
+                                                .length !=
+                                            0)
+                                    ? 'รายงาน รายรับแยกตามประเภท (รายสัปดาห์) (พบข้อมูล ✔️)'
+                                    : 'รายงาน รายรับแยกตามประเภท (รายสัปดาห์) (ไม่พบข้อมูล ✖️)'
+                                : 'รายงาน รายรับแยกตามประเภท (รายสัปดาห์)',
+                        ReportScreen_Color.Colors_Text1_,
+                        TextAlign.center,
+                        FontWeight.w500,
+                        Font_.Fonts_T,
+                        16,
+                        1),
                   ),
                 ],
               ),

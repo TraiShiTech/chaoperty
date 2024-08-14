@@ -39,7 +39,7 @@ class ContractxPakanChoiceModel {
   String? zn;
   String? ln;
   String? docno;
-    String? doctax;
+  String? doctax;
   String? refno;
   String? remark;
   String? room_number;
@@ -47,55 +47,58 @@ class ContractxPakanChoiceModel {
   String? zn1;
   String? tax;
   String? max_date;
+  String? user;
+  String? name_user;
 
-  ContractxPakanChoiceModel({
-    this.ser,
-    this.datex,
-    this.timex,
-    this.cser,
-    this.cid,
-    this.expser,
-    this.exptser,
-    this.expname,
-    this.unitser,
-    this.unit,
-    this.term,
-    this.sday,
-    this.sdate,
-    this.ldate,
-    this.meter,
-    this.qty,
-    this.amt,
-    this.vtype,
-    this.nvat,
-    this.vat,
-    this.pvat,
-    this.nwht,
-    this.wht,
-    this.total,
-    this.st,
-    this.sum_total,
-    this.dataUpdate,
-    this.etype,
-    this.dtype,
-    this.sname,
-    this.cname,
-    this.ctype,
-    this.stype,
-    this.zser,
-    this.zser1,
-    this.zn,
-    this.ln,
-    this.docno,
+  ContractxPakanChoiceModel(
+      {this.ser,
+      this.datex,
+      this.timex,
+      this.cser,
+      this.cid,
+      this.expser,
+      this.exptser,
+      this.expname,
+      this.unitser,
+      this.unit,
+      this.term,
+      this.sday,
+      this.sdate,
+      this.ldate,
+      this.meter,
+      this.qty,
+      this.amt,
+      this.vtype,
+      this.nvat,
+      this.vat,
+      this.pvat,
+      this.nwht,
+      this.wht,
+      this.total,
+      this.st,
+      this.sum_total,
+      this.dataUpdate,
+      this.etype,
+      this.dtype,
+      this.sname,
+      this.cname,
+      this.ctype,
+      this.stype,
+      this.zser,
+      this.zser1,
+      this.zn,
+      this.ln,
+      this.docno,
       this.doctax,
-    this.refno,
-    this.remark,
-    this.room_number,
-    this.name,
-    this.zn1,
-    this.tax,
-    this.max_date,
-  });
+      this.refno,
+      this.remark,
+      this.room_number,
+      this.name,
+      this.zn1,
+      this.tax,
+      this.max_date,
+      this.user,
+      this.name_user});
 
   ContractxPakanChoiceModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -146,6 +149,8 @@ class ContractxPakanChoiceModel {
     zn1 = json['zn1'];
     tax = json['tax'];
     max_date = json['max_date'];
+    user = json['user'];
+    name_user = json['name_user'];
   }
 
   Map<String, dynamic> toJson() {
@@ -198,6 +203,8 @@ class ContractxPakanChoiceModel {
     data['zn1'] = this.zn1;
     data['tax'] = this.tax;
     data['max_date'] = this.max_date;
+    data['user'] = this.user;
+    data['name_user'] = this.name_user;
 
     return data;
   }

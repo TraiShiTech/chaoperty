@@ -93,18 +93,21 @@ class Pdfgen_his_statusbill_TP8_Choice {
     List netImage_QR = [];
     final ByteData image = await rootBundle.load('images/image7-11.png');
     final ByteData BG_PDF = await rootBundle.load('images/Choice_BG_PDF.png');
+    final ByteData LG_PDF = await rootBundle.load('images/choice_logo2.png');
+    // final ByteData Logo_PDF = await rootBundle.load('images/choice_logo.png');
     Uint8List? resizedLogo = await getResizedLogo();
     Uint8List imageData = (image).buffer.asUint8List();
     Uint8List imageBG = (BG_PDF).buffer.asUint8List();
+    Uint8List imageLG = (LG_PDF).buffer.asUint8List();
     var docid = (numdoctax.toString() == '') ? '$numinvoice ' : '$numdoctax ';
     var licence_name1 = 'สิริกร พรหมปัญญา';
     var licence_name2 = 'สิริกร พรหมปัญญา';
     var refid = 'LLJZX20241';
 
-    final imageBytes_manager = await loadAndCacheImage(
-        '${MyConstant().domain}/gen_licence_img.php?isAdd=true&ren=50&ref_id=$refid&name_id=$licence_name1&doc_id=$docid&extension=.png');
-    final imageBytes_Payee = await loadAndCacheImage(
-        '${MyConstant().domain}/gen_licence_img.php?isAdd=true&ren=50&ref_id=$refid&name_id=$licence_name2&doc_id=$docid&extension=.png');
+    // final imageBytes_manager = await loadAndCacheImage(
+    //     '${MyConstant().domain}/gen_licence_img.php?isAdd=true&ren=50&ref_id=$refid&name_id=$licence_name1&doc_id=$docid&extension=.png');
+    // final imageBytes_Payee = await loadAndCacheImage(
+    //     '${MyConstant().domain}/gen_licence_img.php?isAdd=true&ren=50&ref_id=$refid&name_id=$licence_name2&doc_id=$docid&extension=.png');
 
 ////////////////------------------------------->
     double Total_CASH = double.parse(
@@ -192,20 +195,20 @@ class Pdfgen_his_statusbill_TP8_Choice {
                 pw.Row(
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [
-                    pw.Container(
-                      height: 60,
-                      width: 60,
-                      decoration: pw.BoxDecoration(
-                        color: PdfColors.grey200,
-                        border: pw.Border.all(color: PdfColors.grey300),
-                      ),
-                      child: resizedLogo != null
-                          ? pw.Image(
-                              pw.MemoryImage(resizedLogo),
-                              height: 60,
-                              width: 60,
-                            )
-                          : pw.Center(
+                    imageLG != null
+                        ? pw.SizedBox(
+                            child: pw.Center(
+                            child: pw.Image(pw.MemoryImage(imageLG),
+                                height: 70, width: 75, fit: pw.BoxFit.fill),
+                          ))
+                        : pw.Container(
+                            height: 70,
+                            width: 75,
+                            decoration: pw.BoxDecoration(
+                              color: PdfColors.white,
+                              border: pw.Border.all(color: PdfColors.grey300),
+                            ),
+                            child: pw.Center(
                               child: pw.Text(
                                 '$bill_name ',
                                 maxLines: 1,
@@ -216,7 +219,7 @@ class Pdfgen_his_statusbill_TP8_Choice {
                                 ),
                               ),
                             ),
-                    ),
+                          ),
                     // (netImage.isEmpty)
                     //     ? pw.Container(
                     //         height: 60,
@@ -2657,50 +2660,67 @@ class Pdfgen_his_statusbill_TP8_Choice {
                                             ),
                                           ),
                                           pw.Expanded(
-                                            flex: 1,
-                                            child: (imageBytes_manager.isEmpty)
-                                                ? pw.Container(
-                                                    // width: 120,
-                                                    decoration:
-                                                        const pw.BoxDecoration(
-                                                      // color: PdfColors.green100,
-                                                      border: pw.Border(
-                                                        bottom: pw.BorderSide(
-                                                            width: 0.5,
-                                                            color: PdfColors
-                                                                .grey600),
-                                                      ),
-                                                    ),
-                                                    padding:
-                                                        const pw.EdgeInsets.all(
-                                                            8.0),
-                                                    height: 30,
-                                                  )
-                                                : pw.Container(
-                                                    // width: 120,
-                                                    decoration:
-                                                        const pw.BoxDecoration(
-                                                      // color: PdfColors.green100,
-                                                      border: pw.Border(
-                                                        bottom: pw.BorderSide(
-                                                            width: 0.5,
-                                                            color: PdfColors
-                                                                .grey600),
-                                                      ),
-                                                    ),
-                                                    padding:
-                                                        const pw.EdgeInsets.all(
-                                                            8.0),
-                                                    child: pw.Center(
-                                                      child: pw.Image(
-                                                        pw.MemoryImage(
-                                                            imageBytes_manager),
-                                                        height: 30,
-                                                        width: 100,
-                                                      ),
-                                                    ),
+                                              flex: 1,
+                                              child: pw.Container(
+                                                // width: 120,
+                                                decoration:
+                                                    const pw.BoxDecoration(
+                                                  // color: PdfColors.green100,
+                                                  border: pw.Border(
+                                                    bottom: pw.BorderSide(
+                                                        width: 0.5,
+                                                        color:
+                                                            PdfColors.grey600),
                                                   ),
-                                          ),
+                                                ),
+                                                padding:
+                                                    const pw.EdgeInsets.all(
+                                                        8.0),
+                                                height: 30,
+                                              )
+                                              //  (imageBytes_manager.isEmpty)
+                                              //     ? pw.Container(
+                                              //         // width: 120,
+                                              //         decoration:
+                                              //             const pw.BoxDecoration(
+                                              //           // color: PdfColors.green100,
+                                              //           border: pw.Border(
+                                              //             bottom: pw.BorderSide(
+                                              //                 width: 0.5,
+                                              //                 color: PdfColors
+                                              //                     .grey600),
+                                              //           ),
+                                              //         ),
+                                              //         padding:
+                                              //             const pw.EdgeInsets.all(
+                                              //                 8.0),
+                                              //         height: 30,
+                                              //       )
+                                              //     : pw.Container(
+                                              //         // width: 120,
+                                              //         decoration:
+                                              //             const pw.BoxDecoration(
+                                              //           // color: PdfColors.green100,
+                                              //           border: pw.Border(
+                                              //             bottom: pw.BorderSide(
+                                              //                 width: 0.5,
+                                              //                 color: PdfColors
+                                              //                     .grey600),
+                                              //           ),
+                                              //         ),
+                                              //         padding:
+                                              //             const pw.EdgeInsets.all(
+                                              //                 8.0),
+                                              //         child: pw.Center(
+                                              //           child: pw.Image(
+                                              //             pw.MemoryImage(
+                                              //                 imageBytes_manager),
+                                              //             height: 30,
+                                              //             width: 100,
+                                              //           ),
+                                              //         ),
+                                              //       ),
+                                              ),
                                           pw.Text(
                                             ' ผู้จัดการ',
                                             textAlign: pw.TextAlign.left,
@@ -2785,7 +2805,8 @@ class Pdfgen_his_statusbill_TP8_Choice {
                                             child: pw.Align(
                                               alignment: pw.Alignment.center,
                                               child: pw.Text(
-                                                '${DateFormat('dd/MM').format(DateTime.parse(date_Transaction!))}/${DateTime.parse('${date_Transaction}').year + 543}',
+                                                '${DateFormat('dd/MM').format(date)}/${DateTime.parse('${date}').year + 543}',
+                                                //'${DateFormat('dd/MM').format(DateTime.parse(date_Transaction!))}/${DateTime.parse('${date_Transaction}').year + 543}',
                                                 textAlign: pw.TextAlign.left,
                                                 style: pw.TextStyle(
                                                   fontSize: font_Size,
@@ -2835,52 +2856,69 @@ class Pdfgen_his_statusbill_TP8_Choice {
                                             ),
                                           ),
                                           pw.Expanded(
-                                            flex: 1,
-                                            child: (imageBytes_Payee.isEmpty)
-                                                ? pw.Container(
-                                                    // width: 120,
-                                                    decoration:
-                                                        const pw.BoxDecoration(
-                                                      // color: PdfColors.green100,
-                                                      border: pw.Border(
-                                                        bottom: pw.BorderSide(
-                                                            width: 0.5,
-                                                            color: PdfColors
-                                                                .grey600),
-                                                      ),
-                                                    ),
-                                                    padding:
-                                                        const pw.EdgeInsets.all(
-                                                            8.0),
-                                                    height: 30,
-                                                  )
-                                                : pw.Container(
-                                                    // width: 120,
-                                                    decoration:
-                                                        const pw.BoxDecoration(
-                                                      // color: PdfColors.green100,
-                                                      border: pw.Border(
-                                                        bottom: pw.BorderSide(
-                                                            width: 0.5,
-                                                            color: PdfColors
-                                                                .grey600),
-                                                      ),
-                                                    ),
-                                                    padding:
-                                                        const pw.EdgeInsets.all(
-                                                            8.0),
-                                                    child: pw.Center(
-                                                      child: pw.Image(
-                                                        pw.MemoryImage(
-                                                            imageBytes_Payee),
-                                                        height: 30,
-                                                        width: 100,
-                                                      ),
-                                                    ),
+                                              flex: 1,
+                                              child: pw.Container(
+                                                // width: 120,
+                                                decoration:
+                                                    const pw.BoxDecoration(
+                                                  // color: PdfColors.green100,
+                                                  border: pw.Border(
+                                                    bottom: pw.BorderSide(
+                                                        width: 0.5,
+                                                        color:
+                                                            PdfColors.grey600),
                                                   ),
-                                          ),
+                                                ),
+                                                padding:
+                                                    const pw.EdgeInsets.all(
+                                                        8.0),
+                                                height: 45,
+                                              )
+                                              //  (imageBytes_Payee.isEmpty)
+                                              //     ? pw.Container(
+                                              //         // width: 120,
+                                              //         decoration:
+                                              //             const pw.BoxDecoration(
+                                              //           // color: PdfColors.green100,
+                                              //           border: pw.Border(
+                                              //             bottom: pw.BorderSide(
+                                              //                 width: 0.5,
+                                              //                 color: PdfColors
+                                              //                     .grey600),
+                                              //           ),
+                                              //         ),
+                                              //         padding:
+                                              //             const pw.EdgeInsets.all(
+                                              //                 8.0),
+                                              //         height: 30,
+                                              //       )
+                                              //     : pw.Container(
+                                              //         // width: 120,
+                                              //         decoration:
+                                              //             const pw.BoxDecoration(
+                                              //           // color: PdfColors.green100,
+                                              //           border: pw.Border(
+                                              //             bottom: pw.BorderSide(
+                                              //                 width: 0.5,
+                                              //                 color: PdfColors
+                                              //                     .grey600),
+                                              //           ),
+                                              //         ),
+                                              //         padding:
+                                              //             const pw.EdgeInsets.all(
+                                              //                 8.0),
+                                              //         child: pw.Center(
+                                              //           child: pw.Image(
+                                              //             pw.MemoryImage(
+                                              //                 imageBytes_Payee),
+                                              //             height: 30,
+                                              //             width: 100,
+                                              //           ),
+                                              //         ),
+                                              //       ),
+                                              ),
                                           pw.Text(
-                                            ' ผู้รับเงิน',
+                                            ' พนักงาน',
                                             textAlign: pw.TextAlign.left,
                                             style: pw.TextStyle(
                                               fontSize: font_Size,
@@ -2925,7 +2963,7 @@ class Pdfgen_his_statusbill_TP8_Choice {
                                             child: pw.Align(
                                               alignment: pw.Alignment.center,
                                               child: pw.Text(
-                                                '(${licence_name2})',
+                                                '( $fname )',
                                                 textAlign: pw.TextAlign.left,
                                                 style: pw.TextStyle(
                                                   fontSize: font_Size,
@@ -2961,19 +2999,24 @@ class Pdfgen_his_statusbill_TP8_Choice {
                                           pw.Expanded(
                                             flex: 1,
                                             child: pw.Align(
-                                              alignment: pw.Alignment.center,
-                                              child: pw.Text(
-                                                '${DateFormat('dd/MM').format(DateTime.parse(date_Transaction!))}/${DateTime.parse('${date_Transaction}').year + 543}',
-                                                textAlign: pw.TextAlign.left,
-                                                style: pw.TextStyle(
-                                                  fontSize: font_Size,
-                                                  font: ttf,
-                                                  fontWeight:
-                                                      pw.FontWeight.bold,
-                                                  color: Colors_pd,
-                                                ),
-                                              ),
-                                            ),
+                                                alignment: pw.Alignment.center,
+                                                child: pw.Container(
+                                                  // width: 120,
+                                                  decoration:
+                                                      const pw.BoxDecoration(
+                                                    // color: PdfColors.green100,
+                                                    border: pw.Border(
+                                                      bottom: pw.BorderSide(
+                                                          width: 0.5,
+                                                          color: PdfColors
+                                                              .grey600),
+                                                    ),
+                                                  ),
+                                                  padding:
+                                                      const pw.EdgeInsets.all(
+                                                          8.0),
+                                                  height: 12,
+                                                )),
                                           )
                                         ],
                                       ),

@@ -342,9 +342,9 @@ class Excgen_TeNantRenewReport_Choice {
           '${(teNantModels_Renew[index].water_electri == null) ? '' : teNantModels_Renew[index].water_electri.toString()}');
 
       sheet.getRangeByName('N${index + 3}').setNumber(
-          (teNantModels_Renew[index].rent_amt == null)
+          (teNantModels_Renew[index].rent_pvat == null)
               ? 0.00
-              : double.parse('${teNantModels_Renew[index].rent_amt}'));
+              : double.parse('${teNantModels_Renew[index].rent_pvat}'));
 
       sheet.getRangeByName('O${index + 3}').setNumber(
           (teNantModels_Renew[index].rent_vat == null)
@@ -357,9 +357,9 @@ class Excgen_TeNantRenewReport_Choice {
 
       //---
       sheet.getRangeByName('Q${index + 3}').setNumber(
-          (teNantModels_Renew[index].service_amt == null)
+          (teNantModels_Renew[index].service_pvat == null)
               ? 0.00
-              : double.parse('${teNantModels_Renew[index].service_amt}'));
+              : double.parse('${teNantModels_Renew[index].service_pvat}'));
 
       sheet.getRangeByName('R${index + 3}').setNumber(
           (teNantModels_Renew[index].service_vat == null)
@@ -390,7 +390,7 @@ class Excgen_TeNantRenewReport_Choice {
 
       sheet
           .getRangeByName('W${index + 3}')
-          .setText('${teNantModels_Renew[index].user}');
+          .setText('${teNantModels_Renew[index].name_user}');
 
       indextotol = indextotol + 1;
     }

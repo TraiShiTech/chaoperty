@@ -61,6 +61,7 @@ class InvoiceReModel {
   String? pay_dis;
   String? paytotal_dis;
   String? inv;
+  String? name_user;
 
   InvoiceReModel({
     this.ser,
@@ -125,6 +126,7 @@ class InvoiceReModel {
     this.pay_dis,
     this.paytotal_dis,
     this.inv,
+    this.name_user,
   });
 
   InvoiceReModel.fromJson(Map<String, dynamic> json) {
@@ -190,6 +192,7 @@ class InvoiceReModel {
     pay_dis = json['pay_dis'];
     paytotal_dis = json['paytotal_dis'];
     inv = json['inv'];
+    name_user = json['name_user'];
   }
 
   Map<String, dynamic> toJson() {
@@ -257,6 +260,7 @@ class InvoiceReModel {
     data['pay_dis'] = this.pay_dis;
     data['paytotal_dis'] = this.paytotal_dis;
     data['inv'] = this.inv;
+    data['name_user'] = this.name_user;
     return data;
   }
 }

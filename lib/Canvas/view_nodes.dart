@@ -315,7 +315,7 @@ class _NodeDataScreen2State extends State<NodeDataScreen2> {
       final color_text = Colors.white;
       return InfiniteCanvasNode(
         key: UniqueKey(),
-        value: nodeData.ser.toString(),
+        value: nodeDatas[Index].aser.toString(),
         // label: nodeData.lncode.toString(),
         allowResize: false,
         allowMove: false,
@@ -329,18 +329,23 @@ class _NodeDataScreen2State extends State<NodeDataScreen2> {
         ),
         child: MaterialButton(
           key: _btnKeys[Index],
-          onPressed: (nodeData.aser.toString() == '0')
-              ? null
-              : () {
-                  print('Node Size: ${nodeData.cid} ---- ${nodeData.ln}');
-                  read_GC_con_area(Index);
-                  Future.delayed(const Duration(milliseconds: 400), () {
-                    maxColumn(Index, context);
-                    menu!.show(widgetKey: _btnKeys[Index]);
+          onPressed:
+              // (nodeDatas[Index].aser.toString() == '0')
+              //     ? null
+              //     :
+              () {
+            print(
+                'Node Size: ${nodeData.cid} ---- ${nodeData.ln}----------${Index}');
+            read_GC_con_area(Index);
+            print(
+                'Index --${_btnKeys.length}///${nodeDatas.length} ///// ${_btnKeys[Index]}');
+            Future.delayed(const Duration(milliseconds: 400), () {
+              maxColumn(Index, context);
+              menu!.show(widgetKey: _btnKeys[Index]);
 
-                    // TypeNode2(context, color, color_text, nodeData, nodeData.type);
-                  });
-                },
+              // TypeNode2(context, color, color_text, nodeData, nodeData.type);
+            });
+          },
           child: TypeNode(context, color, color_text, nodeData, nodeData.type),
         ),
       );
@@ -457,14 +462,14 @@ class _NodeDataScreen2State extends State<NodeDataScreen2> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: Text(
-                            'เสนอราคา: ${areaModels[index].lncode} (${areaModels[index].ln})',
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                //fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T),
-                          ),
+                          child: Translate.TranslateAndSetText(
+                              'เสนอราคา: ${areaModels[index].lncode} (${areaModels[index].ln})',
+                              ChaoAreaScreen_Color.Colors_Text1_,
+                              TextAlign.center,
+                              null,
+                              Font_.Fonts_T,
+                              16,
+                              1),
                         ),
                         Icon(Iconsax.arrow_circle_right,
                             color: getRandomColor(index)),
@@ -516,14 +521,14 @@ class _NodeDataScreen2State extends State<NodeDataScreen2> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: Text(
-                            'เสนอราคา: ${areaModels[index].lncode} (${areaModels[index].ln})',
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                //fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T),
-                          ),
+                          child: Translate.TranslateAndSetText(
+                              'เสนอราคา: ${areaModels[index].lncode} (${areaModels[index].ln})',
+                              ChaoAreaScreen_Color.Colors_Text1_,
+                              TextAlign.center,
+                              null,
+                              Font_.Fonts_T,
+                              16,
+                              1),
                         ),
                         Icon(Iconsax.arrow_circle_right,
                             color: getRandomColor(index)),
@@ -577,14 +582,14 @@ class _NodeDataScreen2State extends State<NodeDataScreen2> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: Text(
-                            'เสนอราคา: ${areaModels[index].lncode} (${areaModels[index].ln})',
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                //fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T),
-                          ),
+                          child: Translate.TranslateAndSetText(
+                              'เสนอราคา: ${areaModels[index].lncode} (${areaModels[index].ln})',
+                              ChaoAreaScreen_Color.Colors_Text1_,
+                              TextAlign.center,
+                              null,
+                              Font_.Fonts_T,
+                              16,
+                              1),
                         ),
                         Icon(Iconsax.arrow_circle_right,
                             color: getRandomColor(index)),
@@ -641,14 +646,14 @@ class _NodeDataScreen2State extends State<NodeDataScreen2> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: Text(
-                            'ทำสัญญา: ${areaModels[index].lncode} (${areaModels[index].ln})',
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                //fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T),
-                          ),
+                          child: Translate.TranslateAndSetText(
+                              'ทำสัญญา: ${areaModels[index].lncode} (${areaModels[index].ln})',
+                              ChaoAreaScreen_Color.Colors_Text1_,
+                              TextAlign.center,
+                              null,
+                              Font_.Fonts_T,
+                              16,
+                              1),
                         ),
                         Icon(Iconsax.arrow_circle_right,
                             color: getRandomColor(index)),
@@ -705,14 +710,14 @@ class _NodeDataScreen2State extends State<NodeDataScreen2> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: Text(
-                            'ทำสัญญา: ${areaModels[index].lncode} (${areaModels[index].ln})',
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                //fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T),
-                          ),
+                          child: Translate.TranslateAndSetText(
+                              'ทำสัญญา: ${areaModels[index].lncode} (${areaModels[index].ln})',
+                              ChaoAreaScreen_Color.Colors_Text1_,
+                              TextAlign.center,
+                              null,
+                              Font_.Fonts_T,
+                              16,
+                              1),
                         ),
                         Icon(Iconsax.arrow_circle_right,
                             color: getRandomColor(index)),
@@ -829,14 +834,14 @@ class _NodeDataScreen2State extends State<NodeDataScreen2> {
                       child: Row(
                         children: [
                           Expanded(
-                            child: Text(
-                              'สัญญาเดิม: ${areaModels[index].fid} (${areaModels[index].cname})',
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text2_,
-                                  //fontWeight: FontWeight.bold,
-                                  fontFamily: Font_.Fonts_T),
-                            ),
+                            child: Translate.TranslateAndSetText(
+                                'สัญญาเดิม: ${areaModels[index].fid} (${areaModels[index].cname})',
+                                ChaoAreaScreen_Color.Colors_Text1_,
+                                TextAlign.center,
+                                null,
+                                Font_.Fonts_T,
+                                16,
+                                1),
                           ),
                           Icon(Iconsax.arrow_circle_right,
                               color: getRandomColor(index)),
@@ -899,16 +904,16 @@ class _NodeDataScreen2State extends State<NodeDataScreen2> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: Text(
-                            areaModels[index].scfid == 'N'
-                                ? 'N: ${areaModels[index].cid} (${areaModels[index].cname})'
-                                : 'เช่าอยู่: ${areaModels[index].cid} (${areaModels[index].cname})',
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                //fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T),
-                          ),
+                          child: Translate.TranslateAndSetText(
+                              areaModels[index].scfid == 'N'
+                                  ? 'N: ${areaModels[index].cid} (${areaModels[index].cname})'
+                                  : 'เช่าอยู่: ${areaModels[index].cid} (${areaModels[index].cname})',
+                              ChaoAreaScreen_Color.Colors_Text1_,
+                              TextAlign.center,
+                              null,
+                              Font_.Fonts_T,
+                              16,
+                              1),
                         ),
                         Icon(Iconsax.arrow_circle_right,
                             color: getRandomColor(index)),
@@ -972,16 +977,16 @@ class _NodeDataScreen2State extends State<NodeDataScreen2> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: Text(
-                            areaModels[index].scfid == 'N'
-                                ? 'N: ${areaModels[index].cid} (${areaModels[index].cname})'
-                                : 'รับชำระ: ${areaModels[index].cid} (${areaModels[index].cname})',
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                //fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T),
-                          ),
+                          child: Translate.TranslateAndSetText(
+                              areaModels[index].scfid == 'N'
+                                  ? 'N: ${areaModels[index].cid} (${areaModels[index].cname})'
+                                  : 'รับชำระ: ${areaModels[index].cid} (${areaModels[index].cname})',
+                              ChaoAreaScreen_Color.Colors_Text1_,
+                              TextAlign.center,
+                              null,
+                              Font_.Fonts_T,
+                              16,
+                              1),
                         ),
                         Icon(Iconsax.arrow_circle_right,
                             color: getRandomColor(index)),
@@ -1031,14 +1036,14 @@ class _NodeDataScreen2State extends State<NodeDataScreen2> {
                         child: Row(
                           children: [
                             Expanded(
-                              child: Text(
-                                'เสนอราคา: ${areaQuotModels[i].docno}',
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                    color: PeopleChaoScreen_Color.Colors_Text2_,
-                                    //fontWeight: FontWeight.bold,
-                                    fontFamily: Font_.Fonts_T),
-                              ),
+                              child: Translate.TranslateAndSetText(
+                                  'เสนอราคา: ${areaQuotModels[i].docno}',
+                                  ChaoAreaScreen_Color.Colors_Text1_,
+                                  TextAlign.center,
+                                  null,
+                                  Font_.Fonts_T,
+                                  16,
+                                  1),
                             ),
                             Icon(Iconsax.arrow_circle_right,
                                 color: getRandomColor(index)),
@@ -1089,14 +1094,14 @@ class _NodeDataScreen2State extends State<NodeDataScreen2> {
                         child: Row(
                           children: [
                             Expanded(
-                              child: Text(
-                                'เสนอราคา: (มัดจำ) ${areaQuotModels[i].docno}',
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                    color: PeopleChaoScreen_Color.Colors_Text2_,
-                                    //fontWeight: FontWeight.bold,
-                                    fontFamily: Font_.Fonts_T),
-                              ),
+                              child: Translate.TranslateAndSetText(
+                                  'เสนอราคา: (มัดจำ) ${areaQuotModels[i].docno}',
+                                  ChaoAreaScreen_Color.Colors_Text1_,
+                                  TextAlign.center,
+                                  null,
+                                  Font_.Fonts_T,
+                                  16,
+                                  1),
                             ),
                             Icon(Iconsax.arrow_circle_right,
                                 color: getRandomColor(index)),
@@ -1159,14 +1164,14 @@ class _NodeDataScreen2State extends State<NodeDataScreen2> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: Text(
-                            'เช่าอยู่: ${areaModels[index].cfid}',
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                //fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T),
-                          ),
+                          child: Translate.TranslateAndSetText(
+                              'เช่าอยู่: ${areaModels[index].cfid}',
+                              ChaoAreaScreen_Color.Colors_Text1_,
+                              TextAlign.center,
+                              null,
+                              Font_.Fonts_T,
+                              16,
+                              1),
                         ),
                         Icon(Iconsax.arrow_circle_right,
                             color: getRandomColor(index)),
@@ -1228,21 +1233,17 @@ class _NodeDataScreen2State extends State<NodeDataScreen2> {
                                     Border.all(color: Colors.white, width: 2),
                               ),
                               padding: const EdgeInsets.all(5.0),
-                              child: const Row(
+                              child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  AutoSizeText(
-                                    'บัญชี ',
-                                    overflow: TextOverflow.ellipsis,
-                                    minFontSize: 8,
-                                    maxFontSize: 20,
-                                    style: TextStyle(
-                                      decoration: TextDecoration.underline,
-                                      color: ReportScreen_Color.Colors_Text1_,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: FontWeight_.Fonts_T,
-                                    ),
-                                  ),
+                                  Translate.TranslateAndSetText(
+                                      'พื้นที่เช่า ',
+                                      ChaoAreaScreen_Color.Colors_Text2_,
+                                      TextAlign.center,
+                                      FontWeight.bold,
+                                      FontWeight_.Fonts_T,
+                                      14,
+                                      1),
                                   AutoSizeText(
                                     ' > >',
                                     overflow: TextOverflow.ellipsis,
@@ -1553,16 +1554,17 @@ class _NodeDataScreen2State extends State<NodeDataScreen2> {
                                               ),
                                             ),
                                             isExpanded: true,
-                                            hint: Text(
-                                              zone_name == null
-                                                  ? 'ทั้งหมด'
-                                                  : '$zone_name',
-                                              maxLines: 1,
-                                              style: const TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.white,
-                                                  fontFamily: Font_.Fonts_T),
-                                            ),
+                                            hint: Translate.TranslateAndSetText(
+                                                zone_name == null
+                                                    ? 'ทั้งหมด'
+                                                    : '$zone_name',
+                                                Colors.white,
+                                                TextAlign.center,
+                                                null,
+                                                Font_.Fonts_T,
+                                                12,
+                                                1),
+
                                             icon: const Icon(
                                               Icons.arrow_drop_down,
                                               color: Colors.white,
@@ -1792,14 +1794,14 @@ class _NodeDataScreen2State extends State<NodeDataScreen2> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: Text(
-                            'เสนอราคา: ${nodeData.ln} ',
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                //fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T),
-                          ),
+                          child: Translate.TranslateAndSetText(
+                              'เสนอราคา: ${nodeData.ln} ',
+                              ChaoAreaScreen_Color.Colors_Text1_,
+                              TextAlign.center,
+                              null,
+                              Font_.Fonts_T,
+                              16,
+                              1),
                         ),
                         Icon(
                           Iconsax.arrow_circle_right,
@@ -1839,14 +1841,14 @@ class _NodeDataScreen2State extends State<NodeDataScreen2> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: Text(
-                            'ทำสัญญา: ${nodeData.ln}',
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                //fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T),
-                          ),
+                          child: Translate.TranslateAndSetText(
+                              'ทำสัญญา: ${nodeData.ln}',
+                              ChaoAreaScreen_Color.Colors_Text1_,
+                              TextAlign.center,
+                              null,
+                              Font_.Fonts_T,
+                              16,
+                              1),
                         ),
                         Icon(
                           Iconsax.arrow_circle_right,

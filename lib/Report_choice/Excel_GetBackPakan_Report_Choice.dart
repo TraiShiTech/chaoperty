@@ -428,7 +428,7 @@ class Excgen_GetBackPakanReport_Choice {
                       .toString()));
       sheet
           .getRangeByName('X${index + 3}')
-          .setText('${teNantModels_Cancel_GetBackPakan[index].user}');
+          .setText('${teNantModels_Cancel_GetBackPakan[index].name_user}');
       sheet
           .getRangeByName('Y${index + 3}')
           .setText('${teNantModels_Cancel_GetBackPakan[index].cc_remark}');

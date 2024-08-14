@@ -19,6 +19,7 @@ import '../Constant/Myconstant.dart';
 import '../Model/GetC_Syslog.dart';
 import '../Model/GetRenTal_Model.dart';
 import '../Responsive/responsive.dart';
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 import 'package:http/http.dart' as http;
 import 'package:pdf/widgets.dart' as pw;
@@ -421,14 +422,15 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                                     Border.all(color: Colors.grey, width: 1),
                               ),
                               padding: const EdgeInsets.all(8.0),
-                              child: const Center(
-                                child: Text(
-                                  'ระบบแอดมิน',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      // fontSize: 10.0,
-                                      fontFamily: FontWeight_.Fonts_T),
-                                ),
+                              child: Center(
+                                child: Translate.TranslateAndSetText(
+                                    'ระบบแอดมิน',
+                                    SettingScreen_Color.Colors_Text3_,
+                                    TextAlign.center,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    14,
+                                    1),
                               )),
                         ),
                       ),
@@ -457,14 +459,15 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                                     Border.all(color: Colors.grey, width: 1),
                               ),
                               padding: const EdgeInsets.all(8.0),
-                              child: const Center(
-                                child: Text(
-                                  'ระบบผู้ใช้ทั่วไป',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      // fontSize: 10.0,
-                                      fontFamily: FontWeight_.Fonts_T),
-                                ),
+                              child: Center(
+                                child: Translate.TranslateAndSetText(
+                                    'ระบบผู้ใช้ทั่วไป',
+                                    SettingScreen_Color.Colors_Text3_,
+                                    TextAlign.center,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    14,
+                                    1),
                               )),
                         ),
                       ),
@@ -570,17 +573,17 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                                                   padding:
                                                       const EdgeInsets.all(8.0),
                                                   child: Center(
-                                                    child: Text(
-                                                      Status_3[i],
-                                                      style: TextStyle(
-                                                          color: (Status_3_ ==
-                                                                  i)
-                                                              ? Colors.white
-                                                              : Colors.black,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T),
-                                                    ),
+                                                    child: Translate
+                                                        .TranslateAndSetText(
+                                                            Status_3[i],
+                                                            (Status_3_ == i)
+                                                                ? Colors.white
+                                                                : Colors.black,
+                                                            TextAlign.center,
+                                                            FontWeight.bold,
+                                                            FontWeight_.Fonts_T,
+                                                            14,
+                                                            1),
                                                   ),
                                                 ),
                                               )),
@@ -647,17 +650,17 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                                                   padding:
                                                       const EdgeInsets.all(8.0),
                                                   child: Center(
-                                                    child: Text(
-                                                      Status_User[i],
-                                                      style: TextStyle(
-                                                          color: (Status_3_ ==
-                                                                  i)
-                                                              ? Colors.white
-                                                              : Colors.black,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T),
-                                                    ),
+                                                    child: Translate
+                                                        .TranslateAndSetText(
+                                                            Status_User[i],
+                                                            (Status_3_ == i)
+                                                                ? Colors.white
+                                                                : Colors.black,
+                                                            TextAlign.center,
+                                                            FontWeight.bold,
+                                                            FontWeight_.Fonts_T,
+                                                            14,
+                                                            1),
                                                   ),
                                                 ),
                                               )),
@@ -809,17 +812,16 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                               SizedBox(
                                 child: Row(
                                   children: [
-                                    const Padding(
+                                    Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text(
-                                        'ค้นหา:',
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(
-                                            color: ReportScreen_Color
-                                                .Colors_Text1_,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T),
-                                      ),
+                                      child: Translate.TranslateAndSetText(
+                                          'ค้นหา:',
+                                          CustomerScreen_Color.Colors_Text1_,
+                                          TextAlign.end,
+                                          FontWeight.bold,
+                                          FontWeight_.Fonts_T,
+                                          16,
+                                          1),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -843,30 +845,30 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                                   ],
                                 ),
                               ),
-                              const Padding(
+                              Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'ประวัติการใช้งาน',
-                                  style: TextStyle(
-                                      decoration: TextDecoration.underline,
-                                      color: ReportScreen_Color.Colors_Text1_,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: FontWeight_.Fonts_T),
-                                ),
+                                child: Translate.TranslateAndSetText(
+                                    'ประวัติการใช้งาน',
+                                    CustomerScreen_Color.Colors_Text1_,
+                                    TextAlign.end,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    16,
+                                    1),
                               ),
                               SizedBox(
                                 child: Row(
                                   children: [
-                                    const Padding(
+                                    Padding(
                                       padding: EdgeInsets.all(8.0),
-                                      child: Text(
-                                        'วันที่ :',
-                                        style: TextStyle(
-                                            color: ReportScreen_Color
-                                                .Colors_Text1_,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T),
-                                      ),
+                                      child: Translate.TranslateAndSetText(
+                                          'วันที่ :',
+                                          CustomerScreen_Color.Colors_Text1_,
+                                          TextAlign.end,
+                                          FontWeight.bold,
+                                          FontWeight_.Fonts_T,
+                                          16,
+                                          1),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -895,19 +897,19 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                                                     MainAxisAlignment.center,
                                                 children: [
                                                   Center(
-                                                    child: Text(
-                                                      (Value_selectDate == null)
-                                                          ? 'ทั้งหมด'
-                                                          : '$Value_selectDate',
-                                                      style: const TextStyle(
-                                                        color:
-                                                            ReportScreen_Color
-                                                                .Colors_Text2_,
-                                                        // fontWeight: FontWeight.bold,
-                                                        fontFamily:
-                                                            Font_.Fonts_T,
-                                                      ),
-                                                    ),
+                                                    child: Translate
+                                                        .TranslateAndSetText(
+                                                            (Value_selectDate ==
+                                                                    null)
+                                                                ? 'ทั้งหมด'
+                                                                : '$Value_selectDate',
+                                                            CustomerScreen_Color
+                                                                .Colors_Text1_,
+                                                            TextAlign.end,
+                                                            FontWeight.bold,
+                                                            FontWeight_.Fonts_T,
+                                                            16,
+                                                            1),
                                                   ),
                                                 ],
                                               ),
@@ -933,17 +935,19 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                                                             .size
                                                             .width,
                                                         child: Row(
-                                                          children: const [
+                                                          children: [
                                                             Expanded(
-                                                              child: Text(
-                                                                'เลือกทั้งหมด',
-                                                                style: TextStyle(
-                                                                    color: ReportScreen_Color.Colors_Text2_,
-                                                                    // fontWeight:
-                                                                    //     FontWeight
-                                                                    //         .bold,
-                                                                    fontFamily: Font_.Fonts_T),
-                                                              ),
+                                                              child: Translate.TranslateAndSetText(
+                                                                  'เลือกทั้งหมด',
+                                                                  CustomerScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  TextAlign.end,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  16,
+                                                                  1),
                                                             )
                                                           ],
                                                         ))),
@@ -964,17 +968,19 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                                                             .size
                                                             .width,
                                                         child: Row(
-                                                          children: const [
+                                                          children: [
                                                             Expanded(
-                                                              child: Text(
-                                                                'เลือกวันที่',
-                                                                style: TextStyle(
-                                                                    color: ReportScreen_Color.Colors_Text2_,
-                                                                    // fontWeight:
-                                                                    //     FontWeight
-                                                                    //         .bold,
-                                                                    fontFamily: Font_.Fonts_T),
-                                                              ),
+                                                              child: Translate.TranslateAndSetText(
+                                                                  'เลือกวันที่',
+                                                                  CustomerScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  TextAlign.end,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  16,
+                                                                  1),
                                                             )
                                                           ],
                                                         ))),
@@ -1004,18 +1010,17 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                                   SizedBox(
                                     child: Row(
                                       children: [
-                                        const Padding(
+                                        Padding(
                                           padding: EdgeInsets.all(8.0),
-                                          child: Text(
-                                            'ค้นหา:',
-                                            textAlign: TextAlign.end,
-                                            style: TextStyle(
-                                                color: ReportScreen_Color
-                                                    .Colors_Text1_,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily:
-                                                    FontWeight_.Fonts_T),
-                                          ),
+                                          child: Translate.TranslateAndSetText(
+                                              'ค้นหา:',
+                                              CustomerScreen_Color
+                                                  .Colors_Text1_,
+                                              TextAlign.end,
+                                              FontWeight.bold,
+                                              FontWeight_.Fonts_T,
+                                              16,
+                                              1),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
@@ -1044,32 +1049,31 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                                       ],
                                     ),
                                   ),
-                                  const Padding(
+                                  Padding(
                                     padding: EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'ประวัติการใช้งาน',
-                                      style: TextStyle(
-                                          decoration: TextDecoration.underline,
-                                          color:
-                                              ReportScreen_Color.Colors_Text1_,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: FontWeight_.Fonts_T),
-                                    ),
+                                    child: Translate.TranslateAndSetText(
+                                        'ประวัติการใช้งาน',
+                                        CustomerScreen_Color.Colors_Text1_,
+                                        TextAlign.end,
+                                        FontWeight.bold,
+                                        FontWeight_.Fonts_T,
+                                        16,
+                                        1),
                                   ),
                                   SizedBox(
                                     child: Row(
                                       children: [
-                                        const Padding(
+                                        Padding(
                                           padding: EdgeInsets.all(8.0),
-                                          child: Text(
-                                            'วันที่ :',
-                                            style: TextStyle(
-                                                color: ReportScreen_Color
-                                                    .Colors_Text1_,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily:
-                                                    FontWeight_.Fonts_T),
-                                          ),
+                                          child: Translate.TranslateAndSetText(
+                                              'วันที่ :',
+                                              CustomerScreen_Color
+                                                  .Colors_Text1_,
+                                              TextAlign.end,
+                                              FontWeight.bold,
+                                              FontWeight_.Fonts_T,
+                                              16,
+                                              1),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
@@ -1105,20 +1109,18 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                                                             .center,
                                                     children: [
                                                       Center(
-                                                        child: Text(
-                                                          (Value_selectDate ==
-                                                                  null)
-                                                              ? 'ทั้งหมด'
-                                                              : '$Value_selectDate',
-                                                          style:
-                                                              const TextStyle(
-                                                            color: ReportScreen_Color
-                                                                .Colors_Text2_,
-                                                            // fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T,
-                                                          ),
-                                                        ),
+                                                        child: Translate.TranslateAndSetText(
+                                                            (Value_selectDate ==
+                                                                    null)
+                                                                ? 'ทั้งหมด'
+                                                                : '$Value_selectDate',
+                                                            CustomerScreen_Color
+                                                                .Colors_Text1_,
+                                                            TextAlign.end,
+                                                            FontWeight.bold,
+                                                            FontWeight_.Fonts_T,
+                                                            16,
+                                                            1),
                                                       ),
                                                     ],
                                                   ),
@@ -1146,17 +1148,20 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                                                                     .size
                                                                     .width,
                                                             child: Row(
-                                                              children: const [
+                                                              children: [
                                                                 Expanded(
-                                                                  child: Text(
-                                                                    'เลือกทั้งหมด',
-                                                                    style: TextStyle(
-                                                                        color: ReportScreen_Color.Colors_Text2_,
-                                                                        // fontWeight:
-                                                                        //     FontWeight
-                                                                        //         .bold,
-                                                                        fontFamily: Font_.Fonts_T),
-                                                                  ),
+                                                                  child: Translate.TranslateAndSetText(
+                                                                      'เลือกทั้งหมด',
+                                                                      CustomerScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      TextAlign
+                                                                          .end,
+                                                                      FontWeight
+                                                                          .bold,
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                      16,
+                                                                      1),
                                                                 )
                                                               ],
                                                             ))),
@@ -1178,17 +1183,20 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                                                                     .size
                                                                     .width,
                                                             child: Row(
-                                                              children: const [
+                                                              children: [
                                                                 Expanded(
-                                                                  child: Text(
-                                                                    'เลือกวันที่',
-                                                                    style: TextStyle(
-                                                                        color: ReportScreen_Color.Colors_Text2_,
-                                                                        // fontWeight:
-                                                                        //     FontWeight
-                                                                        //         .bold,
-                                                                        fontFamily: Font_.Fonts_T),
-                                                                  ),
+                                                                  child: Translate.TranslateAndSetText(
+                                                                      'เลือกวันที่',
+                                                                      CustomerScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      TextAlign
+                                                                          .end,
+                                                                      FontWeight
+                                                                          .bold,
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                      16,
+                                                                      1),
                                                                 )
                                                               ],
                                                             ))),
@@ -1274,54 +1282,51 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                                           Expanded(
                                             flex: 1,
                                             child: Container(
-                                              child: const Center(
-                                                child: Text(
-                                                  'วันที่',
-                                                  style: TextStyle(
-                                                      color:
-                                                          CustomerScreen_Color
-                                                              .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T),
-                                                ),
+                                              child: Center(
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'วันที่',
+                                                        CustomerScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
+                                                        FontWeight_.Fonts_T,
+                                                        16,
+                                                        1),
                                               ),
                                             ),
                                           ),
                                           Expanded(
                                             flex: 1,
                                             child: Container(
-                                              child: const Center(
-                                                child: Text(
-                                                  'เวลา',
-                                                  style: TextStyle(
-                                                      color:
-                                                          CustomerScreen_Color
-                                                              .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T),
-                                                ),
+                                              child: Center(
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'เวลา',
+                                                        CustomerScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
+                                                        FontWeight_.Fonts_T,
+                                                        16,
+                                                        1),
                                               ),
                                             ),
                                           ),
                                           Expanded(
                                             flex: 2,
                                             child: Container(
-                                              child: const Center(
-                                                child: Text(
-                                                  'ไอพี(ip)',
-                                                  style: TextStyle(
-                                                      color:
-                                                          CustomerScreen_Color
-                                                              .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T),
-                                                ),
+                                              child: Center(
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'ไอพี(ip)',
+                                                        CustomerScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
+                                                        FontWeight_.Fonts_T,
+                                                        16,
+                                                        1),
                                               ),
                                             ),
                                           ),
@@ -1344,54 +1349,51 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                                           Expanded(
                                             flex: 2,
                                             child: Container(
-                                              child: const Center(
-                                                child: Text(
-                                                  'ผู้ใช้',
-                                                  style: TextStyle(
-                                                      color:
-                                                          CustomerScreen_Color
-                                                              .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T),
-                                                ),
+                                              child: Center(
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'ผู้ใช้',
+                                                        CustomerScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
+                                                        FontWeight_.Fonts_T,
+                                                        16,
+                                                        1),
                                               ),
                                             ),
                                           ),
                                           Expanded(
                                             flex: 1,
                                             child: Container(
-                                              child: const Center(
-                                                child: Text(
-                                                  'เมนู',
-                                                  style: TextStyle(
-                                                      color:
-                                                          CustomerScreen_Color
-                                                              .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T),
-                                                ),
+                                              child: Center(
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'เมนู',
+                                                        CustomerScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
+                                                        FontWeight_.Fonts_T,
+                                                        16,
+                                                        1),
                                               ),
                                             ),
                                           ),
                                           Expanded(
                                             flex: 3,
                                             child: Container(
-                                              child: const Center(
-                                                child: Text(
-                                                  'รายละเอียด',
-                                                  style: TextStyle(
-                                                      color:
-                                                          CustomerScreen_Color
-                                                              .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T),
-                                                ),
+                                              child: Center(
+                                                child: Translate
+                                                    .TranslateAndSetText(
+                                                        'รายละเอียด',
+                                                        CustomerScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
+                                                        FontWeight_.Fonts_T,
+                                                        16,
+                                                        1),
                                               ),
                                             ),
                                           ),

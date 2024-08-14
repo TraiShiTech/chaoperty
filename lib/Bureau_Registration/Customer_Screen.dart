@@ -30,6 +30,7 @@ import '../Model/GetType_Model.dart';
 import '../Model/trans_re_bill_history_model.dart';
 import '../Model/trans_re_bill_model.dart';
 import '../Responsive/responsive.dart';
+import '../Style/Translate.dart';
 import '../Style/colors.dart';
 import 'Add_Custo_Screen.dart';
 import 'package:universal_html/html.dart' as html;
@@ -156,6 +157,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
       renTal_name = preferences.getString('renTalName');
     });
   }
+
   Future<Null> read_GC_rental() async {
     if (renTalModels.isNotEmpty) {
       renTalModels.clear();
@@ -784,7 +786,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
 
               // print(customerModels.map((e) => e.docno));
               // print(_customerModels.map((e) => e.docno));
-///_customerModels
+
               setState(() {
                 customerModels = _customerModels.where((customerModel) {
                   var notTitle = customerModel.cname.toString().toLowerCase();
@@ -914,21 +916,21 @@ class _CustomerScreenState extends State<CustomerScreen> {
     String? email = Form_email_.text.toString();
     String? tax = Form_tax_.text.toString();
     String? typerser = '${int.parse(Value_AreaSer_.toString()) + 1}';
-    print('--------------------------------------');
-    print(typerser);
-    print(_verticalGroupValue);
-    print('--------------------------------------');
-    print(Ser);
-    print(nameshop);
-    print(typeshop);
-    print(bussshop);
-    print(bussscontact);
-    print(address);
-    print(tel);
-    print(email);
-    print(tax);
-    print(ren);
-    print('--------------------------------------');
+    // print('--------------------------------------');
+    // print(typerser);
+    // print(_verticalGroupValue);
+    // print('--------------------------------------');
+    // print(Ser);
+    // print(nameshop);
+    // print(typeshop);
+    // print(bussshop);
+    // print(bussscontact);
+    // print(address);
+    // print(tel);
+    // print(email);
+    // print(tax);
+    // print(ren);
+    // print('--------------------------------------');
 
     String url =
         '${MyConstant().domain}/Inc_customer_Bureau.php?isAdd=true&ren=$ren&user=$Ser&nameshop=$nameshop&typeshop=$typeshop&bussshop=$bussshop&bussscontact=$bussscontact&address=$address&tel=$tel&email=$email&tax=$tax&type=$_verticalGroupValue&typeser=$typerser';
@@ -939,7 +941,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
       var result = json.decode(response.body);
 
       if (result.toString() == 'true') {
-        print('true');
+        // print('true');
         Insert_log.Insert_logs('ทะเบียน', 'ทะเบียนลูกค้า>>แก้ไข($nameshop)');
         setState(() {
           select_coutumer();
@@ -983,17 +985,16 @@ class _CustomerScreenState extends State<CustomerScreen> {
                       Container(
                         alignment: Alignment.center,
                         width: MediaQuery.of(context).size.width * 0.6,
-                        child: Text(
-                          // 'เลขที่บิล ${_TransReBillModels[index].docno}',
-                          _TransReBillModels[index].doctax == ''
-                              ? 'เลขที่บิล ${_TransReBillModels[index].docno}'
-                              : 'เลขที่บิล ${_TransReBillModels[index].doctax}',
-                          style: const TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
+                        child: Translate.TranslateAndSetText(
+                            _TransReBillModels[index].doctax == ''
+                                ? 'เลขที่บิล ${_TransReBillModels[index].docno}'
+                                : 'เลขที่บิล ${_TransReBillModels[index].doctax}',
+                            Colors.black,
+                            TextAlign.center,
+                            FontWeight.bold,
+                            FontWeight_.Fonts_T,
+                            14,
+                            1),
                       ),
                     ],
                   ),
@@ -1034,20 +1035,16 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                             //     color: Colors.grey, width: 1),
                                           ),
                                           // padding: const EdgeInsets.all(8.0),
-                                          child: const Center(
-                                            child: Text(
-                                              'รายละเอียดบิล', //numinvoice
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T
-                                                  //fontSize: 10.0
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
+                                          child: Center(
+                                            child:
+                                                Translate.TranslateAndSetText(
+                                                    'รายละเอียดบิล',
+                                                    Colors.black,
+                                                    TextAlign.center,
+                                                    FontWeight.bold,
+                                                    FontWeight_.Fonts_T,
+                                                    14,
+                                                    1),
                                           ),
                                         ),
                                       ),
@@ -1082,24 +1079,20 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                               //     color: Colors.grey, width: 1),
                                             ),
                                             child: Center(
-                                              child: Text(
-                                                _TransReBillModels[index]
-                                                            .doctax ==
-                                                        ''
-                                                    ? 'เลขที่บิล ${_TransReBillModels[index].docno}'
-                                                    : 'เลขที่บิล ${_TransReBillModels[index].doctax}',
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text1_,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T
-                                                    //fontSize: 10.0
-                                                    //fontSize: 10.0
-                                                    ),
-                                              ),
+                                              child: Translate.TranslateAndSetText(
+                                                  _TransReBillModels[
+                                                                  index]
+                                                              .doctax ==
+                                                          ''
+                                                      ? 'เลขที่บิล ${_TransReBillModels[index].docno}'
+                                                      : 'เลขที่บิล ${_TransReBillModels[index].doctax}',
+                                                  CustomerScreen_Color
+                                                      .Colors_Text1_,
+                                                  TextAlign.center,
+                                                  FontWeight.bold,
+                                                  FontWeight_.Fonts_T,
+                                                  14,
+                                                  1),
                                             ),
                                           ),
                                         ),
@@ -1112,67 +1105,52 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                     padding: const EdgeInsets.all(8.0),
                                     child: Row(
                                       children: [
-                                        const Expanded(
+                                        Expanded(
                                           flex: 1,
                                           child: Center(
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 15,
-                                              maxLines: 1,
-                                              'ลำดับ',
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T
-                                                  //fontSize: 10.0
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
+                                            child: Translate
+                                                .TranslateAndSet_TextAutoSize(
+                                                    'ลำดับ',
+                                                    CustomerScreen_Color
+                                                        .Colors_Text1_,
+                                                    TextAlign.center,
+                                                    FontWeight.bold,
+                                                    FontWeight_.Fonts_T,
+                                                    8,
+                                                    20,
+                                                    1),
                                           ),
                                         ),
-                                        const Expanded(
+                                        Expanded(
                                           flex: 2,
                                           child: Center(
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 15,
-                                              maxLines: 1,
-                                              'กำหนดชำระ',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T
-                                                  //fontSize: 10.0
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
+                                            child: Translate
+                                                .TranslateAndSet_TextAutoSize(
+                                                    'ลำดับ',
+                                                    CustomerScreen_Color
+                                                        .Colors_Text1_,
+                                                    TextAlign.center,
+                                                    FontWeight.bold,
+                                                    FontWeight_.Fonts_T,
+                                                    8,
+                                                    20,
+                                                    1),
                                           ),
                                         ),
-                                        const Expanded(
+                                        Expanded(
                                           flex: 2,
                                           child: Center(
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 15,
-                                              maxLines: 1,
-                                              'รายการ',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T
-                                                  //fontSize: 10.0
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
+                                            child: Translate
+                                                .TranslateAndSet_TextAutoSize(
+                                                    'รายการ',
+                                                    CustomerScreen_Color
+                                                        .Colors_Text1_,
+                                                    TextAlign.center,
+                                                    FontWeight.bold,
+                                                    FontWeight_.Fonts_T,
+                                                    8,
+                                                    20,
+                                                    1),
                                           ),
                                         ),
                                         const Expanded(
@@ -1185,7 +1163,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                               'VAT %',
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
-                                                  color: PeopleChaoScreen_Color
+                                                  color: CustomerScreen_Color
                                                       .Colors_Text1_,
                                                   fontWeight: FontWeight.bold,
                                                   fontFamily:
@@ -1196,28 +1174,23 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                             ),
                                           ),
                                         ),
-                                        const Expanded(
+                                        Expanded(
                                           flex: 1,
                                           child: Center(
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 15,
-                                              maxLines: 1,
-                                              'หน่วย',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T
-                                                  //fontSize: 10.0
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
+                                            child: Translate
+                                                .TranslateAndSet_TextAutoSize(
+                                                    'หน่วย',
+                                                    CustomerScreen_Color
+                                                        .Colors_Text1_,
+                                                    TextAlign.center,
+                                                    FontWeight.bold,
+                                                    FontWeight_.Fonts_T,
+                                                    8,
+                                                    20,
+                                                    1),
                                           ),
                                         ),
-                                        const Expanded(
+                                        Expanded(
                                           flex: 1,
                                           child: Center(
                                             child: AutoSizeText(
@@ -1227,7 +1200,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                               'VAT',
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
-                                                  color: PeopleChaoScreen_Color
+                                                  color: CustomerScreen_Color
                                                       .Colors_Text1_,
                                                   fontWeight: FontWeight.bold,
                                                   fontFamily:
@@ -1250,9 +1223,8 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                 '70',
                                                 textAlign: TextAlign.end,
                                                 style: TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text1_,
+                                                    color: CustomerScreen_Color
+                                                        .Colors_Text1_,
                                                     fontWeight: FontWeight.bold,
                                                     fontFamily:
                                                         FontWeight_.Fonts_T
@@ -1274,9 +1246,8 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                 '30',
                                                 textAlign: TextAlign.end,
                                                 style: TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text1_,
+                                                    color: CustomerScreen_Color
+                                                        .Colors_Text1_,
                                                     fontWeight: FontWeight.bold,
                                                     fontFamily:
                                                         FontWeight_.Fonts_T
@@ -1286,46 +1257,36 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                               ),
                                             ),
                                           ),
-                                        const Expanded(
+                                        Expanded(
                                           flex: 1,
                                           child: Center(
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 15,
-                                              maxLines: 2,
-                                              'ราคารวมก่อน VAT',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T
-                                                  //fontSize: 10.0
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
+                                            child: Translate
+                                                .TranslateAndSet_TextAutoSize(
+                                                    'ราคารวมก่อน VAT',
+                                                    CustomerScreen_Color
+                                                        .Colors_Text1_,
+                                                    TextAlign.center,
+                                                    FontWeight.bold,
+                                                    FontWeight_.Fonts_T,
+                                                    8,
+                                                    20,
+                                                    1),
                                           ),
                                         ),
-                                        const Expanded(
+                                        Expanded(
                                           flex: 1,
                                           child: Center(
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 15,
-                                              maxLines: 1,
-                                              'ราคารวม VAT',
-                                              textAlign: TextAlign.end,
-                                              style: TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T
-                                                  //fontSize: 10.0
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
+                                            child: Translate
+                                                .TranslateAndSet_TextAutoSize(
+                                                    'ราคารวม VAT',
+                                                    CustomerScreen_Color
+                                                        .Colors_Text1_,
+                                                    TextAlign.center,
+                                                    FontWeight.bold,
+                                                    FontWeight_.Fonts_T,
+                                                    8,
+                                                    20,
+                                                    1),
                                           ),
                                         ),
                                       ],
@@ -1372,7 +1333,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                         textAlign:
                                                             TextAlign.center,
                                                         style: const TextStyle(
-                                                            color: PeopleChaoScreen_Color
+                                                            color: CustomerScreen_Color
                                                                 .Colors_Text2_,
                                                             //fontWeight: FontWeight.bold,
                                                             fontFamily:
@@ -1389,7 +1350,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                         textAlign:
                                                             TextAlign.center,
                                                         style: const TextStyle(
-                                                            color: PeopleChaoScreen_Color
+                                                            color: CustomerScreen_Color
                                                                 .Colors_Text2_,
                                                             //fontWeight: FontWeight.bold,
                                                             fontFamily:
@@ -1406,7 +1367,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                         textAlign:
                                                             TextAlign.center,
                                                         style: const TextStyle(
-                                                            color: PeopleChaoScreen_Color
+                                                            color: CustomerScreen_Color
                                                                 .Colors_Text2_,
                                                             //fontWeight: FontWeight.bold,
                                                             fontFamily:
@@ -1423,7 +1384,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                         textAlign:
                                                             TextAlign.end,
                                                         style: const TextStyle(
-                                                            color: PeopleChaoScreen_Color
+                                                            color: CustomerScreen_Color
                                                                 .Colors_Text2_,
                                                             //fontWeight: FontWeight.bold,
                                                             fontFamily:
@@ -1440,7 +1401,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                         textAlign:
                                                             TextAlign.end,
                                                         style: const TextStyle(
-                                                            color: PeopleChaoScreen_Color
+                                                            color: CustomerScreen_Color
                                                                 .Colors_Text2_,
                                                             //fontWeight: FontWeight.bold,
                                                             fontFamily:
@@ -1457,7 +1418,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                         textAlign:
                                                             TextAlign.end,
                                                         style: const TextStyle(
-                                                            color: PeopleChaoScreen_Color
+                                                            color: CustomerScreen_Color
                                                                 .Colors_Text2_,
                                                             //fontWeight: FontWeight.bold,
                                                             fontFamily:
@@ -1488,7 +1449,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                               TextAlign.end,
                                                           style:
                                                               const TextStyle(
-                                                                  color: PeopleChaoScreen_Color
+                                                                  color: CustomerScreen_Color
                                                                       .Colors_Text2_,
                                                                   // fontWeight:
                                                                   //     FontWeight
@@ -1525,7 +1486,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                               TextAlign.end,
                                                           style:
                                                               const TextStyle(
-                                                                  color: PeopleChaoScreen_Color
+                                                                  color: CustomerScreen_Color
                                                                       .Colors_Text2_,
                                                                   // fontWeight:
                                                                   //     FontWeight
@@ -1548,7 +1509,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                         textAlign:
                                                             TextAlign.end,
                                                         style: const TextStyle(
-                                                            color: PeopleChaoScreen_Color
+                                                            color: CustomerScreen_Color
                                                                 .Colors_Text2_,
                                                             //fontWeight: FontWeight.bold,
                                                             fontFamily:
@@ -1565,7 +1526,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                         textAlign:
                                                             TextAlign.end,
                                                         style: const TextStyle(
-                                                            color: PeopleChaoScreen_Color
+                                                            color: CustomerScreen_Color
                                                                 .Colors_Text2_,
                                                             //fontWeight: FontWeight.bold,
                                                             fontFamily:
@@ -1604,42 +1565,32 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                       Align(
                                                         alignment:
                                                             Alignment.topLeft,
-                                                        child: Text(
-                                                          'วันที่ชำระ : ${DateFormat('dd-MM').format(DateTime.parse('$pdate 00:00:00'))}-${DateTime.parse('$pdate 00:00:00').year + 543}',
-                                                          textAlign:
-                                                              TextAlign.end,
-                                                          style:
-                                                              const TextStyle(
-                                                                  color: PeopleChaoScreen_Color
-                                                                      .Colors_Text1_,
-                                                                  // fontWeight:
-                                                                  //     FontWeight
-                                                                  //         .bold,
-                                                                  fontFamily:
-                                                                      Font_
-                                                                          .Fonts_T
-                                                                  //fontSize: 10.0
-                                                                  ),
-                                                        ),
+                                                        child: Translate
+                                                            .TranslateAndSet_TextAutoSize(
+                                                                'วันที่ชำระ : ${DateFormat('dd-MM').format(DateTime.parse('$pdate 00:00:00'))}-${DateTime.parse('$pdate 00:00:00').year + 543}',
+                                                                CustomerScreen_Color
+                                                                    .Colors_Text1_,
+                                                                TextAlign.end,
+                                                                FontWeight.bold,
+                                                                Font_.Fonts_T,
+                                                                8,
+                                                                20,
+                                                                1),
                                                       ),
-                                                      const Align(
+                                                      Align(
                                                         alignment:
                                                             Alignment.topLeft,
-                                                        child: Text(
-                                                          'รูปแบบการชำระ',
-                                                          textAlign:
-                                                              TextAlign.end,
-                                                          style: TextStyle(
-                                                              color: PeopleChaoScreen_Color
-                                                                  .Colors_Text1_,
-                                                              // fontWeight:
-                                                              //     FontWeight
-                                                              //         .bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T
-                                                              //fontSize: 10.0
-                                                              ),
-                                                        ),
+                                                        child: Translate
+                                                            .TranslateAndSet_TextAutoSize(
+                                                                'รูปแบบการชำระ',
+                                                                CustomerScreen_Color
+                                                                    .Colors_Text1_,
+                                                                TextAlign.end,
+                                                                FontWeight.bold,
+                                                                Font_.Fonts_T,
+                                                                8,
+                                                                20,
+                                                                1),
                                                       ),
                                                       for (var i = 0;
                                                           i <
@@ -1652,10 +1603,10 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                           child: Text(
                                                             // minFontSize: 10,
                                                             // maxFontSize: 15,
-                                                            '${i + 1}.(${finnancetransModels[i].type}) จำนวน ${nFormat.format(double.parse(finnancetransModels[i].amt!))} บาท',
+                                                            '${i + 1}.(${finnancetransModels[i].type}) . ${nFormat.format(double.parse(finnancetransModels[i].amt!))} ',
                                                             style:
                                                                 const TextStyle(
-                                                                    color: PeopleChaoScreen_Color
+                                                                    color: CustomerScreen_Color
                                                                         .Colors_Text2_,
                                                                     //fontWeight: FontWeight.bold,
                                                                     fontFamily:
@@ -1694,18 +1645,18 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                       children: [
                                                         Container(
                                                           width: 120,
-                                                          child:
-                                                              const AutoSizeText(
-                                                            minFontSize: 10,
-                                                            maxFontSize: 15,
-                                                            'รวม(บาท)',
-                                                            style: TextStyle(
-                                                                color: PeopleChaoScreen_Color
-                                                                    .Colors_Text2_,
-                                                                //fontWeight: FontWeight.bold,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T),
-                                                          ),
+                                                          child: Translate
+                                                              .TranslateAndSet_TextAutoSize(
+                                                                  'รวม(บาท)',
+                                                                  CustomerScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  TextAlign.end,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  Font_.Fonts_T,
+                                                                  8,
+                                                                  20,
+                                                                  1),
                                                         ),
                                                         Expanded(
                                                           // flex: 1,
@@ -1717,7 +1668,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                             '${nFormat.format(sum_pvat)}',
                                                             style:
                                                                 const TextStyle(
-                                                                    color: PeopleChaoScreen_Color
+                                                                    color: CustomerScreen_Color
                                                                         .Colors_Text2_,
                                                                     //fontWeight: FontWeight.bold,
                                                                     fontFamily:
@@ -1731,18 +1682,16 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                       children: [
                                                         Container(
                                                           width: 120,
-                                                          child:
-                                                              const AutoSizeText(
-                                                            minFontSize: 10,
-                                                            maxFontSize: 15,
-                                                            'ภาษีมูลค่าเพิ่ม(vat)',
-                                                            style: TextStyle(
-                                                                color: PeopleChaoScreen_Color
-                                                                    .Colors_Text2_,
-                                                                //fontWeight: FontWeight.bold,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T),
-                                                          ),
+                                                          child: Translate.TranslateAndSet_TextAutoSize(
+                                                              'ภาษีมูลค่าเพิ่ม(vat)',
+                                                              CustomerScreen_Color
+                                                                  .Colors_Text1_,
+                                                              TextAlign.end,
+                                                              FontWeight.bold,
+                                                              Font_.Fonts_T,
+                                                              8,
+                                                              20,
+                                                              1),
                                                         ),
                                                         Expanded(
                                                           // flex: 1,
@@ -1754,7 +1703,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                             '${nFormat.format(sum_vat)}',
                                                             style:
                                                                 const TextStyle(
-                                                                    color: PeopleChaoScreen_Color
+                                                                    color: CustomerScreen_Color
                                                                         .Colors_Text2_,
                                                                     //fontWeight: FontWeight.bold,
                                                                     fontFamily:
@@ -1768,18 +1717,18 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                       children: [
                                                         Container(
                                                           width: 120,
-                                                          child:
-                                                              const AutoSizeText(
-                                                            minFontSize: 10,
-                                                            maxFontSize: 15,
-                                                            'หัก ณ ที่จ่าย',
-                                                            style: TextStyle(
-                                                                color: PeopleChaoScreen_Color
-                                                                    .Colors_Text2_,
-                                                                //fontWeight: FontWeight.bold,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T),
-                                                          ),
+                                                          child: Translate
+                                                              .TranslateAndSet_TextAutoSize(
+                                                                  'หัก ณ ที่จ่าย',
+                                                                  CustomerScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  TextAlign.end,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  Font_.Fonts_T,
+                                                                  8,
+                                                                  20,
+                                                                  1),
                                                         ),
                                                         Expanded(
                                                           // flex: 1,
@@ -1791,7 +1740,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                             '${nFormat.format(sum_wht)}',
                                                             style:
                                                                 const TextStyle(
-                                                                    color: PeopleChaoScreen_Color
+                                                                    color: CustomerScreen_Color
                                                                         .Colors_Text2_,
                                                                     //fontWeight: FontWeight.bold,
                                                                     fontFamily:
@@ -1805,18 +1754,18 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                       children: [
                                                         Container(
                                                           width: 120,
-                                                          child:
-                                                              const AutoSizeText(
-                                                            minFontSize: 10,
-                                                            maxFontSize: 15,
-                                                            'ยอดรวม',
-                                                            style: TextStyle(
-                                                                color: PeopleChaoScreen_Color
-                                                                    .Colors_Text2_,
-                                                                //fontWeight: FontWeight.bold,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T),
-                                                          ),
+                                                          child: Translate
+                                                              .TranslateAndSet_TextAutoSize(
+                                                                  'ยอดรวม',
+                                                                  CustomerScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  TextAlign.end,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  Font_.Fonts_T,
+                                                                  8,
+                                                                  20,
+                                                                  1),
                                                         ),
                                                         Expanded(
                                                           flex: 1,
@@ -1828,7 +1777,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                             '${nFormat.format(sum_amt)}',
                                                             style:
                                                                 const TextStyle(
-                                                                    color: PeopleChaoScreen_Color
+                                                                    color: CustomerScreen_Color
                                                                         .Colors_Text2_,
                                                                     //fontWeight: FontWeight.bold,
                                                                     fontFamily:
@@ -1842,19 +1791,16 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                       children: [
                                                         Container(
                                                           width: 120,
-                                                          child: AutoSizeText(
-                                                            minFontSize: 10,
-                                                            maxFontSize: 15,
-                                                            'ส่วนลด $sum_disp  %',
-                                                            style:
-                                                                const TextStyle(
-                                                                    color: PeopleChaoScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    //fontWeight: FontWeight.bold,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T),
-                                                          ),
+                                                          child: Translate.TranslateAndSet_TextAutoSize(
+                                                              'ส่วนลด $sum_disp  %',
+                                                              CustomerScreen_Color
+                                                                  .Colors_Text1_,
+                                                              TextAlign.end,
+                                                              FontWeight.bold,
+                                                              Font_.Fonts_T,
+                                                              8,
+                                                              20,
+                                                              1),
                                                         ),
                                                         Expanded(
                                                           // flex: 1,
@@ -1864,14 +1810,12 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                             '${nFormat.format(sum_disamt)}',
                                                             textAlign:
                                                                 TextAlign.end,
-                                                            style:
-                                                                const TextStyle(
-                                                                    color: PeopleChaoScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    //fontWeight: FontWeight.bold,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T),
+                                                            style: TextStyle(
+                                                                color: CustomerScreen_Color
+                                                                    .Colors_Text2_,
+                                                                //fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T),
                                                           ),
                                                         ),
                                                       ],
@@ -1880,18 +1824,18 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                       children: [
                                                         Container(
                                                           width: 120,
-                                                          child:
-                                                              const AutoSizeText(
-                                                            minFontSize: 10,
-                                                            maxFontSize: 15,
-                                                            'ยอดชำระ',
-                                                            style: TextStyle(
-                                                                color: PeopleChaoScreen_Color
-                                                                    .Colors_Text2_,
-                                                                //fontWeight: FontWeight.bold,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T),
-                                                          ),
+                                                          child: Translate
+                                                              .TranslateAndSet_TextAutoSize(
+                                                                  'ยอดชำระ',
+                                                                  CustomerScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  TextAlign.end,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  Font_.Fonts_T,
+                                                                  8,
+                                                                  20,
+                                                                  1),
                                                         ),
                                                         Expanded(
                                                           // flex: 1,
@@ -1903,7 +1847,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                             '${nFormat.format(sum_amt - sum_disamt)}',
                                                             style:
                                                                 const TextStyle(
-                                                                    color: PeopleChaoScreen_Color
+                                                                    color: CustomerScreen_Color
                                                                         .Colors_Text2_,
                                                                     //fontWeight: FontWeight.bold,
                                                                     fontFamily:
@@ -1948,7 +1892,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
+                              children: [
                                 Padding(
                                   padding: EdgeInsets.all(8.0),
                                   child: Icon(Icons.highlight_off,
@@ -1956,15 +1900,15 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                 ),
                                 Padding(
                                   padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'ปิด',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      // fontWeight:
-                                      //     FontWeight.bold,
-                                      fontFamily: Font_.Fonts_T,
-                                    ),
-                                  ),
+                                  child: Translate.TranslateAndSet_TextAutoSize(
+                                      'ปิด',
+                                      CustomerScreen_Color.Colors_Text3_,
+                                      TextAlign.end,
+                                      FontWeight.bold,
+                                      Font_.Fonts_T,
+                                      8,
+                                      20,
+                                      1),
                                 ),
                               ],
                             )),
@@ -2091,12 +2035,17 @@ class _CustomerScreenState extends State<CustomerScreen> {
         select_coutumer();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              backgroundColor: Colors.green[600],
-              content: Text(' ทำรายการสำเร็จ... !',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: Font_.Fonts_T))),
+            backgroundColor: Colors.green[600],
+            content: Translate.TranslateAndSet_TextAutoSize(
+                ' ทำรายการสำเร็จ... !',
+                CustomerScreen_Color.Colors_Text3_,
+                TextAlign.end,
+                FontWeight.bold,
+                Font_.Fonts_T,
+                8,
+                20,
+                1),
+          ),
         );
       }
     } catch (e) {
@@ -2146,29 +2095,33 @@ class _CustomerScreenState extends State<CustomerScreen> {
         child: AlertDialog(
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(20.0))),
-          title: const Center(
-              child: Text(
-            'แก้ไข User & Password',
-            style: TextStyle(
-                color: AdminScafScreen_Color.Colors_Text1_,
-                fontWeight: FontWeight.bold,
-                fontFamily: FontWeight_.Fonts_T),
-          )),
+          title: Center(
+            child: Translate.TranslateAndSet_TextAutoSize(
+                'แก้ไข User & Password',
+                CustomerScreen_Color.Colors_Text1_,
+                TextAlign.end,
+                FontWeight.bold,
+                Font_.Fonts_T,
+                8,
+                20,
+                1),
+          ),
           actions: <Widget>[
             Column(
               children: [
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      'User',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                          //fontWeight: FontWeight.bold,
-                          fontFamily: Font_.Fonts_T),
-                    ),
+                    child: Translate.TranslateAndSet_TextAutoSize(
+                        'User',
+                        CustomerScreen_Color.Colors_Text1_,
+                        TextAlign.start,
+                        FontWeight.bold,
+                        Font_.Fonts_T,
+                        8,
+                        20,
+                        1),
                   ),
                 ),
                 Container(
@@ -2246,18 +2199,19 @@ class _CustomerScreenState extends State<CustomerScreen> {
                     },
                   ),
                 ),
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      'Password',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                          //fontWeight: FontWeight.bold,
-                          fontFamily: Font_.Fonts_T),
-                    ),
+                    child: Translate.TranslateAndSet_TextAutoSize(
+                        'Password',
+                        CustomerScreen_Color.Colors_Text1_,
+                        TextAlign.start,
+                        FontWeight.bold,
+                        Font_.Fonts_T,
+                        8,
+                        20,
+                        1),
                   ),
                 ),
                 Container(
@@ -2394,32 +2348,48 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                   });
                                   Navigator.pop(context, 'OK');
 
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content: Text(
-                                              'แก้ไขข้อมูลเสร็จสิ้น !!',
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontFamily: Font_.Fonts_T))));
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content:
+                                        Translate.TranslateAndSet_TextAutoSize(
+                                            'แก้ไขข้อมูลเสร็จสิ้น !!',
+                                            CustomerScreen_Color.Colors_Text1_,
+                                            TextAlign.start,
+                                            FontWeight.bold,
+                                            Font_.Fonts_T,
+                                            8,
+                                            20,
+                                            1),
+                                  ));
                                 } catch (e) {
                                   Navigator.pop(context, 'OK');
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text('เกิดข้อผิดพลาด',
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontFamily: Font_.Fonts_T))),
+                                    SnackBar(
+                                      content: Translate
+                                          .TranslateAndSet_TextAutoSize(
+                                              'เกิดข้อผิดพลาด',
+                                              CustomerScreen_Color
+                                                  .Colors_Text1_,
+                                              TextAlign.start,
+                                              FontWeight.bold,
+                                              Font_.Fonts_T,
+                                              8,
+                                              20,
+                                              1),
+                                    ),
                                   );
                                 }
                               }
                             },
-                            child: const Text(
-                              'ยืนยัน',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T),
-                            ),
+                            child: Translate.TranslateAndSet_TextAutoSize(
+                                'ยืนยัน',
+                                CustomerScreen_Color.Colors_Text3_,
+                                TextAlign.start,
+                                FontWeight.bold,
+                                FontWeight_.Fonts_T,
+                                8,
+                                20,
+                                1),
                           ),
                         ),
                       ),
@@ -2447,13 +2417,15 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                   });
                                   Navigator.pop(context, 'OK');
                                 },
-                                child: const Text(
-                                  'ยกเลิก',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: FontWeight_.Fonts_T),
-                                ),
+                                child: Translate.TranslateAndSet_TextAutoSize(
+                                    'ยกเลิก',
+                                    CustomerScreen_Color.Colors_Text3_,
+                                    TextAlign.start,
+                                    FontWeight.bold,
+                                    FontWeight_.Fonts_T,
+                                    8,
+                                    20,
+                                    1),
                               ),
                             ),
                           ],
@@ -2793,10 +2765,8 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                           child: Column(
                                             children: [
                                               Container(
-                                                  padding:
-                                                       EdgeInsets.all(5),
-                                                  decoration:
-                                                       BoxDecoration(
+                                                  padding: EdgeInsets.all(5),
+                                                  decoration: BoxDecoration(
                                                     color: AppbackgroundColor
                                                         .TiTile_Colors,
                                                     borderRadius:
@@ -2818,25 +2788,18 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                     children: [
                                                       Expanded(
                                                         flex: 1,
-                                                        child: AutoSizeText(
-                                                          minFontSize: 10,
-                                                          maxFontSize: 15,
-                                                          'ทะเบียนลูกค้า :',
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                              color: CustomerScreen_Color
-                                                                  .Colors_Text1_,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontFamily:
-                                                                  FontWeight_
-                                                                      .Fonts_T
-                                                              //fontSize: 10.0
-                                                              //fontSize: 10.0Test_UP_img_Custo
-                                                              ),
-                                                        ),
+                                                        child: Translate
+                                                            .TranslateAndSet_TextAutoSize(
+                                                                'ทะเบียนลูกค้า :',
+                                                                CustomerScreen_Color
+                                                                    .Colors_Text1_,
+                                                                TextAlign.start,
+                                                                FontWeight.bold,
+                                                                FontWeight_
+                                                                    .Fonts_T,
+                                                                8,
+                                                                20,
+                                                                1),
                                                       ),
                                                       // Expanded(
                                                       //   flex: 1,
@@ -2961,8 +2924,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                       padding:
                                                           const EdgeInsets.all(
                                                               5),
-                                                      decoration:
-                                                           BoxDecoration(
+                                                      decoration: BoxDecoration(
                                                         color:
                                                             AppbackgroundColor
                                                                 .TiTile_Colors,
@@ -2984,78 +2946,57 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                             0)),
                                                       ),
                                                       child: Row(
-                                                        children: const [
+                                                        children: [
                                                           // Center(
                                                           //     child:
                                                           //         Text('...')),
                                                           Expanded(
                                                             flex: 1,
-                                                            child: AutoSizeText(
-                                                              minFontSize: 10,
-                                                              maxFontSize: 18,
-                                                              'รหัสสมาชิก',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: TextStyle(
-                                                                  color: CustomerScreen_Color
-                                                                      .Colors_Text1_,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T
-                                                                  //fontSize: 10.0
-                                                                  //fontSize: 10.0
-                                                                  ),
-                                                            ),
+                                                            child: Translate
+                                                                .TranslateAndSet_TextAutoSize(
+                                                                    'รหัสสมาชิก',
+                                                                    CustomerScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    TextAlign
+                                                                        .start,
+                                                                    FontWeight
+                                                                        .bold,
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                                    8,
+                                                                    20,
+                                                                    1),
                                                           ),
                                                           Expanded(
                                                             flex: 1,
-                                                            child: AutoSizeText(
-                                                              minFontSize: 10,
-                                                              maxFontSize: 18,
-                                                              'ชื่อร้าน',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: TextStyle(
-                                                                  color: CustomerScreen_Color
-                                                                      .Colors_Text1_,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T
-                                                                  //fontSize: 10.0
-                                                                  //fontSize: 10.0
-                                                                  ),
-                                                            ),
+                                                            child: Translate
+                                                                .TranslateAndSet_TextAutoSize(
+                                                                    'ชื่อร้าน',
+                                                                    CustomerScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    TextAlign
+                                                                        .start,
+                                                                    FontWeight
+                                                                        .bold,
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                                    8,
+                                                                    20,
+                                                                    1),
                                                           ),
                                                           Expanded(
                                                             flex: 1,
-                                                            child: AutoSizeText(
-                                                              minFontSize: 10,
-                                                              maxFontSize: 18,
-                                                              'ชื่อผู้เช่า/บริษัท',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: TextStyle(
-                                                                  color: CustomerScreen_Color
-                                                                      .Colors_Text1_,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T
-                                                                  //fontSize: 10.0
-                                                                  //fontSize: 10.0
-                                                                  ),
-                                                            ),
+                                                            child: Translate.TranslateAndSet_TextAutoSize(
+                                                                'ชื่อผู้เช่า/บริษัท',
+                                                                CustomerScreen_Color
+                                                                    .Colors_Text1_,
+                                                                TextAlign.start,
+                                                                FontWeight.bold,
+                                                                FontWeight_
+                                                                    .Fonts_T,
+                                                                8,
+                                                                20,
+                                                                1),
                                                           ),
                                                         ],
                                                       ),
@@ -3261,18 +3202,18 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                             0;
                                                                         i < typeModels.length;
                                                                         i++) {
-                                                                      print(
-                                                                          '--------------------------------------');
-                                                                      print(customerModels[
-                                                                              index]
-                                                                          .type
-                                                                          .toString());
-                                                                      print(typeModels[
-                                                                              i]
-                                                                          .type
-                                                                          .toString());
-                                                                      print(
-                                                                          '--------------------------------------');
+                                                                      // print(
+                                                                      //     '--------------------------------------');
+                                                                      // print(customerModels[
+                                                                      //         index]
+                                                                      //     .type
+                                                                      //     .toString());
+                                                                      // print(typeModels[
+                                                                      //         i]
+                                                                      //     .type
+                                                                      //     .toString());
+                                                                      // print(
+                                                                      //     '--------------------------------------');
                                                                       if (customerModels[index]
                                                                               .type
                                                                               .toString() ==
@@ -3436,11 +3377,9 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                             builder: (BuildContext context) =>
                                                                                 AlertDialog(
                                                                               shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
-                                                                              title: const Center(
-                                                                                  child: Text(
-                                                                                'ต้องการลบข้อมูลลูกค้าใช่หรือไม่',
-                                                                                style: TextStyle(color: AdminScafScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
-                                                                              )),
+                                                                              title: Center(
+                                                                                child: Translate.TranslateAndSetText('ต้องการลบข้อมูลลูกค้าใช่หรือไม่', CustomerScreen_Color.Colors_Text2_, TextAlign.center, FontWeight.bold, FontWeight_.Fonts_T, 14, 1),
+                                                                              ),
                                                                               actions: <Widget>[
                                                                                 Column(
                                                                                   children: [
@@ -3491,19 +3430,20 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                                                         select_coutumer();
                                                                                                       });
                                                                                                       Navigator.pop(context, 'OK');
-                                                                                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('ลบข้อมูลลูกค้าเรียบร้อย...')));
+                                                                                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                                                                        content: Translate.TranslateAndSet_TextAutoSize('ลบข้อมูลลูกค้าเรียบร้อย.... ', CustomerScreen_Color.Colors_Text1_, TextAlign.center, FontWeight.bold, FontWeight_.Fonts_T, 8, 20, 1),
+                                                                                                      ));
                                                                                                     } else {
                                                                                                       Navigator.pop(context, 'OK');
                                                                                                       ScaffoldMessenger.of(context).showSnackBar(
-                                                                                                        SnackBar(content: Text('(ผิดพลาด !! )')),
+                                                                                                        SnackBar(
+                                                                                                          content: Translate.TranslateAndSet_TextAutoSize('ผิดพลาด !! ', CustomerScreen_Color.Colors_Text1_, TextAlign.center, FontWeight.bold, FontWeight_.Fonts_T, 8, 20, 1),
+                                                                                                        ),
                                                                                                       );
                                                                                                     }
                                                                                                   } catch (e) {}
                                                                                                 },
-                                                                                                child: const Text(
-                                                                                                  'ยืนยัน',
-                                                                                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
-                                                                                                ),
+                                                                                                child: Translate.TranslateAndSetText('ยืนยัน', CustomerScreen_Color.Colors_Text3_, TextAlign.center, FontWeight.bold, FontWeight_.Fonts_T, 14, 1),
                                                                                               ),
                                                                                             ),
                                                                                           ),
@@ -3521,10 +3461,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                                                   padding: const EdgeInsets.all(8.0),
                                                                                                   child: TextButton(
                                                                                                     onPressed: () => Navigator.pop(context, 'OK'),
-                                                                                                    child: const Text(
-                                                                                                      'ยกเลิก',
-                                                                                                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
-                                                                                                    ),
+                                                                                                    child: Translate.TranslateAndSetText('ยกเลิก', CustomerScreen_Color.Colors_Text3_, TextAlign.center, FontWeight.bold, FontWeight_.Fonts_T, 14, 1),
                                                                                                   ),
                                                                                                 ),
                                                                                               ],
@@ -3573,29 +3510,19 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                           Radius.circular(
                                                                               10)),
                                                                 ),
-                                                                child:
-                                                                    AutoSizeText(
-                                                                  minFontSize:
-                                                                      8,
-                                                                  maxFontSize:
-                                                                      12,
-                                                                  'ลบ',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style: TextStyle(
-                                                                      color: CustomerScreen_Color
-                                                                          .Colors_Text1_,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontFamily:
-                                                                          FontWeight_
-                                                                              .Fonts_T
-                                                                      //fontSize: 10.0
-                                                                      //fontSize: 10.0
-                                                                      ),
-                                                                ),
+                                                                child: Translate.TranslateAndSet_TextAutoSize(
+                                                                    'ลบ',
+                                                                    CustomerScreen_Color
+                                                                        .Colors_Text3_,
+                                                                    TextAlign
+                                                                        .center,
+                                                                    FontWeight
+                                                                        .bold,
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                                    8,
+                                                                    20,
+                                                                    1),
                                                               ),
                                                             ),
                                                           ),
@@ -3634,29 +3561,19 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                           Radius.circular(
                                                                               10)),
                                                                 ),
-                                                                child:
-                                                                    AutoSizeText(
-                                                                  minFontSize:
-                                                                      8,
-                                                                  maxFontSize:
-                                                                      12,
-                                                                  'เพิ่ม',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style: TextStyle(
-                                                                      color: CustomerScreen_Color
-                                                                          .Colors_Text1_,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontFamily:
-                                                                          FontWeight_
-                                                                              .Fonts_T
-                                                                      //fontSize: 10.0
-                                                                      //fontSize: 10.0
-                                                                      ),
-                                                                ),
+                                                                child: Translate.TranslateAndSet_TextAutoSize(
+                                                                    'เพิ่ม',
+                                                                    CustomerScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    TextAlign
+                                                                        .center,
+                                                                    FontWeight
+                                                                        .bold,
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                                    8,
+                                                                    20,
+                                                                    1),
                                                               ),
                                                             ),
                                                           ),
@@ -3699,8 +3616,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                 Container(
                                                     padding:
                                                         const EdgeInsets.all(5),
-                                                    decoration:
-                                                         BoxDecoration(
+                                                    decoration: BoxDecoration(
                                                       color: AppbackgroundColor
                                                           .TiTile_Colors,
                                                       borderRadius:
@@ -3720,25 +3636,20 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                       children: [
                                                         Expanded(
                                                           flex: 1,
-                                                          child: AutoSizeText(
-                                                            minFontSize: 10,
-                                                            maxFontSize: 18,
-                                                            'ข้อมูล',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                                color: CustomerScreen_Color
-                                                                    .Colors_Text1_,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontFamily:
-                                                                    FontWeight_
-                                                                        .Fonts_T
-                                                                //fontSize: 10.0
-                                                                //fontSize: 10.0
-                                                                ),
-                                                          ),
+                                                          child: Translate
+                                                              .TranslateAndSet_TextAutoSize(
+                                                                  'ข้อมูล',
+                                                                  CustomerScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  TextAlign
+                                                                      .center,
+                                                                  FontWeight
+                                                                      .bold,
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                                  8,
+                                                                  20,
+                                                                  1),
                                                         ),
                                                         //// Password(index)
                                                         // if (tappedIndex_ != '')
@@ -3798,20 +3709,21 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                     .all(4.0),
                                                             child: Row(
                                                               children: [
-                                                                const Expanded(
+                                                                Expanded(
                                                                   flex: 1,
-                                                                  child: Text(
-                                                                    'ประเภท',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .start,
-                                                                    style: TextStyle(
-                                                                        color: CustomerScreen_Color.Colors_Text2_,
-                                                                        // fontWeight: FontWeight.bold,
-                                                                        fontFamily: Font_.Fonts_T
-                                                                        //fontSize: 10.0
-                                                                        ),
-                                                                  ),
+                                                                  child: Translate.TranslateAndSet_TextAutoSize(
+                                                                      'ประเภท',
+                                                                      CustomerScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      TextAlign
+                                                                          .start,
+                                                                      FontWeight
+                                                                          .bold,
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                      8,
+                                                                      20,
+                                                                      1),
                                                                 ),
                                                                 Expanded(
                                                                   flex: 2,
@@ -3900,18 +3812,17 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                       padding:
                                                                           const EdgeInsets.all(
                                                                               5),
-                                                                      child:
-                                                                          Text(
-                                                                        '$_verticalGroupValue',
-                                                                        textAlign:
-                                                                            TextAlign.start,
-                                                                        style: const TextStyle(
-                                                                            color: CustomerScreen_Color.Colors_Text2_,
-                                                                            // fontWeight: FontWeight.bold,
-                                                                            fontFamily: Font_.Fonts_T
-                                                                            //fontSize: 10.0
-                                                                            ),
-                                                                      ),
+                                                                      child: Translate.TranslateAndSetText(
+                                                                          '$_verticalGroupValue',
+                                                                          CustomerScreen_Color
+                                                                              .Colors_Text2_,
+                                                                          TextAlign
+                                                                              .start,
+                                                                          null,
+                                                                          Font_
+                                                                              .Fonts_T,
+                                                                          14,
+                                                                          1),
                                                                     ),
                                                                   ),
                                                                 ),
@@ -3922,17 +3833,19 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                         MainAxisAlignment
                                                                             .center,
                                                                     children: [
-                                                                      Text(
-                                                                        'รูป(คลิกที่รูปเพื่อดู)',
-                                                                        textAlign:
-                                                                            TextAlign.center,
-                                                                        style: TextStyle(
-                                                                            color: CustomerScreen_Color.Colors_Text2_,
-                                                                            // fontWeight: FontWeight.bold,
-                                                                            fontFamily: Font_.Fonts_T
-                                                                            //fontSize: 10.0
-                                                                            ),
-                                                                      ),
+                                                                      Translate.TranslateAndSet_TextAutoSize(
+                                                                          'รูป(คลิกที่รูปเพื่อดู)',
+                                                                          CustomerScreen_Color
+                                                                              .Colors_Text1_,
+                                                                          TextAlign
+                                                                              .center,
+                                                                          FontWeight
+                                                                              .bold,
+                                                                          FontWeight_
+                                                                              .Fonts_T,
+                                                                          8,
+                                                                          20,
+                                                                          1),
                                                                       if (tappedIndex_ !=
                                                                           '')
                                                                         IconButton(
@@ -4071,10 +3984,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                                                             padding: const EdgeInsets.all(8.0),
                                                                                                             child: TextButton(
                                                                                                               onPressed: () => Navigator.pop(context, 'OK'),
-                                                                                                              child: const Text(
-                                                                                                                'ปิด',
-                                                                                                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
-                                                                                                              ),
+                                                                                                              child: Translate.TranslateAndSet_TextAutoSize('ปิด', CustomerScreen_Color.Colors_Text3_, TextAlign.center, FontWeight.bold, FontWeight_.Fonts_T, 8, 20, 1),
                                                                                                             ),
                                                                                                           ),
                                                                                                         ),
@@ -4129,20 +4039,21 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                     .all(4.0),
                                                             child: Row(
                                                               children: [
-                                                                const Expanded(
+                                                                Expanded(
                                                                   flex: 1,
-                                                                  child: Text(
-                                                                    'ชื่อร้านค้า',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .start,
-                                                                    style: TextStyle(
-                                                                        color: CustomerScreen_Color.Colors_Text2_,
-                                                                        // fontWeight: FontWeight.bold,
-                                                                        fontFamily: Font_.Fonts_T
-                                                                        //fontSize: 10.0
-                                                                        ),
-                                                                  ),
+                                                                  child: Translate.TranslateAndSet_TextAutoSize(
+                                                                      'ชื่อร้านค้า',
+                                                                      CustomerScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      TextAlign
+                                                                          .start,
+                                                                      FontWeight
+                                                                          .bold,
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                      8,
+                                                                      20,
+                                                                      1),
                                                                 ),
                                                                 Expanded(
                                                                   flex: 2,
@@ -4248,20 +4159,21 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                     ),
                                                                   ),
                                                                 ),
-                                                                const Expanded(
+                                                                Expanded(
                                                                   flex: 1,
-                                                                  child: Text(
-                                                                    'ประเภทร้านค้า',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style: TextStyle(
-                                                                        color: CustomerScreen_Color.Colors_Text2_,
-                                                                        // fontWeight: FontWeight.bold,
-                                                                        fontFamily: Font_.Fonts_T
-                                                                        //fontSize: 10.0
-                                                                        ),
-                                                                  ),
+                                                                  child: Translate.TranslateAndSet_TextAutoSize(
+                                                                      'ประเภทร้านค้า',
+                                                                      CustomerScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      TextAlign
+                                                                          .center,
+                                                                      FontWeight
+                                                                          .bold,
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                      8,
+                                                                      20,
+                                                                      1),
                                                                 ),
                                                                 Expanded(
                                                                   flex: 2,
@@ -4424,20 +4336,21 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                     .all(4.0),
                                                             child: Row(
                                                               children: [
-                                                                const Expanded(
+                                                                Expanded(
                                                                   flex: 1,
-                                                                  child: Text(
-                                                                    'ชื่อผู้เช่า/บริษัท',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .start,
-                                                                    style: TextStyle(
-                                                                        color: CustomerScreen_Color.Colors_Text2_,
-                                                                        // fontWeight: FontWeight.bold,
-                                                                        fontFamily: Font_.Fonts_T
-                                                                        //fontSize: 10.0
-                                                                        ),
-                                                                  ),
+                                                                  child: Translate.TranslateAndSet_TextAutoSize(
+                                                                      'ชื่อผู้เช่า/บริษัท',
+                                                                      CustomerScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      TextAlign
+                                                                          .start,
+                                                                      FontWeight
+                                                                          .bold,
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                      8,
+                                                                      20,
+                                                                      1),
                                                                 ),
                                                                 Expanded(
                                                                   flex: 2,
@@ -4602,20 +4515,21 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                   //   ),
                                                                   // ),
                                                                 ),
-                                                                const Expanded(
+                                                                Expanded(
                                                                   flex: 1,
-                                                                  child: Text(
-                                                                    'ชื่อบุคคลติดต่อ',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style: TextStyle(
-                                                                        color: CustomerScreen_Color.Colors_Text2_,
-                                                                        // fontWeight: FontWeight.bold,
-                                                                        fontFamily: Font_.Fonts_T
-                                                                        //fontSize: 10.0
-                                                                        ),
-                                                                  ),
+                                                                  child: Translate.TranslateAndSet_TextAutoSize(
+                                                                      'ชื่อบุคคลติดต่อ',
+                                                                      CustomerScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      TextAlign
+                                                                          .center,
+                                                                      FontWeight
+                                                                          .bold,
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                      8,
+                                                                      20,
+                                                                      1),
                                                                 ),
                                                                 Expanded(
                                                                   flex: 2,
@@ -4789,20 +4703,21 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                     .all(4.0),
                                                             child: Row(
                                                               children: [
-                                                                const Expanded(
+                                                                Expanded(
                                                                   flex: 1,
-                                                                  child: Text(
-                                                                    'ที่อยู่',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .start,
-                                                                    style: TextStyle(
-                                                                        color: CustomerScreen_Color.Colors_Text2_,
-                                                                        // fontWeight: FontWeight.bold,
-                                                                        fontFamily: Font_.Fonts_T
-                                                                        //fontSize: 10.0
-                                                                        ),
-                                                                  ),
+                                                                  child: Translate.TranslateAndSet_TextAutoSize(
+                                                                      'ที่อยู่',
+                                                                      CustomerScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      TextAlign
+                                                                          .start,
+                                                                      FontWeight
+                                                                          .bold,
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                      8,
+                                                                      20,
+                                                                      1),
                                                                 ),
                                                                 Expanded(
                                                                   flex: 5,
@@ -4965,20 +4880,21 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                     .all(4.0),
                                                             child: Row(
                                                               children: [
-                                                                const Expanded(
+                                                                Expanded(
                                                                   flex: 1,
-                                                                  child: Text(
-                                                                    'เบอร์โทร',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .start,
-                                                                    style: TextStyle(
-                                                                        color: CustomerScreen_Color.Colors_Text2_,
-                                                                        // fontWeight: FontWeight.bold,
-                                                                        fontFamily: Font_.Fonts_T
-                                                                        //fontSize: 10.0
-                                                                        ),
-                                                                  ),
+                                                                  child: Translate.TranslateAndSet_TextAutoSize(
+                                                                      'เบอร์โทร',
+                                                                      CustomerScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      TextAlign
+                                                                          .start,
+                                                                      FontWeight
+                                                                          .bold,
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                      8,
+                                                                      20,
+                                                                      1),
                                                                 ),
                                                                 Expanded(
                                                                   flex: 2,
@@ -5143,20 +5059,21 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                   //   ),
                                                                   // ),
                                                                 ),
-                                                                const Expanded(
+                                                                Expanded(
                                                                   flex: 1,
-                                                                  child: Text(
-                                                                    'อีเมล',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style: TextStyle(
-                                                                        color: CustomerScreen_Color.Colors_Text2_,
-                                                                        // fontWeight: FontWeight.bold,
-                                                                        fontFamily: Font_.Fonts_T
-                                                                        //fontSize: 10.0
-                                                                        ),
-                                                                  ),
+                                                                  child: Translate.TranslateAndSet_TextAutoSize(
+                                                                      'อีเมล',
+                                                                      CustomerScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      TextAlign
+                                                                          .center,
+                                                                      FontWeight
+                                                                          .bold,
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                      8,
+                                                                      20,
+                                                                      1),
                                                                 ),
                                                                 Expanded(
                                                                   flex: 2,
@@ -5577,26 +5494,18 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                     Expanded(
                                                       flex: 1,
                                                       child: Container(
-                                                        child:
-                                                            const AutoSizeText(
-                                                          minFontSize: 8,
-                                                          maxFontSize: 12,
-                                                          '**กด Enter ทุกครั้งที่มีการเปลี่ยนแปลงข้อมูล',
-                                                          textAlign:
-                                                              TextAlign.end,
-                                                          style: TextStyle(
-                                                              color: Colors.red,
-                                                              fontWeight:
+                                                          child: Translate
+                                                              .TranslateAndSet_TextAutoSize(
+                                                                  '**กด Enter ทุกครั้งที่มีการเปลี่ยนแปลงข้อมูล',
+                                                                  Colors.red,
+                                                                  TextAlign.end,
                                                                   FontWeight
                                                                       .bold,
-                                                              fontFamily:
                                                                   FontWeight_
-                                                                      .Fonts_T
-                                                              //fontSize: 10.0
-                                                              //fontSize: 10.0
-                                                              ),
-                                                        ),
-                                                      ),
+                                                                      .Fonts_T,
+                                                                  8,
+                                                                  20,
+                                                                  1)),
                                                     ),
                                                   ],
                                                 )),
@@ -5653,7 +5562,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                   children: [
                                     Container(
                                         padding: const EdgeInsets.all(5),
-                                        decoration:  BoxDecoration(
+                                        decoration: BoxDecoration(
                                           color:
                                               AppbackgroundColor.TiTile_Colors,
                                           borderRadius: BorderRadius.only(
@@ -5664,72 +5573,57 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                         ),
                                         child: Row(
                                           children: [
-                                            const Expanded(
-                                              flex: 1,
-                                              child: AutoSizeText(
-                                                minFontSize: 10,
-                                                maxFontSize: 18,
-                                                'ประวัติบิล',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color: CustomerScreen_Color
-                                                        .Colors_Text1_,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T
-                                                    //fontSize: 10.0
-                                                    //fontSize: 10.0
-                                                    ),
-                                              ),
-                                            ),
+                                            Expanded(
+                                                flex: 1,
+                                                child: Translate
+                                                    .TranslateAndSet_TextAutoSize(
+                                                        'ประวัติบิล',
+                                                        CustomerScreen_Color
+                                                            .Colors_Text1_,
+                                                        TextAlign.center,
+                                                        FontWeight.bold,
+                                                        FontWeight_.Fonts_T,
+                                                        8,
+                                                        20,
+                                                        1)),
                                             Padding(
                                               padding:
                                                   const EdgeInsets.all(4.0),
                                               child: InkWell(
                                                 child: Container(
-                                                  padding:
-                                                      const EdgeInsets.all(5),
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.white60,
-                                                    borderRadius:
-                                                        const BorderRadius.only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    10)),
-                                                    border: Border.all(
-                                                        color: Colors.white,
-                                                        width: 1),
-                                                  ),
-                                                  child: const AutoSizeText(
-                                                    minFontSize: 10,
-                                                    maxFontSize: 18,
-                                                    'เรียกดูเพิ่มเติม',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        // decoration:
-                                                        //     TextDecoration.underline,
-                                                        color:
+                                                    padding:
+                                                        const EdgeInsets.all(5),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white60,
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                                  .only(
+                                                              topLeft: Radius
+                                                                  .circular(10),
+                                                              topRight: Radius
+                                                                  .circular(10),
+                                                              bottomLeft: Radius
+                                                                  .circular(10),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          10)),
+                                                      border: Border.all(
+                                                          color: Colors.white,
+                                                          width: 1),
+                                                    ),
+                                                    child: Translate
+                                                        .TranslateAndSet_TextAutoSize(
+                                                            'เรียกดูเพิ่มเติม',
                                                             CustomerScreen_Color
                                                                 .Colors_Text1_,
-                                                        fontWeight:
+                                                            TextAlign.center,
                                                             FontWeight.bold,
-                                                        fontFamily:
-                                                            FontWeight_.Fonts_T
-                                                        //fontSize: 10.0
-                                                        //fontSize: 10.0
-                                                        ),
-                                                  ),
-                                                ),
-                                                onTap: () {
+                                                            FontWeight_.Fonts_T,
+                                                            8,
+                                                            20,
+                                                            1)),
+                                                onTap: () async {
                                                   showDialog<void>(
                                                     context: context,
                                                     barrierDismissible:
@@ -5743,24 +5637,17 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                               BorderRadius
                                                                   .circular(20),
                                                         ),
-                                                        title: const Center(
-                                                          child: Text(
-                                                            'รายละเอียดเพิ่มเติม',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                                color: CustomerScreen_Color
-                                                                    .Colors_Text1_,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontFamily:
-                                                                    FontWeight_
-                                                                        .Fonts_T,
-                                                                fontSize: 20.0
-                                                                //fontSize: 10.0
-                                                                ),
-                                                          ),
+                                                        title: Center(
+                                                          child: Translate.TranslateAndSetText(
+                                                              'รายละเอียดเพิ่มเติม',
+                                                              CustomerScreen_Color
+                                                                  .Colors_Text1_,
+                                                              TextAlign.center,
+                                                              FontWeight.bold,
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                              14,
+                                                              1),
                                                         ),
                                                         content: Container(
                                                           width: (Responsive
@@ -5828,7 +5715,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               ? 80
                                                                               : 50,
                                                                           decoration:
-                                                                               BoxDecoration(
+                                                                              BoxDecoration(
                                                                             color:
                                                                                 AppbackgroundColor.TiTile_Colors,
                                                                             borderRadius: BorderRadius.only(
@@ -5844,19 +5731,14 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                           ),
                                                                           padding:
                                                                               const EdgeInsets.all(8.0),
-                                                                          child:
-                                                                              const Text(
-                                                                            'ใบกำกับภาษี :',
-                                                                            textAlign:
-                                                                                TextAlign.start,
-                                                                            style: TextStyle(
-                                                                                color: CustomerScreen_Color.Colors_Text1_,
-                                                                                fontWeight: FontWeight.bold,
-                                                                                fontFamily: FontWeight_.Fonts_T
-                                                                                //fontSize: 10.0
-                                                                                //fontSize: 10.0
-                                                                                ),
-                                                                          ),
+                                                                          child: Translate.TranslateAndSetText(
+                                                                              'ใบกำกับภาษี :',
+                                                                              CustomerScreen_Color.Colors_Text1_,
+                                                                              TextAlign.center,
+                                                                              FontWeight.bold,
+                                                                              FontWeight_.Fonts_T,
+                                                                              14,
+                                                                              1),
                                                                         ),
                                                                       ),
                                                                       Expanded(
@@ -5931,19 +5813,14 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               AppbackgroundColor.TiTile_Colors,
                                                                           padding:
                                                                               const EdgeInsets.all(8.0),
-                                                                          child:
-                                                                              const Text(
-                                                                            'ชำระก่อนกำหนด :',
-                                                                            textAlign:
-                                                                                TextAlign.start,
-                                                                            style: TextStyle(
-                                                                                color: CustomerScreen_Color.Colors_Text1_,
-                                                                                fontWeight: FontWeight.bold,
-                                                                                fontFamily: FontWeight_.Fonts_T
-                                                                                //fontSize: 10.0
-                                                                                //fontSize: 10.0
-                                                                                ),
-                                                                          ),
+                                                                          child: Translate.TranslateAndSetText(
+                                                                              'ชำระก่อนกำหนด :',
+                                                                              CustomerScreen_Color.Colors_Text1_,
+                                                                              TextAlign.center,
+                                                                              FontWeight.bold,
+                                                                              FontWeight_.Fonts_T,
+                                                                              14,
+                                                                              1),
                                                                         ),
                                                                       ),
                                                                       Expanded(
@@ -5957,22 +5834,14 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               Colors.grey[200],
                                                                           padding:
                                                                               const EdgeInsets.all(8.0),
-                                                                          child:
-                                                                              Text(
-                                                                            '${nFormat2.format(Total_early_payment)} ครั้ง',
-                                                                            // '$Total_amtbill',
-                                                                            textAlign:
-                                                                                TextAlign.end,
-                                                                            style: const TextStyle(
-                                                                                color: CustomerScreen_Color.Colors_Text2_,
-                                                                                // fontWeight:
-                                                                                //     FontWeight
-                                                                                //         .bold,
-                                                                                fontFamily: Font_.Fonts_T
-                                                                                //fontSize: 10.0
-                                                                                //fontSize: 10.0
-                                                                                ),
-                                                                          ),
+                                                                          child: Translate.TranslateAndSetText(
+                                                                              '${nFormat2.format(Total_early_payment)} ครั้ง',
+                                                                              CustomerScreen_Color.Colors_Text1_,
+                                                                              TextAlign.center,
+                                                                              FontWeight.bold,
+                                                                              FontWeight_.Fonts_T,
+                                                                              14,
+                                                                              1),
                                                                         ),
                                                                       ),
                                                                     ],
@@ -6005,19 +5874,14 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               AppbackgroundColor.TiTile_Colors,
                                                                           padding:
                                                                               const EdgeInsets.all(8.0),
-                                                                          child:
-                                                                              const Text(
-                                                                            'ชำระตรงกำหนด :',
-                                                                            textAlign:
-                                                                                TextAlign.start,
-                                                                            style: TextStyle(
-                                                                                color: CustomerScreen_Color.Colors_Text1_,
-                                                                                fontWeight: FontWeight.bold,
-                                                                                fontFamily: FontWeight_.Fonts_T
-                                                                                //fontSize: 10.0
-                                                                                //fontSize: 10.0
-                                                                                ),
-                                                                          ),
+                                                                          child: Translate.TranslateAndSetText(
+                                                                              'ชำระตรงกำหนด :',
+                                                                              CustomerScreen_Color.Colors_Text1_,
+                                                                              TextAlign.start,
+                                                                              FontWeight.bold,
+                                                                              FontWeight_.Fonts_T,
+                                                                              14,
+                                                                              1),
                                                                         ),
                                                                       ),
                                                                       Expanded(
@@ -6031,22 +5895,14 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               Colors.grey[200],
                                                                           padding:
                                                                               const EdgeInsets.all(8.0),
-                                                                          child:
-                                                                              Text(
-                                                                            '${nFormat2.format(Total_ontime_payment)} ครั้ง',
-                                                                            // '$Total_amtbill',
-                                                                            textAlign:
-                                                                                TextAlign.end,
-                                                                            style: const TextStyle(
-                                                                                color: CustomerScreen_Color.Colors_Text2_,
-                                                                                // fontWeight:
-                                                                                //     FontWeight
-                                                                                //         .bold,
-                                                                                fontFamily: Font_.Fonts_T
-                                                                                //fontSize: 10.0
-                                                                                //fontSize: 10.0
-                                                                                ),
-                                                                          ),
+                                                                          child: Translate.TranslateAndSetText(
+                                                                              '${nFormat2.format(Total_ontime_payment)} ครั้ง',
+                                                                              CustomerScreen_Color.Colors_Text1_,
+                                                                              TextAlign.start,
+                                                                              FontWeight.bold,
+                                                                              FontWeight_.Fonts_T,
+                                                                              14,
+                                                                              1),
                                                                         ),
                                                                       ),
                                                                     ],
@@ -6079,19 +5935,14 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               AppbackgroundColor.TiTile_Colors,
                                                                           padding:
                                                                               const EdgeInsets.all(8.0),
-                                                                          child:
-                                                                              const Text(
-                                                                            'ชำระเกินกำหนด :',
-                                                                            textAlign:
-                                                                                TextAlign.start,
-                                                                            style: TextStyle(
-                                                                                color: CustomerScreen_Color.Colors_Text1_,
-                                                                                fontWeight: FontWeight.bold,
-                                                                                fontFamily: FontWeight_.Fonts_T
-                                                                                //fontSize: 10.0
-                                                                                //fontSize: 10.0
-                                                                                ),
-                                                                          ),
+                                                                          child: Translate.TranslateAndSetText(
+                                                                              'ชำระเกินกำหนด :',
+                                                                              CustomerScreen_Color.Colors_Text1_,
+                                                                              TextAlign.start,
+                                                                              FontWeight.bold,
+                                                                              FontWeight_.Fonts_T,
+                                                                              14,
+                                                                              1),
                                                                         ),
                                                                       ),
                                                                       Expanded(
@@ -6105,22 +5956,14 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               Colors.grey[200],
                                                                           padding:
                                                                               const EdgeInsets.all(8.0),
-                                                                          child:
-                                                                              Text(
-                                                                            '${nFormat2.format(Total_late_payment)} ครั้ง',
-                                                                            // '$Total_amtbill',
-                                                                            textAlign:
-                                                                                TextAlign.end,
-                                                                            style: const TextStyle(
-                                                                                color: CustomerScreen_Color.Colors_Text2_,
-                                                                                // fontWeight:
-                                                                                //     FontWeight
-                                                                                //         .bold,
-                                                                                fontFamily: Font_.Fonts_T
-                                                                                //fontSize: 10.0
-                                                                                //fontSize: 10.0
-                                                                                ),
-                                                                          ),
+                                                                          child: Translate.TranslateAndSetText(
+                                                                              '${nFormat2.format(Total_late_payment)} ครั้ง',
+                                                                              CustomerScreen_Color.Colors_Text1_,
+                                                                              TextAlign.start,
+                                                                              FontWeight.bold,
+                                                                              FontWeight_.Fonts_T,
+                                                                              14,
+                                                                              1),
                                                                         ),
                                                                       ),
                                                                     ],
@@ -6153,19 +5996,14 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               AppbackgroundColor.TiTile_Colors,
                                                                           padding:
                                                                               const EdgeInsets.all(8.0),
-                                                                          child:
-                                                                              const Text(
-                                                                            'รายการค้างชำระ :',
-                                                                            textAlign:
-                                                                                TextAlign.start,
-                                                                            style: TextStyle(
-                                                                                color: CustomerScreen_Color.Colors_Text1_,
-                                                                                fontWeight: FontWeight.bold,
-                                                                                fontFamily: FontWeight_.Fonts_T
-                                                                                //fontSize: 10.0
-                                                                                //fontSize: 10.0
-                                                                                ),
-                                                                          ),
+                                                                          child: Translate.TranslateAndSetText(
+                                                                              'รายการค้างชำระ :',
+                                                                              CustomerScreen_Color.Colors_Text1_,
+                                                                              TextAlign.start,
+                                                                              FontWeight.bold,
+                                                                              FontWeight_.Fonts_T,
+                                                                              14,
+                                                                              1),
                                                                         ),
                                                                       ),
                                                                       Expanded(
@@ -6179,22 +6017,14 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               Colors.grey[200],
                                                                           padding:
                                                                               const EdgeInsets.all(8.0),
-                                                                          child:
-                                                                              Text(
-                                                                            '${nFormat2.format(Total_tenant)} รายการ ',
-                                                                            // '$Total_amtbill',
-                                                                            textAlign:
-                                                                                TextAlign.end,
-                                                                            style: const TextStyle(
-                                                                                color: CustomerScreen_Color.Colors_Text2_,
-                                                                                // fontWeight:
-                                                                                //     FontWeight
-                                                                                //         .bold,
-                                                                                fontFamily: Font_.Fonts_T
-                                                                                //fontSize: 10.0
-                                                                                //fontSize: 10.0
-                                                                                ),
-                                                                          ),
+                                                                          child: Translate.TranslateAndSetText(
+                                                                              '${nFormat2.format(Total_tenant)} รายการ ',
+                                                                              CustomerScreen_Color.Colors_Text1_,
+                                                                              TextAlign.start,
+                                                                              FontWeight.bold,
+                                                                              FontWeight_.Fonts_T,
+                                                                              14,
+                                                                              1),
                                                                         ),
                                                                       ),
                                                                     ],
@@ -6227,19 +6057,14 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               AppbackgroundColor.TiTile_Colors,
                                                                           padding:
                                                                               const EdgeInsets.all(8.0),
-                                                                          child:
-                                                                              const Text(
-                                                                            'ยอดชำระรวม :',
-                                                                            textAlign:
-                                                                                TextAlign.start,
-                                                                            style: TextStyle(
-                                                                                color: CustomerScreen_Color.Colors_Text1_,
-                                                                                fontWeight: FontWeight.bold,
-                                                                                fontFamily: FontWeight_.Fonts_T
-                                                                                //fontSize: 10.0
-                                                                                //fontSize: 10.0
-                                                                                ),
-                                                                          ),
+                                                                          child: Translate.TranslateAndSetText(
+                                                                              'ยอดชำระรวม :',
+                                                                              CustomerScreen_Color.Colors_Text1_,
+                                                                              TextAlign.start,
+                                                                              FontWeight.bold,
+                                                                              FontWeight_.Fonts_T,
+                                                                              14,
+                                                                              1),
                                                                         ),
                                                                       ),
                                                                       Expanded(
@@ -6253,22 +6078,14 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               Colors.grey[200],
                                                                           padding:
                                                                               const EdgeInsets.all(8.0),
-                                                                          child:
-                                                                              Text(
-                                                                            '${nFormat.format(Total_amtbill)} บาท ',
-                                                                            // '$Total_amtbill',
-                                                                            textAlign:
-                                                                                TextAlign.end,
-                                                                            style: const TextStyle(
-                                                                                color: CustomerScreen_Color.Colors_Text2_,
-                                                                                // fontWeight:
-                                                                                //     FontWeight
-                                                                                //         .bold,
-                                                                                fontFamily: Font_.Fonts_T
-                                                                                //fontSize: 10.0
-                                                                                //fontSize: 10.0
-                                                                                ),
-                                                                          ),
+                                                                          child: Translate.TranslateAndSetText(
+                                                                              '${nFormat.format(Total_amtbill)} บาท ',
+                                                                              CustomerScreen_Color.Colors_Text1_,
+                                                                              TextAlign.start,
+                                                                              FontWeight.bold,
+                                                                              FontWeight_.Fonts_T,
+                                                                              14,
+                                                                              1),
                                                                         ),
                                                                       ),
                                                                     ],
@@ -6298,7 +6115,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               ? 80
                                                                               : 50,
                                                                           decoration:
-                                                                               BoxDecoration(
+                                                                              BoxDecoration(
                                                                             color:
                                                                                 AppbackgroundColor.TiTile_Colors,
                                                                             borderRadius: BorderRadius.only(
@@ -6315,18 +6132,17 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                           padding:
                                                                               const EdgeInsets.all(8.0),
                                                                           child:
-                                                                              const Align(
+                                                                              Align(
                                                                             alignment:
                                                                                 Alignment.centerLeft,
-                                                                            child:
-                                                                                Text(
-                                                                              'ประเภทการเช่า:',
-                                                                              textAlign: TextAlign.start,
-                                                                              style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
-                                                                                  //fontSize: 10.0
-                                                                                  //fontSize: 10.0
-                                                                                  ),
-                                                                            ),
+                                                                            child: Translate.TranslateAndSetText(
+                                                                                'ประเภทการเช่า:',
+                                                                                CustomerScreen_Color.Colors_Text1_,
+                                                                                TextAlign.start,
+                                                                                FontWeight.bold,
+                                                                                FontWeight_.Fonts_T,
+                                                                                14,
+                                                                                1),
                                                                           ),
                                                                         ),
                                                                       ),
@@ -6441,7 +6257,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               ? 80
                                                                               : 50,
                                                                           decoration:
-                                                                               BoxDecoration(
+                                                                              BoxDecoration(
                                                                             color:
                                                                                 AppbackgroundColor.TiTile_Colors,
                                                                             borderRadius: BorderRadius.only(
@@ -6458,18 +6274,17 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                           padding:
                                                                               const EdgeInsets.all(8.0),
                                                                           child:
-                                                                              const Align(
+                                                                              Align(
                                                                             alignment:
                                                                                 Alignment.centerLeft,
-                                                                            child:
-                                                                                Text(
-                                                                              'หมดสัญญา:',
-                                                                              textAlign: TextAlign.start,
-                                                                              style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
-                                                                                  //fontSize: 10.0
-                                                                                  //fontSize: 10.0
-                                                                                  ),
-                                                                            ),
+                                                                            child: Translate.TranslateAndSetText(
+                                                                                'หมดสัญญา:',
+                                                                                CustomerScreen_Color.Colors_Text1_,
+                                                                                TextAlign.start,
+                                                                                FontWeight.bold,
+                                                                                FontWeight_.Fonts_T,
+                                                                                14,
+                                                                                1),
                                                                           ),
                                                                         ),
                                                                       ),
@@ -6584,7 +6399,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               ? 80
                                                                               : 50,
                                                                           decoration:
-                                                                               BoxDecoration(
+                                                                              BoxDecoration(
                                                                             color:
                                                                                 AppbackgroundColor.TiTile_Colors,
                                                                             borderRadius: BorderRadius.only(
@@ -6601,18 +6416,17 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                           padding:
                                                                               const EdgeInsets.all(8.0),
                                                                           child:
-                                                                              const Align(
+                                                                              Align(
                                                                             alignment:
                                                                                 Alignment.centerLeft,
-                                                                            child:
-                                                                                Text(
-                                                                              'ใกล้หมดสัญญา :',
-                                                                              textAlign: TextAlign.start,
-                                                                              style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
-                                                                                  //fontSize: 10.0
-                                                                                  //fontSize: 10.0
-                                                                                  ),
-                                                                            ),
+                                                                            child: Translate.TranslateAndSetText(
+                                                                                'ใกล้หมดสัญญา :',
+                                                                                CustomerScreen_Color.Colors_Text1_,
+                                                                                TextAlign.start,
+                                                                                FontWeight.bold,
+                                                                                FontWeight_.Fonts_T,
+                                                                                14,
+                                                                                1),
                                                                           ),
                                                                         ),
                                                                       ),
@@ -6726,7 +6540,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               ? 80
                                                                               : 50,
                                                                           decoration:
-                                                                               BoxDecoration(
+                                                                              BoxDecoration(
                                                                             color:
                                                                                 AppbackgroundColor.TiTile_Colors,
                                                                             borderRadius: BorderRadius.only(
@@ -6743,18 +6557,17 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                           padding:
                                                                               const EdgeInsets.all(8.0),
                                                                           child:
-                                                                              const Align(
+                                                                              Align(
                                                                             alignment:
                                                                                 Alignment.centerLeft,
-                                                                            child:
-                                                                                Text(
-                                                                              'เช่าอยู่ :',
-                                                                              textAlign: TextAlign.start,
-                                                                              style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
-                                                                                  //fontSize: 10.0
-                                                                                  //fontSize: 10.0
-                                                                                  ),
-                                                                            ),
+                                                                            child: Translate.TranslateAndSetText(
+                                                                                'เช่าอยู่ :',
+                                                                                CustomerScreen_Color.Colors_Text1_,
+                                                                                TextAlign.start,
+                                                                                FontWeight.bold,
+                                                                                FontWeight_.Fonts_T,
+                                                                                14,
+                                                                                1),
                                                                           ),
                                                                         ),
                                                                       ),
@@ -6868,7 +6681,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               ? 80
                                                                               : 50,
                                                                           decoration:
-                                                                               BoxDecoration(
+                                                                              BoxDecoration(
                                                                             color:
                                                                                 AppbackgroundColor.TiTile_Colors,
                                                                             borderRadius: BorderRadius.only(
@@ -6885,18 +6698,17 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                           padding:
                                                                               const EdgeInsets.all(8.0),
                                                                           child:
-                                                                              const Align(
+                                                                              Align(
                                                                             alignment:
                                                                                 Alignment.centerLeft,
-                                                                            child:
-                                                                                Text(
-                                                                              'เสนอราคา :',
-                                                                              textAlign: TextAlign.start,
-                                                                              style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
-                                                                                  //fontSize: 10.0
-                                                                                  //fontSize: 10.0
-                                                                                  ),
-                                                                            ),
+                                                                            child: Translate.TranslateAndSetText(
+                                                                                'เสนอราคา :',
+                                                                                CustomerScreen_Color.Colors_Text1_,
+                                                                                TextAlign.start,
+                                                                                FontWeight.bold,
+                                                                                FontWeight_.Fonts_T,
+                                                                                14,
+                                                                                1),
                                                                           ),
                                                                         ),
                                                                       ),
@@ -7010,7 +6822,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               ? 80
                                                                               : 50,
                                                                           decoration:
-                                                                               BoxDecoration(
+                                                                              BoxDecoration(
                                                                             color:
                                                                                 AppbackgroundColor.TiTile_Colors,
                                                                             borderRadius: BorderRadius.only(
@@ -7027,18 +6839,17 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                           padding:
                                                                               const EdgeInsets.all(8.0),
                                                                           child:
-                                                                              const Align(
+                                                                              Align(
                                                                             alignment:
                                                                                 Alignment.centerLeft,
-                                                                            child:
-                                                                                Text(
-                                                                              'ยกเลิกสัญญา:',
-                                                                              textAlign: TextAlign.start,
-                                                                              style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
-                                                                                  //fontSize: 10.0
-                                                                                  //fontSize: 10.0
-                                                                                  ),
-                                                                            ),
+                                                                            child: Translate.TranslateAndSetText(
+                                                                                'ยกเลิกสัญญา :',
+                                                                                CustomerScreen_Color.Colors_Text1_,
+                                                                                TextAlign.start,
+                                                                                FontWeight.bold,
+                                                                                FontWeight_.Fonts_T,
+                                                                                14,
+                                                                                1),
                                                                           ),
                                                                         ),
                                                                       ),
@@ -7113,17 +6924,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                                               onTap: () {
                                                                                                 Navigator.pop(context);
                                                                                               },
-                                                                                              child: Container(
-                                                                                                  color: Colors.white,
-                                                                                                  padding: const EdgeInsets.all(10),
-                                                                                                  width: MediaQuery.of(context).size.width,
-                                                                                                  child: Text(
-                                                                                                    'เหตุผล : ${contractModels[index].cc_remark}',
-                                                                                                    style: const TextStyle(
-                                                                                                        color: CustomerScreen_Color.Colors_Text2_,
-                                                                                                        //fontWeight: FontWeight.bold,
-                                                                                                        fontFamily: Font_.Fonts_T),
-                                                                                                  ))),
+                                                                                              child: Container(color: Colors.white, padding: const EdgeInsets.all(10), width: MediaQuery.of(context).size.width, child: Translate.TranslateAndSet_TextAutoSize('เหตุผล : ${contractModels[index].cc_remark}', CustomerScreen_Color.Colors_Text1_, TextAlign.start, FontWeight.bold, FontWeight_.Fonts_T, 8, 20, 1))),
                                                                                         ),
                                                                                       ],
                                                                                     ),
@@ -7204,7 +7005,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               borderRadius: const BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
                                                                               border: Border.all(color: Colors.grey, width: 1),
                                                                             ),
-                                                                            child: const Row(
+                                                                            child: Row(
                                                                               mainAxisAlignment: MainAxisAlignment.center,
                                                                               children: [
                                                                                 Padding(
@@ -7213,15 +7014,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                                 ),
                                                                                 Padding(
                                                                                   padding: EdgeInsets.all(8.0),
-                                                                                  child: Text(
-                                                                                    'ปิด',
-                                                                                    style: TextStyle(
-                                                                                      color: Colors.white,
-                                                                                      // fontWeight:
-                                                                                      //     FontWeight.bold,
-                                                                                      fontFamily: Font_.Fonts_T,
-                                                                                    ),
-                                                                                  ),
+                                                                                  child: Translate.TranslateAndSetText('ปิด :', CustomerScreen_Color.Colors_Text3_, TextAlign.start, FontWeight.bold, FontWeight_.Fonts_T, 14, 1),
                                                                                 ),
                                                                               ],
                                                                             )),
@@ -7243,7 +7036,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                         )),
                                     Container(
                                       padding: const EdgeInsets.all(5),
-                                      decoration:  BoxDecoration(
+                                      decoration: BoxDecoration(
                                         color: AppbackgroundColor.TiTile_Colors,
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(0),
@@ -7252,25 +7045,20 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                             bottomRight: Radius.circular(0)),
                                       ),
                                       child: Row(
-                                        children: const [
+                                        children: [
                                           Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 18,
-                                              'เลขที่ใบเสร็จ',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: CustomerScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T
-                                                  //fontSize: 10.0
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
-                                          ),
+                                              flex: 1,
+                                              child: Translate
+                                                  .TranslateAndSet_TextAutoSize(
+                                                      'เลขที่ใบเสร็จ',
+                                                      CustomerScreen_Color
+                                                          .Colors_Text2_,
+                                                      TextAlign.center,
+                                                      FontWeight.bold,
+                                                      FontWeight_.Fonts_T,
+                                                      8,
+                                                      20,
+                                                      1)),
                                           // Expanded(
                                           //   flex: 1,
                                           //   child: AutoSizeText(
@@ -7288,113 +7076,83 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                           //   ),
                                           // ),
                                           Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 18,
-                                              'กำหนดชำระ',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: CustomerScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T
-                                                  //fontSize: 10.0
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
-                                          ),
+                                              flex: 1,
+                                              child: Translate
+                                                  .TranslateAndSet_TextAutoSize(
+                                                      'กำหนดชำระ',
+                                                      CustomerScreen_Color
+                                                          .Colors_Text2_,
+                                                      TextAlign.center,
+                                                      FontWeight.bold,
+                                                      FontWeight_.Fonts_T,
+                                                      8,
+                                                      20,
+                                                      1)),
                                           Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 18,
-                                              'วันที่ชำระ',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: CustomerScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T
-                                                  //fontSize: 10.0
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
-                                          ),
+                                              flex: 1,
+                                              child: Translate
+                                                  .TranslateAndSet_TextAutoSize(
+                                                      'วันที่ชำระ',
+                                                      CustomerScreen_Color
+                                                          .Colors_Text2_,
+                                                      TextAlign.center,
+                                                      FontWeight.bold,
+                                                      FontWeight_.Fonts_T,
+                                                      8,
+                                                      20,
+                                                      1)),
                                           Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 18,
-                                              'รหัสพื้นที่',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: CustomerScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T
-                                                  //fontSize: 10.0
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
-                                          ),
+                                              flex: 1,
+                                              child: Translate
+                                                  .TranslateAndSet_TextAutoSize(
+                                                      'รหัสพื้นที่',
+                                                      CustomerScreen_Color
+                                                          .Colors_Text2_,
+                                                      TextAlign.center,
+                                                      FontWeight.bold,
+                                                      FontWeight_.Fonts_T,
+                                                      8,
+                                                      20,
+                                                      1)),
                                           Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 18,
-                                              'จำนวนเงิน',
-                                              textAlign: TextAlign.right,
-                                              style: TextStyle(
-                                                  color: CustomerScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T
-                                                  //fontSize: 10.0
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
-                                          ),
+                                              flex: 1,
+                                              child: Translate
+                                                  .TranslateAndSet_TextAutoSize(
+                                                      'จำนวนเงิน',
+                                                      CustomerScreen_Color
+                                                          .Colors_Text2_,
+                                                      TextAlign.right,
+                                                      FontWeight.bold,
+                                                      FontWeight_.Fonts_T,
+                                                      8,
+                                                      20,
+                                                      1)),
                                           Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 18,
-                                              'สถานะ',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: CustomerScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T
-                                                  //fontSize: 10.0
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
-                                          ),
+                                              flex: 1,
+                                              child: Translate
+                                                  .TranslateAndSet_TextAutoSize(
+                                                      'สถานะ',
+                                                      CustomerScreen_Color
+                                                          .Colors_Text2_,
+                                                      TextAlign.center,
+                                                      FontWeight.bold,
+                                                      FontWeight_.Fonts_T,
+                                                      8,
+                                                      20,
+                                                      1)),
                                           Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 18,
-                                              'เรียกดู',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: CustomerScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T
-                                                  //fontSize: 10.0
-                                                  //fontSize: 10.0
-                                                  ),
-                                            ),
-                                          ),
+                                              flex: 1,
+                                              child: Translate
+                                                  .TranslateAndSet_TextAutoSize(
+                                                      'เรียกดู',
+                                                      CustomerScreen_Color
+                                                          .Colors_Text2_,
+                                                      TextAlign.center,
+                                                      FontWeight.bold,
+                                                      FontWeight_.Fonts_T,
+                                                      8,
+                                                      20,
+                                                      1)),
                                         ],
                                       ),
                                     ),
@@ -7412,23 +7170,19 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                         child: (_TransReBillModels.length < 1)
                                             ? SizedBox(
                                                 child: Center(
-                                                  child: AutoSizeText(
-                                                    (tappedIndex_ == '')
-                                                        ? 'กรุณาเลือกรายชื่อก่อน'
-                                                        : 'ไม่พบข้อมูล',
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                        color:
+                                                    child: Translate
+                                                        .TranslateAndSet_TextAutoSize(
+                                                            (tappedIndex_ == '')
+                                                                ? 'กรุณาเลือกรายชื่อก่อน'
+                                                                : 'ไม่พบข้อมูล',
                                                             CustomerScreen_Color
                                                                 .Colors_Text2_,
-                                                        // fontWeight: FontWeight.bold,
-                                                        fontFamily:
-                                                            Font_.Fonts_T
-                                                        //fontSize: 10.0
-                                                        //fontSize: 10.0
-                                                        ),
-                                                  ),
-                                                ),
+                                                            TextAlign.center,
+                                                            FontWeight.bold,
+                                                            FontWeight_.Fonts_T,
+                                                            8,
+                                                            20,
+                                                            1)),
                                               )
                                             : ListView.builder(
                                                 itemCount:
@@ -7450,7 +7204,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                       //         .tappedIndex_Colors
                                                       //         .withOpacity(0.5)
                                                       //     : null,
-                                                      child:ListTile(
+                                                      child: ListTile(
                                                         onTap: () {
                                                           setState(() {
                                                             tappedIndex_2 =
@@ -7618,30 +7372,23 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                 ),
                                                               ),
                                                               Expanded(
-                                                                flex: 1,
-                                                                child:
-                                                                    AutoSizeText(
-                                                                  minFontSize:
-                                                                      10,
-                                                                  maxFontSize:
-                                                                      18,
-                                                                  (_TransReBillModels[index]
-                                                                              .doctax ==
-                                                                          '')
-                                                                      ? '-'
-                                                                      : 'ใบกำกับภาษี',
-                                                                  textAlign:
+                                                                  flex: 1,
+                                                                  child: Translate.TranslateAndSet_TextAutoSize(
+                                                                      (_TransReBillModels[index].doctax ==
+                                                                              '')
+                                                                          ? '-'
+                                                                          : 'ใบกำกับภาษี',
+                                                                      CustomerScreen_Color
+                                                                          .Colors_Text2_,
                                                                       TextAlign
                                                                           .center,
-                                                                  style: const TextStyle(
-                                                                      color: CustomerScreen_Color.Colors_Text2_,
-                                                                      // fontWeight: FontWeight.bold,
-                                                                      fontFamily: Font_.Fonts_T
-                                                                      //fontSize: 10.0
-                                                                      //fontSize: 10.0
-                                                                      ),
-                                                                ),
-                                                              ),
+                                                                      FontWeight
+                                                                          .bold,
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                      8,
+                                                                      20,
+                                                                      1)),
                                                               Expanded(
                                                                 flex: 1,
                                                                 child: Padding(
@@ -7667,22 +7414,16 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                       padding:
                                                                           const EdgeInsets.all(
                                                                               2.0),
-                                                                      child:
-                                                                          const Center(
-                                                                        child:
-                                                                            Text(
-                                                                          'เรียกดู',
-                                                                          textAlign:
+                                                                      child: Center(
+                                                                          child: Translate.TranslateAndSet_TextAutoSize(
+                                                                              'เรียกดู',
+                                                                              CustomerScreen_Color.Colors_Text3_,
                                                                               TextAlign.center,
-                                                                          style: TextStyle(
-                                                                              color: Colors.white,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontFamily: FontWeight_.Fonts_T
-                                                                              //fontSize: 10.0
-                                                                              //fontSize: 10.0
-                                                                              ),
-                                                                        ),
-                                                                      ),
+                                                                              FontWeight.bold,
+                                                                              FontWeight_.Fonts_T,
+                                                                              8,
+                                                                              20,
+                                                                              1)),
                                                                     ),
                                                                     onTap:
                                                                         () async {

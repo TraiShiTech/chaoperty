@@ -3928,7 +3928,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                                               stream: Stream.periodic(
                                                                   const Duration(
                                                                       seconds:
-                                                                          0)),
+                                                                          10)),
                                                               builder: (context,
                                                                   snapshot) {
                                                                 return Container(
